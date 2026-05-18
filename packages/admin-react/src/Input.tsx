@@ -1,10 +1,13 @@
-import { forwardRef, type InputHTMLAttributes } from "react";
-import { cx } from "./lib/cx";
+import { Input as BaseInput } from "@base-ui/react/input";
+import { clsx } from "clsx";
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 
 export type InputVariant = "bordered" | "ghost" | "danger";
 export type InputSize = "sm" | "md" | "lg";
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+type BaseInputProps = Omit<ComponentPropsWithoutRef<typeof BaseInput>, "size">;
+
+export interface InputProps extends BaseInputProps {
   variant?: InputVariant;
   inputSize?: InputSize;
 }
@@ -14,14 +17,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   ref,
 ) {
   return (
-    <input
+    <BaseInput
       ref={ref}
       type={type}
-      className={cx(
+      className={clsx(
         "input",
         `input-${variant}`,
         inputSize !== "md" && `input-${inputSize}`,
-        className,
+        typeof className === "string" ? className : undefined,
       )}
       {...rest}
     />

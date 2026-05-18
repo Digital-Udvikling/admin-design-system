@@ -1,13 +1,17 @@
 ---
 import { Input } from "@aortl/admin-react";
 import Example from "../../components/Example.astro";
+import { FieldEmailDemo } from "../../demos/FieldEmailDemo";
+import { FieldValidationDemo } from "../../demos/FieldValidationDemo";
 import Layout from "../../layouts/Layout.astro";
 ---
 
 <Layout title="React — Inputs">
   <h1 class="text-3xl font-bold mb-2">Input</h1>
   <p class="text-text-muted text-lg mb-8">
-    Variant via <code>variant</code>, size via <code>inputSize</code> (avoids conflict with native <code>size</code>).
+    Variant via <code>variant</code>, size via <code>inputSize</code> (the native
+    <code>size</code> attribute is shadowed). Wraps Base UI's <code>Input</code>,
+    so it auto-wires accessibility when placed inside a <code>Field</code>.
   </p>
 
   <Example
@@ -45,6 +49,42 @@ import Layout from "../../layouts/Layout.astro";
   >
     <div class="w-full max-w-sm">
       <Input disabled defaultValue="Disabled" />
+    </div>
+  </Example>
+
+  <h2 class="text-xl font-semibold mt-12 mb-3">Accessible field composition</h2>
+  <p class="text-sm text-text-muted mb-4">
+    Wrap an <code>Input</code> in <code>Field</code> + <code>FieldLabel</code> to
+    get an associated label, description, and validation-driven error messaging
+    — all handled by Base UI under the hood.
+  </p>
+
+  <Example
+    title="Label + description"
+    lang="tsx"
+    code={`<Field name="email">
+  <FieldLabel>Email</FieldLabel>
+  <Input type="email" placeholder="you@example.com" />
+  <FieldDescription>We'll never share your email.</FieldDescription>
+</Field>`}
+  >
+    <div class="w-full max-w-sm">
+      <FieldEmailDemo client:load />
+    </div>
+  </Example>
+
+  <Example
+    title="With validation"
+    lang="tsx"
+    code={`<Field name="username" validationMode="onChange">
+  <FieldLabel>Username</FieldLabel>
+  <Input required minLength={3} placeholder="At least 3 characters" />
+  <FieldError match="valueMissing">Username is required.</FieldError>
+  <FieldError match="tooShort">Must be at least 3 characters.</FieldError>
+</Field>`}
+  >
+    <div class="w-full max-w-sm">
+      <FieldValidationDemo client:load />
     </div>
   </Example>
 </Layout>

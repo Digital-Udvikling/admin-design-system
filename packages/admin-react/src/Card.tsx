@@ -1,5 +1,5 @@
+import { clsx } from "clsx";
 import { forwardRef, type HTMLAttributes } from "react";
-import { cx } from "./lib/cx";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   bordered?: boolean;
@@ -13,7 +13,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   return (
     <div
       ref={ref}
-      className={cx("card", bordered && "card-bordered", compact && "card-compact", className)}
+      className={clsx("card", bordered && "card-bordered", compact && "card-compact", className)}
       {...rest}
     />
   );
@@ -25,7 +25,7 @@ export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(function CardB
   { className, ...rest },
   ref,
 ) {
-  return <div ref={ref} className={cx("card-body", className)} {...rest} />;
+  return <div ref={ref} className={clsx("card-body", className)} {...rest} />;
 });
 
 export type CardTitleProps = HTMLAttributes<HTMLHeadingElement>;
@@ -34,14 +34,14 @@ export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(function
   { className, ...rest },
   ref,
 ) {
-  return <h3 ref={ref} className={cx("card-title", className)} {...rest} />;
+  return <h3 ref={ref} className={clsx("card-title", className)} {...rest} />;
 });
 
 export type CardDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
 
 export const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
   function CardDescription({ className, ...rest }, ref) {
-    return <p ref={ref} className={cx("card-description", className)} {...rest} />;
+    return <p ref={ref} className={clsx("card-description", className)} {...rest} />;
   },
 );
 
@@ -51,5 +51,5 @@ export const CardActions = forwardRef<HTMLDivElement, CardActionsProps>(function
   { className, ...rest },
   ref,
 ) {
-  return <div ref={ref} className={cx("card-actions", className)} {...rest} />;
+  return <div ref={ref} className={clsx("card-actions", className)} {...rest} />;
 });

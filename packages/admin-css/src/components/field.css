@@ -1,0 +1,23 @@
+@layer components {
+  .field {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .field-label {
+    @apply text-sm font-medium text-text leading-none;
+  }
+
+  .field-description {
+    @apply text-xs text-text-muted leading-relaxed;
+  }
+
+  .field-error {
+    @apply text-xs text-danger leading-relaxed;
+  }
+
+  /* When the field is in an invalid state, tint the contained input.
+     Base UI applies data-invalid on the Field root once validation fails. */
+  .field[data-invalid] .input {
+    @apply border-danger;
+  }
+}

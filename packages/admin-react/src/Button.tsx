@@ -1,10 +1,11 @@
-import { type ButtonHTMLAttributes, forwardRef } from "react";
-import { cx } from "./lib/cx";
+import { Button as BaseButton } from "@base-ui/react/button";
+import { clsx } from "clsx";
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ComponentPropsWithoutRef<typeof BaseButton> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   block?: boolean;
@@ -15,15 +16,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   return (
-    <button
+    <BaseButton
       ref={ref}
       type={type}
-      className={cx(
+      className={clsx(
         "btn",
         `btn-${variant}`,
         size !== "md" && `btn-${size}`,
         block && "btn-block",
-        className,
+        typeof className === "string" ? className : undefined,
       )}
       {...rest}
     />

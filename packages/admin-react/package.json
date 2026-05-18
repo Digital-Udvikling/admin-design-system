@@ -27,7 +27,9 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@aortl/admin-css": "workspace:*"
+    "@aortl/admin-css": "workspace:*",
+    "@base-ui/react": "1.4.1",
+    "clsx": "2.1.1"
   },
   "devDependencies": {
     "@types/react": "19.2.14",

@@ -38,10 +38,29 @@ export function App() {
 | `<Button />`                                 | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
 | `<Input />`                                  | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg` |
 | `<Card />` + `CardBody / Title / Description / Actions` | `bordered`, `compact` (on `Card`)                                     |
+| `<Field />` + `FieldLabel / FieldDescription / FieldError` | `name`, `validate`, `validationMode` (on `Field`)                |
 
 > `inputSize` is intentionally named instead of `size` because `<input>` has its own native `size` attribute.
 
 All components forward `ref`, accept `className` (merged with the design-system classes), and pass through standard HTML attributes.
+
+## Accessibility
+
+`Button`, `Input`, and `Field` wrap [Base UI](https://base-ui.com) primitives:
+
+- `Button` keeps focus when disabled (`focusableWhenDisabled` available), and can render as another element (`render` prop) while preserving keyboard semantics.
+- `Input` auto-wires into `Field` for label/description/error association and validation state — without manual `id` / `aria-describedby` plumbing.
+- `Field` handles HTML validation (`required`, `minLength`, `pattern`, ...) and surfaces matched errors via `<FieldError match="..." />`.
+
+```tsx
+<Field name="email" validationMode="onBlur">
+  <FieldLabel>Email</FieldLabel>
+  <Input type="email" required />
+  <FieldDescription>We'll never share your email.</FieldDescription>
+  <FieldError match="valueMissing">Email is required.</FieldError>
+  <FieldError match="typeMismatch">Enter a valid email.</FieldError>
+</Field>
+```
 
 ## Build
 

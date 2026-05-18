@@ -8,24 +8,11 @@ export default defineConfig({
   integrations: [
     react(),
     starlight({
-      title: "@aortl/admin",
+      title: "aortl design system",
       customCss: ["./src/styles/global.css"],
       sidebar: [
-        {
-          label: "Getting Started",
-          items: [
-            { label: "Vanilla CSS", slug: "getting-started/vanilla" },
-            { label: "React", slug: "getting-started/react" },
-          ],
-        },
-        {
-          label: "Components",
-          items: [
-            { label: "Buttons", slug: "components/buttons" },
-            { label: "Inputs", slug: "components/inputs" },
-            { label: "Cards", slug: "components/cards" },
-          ],
-        },
+        { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started/' } }], },
+        { label: 'Components', items: [{ autogenerate: { directory: 'components/' } }], },
       ],
     }),
     mdx(),

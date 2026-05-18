@@ -1,0 +1,42 @@
+---
+title: Tailwind
+description: Drop the design system into an existing Tailwind v4 project so utilities and component classes share the same tokens.
+sidebar:
+  order: 3
+---
+
+The design system is built on Tailwind v4. If your app already uses Tailwind, import the source CSS — utilities like `bg-primary` and `rounded-control` resolve to the same tokens that power `.btn`, `.card`, and `.input`.
+
+## Install
+
+```bash
+npm install @aortl/admin-css
+```
+
+## Import into your Tailwind entry
+
+```css
+@import "tailwindcss";
+@import "@aortl/admin-css/src/theme.css";
+@import "@aortl/admin-css/src/components/index.css";
+```
+
+- `theme.css` registers the design tokens. Tailwind auto-generates utilities like `bg-primary`, `text-text-muted`, `rounded-control`, and `shadow-elevation-1`.
+- `components/index.css` ships the semantic classes — `.btn`, `.input`, `.card`, `.field` — built on the same tokens.
+
+Skip either import if you only want one half.
+
+## Mix utilities and components
+
+```html
+<div class="card p-6">
+  <h3 class="card-title">Inbox</h3>
+  <p class="text-text-muted text-sm">3 unread</p>
+  <div class="mt-4 flex gap-2">
+    <button class="btn btn-primary">Open</button>
+    <button class="btn btn-ghost">Archive</button>
+  </div>
+</div>
+```
+
+Override tokens the same way as with vanilla CSS — see [Theming](../theming/).

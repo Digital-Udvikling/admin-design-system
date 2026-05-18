@@ -1,6 +1,8 @@
 ---
 title: Vanilla CSS
 description: A single pre-built stylesheet. No build tooling required on your end.
+sidebar:
+  order: 1
 ---
 
 A single pre-built stylesheet. No build tooling required on your end.
@@ -18,14 +20,3 @@ npm install @aortl/admin-css
 ```
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry.
-
-## Theming
-
-Override any token in your own stylesheet, loaded _after_ the design system:
-
-```css
-:root {
-  --color-primary: oklch(0.6 0.2 30);
-  --radius-control: 0.25rem;
-}
-```

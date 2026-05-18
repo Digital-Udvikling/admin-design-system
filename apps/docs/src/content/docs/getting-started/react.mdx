@@ -1,9 +1,11 @@
 ---
 title: React
-description: Thin React wrappers that emit the same class names as the vanilla CSS — visual parity guaranteed.
+description: Thin React wrappers that emit the same class names as the vanilla CSS
+sidebar:
+  order: 2
 ---
 
-Thin React wrappers that emit the same class names as the vanilla CSS — visual parity guaranteed.
+Thin React wrappers that emit the same class names as the vanilla CSS.
 
 ## Install
 
@@ -36,7 +38,5 @@ export function SignIn() {
 
 ## Notes
 
-- All components forward `ref` and accept `className` (merged with built-in classes).
-- Styles come from one CSS file — theming via CSS variables works exactly as with the vanilla package.
-- `<Input>` uses `inputSize` instead of `size` to avoid colliding with the native HTML attribute.
+- Styles come from one CSS file — see [Theming](../theming/) to override design tokens.
 - `<Button>`, `<Input>`, and `<Field>` wrap [Base UI](https://base-ui.com) primitives — keyboard, focus, and validation accessibility are handled for you.

@@ -8,8 +8,6 @@ import Example from "../../../components/Example.astro";
 import { FieldEmailDemo } from "../../../demos/FieldEmailDemo";
 import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
 
-Base class `.input` + a variant + an optional size. In React, `variant` and `inputSize` props map 1:1 to the same modifier classes (the native `size` attribute is shadowed).
-
 <Example
   title="Variants"
   html={`<input class="input input-bordered" placeholder="Bordered (default)">
@@ -52,7 +50,7 @@ Base class `.input` + a variant + an optional size. In React, `variant` and `inp
   </div>
 </Example>
 
-## Accessible field composition
+## Field composition
 
 In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wrap an `Input` in `Field` + `Field.Label` to get the same wiring automatically — Base UI handles association, description, and validation messaging.
 

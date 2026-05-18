@@ -11,7 +11,7 @@ npm install @aortl/admin-css
 Or grab it from a CDN — no install needed:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css">
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
 ```
 
 ## Use
@@ -20,7 +20,7 @@ Or grab it from a CDN — no install needed:
 <button class="btn btn-primary">Save</button>
 <button class="btn btn-ghost btn-sm">Cancel</button>
 
-<input class="input input-bordered" placeholder="Name">
+<input class="input input-bordered" placeholder="Name" />
 
 <div class="card">
   <div class="card-body">
@@ -35,11 +35,11 @@ Or grab it from a CDN — no install needed:
 
 ## Components
 
-| Class           | Variants                                                 | Sizes              |
-| --------------- | -------------------------------------------------------- | ------------------ |
-| `.btn`          | `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger` | `.btn-sm`, `.btn-lg` |
-| `.input`        | `.input-bordered`, `.input-ghost`, `.input-danger`      | `.input-sm`, `.input-lg` |
-| `.card`         | `.card-bordered`, `.card-compact`                       | —                  |
+| Class    | Variants                                                      | Sizes                    |
+| -------- | ------------------------------------------------------------- | ------------------------ |
+| `.btn`   | `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger` | `.btn-sm`, `.btn-lg`     |
+| `.input` | `.input-bordered`, `.input-ghost`, `.input-danger`            | `.input-sm`, `.input-lg` |
+| `.card`  | `.card-bordered`, `.card-compact`                             | —                        |
 
 The `card` component uses children: `.card-body`, `.card-title`, `.card-description`, `.card-actions`.
 

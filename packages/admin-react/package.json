@@ -2,8 +2,20 @@
   "name": "@aortl/admin-react",
   "version": "0.0.1",
   "description": "React component library for the admin design system. Pairs with @aortl/admin-css.",
+  "keywords": [
+    "components",
+    "design-system",
+    "react",
+    "tailwind"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "type": "module",
-  "files": ["dist", "README.md"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -15,16 +27,11 @@
     },
     "./styles.css": "./dist/admin.css"
   },
-  "sideEffects": ["**/*.css"],
   "scripts": {
     "build": "vite build && pnpm copy:css",
     "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit"
-  },
-  "peerDependencies": {
-    "react": ">=19.2",
-    "react-dom": ">=19.2"
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",
@@ -41,5 +48,8 @@
     "vite": "8.0.13",
     "vite-plugin-dts": "5.0.0"
   },
-  "keywords": ["react", "components", "design-system", "tailwind"]
+  "peerDependencies": {
+    "react": ">=19.2",
+    "react-dom": ">=19.2"
+  }
 }

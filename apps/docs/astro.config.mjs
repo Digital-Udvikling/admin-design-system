@@ -11,8 +11,8 @@ export default defineConfig({
       title: "aortl design system",
       customCss: ["./src/styles/global.css"],
       sidebar: [
-        { label: 'Getting Started', items: [{ autogenerate: { directory: 'getting-started/' } }], },
-        { label: 'Components', items: [{ autogenerate: { directory: 'components/' } }], },
+        { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
+        { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
       ],
     }),
     mdx(),

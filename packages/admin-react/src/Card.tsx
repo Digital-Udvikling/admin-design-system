@@ -21,8 +21,12 @@ function CardBody({ className, ...rest }: CardBodyProps) {
 }
 
 export type CardTitleProps = ComponentProps<"h3">;
-function CardTitle({ className, ...rest }: CardTitleProps) {
-  return <h3 className={clsx("card-title", className)} {...rest} />;
+function CardTitle({ className, children, ...rest }: CardTitleProps) {
+  return (
+    <h3 className={clsx("card-title", className)} {...rest}>
+      {children}
+    </h3>
+  );
 }
 
 export type CardDescriptionProps = ComponentProps<"p">;

@@ -33,12 +33,12 @@ export function App() {
 
 ## Components
 
-| Component   | Parts                                                       | Key props                                                                                                                                          |
-| ----------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<Button>`  | —                                                           | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
-| `<Input>`   | —                                                           | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg`                                  |
-| `<Card>`    | `Card.Body`, `Card.Title`, `Card.Description`, `Card.Actions` | `bordered`, `compact` (on root)                                                                                                                    |
-| `<Field>`   | `Field.Label`, `Field.Description`, `Field.Error`           | `name`, `validate`, `validationMode` (on root)                                                                                                     |
+| Component  | Parts                                                         | Key props                                                                                                                                          |
+| ---------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<Button>` | —                                                             | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
+| `<Input>`  | —                                                             | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg`                                   |
+| `<Card>`   | `Card.Body`, `Card.Title`, `Card.Description`, `Card.Actions` | `bordered`, `compact` (on root)                                                                                                                    |
+| `<Field>`  | `Field.Label`, `Field.Description`, `Field.Error`             | `name`, `validate`, `validationMode` (on root)                                                                                                     |
 
 > `inputSize` is intentionally named instead of `size` because `<input>` has its own native `size` attribute.
 

@@ -2,11 +2,11 @@
 
 A small, opinionated design system shipped in two flavors from a single source of truth.
 
-| Package                | What it is                                                                                          |
-| ---------------------- | --------------------------------------------------------------------------------------------------- |
-| `@aortl/admin-css`     | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...). |
-| `@aortl/admin-react`   | A React component library that renders the same class names as the CSS package.                    |
-| `apps/docs` (private)  | A [Starlight](https://starlight.astro.build) docs site that shows each component's vanilla and React source side-by-side via synced tabs. |
+| Package               | What it is                                                                                                                                |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `@aortl/admin-css`    | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...).                                       |
+| `@aortl/admin-react`  | A React component library that renders the same class names as the CSS package.                                                           |
+| `apps/docs` (private) | A [Starlight](https://starlight.astro.build) docs site that shows each component's vanilla and React source side-by-side via synced tabs. |
 
 Components follow daisyUI's class-naming conventions (`.btn-primary`, `.btn-sm`, etc.) but are built from scratch on top of Tailwind v4 — no daisyUI runtime dependency.
 
@@ -21,9 +21,9 @@ pnpm dev            # runs the docs site at http://localhost:4321
 ## Using the vanilla CSS in any HTML page
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css">
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
 <button class="btn btn-primary">Click me</button>
-<input class="input input-bordered" placeholder="Name">
+<input class="input input-bordered" placeholder="Name" />
 ```
 
 ## Using the React components

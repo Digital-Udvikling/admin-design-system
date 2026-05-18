@@ -1,0 +1,42 @@
+---
+title: React
+description: Thin React wrappers that emit the same class names as the vanilla CSS — visual parity guaranteed.
+---
+
+Thin React wrappers that emit the same class names as the vanilla CSS — visual parity guaranteed.
+
+## Install
+
+```bash
+npm install @aortl/admin-react react react-dom
+```
+
+## Import styles + components
+
+```tsx
+import "@aortl/admin-react/styles.css";
+import { Button, Card, Input } from "@aortl/admin-react";
+
+export function SignIn() {
+  return (
+    <Card>
+      <Card.Body>
+        <Card.Title>Sign in</Card.Title>
+        <Input placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <Card.Actions>
+          <Button variant="primary">Sign in</Button>
+          <Button variant="ghost">Cancel</Button>
+        </Card.Actions>
+      </Card.Body>
+    </Card>
+  );
+}
+```
+
+## Notes
+
+- All components forward `ref` and accept `className` (merged with built-in classes).
+- Styles come from one CSS file — theming via CSS variables works exactly as with the vanilla package.
+- `<Input>` uses `inputSize` instead of `size` to avoid colliding with the native HTML attribute.
+- `<Button>`, `<Input>`, and `<Field>` wrap [Base UI](https://base-ui.com) primitives — keyboard, focus, and validation accessibility are handled for you.

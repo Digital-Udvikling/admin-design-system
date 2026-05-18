@@ -1,0 +1,31 @@
+---
+title: Vanilla CSS
+description: A single pre-built stylesheet. No build tooling required on your end.
+---
+
+A single pre-built stylesheet. No build tooling required on your end.
+
+## Install via CDN
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css">
+```
+
+## Or via npm
+
+```bash
+npm install @aortl/admin-css
+```
+
+Then import `@aortl/admin-css/admin.min.css` from your bundler entry.
+
+## Theming
+
+Override any token in your own stylesheet, loaded _after_ the design system:
+
+```css
+:root {
+  --color-primary: oklch(0.6 0.2 30);
+  --radius-control: 0.25rem;
+}
+```

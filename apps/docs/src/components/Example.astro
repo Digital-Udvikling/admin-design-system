@@ -1,28 +1,121 @@
 ---
-import { Code } from "astro:components";
+import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
+import prettier from "prettier";
 
 interface Props {
   title?: string;
-  code: string;
-  lang?: "html" | "jsx" | "tsx";
+  /** HTML / vanilla-CSS source. Omit to hide the Vanilla tab. */
+  html?: string;
+  /** React / JSX source. Omit to hide the React tab. */
+  react?: string;
 }
 
-const { title, code, lang = "html" } = Astro.props;
+const PRETTIER_OPTS = {
+  tabWidth: 2,
+  printWidth: 80,
+  singleQuote: false,
+  semi: true,
+} as const;
+
+function dedent(s: string): string {
+  const lines = s.split("\n");
+  const indents = lines
+    .filter((l) => l.trim().length > 0)
+    .map((l) => /^ */.exec(l)?.[0].length ?? 0);
+  const min = indents.length > 0 ? Math.min(...indents) : 0;
+  return lines
+    .map((l) => l.slice(min))
+    .join("\n")
+    .replace(/^\n+|\n+$/g, "");
+}
+
+/**
+ * Snippet sources are fragments (sibling roots, no enclosing element), which
+ * neither Prettier's HTML nor babel-ts parser accept directly. We wrap in a
+ * single root, format, then strip the wrapper and dedent the inner content.
+ */
+async function formatHtml(code: string): Promise<string> {
+  const wrapped = `<div>\n${code}\n</div>`;
+  const out = (await prettier.format(wrapped, { ...PRETTIER_OPTS, parser: "html" })).trim();
+  const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
+  return dedent(inner);
+}
+
+async function formatReact(code: string): Promise<string> {
+  const wrapped = `<>\n${code}\n</>;\n`;
+  const out = (await prettier.format(wrapped, { ...PRETTIER_OPTS, parser: "babel-ts" })).trim();
+  const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
+  return dedent(inner);
+}
+
+const { title, html: rawHtml, react: rawReact } = Astro.props;
+const [html, react] = await Promise.all([
+  rawHtml ? formatHtml(rawHtml) : Promise.resolve(undefined),
+  rawReact ? formatReact(rawReact) : Promise.resolve(undefined),
+]);
+const hasBoth = !!html && !!react;
 ---
 
-<section class="mb-8">
-  {title && <h3 class="text-base font-semibold mb-3">{title}</h3>}
-  <div class="border border-border rounded-card overflow-hidden">
-    <div class="p-6 bg-surface flex flex-wrap items-center gap-3">
+<section class="not-content example-block">
+  {title && <h3 class="example-title">{title}</h3>}
+  <div class="example-frame">
+    <div class="example-preview">
       <slot />
     </div>
-    <details class="border-t border-border bg-surface-muted">
-      <summary class="px-4 py-2 text-xs font-medium text-text-muted cursor-pointer select-none hover:bg-surface-strong">
-        View source
-      </summary>
-      <div class="text-xs">
-        <Code code={code} lang={lang} theme="github-light" />
-      </div>
-    </details>
+    <div class="example-source">
+      {
+        hasBoth ? (
+          <Tabs syncKey="package">
+            <TabItem label="Vanilla CSS">
+              <Code code={html!} lang="html" />
+            </TabItem>
+            <TabItem label="React">
+              <Code code={react!} lang="tsx" />
+            </TabItem>
+          </Tabs>
+        ) : html ? (
+          <Code code={html} lang="html" />
+        ) : react ? (
+          <Code code={react} lang="tsx" />
+        ) : null
+      }
+    </div>
   </div>
 </section>
+
+<style>
+  .example-block {
+    margin: 1.5rem 0 2rem;
+  }
+  .example-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+  }
+  .example-frame {
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--sl-color-bg);
+  }
+  .example-preview {
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+    background: var(--sl-color-bg);
+  }
+  .example-source :global(starlight-tabs) {
+    margin-top: 0;
+  }
+  .example-source :global(.tablist-wrapper) {
+    background: var(--sl-color-bg-nav);
+  }
+  .example-source :global(pre) {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+  }
+</style>

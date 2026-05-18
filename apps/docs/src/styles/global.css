@@ -4,7 +4,10 @@
  * Pull design-system source files (not the built bundle) so the docs share
  * Tailwind's single compilation pass — no duplicated preflight, and edits to
  * admin-css source hot-reload immediately during dev.
+ *
+ * NOTE: We intentionally skip admin-css/base.css here — Starlight owns the
+ * page chrome (background, body font, link colors). The admin-css tokens and
+ * component classes still apply inside example wrappers via .btn / .card etc.
  */
 @import "@aortl/admin-css/src/theme.css";
-@import "@aortl/admin-css/src/base.css";
 @import "@aortl/admin-css/src/components/index.css";

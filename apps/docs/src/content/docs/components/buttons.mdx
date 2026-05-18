@@ -1,0 +1,61 @@
+---
+title: Buttons
+description: Base class .btn + a variant + an optional size. Identical DOM from either package.
+---
+
+import { Button } from "@aortl/admin-react";
+import Example from "../../../components/Example.astro";
+
+Base class `.btn` + a variant + an optional size. The React `<Button>` renders the same DOM, so the preview below is identical for either flavor — switch tabs to compare source.
+
+<Example
+  title="Variants"
+  html={`<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-ghost">Ghost</button>
+<button class="btn btn-danger">Danger</button>`}
+  react={`<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="danger">Danger</Button>`}
+>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="danger">Danger</Button>
+</Example>
+
+<Example
+  title="Sizes"
+  html={`<button class="btn btn-primary btn-sm">Small</button>
+<button class="btn btn-primary">Medium</button>
+<button class="btn btn-primary btn-lg">Large</button>`}
+  react={`<Button size="sm">Small</Button>
+<Button>Medium</Button>
+<Button size="lg">Large</Button>`}
+>
+  <Button size="sm">Small</Button>
+  <Button>Medium</Button>
+  <Button size="lg">Large</Button>
+</Example>
+
+<Example
+  title="Disabled"
+  html={`<button class="btn btn-primary" disabled>Disabled</button>
+<button class="btn btn-secondary" disabled>Disabled</button>`}
+  react={`<Button disabled>Disabled</Button>
+<Button variant="secondary" disabled>Disabled</Button>`}
+>
+  <Button disabled>Disabled</Button>
+  <Button variant="secondary" disabled>Disabled</Button>
+</Example>
+
+<Example
+  title="Block (full width)"
+  html={`<button class="btn btn-primary btn-block">Continue</button>`}
+  react={`<Button block>Continue</Button>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <Button block>Continue</Button>
+  </div>
+</Example>

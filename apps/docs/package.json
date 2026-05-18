@@ -14,14 +14,18 @@
     "@aortl/admin-css": "workspace:*",
     "@aortl/admin-react": "workspace:*",
     "@astrojs/check": "0.9.9",
+    "@astrojs/mdx": "5.0.6",
     "@astrojs/react": "5.0.5",
+    "@astrojs/starlight": "0.39.2",
     "@tailwindcss/vite": "4.3.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "astro": "6.3.3",
     "react": "19.2.6",
     "react-dom": "19.2.6",
+    "sharp": "0.34.4",
     "tailwindcss": "4.3.0",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "prettier": "3.8.3"
   }
 }

@@ -1,0 +1,96 @@
+---
+title: Inputs
+description: Base class .input + a variant + an optional size. Field composition adds accessibility wiring in React.
+---
+
+import { Input } from "@aortl/admin-react";
+import Example from "../../../components/Example.astro";
+import { FieldEmailDemo } from "../../../demos/FieldEmailDemo";
+import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
+
+Base class `.input` + a variant + an optional size. In React, `variant` and `inputSize` props map 1:1 to the same modifier classes (the native `size` attribute is shadowed).
+
+<Example
+  title="Variants"
+  html={`<input class="input input-bordered" placeholder="Bordered (default)">
+<input class="input input-ghost" placeholder="Ghost">
+<input class="input input-danger" placeholder="Danger" value="invalid">`}
+  react={`<Input placeholder="Bordered (default)" />
+<Input variant="ghost" placeholder="Ghost" />
+<Input variant="danger" defaultValue="invalid" />`}
+>
+  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "24rem" }}>
+    <Input placeholder="Bordered (default)" />
+    <Input variant="ghost" placeholder="Ghost" />
+    <Input variant="danger" defaultValue="invalid" />
+  </div>
+</Example>
+
+<Example
+  title="Sizes"
+  html={`<input class="input input-bordered input-sm" placeholder="Small">
+<input class="input input-bordered" placeholder="Medium">
+<input class="input input-bordered input-lg" placeholder="Large">`}
+  react={`<Input inputSize="sm" placeholder="Small" />
+<Input placeholder="Medium" />
+<Input inputSize="lg" placeholder="Large" />`}
+>
+  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", maxWidth: "24rem" }}>
+    <Input inputSize="sm" placeholder="Small" />
+    <Input placeholder="Medium" />
+    <Input inputSize="lg" placeholder="Large" />
+  </div>
+</Example>
+
+<Example
+  title="Disabled"
+  html={`<input class="input input-bordered" disabled value="Disabled">`}
+  react={`<Input disabled defaultValue="Disabled" />`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <Input disabled defaultValue="Disabled" />
+  </div>
+</Example>
+
+## Accessible field composition
+
+In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wrap an `Input` in `Field` + `Field.Label` to get the same wiring automatically — Base UI handles association, description, and validation messaging.
+
+<Example
+  title="Label + description"
+  html={`<div class="field">
+  <label class="field-label" for="email">Email</label>
+  <input id="email" type="email" class="input input-bordered" placeholder="you@example.com" aria-describedby="email-desc">
+  <p id="email-desc" class="field-description">We'll never share your email.</p>
+</div>`}
+  react={`<Field name="email">
+  <Field.Label>Email</Field.Label>
+  <Input type="email" placeholder="you@example.com" />
+  <Field.Description>We'll never share your email.</Field.Description>
+</Field>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <FieldEmailDemo client:load />
+  </div>
+</Example>
+
+<Example
+  title="With validation"
+  html={`<form>
+  <div class="field">
+    <label class="field-label" for="username">Username</label>
+    <input id="username" class="input input-bordered" required minlength="3" placeholder="At least 3 characters">
+    <!-- Vanilla relies on the browser's built-in :invalid + ValidityState. -->
+  </div>
+</form>`}
+  react={`<Field name="username" validationMode="onChange">
+  <Field.Label>Username</Field.Label>
+  <Input required minLength={3} placeholder="At least 3 characters" />
+  <Field.Error match="valueMissing">Username is required.</Field.Error>
+  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
+</Field>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <FieldValidationDemo client:load />
+  </div>
+</Example>

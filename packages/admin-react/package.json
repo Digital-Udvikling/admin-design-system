@@ -23,8 +23,8 @@
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=19.2",
+    "react-dom": ">=19.2"
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",

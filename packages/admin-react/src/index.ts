@@ -2,10 +2,6 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from ".
 export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";
 export {
   Card,
-  CardBody,
-  CardTitle,
-  CardDescription,
-  CardActions,
   type CardProps,
   type CardBodyProps,
   type CardTitleProps,
@@ -14,9 +10,6 @@ export {
 } from "./Card";
 export {
   Field,
-  FieldLabel,
-  FieldDescription,
-  FieldError,
   type FieldProps,
   type FieldLabelProps,
   type FieldDescriptionProps,

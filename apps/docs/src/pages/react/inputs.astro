@@ -54,7 +54,7 @@ import Layout from "../../layouts/Layout.astro";
 
   <h2 class="text-xl font-semibold mt-12 mb-3">Accessible field composition</h2>
   <p class="text-sm text-text-muted mb-4">
-    Wrap an <code>Input</code> in <code>Field</code> + <code>FieldLabel</code> to
+    Wrap an <code>Input</code> in <code>Field</code> + <code>Field.Label</code> to
     get an associated label, description, and validation-driven error messaging
     — all handled by Base UI under the hood.
   </p>
@@ -63,9 +63,9 @@ import Layout from "../../layouts/Layout.astro";
     title="Label + description"
     lang="tsx"
     code={`<Field name="email">
-  <FieldLabel>Email</FieldLabel>
+  <Field.Label>Email</Field.Label>
   <Input type="email" placeholder="you@example.com" />
-  <FieldDescription>We'll never share your email.</FieldDescription>
+  <Field.Description>We'll never share your email.</Field.Description>
 </Field>`}
   >
     <div class="w-full max-w-sm">
@@ -77,10 +77,10 @@ import Layout from "../../layouts/Layout.astro";
     title="With validation"
     lang="tsx"
     code={`<Field name="username" validationMode="onChange">
-  <FieldLabel>Username</FieldLabel>
+  <Field.Label>Username</Field.Label>
   <Input required minLength={3} placeholder="At least 3 characters" />
-  <FieldError match="valueMissing">Username is required.</FieldError>
-  <FieldError match="tooShort">Must be at least 3 characters.</FieldError>
+  <Field.Error match="valueMissing">Username is required.</Field.Error>
+  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
 </Field>`}
   >
     <div class="w-full max-w-sm">

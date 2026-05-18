@@ -1,12 +1,12 @@
-import { Field, FieldError, FieldLabel, Input } from "@aortl/admin-react";
+import { Field, Input } from "@aortl/admin-react";
 
 export function FieldValidationDemo() {
   return (
     <Field name="username" validationMode="onChange">
-      <FieldLabel>Username</FieldLabel>
+      <Field.Label>Username</Field.Label>
       <Input required minLength={3} placeholder="At least 3 characters" />
-      <FieldError match="valueMissing">Username is required.</FieldError>
-      <FieldError match="tooShort">Must be at least 3 characters.</FieldError>
+      <Field.Error match="valueMissing">Username is required.</Field.Error>
+      <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
     </Field>
   );
 }

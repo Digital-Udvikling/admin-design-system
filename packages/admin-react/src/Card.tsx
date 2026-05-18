@@ -1,55 +1,43 @@
 import { clsx } from "clsx";
-import { forwardRef, type HTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 
-export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends ComponentProps<"div"> {
   bordered?: boolean;
   compact?: boolean;
 }
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
-  { bordered, compact, className, ...rest },
-  ref,
-) {
+function CardRoot({ bordered, compact, className, ...rest }: CardProps) {
   return (
     <div
-      ref={ref}
       className={clsx("card", bordered && "card-bordered", compact && "card-compact", className)}
       {...rest}
     />
   );
-});
+}
 
-export type CardBodyProps = HTMLAttributes<HTMLDivElement>;
+export type CardBodyProps = ComponentProps<"div">;
+function CardBody({ className, ...rest }: CardBodyProps) {
+  return <div className={clsx("card-body", className)} {...rest} />;
+}
 
-export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(function CardBody(
-  { className, ...rest },
-  ref,
-) {
-  return <div ref={ref} className={clsx("card-body", className)} {...rest} />;
-});
+export type CardTitleProps = ComponentProps<"h3">;
+function CardTitle({ className, ...rest }: CardTitleProps) {
+  return <h3 className={clsx("card-title", className)} {...rest} />;
+}
 
-export type CardTitleProps = HTMLAttributes<HTMLHeadingElement>;
+export type CardDescriptionProps = ComponentProps<"p">;
+function CardDescription({ className, ...rest }: CardDescriptionProps) {
+  return <p className={clsx("card-description", className)} {...rest} />;
+}
 
-export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(function CardTitle(
-  { className, ...rest },
-  ref,
-) {
-  return <h3 ref={ref} className={clsx("card-title", className)} {...rest} />;
-});
+export type CardActionsProps = ComponentProps<"div">;
+function CardActions({ className, ...rest }: CardActionsProps) {
+  return <div className={clsx("card-actions", className)} {...rest} />;
+}
 
-export type CardDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
-
-export const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
-  function CardDescription({ className, ...rest }, ref) {
-    return <p ref={ref} className={clsx("card-description", className)} {...rest} />;
-  },
-);
-
-export type CardActionsProps = HTMLAttributes<HTMLDivElement>;
-
-export const CardActions = forwardRef<HTMLDivElement, CardActionsProps>(function CardActions(
-  { className, ...rest },
-  ref,
-) {
-  return <div ref={ref} className={clsx("card-actions", className)} {...rest} />;
+export const Card = Object.assign(CardRoot, {
+  Body: CardBody,
+  Title: CardTitle,
+  Description: CardDescription,
+  Actions: CardActions,
 });

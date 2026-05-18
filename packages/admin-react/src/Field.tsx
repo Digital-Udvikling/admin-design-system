@@ -1,77 +1,65 @@
 import { Field as BaseField } from "@base-ui/react/field";
 import { clsx } from "clsx";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentProps } from "react";
 
 /**
  * Thin wrappers around Base UI's Field primitives that apply the design
  * system's class names. Compose for fully accessible labeled form fields:
  *
  *   <Field name="email">
- *     <FieldLabel>Email</FieldLabel>
+ *     <Field.Label>Email</Field.Label>
  *     <Input type="email" required />
- *     <FieldDescription>We'll never share your email</FieldDescription>
- *     <FieldError match="valueMissing">Email is required</FieldError>
+ *     <Field.Description>We'll never share your email.</Field.Description>
+ *     <Field.Error match="valueMissing">Email is required.</Field.Error>
  *   </Field>
  */
 
-export type FieldProps = ComponentPropsWithoutRef<typeof BaseField.Root>;
+export type FieldProps = ComponentProps<typeof BaseField.Root>;
 
-export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
-  { className, ...rest },
-  ref,
-) {
+function FieldRoot({ className, ...rest }: FieldProps) {
   return (
     <BaseField.Root
-      ref={ref}
       className={clsx("field", typeof className === "string" ? className : undefined)}
       {...rest}
     />
   );
-});
+}
 
-export type FieldLabelProps = ComponentPropsWithoutRef<typeof BaseField.Label>;
+export type FieldLabelProps = ComponentProps<typeof BaseField.Label>;
 
-export const FieldLabel = forwardRef<HTMLLabelElement, FieldLabelProps>(function FieldLabel(
-  { className, ...rest },
-  ref,
-) {
+function FieldLabel({ className, ...rest }: FieldLabelProps) {
   return (
     <BaseField.Label
-      ref={ref}
       className={clsx("field-label", typeof className === "string" ? className : undefined)}
       {...rest}
     />
   );
-});
+}
 
-export type FieldDescriptionProps = ComponentPropsWithoutRef<typeof BaseField.Description>;
+export type FieldDescriptionProps = ComponentProps<typeof BaseField.Description>;
 
-export const FieldDescription = forwardRef<HTMLParagraphElement, FieldDescriptionProps>(
-  function FieldDescription({ className, ...rest }, ref) {
-    return (
-      <BaseField.Description
-        ref={ref}
-        className={clsx(
-          "field-description",
-          typeof className === "string" ? className : undefined,
-        )}
-        {...rest}
-      />
-    );
-  },
-);
+function FieldDescription({ className, ...rest }: FieldDescriptionProps) {
+  return (
+    <BaseField.Description
+      className={clsx("field-description", typeof className === "string" ? className : undefined)}
+      {...rest}
+    />
+  );
+}
 
-export type FieldErrorProps = ComponentPropsWithoutRef<typeof BaseField.Error>;
+export type FieldErrorProps = ComponentProps<typeof BaseField.Error>;
 
-export const FieldError = forwardRef<HTMLDivElement, FieldErrorProps>(function FieldError(
-  { className, ...rest },
-  ref,
-) {
+function FieldError({ className, ...rest }: FieldErrorProps) {
   return (
     <BaseField.Error
-      ref={ref}
       className={clsx("field-error", typeof className === "string" ? className : undefined)}
       {...rest}
     />
   );
+}
+
+export const Field = Object.assign(FieldRoot, {
+  Label: FieldLabel,
+  Description: FieldDescription,
+  Error: FieldError,
 });

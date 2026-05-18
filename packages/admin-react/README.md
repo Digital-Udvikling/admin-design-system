@@ -12,20 +12,20 @@ npm install @aortl/admin-react react react-dom
 
 ```tsx
 import "@aortl/admin-react/styles.css";
-import { Button, Input, Card, CardBody, CardTitle, CardActions } from "@aortl/admin-react";
+import { Button, Card, Input } from "@aortl/admin-react";
 
 export function App() {
   return (
     <Card>
-      <CardBody>
-        <CardTitle>Sign in</CardTitle>
+      <Card.Body>
+        <Card.Title>Sign in</Card.Title>
         <Input placeholder="Email" />
         <Input type="password" placeholder="Password" />
-        <CardActions>
+        <Card.Actions>
           <Button variant="primary">Sign in</Button>
           <Button variant="ghost">Cancel</Button>
-        </CardActions>
-      </CardBody>
+        </Card.Actions>
+      </Card.Body>
     </Card>
   );
 }
@@ -33,12 +33,12 @@ export function App() {
 
 ## Components
 
-| Component                                    | Key props                                                                 |
-| -------------------------------------------- | ------------------------------------------------------------------------- |
-| `<Button />`                                 | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
-| `<Input />`                                  | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg` |
-| `<Card />` + `CardBody / Title / Description / Actions` | `bordered`, `compact` (on `Card`)                                     |
-| `<Field />` + `FieldLabel / FieldDescription / FieldError` | `name`, `validate`, `validationMode` (on `Field`)                |
+| Component   | Parts                                                       | Key props                                                                                                                                          |
+| ----------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<Button>`  | —                                                           | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
+| `<Input>`   | —                                                           | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg`                                  |
+| `<Card>`    | `Card.Body`, `Card.Title`, `Card.Description`, `Card.Actions` | `bordered`, `compact` (on root)                                                                                                                    |
+| `<Field>`   | `Field.Label`, `Field.Description`, `Field.Error`           | `name`, `validate`, `validationMode` (on root)                                                                                                     |
 
 > `inputSize` is intentionally named instead of `size` because `<input>` has its own native `size` attribute.
 
@@ -50,15 +50,15 @@ All components forward `ref`, accept `className` (merged with the design-system 
 
 - `Button` keeps focus when disabled (`focusableWhenDisabled` available), and can render as another element (`render` prop) while preserving keyboard semantics.
 - `Input` auto-wires into `Field` for label/description/error association and validation state — without manual `id` / `aria-describedby` plumbing.
-- `Field` handles HTML validation (`required`, `minLength`, `pattern`, ...) and surfaces matched errors via `<FieldError match="..." />`.
+- `Field` handles HTML validation (`required`, `minLength`, `pattern`, ...) and surfaces matched errors via `<Field.Error match="..." />`.
 
 ```tsx
 <Field name="email" validationMode="onBlur">
-  <FieldLabel>Email</FieldLabel>
+  <Field.Label>Email</Field.Label>
   <Input type="email" required />
-  <FieldDescription>We'll never share your email.</FieldDescription>
-  <FieldError match="valueMissing">Email is required.</FieldError>
-  <FieldError match="typeMismatch">Enter a valid email.</FieldError>
+  <Field.Description>We'll never share your email.</Field.Description>
+  <Field.Error match="valueMissing">Email is required.</Field.Error>
+  <Field.Error match="typeMismatch">Enter a valid email.</Field.Error>
 </Field>
 ```
 

@@ -1,11 +1,11 @@
-import { Field, FieldDescription, FieldLabel, Input } from "@aortl/admin-react";
+import { Field, Input } from "@aortl/admin-react";
 
 export function FieldEmailDemo() {
   return (
     <Field name="email">
-      <FieldLabel>Email</FieldLabel>
+      <Field.Label>Email</Field.Label>
       <Input type="email" placeholder="you@example.com" />
-      <FieldDescription>We'll never share your email.</FieldDescription>
+      <Field.Description>We'll never share your email.</Field.Description>
     </Field>
   );
 }

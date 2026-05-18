@@ -1,0 +1,46 @@
+---
+import Example from "../../components/Example.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Vanilla — Inputs">
+  <h1 class="text-3xl font-bold mb-2">Inputs</h1>
+  <p class="text-text-muted text-lg mb-8">
+    Base class <code>.input</code> + a variant + an optional size.
+  </p>
+
+  <Example
+    title="Variants"
+    code={`<input class="input input-bordered" placeholder="Bordered (default)">
+<input class="input input-ghost" placeholder="Ghost">
+<input class="input input-danger" placeholder="Danger" value="invalid">`}
+  >
+    <div class="flex flex-col gap-3 w-full max-w-sm">
+      <input class="input input-bordered" placeholder="Bordered (default)" />
+      <input class="input input-ghost" placeholder="Ghost" />
+      <input class="input input-danger" placeholder="Danger" value="invalid" />
+    </div>
+  </Example>
+
+  <Example
+    title="Sizes"
+    code={`<input class="input input-bordered input-sm" placeholder="Small">
+<input class="input input-bordered" placeholder="Medium">
+<input class="input input-bordered input-lg" placeholder="Large">`}
+  >
+    <div class="flex flex-col gap-3 w-full max-w-sm">
+      <input class="input input-bordered input-sm" placeholder="Small" />
+      <input class="input input-bordered" placeholder="Medium" />
+      <input class="input input-bordered input-lg" placeholder="Large" />
+    </div>
+  </Example>
+
+  <Example
+    title="Disabled"
+    code={`<input class="input input-bordered" disabled value="Disabled">`}
+  >
+    <div class="w-full max-w-sm">
+      <input class="input input-bordered" disabled value="Disabled" />
+    </div>
+  </Example>
+</Layout>

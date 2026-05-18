@@ -1,0 +1,53 @@
+---
+import Example from "../../components/Example.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Vanilla — Buttons">
+  <h1 class="text-3xl font-bold mb-2">Buttons</h1>
+  <p class="text-text-muted text-lg mb-8">
+    Base class <code>.btn</code> + a variant + an optional size.
+  </p>
+
+  <Example
+    title="Variants"
+    code={`<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-ghost">Ghost</button>
+<button class="btn btn-danger">Danger</button>`}
+  >
+    <button class="btn btn-primary">Primary</button>
+    <button class="btn btn-secondary">Secondary</button>
+    <button class="btn btn-ghost">Ghost</button>
+    <button class="btn btn-danger">Danger</button>
+  </Example>
+
+  <Example
+    title="Sizes"
+    code={`<button class="btn btn-primary btn-sm">Small</button>
+<button class="btn btn-primary">Medium</button>
+<button class="btn btn-primary btn-lg">Large</button>`}
+  >
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary">Medium</button>
+    <button class="btn btn-primary btn-lg">Large</button>
+  </Example>
+
+  <Example
+    title="Disabled"
+    code={`<button class="btn btn-primary" disabled>Disabled</button>
+<button class="btn btn-secondary" disabled>Disabled</button>`}
+  >
+    <button class="btn btn-primary" disabled>Disabled</button>
+    <button class="btn btn-secondary" disabled>Disabled</button>
+  </Example>
+
+  <Example
+    title="Block (full width)"
+    code={`<button class="btn btn-primary btn-block">Continue</button>`}
+  >
+    <div class="w-full max-w-sm">
+      <button class="btn btn-primary btn-block">Continue</button>
+    </div>
+  </Example>
+</Layout>

@@ -1,0 +1,43 @@
+{
+  "name": "@aortl/admin-react",
+  "version": "0.0.1",
+  "description": "React component library for the admin design system. Pairs with @aortl/admin-css.",
+  "type": "module",
+  "files": ["dist", "README.md"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/admin.css"
+  },
+  "sideEffects": ["**/*.css"],
+  "scripts": {
+    "build": "vite build && pnpm copy:css",
+    "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css",
+    "dev": "vite build --watch",
+    "check-types": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@aortl/admin-css": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "typescript": "5.8.3",
+    "vite": "8.0.13",
+    "vite-plugin-dts": "5.0.0"
+  },
+  "keywords": ["react", "components", "design-system", "tailwind"]
+}

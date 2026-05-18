@@ -1,0 +1,12 @@
+@layer base {
+  html {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+  }
+}

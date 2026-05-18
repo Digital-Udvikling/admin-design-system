@@ -1,0 +1,50 @@
+---
+import { Input } from "@aortl/admin-react";
+import Example from "../../components/Example.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="React — Inputs">
+  <h1 class="text-3xl font-bold mb-2">Input</h1>
+  <p class="text-text-muted text-lg mb-8">
+    Variant via <code>variant</code>, size via <code>inputSize</code> (avoids conflict with native <code>size</code>).
+  </p>
+
+  <Example
+    title="Variants"
+    lang="tsx"
+    code={`<Input placeholder="Bordered (default)" />
+<Input variant="ghost" placeholder="Ghost" />
+<Input variant="danger" defaultValue="invalid" />`}
+  >
+    <div class="flex flex-col gap-3 w-full max-w-sm">
+      <Input placeholder="Bordered (default)" />
+      <Input variant="ghost" placeholder="Ghost" />
+      <Input variant="danger" defaultValue="invalid" />
+    </div>
+  </Example>
+
+  <Example
+    title="Sizes"
+    lang="tsx"
+    code={`<Input inputSize="sm" placeholder="Small" />
+<Input placeholder="Medium" />
+<Input inputSize="lg" placeholder="Large" />`}
+  >
+    <div class="flex flex-col gap-3 w-full max-w-sm">
+      <Input inputSize="sm" placeholder="Small" />
+      <Input placeholder="Medium" />
+      <Input inputSize="lg" placeholder="Large" />
+    </div>
+  </Example>
+
+  <Example
+    title="Disabled"
+    lang="tsx"
+    code={`<Input disabled defaultValue="Disabled" />`}
+  >
+    <div class="w-full max-w-sm">
+      <Input disabled defaultValue="Disabled" />
+    </div>
+  </Example>
+</Layout>

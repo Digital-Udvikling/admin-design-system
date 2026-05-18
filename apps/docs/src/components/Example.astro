@@ -1,0 +1,28 @@
+---
+import { Code } from "astro:components";
+
+interface Props {
+  title?: string;
+  code: string;
+  lang?: "html" | "jsx" | "tsx";
+}
+
+const { title, code, lang = "html" } = Astro.props;
+---
+
+<section class="mb-8">
+  {title && <h3 class="text-base font-semibold mb-3">{title}</h3>}
+  <div class="border border-border rounded-card overflow-hidden">
+    <div class="p-6 bg-surface flex flex-wrap items-center gap-3">
+      <slot />
+    </div>
+    <details class="border-t border-border bg-surface-muted">
+      <summary class="px-4 py-2 text-xs font-medium text-text-muted cursor-pointer select-none hover:bg-surface-strong">
+        View source
+      </summary>
+      <div class="text-xs">
+        <Code code={code} lang={lang} theme="github-light" />
+      </div>
+    </details>
+  </div>
+</section>

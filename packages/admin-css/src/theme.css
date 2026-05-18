@@ -1,0 +1,42 @@
+/**
+ * Design tokens — the single place colors, radii, and shadows live.
+ *
+ * Tailwind v4 auto-generates utility classes from these CSS variables:
+ *   --color-primary       → bg-primary, text-primary, border-primary, ...
+ *   --radius-control      → rounded-control
+ *   --shadow-elevation-1  → shadow-elevation-1
+ *
+ * Override any token in your own CSS to reskin the system:
+ *   :root { --color-primary: oklch(0.6 0.2 30); }
+ */
+@theme {
+  /* Brand */
+  --color-primary: oklch(0.58 0.18 250);
+  --color-primary-content: oklch(0.98 0 0);
+  --color-primary-hover: oklch(0.52 0.18 250);
+
+  /* Neutral surfaces */
+  --color-surface: oklch(1 0 0);
+  --color-surface-muted: oklch(0.96 0 0);
+  --color-surface-strong: oklch(0.92 0 0);
+
+  /* Borders & text */
+  --color-border: oklch(0.88 0 0);
+  --color-border-strong: oklch(0.78 0 0);
+  --color-text: oklch(0.2 0 0);
+  --color-text-muted: oklch(0.45 0 0);
+
+  /* State */
+  --color-danger: oklch(0.55 0.22 25);
+  --color-danger-content: oklch(0.98 0 0);
+  --color-success: oklch(0.6 0.16 145);
+  --color-success-content: oklch(0.98 0 0);
+
+  /* Radii */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+
+  /* Elevation */
+  --shadow-elevation-1: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --shadow-elevation-2: 0 4px 12px -2px oklch(0 0 0 / 0.08);
+}

@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/*
+ * Pull design-system source files (not the built bundle) so the docs share
+ * Tailwind's single compilation pass — no duplicated preflight, and edits to
+ * admin-css source hot-reload immediately during dev.
+ */
+@import "@aortl/admin-css/src/theme.css";
+@import "@aortl/admin-css/src/base.css";
+@import "@aortl/admin-css/src/components/index.css";

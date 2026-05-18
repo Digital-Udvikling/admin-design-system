@@ -1,0 +1,35 @@
+@layer components {
+  .card {
+    @apply flex flex-col
+           bg-surface text-text
+           border border-border
+           rounded-card
+           shadow-elevation-1
+           overflow-hidden;
+  }
+
+  .card-body {
+    @apply flex flex-col gap-3 p-5;
+  }
+
+  .card-title {
+    @apply text-lg font-semibold leading-tight;
+  }
+
+  .card-description {
+    @apply text-sm text-text-muted;
+  }
+
+  .card-actions {
+    @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
+  }
+
+  /* Modifiers */
+  .card-compact .card-body {
+    @apply p-3 gap-2;
+  }
+
+  .card-bordered {
+    @apply shadow-none border-border-strong;
+  }
+}

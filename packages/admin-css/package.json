@@ -1,0 +1,27 @@
+{
+  "name": "@aortl/admin-css",
+  "version": "0.0.1",
+  "description": "Pre-built CSS design system. Drop in via <link> and use semantic class names.",
+  "type": "module",
+  "files": ["dist", "src", "README.md"],
+  "main": "./dist/admin.css",
+  "style": "./dist/admin.css",
+  "exports": {
+    ".": "./dist/admin.css",
+    "./admin.css": "./dist/admin.css",
+    "./admin.min.css": "./dist/admin.min.css",
+    "./src/*": "./src/*"
+  },
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "pnpm build:dev && pnpm build:min",
+    "build:dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css",
+    "build:min": "tailwindcss -i ./src/index.css -o ./dist/admin.min.css --minify",
+    "dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.0",
+    "tailwindcss": "4.3.0"
+  },
+  "keywords": ["css", "tailwind", "design-system", "components"]
+}

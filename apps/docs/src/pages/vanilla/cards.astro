@@ -1,0 +1,70 @@
+---
+import Example from "../../components/Example.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Vanilla — Cards">
+  <h1 class="text-3xl font-bold mb-2">Cards</h1>
+  <p class="text-text-muted text-lg mb-8">
+    A container with optional title, description, and actions.
+  </p>
+
+  <Example
+    title="Basic"
+    code={`<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Welcome</h3>
+    <p class="card-description">A short description sits here.</p>
+    <div class="card-actions">
+      <button class="btn btn-primary btn-sm">Get started</button>
+      <button class="btn btn-ghost btn-sm">Maybe later</button>
+    </div>
+  </div>
+</div>`}
+  >
+    <div class="card w-full max-w-sm">
+      <div class="card-body">
+        <h3 class="card-title">Welcome</h3>
+        <p class="card-description">A short description sits here.</p>
+        <div class="card-actions">
+          <button class="btn btn-primary btn-sm">Get started</button>
+          <button class="btn btn-ghost btn-sm">Maybe later</button>
+        </div>
+      </div>
+    </div>
+  </Example>
+
+  <Example
+    title="Compact"
+    code={`<div class="card card-compact">
+  <div class="card-body">
+    <h3 class="card-title">Less padding</h3>
+    <p class="card-description">Useful in dense layouts.</p>
+  </div>
+</div>`}
+  >
+    <div class="card card-compact w-full max-w-sm">
+      <div class="card-body">
+        <h3 class="card-title">Less padding</h3>
+        <p class="card-description">Useful in dense layouts.</p>
+      </div>
+    </div>
+  </Example>
+
+  <Example
+    title="Bordered (no shadow)"
+    code={`<div class="card card-bordered">
+  <div class="card-body">
+    <h3 class="card-title">Flat</h3>
+    <p class="card-description">Stronger border, no elevation.</p>
+  </div>
+</div>`}
+  >
+    <div class="card card-bordered w-full max-w-sm">
+      <div class="card-body">
+        <h3 class="card-title">Flat</h3>
+        <p class="card-description">Stronger border, no elevation.</p>
+      </div>
+    </div>
+  </Example>
+</Layout>

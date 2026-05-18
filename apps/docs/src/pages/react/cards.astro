@@ -1,0 +1,98 @@
+---
+import {
+  Button,
+  Card,
+  CardActions,
+  CardBody,
+  CardDescription,
+  CardTitle,
+  Input,
+} from "@aortl/admin-react";
+import Example from "../../components/Example.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="React — Cards">
+  <h1 class="text-3xl font-bold mb-2">Card</h1>
+  <p class="text-text-muted text-lg mb-8">
+    Container plus <code>CardBody</code>, <code>CardTitle</code>, <code>CardDescription</code>, <code>CardActions</code>.
+  </p>
+
+  <Example
+    title="Basic"
+    lang="tsx"
+    code={`<Card>
+  <CardBody>
+    <CardTitle>Welcome</CardTitle>
+    <CardDescription>A short description sits here.</CardDescription>
+    <CardActions>
+      <Button size="sm">Get started</Button>
+      <Button variant="ghost" size="sm">Maybe later</Button>
+    </CardActions>
+  </CardBody>
+</Card>`}
+  >
+    <div class="w-full max-w-sm">
+      <Card>
+        <CardBody>
+          <CardTitle>Welcome</CardTitle>
+          <CardDescription>A short description sits here.</CardDescription>
+          <CardActions>
+            <Button size="sm">Get started</Button>
+            <Button variant="ghost" size="sm">Maybe later</Button>
+          </CardActions>
+        </CardBody>
+      </Card>
+    </div>
+  </Example>
+
+  <Example
+    title="Sign-in form"
+    lang="tsx"
+    code={`<Card>
+  <CardBody>
+    <CardTitle>Sign in</CardTitle>
+    <Input placeholder="Email" />
+    <Input type="password" placeholder="Password" />
+    <CardActions>
+      <Button>Sign in</Button>
+      <Button variant="ghost">Cancel</Button>
+    </CardActions>
+  </CardBody>
+</Card>`}
+  >
+    <div class="w-full max-w-sm">
+      <Card>
+        <CardBody>
+          <CardTitle>Sign in</CardTitle>
+          <Input placeholder="Email" />
+          <Input type="password" placeholder="Password" />
+          <CardActions>
+            <Button>Sign in</Button>
+            <Button variant="ghost">Cancel</Button>
+          </CardActions>
+        </CardBody>
+      </Card>
+    </div>
+  </Example>
+
+  <Example
+    title="Compact + bordered"
+    lang="tsx"
+    code={`<Card compact bordered>
+  <CardBody>
+    <CardTitle>Flat & dense</CardTitle>
+    <CardDescription>Less padding, stronger border, no shadow.</CardDescription>
+  </CardBody>
+</Card>`}
+  >
+    <div class="w-full max-w-sm">
+      <Card compact bordered>
+        <CardBody>
+          <CardTitle>Flat & dense</CardTitle>
+          <CardDescription>Less padding, stronger border, no shadow.</CardDescription>
+        </CardBody>
+      </Card>
+    </div>
+  </Example>
+</Layout>

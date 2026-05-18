@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Overview">
+  <h1 class="text-3xl font-bold mb-2">@aortl/admin</h1>
+  <p class="text-text-muted text-lg mb-8">
+    A small, opinionated design system. One source of truth, two consumable formats.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <a href="/vanilla" class="card hover:shadow-elevation-2 transition-shadow">
+      <div class="card-body">
+        <h3 class="card-title">Vanilla CSS</h3>
+        <p class="card-description">
+          A pre-built CSS file. Drop it in via <code>&lt;link&gt;</code> and use
+          semantic class names. No build setup, no Tailwind required.
+        </p>
+        <div class="card-actions">
+          <span class="btn btn-secondary btn-sm">Browse vanilla →</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="/react" class="card hover:shadow-elevation-2 transition-shadow">
+      <div class="card-body">
+        <h3 class="card-title">React</h3>
+        <p class="card-description">
+          A tree-shakeable React component library. Same class names as the CSS
+          package, so vanilla HTML and React render identically.
+        </p>
+        <div class="card-actions">
+          <span class="btn btn-secondary btn-sm">Browse React →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</Layout>

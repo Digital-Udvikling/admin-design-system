@@ -1,0 +1,49 @@
+---
+import { Code } from "astro:components";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="React — Overview">
+  <h1 class="text-3xl font-bold mb-2">React</h1>
+  <p class="text-text-muted text-lg mb-8">
+    Thin React wrappers that emit the same class names as the vanilla CSS — visual parity guaranteed.
+  </p>
+
+  <h2 class="text-xl font-semibold mb-3">Install</h2>
+  <Code
+    code={`npm install @aortl/admin-react react react-dom`}
+    lang="bash"
+    theme="github-light"
+  />
+
+  <h2 class="text-xl font-semibold mt-8 mb-3">Import styles + components</h2>
+  <Code
+    code={`import "@aortl/admin-react/styles.css";
+import { Button, Input, Card, CardBody, CardTitle, CardActions } from "@aortl/admin-react";
+
+export function SignIn() {
+  return (
+    <Card>
+      <CardBody>
+        <CardTitle>Sign in</CardTitle>
+        <Input placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <CardActions>
+          <Button variant="primary">Sign in</Button>
+          <Button variant="ghost">Cancel</Button>
+        </CardActions>
+      </CardBody>
+    </Card>
+  );
+}`}
+    lang="tsx"
+    theme="github-light"
+  />
+
+  <h2 class="text-xl font-semibold mt-8 mb-3">Notes</h2>
+  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+    <li>All components forward <code>ref</code> and accept <code>className</code> (merged with built-in classes).</li>
+    <li>Styles come from one CSS file — theming via CSS variables works exactly as with the vanilla package.</li>
+    <li><code>&lt;Input&gt;</code> uses <code>inputSize</code> instead of <code>size</code> to avoid colliding with the native HTML attribute.</li>
+  </ul>
+</Layout>

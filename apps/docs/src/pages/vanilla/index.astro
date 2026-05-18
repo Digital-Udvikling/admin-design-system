@@ -1,0 +1,41 @@
+---
+import { Code } from "astro:components";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Vanilla — Overview">
+  <h1 class="text-3xl font-bold mb-2">Vanilla CSS</h1>
+  <p class="text-text-muted text-lg mb-8">
+    A single pre-built stylesheet. No build tooling required on your end.
+  </p>
+
+  <h2 class="text-xl font-semibold mb-3">Install via CDN</h2>
+  <Code
+    code={`<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css">`}
+    lang="html"
+    theme="github-light"
+  />
+
+  <h2 class="text-xl font-semibold mt-8 mb-3">Or via npm</h2>
+  <Code
+    code={`npm install @aortl/admin-css`}
+    lang="bash"
+    theme="github-light"
+  />
+  <p class="text-sm text-text-muted mt-2">
+    Then import <code>@aortl/admin-css/admin.min.css</code> from your bundler entry.
+  </p>
+
+  <h2 class="text-xl font-semibold mt-8 mb-3">Theming</h2>
+  <p class="text-sm text-text-muted mb-3">
+    Override any token in your own stylesheet, loaded <em>after</em> the design system:
+  </p>
+  <Code
+    code={`:root {
+  --color-primary: oklch(0.6 0.2 30);
+  --radius-control: 0.25rem;
+}`}
+    lang="css"
+    theme="github-light"
+  />
+</Layout>

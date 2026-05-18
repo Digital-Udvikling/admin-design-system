@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint (oxlint)
+        run: pnpm lint
+
+      - name: Format check (oxfmt)
+        run: pnpm format:check
+
+      - name: Build (workspace types for docs check)
+        run: pnpm build
+
+      - name: Type check (tsc / astro)
+        run: pnpm check-types

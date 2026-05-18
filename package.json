@@ -8,9 +8,15 @@
     "build:react": "pnpm --filter @aortl/admin-react build",
     "dev": "pnpm --filter docs dev",
     "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
-    "clean": "pnpm -r exec rm -rf dist .astro node_modules/.vite"
+    "clean": "pnpm -r exec rm -rf dist .astro node_modules/.vite",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "devDependencies": {
+    "oxfmt": "0.50.0",
+    "oxlint": "1.65.0",
     "typescript": "5.8.3"
   },
   "packageManager": "pnpm@10.13.1",

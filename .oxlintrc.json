@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true,
+    "builtin": true
+  },
+  "settings": {
+    "react": {
+      "version": "19.2.0"
+    }
+  },
+  "rules": {},
+  "ignorePatterns": [
+    "**/node_modules",
+    "**/dist",
+    "**/.astro",
+    "**/coverage",
+    "**/.turbo",
+    "**/.vite",
+    "pnpm-lock.yaml"
+  ]
+}

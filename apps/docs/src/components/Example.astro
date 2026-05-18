@@ -1,6 +1,6 @@
 ---
 import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
-import prettier from "prettier";
+import { format } from "oxfmt";
 
 interface Props {
   title?: string;
@@ -36,14 +36,18 @@ function dedent(s: string): string {
  */
 async function formatHtml(code: string): Promise<string> {
   const wrapped = `<div>\n${code}\n</div>`;
-  const out = (await prettier.format(wrapped, { ...PRETTIER_OPTS, parser: "html" })).trim();
+  const out = (
+    await format("test.html", wrapped, { ...PRETTIER_OPTS, parser: "html" })
+  ).code.trim();
   const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
   return dedent(inner);
 }
 
 async function formatReact(code: string): Promise<string> {
   const wrapped = `<>\n${code}\n</>;\n`;
-  const out = (await prettier.format(wrapped, { ...PRETTIER_OPTS, parser: "babel-ts" })).trim();
+  const out = (
+    await format("test.tsx", wrapped, { ...PRETTIER_OPTS, parser: "babel-ts" })
+  ).code.trim();
   const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
   return dedent(inner);
 }
@@ -107,7 +111,8 @@ const hasBoth = !!html && !!react;
     border-bottom: 1px solid var(--sl-color-hairline);
     background: #fff;
   }
-  .example-source :global(starlight-tabs), .example-source :global(div[role="tabpanel"]) {
+  .example-source :global(starlight-tabs),
+  .example-source :global(div[role="tabpanel"]) {
     margin-top: 0;
   }
   .example-source :global(.tablist-wrapper) {

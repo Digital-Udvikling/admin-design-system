@@ -1,0 +1,59 @@
+---
+title: Alerts
+description: Inline notifications for form errors, success messages, and other contextual feedback.
+---
+
+import { Alert } from "@aortl/admin-react";
+import Example from "../../../components/Example.astro";
+
+Use alerts to surface form-level errors, success confirmations, and other contextual messages above the content they relate to. For single-field validation messages, use [Fields](/admin-design-system/components/forms/fields/) instead.
+
+## Examples
+
+### Variants
+
+<Example
+  html={`<div class="alert alert-info" role="status">Heads up — this is informational.</div>
+<div class="alert alert-success" role="status">Changes saved successfully.</div>
+<div class="alert alert-warning" role="alert">Double-check before submitting.</div>
+<div class="alert alert-danger" role="alert">Something went wrong.</div>`}
+  react={`<Alert variant="info">Heads up — this is informational.</Alert>
+<Alert variant="success">Changes saved successfully.</Alert>
+<Alert variant="warning">Double-check before submitting.</Alert>
+<Alert variant="danger">Something went wrong.</Alert>`}
+>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.75rem",
+      width: "100%",
+      maxWidth: "32rem",
+    }}
+  >
+    <Alert variant="info">Heads up — this is informational.</Alert>
+    <Alert variant="success">Changes saved successfully.</Alert>
+    <Alert variant="warning">Double-check before submitting.</Alert>
+    <Alert variant="danger">Something went wrong.</Alert>
+  </div>
+</Example>
+
+### With title and description
+
+<Example
+  html={`<div class="alert alert-danger" role="alert">
+  <strong class="alert-title">Form has errors</strong>
+  <p class="alert-description">Please fix the issues below before submitting.</p>
+</div>`}
+  react={`<Alert variant="danger">
+  <Alert.Title>Form has errors</Alert.Title>
+  <Alert.Description>Please fix the issues below before submitting.</Alert.Description>
+</Alert>`}
+>
+  <div style={{ width: "100%", maxWidth: "32rem" }}>
+    <Alert variant="danger">
+      <Alert.Title>Form has errors</Alert.Title>
+      <Alert.Description>Please fix the issues below before submitting.</Alert.Description>
+    </Alert>
+  </div>
+</Example>

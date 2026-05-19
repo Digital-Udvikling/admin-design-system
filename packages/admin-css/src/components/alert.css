@@ -1,0 +1,45 @@
+@layer components {
+  .alert {
+    @apply flex flex-col gap-1 w-full px-3 py-2 rounded-md border text-sm text-text;
+  }
+
+  .alert-info {
+    @apply bg-info-muted border-info-muted;
+  }
+
+  .alert-success {
+    @apply bg-success-muted border-success-muted;
+  }
+
+  .alert-warning {
+    @apply bg-warning-muted border-warning-muted;
+  }
+
+  .alert-danger {
+    @apply bg-danger-muted border-danger-muted;
+  }
+
+  .alert-title {
+    @apply font-medium leading-none;
+  }
+
+  .alert-info .alert-title {
+    @apply text-info;
+  }
+
+  .alert-success .alert-title {
+    @apply text-success;
+  }
+
+  .alert-warning .alert-title {
+    @apply text-warning;
+  }
+
+  .alert-danger .alert-title {
+    @apply text-danger;
+  }
+
+  .alert-description {
+    @apply text-text-muted leading-relaxed;
+  }
+}

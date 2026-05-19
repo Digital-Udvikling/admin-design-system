@@ -1,3 +1,10 @@
+export {
+  Alert,
+  type AlertProps,
+  type AlertVariant,
+  type AlertTitleProps,
+  type AlertDescriptionProps,
+} from "./Alert";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";

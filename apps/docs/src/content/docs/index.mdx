@@ -6,7 +6,7 @@ hero:
   tagline: A small, opinionated design system. For building admin interfaces with React or vanilla HTML + CSS.
   actions:
     - text: Browse components
-      link: /components/buttons/
+      link: components/buttons/
       icon: right-arrow
       variant: primary
 ---
@@ -18,12 +18,12 @@ import { CardGrid, LinkCard } from "@astrojs/starlight/components";
 <CardGrid>
   <LinkCard
     title="Vanilla CSS"
-    href="/getting-started/vanilla/"
+    href={`${import.meta.env.BASE_URL}getting-started/vanilla/`}
     description="A pre-built stylesheet. Drop it in via <link> and use semantic class names — no build setup, no Tailwind required."
   />
   <LinkCard
     title="React"
-    href="/getting-started/react/"
+    href={`${import.meta.env.BASE_URL}getting-started/react/`}
     description="A tree-shakeable component library. Same class names as the CSS package, so vanilla HTML and React render identically."
   />
 </CardGrid>

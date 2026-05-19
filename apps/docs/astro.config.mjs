@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
@@ -22,5 +23,12 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        "@aortl/admin-react": fileURLToPath(
+          new URL("../../packages/admin-react/src/index.ts", import.meta.url),
+        ),
+      },
+    },
   },
 });

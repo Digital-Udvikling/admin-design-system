@@ -19,7 +19,7 @@ This is a system for **internal admin tooling**, not customer-facing marketing s
 - **Clarity over polish** — legible type, honest borders, restrained color. Decorative gradients, oversized hero spacing, soft shadows, and animation flourishes belong in a different system.
 - **Predictable primitives** — fewer variants, consistent names, no surprises. A `<Button>` does what the HTML button does.
 
-When in doubt: would this make a 12-row form on a busy admin screen *easier* or *prettier*? Pick easier.
+When in doubt: would this make a 12-row form on a busy admin screen _easier_ or _prettier_? Pick easier.
 
 ## Commands
 

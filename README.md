@@ -4,11 +4,11 @@
 
 A small, opinionated design system shipped in two flavors from a single source of truth. Built for internal admin tooling — dashboards, CRMs, ops consoles — where information density and operator UX matter more than marketing polish.
 
-| Package               | What it is                                                                                                                                |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `@aortl/admin-css`    | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...).                                       |
-| `@aortl/admin-react`  | A React component library that renders the same class names as the CSS package.                                                           |
-| `apps/docs`           | A [Starlight](https://starlight.astro.build) docs site that shows each component's vanilla and React source side-by-side via synced tabs. |
+| Package              | What it is                                                                                                                                |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `@aortl/admin-css`   | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...).                                       |
+| `@aortl/admin-react` | A React component library that renders the same class names as the CSS package.                                                           |
+| `apps/docs`          | A [Starlight](https://starlight.astro.build) docs site that shows each component's vanilla and React source side-by-side via synced tabs. |
 
 ## Quick start
 

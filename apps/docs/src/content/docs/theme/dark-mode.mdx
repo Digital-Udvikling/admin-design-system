@@ -11,11 +11,11 @@ Dark mode tokens follow Flexoki's [inverted ramp](https://stephango.com/flexoki)
 
 The active mode is resolved from CSS `color-scheme`, declared at `:root`:
 
-| Selector                | `color-scheme` | When it wins                |
-| ----------------------- | -------------- | --------------------------- |
-| `:root`                 | `light dark`   | default — follows the OS    |
-| `[data-theme="light"]`  | `light`        | forces light                |
-| `[data-theme="dark"]`   | `dark`         | forces dark                 |
+| Selector               | `color-scheme` | When it wins             |
+| ---------------------- | -------------- | ------------------------ |
+| `:root`                | `light dark`   | default — follows the OS |
+| `[data-theme="light"]` | `light`        | forces light             |
+| `[data-theme="dark"]`  | `dark`         | forces dark              |
 
 `color-scheme` also flips native form controls, scrollbars, and the page background before paint, so there's no flash on load.
 
@@ -24,8 +24,12 @@ The active mode is resolved from CSS `color-scheme`, declared at `:root`:
 Set `data-theme` on `<html>` to override the OS preference:
 
 ```html
-<html data-theme="dark">...</html>
-<html data-theme="light">...</html>
+<html data-theme="dark">
+  ...
+</html>
+<html data-theme="light">
+  ...
+</html>
 ```
 
 ## Scope to a subtree
@@ -40,7 +44,7 @@ The selector isn't scoped to `:root`, so any element can flip its own subtree �
 
 ## Tailwind `dark:` variant
 
-Tailwind's `dark:` variant is wired to the same rules: it fires under `prefers-color-scheme: dark` *or* inside `[data-theme="dark"]`, and is suppressed inside `[data-theme="light"]`. Authored utilities stay in sync with the tokens:
+Tailwind's `dark:` variant is wired to the same rules: it fires under `prefers-color-scheme: dark` _or_ inside `[data-theme="dark"]`, and is suppressed inside `[data-theme="light"]`. Authored utilities stay in sync with the tokens:
 
 ```html
 <div class="shadow-md dark:shadow-xl">...</div>

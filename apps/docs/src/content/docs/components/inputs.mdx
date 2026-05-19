@@ -1,15 +1,16 @@
 ---
 title: Inputs
-description: Base class .input + a variant + an optional size. Field composition adds accessibility wiring in React.
+description: Base class .input + a variant + an optional size.
 ---
 
 import { Input } from "@aortl/admin-react";
 import Example from "../../../components/Example.astro";
-import { FieldEmailDemo } from "../../../demos/FieldEmailDemo";
-import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
+
+## Examples
+
+### Variants
 
 <Example
-  title="Variants"
   html={`<input class="input input-bordered" placeholder="Bordered (default)">
 <input class="input input-ghost" placeholder="Ghost">
 <input class="input input-danger" placeholder="Danger" value="invalid">`}
@@ -32,8 +33,9 @@ import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
   </div>
 </Example>
 
+### Sizes
+
 <Example
-  title="Sizes"
   html={`<input class="input input-bordered input-sm" placeholder="Small">
 <input class="input input-bordered" placeholder="Medium">
 <input class="input input-bordered input-lg" placeholder="Large">`}
@@ -56,8 +58,9 @@ import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
   </div>
 </Example>
 
+### Disabled
+
 <Example
-  title="Disabled"
   html={`<input class="input input-bordered" disabled value="Disabled">`}
   react={`<Input disabled defaultValue="Disabled" />`}
 >
@@ -66,45 +69,68 @@ import { FieldValidationDemo } from "../../../demos/FieldValidationDemo";
   </div>
 </Example>
 
-## Field composition
+### Types
 
-In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wrap an `Input` in `Field` + `Field.Label` to get the same wiring automatically — Base UI handles association, description, and validation messaging.
+`Input` forwards the native `type` attribute, so every HTML input type works — the browser handles affordances like date pickers, number steppers, and password masking.
 
 <Example
-  title="Label + description"
-  html={`<div class="field">
-  <label class="field-label" for="email">Email</label>
-  <input id="email" type="email" class="input input-bordered" placeholder="you@example.com" aria-describedby="email-desc">
-  <p id="email-desc" class="field-description">We'll never share your email.</p>
-</div>`}
-  react={`<Field name="email">
-  <Field.Label>Email</Field.Label>
-  <Input type="email" placeholder="you@example.com" />
-  <Field.Description>We'll never share your email.</Field.Description>
-</Field>`}
+  html={`<input class="input input-bordered" type="email" placeholder="you@example.com">
+<input class="input input-bordered" type="password" placeholder="Password">
+<input class="input input-bordered" type="number" placeholder="42">
+<input class="input input-bordered" type="date">
+<input class="input input-bordered" type="time">
+<input class="input input-bordered" type="search" placeholder="Search">
+<input class="input input-bordered" type="url" placeholder="https://example.com">
+<input class="input input-bordered" type="tel" placeholder="+45 12 34 56 78">`}
+  react={`<Input type="email" placeholder="you@example.com" />
+<Input type="password" placeholder="Password" />
+<Input type="number" placeholder="42" />
+<Input type="date" />
+<Input type="time" />
+<Input type="search" placeholder="Search" />
+<Input type="url" placeholder="https://example.com" />
+<Input type="tel" placeholder="+45 12 34 56 78" />`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FieldEmailDemo client:load />
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.75rem",
+      width: "100%",
+      maxWidth: "24rem",
+    }}
+  >
+    <Input type="email" placeholder="you@example.com" />
+    <Input type="password" placeholder="Password" />
+    <Input type="number" placeholder="42" />
+    <Input type="date" />
+    <Input type="time" />
+    <Input type="search" placeholder="Search" />
+    <Input type="url" placeholder="https://example.com" />
+    <Input type="tel" placeholder="+45 12 34 56 78" />
   </div>
 </Example>
 
+### File
+
+`type="file"` keeps the browser's native chooser button — pair it with a `Field.Label` (see [Fields](../fields/)) for accessible labeling.
+
 <Example
-  title="With validation"
-  html={`<form>
-  <div class="field">
-    <label class="field-label" for="username">Username</label>
-    <input id="username" class="input input-bordered" required minlength="3" placeholder="At least 3 characters">
-    <!-- Vanilla relies on the browser's built-in :invalid + ValidityState. -->
-  </div>
-</form>`}
-  react={`<Field name="username" validationMode="onChange">
-  <Field.Label>Username</Field.Label>
-  <Input required minLength={3} placeholder="At least 3 characters" />
-  <Field.Error match="valueMissing">Username is required.</Field.Error>
-  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
-</Field>`}
+  html={`<input class="input input-bordered" type="file">
+<input class="input input-bordered" type="file" accept="image/*" multiple>`}
+  react={`<Input type="file" />
+<Input type="file" accept="image/*" multiple />`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FieldValidationDemo client:load />
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.75rem",
+      width: "100%",
+      maxWidth: "24rem",
+    }}
+  >
+    <Input type="file" />
+    <Input type="file" accept="image/*" multiple />
   </div>
 </Example>

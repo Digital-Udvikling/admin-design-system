@@ -3,7 +3,6 @@ import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
 import { format } from "oxfmt";
 
 interface Props {
-  title?: string;
   /** HTML / vanilla-CSS source. Omit to hide the Vanilla tab. */
   html?: string;
   /** React / JSX source. Omit to hide the React tab. */
@@ -52,7 +51,7 @@ async function formatReact(code: string): Promise<string> {
   return dedent(inner);
 }
 
-const { title, html: rawHtml, react: rawReact } = Astro.props;
+const { html: rawHtml, react: rawReact } = Astro.props;
 const [html, react] = await Promise.all([
   rawHtml ? formatHtml(rawHtml) : Promise.resolve(undefined),
   rawReact ? formatReact(rawReact) : Promise.resolve(undefined),
@@ -61,7 +60,6 @@ const hasBoth = !!html && !!react;
 ---
 
 <section class="not-content example-block">
-  {title && <h3 class="example-title">{title}</h3>}
   <div class="example-frame">
     <div class="example-preview">
       <slot />
@@ -90,11 +88,6 @@ const hasBoth = !!html && !!react;
 <style>
   .example-block {
     margin: 1.5rem 0 2rem;
-  }
-  .example-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0 0 0.75rem;
   }
   .example-frame {
     border: 1px solid var(--sl-color-hairline);

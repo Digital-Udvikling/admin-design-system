@@ -1,0 +1,37 @@
+@layer components {
+  .btn-group {
+    @apply inline-flex;
+  }
+
+  .btn-group > .btn {
+    @apply rounded-none relative focus-visible:z-10;
+  }
+
+  .btn-group > .btn:not(:first-child) {
+    @apply -ml-px;
+  }
+
+  .btn-group > .btn:first-child {
+    @apply rounded-l-lg;
+  }
+
+  .btn-group > .btn:last-child {
+    @apply rounded-r-lg;
+  }
+
+  .btn-group-vertical {
+    @apply inline-flex flex-col;
+  }
+
+  .btn-group-vertical > .btn:not(:first-child) {
+    @apply -mt-px ml-0;
+  }
+
+  .btn-group-vertical > .btn:first-child {
+    @apply rounded-t-lg rounded-bl-none;
+  }
+
+  .btn-group-vertical > .btn:last-child {
+    @apply rounded-b-lg rounded-tr-none;
+  }
+}

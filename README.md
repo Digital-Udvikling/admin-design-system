@@ -2,7 +2,7 @@
 
 ### 📖 **[View the live docs →](https://digital-udvikling.github.io/admin-design-system/)**
 
-A small, opinionated design system shipped in two flavors from a single source of truth.
+A small, opinionated design system shipped in two flavors from a single source of truth. Built for internal admin tooling — dashboards, CRMs, ops consoles — where information density and operator UX matter more than marketing polish.
 
 | Package               | What it is                                                                                                                                |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

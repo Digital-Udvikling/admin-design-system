@@ -31,7 +31,12 @@
     "build": "vite build && pnpm copy:css",
     "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css",
     "dev": "vite build --watch",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",

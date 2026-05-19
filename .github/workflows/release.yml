@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/*/package.json"
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-tags: true
+
+      - name: Determine packages to release
+        id: plan
+        run: |
+          set -euo pipefail
+          PKGS=""
+          for f in packages/*/package.json; do
+            [ "$(jq -r '.private // false' "$f")" = "true" ] && continue
+            NAME="$(jq -r .name "$f")"
+            VERSION="$(jq -r .version "$f")"
+            TAG="$NAME@$VERSION"
+            if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+              echo "✓ $TAG already tagged, skipping"
+            else
+              echo "→ Will release $TAG"
+              PKGS="$PKGS $NAME"
+            fi
+          done
+          echo "packages=${PKGS# }" >> "$GITHUB_OUTPUT"
+
+      - uses: pnpm/action-setup@v4
+        if: steps.plan.outputs.packages != ''
+
+      - uses: actions/setup-node@v5
+        if: steps.plan.outputs.packages != ''
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        if: steps.plan.outputs.packages != ''
+        run: pnpm install --frozen-lockfile
+
+      - name: Build, publish, and tag each package
+        if: steps.plan.outputs.packages != ''
+        run: |
+          set -euo pipefail
+          for NAME in ${{ steps.plan.outputs.packages }}; do
+            DIR=""
+            for f in packages/*/package.json; do
+              if [ "$(jq -r .name "$f")" = "$NAME" ]; then
+                DIR="$(dirname "$f")"
+                break
+              fi
+            done
+            VERSION="$(jq -r .version "$DIR/package.json")"
+            TAG="$NAME@$VERSION"
+            echo "::group::Release $TAG"
+            pnpm -r --filter "$NAME..." build
+            pnpm --filter "$NAME" publish --no-git-checks --access public --provenance
+            git tag "$TAG"
+            git push origin "$TAG"
+            echo "::endgroup::"
+          done

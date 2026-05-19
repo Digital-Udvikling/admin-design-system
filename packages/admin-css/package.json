@@ -29,7 +29,12 @@
     "build": "pnpm build:dev && pnpm build:min",
     "build:dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css",
     "build:min": "tailwindcss -i ./src/index.css -o ./dist/admin.min.css --minify",
-    "dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css --watch"
+    "dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css --watch",
+    "prepublishOnly": "pnpm build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.0",

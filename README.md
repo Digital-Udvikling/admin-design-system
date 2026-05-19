@@ -63,3 +63,7 @@ apps/
 5. Register the new page in the `Components` sidebar group in `apps/docs/astro.config.mjs`.
 
 No build-config changes needed.
+
+## Releasing a package
+
+Bump the `version` field in the package's `package.json`, commit, push to `main`. That's it — `.github/workflows/release.yml` picks it up, publishes to npm, and tags the commit.

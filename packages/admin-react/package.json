@@ -35,7 +35,10 @@
     "build": "vite build && pnpm copy:css",
     "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css",
     "dev": "vite build --watch",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
@@ -44,14 +47,21 @@
     "clsx": "2.1.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
+    "@vitest/coverage-v8": "4.1.6",
+    "happy-dom": "20.9.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "typescript": "5.8.3",
     "vite": "8.0.13",
-    "vite-plugin-dts": "5.0.0"
+    "vite-plugin-dts": "5.0.0",
+    "vitest": "4.1.6"
   },
   "peerDependencies": {
     "react": ">=19.2",

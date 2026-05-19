@@ -30,6 +30,7 @@ pnpm build:css       # admin-css only
 pnpm build:react     # admin-react only (depends on admin-css dist)
 pnpm dev             # docs site at http://localhost:4321, with HMR into source CSS
 pnpm check-types     # tsc on admin-react + astro check on docs
+pnpm test            # vitest on admin-react (happy-dom + RTL)
 pnpm lint            # oxlint (NOT eslint)
 pnpm lint:fix
 pnpm format          # oxfmt (NOT prettier)
@@ -37,7 +38,7 @@ pnpm format:check
 pnpm clean           # nuke dist/, .astro/, node_modules/.vite across the workspace
 ```
 
-CI (`.github/workflows/ci.yml`) runs `lint`, `format:check`, `build`, then `check-types` — replicate locally before pushing.
+CI (`.github/workflows/ci.yml`) runs `lint`, `format:check`, `build`, `check-types`, then `test` — replicate locally before pushing.
 
 ## Architecture
 
@@ -68,6 +69,17 @@ Workspace order matters: `admin-css` builds first (Tailwind CLI produces `dist/a
 
 That same file also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's layers — otherwise Starlight's `@layer starlight.reset` overrides component sizing regardless of specificity. Don't reorder these imports without understanding why.
 
+### Tests
+
+`admin-react` is tested with Vitest + `@testing-library/react` on happy-dom. Tests live next to the component as `<Name>.test.tsx`.
+
+Two shapes per component:
+
+1. **Smoke** — one `it("renders", ...)` that mounts the component (with subparts where applicable) and asserts the root is queryable. Goal is just "doesn't throw" — not a class-name or DOM-shape contract.
+2. **Interactions** — controlled + uncontrolled paths for stateful components (`Input`, `Textarea`, `Checkbox`, `Switch`, `Radio`, `Select`), plus a "parent ignores change → state stays put" case to verify the wrapper doesn't shadow Base UI's controlled semantics. Use `@testing-library/user-event`, not `fireEvent`.
+
+Config notes — tests are kept out of the published build (`tsconfig.json` and `vite-plugin-dts` both exclude `*.test.*` + `test-setup.ts`); `tsconfig.test.json` is a sibling project for type-checking and runs as the second half of `pnpm check-types`. `src/test-setup.ts` imports jest-dom matchers AND wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup checks for `afterEach` at module-load time which vitest doesn't expose that early, so without this the DOM leaks across tests in the same file. `css: false` in `vitest.config.ts`: visual checks belong in the docs site.
+
 ### Docs Example component
 
 `apps/docs/src/components/Example.astro` renders the live preview and the synced-tab source viewer. It accepts `html` and `react` props and formats both at build time with `oxfmt`'s prettier parsers (`html` and `babel-ts`). Snippets are fragments (sibling roots), so the formatter wraps them in a synthetic root, formats, then strips and dedents — keep that in mind if you touch the helpers in `Example.astro`.
@@ -79,7 +91,8 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, ...).
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
 3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose class names with `clsx`, re-export from `src/index.ts` (export both the component and its types).
-4. `apps/docs/src/content/docs/components/<name>.mdx` — use `<Example html={...} react={...}>` with the live JSX as children.
+4. (If you added a React component) `packages/admin-react/src/<Name>.test.tsx` — at minimum a smoke test; add interaction tests for any controlled state. See the **Tests** section above.
+5. `apps/docs/src/content/docs/components/<name>.mdx` — use `<Example html={...} react={...}>` with the live JSX as children.
 
 No build config changes needed for new components.
 

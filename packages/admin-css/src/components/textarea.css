@@ -1,0 +1,33 @@
+@layer components {
+  .textarea {
+    @apply block w-full px-3 py-2 min-h-20 resize-y
+           rounded-lg text-sm
+           bg-surface text-text
+           border border-transparent
+           transition-colors duration-150
+           placeholder:text-text-muted
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .textarea-bordered {
+    @apply border-border hover:border-border-strong;
+  }
+
+  .textarea-ghost {
+    @apply bg-transparent hover:bg-surface-muted;
+  }
+
+  .textarea-danger {
+    @apply border-danger focus-visible:outline-danger;
+  }
+
+  /* Sizes */
+  .textarea-sm {
+    @apply text-xs px-2.5 py-1.5 min-h-16;
+  }
+
+  .textarea-lg {
+    @apply text-base px-4 py-2.5 min-h-24;
+  }
+}

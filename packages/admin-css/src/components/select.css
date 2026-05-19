@@ -1,0 +1,92 @@
+@layer components {
+  .select-trigger {
+    @apply inline-flex items-center justify-between gap-2 w-full px-3 py-2
+           rounded-lg text-sm leading-none text-left
+           bg-surface text-text
+           border border-transparent
+           cursor-pointer select-none
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .select-trigger[data-popup-open] {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  .select-trigger[data-placeholder] {
+    @apply text-text-muted;
+  }
+
+  .select-trigger-bordered {
+    @apply border-border hover:border-border-strong;
+  }
+
+  .select-trigger-ghost {
+    @apply bg-transparent hover:bg-surface-muted;
+  }
+
+  .select-trigger-danger {
+    @apply border-danger focus-visible:outline-danger;
+  }
+
+  /* Sizes */
+  .select-trigger-sm {
+    @apply text-xs px-2.5 py-1.5;
+  }
+
+  .select-trigger-lg {
+    @apply text-base px-4 py-2.5;
+  }
+
+  .select-icon {
+    @apply inline-flex items-center justify-center size-4 shrink-0
+           text-text-muted transition-transform duration-150;
+  }
+
+  .select-trigger[data-popup-open] .select-icon {
+    @apply rotate-180;
+  }
+
+  .select-popup {
+    @apply min-w-[var(--anchor-width)] max-h-72 overflow-auto
+           py-1 outline-none
+           bg-surface text-text
+           border border-border rounded-lg shadow-md
+           transition-[opacity,transform] duration-100;
+  }
+
+  .select-popup[data-starting-style],
+  .select-popup[data-ending-style] {
+    @apply opacity-0;
+  }
+
+  .select-popup[data-starting-style] {
+    @apply -translate-y-1;
+  }
+
+  .select-item {
+    @apply flex items-center gap-2 px-3 py-1.5 text-sm
+           cursor-pointer select-none outline-none;
+  }
+
+  .select-item[data-highlighted] {
+    @apply bg-surface-muted;
+  }
+
+  .select-item[data-selected] {
+    @apply font-medium;
+  }
+
+  .select-item[data-disabled] {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .select-item-indicator {
+    @apply inline-flex items-center justify-center size-4 ml-auto text-primary;
+  }
+
+  .select-group-label {
+    @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
+  }
+}

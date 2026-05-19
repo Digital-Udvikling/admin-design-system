@@ -1,0 +1,31 @@
+@layer components {
+  .switch {
+    @apply relative inline-flex items-center w-9 h-5 shrink-0 p-0.5
+           rounded-full border border-transparent
+           cursor-pointer
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .switch[data-unchecked] {
+    @apply bg-border-strong;
+  }
+
+  .switch[data-checked] {
+    @apply bg-primary;
+  }
+
+  .switch[data-disabled] {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .switch-thumb {
+    @apply size-4 rounded-full bg-paper shadow-sm
+           transition-transform duration-150;
+  }
+
+  .switch[data-checked] .switch-thumb {
+    @apply translate-x-4;
+  }
+}

@@ -15,9 +15,20 @@
     @apply text-xs text-danger leading-relaxed;
   }
 
-  /* When the field is in an invalid state, tint the contained input.
+  /* When the field is in an invalid state, tint the contained control.
      Base UI applies data-invalid on the Field root once validation fails. */
-  .field[data-invalid] .input {
+  .field[data-invalid] .input,
+  .field[data-invalid] .textarea,
+  .field[data-invalid] .select-trigger {
     @apply border-danger;
+  }
+
+  .field[data-invalid] .checkbox[data-unchecked],
+  .field[data-invalid] .radio[data-unchecked] {
+    @apply border-danger;
+  }
+
+  .field[data-invalid] .switch[data-unchecked] {
+    @apply ring-1 ring-danger;
   }
 }

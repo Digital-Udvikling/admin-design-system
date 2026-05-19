@@ -1,0 +1,96 @@
+---
+title: Radios
+description: Radio + RadioGroup. React wraps Base UI; vanilla styles native inputs.
+---
+
+import Example from "../../../../components/Example.astro";
+import {
+  RadioHorizontalDemo,
+  RadioVerticalDemo,
+  RadioDisabledDemo,
+} from "../../../../demos/RadioDemos";
+
+`RadioGroup` provides the selection state for its child `Radio`s. The React side wraps Base UI's `Radio.Root` (rendered as a `<span>` with a hidden `<input>`); vanilla styles a native `<input type="radio">` with the same class names.
+
+## Examples
+
+### Group (horizontal)
+
+<Example
+  html={`<div class="radio-group" role="radiogroup">
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="size" value="sm" class="radio"> Small
+  </label>
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="size" value="md" class="radio" checked> Medium
+  </label>
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="size" value="lg" class="radio"> Large
+  </label>
+</div>`}
+  react={`<RadioGroup name="size" defaultValue="md">
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="sm" /> Small
+  </label>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="md" /> Medium
+  </label>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="lg" /> Large
+  </label>
+</RadioGroup>`}
+>
+  <RadioHorizontalDemo client:load />
+</Example>
+
+### Vertical
+
+<Example
+  html={`<div class="radio-group radio-group-vertical" role="radiogroup">
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="plan" value="free" class="radio" checked> Free
+  </label>
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="plan" value="pro" class="radio"> Pro
+  </label>
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <input type="radio" name="plan" value="enterprise" class="radio"> Enterprise
+  </label>
+</div>`}
+  react={`<RadioGroup name="plan" orientation="vertical" defaultValue="free">
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="free" /> Free
+  </label>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="pro" /> Pro
+  </label>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="enterprise" /> Enterprise
+  </label>
+</RadioGroup>`}
+>
+  <RadioVerticalDemo client:load />
+</Example>
+
+### Disabled
+
+<Example
+  html={`<div class="radio-group" role="radiogroup">
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem; opacity: 0.6;">
+    <input type="radio" name="t" value="a" class="radio" disabled> Option A
+  </label>
+  <label style="display: inline-flex; align-items: center; gap: 0.5rem; opacity: 0.6;">
+    <input type="radio" name="t" value="b" class="radio" disabled checked> Option B
+  </label>
+</div>`}
+  react={`<RadioGroup name="t" defaultValue="b" disabled>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="a" /> Option A
+  </label>
+  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+    <Radio value="b" /> Option B
+  </label>
+</RadioGroup>`}
+>
+  <RadioDisabledDemo client:load />
+</Example>

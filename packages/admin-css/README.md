@@ -33,28 +33,6 @@ Or grab it from a CDN — no install needed:
 </div>
 ```
 
-## Components
-
-| Class    | Variants                                                      | Sizes                    |
-| -------- | ------------------------------------------------------------- | ------------------------ |
-| `.btn`   | `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger` | `.btn-sm`, `.btn-lg`     |
-| `.input` | `.input-bordered`, `.input-ghost`, `.input-danger`            | `.input-sm`, `.input-lg` |
-| `.card`  | `.card-bordered`, `.card-compact`                             | —                        |
-
-The `card` component uses children: `.card-body`, `.card-title`, `.card-description`, `.card-actions`.
-
-## Theming
-
-Override any CSS variable in your own stylesheet:
-
-```css
-:root {
-  --color-primary: oklch(0.6 0.2 30);
-}
-```
-
-See `src/theme.css` for the full list of tokens.
-
 ## Build
 
 ```fish

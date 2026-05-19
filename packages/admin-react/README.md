@@ -31,37 +31,6 @@ export function App() {
 }
 ```
 
-## Components
-
-| Component  | Parts                                                         | Key props                                                                                                                                          |
-| ---------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<Button>` | —                                                             | `variant`: `primary` (default) `\|` `secondary` `\|` `ghost` `\|` `danger` <br/> `size`: `sm` `\|` `md` (default) `\|` `lg` <br/> `block`: boolean |
-| `<Input>`  | —                                                             | `variant`: `bordered` (default) `\|` `ghost` `\|` `danger` <br/> `inputSize`: `sm` `\|` `md` (default) `\|` `lg`                                   |
-| `<Card>`   | `Card.Body`, `Card.Title`, `Card.Description`, `Card.Actions` | `bordered`, `compact` (on root)                                                                                                                    |
-| `<Field>`  | `Field.Label`, `Field.Description`, `Field.Error`             | `name`, `validate`, `validationMode` (on root)                                                                                                     |
-
-> `inputSize` is intentionally named instead of `size` because `<input>` has its own native `size` attribute.
-
-All components forward `ref`, accept `className` (merged with the design-system classes), and pass through standard HTML attributes.
-
-## Accessibility
-
-`Button`, `Input`, and `Field` wrap [Base UI](https://base-ui.com) primitives:
-
-- `Button` keeps focus when disabled (`focusableWhenDisabled` available), and can render as another element (`render` prop) while preserving keyboard semantics.
-- `Input` auto-wires into `Field` for label/description/error association and validation state — without manual `id` / `aria-describedby` plumbing.
-- `Field` handles HTML validation (`required`, `minLength`, `pattern`, ...) and surfaces matched errors via `<Field.Error match="..." />`.
-
-```tsx
-<Field name="email" validationMode="onBlur">
-  <Field.Label>Email</Field.Label>
-  <Input type="email" required />
-  <Field.Description>We'll never share your email.</Field.Description>
-  <Field.Error match="valueMissing">Email is required.</Field.Error>
-  <Field.Error match="typeMismatch">Enter a valid email.</Field.Error>
-</Field>
-```
-
 ## Build
 
 ```fish

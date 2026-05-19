@@ -1,4 +1,11 @@
 export {
+  Accordion,
+  type AccordionProps,
+  type AccordionItemProps,
+  type AccordionSummaryProps,
+  type AccordionContentProps,
+} from "./Accordion";
+export {
   Alert,
   type AlertProps,
   type AlertVariant,

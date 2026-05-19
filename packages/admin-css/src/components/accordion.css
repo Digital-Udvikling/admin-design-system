@@ -1,0 +1,77 @@
+@layer components {
+  .accordion {
+    @apply flex flex-col;
+  }
+
+  .accordion-item {
+    @apply border border-border bg-surface;
+    /* Enables transitioning height: 0 ↔ height: auto on ::details-content. */
+    interpolate-size: allow-keywords;
+  }
+
+  .accordion-item:first-child {
+    @apply rounded-t-lg;
+  }
+
+  .accordion-item:last-child {
+    @apply rounded-b-lg;
+  }
+
+  .accordion-item + .accordion-item {
+    border-top: 0;
+  }
+
+  .accordion-summary {
+    @apply flex items-center justify-between gap-2
+           px-4 py-3 cursor-pointer select-none
+           text-sm font-medium text-text
+           hover:bg-surface-muted
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+    list-style: none;
+  }
+
+  .accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Chevron — rotates when the item is open. */
+  .accordion-summary::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+    flex-shrink: 0;
+  }
+
+  .accordion-item[open] > .accordion-summary::after {
+    transform: rotate(-135deg);
+  }
+
+  .accordion-content {
+    @apply px-4 py-3 text-sm text-text border-t border-border;
+  }
+
+  /* Smooth open/close via ::details-content. With interpolate-size enabled
+     on the parent, the height auto ↔ 0 transition animates instead of
+     snapping. allow-discrete coordinates the content-visibility flip so the
+     content stays in the render tree throughout the animation. Browsers
+     without ::details-content degrade to the native instant toggle. */
+  .accordion-item::details-content {
+    opacity: 0;
+    height: 0;
+    overflow: clip;
+    transition:
+      opacity 200ms ease,
+      height 200ms ease,
+      content-visibility 200ms;
+    transition-behavior: allow-discrete;
+  }
+
+  .accordion-item[open]::details-content {
+    opacity: 1;
+    height: auto;
+  }
+}

@@ -14,6 +14,7 @@ export {
   type FileInputVariant,
   type FileInputSize,
 } from "./FileInput";
+export { InputGroup, type InputGroupProps, type InputGroupAddonProps } from "./InputGroup";
 export { Textarea, type TextareaProps, type TextareaVariant, type TextareaSize } from "./Textarea";
 export { Checkbox, type CheckboxProps, type CheckboxIndicatorProps } from "./Checkbox";
 export {

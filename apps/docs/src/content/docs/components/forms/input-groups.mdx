@@ -1,0 +1,94 @@
+---
+title: Input groups
+description: Combine inputs, addons, and buttons into a single flush row with merged borders.
+---
+
+import { Button, Input, InputGroup } from "@aortl/admin-react";
+import Example from "../../../../components/Example.astro";
+
+Use input groups to attach a prefix, suffix, or action button directly to an input. The group collapses the shared border between adjacent children and keeps the outer corners rounded — replacements for crispy's `PrependedText`, `AppendedText`, and `FieldWithButtons` layout objects.
+
+## Examples
+
+### Prepended addon
+
+<Example
+  html={`<div class="input-group">
+  <span class="input-group-addon">$</span>
+  <input class="input input-bordered" type="number" placeholder="0.00">
+</div>`}
+  react={`<InputGroup>
+  <InputGroup.Addon>$</InputGroup.Addon>
+  <Input type="number" placeholder="0.00" />
+</InputGroup>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <InputGroup>
+      <InputGroup.Addon>$</InputGroup.Addon>
+      <Input type="number" placeholder="0.00" />
+    </InputGroup>
+  </div>
+</Example>
+
+### Appended addon
+
+<Example
+  html={`<div class="input-group">
+  <input class="input input-bordered" type="text" placeholder="subdomain">
+  <span class="input-group-addon">.example.com</span>
+</div>`}
+  react={`<InputGroup>
+  <Input placeholder="subdomain" />
+  <InputGroup.Addon>.example.com</InputGroup.Addon>
+</InputGroup>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <InputGroup>
+      <Input placeholder="subdomain" />
+      <InputGroup.Addon>.example.com</InputGroup.Addon>
+    </InputGroup>
+  </div>
+</Example>
+
+### Both ends
+
+<Example
+  html={`<div class="input-group">
+  <span class="input-group-addon">$</span>
+  <input class="input input-bordered" type="number" placeholder="0.00">
+  <span class="input-group-addon">USD</span>
+</div>`}
+  react={`<InputGroup>
+  <InputGroup.Addon>$</InputGroup.Addon>
+  <Input type="number" placeholder="0.00" />
+  <InputGroup.Addon>USD</InputGroup.Addon>
+</InputGroup>`}
+>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <InputGroup>
+      <InputGroup.Addon>$</InputGroup.Addon>
+      <Input type="number" placeholder="0.00" />
+      <InputGroup.Addon>USD</InputGroup.Addon>
+    </InputGroup>
+  </div>
+</Example>
+
+### With a button
+
+<Example
+  html={`<div class="input-group">
+  <input class="input input-bordered" type="search" placeholder="Search orders…">
+  <button class="btn btn-primary" type="submit">Search</button>
+</div>`}
+  react={`<InputGroup>
+  <Input type="search" placeholder="Search orders…" />
+  <Button type="submit">Search</Button>
+</InputGroup>`}
+>
+  <div style={{ width: "100%", maxWidth: "28rem" }}>
+    <InputGroup>
+      <Input type="search" placeholder="Search orders…" />
+      <Button type="submit">Search</Button>
+    </InputGroup>
+  </div>
+</Example>

@@ -1,0 +1,38 @@
+@layer components {
+  .input-group {
+    @apply inline-flex w-full;
+  }
+
+  /* Clear all corners, then re-apply the outer ones on the first/last
+     child. Equal-specificity rules win because input-group.css imports
+     after input.css. */
+  .input-group > * {
+    @apply rounded-none;
+  }
+
+  .input-group > :first-child {
+    @apply rounded-l-lg;
+  }
+
+  .input-group > :last-child {
+    @apply rounded-r-lg;
+  }
+
+  /* Collapse the shared edge between adjacent children. */
+  .input-group > :not(:first-child) {
+    margin-left: -1px;
+  }
+
+  /* Float the focused element so its outline ring and accented border
+     can't be clipped by its neighbour's overlapping edge. */
+  .input-group > :focus,
+  .input-group > :focus-within {
+    @apply relative z-10;
+  }
+
+  .input-group-addon {
+    @apply inline-flex items-center px-3 text-sm leading-none whitespace-nowrap
+           bg-surface-muted text-text-muted
+           border border-border;
+  }
+}

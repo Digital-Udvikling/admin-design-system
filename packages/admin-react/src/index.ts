@@ -8,6 +8,12 @@ export {
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";
+export {
+  FileInput,
+  type FileInputProps,
+  type FileInputVariant,
+  type FileInputSize,
+} from "./FileInput";
 export { Textarea, type TextareaProps, type TextareaVariant, type TextareaSize } from "./Textarea";
 export { Checkbox, type CheckboxProps, type CheckboxIndicatorProps } from "./Checkbox";
 export {

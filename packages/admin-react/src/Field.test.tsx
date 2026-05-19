@@ -19,6 +19,16 @@ describe("Field", () => {
     expect(screen.getByText("Email is required.")).toBeInTheDocument();
   });
 
+  it("marks the label as required when the prop is set", () => {
+    render(
+      <Field>
+        <Field.Label required>Email</Field.Label>
+        <Input required />
+      </Field>,
+    );
+    expect(screen.getByText("Email")).toHaveAttribute("data-required");
+  });
+
   describe("interactions", () => {
     it("clicking the label focuses the associated Input", async () => {
       const user = userEvent.setup();

@@ -7,6 +7,15 @@
     @apply text-sm font-medium text-text leading-none;
   }
 
+  .field-label[data-required]::after {
+    content: " *";
+    @apply text-danger;
+  }
+
+  .asteriskField {
+    @apply text-danger;
+  }
+
   .field-description {
     @apply text-xs text-text-muted leading-relaxed;
   }

@@ -25,11 +25,15 @@ function FieldRoot({ className, ...rest }: FieldProps) {
   );
 }
 
-export type FieldLabelProps = ComponentProps<typeof BaseField.Label>;
+export type FieldLabelProps = ComponentProps<typeof BaseField.Label> & {
+  /** Renders a red asterisk after the label text via `data-required`. */
+  required?: boolean;
+};
 
-function FieldLabel({ className, ...rest }: FieldLabelProps) {
+function FieldLabel({ className, required, ...rest }: FieldLabelProps) {
   return (
     <BaseField.Label
+      data-required={required ? "" : undefined}
       className={clsx("field-label", typeof className === "string" ? className : undefined)}
       {...rest}
     />

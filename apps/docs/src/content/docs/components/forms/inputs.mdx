@@ -111,15 +111,21 @@ import Example from "../../../../components/Example.astro";
   </div>
 </Example>
 
-### File
+### Date and time
 
-`type="file"` keeps the browser's native chooser button — pair it with a `Field.Label` (see [Fields](../fields/)) for accessible labeling.
+The browser renders the native picker; the design system tones the calendar glyph (`::-webkit-calendar-picker-indicator`) to read as interactive without overwhelming the input. Dark-mode colouring comes for free via `color-scheme`.
 
 <Example
-  html={`<input class="input input-bordered" type="file">
-<input class="input input-bordered" type="file" accept="image/*" multiple>`}
-  react={`<Input type="file" />
-<Input type="file" accept="image/*" multiple />`}
+  html={`<input class="input input-bordered" type="date">
+<input class="input input-bordered" type="time">
+<input class="input input-bordered" type="datetime-local">
+<input class="input input-bordered" type="month">
+<input class="input input-bordered" type="week">`}
+  react={`<Input type="date" />
+<Input type="time" />
+<Input type="datetime-local" />
+<Input type="month" />
+<Input type="week" />`}
 >
   <div
     style={{
@@ -130,7 +136,14 @@ import Example from "../../../../components/Example.astro";
       maxWidth: "24rem",
     }}
   >
-    <Input type="file" />
-    <Input type="file" accept="image/*" multiple />
+    <Input type="date" />
+    <Input type="time" />
+    <Input type="datetime-local" />
+    <Input type="month" />
+    <Input type="week" />
   </div>
 </Example>
+
+### File
+
+For richer chrome around the picker button, use the dedicated [FileInput](../file-inputs/) component (`.file-input` class). Plain `<input type="file" class="input">` works but the file-selector button stays browser-default.

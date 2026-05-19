@@ -30,4 +30,11 @@
   .input-lg {
     @apply text-base px-4 py-2.5;
   }
+
+  /* Native date/time picker glyph. The browser handles dark-mode coloring
+     via the inherited `color-scheme` set on [data-theme]; we just tone the
+     glyph down at rest and brighten it on hover so it reads as interactive. */
+  .input::-webkit-calendar-picker-indicator {
+    @apply opacity-60 cursor-pointer hover:opacity-100;
+  }
 }

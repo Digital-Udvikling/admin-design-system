@@ -1,3 +1,14 @@
+/*
+ * Layer order: push Tailwind's `components` and `utilities` after Starlight's
+ * own layers so admin-css component styles (e.g. `.btn-sm { font-size }`) win
+ * over `@layer starlight.reset { button { font: inherit } }`. Without this
+ * pre-declaration, Starlight's layers append *after* Tailwind's and override
+ * our component sizing regardless of selector specificity.
+ */
+@layer theme, base, starlight.base, starlight.reset, starlight.core,
+  starlight.content, starlight.components, starlight.utils, components,
+  utilities;
+
 @import "tailwindcss";
 
 /*

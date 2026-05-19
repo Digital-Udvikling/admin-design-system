@@ -25,9 +25,7 @@ In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wra
   <Field.Description>We'll never share your email.</Field.Description>
 </Field>`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FieldEmailDemo client:load />
-  </div>
+  <FieldEmailDemo client:load />
 </Example>
 
 ### Required
@@ -48,21 +46,11 @@ Pass `required` to `Field.Label` (React) or add `data-required` to the label (va
   <Input type="email" required />
 </Field>`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <div class="field">
-      <label class="field-label" data-required for="email-required-demo">
-        Email
-      </label>
-      <input id="email-required-demo" type="email" class="input input-bordered" required />
-    </div>
+  <div class="field">
+    <label class="field-label" data-required for="email-required-demo">
+      Email
+    </label>
+    <input id="email-required-demo" type="email" class="input input-bordered" required />
   </div>
 </Example>
 
@@ -83,7 +71,5 @@ Pass `required` to `Field.Label` (React) or add `data-required` to the label (va
   <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
 </Field>`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FieldValidationDemo client:load />
-  </div>
+  <FieldValidationDemo client:load />
 </Example>

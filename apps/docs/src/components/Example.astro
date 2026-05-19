@@ -61,9 +61,24 @@ const hasBoth = !!html && !!react;
 
 <section class="not-content example-block">
   <div class="example-frame">
-    <div class="example-preview">
-      <slot />
-    </div>
+    {
+      hasBoth ? (
+        <package-preview class="example-preview">
+          <div
+            class="preview-variant"
+            data-variant="html"
+            set:html={rawHtml!}
+          />
+          <div class="preview-variant" data-variant="react" hidden>
+            <slot />
+          </div>
+        </package-preview>
+      ) : (
+        <div class="example-preview">
+          <slot />
+        </div>
+      )
+    }
     <div class="example-source">
       {
         hasBoth ? (
@@ -85,6 +100,61 @@ const hasBoth = !!html && !!react;
   </div>
 </section>
 
+{/* Hoisted module so Astro bundles and dedupes it across the page. The
+storage key, sync attribute, and tab selectors below intentionally track
+@astrojs/starlight/user-components/Tabs.astro — keep them in sync. */}
+<script>
+  const STORAGE_KEY = "starlight-synced-tabs__package";
+
+  class PackagePreview extends HTMLElement {
+    #observer: MutationObserver | null = null;
+    #onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue) this.#apply(e.newValue);
+    };
+
+    connectedCallback() {
+      if (this.querySelectorAll(".preview-variant").length < 2) return;
+
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) this.#apply(stored);
+
+      const tabs = this.parentElement?.querySelector(
+        'starlight-tabs[data-sync-key="package"]',
+      );
+      if (tabs) {
+        this.#observer = new MutationObserver(() => {
+          const tab = tabs.querySelector('[role="tab"][aria-selected="true"]');
+          const label = tab?.textContent?.trim();
+          if (label) this.#apply(label);
+        });
+        this.#observer.observe(tabs, {
+          attributes: true,
+          attributeFilter: ["aria-selected"],
+          subtree: true,
+        });
+      }
+
+      window.addEventListener("storage", this.#onStorage);
+    }
+
+    disconnectedCallback() {
+      this.#observer?.disconnect();
+      this.#observer = null;
+      window.removeEventListener("storage", this.#onStorage);
+    }
+
+    #apply(label: string) {
+      const wantReact = label === "React";
+      for (const v of this.querySelectorAll<HTMLElement>(".preview-variant")) {
+        const isReact = v.dataset.variant === "react";
+        v.hidden = wantReact ? !isReact : isReact;
+      }
+    }
+  }
+
+  customElements.define("package-preview", PackagePreview);
+</script>
+
 <style>
   .example-block {
     margin: 1.5rem 0 2rem;
@@ -103,6 +173,14 @@ const hasBoth = !!html && !!react;
     gap: 0.75rem;
     border-bottom: 1px solid var(--sl-color-hairline);
     background: var(--color-surface);
+  }
+  /* Variants are layout-transparent so children flex directly in the
+  preview. The explicit [hidden] rule outranks display: contents. */
+  .example-preview .preview-variant {
+    display: contents;
+  }
+  .example-preview .preview-variant[hidden] {
+    display: none;
   }
   .example-source :global(starlight-tabs),
   .example-source :global(div[role="tabpanel"]) {

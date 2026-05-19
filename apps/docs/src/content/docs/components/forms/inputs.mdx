@@ -18,19 +18,9 @@ import Example from "../../../../components/Example.astro";
 <Input variant="ghost" placeholder="Ghost" />
 <Input variant="danger" defaultValue="invalid" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <Input placeholder="Bordered (default)" />
-    <Input variant="ghost" placeholder="Ghost" />
-    <Input variant="danger" defaultValue="invalid" />
-  </div>
+  <Input placeholder="Bordered (default)" />
+  <Input variant="ghost" placeholder="Ghost" />
+  <Input variant="danger" defaultValue="invalid" />
 </Example>
 
 ### Sizes
@@ -43,19 +33,9 @@ import Example from "../../../../components/Example.astro";
 <Input placeholder="Medium" />
 <Input inputSize="lg" placeholder="Large" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <Input inputSize="sm" placeholder="Small" />
-    <Input placeholder="Medium" />
-    <Input inputSize="lg" placeholder="Large" />
-  </div>
+  <Input inputSize="sm" placeholder="Small" />
+  <Input placeholder="Medium" />
+  <Input inputSize="lg" placeholder="Large" />
 </Example>
 
 ### Disabled
@@ -64,9 +44,7 @@ import Example from "../../../../components/Example.astro";
   html={`<input class="input input-bordered" disabled value="Disabled">`}
   react={`<Input disabled defaultValue="Disabled" />`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <Input disabled defaultValue="Disabled" />
-  </div>
+  <Input disabled defaultValue="Disabled" />
 </Example>
 
 ### Types
@@ -91,24 +69,14 @@ import Example from "../../../../components/Example.astro";
 <Input type="url" placeholder="https://example.com" />
 <Input type="tel" placeholder="+45 12 34 56 78" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <Input type="email" placeholder="you@example.com" />
-    <Input type="password" placeholder="Password" />
-    <Input type="number" placeholder="42" />
-    <Input type="date" />
-    <Input type="time" />
-    <Input type="search" placeholder="Search" />
-    <Input type="url" placeholder="https://example.com" />
-    <Input type="tel" placeholder="+45 12 34 56 78" />
-  </div>
+  <Input type="email" placeholder="you@example.com" />
+  <Input type="password" placeholder="Password" />
+  <Input type="number" placeholder="42" />
+  <Input type="date" />
+  <Input type="time" />
+  <Input type="search" placeholder="Search" />
+  <Input type="url" placeholder="https://example.com" />
+  <Input type="tel" placeholder="+45 12 34 56 78" />
 </Example>
 
 ### Date and time
@@ -127,21 +95,11 @@ The browser renders the native picker; the design system tones the calendar glyp
 <Input type="month" />
 <Input type="week" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <Input type="date" />
-    <Input type="time" />
-    <Input type="datetime-local" />
-    <Input type="month" />
-    <Input type="week" />
-  </div>
+  <Input type="date" />
+  <Input type="time" />
+  <Input type="datetime-local" />
+  <Input type="month" />
+  <Input type="week" />
 </Example>
 
 ### File

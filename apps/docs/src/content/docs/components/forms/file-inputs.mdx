@@ -20,19 +20,9 @@ The native `<input type="file">` is the only HTML control whose internal chrome 
 <FileInput variant="ghost" />
 <FileInput variant="danger" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <FileInput />
-    <FileInput variant="ghost" />
-    <FileInput variant="danger" />
-  </div>
+  <FileInput />
+  <FileInput variant="ghost" />
+  <FileInput variant="danger" />
 </Example>
 
 ### Sizes
@@ -45,19 +35,9 @@ The native `<input type="file">` is the only HTML control whose internal chrome 
 <FileInput />
 <FileInput inputSize="lg" />`}
 >
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.75rem",
-      width: "100%",
-      maxWidth: "24rem",
-    }}
-  >
-    <FileInput inputSize="sm" />
-    <FileInput />
-    <FileInput inputSize="lg" />
-  </div>
+  <FileInput inputSize="sm" />
+  <FileInput />
+  <FileInput inputSize="lg" />
 </Example>
 
 ### Restricting file types
@@ -68,9 +48,7 @@ The native `accept` and `multiple` attributes flow through unchanged.
   html={`<input type="file" class="file-input file-input-bordered" accept="image/*" multiple>`}
   react={`<FileInput accept="image/*" multiple />`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FileInput accept="image/*" multiple />
-  </div>
+  <FileInput accept="image/*" multiple />
 </Example>
 
 ### Disabled
@@ -79,7 +57,5 @@ The native `accept` and `multiple` attributes flow through unchanged.
   html={`<input type="file" class="file-input file-input-bordered" disabled>`}
   react={`<FileInput disabled />`}
 >
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
-    <FileInput disabled />
-  </div>
+  <FileInput disabled />
 </Example>

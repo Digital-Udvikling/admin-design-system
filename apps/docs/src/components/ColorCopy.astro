@@ -1,0 +1,233 @@
+---
+/**
+ * Singleton: renders a shared "copy color" popover and a toast.
+ * Listens for clicks on any [data-color-chip] element on the page and opens
+ * a menu offering hex / class / CSS variable. Used by ColorFamily + ColorRamp.
+ */
+---
+
+<div class="copy-popover" popover id="color-copy-popover">
+  <button class="copy-option" type="button" data-format="hex">
+    <span class="copy-label">Hex</span>
+    <code class="copy-value" data-target="hex"></code>
+  </button>
+  <button class="copy-option" type="button" data-format="class">
+    <span class="copy-label">Class</span>
+    <code class="copy-value" data-target="class"></code>
+  </button>
+  <button class="copy-option" type="button" data-format="var">
+    <span class="copy-label">Variable</span>
+    <code class="copy-value" data-target="var"></code>
+  </button>
+</div>
+
+<div class="copy-toast" id="color-copy-toast" role="status" aria-live="polite"></div>
+
+<style>
+  .copy-popover {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0.25rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.5rem;
+    background: var(--sl-color-bg);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+    min-width: 15rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  .copy-popover:popover-open {
+    display: flex;
+  }
+  .copy-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    border: 0;
+    background: transparent;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    text-align: left;
+    color: var(--sl-color-text);
+    font-family: inherit;
+  }
+  .copy-option:hover,
+  .copy-option:focus-visible {
+    background: var(--sl-color-bg-nav);
+    outline: none;
+  }
+  .copy-label {
+    color: var(--sl-color-text-accent);
+    font-weight: 500;
+  }
+  .copy-value {
+    font-size: 0.7rem;
+    color: var(--sl-color-text);
+    background: transparent;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 11rem;
+  }
+  .copy-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.55rem 1rem;
+    background: var(--sl-color-text);
+    color: var(--sl-color-bg);
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+    opacity: 0;
+    transition: opacity 180ms ease;
+    pointer-events: none;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .copy-toast.show {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const popover = document.getElementById(
+    "color-copy-popover",
+  ) as HTMLDivElement | null;
+  const toast = document.getElementById(
+    "color-copy-toast",
+  ) as HTMLDivElement | null;
+  if (!popover || !toast) {
+    /* nothing to wire up */
+  } else {
+    const slots = {
+      hex: popover.querySelector('[data-target="hex"]') as HTMLElement,
+      class: popover.querySelector('[data-target="class"]') as HTMLElement,
+      var: popover.querySelector('[data-target="var"]') as HTMLElement,
+    };
+
+    let toastTimer: number | undefined;
+    function flashToast(message: string) {
+      toast!.textContent = message;
+      toast!.classList.add("show");
+      if (toastTimer) window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(
+        () => toast!.classList.remove("show"),
+        1400,
+      );
+    }
+
+    function rgbToHex(value: string): string {
+      const m = value.match(
+        /rgba?\(\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)/,
+      );
+      if (!m) return value;
+      const hex = (n: string) =>
+        Math.round(parseFloat(n)).toString(16).padStart(2, "0");
+      return `#${hex(m[1])}${hex(m[2])}${hex(m[3])}`;
+    }
+
+    function twNameFromVariable(variable: string): string {
+      return variable.replace(/^--color-/, "");
+    }
+
+    function positionPopover(anchor: HTMLElement) {
+      const rect = anchor.getBoundingClientRect();
+      const margin = 6;
+      // Render off-screen first to measure, then clamp to viewport.
+      popover!.style.top = "0px";
+      popover!.style.left = "0px";
+      const pop = popover!.getBoundingClientRect();
+      let top = rect.bottom + margin;
+      let left = rect.left;
+      if (top + pop.height > window.innerHeight - margin) {
+        top = Math.max(margin, rect.top - pop.height - margin);
+      }
+      if (left + pop.width > window.innerWidth - margin) {
+        left = Math.max(margin, window.innerWidth - pop.width - margin);
+      }
+      popover!.style.top = `${top}px`;
+      popover!.style.left = `${left}px`;
+    }
+
+    let activeAnchor: HTMLElement | null = null;
+
+    document.addEventListener("click", (event) => {
+      const trigger = (event.target as HTMLElement).closest(
+        "[data-color-chip]",
+      ) as HTMLElement | null;
+      if (!trigger) return;
+
+      event.preventDefault();
+      const variable = trigger.dataset.variable ?? "";
+      const swatch = trigger.querySelector("[data-color-swatch]") as
+        | HTMLElement
+        | null;
+      const computed = swatch
+        ? getComputedStyle(swatch).backgroundColor
+        : getComputedStyle(trigger).backgroundColor;
+      const hex = rgbToHex(computed).toLowerCase();
+      const className = twNameFromVariable(variable);
+      const varExpr = `var(${variable})`;
+
+      slots.hex.textContent = hex;
+      slots.class.textContent = className;
+      slots.var.textContent = varExpr;
+
+      const sameAnchor = activeAnchor === trigger;
+      const isOpen = popover.matches(":popover-open");
+      if (isOpen && sameAnchor) {
+        popover.hidePopover();
+        activeAnchor = null;
+        return;
+      }
+      if (isOpen) popover.hidePopover();
+      activeAnchor = trigger;
+      popover.showPopover();
+      positionPopover(trigger);
+    });
+
+    popover.addEventListener("toggle", (event) => {
+      const e = event as ToggleEvent;
+      if (e.newState === "closed") activeAnchor = null;
+    });
+
+    popover.addEventListener("click", async (event) => {
+      const option = (event.target as HTMLElement).closest(
+        ".copy-option",
+      ) as HTMLElement | null;
+      if (!option) return;
+      const format = option.dataset.format as "hex" | "class" | "var";
+      const value = slots[format].textContent ?? "";
+      const labels: Record<string, string> = {
+        hex: "hex",
+        class: "class",
+        var: "variable",
+      };
+      try {
+        await navigator.clipboard.writeText(value);
+        flashToast(`Copied ${labels[format]} ${value}`);
+      } catch {
+        flashToast("Copy failed");
+      }
+      popover.hidePopover();
+    });
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (popover.matches(":popover-open")) popover.hidePopover();
+      },
+      { passive: true },
+    );
+  }
+</script>

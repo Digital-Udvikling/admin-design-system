@@ -7,6 +7,9 @@ sidebar:
 
 import ColorFamily from "../../../components/ColorFamily.astro";
 import ColorRamp from "../../../components/ColorRamp.astro";
+import ColorCopy from "../../../components/ColorCopy.astro";
+
+<ColorCopy />
 
 The palette is [Flexoki](https://stephango.com/flexoki) — an inky, paper-warm scheme by Steph Ango. Colors live in two layers, both registered with Tailwind's `@theme`:
 
@@ -14,6 +17,8 @@ The palette is [Flexoki](https://stephango.com/flexoki) — an inky, paper-warm 
 2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, ...) point at palette tones. Components only ever reference these.
 
 Use a utility (`bg-primary`, `text-text-muted`) or reference the variable directly (`var(--color-primary)`). Override either layer to reskin the system — see [Customize](../customize/).
+
+Click any swatch to copy its hex, Tailwind class token, or CSS variable.
 
 ## Semantic tokens
 

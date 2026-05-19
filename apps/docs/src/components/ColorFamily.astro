@@ -22,15 +22,24 @@ const { family, description, variants } = Astro.props;
     {
       variants.map((v) => (
         <li class="variant">
-          <div
-            class="variant-chip"
-            style={`background: var(${v.variable})`}
-            aria-hidden="true"
-          />
-          <div class="variant-meta">
-            <span class="variant-label">{v.label}</span>
-            <code class="variant-var">{v.variable}</code>
-          </div>
+          <button
+            type="button"
+            class="variant-trigger"
+            data-color-chip
+            data-variable={v.variable}
+            aria-label={`Copy ${v.label} (${v.variable})`}
+          >
+            <span
+              class="variant-chip"
+              data-color-swatch
+              style={`background: var(${v.variable})`}
+              aria-hidden="true"
+            />
+            <span class="variant-meta">
+              <span class="variant-label">{v.label}</span>
+              <code class="variant-var">{v.variable}</code>
+            </span>
+          </button>
         </li>
       ))
     }
@@ -85,16 +94,36 @@ const { family, description, variants } = Astro.props;
     }
   }
   .variant {
+    min-width: 0;
+  }
+  .variant-trigger {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    min-width: 0;
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    border-radius: 0.5rem;
+  }
+  .variant-trigger:focus-visible {
+    outline: 2px solid var(--sl-color-text-accent);
+    outline-offset: 3px;
   }
   .variant-chip {
+    display: block;
     height: 3.5rem;
     border-radius: 0.5rem;
     border: 1px solid var(--sl-color-hairline);
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+    transition: transform 120ms ease;
+  }
+  .variant-trigger:hover .variant-chip {
+    transform: translateY(-1px);
   }
   .variant-meta {
     display: flex;

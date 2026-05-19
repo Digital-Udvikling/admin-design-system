@@ -1,5 +1,7 @@
 # @aortl/admin design system
 
+### 📖 **[View the live docs →](https://digital-udvikling.github.io/admin-design-system/)**
+
 A small, opinionated design system shipped in two flavors from a single source of truth.
 
 | Package               | What it is                                                                                                                                |

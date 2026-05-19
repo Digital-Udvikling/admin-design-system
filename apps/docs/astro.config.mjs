@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
+  site: "https://digital-udvikling.github.io",
+  base: "/admin-design-system/",
   integrations: [
     react(),
     starlight({

@@ -1,0 +1,78 @@
+---
+interface Tone {
+  label: string;
+  variable: string;
+}
+
+interface Props {
+  family: string;
+  tones: Tone[];
+}
+
+const { family, tones } = Astro.props;
+---
+
+<section class="not-content ramp">
+  <h3 class="ramp-title">{family}</h3>
+  <ol class="ramp-strip" style={`--ramp-count: ${tones.length}`}>
+    {
+      tones.map((t) => (
+        <li class="ramp-step">
+          <div
+            class="ramp-chip"
+            style={`background: var(${t.variable})`}
+            aria-hidden="true"
+          />
+          <span class="ramp-label">{t.label}</span>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .ramp {
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--sl-color-hairline);
+  }
+  .ramp:first-of-type {
+    border-top: none;
+    padding-top: 0.25rem;
+  }
+  .ramp-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+  .ramp-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--ramp-count), minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  .ramp-step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .ramp-chip {
+    aspect-ratio: 1;
+    border-radius: 0.25rem;
+    border: 1px solid var(--sl-color-hairline);
+  }
+  .ramp-label {
+    font-size: 0.6rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--sl-color-text-accent);
+    text-align: center;
+    line-height: 1;
+  }
+  @media (max-width: 50rem) {
+    .ramp-label {
+      font-size: 0.55rem;
+    }
+  }
+</style>

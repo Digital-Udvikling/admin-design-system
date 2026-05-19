@@ -1,48 +1,208 @@
 /**
- * Design tokens — the single place colors live.
+ * Design tokens — based on Flexoki (https://stephango.com/flexoki).
  *
- * Tailwind v4 auto-generates utility classes from these CSS variables:
- *   --color-primary  → bg-primary, text-primary, border-primary, ...
+ * Two layers, both registered with @theme so Tailwind generates utilities
+ * (bg-blue-600, bg-primary, ...) and emits them as CSS variables you can
+ * reference or override at runtime.
  *
- * Radii and shadows use Tailwind's built-in scale (rounded-lg, shadow-xs, ...).
+ *   1. Palette — the Flexoki ramps (paper, black, base, red, orange,
+ *      yellow, green, cyan, blue, purple, magenta). Replaces Tailwind's
+ *      default colors entirely.
  *
- * Override any token in your own CSS to reskin the system:
- *   :root { --color-primary: oklch(0.6 0.2 30); }
+ *   2. Semantic — purpose-named aliases (primary, surface, danger, ...)
+ *      pointing at palette tones. Components use these, never the palette
+ *      directly, so reskinning means remapping the alias:
+ *
+ *        :root { --color-primary: var(--color-green-600); }
+ *
+ *      or replacing the palette tone underneath:
+ *
+ *        :root { --color-blue-600: oklch(0.55 0.18 250); }
  */
 
-@theme static inline {
-  /* Brand */
-  --color-primary: oklch(0.58 0.18 250);
-  --color-primary-content: oklch(0.98 0 0);
-  --color-primary-hover: oklch(0.52 0.18 250);
-  --color-primary-muted: oklch(0.96 0.03 250);
+@theme static {
+  /* Wipe Tailwind's default palette — Flexoki is the single source of truth. */
+  --color-*: initial;
 
-  /* Neutral surfaces */
-  --color-surface: oklch(1 0 0);
-  --color-surface-muted: oklch(0.96 0 0);
-  --color-surface-strong: oklch(0.92 0 0);
+  /* Base */
+  --color-paper: #fffcf0;
+  --color-black: #100f0f;
+  --color-base-50: #f2f0e5;
+  --color-base-100: #e6e4d9;
+  --color-base-150: #dad8ce;
+  --color-base-200: #cecdc3;
+  --color-base-300: #b7b5ac;
+  --color-base-400: #9f9d96;
+  --color-base-500: #878580;
+  --color-base-600: #6f6e69;
+  --color-base-700: #575653;
+  --color-base-800: #403e3c;
+  --color-base-850: #343331;
+  --color-base-900: #282726;
+  --color-base-950: #1c1b1a;
 
-  /* Borders & text */
-  --color-border: oklch(0.88 0 0);
-  --color-border-strong: oklch(0.78 0 0);
-  --color-text: oklch(0.2 0 0);
-  --color-text-muted: oklch(0.45 0 0);
+  /* Red */
+  --color-red-50: #ffe1d5;
+  --color-red-100: #ffcabb;
+  --color-red-150: #fdb2a2;
+  --color-red-200: #f89a8a;
+  --color-red-300: #e8705f;
+  --color-red-400: #d14d41;
+  --color-red-500: #c03e35;
+  --color-red-600: #af3029;
+  --color-red-700: #942822;
+  --color-red-800: #6c201c;
+  --color-red-850: #551b18;
+  --color-red-900: #3e1715;
+  --color-red-950: #261312;
 
-  /* State */
-  --color-danger: oklch(0.55 0.22 25);
-  --color-danger-content: oklch(0.98 0 0);
-  --color-danger-hover: oklch(0.49 0.22 25);
-  --color-danger-muted: oklch(0.96 0.03 25);
-  --color-success: oklch(0.6 0.16 145);
-  --color-success-content: oklch(0.98 0 0);
-  --color-success-hover: oklch(0.54 0.16 145);
-  --color-success-muted: oklch(0.96 0.03 145);
-  --color-warning: oklch(0.78 0.16 85);
-  --color-warning-content: oklch(0.2 0 0);
-  --color-warning-hover: oklch(0.72 0.16 85);
-  --color-warning-muted: oklch(0.96 0.04 85);
-  --color-info: oklch(0.65 0.13 230);
-  --color-info-content: oklch(0.98 0 0);
-  --color-info-hover: oklch(0.59 0.13 230);
-  --color-info-muted: oklch(0.96 0.03 230);
+  /* Orange */
+  --color-orange-50: #ffe7ce;
+  --color-orange-100: #fed3af;
+  --color-orange-150: #fcc192;
+  --color-orange-200: #f9ae77;
+  --color-orange-300: #ec8b49;
+  --color-orange-400: #da702c;
+  --color-orange-500: #cb6120;
+  --color-orange-600: #bc5215;
+  --color-orange-700: #9d4310;
+  --color-orange-800: #71320d;
+  --color-orange-850: #59290d;
+  --color-orange-900: #40200d;
+  --color-orange-950: #27180e;
+
+  /* Yellow */
+  --color-yellow-50: #faeec6;
+  --color-yellow-100: #f6e2a0;
+  --color-yellow-150: #f1d67e;
+  --color-yellow-200: #eccb60;
+  --color-yellow-300: #dfb431;
+  --color-yellow-400: #d0a215;
+  --color-yellow-500: #be9207;
+  --color-yellow-600: #ad8301;
+  --color-yellow-700: #8e6b01;
+  --color-yellow-800: #664d01;
+  --color-yellow-850: #503d02;
+  --color-yellow-900: #3a2d04;
+  --color-yellow-950: #241e08;
+
+  /* Green */
+  --color-green-50: #edeecf;
+  --color-green-100: #dde2b2;
+  --color-green-150: #cdd597;
+  --color-green-200: #bec97e;
+  --color-green-300: #a0af54;
+  --color-green-400: #879a39;
+  --color-green-500: #768d21;
+  --color-green-600: #66800b;
+  --color-green-700: #536907;
+  --color-green-800: #3d4c07;
+  --color-green-850: #313d07;
+  --color-green-900: #252d09;
+  --color-green-950: #1a1e0c;
+
+  /* Cyan */
+  --color-cyan-50: #ddf1e4;
+  --color-cyan-100: #bfe8d9;
+  --color-cyan-150: #a2dece;
+  --color-cyan-200: #87d3c3;
+  --color-cyan-300: #5abdac;
+  --color-cyan-400: #3aa99f;
+  --color-cyan-500: #2f968d;
+  --color-cyan-600: #24837b;
+  --color-cyan-700: #1c6c66;
+  --color-cyan-800: #164f4a;
+  --color-cyan-850: #143f3c;
+  --color-cyan-900: #122f2c;
+  --color-cyan-950: #101f1d;
+
+  /* Blue */
+  --color-blue-50: #e1eceb;
+  --color-blue-100: #c6dde8;
+  --color-blue-150: #abcfe2;
+  --color-blue-200: #92bfdb;
+  --color-blue-300: #66a0c8;
+  --color-blue-400: #4385be;
+  --color-blue-500: #3171b2;
+  --color-blue-600: #205ea6;
+  --color-blue-700: #1a4f8c;
+  --color-blue-800: #163b66;
+  --color-blue-850: #133051;
+  --color-blue-900: #12253b;
+  --color-blue-950: #101a24;
+
+  /* Purple */
+  --color-purple-50: #f0eaec;
+  --color-purple-100: #e2d9e9;
+  --color-purple-150: #d3cae6;
+  --color-purple-200: #c4b9e0;
+  --color-purple-300: #a699d0;
+  --color-purple-400: #8b7ec8;
+  --color-purple-500: #735eb5;
+  --color-purple-600: #5e409d;
+  --color-purple-700: #4f3685;
+  --color-purple-800: #3c2a62;
+  --color-purple-850: #31234e;
+  --color-purple-900: #261c39;
+  --color-purple-950: #1a1623;
+
+  /* Magenta */
+  --color-magenta-50: #fee4e5;
+  --color-magenta-100: #fccfda;
+  --color-magenta-150: #f9b9cf;
+  --color-magenta-200: #f4a4c2;
+  --color-magenta-300: #e47da8;
+  --color-magenta-400: #ce5d97;
+  --color-magenta-500: #b74583;
+  --color-magenta-600: #a02f6f;
+  --color-magenta-700: #87285e;
+  --color-magenta-800: #641f46;
+  --color-magenta-850: #4f1b39;
+  --color-magenta-900: #39172b;
+  --color-magenta-950: #24131d;
+}
+
+@theme static {
+  /* Surfaces */
+  --color-surface: var(--color-paper);
+  --color-surface-muted: var(--color-base-50);
+  --color-surface-strong: var(--color-base-100);
+
+  /* Text */
+  --color-text: var(--color-black);
+  --color-text-muted: var(--color-base-600);
+
+  /* Borders */
+  --color-border: var(--color-base-150);
+  --color-border-strong: var(--color-base-300);
+
+  /* Primary — Flexoki blue */
+  --color-primary: var(--color-blue-600);
+  --color-primary-hover: var(--color-blue-700);
+  --color-primary-muted: var(--color-blue-50);
+  --color-primary-content: var(--color-paper);
+
+  /* Danger — red */
+  --color-danger: var(--color-red-600);
+  --color-danger-hover: var(--color-red-700);
+  --color-danger-muted: var(--color-red-50);
+  --color-danger-content: var(--color-paper);
+
+  /* Success — green */
+  --color-success: var(--color-green-600);
+  --color-success-hover: var(--color-green-700);
+  --color-success-muted: var(--color-green-50);
+  --color-success-content: var(--color-paper);
+
+  /* Warning — yellow (dark text for legibility on the bright base) */
+  --color-warning: var(--color-yellow-400);
+  --color-warning-hover: var(--color-yellow-500);
+  --color-warning-muted: var(--color-yellow-50);
+  --color-warning-content: var(--color-black);
+
+  /* Info — cyan */
+  --color-info: var(--color-cyan-600);
+  --color-info-hover: var(--color-cyan-700);
+  --color-info-muted: var(--color-cyan-50);
+  --color-info-content: var(--color-paper);
 }

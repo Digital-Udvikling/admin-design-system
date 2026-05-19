@@ -7,12 +7,26 @@ sidebar:
 
 Override design tokens via CSS variables. Works the same whether you use the vanilla CSS or the React package. Browse the available tokens on the [Colors](../colors/) page.
 
-## Override tokens
+## Override a semantic token
 
-In your own stylesheet, loaded _after_ the design system:
+Remap a single role to a different palette tone — or to any color you want. Components will follow automatically.
 
 ```css
 :root {
-  --color-primary: oklch(0.6 0.2 30);
+  --color-primary: var(--color-green-600);
 }
 ```
+
+## Override a palette tone
+
+Replace a Flexoki tone everywhere it's used (`bg-blue-600`, anything semantic that points at it, your own CSS):
+
+```css
+:root {
+  --color-blue-600: oklch(0.55 0.18 250);
+}
+```
+
+## Swap the whole palette
+
+Both blocks are stacked on `:root`. Redefine the palette in your own stylesheet to ship a different brand entirely while keeping every semantic role intact.

@@ -5,7 +5,7 @@ sidebar:
   order: 3
 ---
 
-The design system is built on Tailwind v4. If your app already uses Tailwind, import the source CSS — utilities like `bg-primary` and `rounded-control` resolve to the same tokens that power `.btn`, `.card`, and `.input`.
+The design system is built on Tailwind v4. If your app already uses Tailwind, import the source CSS — utilities like `bg-primary` resolve to the same tokens that power `.btn`, `.card`, and `.input`. Radii and shadows use Tailwind's built-in scale (`rounded-lg`, `shadow-xs`, ...).
 
 ## Install
 
@@ -21,7 +21,7 @@ npm install @aortl/admin-css
 @import "@aortl/admin-css/src/components/index.css";
 ```
 
-- `theme.css` registers the design tokens. Tailwind auto-generates utilities like `bg-primary`, `text-text-muted`, `rounded-control`, and `shadow-elevation-1`.
+- `theme.css` registers the design tokens. Tailwind auto-generates utilities like `bg-primary` and `text-text-muted`.
 - `components/index.css` ships the semantic classes — `.btn`, `.input`, `.card`, `.field` — built on the same tokens.
 
 Skip either import if you only want one half.
@@ -39,4 +39,4 @@ Skip either import if you only want one half.
 </div>
 ```
 
-Override tokens the same way as with vanilla CSS — see [Theming](../theming/).
+Override tokens the same way as with vanilla CSS — see [Customize](../../theme/customize/).

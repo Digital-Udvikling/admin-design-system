@@ -3,8 +3,8 @@
     @apply flex flex-col
            bg-surface text-text
            border border-border
-           rounded-card
-           shadow-elevation-1
+           rounded-xl
+           shadow-xs
            overflow-hidden;
   }
 

@@ -1,0 +1,95 @@
+---
+title: Colors
+description: The color tokens that drive the Tailwind theme — brand, surfaces, borders, text, and state.
+sidebar:
+  order: 1
+---
+
+import ColorFamily from "../../../components/ColorFamily.astro";
+
+Every color is a CSS variable registered under Tailwind's `@theme`. Use the utility (`bg-primary`, `text-text-muted`) or reference the variable directly (`var(--color-primary)`). Override any token to reskin the system — see [Customize](../customize/).
+
+Each family below shares the same four-slot layout: **Base**, **Hover** (interactive state), **Muted** (low-saturation background for alerts and tinted surfaces), and **Content** (text/icons on top of the base).
+
+<ColorFamily
+  family="Primary"
+  description="Brand accent. Drives primary buttons, links, focus rings."
+  variants={[
+    { label: "Base", variable: "--color-primary" },
+    { label: "Hover", variable: "--color-primary-hover" },
+    { label: "Muted", variable: "--color-primary-muted" },
+    { label: "Content", variable: "--color-primary-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="Text"
+  description="Foreground content on neutral surfaces."
+  variants={[
+    { label: "Base", variable: "--color-text" },
+    { label: "Muted", variable: "--color-text-muted" },
+  ]}
+/>
+
+<ColorFamily
+  family="Surface"
+  description="Page and component backgrounds, lightest to strongest."
+  variants={[
+    { label: "Base", variable: "--color-surface" },
+    { label: "Muted", variable: "--color-surface-muted" },
+    { label: "Strong", variable: "--color-surface-strong" },
+  ]}
+/>
+
+<ColorFamily
+  family="Danger"
+  description="Destructive actions and error states."
+  variants={[
+    { label: "Base", variable: "--color-danger" },
+    { label: "Hover", variable: "--color-danger-hover" },
+    { label: "Muted", variable: "--color-danger-muted" },
+    { label: "Content", variable: "--color-danger-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="Success"
+  description="Confirmation and positive outcomes."
+  variants={[
+    { label: "Base", variable: "--color-success" },
+    { label: "Hover", variable: "--color-success-hover" },
+    { label: "Muted", variable: "--color-success-muted" },
+    { label: "Content", variable: "--color-success-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="Warning"
+  description="Caution and non-blocking issues."
+  variants={[
+    { label: "Base", variable: "--color-warning" },
+    { label: "Hover", variable: "--color-warning-hover" },
+    { label: "Muted", variable: "--color-warning-muted" },
+    { label: "Content", variable: "--color-warning-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="Info"
+  description="Neutral notifications and helper hints."
+  variants={[
+    { label: "Base", variable: "--color-info" },
+    { label: "Hover", variable: "--color-info-hover" },
+    { label: "Muted", variable: "--color-info-muted" },
+    { label: "Content", variable: "--color-info-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="Border"
+  description="Dividers and outlines."
+  variants={[
+    { label: "Base", variable: "--color-border" },
+    { label: "Strong", variable: "--color-border-strong" },
+  ]}
+/>

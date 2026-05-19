@@ -1,7 +1,7 @@
 @layer components {
   .input {
     @apply inline-flex items-center w-full px-3 py-2
-           rounded-control text-sm leading-none
+           rounded-lg text-sm leading-none
            bg-surface text-text
            border border-transparent
            transition-colors duration-150

@@ -14,6 +14,7 @@ export default defineConfig({
       customCss: ["./src/styles/global.css"],
       sidebar: [
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
+        { label: "Theme", items: [{ autogenerate: { directory: "theme/" } }] },
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
       ],
     }),

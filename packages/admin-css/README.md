@@ -50,7 +50,6 @@ Override any CSS variable in your own stylesheet:
 ```css
 :root {
   --color-primary: oklch(0.6 0.2 30);
-  --radius-control: 0.25rem;
 }
 ```
 

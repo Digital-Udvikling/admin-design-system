@@ -3,6 +3,12 @@
     @apply flex flex-col gap-1.5;
   }
 
+  /* Horizontal layout — pairs a control (typically a switch) with its label
+     on one row. Use when the label belongs beside the control, not above it. */
+  .field-row {
+    @apply flex-row items-center gap-3;
+  }
+
   .field-label {
     @apply text-sm font-medium text-text leading-none;
   }

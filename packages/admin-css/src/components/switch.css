@@ -48,4 +48,15 @@
   input.switch:checked::before {
     @apply translate-x-4;
   }
+
+  /* A <label> wrapping a switch + text lays out inline.
+     Switches are wider than checkboxes/radios so the gap is a touch larger. */
+  label:has(> .switch) {
+    @apply inline-flex items-center gap-3 cursor-pointer;
+  }
+
+  label:has(> .switch:disabled),
+  label:has(> .switch[data-disabled]) {
+    @apply opacity-60 cursor-not-allowed;
+  }
 }

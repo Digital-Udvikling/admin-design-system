@@ -7,6 +7,8 @@ import { Radio, RadioGroup } from "@aortl/admin-react";
 
 `RadioGroup` provides the selection state for its child `Radio`s. The React side wraps Base UI's `Radio.Root` (rendered as a `<span>` with a hidden `<input>`); vanilla styles a native `<input type="radio">` with the same class names.
 
+A `<label>` wrapping a `.radio` is laid out inline automatically — no extra class is needed.
+
 ## Examples
 
 ### Group (horizontal)
@@ -15,27 +17,21 @@ import { Radio, RadioGroup } from "@aortl/admin-react";
 
 ```html
 <div class="radio-group" role="radiogroup">
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="size" value="sm" class="radio" /> Small
-  </label>
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="size" value="md" class="radio" checked /> Medium
-  </label>
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="size" value="lg" class="radio" /> Large
-  </label>
+  <label> <input type="radio" name="size" value="sm" class="radio" /> Small </label>
+  <label> <input type="radio" name="size" value="md" class="radio" checked /> Medium </label>
+  <label> <input type="radio" name="size" value="lg" class="radio" /> Large </label>
 </div>
 ```
 
 ```tsx
 <RadioGroup name="size" defaultValue="md">
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="sm" /> Small
   </label>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="md" /> Medium
   </label>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="lg" /> Large
   </label>
 </RadioGroup>
@@ -49,27 +45,21 @@ import { Radio, RadioGroup } from "@aortl/admin-react";
 
 ```html
 <div class="radio-group radio-group-vertical" role="radiogroup">
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="plan" value="free" class="radio" checked /> Free
-  </label>
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="plan" value="pro" class="radio" /> Pro
-  </label>
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
-    <input type="radio" name="plan" value="enterprise" class="radio" /> Enterprise
-  </label>
+  <label> <input type="radio" name="plan" value="free" class="radio" checked /> Free </label>
+  <label> <input type="radio" name="plan" value="pro" class="radio" /> Pro </label>
+  <label> <input type="radio" name="plan" value="enterprise" class="radio" /> Enterprise </label>
 </div>
 ```
 
 ```tsx
 <RadioGroup name="plan" orientation="vertical" defaultValue="free">
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="free" /> Free
   </label>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="pro" /> Pro
   </label>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="enterprise" /> Enterprise
   </label>
 </RadioGroup>
@@ -83,21 +73,17 @@ import { Radio, RadioGroup } from "@aortl/admin-react";
 
 ```html
 <div class="radio-group" role="radiogroup">
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem; opacity: 0.6;">
-    <input type="radio" name="t" value="a" class="radio" disabled /> Option A
-  </label>
-  <label style="display: inline-flex; align-items: center; gap: 0.5rem; opacity: 0.6;">
-    <input type="radio" name="t" value="b" class="radio" disabled checked /> Option B
-  </label>
+  <label> <input type="radio" name="t" value="a" class="radio" disabled /> Option A </label>
+  <label> <input type="radio" name="t" value="b" class="radio" disabled checked /> Option B </label>
 </div>
 ```
 
 ```tsx
 <RadioGroup name="t" defaultValue="b" disabled>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="a" /> Option A
   </label>
-  <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+  <label>
     <Radio value="b" /> Option B
   </label>
 </RadioGroup>

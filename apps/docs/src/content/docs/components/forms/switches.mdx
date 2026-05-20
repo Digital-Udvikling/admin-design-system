@@ -45,15 +45,17 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 
 :::example
 
+Add `.field-row` to lay the switch and its label out on one line. The default `.field` stacks vertically.
+
 ```html
-<div class="field" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+<div class="field field-row">
   <input type="checkbox" role="switch" class="switch" checked />
   <label class="field-label">Email notifications</label>
 </div>
 ```
 
 ```tsx
-<Field name="notify" style={{ flexDirection: "row", alignItems: "center", gap: "0.75rem" }}>
+<Field name="notify" className="field-row">
   <Switch defaultChecked />
   <Field.Label>Email notifications</Field.Label>
 </Field>

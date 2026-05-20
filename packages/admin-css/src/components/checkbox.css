@@ -24,4 +24,15 @@
   .checkbox-indicator {
     @apply inline-flex items-center justify-center size-3 text-primary-content;
   }
+
+  /* A <label> wrapping a checkbox + text lays out inline with a small gap.
+     Covers both the vanilla input.checkbox and Base UI's button.checkbox. */
+  label:has(> .checkbox) {
+    @apply inline-flex items-center gap-2 cursor-pointer;
+  }
+
+  label:has(> .checkbox:disabled),
+  label:has(> .checkbox[data-disabled]) {
+    @apply opacity-60 cursor-not-allowed;
+  }
 }

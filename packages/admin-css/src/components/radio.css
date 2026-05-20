@@ -31,4 +31,15 @@
   .radio-group-vertical {
     @apply flex-col gap-2 items-start;
   }
+
+  /* A <label> wrapping a radio + text lays out inline with a small gap.
+     Covers both the vanilla input.radio and Base UI's span.radio. */
+  label:has(> .radio) {
+    @apply inline-flex items-center gap-2 cursor-pointer;
+  }
+
+  label:has(> .radio:disabled),
+  label:has(> .radio[data-disabled]) {
+    @apply opacity-60 cursor-not-allowed;
+  }
 }

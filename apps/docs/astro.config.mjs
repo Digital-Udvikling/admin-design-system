@@ -19,6 +19,7 @@ export default defineConfig({
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
         { label: "Theme", items: [{ autogenerate: { directory: "theme/" } }] },
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
+        { label: "Modules", items: [{ autogenerate: { directory: "modules/" } }] },
       ],
     }),
     mdx({ remarkPlugins: [remarkDirective, remarkExample] }),

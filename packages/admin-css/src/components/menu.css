@@ -1,0 +1,74 @@
+@layer components {
+  /* Native <details> drives open state — no JS needed. The popup is a
+     position: absolute child of the relative .menu root. */
+  .menu {
+    @apply relative inline-block;
+  }
+
+  .menu-trigger {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1.5
+           rounded-md text-sm leading-none
+           text-text bg-transparent
+           hover:bg-surface-strong
+           cursor-pointer select-none
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+    list-style: none;
+  }
+
+  .menu-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Chevron — rotates when the menu opens. */
+  .menu-trigger::after {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    color: var(--color-text-muted);
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+    flex-shrink: 0;
+  }
+
+  .menu[open] > .menu-trigger::after {
+    transform: rotate(-135deg);
+  }
+
+  .menu-popup {
+    @apply absolute top-full left-0 z-30 mt-1
+           min-w-44 max-h-72 overflow-auto
+           py-1
+           bg-surface text-text
+           border border-border rounded-lg shadow-md;
+  }
+
+  .menu-item {
+    @apply flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
+           text-text bg-transparent
+           border-0
+           text-left no-underline
+           cursor-pointer select-none
+           hover:bg-surface-muted
+           focus-visible:bg-surface-muted focus-visible:outline-none
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .menu-item[aria-disabled="true"] {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .menu-separator {
+    @apply h-px my-1 bg-border border-0;
+  }
+
+  .menu-group {
+    @apply flex flex-col;
+  }
+
+  .menu-group-label {
+    @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
+  }
+}

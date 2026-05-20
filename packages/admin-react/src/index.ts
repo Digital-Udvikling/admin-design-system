@@ -12,6 +12,7 @@ export {
   type AlertTitleProps,
   type AlertDescriptionProps,
 } from "./Alert";
+export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";
@@ -63,3 +64,47 @@ export {
   type FieldDescriptionProps,
   type FieldErrorProps,
 } from "./Field";
+export {
+  Footer,
+  type FooterProps,
+  type FooterLinksProps,
+  type FooterLinkProps,
+  type FooterMetaProps,
+} from "./Footer";
+export {
+  Menu,
+  type MenuProps,
+  type MenuTriggerProps,
+  type MenuPopupProps,
+  type MenuItemProps,
+  type MenuLinkItemProps,
+  type MenuSeparatorProps,
+  type MenuGroupProps,
+  type MenuGroupLabelProps,
+} from "./Menu";
+export {
+  Navbar,
+  type NavbarProps,
+  type NavbarBrandProps,
+  type NavbarItemsProps,
+  type NavbarItemProps,
+  type NavbarDropdownProps,
+  type NavbarActionsProps,
+  type NavbarMobileToggleProps,
+} from "./Navbar";
+export {
+  Sidebar,
+  type SidebarProps,
+  type SidebarHeaderProps,
+  type SidebarNavProps,
+  type SidebarGroupProps,
+  type SidebarGroupLabelProps,
+  type SidebarItemProps,
+  type SidebarIconProps,
+  type SidebarLabelProps,
+  type SidebarBadgeProps,
+  type SidebarCollapsibleProps,
+  type SidebarSubItemProps,
+  type SidebarFooterProps,
+  type SidebarCollapseToggleProps,
+} from "./Sidebar";

@@ -1,0 +1,59 @@
+@layer components {
+  /* Layout container — CSS grid with named areas. Sidebar/footer slots are
+     optional; modifier classes adjust the template. The sidebar column uses
+     `auto` so the .sidebar's own width drives it — collapse/peek modes change
+     the sidebar's intrinsic width instead of recomputing the grid here. */
+  .app-shell {
+    --app-shell-sidebar-w: 240px;
+    --app-shell-sidebar-w-collapsed: 56px;
+
+    @apply grid min-h-screen w-full bg-surface text-text;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+
+  .app-shell > .navbar {
+    grid-area: header;
+  }
+
+  .app-shell > main,
+  .app-shell-main {
+    grid-area: main;
+    min-width: 0;
+  }
+
+  .app-shell > .footer {
+    grid-area: footer;
+  }
+
+  .app-shell-with-sidebar {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "footer  footer";
+  }
+
+  .app-shell-with-sidebar > .sidebar {
+    grid-area: sidebar;
+  }
+
+  /* Mobile: the sidebar lives in a Dialog drawer, so reclaim the column. */
+  @media (max-width: 48rem) {
+    .app-shell-with-sidebar {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    }
+
+    .app-shell-with-sidebar > .sidebar {
+      display: none;
+    }
+  }
+}

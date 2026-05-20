@@ -1,5 +1,6 @@
 @import "./accordion.css";
 @import "./alert.css";
+@import "./app-shell.css";
 @import "./button.css";
 @import "./button-group.css";
 @import "./input.css";
@@ -12,3 +13,7 @@
 @import "./card.css";
 @import "./field.css";
 @import "./file-input.css";
+@import "./footer.css";
+@import "./menu.css";
+@import "./navbar.css";
+@import "./sidebar.css";

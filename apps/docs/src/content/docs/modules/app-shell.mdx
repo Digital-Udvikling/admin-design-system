@@ -1,0 +1,664 @@
+---
+title: App Shell
+description: Page chrome — navbar, optional sidebar, optional footer — laid out around a main content area. Includes Menu, the dropdown primitive used by the navbar.
+sidebar:
+  order: 1
+---
+
+import { AppShell, Navbar, Sidebar, Footer, Menu, Select } from "@aortl/admin-react";
+
+The app shell is the layout primitive every admin page sits inside. It owns a CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — and a small React context for the mobile drawer state. The pieces it composes work standalone outside the shell, too.
+
+Built to live inside a host frame: it doesn't assume it owns the viewport.
+
+## Anatomy
+
+```text
++--------------------------------------------+
+|                    navbar                  |
++----------+---------------------------------+
+|          |                                 |
+| sidebar  |              main               |
+|  (opt.)  |                                 |
+|          |                                 |
++----------+---------------------------------+
+|                    footer (opt.)           |
++--------------------------------------------+
+```
+
+## Quick start
+
+The simplest shell: navbar above, `main` below.
+
+:::example
+
+```html
+<div class="app-shell" style="min-height: 16rem">
+  <header class="navbar">
+    <div class="navbar-brand">Acme</div>
+  </header>
+  <main class="app-shell-main" style="padding: 1rem">Page content</main>
+</div>
+```
+
+```tsx
+<AppShell style={{ minHeight: "16rem" }}>
+  <Navbar>
+    <Navbar.Brand>Acme</Navbar.Brand>
+  </Navbar>
+  <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
+</AppShell>
+```
+
+:::
+
+Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
+
+:::example
+
+```tsx
+<AppShell hasSidebar hasFooter style={{ minHeight: "20rem" }}>
+  <Navbar>
+    <Navbar.Brand>Acme</Navbar.Brand>
+  </Navbar>
+  <Sidebar>
+    <Sidebar.Nav>
+      <Sidebar.Item href="#" active>
+        <Sidebar.Label>Dashboard</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Orders</Sidebar.Label>
+      </Sidebar.Item>
+    </Sidebar.Nav>
+  </Sidebar>
+  <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
+  <Footer>
+    <Footer.Meta>© Acme</Footer.Meta>
+  </Footer>
+</AppShell>
+```
+
+:::
+
+## Navbar
+
+A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from the left, `<Navbar.Actions>` to the right. Items mark the active page via `active` (sets `aria-current="page"`).
+
+:::example
+
+```html
+<header class="navbar">
+  <div class="navbar-brand">Acme</div>
+  <nav class="navbar-items">
+    <a class="navbar-item" href="#" aria-current="page">Dashboard</a>
+    <a class="navbar-item" href="#">Orders</a>
+    <a class="navbar-item" href="#">Customers</a>
+  </nav>
+  <div class="navbar-actions">
+    <button class="btn btn-ghost btn-sm" type="button">Sign out</button>
+  </div>
+</header>
+```
+
+```tsx
+<Navbar>
+  <Navbar.Brand>Acme</Navbar.Brand>
+  <Navbar.Items>
+    <Navbar.Item href="#" active>
+      Dashboard
+    </Navbar.Item>
+    <Navbar.Item href="#">Orders</Navbar.Item>
+    <Navbar.Item href="#">Customers</Navbar.Item>
+  </Navbar.Items>
+  <Navbar.Actions>
+    <button className="btn btn-ghost btn-sm" type="button">
+      Sign out
+    </button>
+  </Navbar.Actions>
+</Navbar>
+```
+
+:::
+
+### Dropdowns
+
+`<Navbar.Dropdown>` is a [`<Menu>`](#menu) styled as a navbar item — `menu-trigger` plus `navbar-item` on the `<summary>`. The chevron lives in CSS, no SVG needed.
+
+:::example
+
+```html
+<header class="navbar">
+  <div class="navbar-brand">Acme</div>
+  <nav class="navbar-items">
+    <a class="navbar-item" href="#">Dashboard</a>
+    <details class="menu">
+      <summary class="menu-trigger navbar-item">Products</summary>
+      <div class="menu-popup" role="menu">
+        <button class="menu-item" type="button">Catalogue</button>
+        <button class="menu-item" type="button">Categories</button>
+        <hr class="menu-separator" />
+        <button class="menu-item" type="button">Imports</button>
+      </div>
+    </details>
+  </nav>
+</header>
+```
+
+```tsx
+<Navbar>
+  <Navbar.Brand>Acme</Navbar.Brand>
+  <Navbar.Items>
+    <Navbar.Item href="#">Dashboard</Navbar.Item>
+    <Navbar.Dropdown label="Products">
+      <Menu.Item>Catalogue</Menu.Item>
+      <Menu.Item>Categories</Menu.Item>
+      <Menu.Separator />
+      <Menu.Item>Imports</Menu.Item>
+    </Navbar.Dropdown>
+  </Navbar.Items>
+</Navbar>
+```
+
+:::
+
+### Actions slot
+
+Drop in a shop switcher, user menu, sign-out — anything right-aligned.
+
+:::example
+
+```tsx
+<Navbar>
+  <Navbar.Brand>AO Retail</Navbar.Brand>
+  <Navbar.Actions>
+    <Select defaultValue="billigvvs.dk">
+      <Select.Trigger triggerSize="sm" aria-label="Shop">
+        <Select.Value />
+        <Select.Icon />
+      </Select.Trigger>
+      <Select.Popup>
+        <Select.Item value="billigvvs.dk">
+          <Select.ItemText>BilligVVS.dk</Select.ItemText>
+        </Select.Item>
+        <Select.Item value="lavprisvvs.dk">
+          <Select.ItemText>LavprisVVS.dk</Select.ItemText>
+        </Select.Item>
+        <Select.Item value="elproffs.se">
+          <Select.ItemText>ELproffs.se</Select.ItemText>
+        </Select.Item>
+      </Select.Popup>
+    </Select>
+    <Navbar.Dropdown label="Nickolaj">
+      <Menu.Item>Profile</Menu.Item>
+      <Menu.Separator />
+      <Menu.Item>Sign out</Menu.Item>
+    </Navbar.Dropdown>
+  </Navbar.Actions>
+</Navbar>
+```
+
+:::
+
+### Mobile toggle
+
+`<Navbar.MobileToggle>` is hidden above the `md` breakpoint and flips `AppShell`'s mobile drawer state. The hamburger is drawn with one element + two box-shadow strokes — no SVG.
+
+```html
+<button class="navbar-mobile-toggle" type="button" aria-label="Open menu"></button>
+```
+
+See [mobile drawer](#mobile-drawer) below.
+
+## Sidebar
+
+A left rail for systems with many sub-pages. Three pieces to know: flat items, tree-shaped groups, and click-to-collapse — all driven by native HTML, so the vanilla examples work without any JS.
+
+### Items and groups
+
+`<Sidebar.Item>` is a leaf link with `active` for the current route. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>`. The label hides when the sidebar collapses.
+
+:::example
+
+```tsx
+<Sidebar style={{ height: "20rem" }}>
+  <Sidebar.Nav>
+    <Sidebar.Group>
+      <Sidebar.GroupLabel>Workspace</Sidebar.GroupLabel>
+      <Sidebar.Item href="#" active>
+        <Sidebar.Label>Dashboard</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Orders</Sidebar.Label>
+      </Sidebar.Item>
+    </Sidebar.Group>
+    <Sidebar.Group>
+      <Sidebar.GroupLabel>Catalogue</Sidebar.GroupLabel>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Products</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Categories</Sidebar.Label>
+      </Sidebar.Item>
+    </Sidebar.Group>
+  </Sidebar.Nav>
+</Sidebar>
+```
+
+:::
+
+### Tree navigation
+
+`<Sidebar.Collapsible>` is a `<details>` element. Click the trigger to reveal `<Sidebar.SubItem>` rows underneath. Pass `defaultOpen` to start expanded.
+
+:::example
+
+```html
+<aside class="sidebar" style="height: 22rem">
+  <nav class="sidebar-nav">
+    <a class="sidebar-item" href="#"><span class="sidebar-label">Ordrer</span></a>
+    <details class="sidebar-collapsible" open>
+      <summary class="sidebar-collapsible-trigger">
+        <span class="sidebar-label">Webshop</span>
+      </summary>
+      <div class="sidebar-collapsible-panel">
+        <a class="sidebar-subitem" href="#" aria-current="page">CMS</a>
+        <a class="sidebar-subitem" href="#">Kampagner</a>
+        <a class="sidebar-subitem" href="#">Søgeord</a>
+        <a class="sidebar-subitem" href="#">Redirects</a>
+      </div>
+    </details>
+    <a class="sidebar-item" href="#"><span class="sidebar-label">Lager</span></a>
+  </nav>
+</aside>
+```
+
+```tsx
+<Sidebar style={{ height: "22rem" }}>
+  <Sidebar.Nav>
+    <Sidebar.Item href="#">
+      <Sidebar.Label>Ordrer</Sidebar.Label>
+    </Sidebar.Item>
+    <Sidebar.Collapsible defaultOpen trigger={<Sidebar.Label>Webshop</Sidebar.Label>}>
+      <Sidebar.SubItem href="#" active>
+        CMS
+      </Sidebar.SubItem>
+      <Sidebar.SubItem href="#">Kampagner</Sidebar.SubItem>
+      <Sidebar.SubItem href="#">Søgeord</Sidebar.SubItem>
+      <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
+    </Sidebar.Collapsible>
+    <Sidebar.Item href="#">
+      <Sidebar.Label>Lager</Sidebar.Label>
+    </Sidebar.Item>
+  </Sidebar.Nav>
+</Sidebar>
+```
+
+:::
+
+### Click to collapse
+
+`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox. The rail responds to `.sidebar:has(.sidebar-toggle:checked)` — pure CSS. Wrap each item's glyph in `<Sidebar.Icon>` so it stays visible in the collapsed rail.
+
+React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `defaultCollapsed` / `onCollapsedChange`) that drives the same checkbox.
+
+:::example
+
+```html
+<aside class="sidebar" style="height: 20rem">
+  <nav class="sidebar-nav">
+    <a class="sidebar-item" href="#" aria-current="page">
+      <span class="sidebar-icon">
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M3 12l9-9 9 9" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+      </span>
+      <span class="sidebar-label">Dashboard</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <span class="sidebar-icon">
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+      </span>
+      <span class="sidebar-label">Orders</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <label class="sidebar-collapse-toggle">
+      <input type="checkbox" class="sidebar-toggle" />
+      <span class="sr-only">Toggle sidebar</span>
+    </label>
+  </div>
+</aside>
+```
+
+```tsx
+<Sidebar style={{ height: "20rem" }}>
+  <Sidebar.Nav>
+    <Sidebar.Item href="#" active>
+      <Sidebar.Icon>
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path d="M3 12l9-9 9 9" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+      </Sidebar.Icon>
+      <Sidebar.Label>Dashboard</Sidebar.Label>
+    </Sidebar.Item>
+    <Sidebar.Item href="#">
+      <Sidebar.Icon>
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+      </Sidebar.Icon>
+      <Sidebar.Label>Orders</Sidebar.Label>
+    </Sidebar.Item>
+  </Sidebar.Nav>
+  <Sidebar.Footer>
+    <Sidebar.CollapseToggle />
+  </Sidebar.Footer>
+</Sidebar>
+```
+
+:::
+
+### Mobile drawer
+
+Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below the `md` breakpoint the desktop column hides and `<Navbar.MobileToggle>` opens the drawer. Esc, backdrop click, and link clicks all close it; focus is trapped while open.
+
+:::example
+
+```tsx
+<AppShell hasSidebar style={{ minHeight: "24rem" }}>
+  <Navbar>
+    <Navbar.MobileToggle />
+    <Navbar.Brand>Acme</Navbar.Brand>
+  </Navbar>
+  <Sidebar>
+    <Sidebar.Nav>
+      <Sidebar.Item href="#" active>
+        <Sidebar.Label>Dashboard</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Orders</Sidebar.Label>
+      </Sidebar.Item>
+    </Sidebar.Nav>
+  </Sidebar>
+  <AppShell.Main style={{ padding: "1rem" }}>
+    Resize below 768px and tap the hamburger.
+  </AppShell.Main>
+</AppShell>
+```
+
+:::
+
+## Footer
+
+Small horizontal strip. `<Footer.Links>` on the left, `<Footer.Meta>` on the right; both wrap on narrow viewports.
+
+:::example
+
+```html
+<footer class="footer">
+  <div class="footer-links">
+    <a class="footer-link" href="#">Docs</a>
+    <a class="footer-link" href="#">Status</a>
+    <a class="footer-link" href="#">Support</a>
+  </div>
+  <div class="footer-meta">v1.4.0 · © Acme</div>
+</footer>
+```
+
+```tsx
+<Footer>
+  <Footer.Links>
+    <Footer.Link href="#">Docs</Footer.Link>
+    <Footer.Link href="#">Status</Footer.Link>
+    <Footer.Link href="#">Support</Footer.Link>
+  </Footer.Links>
+  <Footer.Meta>v1.4.0 · © Acme</Footer.Meta>
+</Footer>
+```
+
+:::
+
+## Menu
+
+The generic dropdown primitive used by `<Navbar.Dropdown>` and anywhere else you need a popover-driven action list. Built on native `<details>` + `<summary>` — open/close, click-to-toggle, and the chevron rotation are all CSS. No light dismiss; click the trigger again to close.
+
+:::example
+
+```html
+<details class="menu">
+  <summary class="menu-trigger">Open menu</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button">Edit</button>
+    <button class="menu-item" type="button">Duplicate</button>
+    <hr class="menu-separator" />
+    <button class="menu-item" type="button">Delete</button>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger>Open menu</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Duplicate</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
+Cluster related items with `<Menu.Group>` + `<Menu.GroupLabel>`. Use `<Menu.LinkItem>` for real anchors (right-click to open in a new tab).
+
+:::example
+
+```tsx
+<Menu>
+  <Menu.Trigger>Resources</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Group>
+      <Menu.GroupLabel>Internal</Menu.GroupLabel>
+      <Menu.LinkItem href="#docs">Docs</Menu.LinkItem>
+      <Menu.LinkItem href="#changelog">Changelog</Menu.LinkItem>
+    </Menu.Group>
+    <Menu.Separator />
+    <Menu.Group>
+      <Menu.GroupLabel>External</Menu.GroupLabel>
+      <Menu.LinkItem href="#support">Support</Menu.LinkItem>
+    </Menu.Group>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
+## Examples
+
+Full compositions to copy and adapt. The parts above show each primitive in isolation; these show how they fit together.
+
+### Classic admin
+
+Sidebar-first with a shop selector in the navbar, tree navigation for a section with sub-pages, and a click toggle for the rail. Closest to existing AO Retail systems.
+
+:::example
+
+```tsx
+<AppShell hasSidebar hasFooter style={{ minHeight: "32rem" }}>
+  <Navbar>
+    <Navbar.MobileToggle />
+    <Navbar.Brand>AO Retail</Navbar.Brand>
+    <Navbar.Actions>
+      <Select defaultValue="billigvvs.dk">
+        <Select.Trigger triggerSize="sm" aria-label="Shop">
+          <Select.Value />
+          <Select.Icon />
+        </Select.Trigger>
+        <Select.Popup>
+          <Select.Item value="billigvvs.dk">
+            <Select.ItemText>BilligVVS.dk</Select.ItemText>
+          </Select.Item>
+          <Select.Item value="lavprisvvs.dk">
+            <Select.ItemText>LavprisVVS.dk</Select.ItemText>
+          </Select.Item>
+          <Select.Item value="elproffs.se">
+            <Select.ItemText>ELproffs.se</Select.ItemText>
+          </Select.Item>
+          <Select.Item value="vvskupp.no">
+            <Select.ItemText>VVSkupp.no</Select.ItemText>
+          </Select.Item>
+        </Select.Popup>
+      </Select>
+      <Navbar.Dropdown label="Nickolaj">
+        <Menu.Item>Profile</Menu.Item>
+        <Menu.Separator />
+        <Menu.Item>Sign out</Menu.Item>
+      </Navbar.Dropdown>
+    </Navbar.Actions>
+  </Navbar>
+  <Sidebar>
+    <Sidebar.Nav>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Indstillinger</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Ordrer</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Kundeservice</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Produkter</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Collapsible defaultOpen trigger={<Sidebar.Label>Webshop</Sidebar.Label>}>
+        <Sidebar.SubItem href="#" active>
+          CMS
+        </Sidebar.SubItem>
+        <Sidebar.SubItem href="#">Kampagner</Sidebar.SubItem>
+        <Sidebar.SubItem href="#">Søgeord</Sidebar.SubItem>
+        <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
+      </Sidebar.Collapsible>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Lager</Sidebar.Label>
+      </Sidebar.Item>
+      <Sidebar.Item href="#">
+        <Sidebar.Label>Statistik</Sidebar.Label>
+      </Sidebar.Item>
+    </Sidebar.Nav>
+    <Sidebar.Footer>
+      <Sidebar.CollapseToggle />
+    </Sidebar.Footer>
+  </Sidebar>
+  <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
+  <Footer>
+    <Footer.Links>
+      <Footer.Link href="#">Docs</Footer.Link>
+      <Footer.Link href="#">Status</Footer.Link>
+    </Footer.Links>
+    <Footer.Meta>© AO Retail</Footer.Meta>
+  </Footer>
+</AppShell>
+```
+
+:::
+
+### Top-nav heavy
+
+No sidebar. Primary navigation lives in the navbar, organised through `<Navbar.Dropdown>`. Good for tools with few top-level destinations and per-destination tabs handled in `main`.
+
+:::example
+
+```tsx
+<AppShell hasFooter style={{ minHeight: "28rem" }}>
+  <Navbar>
+    <Navbar.Brand>Insights</Navbar.Brand>
+    <Navbar.Items>
+      <Navbar.Item href="#" active>
+        Dashboard
+      </Navbar.Item>
+      <Navbar.Dropdown label="Reports">
+        <Menu.Item>Sales</Menu.Item>
+        <Menu.Item>Returns</Menu.Item>
+        <Menu.Item>Inventory</Menu.Item>
+        <Menu.Separator />
+        <Menu.Item>Custom…</Menu.Item>
+      </Navbar.Dropdown>
+      <Navbar.Dropdown label="Customers">
+        <Menu.Item>Segments</Menu.Item>
+        <Menu.Item>Lifetime value</Menu.Item>
+      </Navbar.Dropdown>
+      <Navbar.Item href="#">Settings</Navbar.Item>
+    </Navbar.Items>
+    <Navbar.Actions>
+      <Navbar.Dropdown label="Nickolaj">
+        <Menu.Item>Profile</Menu.Item>
+        <Menu.Separator />
+        <Menu.Item>Sign out</Menu.Item>
+      </Navbar.Dropdown>
+    </Navbar.Actions>
+  </Navbar>
+  <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
+  <Footer>
+    <Footer.Links>
+      <Footer.Link href="#">Docs</Footer.Link>
+      <Footer.Link href="#">Changelog</Footer.Link>
+      <Footer.Link href="#">Support</Footer.Link>
+    </Footer.Links>
+    <Footer.Meta>v2.1.0</Footer.Meta>
+  </Footer>
+</AppShell>
+```
+
+:::
+
+## Customization
+
+Two CSS variables on `.app-shell` set the rail width:
+
+| Variable                          | Default | What it controls                       |
+| --------------------------------- | ------- | -------------------------------------- |
+| `--app-shell-sidebar-w`           | `240px` | Expanded sidebar / drawer width.       |
+| `--app-shell-sidebar-w-collapsed` | `56px`  | Width of the icon rail when collapsed. |
+
+Override them at the root or on a specific shell instance to retune the layout.
+
+```css
+.app-shell {
+  --app-shell-sidebar-w: 280px;
+}
+```

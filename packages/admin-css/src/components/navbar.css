@@ -1,0 +1,63 @@
+@layer components {
+  .navbar {
+    @apply flex items-center gap-3 px-4 h-12
+           bg-surface-muted text-text
+           border-b border-border;
+  }
+
+  .navbar-brand {
+    @apply flex items-center gap-2 font-semibold text-sm shrink-0 text-text;
+  }
+
+  .navbar-items {
+    @apply flex items-center gap-0.5;
+  }
+
+  .navbar-item {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1.5
+           rounded-md text-sm leading-none
+           text-text bg-transparent
+           hover:bg-surface-strong
+           cursor-pointer select-none
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+  }
+
+  .navbar-item[aria-current="page"],
+  .navbar-item[data-active] {
+    @apply bg-primary-muted text-primary;
+  }
+
+  /* Right-aligned slot for actions: shop selector, user menu, etc. */
+  .navbar-actions {
+    @apply flex items-center gap-2 ml-auto;
+  }
+
+  /* Hamburger; hidden above the md breakpoint. The three lines are drawn
+     with one element + two box-shadow strokes — no SVG needed. */
+  .navbar-mobile-toggle {
+    @apply inline-flex items-center justify-center size-9 -ml-2
+           rounded-md text-text bg-transparent
+           hover:bg-surface-strong
+           cursor-pointer
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+  }
+
+  .navbar-mobile-toggle::before {
+    content: "";
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+    box-shadow:
+      0 -6px 0 currentColor,
+      0 6px 0 currentColor;
+  }
+
+  @media (min-width: 48rem) {
+    .navbar-mobile-toggle {
+      display: none;
+    }
+  }
+}

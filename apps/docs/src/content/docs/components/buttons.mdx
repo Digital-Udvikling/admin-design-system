@@ -62,6 +62,28 @@ import { IconPlus, IconTrash, IconDownload, IconDotsVertical } from "@tabler/ico
 
 :::
 
+### Loading
+
+Add `.btn-loading` to paint a spinner in place of the leading icon and freeze interaction. In React, the `loading` prop also sets `disabled` and `aria-busy="true"` so screen readers announce the pending state.
+
+:::example
+
+```html
+<button class="btn btn-primary btn-loading" type="button" disabled aria-busy="true">Saving</button>
+<button class="btn btn-secondary btn-loading" type="button" disabled aria-busy="true">
+  Loading
+</button>
+```
+
+```tsx
+<Button loading>Saving</Button>
+<Button variant="secondary" loading>Loading</Button>
+```
+
+:::
+
+The spinner sits where a leading `icon` would, so if you pass both `icon` and `loading` the icon is suppressed while the spinner is shown — no double-glyph. A trailing icon stays visible.
+
 ### Block (full width)
 
 :::example

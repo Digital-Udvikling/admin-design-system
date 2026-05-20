@@ -39,4 +39,38 @@
   .btn-block {
     @apply w-full;
   }
+
+  /* Loading state — paints a spinner via ::before, so no extra markup is
+     required. Sized in `em` so it tracks btn-sm / btn-lg. Pair with the
+     `disabled` attribute (or the React wrapper, which sets it for you) for
+     keyboard a11y; the visual disable lives here so vanilla still feels right
+     without it. */
+  .btn-loading {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  .btn-loading::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    border: 0.125em solid color-mix(in oklab, currentColor 25%, transparent);
+    border-top-color: currentColor;
+    animation: spinner-spin 0.6s linear infinite;
+  }
+
+  /* Suppress a leading icon while loading so we don't show two glyphs.
+     Trailing icons stay visible — they may convey structural meaning
+     (e.g. a dropdown chevron on a split-button trigger). */
+  .btn-loading > :is(i, svg):first-child {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-loading::before {
+      animation-duration: 2s;
+    }
+  }
 }

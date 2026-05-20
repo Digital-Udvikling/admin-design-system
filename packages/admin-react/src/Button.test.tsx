@@ -63,5 +63,37 @@ describe("Button", () => {
       await user.click(btn);
       expect(onClick).not.toHaveBeenCalled();
     });
+
+    it("loading: applies btn-loading, marks aria-busy, disables, and skips clicks", async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      render(
+        <Button loading onClick={onClick}>
+          Saving
+        </Button>,
+      );
+      const btn = screen.getByRole("button", { name: "Saving" });
+      expect(btn).toHaveClass("btn-loading");
+      expect(btn).toHaveAttribute("aria-busy", "true");
+      expect(btn).toBeDisabled();
+      await user.click(btn);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it("loading: suppresses the leading icon but keeps the trailing one", () => {
+      function IconLead(props: { "aria-hidden"?: boolean | "true" | "false" }) {
+        return <svg data-testid="lead" {...props} />;
+      }
+      function IconTrail(props: { "aria-hidden"?: boolean | "true" | "false" }) {
+        return <svg data-testid="trail" {...props} />;
+      }
+      render(
+        <Button loading icon={IconLead} iconTrailing={IconTrail}>
+          Saving
+        </Button>,
+      );
+      expect(screen.queryByTestId("lead")).not.toBeInTheDocument();
+      expect(screen.getByTestId("trail")).toBeInTheDocument();
+    });
   });
 });

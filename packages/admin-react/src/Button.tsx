@@ -10,6 +10,9 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   block?: boolean;
+  /** Shows a spinner in place of the leading icon and disables interaction.
+   *  Sets `aria-busy="true"` and the native `disabled` attribute. */
+  loading?: boolean;
   /** Leading icon. Pass a component (`icon={IconPlus}`) or an element. */
   icon?: IconProp;
   /** Trailing icon. Pass a component (`iconTrailing={IconArrowRight}`) or an element. */
@@ -20,23 +23,33 @@ export function Button({
   variant = "primary",
   size = "md",
   block,
+  loading,
   icon,
   iconTrailing,
   className,
   type = "button",
+  disabled,
   children,
   ...rest
 }: ButtonProps) {
   return (
     <BaseButton
       type={type}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
-        ["btn", `btn-${variant}`, size !== "md" && `btn-${size}`, block && "btn-block"],
+        [
+          "btn",
+          `btn-${variant}`,
+          size !== "md" && `btn-${size}`,
+          block && "btn-block",
+          loading && "btn-loading",
+        ],
         className,
       )}
       {...rest}
     >
-      {renderIcon(icon)}
+      {loading ? null : renderIcon(icon)}
       {children}
       {renderIcon(iconTrailing)}
     </BaseButton>

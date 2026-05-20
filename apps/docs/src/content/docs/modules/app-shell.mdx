@@ -1,6 +1,6 @@
 ---
 title: App Shell
-description: Page chrome — navbar, optional sidebar, optional footer — laid out around a main content area. Includes Menu, the dropdown primitive used by the navbar.
+description: Page chrome — navbar, optional sidebar, optional footer — laid out around a main content area.
 sidebar:
   order: 1
 ---
@@ -122,7 +122,7 @@ A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from th
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](#menu) styled as a navbar item — `menu-trigger` plus `navbar-item` on the `<summary>`. The chevron lives in CSS, no SVG needed.
+`<Navbar.Dropdown>` is a [`<Menu>`](/admin-design-system/components/menus/) styled as a navbar item — `menu-trigger` plus `navbar-item` on the `<summary>`. The chevron lives in CSS, no SVG needed.
 
 :::example
 
@@ -165,7 +165,30 @@ A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from th
 
 Drop in a shop switcher, user menu, sign-out — anything right-aligned.
 
+The vanilla example uses a native `<select>` with the same `.select` classes — the rule set targets `<select>` specifically with `appearance: none` plus a CSS chevron, so the look matches the React Base UI version. The React `<Select>` is preferable when option rows need custom rendering (icons, two lines, etc.).
+
 :::example
+
+```html
+<header class="navbar">
+  <div class="navbar-brand">AO Retail</div>
+  <div class="navbar-actions">
+    <select class="select select-bordered select-sm" style="width: auto" aria-label="Shop">
+      <option value="billigvvs.dk">BilligVVS.dk</option>
+      <option value="lavprisvvs.dk">LavprisVVS.dk</option>
+      <option value="elproffs.se">ELproffs.se</option>
+    </select>
+    <details class="menu">
+      <summary class="menu-trigger navbar-item">Nickolaj</summary>
+      <div class="menu-popup" role="menu">
+        <button class="menu-item" type="button">Profile</button>
+        <hr class="menu-separator" />
+        <button class="menu-item" type="button">Sign out</button>
+      </div>
+    </details>
+  </div>
+</header>
+```
 
 ```tsx
 <Navbar>
@@ -448,62 +471,6 @@ Small horizontal strip. `<Footer.Links>` on the left, `<Footer.Meta>` on the rig
   </Footer.Links>
   <Footer.Meta>v1.4.0 · © Acme</Footer.Meta>
 </Footer>
-```
-
-:::
-
-## Menu
-
-The generic dropdown primitive used by `<Navbar.Dropdown>` and anywhere else you need a popover-driven action list. Built on native `<details>` + `<summary>` — open/close, click-to-toggle, and the chevron rotation are all CSS. No light dismiss; click the trigger again to close.
-
-:::example
-
-```html
-<details class="menu">
-  <summary class="menu-trigger">Open menu</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">Edit</button>
-    <button class="menu-item" type="button">Duplicate</button>
-    <hr class="menu-separator" />
-    <button class="menu-item" type="button">Delete</button>
-  </div>
-</details>
-```
-
-```tsx
-<Menu>
-  <Menu.Trigger>Open menu</Menu.Trigger>
-  <Menu.Popup>
-    <Menu.Item>Edit</Menu.Item>
-    <Menu.Item>Duplicate</Menu.Item>
-    <Menu.Separator />
-    <Menu.Item>Delete</Menu.Item>
-  </Menu.Popup>
-</Menu>
-```
-
-:::
-
-Cluster related items with `<Menu.Group>` + `<Menu.GroupLabel>`. Use `<Menu.LinkItem>` for real anchors (right-click to open in a new tab).
-
-:::example
-
-```tsx
-<Menu>
-  <Menu.Trigger>Resources</Menu.Trigger>
-  <Menu.Popup>
-    <Menu.Group>
-      <Menu.GroupLabel>Internal</Menu.GroupLabel>
-      <Menu.LinkItem href="#docs">Docs</Menu.LinkItem>
-      <Menu.LinkItem href="#changelog">Changelog</Menu.LinkItem>
-    </Menu.Group>
-    <Menu.Separator />
-    <Menu.Group>
-      <Menu.GroupLabel>External</Menu.GroupLabel>
-      <Menu.LinkItem href="#support">Support</Menu.LinkItem>
-    </Menu.Group>
-  </Menu.Popup>
-</Menu>
 ```
 
 :::

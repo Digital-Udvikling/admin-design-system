@@ -1,0 +1,152 @@
+---
+title: Menus
+description: Dropdown menu built on native <details> + <summary>. CSS-only — open/close, click-to-toggle, and chevron rotation are all platform behaviour. Composes with .btn and .btn-group for split buttons.
+---
+
+import { Menu, Button, ButtonGroup } from "@aortl/admin-react";
+
+Menus are a `<details>` element with a `<summary>` trigger and a positioned popup. The browser handles open/close and the chevron rotation tracks `[open]` via CSS. There is no light dismiss; click the trigger again, or move focus, to close.
+
+The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout). Its default appearance steps aside when `.btn` is also applied, so you can drop a menu into a `<ButtonGroup>` to build a split button without fighting the cascade.
+
+## Examples
+
+### Basic
+
+:::example
+
+```html
+<details class="menu">
+  <summary class="menu-trigger">Open menu</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button">Edit</button>
+    <button class="menu-item" type="button">Duplicate</button>
+    <hr class="menu-separator" />
+    <button class="menu-item" type="button">Delete</button>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger>Open menu</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Duplicate</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
+### Grouped items
+
+Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is non-interactive.
+
+:::example
+
+```tsx
+<Menu>
+  <Menu.Trigger>Resources</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Group>
+      <Menu.GroupLabel>Internal</Menu.GroupLabel>
+      <Menu.LinkItem href="#docs">Docs</Menu.LinkItem>
+      <Menu.LinkItem href="#changelog">Changelog</Menu.LinkItem>
+    </Menu.Group>
+    <Menu.Separator />
+    <Menu.Group>
+      <Menu.GroupLabel>External</Menu.GroupLabel>
+      <Menu.LinkItem href="#support">Support</Menu.LinkItem>
+    </Menu.Group>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
+Use `<Menu.LinkItem>` (an anchor) when the entry should be a real link — right-click to open in a new tab, copy URL, etc. Use `<Menu.Item>` (a button) for client-side actions.
+
+### Button-styled trigger
+
+Add `btn` + a variant class to the `<summary>`. The `.menu-trigger` default appearance steps aside (`:not(.btn)` in the CSS), so background, hover, padding, and text colour come from the button class.
+
+:::example
+
+```html
+<details class="menu">
+  <summary class="menu-trigger btn btn-primary">Actions</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button">Approve</button>
+    <button class="menu-item" type="button">Reject</button>
+    <hr class="menu-separator" />
+    <button class="menu-item" type="button">Send to review</button>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger className="btn btn-primary">Actions</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item>Approve</Menu.Item>
+    <Menu.Item>Reject</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item>Send to review</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
+### Split button
+
+A primary action on the left, a related set of actions on the right. The right side is a `<details>` inside a `<ButtonGroup>` — the group rules round the outer edges of the menu trigger to match the strip.
+
+:::example
+
+```html
+<div class="btn-group">
+  <button class="btn btn-primary" type="button">Save</button>
+  <details class="menu">
+    <summary
+      class="menu-trigger btn btn-primary"
+      style="padding-left: 0.75rem; padding-right: 0.75rem"
+      aria-label="More save options"
+    ></summary>
+    <div class="menu-popup" role="menu">
+      <button class="menu-item" type="button">Save as draft</button>
+      <button class="menu-item" type="button">Save and publish</button>
+      <hr class="menu-separator" />
+      <button class="menu-item" type="button">Save a copy…</button>
+    </div>
+  </details>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <Button variant="primary">Save</Button>
+  <Menu>
+    <Menu.Trigger
+      className="btn btn-primary"
+      style={{ paddingLeft: "0.75rem", paddingRight: "0.75rem" }}
+      aria-label="More save options"
+    />
+    <Menu.Popup>
+      <Menu.Item>Save as draft</Menu.Item>
+      <Menu.Item>Save and publish</Menu.Item>
+      <Menu.Separator />
+      <Menu.Item>Save a copy…</Menu.Item>
+    </Menu.Popup>
+  </Menu>
+</ButtonGroup>
+```
+
+:::
+
+The summary's content is empty — the chevron from `.menu-trigger::after` is all that's needed. The narrow horizontal padding makes the trigger feel like an icon button next to the wider primary action. Add `aria-label` for screen readers since the visible glyph is decorative.
+
+The same pattern works with any variant: `btn-secondary`, `btn-danger`, `btn-ghost`. The chevron inherits `currentColor`, so it always matches the surrounding text.

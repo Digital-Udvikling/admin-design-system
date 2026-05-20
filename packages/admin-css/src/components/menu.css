@@ -5,11 +5,10 @@
     @apply relative inline-block;
   }
 
+  /* Behaviour — applied always so the trigger works regardless of
+     additional visual classes (e.g. `btn btn-primary` for a split button). */
   .menu-trigger {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1.5
-           rounded-md text-sm leading-none
-           text-text bg-transparent
-           hover:bg-surface-strong
+    @apply inline-flex items-center gap-1.5
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
@@ -20,17 +19,32 @@
     display: none;
   }
 
-  /* Chevron — rotates when the menu opens. */
+  /* Default appearance — bows out when `.btn` is also on the trigger so
+     button classes (bg, hover, padding, text colour) take over cleanly. */
+  .menu-trigger:not(.btn) {
+    @apply px-2.5 py-1.5 rounded-md text-sm leading-none
+           text-text bg-transparent
+           hover:bg-surface-strong;
+  }
+
+  /* Chevron uses currentColor so it tracks the trigger's text colour —
+     muted text on the default trigger, content colour on a btn-primary
+     split button, etc. Sized in em so it scales with btn-sm / btn-lg. */
   .menu-trigger::after {
     content: "";
-    width: 0.4rem;
-    height: 0.4rem;
+    width: 0.5em;
+    height: 0.5em;
     border-right: 2px solid currentColor;
     border-bottom: 2px solid currentColor;
-    color: var(--color-text-muted);
     transform: rotate(45deg);
     transition: transform 150ms ease;
     flex-shrink: 0;
+  }
+
+  /* Icon-only triggers (e.g. the dropdown half of a split button) center
+     their chevron instead of letting it sit at the start. */
+  .menu-trigger:empty {
+    @apply justify-center;
   }
 
   .menu[open] > .menu-trigger::after {

@@ -19,6 +19,42 @@
     @apply rounded-r-lg;
   }
 
+  /* Split-button support: a <details class="menu"> child sits in the strip
+     alongside .btn children, with its .menu-trigger getting the same edge
+     treatment as the buttons around it. inline-flex on the details makes
+     the <summary> stretch vertically to match sibling .btn heights, so an
+     icon-only trigger doesn't end up shorter than its neighbours. */
+  .btn-group > .menu {
+    @apply relative focus-visible:z-10;
+    display: inline-flex;
+  }
+
+  .btn-group > .menu:not(:first-child) {
+    @apply -ml-px;
+  }
+
+  .btn-group > .menu > .menu-trigger {
+    @apply rounded-none;
+  }
+
+  .btn-group > .menu:first-child > .menu-trigger {
+    @apply rounded-l-lg;
+  }
+
+  .btn-group > .menu:last-child > .menu-trigger {
+    @apply rounded-r-lg;
+  }
+
+  /* Divider between adjacent items so same-coloured siblings (e.g. a
+     split button) read as separate actions. currentColor + color-mix
+     means the divider works across every .btn variant — light on
+     coloured buttons, dark on ghost/secondary — without per-variant
+     rules. */
+  .btn-group > .btn:not(:first-child),
+  .btn-group > .menu:not(:first-child) > .menu-trigger {
+    border-left-color: color-mix(in srgb, currentColor 25%, transparent);
+  }
+
   .btn-group-vertical {
     @apply inline-flex flex-col;
   }

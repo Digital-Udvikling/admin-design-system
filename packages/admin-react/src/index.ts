@@ -16,6 +16,12 @@ export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } fro
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
+export {
+  Breadcrumbs,
+  type BreadcrumbsProps,
+  type BreadcrumbItemProps,
+  type BreadcrumbSeparatorProps,
+} from "./Breadcrumbs";
 export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";
 export {
   FileInput,

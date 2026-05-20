@@ -1,0 +1,95 @@
+---
+title: Breadcrumbs
+description: Compact trail of links to ancestor pages, with the current page as the trailing non-link entry.
+---
+
+import { Breadcrumbs } from "@aortl/admin-react";
+import { IconChevronRight, IconHome } from "@tabler/icons-react";
+
+A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links and a final non-link entry. The current page is marked with `aria-current="page"` and styled as body text. Separators are CSS-driven so a single `<span class="breadcrumb-separator">` between items is all you need; supply a child element if you want a chevron instead of the default slash.
+
+## Examples
+
+### Basic
+
+:::example
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a class="breadcrumb-item" href="/">Home</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li><a class="breadcrumb-item" href="/users">Users</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
+  </ol>
+</nav>
+```
+
+```tsx
+<Breadcrumbs>
+  <Breadcrumbs.Item href="/">Home</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/users">Users</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Detail</Breadcrumbs.Item>
+</Breadcrumbs>
+```
+
+:::
+
+### With a chevron separator
+
+Drop an icon inside `.breadcrumb-separator` — the empty-`:empty::before` rule steps aside, so the icon becomes the separator.
+
+:::example
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a class="breadcrumb-item" href="/">
+        <i class="ti ti-home" aria-hidden="true"></i>
+        Home
+      </a>
+    </li>
+    <span class="breadcrumb-separator" aria-hidden="true">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </span>
+    <li><a class="breadcrumb-item" href="/users">Users</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </span>
+    <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
+  </ol>
+</nav>
+```
+
+```tsx
+<Breadcrumbs separator={<IconChevronRight size={14} />}>
+  <Breadcrumbs.Item href="/" icon={IconHome}>
+    Home
+  </Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/users">Users</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Detail</Breadcrumbs.Item>
+</Breadcrumbs>
+```
+
+:::
+
+### Deep paths
+
+The `<ol>` is `inline-flex flex-wrap`, so long paths reflow onto a second line on narrow viewports instead of forcing horizontal overflow.
+
+:::example
+
+```tsx
+<Breadcrumbs>
+  <Breadcrumbs.Item href="/">Home</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs">Organisations</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme">Acme Inc.</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme/projects">Projects</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme/projects/123">Q3 launch</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Settings</Breadcrumbs.Item>
+</Breadcrumbs>
+```
+
+:::

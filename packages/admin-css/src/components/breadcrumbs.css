@@ -1,0 +1,38 @@
+@layer components {
+  .breadcrumbs {
+    @apply text-sm text-text-muted;
+  }
+
+  .breadcrumbs > ol {
+    @apply inline-flex flex-wrap items-center gap-1.5 m-0 p-0 list-none;
+  }
+
+  .breadcrumb-item {
+    @apply inline-flex items-center gap-1.5
+           text-text-muted no-underline
+           hover:text-text
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+  }
+
+  /* `aria-current` on the last item promotes it to body text weight. Non-links
+     stay non-interactive — same selector matches both <a aria-current> and
+     <span aria-current>. */
+  .breadcrumb-item[aria-current="page"] {
+    @apply text-text font-medium pointer-events-none;
+  }
+
+  /* Slash separator. Use `<span class="breadcrumb-separator">` between items;
+     swap content via a child icon when you want a chevron instead. */
+  .breadcrumb-separator {
+    @apply inline-flex items-center text-text-muted/60 select-none;
+  }
+
+  .breadcrumb-separator:empty::before {
+    content: "/";
+  }
+
+  .breadcrumb-separator > :is(i, svg) {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}

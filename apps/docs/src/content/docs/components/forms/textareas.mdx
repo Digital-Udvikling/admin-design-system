@@ -3,66 +3,84 @@ title: Textareas
 description: Base class .textarea + a variant + an optional size. Identical DOM from either package.
 ---
 
-import { Textarea } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
-import { TextareaFieldDemo } from "../../../../demos/TextareaFieldDemo";
+import { Field, Textarea } from "@aortl/admin-react";
 
 ## Examples
 
 ### Variants
 
-<Example
-  html={`<textarea class="textarea textarea-bordered" placeholder="Bordered (default)"></textarea>
+:::example
+
+```html
+<textarea class="textarea textarea-bordered" placeholder="Bordered (default)"></textarea>
 <textarea class="textarea textarea-ghost" placeholder="Ghost"></textarea>
-<textarea class="textarea textarea-danger" placeholder="Danger">invalid</textarea>`}
-  react={`<Textarea placeholder="Bordered (default)" />
+<textarea class="textarea textarea-danger" placeholder="Danger">invalid</textarea>
+```
+
+```tsx
+<Textarea placeholder="Bordered (default)" />
 <Textarea variant="ghost" placeholder="Ghost" />
-<Textarea variant="danger" defaultValue="invalid" />`}
->
-  <Textarea placeholder="Bordered (default)" />
-  <Textarea variant="ghost" placeholder="Ghost" />
-  <Textarea variant="danger" defaultValue="invalid" />
-</Example>
+<Textarea variant="danger" defaultValue="invalid" />
+```
+
+:::
 
 ### Sizes
 
-<Example
-  html={`<textarea class="textarea textarea-bordered textarea-sm" placeholder="Small"></textarea>
+:::example
+
+```html
+<textarea class="textarea textarea-bordered textarea-sm" placeholder="Small"></textarea>
 <textarea class="textarea textarea-bordered" placeholder="Medium"></textarea>
-<textarea class="textarea textarea-bordered textarea-lg" placeholder="Large"></textarea>`}
-  react={`<Textarea textareaSize="sm" placeholder="Small" />
+<textarea class="textarea textarea-bordered textarea-lg" placeholder="Large"></textarea>
+```
+
+```tsx
+<Textarea textareaSize="sm" placeholder="Small" />
 <Textarea placeholder="Medium" />
-<Textarea textareaSize="lg" placeholder="Large" />`}
->
-  <Textarea textareaSize="sm" placeholder="Small" />
-  <Textarea placeholder="Medium" />
-  <Textarea textareaSize="lg" placeholder="Large" />
-</Example>
+<Textarea textareaSize="lg" placeholder="Large" />
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<textarea class="textarea textarea-bordered" disabled>Disabled</textarea>`}
-  react={`<Textarea disabled defaultValue="Disabled" />`}
->
-  <Textarea disabled defaultValue="Disabled" />
-</Example>
+:::example
+
+```html
+<textarea class="textarea textarea-bordered" disabled>Disabled</textarea>
+```
+
+```tsx
+<Textarea disabled defaultValue="Disabled" />
+```
+
+:::
 
 ### Inside a Field
 
 Wrap a `Textarea` in `Field` to get a label, description, and validation messaging — the same Base UI wiring used by `Input`. The invalid border tint flows in automatically when validation fails.
 
-<Example
-  html={`<div class="field">
+:::example
+
+```html
+<div class="field">
   <label class="field-label" for="notes">Notes</label>
-  <textarea id="notes" class="textarea textarea-bordered" placeholder="Anything you'd like to share"></textarea>
+  <textarea
+    id="notes"
+    class="textarea textarea-bordered"
+    placeholder="Anything you'd like to share"
+  ></textarea>
   <p class="field-description">Markdown is supported.</p>
-</div>`}
-  react={`<Field name="notes">
+</div>
+```
+
+```tsx
+<Field name="notes">
   <Field.Label>Notes</Field.Label>
   <Textarea placeholder="Anything you'd like to share" />
   <Field.Description>Markdown is supported.</Field.Description>
-</Field>`}
->
-  <TextareaFieldDemo client:load />
-</Example>
+</Field>
+```
+
+:::

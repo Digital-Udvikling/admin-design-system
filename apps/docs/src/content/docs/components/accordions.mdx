@@ -4,7 +4,6 @@ description: Native <details> + <summary>, smoothed by interpolate-size and ::de
 ---
 
 import { Accordion } from "@aortl/admin-react";
-import Example from "../../../components/Example.astro";
 
 Native disclosure widgets ship with the correct ARIA semantics, keyboard handling, and browser find-in-page behaviour out of the box. The `.accordion-*` classes layer purely visual styling on top of `<details>` and `<summary>`, and `interpolate-size: allow-keywords` plus `::details-content` give them a smooth open/close animation in modern browsers. Older browsers degrade to the default instant toggle — no JavaScript, no fallback to ship.
 
@@ -12,34 +11,36 @@ Native disclosure widgets ship with the correct ARIA semantics, keyboard handlin
 
 ### Single item
 
-<Example
-  html={`<div class="accordion">
+:::example
+
+```html
+<div class="accordion">
   <details class="accordion-item">
     <summary class="accordion-summary">Settings</summary>
     <div class="accordion-content">Theme, language, accessibility preferences.</div>
   </details>
-</div>`}
-  react={`<Accordion>
+</div>
+```
+
+```tsx
+<Accordion>
   <Accordion.Item>
     <Accordion.Summary>Settings</Accordion.Summary>
     <Accordion.Content>Theme, language, accessibility preferences.</Accordion.Content>
   </Accordion.Item>
-</Accordion>`}
->
-  <Accordion>
-    <Accordion.Item>
-      <Accordion.Summary>Settings</Accordion.Summary>
-      <Accordion.Content>Theme, language, accessibility preferences.</Accordion.Content>
-    </Accordion.Item>
-  </Accordion>
-</Example>
+</Accordion>
+```
+
+:::
 
 ### Grouped items
 
 Adjacent items collapse their shared border and the group rounds only on the outer corners.
 
-<Example
-  html={`<div class="accordion">
+:::example
+
+```html
+<div class="accordion">
   <details class="accordion-item">
     <summary class="accordion-summary">Account</summary>
     <div class="accordion-content">Name, email, password.</div>
@@ -52,8 +53,11 @@ Adjacent items collapse their shared border and the group rounds only on the out
     <summary class="accordion-summary">Billing</summary>
     <div class="accordion-content">Plan, payment methods, invoices.</div>
   </details>
-</div>`}
-  react={`<Accordion>
+</div>
+```
+
+```tsx
+<Accordion>
   <Accordion.Item>
     <Accordion.Summary>Account</Accordion.Summary>
     <Accordion.Content>Name, email, password.</Accordion.Content>
@@ -66,42 +70,29 @@ Adjacent items collapse their shared border and the group rounds only on the out
     <Accordion.Summary>Billing</Accordion.Summary>
     <Accordion.Content>Plan, payment methods, invoices.</Accordion.Content>
   </Accordion.Item>
-</Accordion>`}
->
-  <Accordion>
-    <Accordion.Item>
-      <Accordion.Summary>Account</Accordion.Summary>
-      <Accordion.Content>Name, email, password.</Accordion.Content>
-    </Accordion.Item>
-    <Accordion.Item>
-      <Accordion.Summary>Notifications</Accordion.Summary>
-      <Accordion.Content>Email digests, push, in-app banners.</Accordion.Content>
-    </Accordion.Item>
-    <Accordion.Item>
-      <Accordion.Summary>Billing</Accordion.Summary>
-      <Accordion.Content>Plan, payment methods, invoices.</Accordion.Content>
-    </Accordion.Item>
-  </Accordion>
-</Example>
+</Accordion>
+```
+
+:::
 
 ### Open by default
 
 Add the native `open` attribute.
 
-<Example
-  html={`<details class="accordion-item" open>
+:::example
+
+```html
+<details class="accordion-item" open>
   <summary class="accordion-summary">Already expanded</summary>
   <div class="accordion-content">Visible without a click.</div>
-</details>`}
-  react={`<Accordion.Item open>
+</details>
+```
+
+```tsx
+<Accordion.Item open>
   <Accordion.Summary>Already expanded</Accordion.Summary>
   <Accordion.Content>Visible without a click.</Accordion.Content>
-</Accordion.Item>`}
->
-  <Accordion>
-    <Accordion.Item open>
-      <Accordion.Summary>Already expanded</Accordion.Summary>
-      <Accordion.Content>Visible without a click.</Accordion.Content>
-    </Accordion.Item>
-  </Accordion>
-</Example>
+</Accordion.Item>
+```
+
+:::

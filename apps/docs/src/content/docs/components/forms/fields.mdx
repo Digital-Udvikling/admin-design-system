@@ -3,9 +3,7 @@ title: Fields
 description: Field composition adds accessibility wiring around inputs. Identical DOM from either package.
 ---
 
-import Example from "../../../../components/Example.astro";
-import { FieldEmailDemo } from "../../../../demos/FieldEmailDemo";
-import { FieldValidationDemo } from "../../../../demos/FieldValidationDemo";
+import { Field, Input } from "@aortl/admin-react";
 
 In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wrap an `Input` in `Field` + `Field.Label` to get the same wiring automatically — Base UI handles association, description, and validation messaging.
 
@@ -13,63 +11,85 @@ In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wra
 
 ### Label + description
 
-<Example
-  html={`<div class="field">
+:::example
+
+```html
+<div class="field">
   <label class="field-label" for="email">Email</label>
-  <input id="email" type="email" class="input input-bordered" placeholder="you@example.com" aria-describedby="email-desc">
+  <input
+    id="email"
+    type="email"
+    class="input input-bordered"
+    placeholder="you@example.com"
+    aria-describedby="email-desc"
+  />
   <p id="email-desc" class="field-description">We'll never share your email.</p>
-</div>`}
-  react={`<Field name="email">
+</div>
+```
+
+```tsx
+<Field name="email">
   <Field.Label>Email</Field.Label>
   <Input type="email" placeholder="you@example.com" />
   <Field.Description>We'll never share your email.</Field.Description>
-</Field>`}
->
-  <FieldEmailDemo client:load />
-</Example>
+</Field>
+```
+
+:::
 
 ### Required
 
 Pass `required` to `Field.Label` (React) or add `data-required` to the label (vanilla) to render a red asterisk. The `.asteriskField` class is also available for compatibility with template generators that emit `<span class="asteriskField">*</span>` inside the label (e.g. django-crispy-forms).
 
-<Example
-  html={`<div class="field">
+:::example
+
+```html
+<div class="field">
   <label class="field-label" for="email-required" data-required>Email</label>
-  <input id="email-required" type="email" class="input input-bordered" required>
+  <input id="email-required" type="email" class="input input-bordered" required />
 </div>
 <div class="field">
   <label class="field-label" for="email-asterisk">Email <span class="asteriskField">*</span></label>
-  <input id="email-asterisk" type="email" class="input input-bordered" required>
-</div>`}
-  react={`<Field name="email">
+  <input id="email-asterisk" type="email" class="input input-bordered" required />
+</div>
+```
+
+```tsx
+<Field name="email">
   <Field.Label required>Email</Field.Label>
   <Input type="email" required />
-</Field>`}
->
-  <div class="field">
-    <label class="field-label" data-required for="email-required-demo">
-      Email
-    </label>
-    <input id="email-required-demo" type="email" class="input input-bordered" required />
-  </div>
-</Example>
+</Field>
+```
+
+:::
 
 ### With validation
 
-<Example
-  html={`<form>
+:::example
+
+```html
+<form>
   <div class="field">
     <label class="field-label" for="username">Username</label>
-    <input id="username" class="input input-bordered" required minlength="3" placeholder="At least 3 characters">
+    <input
+      id="username"
+      class="input input-bordered"
+      required
+      minlength="3"
+      placeholder="At least 3 characters"
+    />
     <!-- Vanilla relies on the browser's built-in :invalid + ValidityState. -->
   </div>
-</form>`}
-  react={`<Field name="username" validationMode="onChange">
+</form>
+```
+
+```tsx
+<Field name="username" validationMode="onChange">
   <Field.Label>Username</Field.Label>
   <Input required minLength={3} placeholder="At least 3 characters" />
   <Field.Error match="valueMissing">Username is required.</Field.Error>
   <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
-</Field>`}
->
-  <FieldValidationDemo client:load />
-</Example>
+</Field>
+```
+
+:::

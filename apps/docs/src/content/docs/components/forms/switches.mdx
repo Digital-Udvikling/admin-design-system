@@ -3,9 +3,7 @@ title: Switches
 description: Base class .switch with an inner .switch-thumb. React wraps Base UI; vanilla styles a native input.
 ---
 
-import { Switch } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
-import { SwitchFieldDemo } from "../../../../demos/SwitchFieldDemo";
+import { Field, Switch } from "@aortl/admin-react";
 
 A toggle for on/off state. Use a switch when the change applies immediately (e.g. enable a feature). For form-submission booleans, prefer a [checkbox](../checkboxes/).
 
@@ -13,53 +11,62 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 
 ### Default
 
-<Example
-  html={`<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked>
+:::example
+
+```html
+<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked>
   <span class="switch-thumb"></span>
 </button>
 <button type="button" role="switch" aria-checked="true" class="switch" data-checked>
   <span class="switch-thumb"></span>
-</button>`}
-  react={`<Switch />
-<Switch defaultChecked />`}
->
-  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-    <Switch />
-    <Switch defaultChecked />
-  </div>
-</Example>
+</button>
+```
+
+```tsx
+<Switch />
+<Switch defaultChecked />
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked disabled>
+:::example
+
+```html
+<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked disabled>
   <span class="switch-thumb"></span>
 </button>
 <button type="button" role="switch" aria-checked="true" class="switch" data-checked disabled>
   <span class="switch-thumb"></span>
-</button>`}
-  react={`<Switch disabled />
-<Switch disabled defaultChecked />`}
->
-  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-    <Switch disabled />
-    <Switch disabled defaultChecked />
-  </div>
-</Example>
+</button>
+```
+
+```tsx
+<Switch disabled />
+<Switch disabled defaultChecked />
+```
+
+:::
 
 ### Inside a Field
 
-<Example
-  html={`<div class="field" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+:::example
+
+```html
+<div class="field" style="flex-direction: row; align-items: center; gap: 0.75rem;">
   <button type="button" role="switch" aria-checked="true" class="switch" data-checked>
     <span class="switch-thumb"></span>
   </button>
   <label class="field-label">Email notifications</label>
-</div>`}
-  react={`<Field name="notify" style={{ flexDirection: "row", alignItems: "center", gap: "0.75rem" }}>
+</div>
+```
+
+```tsx
+<Field name="notify" style={{ flexDirection: "row", alignItems: "center", gap: "0.75rem" }}>
   <Switch defaultChecked />
   <Field.Label>Email notifications</Field.Label>
-</Field>`}
->
-  <SwitchFieldDemo client:load />
-</Example>
+</Field>
+```
+
+:::

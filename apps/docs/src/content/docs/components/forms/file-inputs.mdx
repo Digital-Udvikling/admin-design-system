@@ -4,7 +4,6 @@ description: Native file picker styled with consistent button chrome.
 ---
 
 import { FileInput } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
 
 The native `<input type="file">` is the only HTML control whose internal chrome (the "Choose file" button) is browser-styled. The `.file-input` class uses `::file-selector-button` to bring that button in line with the design system. `FileInput` does the same in React.
 
@@ -12,50 +11,66 @@ The native `<input type="file">` is the only HTML control whose internal chrome 
 
 ### Variants
 
-<Example
-  html={`<input type="file" class="file-input file-input-bordered">
-<input type="file" class="file-input file-input-ghost">
-<input type="file" class="file-input file-input-danger">`}
-  react={`<FileInput />
+:::example
+
+```html
+<input type="file" class="file-input file-input-bordered" />
+<input type="file" class="file-input file-input-ghost" />
+<input type="file" class="file-input file-input-danger" />
+```
+
+```tsx
+<FileInput />
 <FileInput variant="ghost" />
-<FileInput variant="danger" />`}
->
-  <FileInput />
-  <FileInput variant="ghost" />
-  <FileInput variant="danger" />
-</Example>
+<FileInput variant="danger" />
+```
+
+:::
 
 ### Sizes
 
-<Example
-  html={`<input type="file" class="file-input file-input-bordered file-input-sm">
-<input type="file" class="file-input file-input-bordered">
-<input type="file" class="file-input file-input-bordered file-input-lg">`}
-  react={`<FileInput inputSize="sm" />
+:::example
+
+```html
+<input type="file" class="file-input file-input-bordered file-input-sm" />
+<input type="file" class="file-input file-input-bordered" />
+<input type="file" class="file-input file-input-bordered file-input-lg" />
+```
+
+```tsx
+<FileInput inputSize="sm" />
 <FileInput />
-<FileInput inputSize="lg" />`}
->
-  <FileInput inputSize="sm" />
-  <FileInput />
-  <FileInput inputSize="lg" />
-</Example>
+<FileInput inputSize="lg" />
+```
+
+:::
 
 ### Restricting file types
 
 The native `accept` and `multiple` attributes flow through unchanged.
 
-<Example
-  html={`<input type="file" class="file-input file-input-bordered" accept="image/*" multiple>`}
-  react={`<FileInput accept="image/*" multiple />`}
->
-  <FileInput accept="image/*" multiple />
-</Example>
+:::example
+
+```html
+<input type="file" class="file-input file-input-bordered" accept="image/*" multiple />
+```
+
+```tsx
+<FileInput accept="image/*" multiple />
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<input type="file" class="file-input file-input-bordered" disabled>`}
-  react={`<FileInput disabled />`}
->
-  <FileInput disabled />
-</Example>
+:::example
+
+```html
+<input type="file" class="file-input file-input-bordered" disabled />
+```
+
+```tsx
+<FileInput disabled />
+```
+
+:::

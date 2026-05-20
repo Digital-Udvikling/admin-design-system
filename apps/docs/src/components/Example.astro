@@ -1,62 +1,24 @@
 ---
 import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
-import { format } from "oxfmt";
+import type { ComponentType } from "react";
+import { ReactPreview } from "./ReactPreview.tsx";
 
 interface Props {
-  /** HTML / vanilla-CSS source. Omit to hide the Vanilla tab. */
+  /** Pre-formatted HTML source. Drives the vanilla preview and the HTML tab. */
   html?: string;
-  /** React / JSX source. Omit to hide the React tab. */
+  /** Pre-formatted React source. Drives the React tab. */
   react?: string;
+  /**
+   * The React preview as a single component reference. Rendered through
+   * `ReactPreview` (a `.tsx` file) so Astro routes the entire subtree
+   * through one React SSR pass — required for context-publishing
+   * primitives like `Field` to reach their descendants.
+   */
+  preview?: ComponentType;
 }
 
-const PRETTIER_OPTS = {
-  tabWidth: 2,
-  printWidth: 80,
-  singleQuote: false,
-  semi: true,
-} as const;
-
-function dedent(s: string): string {
-  const lines = s.split("\n");
-  const indents = lines
-    .filter((l) => l.trim().length > 0)
-    .map((l) => /^ */.exec(l)?.[0].length ?? 0);
-  const min = indents.length > 0 ? Math.min(...indents) : 0;
-  return lines
-    .map((l) => l.slice(min))
-    .join("\n")
-    .replace(/^\n+|\n+$/g, "");
-}
-
-/**
- * Snippet sources are fragments (sibling roots, no enclosing element), which
- * neither Prettier's HTML nor babel-ts parser accept directly. We wrap in a
- * single root, format, then strip the wrapper and dedent the inner content.
- */
-async function formatHtml(code: string): Promise<string> {
-  const wrapped = `<div>\n${code}\n</div>`;
-  const out = (
-    await format("test.html", wrapped, { ...PRETTIER_OPTS, parser: "html" })
-  ).code.trim();
-  const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
-  return dedent(inner);
-}
-
-async function formatReact(code: string): Promise<string> {
-  const wrapped = `<>\n${code}\n</>;\n`;
-  const out = (
-    await format("test.tsx", wrapped, { ...PRETTIER_OPTS, parser: "babel-ts" })
-  ).code.trim();
-  const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
-  return dedent(inner);
-}
-
-const { html: rawHtml, react: rawReact } = Astro.props;
-const [html, react] = await Promise.all([
-  rawHtml ? formatHtml(rawHtml) : Promise.resolve(undefined),
-  rawReact ? formatReact(rawReact) : Promise.resolve(undefined),
-]);
-const hasBoth = !!html && !!react;
+const { html, react, preview } = Astro.props;
+const hasBoth = !!html && !!preview;
 ---
 
 <section class="not-content example-block">
@@ -64,18 +26,18 @@ const hasBoth = !!html && !!react;
     {
       hasBoth ? (
         <package-preview class="example-preview">
-          <div
-            class="preview-variant"
-            data-variant="html"
-            set:html={rawHtml!}
-          />
+          <div class="preview-variant" data-variant="html" set:html={html!} />
           <div class="preview-variant" data-variant="react" hidden>
-            <slot />
+            <ReactPreview render={preview!} />
           </div>
         </package-preview>
       ) : (
         <div class="example-preview">
-          <slot />
+          {preview ? (
+            <ReactPreview render={preview} />
+          ) : html ? (
+            <Fragment set:html={html} />
+          ) : null}
         </div>
       )
     }

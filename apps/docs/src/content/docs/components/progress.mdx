@@ -1,0 +1,84 @@
+---
+title: Progress
+description: Styled native <progress> element for determinate and indeterminate work.
+---
+
+import { Progress } from "@aortl/admin-react";
+
+A thin wrapper around the native `<progress>` element. The browser handles ARIA semantics (`role="progressbar"`, `aria-valuenow`, etc.); we just style the track and fill across engines. Omit `value` for an indeterminate bar.
+
+## Examples
+
+### Determinate
+
+:::example
+
+```html
+<progress class="progress" value="25" max="100"></progress>
+<progress class="progress" value="60" max="100"></progress>
+<progress class="progress" value="90" max="100"></progress>
+```
+
+```tsx
+<Progress value={25} />
+<Progress value={60} />
+<Progress value={90} />
+```
+
+:::
+
+### Indeterminate
+
+Drop the `value` attribute (or pass `value={undefined}` in React) when you don't know how long something will take.
+
+:::example
+
+```html
+<progress class="progress"></progress>
+```
+
+```tsx
+<Progress />
+```
+
+:::
+
+### Variants
+
+The fill uses `currentColor` so swap variants without touching the track.
+
+:::example
+
+```html
+<progress class="progress" value="40" max="100"></progress>
+<progress class="progress progress-success" value="40" max="100"></progress>
+<progress class="progress progress-warning" value="40" max="100"></progress>
+<progress class="progress progress-danger" value="40" max="100"></progress>
+```
+
+```tsx
+<Progress value={40} />
+<Progress value={40} variant="success" />
+<Progress value={40} variant="warning" />
+<Progress value={40} variant="danger" />
+```
+
+:::
+
+### Sizes
+
+:::example
+
+```html
+<progress class="progress progress-sm" value="50" max="100"></progress>
+<progress class="progress" value="50" max="100"></progress>
+<progress class="progress progress-lg" value="50" max="100"></progress>
+```
+
+```tsx
+<Progress value={50} size="sm" />
+<Progress value={50} />
+<Progress value={50} size="lg" />
+```
+
+:::

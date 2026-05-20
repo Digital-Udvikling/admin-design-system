@@ -34,6 +34,7 @@ export {
   type RadioGroupProps,
   type RadioGroupOrientation,
 } from "./Radio";
+export { Progress, type ProgressProps, type ProgressVariant, type ProgressSize } from "./Progress";
 export { Spinner, type SpinnerProps, type SpinnerSize } from "./Spinner";
 export { Switch, type SwitchProps, type SwitchThumbProps } from "./Switch";
 export {

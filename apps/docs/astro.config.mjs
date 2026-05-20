@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import remarkDirective from "remark-directive";
 import remarkExample from "./plugins/example/index.mjs";
+import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
 
 export default defineConfig({
   site: "https://digital-udvikling.github.io",
@@ -25,7 +26,7 @@ export default defineConfig({
     mdx({ remarkPlugins: [remarkDirective, remarkExample] }),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), virtualPreviewsPlugin()],
     resolve: {
       alias: {
         "@aortl/admin-react": fileURLToPath(

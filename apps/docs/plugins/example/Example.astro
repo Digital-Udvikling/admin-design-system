@@ -1,24 +1,16 @@
 ---
 import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
-import type { ComponentType } from "react";
-import { ReactPreview } from "./ReactPreview.tsx";
 
 interface Props {
   /** Pre-formatted HTML source. Drives the vanilla preview and the HTML tab. */
   html?: string;
   /** Pre-formatted React source. Drives the React tab. */
   react?: string;
-  /**
-   * The React preview as a single component reference. Rendered through
-   * `ReactPreview` (a `.tsx` file) so Astro routes the entire subtree
-   * through one React SSR pass — required for context-publishing
-   * primitives like `Field` to reach their descendants.
-   */
-  preview?: ComponentType;
 }
 
-const { html, react, preview } = Astro.props;
-const hasBoth = !!html && !!preview;
+const { html, react } = Astro.props;
+const hasReact = !!react;
+const hasBoth = !!html && hasReact;
 ---
 
 <section class="not-content example-block">
@@ -28,13 +20,13 @@ const hasBoth = !!html && !!preview;
         <package-preview class="example-preview">
           <div class="preview-variant" data-variant="html" set:html={html!} />
           <div class="preview-variant" data-variant="react" hidden>
-            <ReactPreview render={preview!} />
+            <slot name="preview" />
           </div>
         </package-preview>
       ) : (
         <div class="example-preview">
-          {preview ? (
-            <ReactPreview render={preview} />
+          {hasReact ? (
+            <slot name="preview" />
           ) : html ? (
             <Fragment set:html={html} />
           ) : null}

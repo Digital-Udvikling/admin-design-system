@@ -1,9 +1,10 @@
+import { createHash } from "node:crypto";
 import { Parser } from "acorn";
 import jsx from "acorn-jsx";
 import { generate } from "astring";
-import { buildJsx } from "estree-util-build-jsx";
 import { format } from "oxfmt";
 import { visit, SKIP } from "unist-util-visit";
+import { previewId, registerPreview } from "./virtual-previews.mjs";
 
 const JsxParser = Parser.extend(jsx());
 
@@ -15,15 +16,12 @@ const PRETTIER_OPTS = {
 };
 
 /**
- * Private identifiers we own and inject. Using a `__` prefix sidesteps name
- * collisions with whatever the author already imports, which lets us always
- * inject the renderer without scanning the tree first.
+ * Private identifiers we own and inject. The `__` prefix sidesteps name
+ * collisions with whatever the author already imports.
  */
 const RENDERER_NAME = "__ExampleRenderer";
 const PREVIEW_PREFIX = "__ExamplePreview";
-const REACT_NS = "__ExampleReact";
 const RENDERER_IMPORT = `import ${RENDERER_NAME} from "@example/Example.astro";`;
-const REACT_IMPORT = `import * as ${REACT_NS} from "react";`;
 
 /**
  * Rewrites `:::example` directives into the existing Example renderer.
@@ -41,12 +39,15 @@ const REACT_IMPORT = `import * as ${REACT_NS} from "react";`;
  *
  *     :::
  *
- * Either fence may be omitted. The tsx fence is wrapped in a per-example
- * function component (`__ExamplePreviewN`) so the React preview is one VNode
- * from Astro's perspective — Astro renders it through a single React SSR
- * pass, which keeps context-publishing primitives (`Field`, `RadioGroup`,
- * `Select.Root`) connected to their descendants. Going through `<slot />`
- * breaks that.
+ * Either fence may be omitted. The tsx fence is compiled into a default-
+ * exported React component, registered as a virtual module
+ * (`virtual:example-preview/<hash>.tsx`), and hydrated as a client island
+ * by Astro. Wrapping the whole preview in one component means Astro routes
+ * the entire subtree through a single React SSR pass and hydrates the same
+ * tree on the client — required for context-publishing primitives (`Field`,
+ * `RadioGroup`, `Tabs.Root`, `Select.Root`) to reach their descendants, and
+ * for Base UI's stateful components (Tabs, Checkbox, Radio, Switch, Select,
+ * Menu) to be interactive at all.
  *
  * @returns {(tree: import("mdast").Root, file: import("vfile").VFile) => Promise<void>}
  */
@@ -67,8 +68,14 @@ export default function remarkExample() {
 
     if (jobs.length === 0) return;
 
+    // Capture the author's top-level ImportDeclarations BEFORE we inject our
+    // own. Each virtual preview module is built on top of these so that
+    // identifiers like `<Checkbox>` or `<Field>` resolve the same way they
+    // do in the surrounding MDX.
+    const userImportsBlock = collectMdxImports(tree).join("\n");
+
     /** @type {string[]} */
-    const previewDeclarations = [];
+    const previewImports = [];
     let previewCount = 0;
 
     await Promise.all(
@@ -89,30 +96,92 @@ export default function remarkExample() {
         if (html !== undefined) attributes.push(stringAttr("html", html));
         if (react !== undefined) attributes.push(stringAttr("react", react));
 
+        /** @type {any[]} */
+        const children = [];
         if (react !== undefined) {
+          const previewSource = buildPreviewSource(userImportsBlock, react);
+          const moduleId = previewId(hash(previewSource));
+          registerPreview(moduleId, previewSource);
+
           const previewName = `${PREVIEW_PREFIX}${previewCount++}`;
-          previewDeclarations.push(
-            `const ${previewName} = () => (\n  <>\n${indent(react, 4)}\n  </>\n);`,
-          );
-          attributes.push(identifierAttr("preview", previewName));
+          previewImports.push(`import ${previewName} from "${moduleId}";`);
+
+          children.push({
+            type: "mdxJsxFlowElement",
+            name: previewName,
+            attributes: [
+              { type: "mdxJsxAttribute", name: "client:load", value: null },
+              { type: "mdxJsxAttribute", name: "slot", value: "preview" },
+            ],
+            children: [],
+          });
         }
 
         Object.assign(node, {
           type: "mdxJsxFlowElement",
           name: RENDERER_NAME,
           attributes,
-          children: [],
+          children,
         });
       }),
     );
 
-    const esmSource = [
-      RENDERER_IMPORT,
-      ...(previewDeclarations.length > 0 ? [REACT_IMPORT] : []),
-      ...previewDeclarations,
-    ].join("\n\n");
+    const esmSource = [RENDERER_IMPORT, ...previewImports].join("\n");
     injectEsm(tree, esmSource);
   };
+}
+
+/**
+ * @param {import("mdast").Root} tree
+ * @returns {string[]}
+ */
+function collectMdxImports(tree) {
+  /** @type {string[]} */
+  const sources = [];
+  visit(tree, (node) => {
+    if (node.type !== "mdxjsEsm") return;
+    /** @type {any} */
+    let program;
+    try {
+      program = JsxParser.parse(/** @type {any} */ (node).value, {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      });
+    } catch {
+      return;
+    }
+    for (const stmt of program.body) {
+      if (stmt.type === "ImportDeclaration") {
+        sources.push(generate(stmt).trim());
+      }
+    }
+  });
+  return sources;
+}
+
+/**
+ * Build the TSX source for one preview's virtual module. The returned source
+ * is hashed to derive the module id, so any change here invalidates the
+ * cache across the workspace.
+ *
+ * @param {string} importsBlock
+ * @param {string} reactSource
+ */
+function buildPreviewSource(importsBlock, reactSource) {
+  const header = importsBlock.length > 0 ? `${importsBlock}\n\n` : "";
+  return `${header}export default function ExamplePreview() {
+  return (
+    <>
+${indent(reactSource, 6)}
+    </>
+  );
+}
+`;
+}
+
+/** @param {string} s */
+function hash(s) {
+  return createHash("sha1").update(s).digest("hex").slice(0, 16);
 }
 
 /**
@@ -145,36 +214,8 @@ function stringAttr(name, value) {
 }
 
 /**
- * `preview={someIdentifier}` — the value is a JSX expression whose ESTree
- * is a single identifier reference into the injected esm scope.
- *
- * @param {string} name
- * @param {string} identifier
- */
-function identifierAttr(name, identifier) {
-  const program = JsxParser.parse(identifier, {
-    ecmaVersion: "latest",
-    sourceType: "module",
-  });
-  return {
-    type: "mdxJsxAttribute",
-    name,
-    value: {
-      type: "mdxJsxAttributeValueExpression",
-      value: identifier,
-      data: { estree: program },
-    },
-  };
-}
-
-/**
  * Inject a single `mdxjsEsm` node at the top of the document carrying the
- * renderer import and every preview function for this file. JSX inside the
- * preview FCs is transformed to `react/jsx-runtime` calls right here —
- * Astro's MDX integration compiles the surrounding document with its own
- * JSX runtime (which produces Astro VNodes), and those don't render inside
- * React's SSR pass. Pinning the FCs to React's runtime guarantees one
- * coherent React tree from `ReactPreview` down.
+ * renderer import and every preview-module import for this file.
  *
  * @param {import("mdast").Root} tree
  * @param {string} source
@@ -183,15 +224,10 @@ function injectEsm(tree, source) {
   const program = /** @type {any} */ (
     JsxParser.parse(source, { ecmaVersion: "latest", sourceType: "module" })
   );
-  buildJsx(program, {
-    runtime: "classic",
-    pragma: `${REACT_NS}.createElement`,
-    pragmaFrag: `${REACT_NS}.Fragment`,
-  });
   /** @type {any} */
   const node = {
     type: "mdxjsEsm",
-    value: generate(program),
+    value: source,
     data: { estree: program },
   };
   tree.children.unshift(node);

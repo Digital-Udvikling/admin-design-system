@@ -4,6 +4,8 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import remarkDirective from "remark-directive";
+import remarkExample from "./plugins/example/index.mjs";
 
 export default defineConfig({
   site: "https://digital-udvikling.github.io",
@@ -19,7 +21,7 @@ export default defineConfig({
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
       ],
     }),
-    mdx(),
+    mdx({ remarkPlugins: [remarkDirective, remarkExample] }),
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -28,6 +30,8 @@ export default defineConfig({
         "@aortl/admin-react": fileURLToPath(
           new URL("../../packages/admin-react/src/index.ts", import.meta.url),
         ),
+        "@docs": fileURLToPath(new URL("./src", import.meta.url)),
+        "@example": fileURLToPath(new URL("./plugins/example", import.meta.url)),
       },
     },
   },

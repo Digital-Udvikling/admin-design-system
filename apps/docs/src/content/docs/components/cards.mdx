@@ -4,7 +4,6 @@ description: A container with optional title, description, and actions. Identica
 ---
 
 import { Button, Card, Input } from "@aortl/admin-react";
-import Example from "../../../components/Example.astro";
 
 A container with optional title, description, and actions.
 
@@ -12,8 +11,10 @@ A container with optional title, description, and actions.
 
 ### Basic
 
-<Example
-  html={`<div class="card">
+:::example
+
+```html
+<div class="card">
   <div class="card-body">
     <h3 class="card-title">Welcome</h3>
     <p class="card-description">A short description sits here.</p>
@@ -22,47 +23,46 @@ A container with optional title, description, and actions.
       <button class="btn btn-ghost btn-sm">Maybe later</button>
     </div>
   </div>
-</div>`}
-  react={`<Card>
+</div>
+```
+
+```tsx
+<Card>
   <Card.Body>
     <Card.Title>Welcome</Card.Title>
     <Card.Description>A short description sits here.</Card.Description>
     <Card.Actions>
       <Button size="sm">Get started</Button>
-      <Button variant="ghost" size="sm">Maybe later</Button>
+      <Button variant="ghost" size="sm">
+        Maybe later
+      </Button>
     </Card.Actions>
   </Card.Body>
-</Card>`}
->
-  <Card>
-    <Card.Body>
-      <Card.Title>Welcome</Card.Title>
-      <Card.Description>A short description sits here.</Card.Description>
-      <Card.Actions>
-        <Button size="sm">Get started</Button>
-        <Button variant="ghost" size="sm">
-          Maybe later
-        </Button>
-      </Card.Actions>
-    </Card.Body>
-  </Card>
-</Example>
+</Card>
+```
+
+:::
 
 ### Sign-in form
 
-<Example
-  html={`<div class="card">
+:::example
+
+```html
+<div class="card">
   <div class="card-body">
     <h3 class="card-title">Sign in</h3>
-    <input class="input input-bordered" placeholder="Email">
-    <input class="input input-bordered" type="password" placeholder="Password">
+    <input class="input input-bordered" placeholder="Email" />
+    <input class="input input-bordered" type="password" placeholder="Password" />
     <div class="card-actions">
       <button class="btn btn-primary">Sign in</button>
       <button class="btn btn-ghost">Cancel</button>
     </div>
   </div>
-</div>`}
-  react={`<Card>
+</div>
+```
+
+```tsx
+<Card>
   <Card.Body>
     <Card.Title>Sign in</Card.Title>
     <Input placeholder="Email" />
@@ -72,41 +72,31 @@ A container with optional title, description, and actions.
       <Button variant="ghost">Cancel</Button>
     </Card.Actions>
   </Card.Body>
-</Card>`}
->
-  <Card>
-    <Card.Body>
-      <Card.Title>Sign in</Card.Title>
-      <Input placeholder="Email" />
-      <Input type="password" placeholder="Password" />
-      <Card.Actions>
-        <Button>Sign in</Button>
-        <Button variant="ghost">Cancel</Button>
-      </Card.Actions>
-    </Card.Body>
-  </Card>
-</Example>
+</Card>
+```
+
+:::
 
 ### Compact + bordered
 
-<Example
-  html={`<div class="card card-compact card-bordered">
+:::example
+
+```html
+<div class="card card-compact card-bordered">
   <div class="card-body">
     <h3 class="card-title">Flat & dense</h3>
     <p class="card-description">Less padding, stronger border, no shadow.</p>
   </div>
-</div>`}
-  react={`<Card compact bordered>
+</div>
+```
+
+```tsx
+<Card compact bordered>
   <Card.Body>
     <Card.Title>Flat & dense</Card.Title>
     <Card.Description>Less padding, stronger border, no shadow.</Card.Description>
   </Card.Body>
-</Card>`}
->
-  <Card compact bordered>
-    <Card.Body>
-      <Card.Title>Flat & dense</Card.Title>
-      <Card.Description>Less padding, stronger border, no shadow.</Card.Description>
-    </Card.Body>
-  </Card>
-</Example>
+</Card>
+```
+
+:::

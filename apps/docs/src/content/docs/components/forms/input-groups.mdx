@@ -4,7 +4,6 @@ description: Combine inputs, addons, and buttons into a single flush row with me
 ---
 
 import { Button, Input, InputGroup } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
 
 Use input groups to attach a prefix, suffix, or action button directly to an input. The group collapses the shared border between adjacent children and keeps the outer corners rounded — replacements for crispy's `PrependedText`, `AppendedText`, and `FieldWithButtons` layout objects.
 
@@ -12,75 +11,82 @@ Use input groups to attach a prefix, suffix, or action button directly to an inp
 
 ### Prepended addon
 
-<Example
-  html={`<div class="input-group">
+:::example
+
+```html
+<div class="input-group">
   <span class="input-group-addon">$</span>
-  <input class="input input-bordered" type="number" placeholder="0.00">
-</div>`}
-  react={`<InputGroup>
+  <input class="input input-bordered" type="number" placeholder="0.00" />
+</div>
+```
+
+```tsx
+<InputGroup>
   <InputGroup.Addon>$</InputGroup.Addon>
   <Input type="number" placeholder="0.00" />
-</InputGroup>`}
->
-  <InputGroup>
-    <InputGroup.Addon>$</InputGroup.Addon>
-    <Input type="number" placeholder="0.00" />
-  </InputGroup>
-</Example>
+</InputGroup>
+```
+
+:::
 
 ### Appended addon
 
-<Example
-  html={`<div class="input-group">
-  <input class="input input-bordered" type="text" placeholder="subdomain">
+:::example
+
+```html
+<div class="input-group">
+  <input class="input input-bordered" type="text" placeholder="subdomain" />
   <span class="input-group-addon">.example.com</span>
-</div>`}
-  react={`<InputGroup>
+</div>
+```
+
+```tsx
+<InputGroup>
   <Input placeholder="subdomain" />
   <InputGroup.Addon>.example.com</InputGroup.Addon>
-</InputGroup>`}
->
-  <InputGroup>
-    <Input placeholder="subdomain" />
-    <InputGroup.Addon>.example.com</InputGroup.Addon>
-  </InputGroup>
-</Example>
+</InputGroup>
+```
+
+:::
 
 ### Both ends
 
-<Example
-  html={`<div class="input-group">
+:::example
+
+```html
+<div class="input-group">
   <span class="input-group-addon">$</span>
-  <input class="input input-bordered" type="number" placeholder="0.00">
+  <input class="input input-bordered" type="number" placeholder="0.00" />
   <span class="input-group-addon">USD</span>
-</div>`}
-  react={`<InputGroup>
+</div>
+```
+
+```tsx
+<InputGroup>
   <InputGroup.Addon>$</InputGroup.Addon>
   <Input type="number" placeholder="0.00" />
   <InputGroup.Addon>USD</InputGroup.Addon>
-</InputGroup>`}
->
-  <InputGroup>
-    <InputGroup.Addon>$</InputGroup.Addon>
-    <Input type="number" placeholder="0.00" />
-    <InputGroup.Addon>USD</InputGroup.Addon>
-  </InputGroup>
-</Example>
+</InputGroup>
+```
+
+:::
 
 ### With a button
 
-<Example
-  html={`<div class="input-group">
-  <input class="input input-bordered" type="search" placeholder="Search orders…">
+:::example
+
+```html
+<div class="input-group">
+  <input class="input input-bordered" type="search" placeholder="Search orders…" />
   <button class="btn btn-primary" type="submit">Search</button>
-</div>`}
-  react={`<InputGroup>
+</div>
+```
+
+```tsx
+<InputGroup>
   <Input type="search" placeholder="Search orders…" />
   <Button type="submit">Search</Button>
-</InputGroup>`}
->
-  <InputGroup>
-    <Input type="search" placeholder="Search orders…" />
-    <Button type="submit">Search</Button>
-  </InputGroup>
-</Example>
+</InputGroup>
+```
+
+:::

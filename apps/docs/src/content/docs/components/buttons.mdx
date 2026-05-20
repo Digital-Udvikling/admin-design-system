@@ -4,62 +4,73 @@ description: Base class .btn + a variant + an optional size. Identical DOM from 
 ---
 
 import { Button } from "@aortl/admin-react";
-import Example from "../../../components/Example.astro";
 
 ## Examples
 
 ### Variants
 
-<Example
-  html={`<button class="btn btn-primary">Primary</button>
+:::example
+
+```html
+<button class="btn btn-primary">Primary</button>
 <button class="btn btn-secondary">Secondary</button>
 <button class="btn btn-ghost">Ghost</button>
-<button class="btn btn-danger">Danger</button>`}
-  react={`<Button variant="primary">Primary</Button>
+<button class="btn btn-danger">Danger</button>
+```
+
+```tsx
+<Button variant="primary">Primary</Button>
 <Button variant="secondary">Secondary</Button>
 <Button variant="ghost">Ghost</Button>
-<Button variant="danger">Danger</Button>`}
->
-  <Button variant="primary">Primary</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="ghost">Ghost</Button>
-  <Button variant="danger">Danger</Button>
-</Example>
+<Button variant="danger">Danger</Button>
+```
+
+:::
 
 ### Sizes
 
-<Example
-  html={`<button class="btn btn-primary btn-sm">Small</button>
+:::example
+
+```html
+<button class="btn btn-primary btn-sm">Small</button>
 <button class="btn btn-primary">Medium</button>
-<button class="btn btn-primary btn-lg">Large</button>`}
-  react={`<Button size="sm">Small</Button>
+<button class="btn btn-primary btn-lg">Large</button>
+```
+
+```tsx
+<Button size="sm">Small</Button>
 <Button>Medium</Button>
-<Button size="lg">Large</Button>`}
->
-  <Button size="sm">Small</Button>
-  <Button>Medium</Button>
-  <Button size="lg">Large</Button>
-</Example>
+<Button size="lg">Large</Button>
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<button class="btn btn-primary" disabled>Disabled</button>
-<button class="btn btn-secondary" disabled>Disabled</button>`}
-  react={`<Button disabled>Disabled</Button>
-<Button variant="secondary" disabled>Disabled</Button>`}
->
-  <Button disabled>Disabled</Button>
-  <Button variant="secondary" disabled>
-    Disabled
-  </Button>
-</Example>
+:::example
+
+```html
+<button class="btn btn-primary" disabled>Disabled</button>
+<button class="btn btn-secondary" disabled>Disabled</button>
+```
+
+```tsx
+<Button disabled>Disabled</Button>
+<Button variant="secondary" disabled>Disabled</Button>
+```
+
+:::
 
 ### Block (full width)
 
-<Example
-  html={`<button class="btn btn-primary btn-block">Continue</button>`}
-  react={`<Button block>Continue</Button>`}
->
-  <Button block>Continue</Button>
-</Example>
+:::example
+
+```html
+<button class="btn btn-primary btn-block">Continue</button>
+```
+
+```tsx
+<Button block>Continue</Button>
+```
+
+:::

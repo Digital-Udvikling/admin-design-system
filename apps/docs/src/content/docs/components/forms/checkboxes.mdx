@@ -3,9 +3,7 @@ title: Checkboxes
 description: Base class .checkbox with an inner .checkbox-indicator. React wraps Base UI; vanilla styles a native input.
 ---
 
-import { Checkbox } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
-import { CheckboxFieldDemo } from "../../../../demos/CheckboxFieldDemo";
+import { Checkbox, Field } from "@aortl/admin-react";
 
 The React component wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">`) so the indicator can be styled freely. The vanilla example styles a native `<input type="checkbox">` with the same class names — visually equivalent, different rendered DOM.
 
@@ -13,61 +11,79 @@ The React component wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">
 
 ### Default
 
-<Example
-  html={`<input type="checkbox" class="checkbox">
-<input type="checkbox" class="checkbox" checked>`}
-  react={`<Checkbox />
-<Checkbox defaultChecked />`}
->
-  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-    <Checkbox />
-    <Checkbox defaultChecked />
-  </div>
-</Example>
+:::example
+
+```html
+<input type="checkbox" class="checkbox" /> <input type="checkbox" class="checkbox" checked />
+```
+
+```tsx
+<Checkbox />
+<Checkbox defaultChecked />
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<input type="checkbox" class="checkbox" disabled>
-<input type="checkbox" class="checkbox" disabled checked>`}
-  react={`<Checkbox disabled />
-<Checkbox disabled defaultChecked />`}
->
-  <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-    <Checkbox disabled />
-    <Checkbox disabled defaultChecked />
-  </div>
-</Example>
+:::example
+
+```html
+<input type="checkbox" class="checkbox" disabled />
+<input type="checkbox" class="checkbox" disabled checked />
+```
+
+```tsx
+<Checkbox disabled />
+<Checkbox disabled defaultChecked />
+```
+
+:::
 
 ### Indeterminate
 
 The indeterminate state is set imperatively in React; vanilla mirrors it by setting `indeterminate` on the DOM node. The CSS treats indeterminate identically to checked.
 
-<Example
-  html={`<input type="checkbox" class="checkbox" id="indeterm">
-<script>document.getElementById("indeterm").indeterminate = true;</script>`}
-  react={`<Checkbox indeterminate />`}
->
-  <Checkbox indeterminate />
-</Example>
+:::example
+
+```html
+<input type="checkbox" class="checkbox" id="indeterm" />
+<script>
+  document.getElementById("indeterm").indeterminate = true;
+</script>
+```
+
+```tsx
+<Checkbox indeterminate />
+```
+
+:::
 
 ### Inside a Field
 
-<Example
-  html={`<div class="field">
-  <label class="field-label" style="flex-direction: row; align-items: center; gap: 0.5rem; display: inline-flex;">
-    <input type="checkbox" class="checkbox" name="newsletter">
+:::example
+
+```html
+<div class="field">
+  <label
+    class="field-label"
+    style="flex-direction: row; align-items: center; gap: 0.5rem; display: inline-flex;"
+  >
+    <input type="checkbox" class="checkbox" name="newsletter" />
     Subscribe to the newsletter
   </label>
   <p class="field-description">One short email per month. Unsubscribe anytime.</p>
-</div>`}
-  react={`<Field name="newsletter">
+</div>
+```
+
+```tsx
+<Field name="newsletter">
   <Field.Label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
     <Checkbox />
     Subscribe to the newsletter
   </Field.Label>
   <Field.Description>One short email per month. Unsubscribe anytime.</Field.Description>
-</Field>`}
->
-  <CheckboxFieldDemo client:load />
-</Example>
+</Field>
+```
+
+:::

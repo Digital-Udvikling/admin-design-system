@@ -4,103 +4,112 @@ description: Base class .input + a variant + an optional size.
 ---
 
 import { Input } from "@aortl/admin-react";
-import Example from "../../../../components/Example.astro";
 
 ## Examples
 
 ### Variants
 
-<Example
-  html={`<input class="input input-bordered" placeholder="Bordered (default)">
-<input class="input input-ghost" placeholder="Ghost">
-<input class="input input-danger" placeholder="Danger" value="invalid">`}
-  react={`<Input placeholder="Bordered (default)" />
+:::example
+
+```html
+<input class="input input-bordered" placeholder="Bordered (default)" />
+<input class="input input-ghost" placeholder="Ghost" />
+<input class="input input-danger" placeholder="Danger" value="invalid" />
+```
+
+```tsx
+<Input placeholder="Bordered (default)" />
 <Input variant="ghost" placeholder="Ghost" />
-<Input variant="danger" defaultValue="invalid" />`}
->
-  <Input placeholder="Bordered (default)" />
-  <Input variant="ghost" placeholder="Ghost" />
-  <Input variant="danger" defaultValue="invalid" />
-</Example>
+<Input variant="danger" defaultValue="invalid" />
+```
+
+:::
 
 ### Sizes
 
-<Example
-  html={`<input class="input input-bordered input-sm" placeholder="Small">
-<input class="input input-bordered" placeholder="Medium">
-<input class="input input-bordered input-lg" placeholder="Large">`}
-  react={`<Input inputSize="sm" placeholder="Small" />
+:::example
+
+```html
+<input class="input input-bordered input-sm" placeholder="Small" />
+<input class="input input-bordered" placeholder="Medium" />
+<input class="input input-bordered input-lg" placeholder="Large" />
+```
+
+```tsx
+<Input inputSize="sm" placeholder="Small" />
 <Input placeholder="Medium" />
-<Input inputSize="lg" placeholder="Large" />`}
->
-  <Input inputSize="sm" placeholder="Small" />
-  <Input placeholder="Medium" />
-  <Input inputSize="lg" placeholder="Large" />
-</Example>
+<Input inputSize="lg" placeholder="Large" />
+```
+
+:::
 
 ### Disabled
 
-<Example
-  html={`<input class="input input-bordered" disabled value="Disabled">`}
-  react={`<Input disabled defaultValue="Disabled" />`}
->
-  <Input disabled defaultValue="Disabled" />
-</Example>
+:::example
+
+```html
+<input class="input input-bordered" disabled value="Disabled" />
+```
+
+```tsx
+<Input disabled defaultValue="Disabled" />
+```
+
+:::
 
 ### Types
 
 `Input` forwards the native `type` attribute, so every HTML input type works — the browser handles affordances like date pickers, number steppers, and password masking.
 
-<Example
-  html={`<input class="input input-bordered" type="email" placeholder="you@example.com">
-<input class="input input-bordered" type="password" placeholder="Password">
-<input class="input input-bordered" type="number" placeholder="42">
-<input class="input input-bordered" type="date">
-<input class="input input-bordered" type="time">
-<input class="input input-bordered" type="search" placeholder="Search">
-<input class="input input-bordered" type="url" placeholder="https://example.com">
-<input class="input input-bordered" type="tel" placeholder="+45 12 34 56 78">`}
-  react={`<Input type="email" placeholder="you@example.com" />
+:::example
+
+```html
+<input class="input input-bordered" type="email" placeholder="you@example.com" />
+<input class="input input-bordered" type="password" placeholder="Password" />
+<input class="input input-bordered" type="number" placeholder="42" />
+<input class="input input-bordered" type="date" />
+<input class="input input-bordered" type="time" />
+<input class="input input-bordered" type="search" placeholder="Search" />
+<input class="input input-bordered" type="url" placeholder="https://example.com" />
+<input class="input input-bordered" type="tel" placeholder="+45 12 34 56 78" />
+```
+
+```tsx
+<Input type="email" placeholder="you@example.com" />
 <Input type="password" placeholder="Password" />
 <Input type="number" placeholder="42" />
 <Input type="date" />
 <Input type="time" />
 <Input type="search" placeholder="Search" />
 <Input type="url" placeholder="https://example.com" />
-<Input type="tel" placeholder="+45 12 34 56 78" />`}
->
-  <Input type="email" placeholder="you@example.com" />
-  <Input type="password" placeholder="Password" />
-  <Input type="number" placeholder="42" />
-  <Input type="date" />
-  <Input type="time" />
-  <Input type="search" placeholder="Search" />
-  <Input type="url" placeholder="https://example.com" />
-  <Input type="tel" placeholder="+45 12 34 56 78" />
-</Example>
+<Input type="tel" placeholder="+45 12 34 56 78" />
+```
+
+:::
 
 ### Date and time
 
 The browser renders the native picker; the design system tones the calendar glyph (`::-webkit-calendar-picker-indicator`) to read as interactive without overwhelming the input. Dark-mode colouring comes for free via `color-scheme`.
 
-<Example
-  html={`<input class="input input-bordered" type="date">
-<input class="input input-bordered" type="time">
-<input class="input input-bordered" type="datetime-local">
-<input class="input input-bordered" type="month">
-<input class="input input-bordered" type="week">`}
-  react={`<Input type="date" />
+:::example
+
+```html
+<input class="input input-bordered" type="date" />
+<input class="input input-bordered" type="time" />
+<input class="input input-bordered" type="datetime-local" />
+<input class="input input-bordered" type="month" />
+<input class="input input-bordered" type="week" />
+```
+
+```tsx
+<Input type="date" />
 <Input type="time" />
 <Input type="datetime-local" />
 <Input type="month" />
-<Input type="week" />`}
->
-  <Input type="date" />
-  <Input type="time" />
-  <Input type="datetime-local" />
-  <Input type="month" />
-  <Input type="week" />
-</Example>
+<Input type="week" />
+```
+
+:::
 
 ### File
 

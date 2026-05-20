@@ -80,9 +80,31 @@ Two shapes per component:
 
 Config notes — tests are kept out of the published build (`tsconfig.json` and `vite-plugin-dts` both exclude `*.test.*` + `test-setup.ts`); `tsconfig.test.json` is a sibling project for type-checking and runs as the second half of `pnpm check-types`. `src/test-setup.ts` imports jest-dom matchers AND wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup checks for `afterEach` at module-load time which vitest doesn't expose that early, so without this the DOM leaks across tests in the same file. `css: false` in `vitest.config.ts`: visual checks belong in the docs site.
 
-### Docs Example component
+### Docs `:::example` directive
 
-`apps/docs/src/components/Example.astro` renders the live preview and the synced-tab source viewer. It accepts `html` and `react` props and formats both at build time with `oxfmt`'s prettier parsers (`html` and `babel-ts`). Snippets are fragments (sibling roots), so the formatter wraps them in a synthetic root, formats, then strips and dedents — keep that in mind if you touch the helpers in `Example.astro`.
+Examples in MDX are authored as a remark container directive — never write `<Example>` JSX by hand. The entire pipeline lives in `apps/docs/plugins/example/`:
+
+- `index.mjs` — remark plugin (registered in `astro.config.mjs`). Finds `:::example` blocks, pulls out the `html` and `tsx` code fences, formats both with `oxfmt`'s prettier parsers (`html` / `babel-ts`), wraps the tsx fence in a per-example FC, and rewrites the node into a renderer call.
+- `Example.astro` — the renderer. Imported via the `@example` Vite alias from injected ESM.
+- `ReactPreview.tsx` — single-component wrapper that keeps the React preview inside one SSR pass so Base UI context (`Field`, `RadioGroup`, `Select.Root`) reaches descendants. Don't replace it with `<slot />` or inline JSX in the renderer — Astro will compile JSX through its own runtime and sever React context.
+
+Authoring syntax (either fence may be omitted):
+
+````markdown
+:::example
+
+```html
+<button class="btn btn-primary">Save</button>
+```
+
+```tsx
+<Button variant="primary">Save</Button>
+```
+
+:::
+````
+
+The plugin wraps each tsx fence in a synthetic root for formatting, then strips and dedents. Same for the html fence. Keep that in mind if you touch the formatter helpers.
 
 URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.env.BASE_URL}components/buttons/` ``) — the site is served from `/admin-design-system/` on GitHub Pages.
 
@@ -92,7 +114,7 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
 3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose class names with `clsx`, re-export from `src/index.ts` (export both the component and its types).
 4. (If you added a React component) `packages/admin-react/src/<Name>.test.tsx` — at minimum a smoke test; add interaction tests for any controlled state. See the **Tests** section above.
-5. `apps/docs/src/content/docs/components/<name>.mdx` — use `<Example html={...} react={...}>` with the live JSX as children.
+5. `apps/docs/src/content/docs/components/<name>.mdx` — write each example as a `:::example` block with ` ```html ` and ` ```tsx ` fences. See **Docs `:::example` directive** above.
 
 No build config changes needed for new components.
 

@@ -1,0 +1,91 @@
+---
+title: Tabs
+description: Section a view into named panels. Vanilla works without JS via hidden radio inputs; React wraps Base UI for full ARIA semantics.
+---
+
+import { Tabs } from "@aortl/admin-react";
+
+Tabs split a workspace into named panels — useful on detail pages where settings, activity, and related entities all live under the same record. The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interactive without JavaScript; React wraps Base UI Tabs for full ARIA semantics, arrow-key navigation, and controlled state.
+
+## Examples
+
+### Basic (bordered)
+
+The default variant uses an animated underline on the selected tab.
+
+:::example
+
+```html
+<div class="tabs tabs-bordered">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="basic" id="basic-1" value="1" checked />
+    <label class="tab" for="basic-1">Overview</label>
+    <input class="tab-input" type="radio" name="basic" id="basic-2" value="2" />
+    <label class="tab" for="basic-2">Activity</label>
+    <input class="tab-input" type="radio" name="basic" id="basic-3" value="3" />
+    <label class="tab" for="basic-3">Settings</label>
+  </div>
+  <div class="tab-panel" data-value="1">Overview content.</div>
+  <div class="tab-panel" data-value="2">Activity content.</div>
+  <div class="tab-panel" data-value="3">Settings content.</div>
+</div>
+```
+
+```tsx
+<Tabs defaultValue="overview">
+  <Tabs.List>
+    <Tabs.Tab value="overview">Overview</Tabs.Tab>
+    <Tabs.Tab value="activity">Activity</Tabs.Tab>
+    <Tabs.Tab value="settings">Settings</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="overview">Overview content.</Tabs.Panel>
+  <Tabs.Panel value="activity">Activity content.</Tabs.Panel>
+  <Tabs.Panel value="settings">Settings content.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
+### Boxed (segmented control)
+
+A grouped, bordered control — handy as a small mode switch above a chart or list.
+
+:::example
+
+```tsx
+<Tabs defaultValue="week" variant="boxed" size="sm">
+  <Tabs.List>
+    <Tabs.Tab value="day">Day</Tabs.Tab>
+    <Tabs.Tab value="week">Week</Tabs.Tab>
+    <Tabs.Tab value="month">Month</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="day">Daily breakdown.</Tabs.Panel>
+  <Tabs.Panel value="week">Weekly breakdown.</Tabs.Panel>
+  <Tabs.Panel value="month">Monthly breakdown.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
+### Vertical orientation
+
+Set `orientation="vertical"` for a left-aligned tab strip with panels to the right. Common for settings screens with many sections.
+
+:::example
+
+```tsx
+<Tabs defaultValue="profile" orientation="vertical">
+  <Tabs.List>
+    <Tabs.Tab value="profile">Profile</Tabs.Tab>
+    <Tabs.Tab value="account">Account</Tabs.Tab>
+    <Tabs.Tab value="billing">Billing</Tabs.Tab>
+    <Tabs.Tab value="api">API keys</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="profile">Profile settings.</Tabs.Panel>
+  <Tabs.Panel value="account">Account settings.</Tabs.Panel>
+  <Tabs.Panel value="billing">Billing details.</Tabs.Panel>
+  <Tabs.Panel value="api">Personal access tokens.</Tabs.Panel>
+</Tabs>
+```
+
+:::

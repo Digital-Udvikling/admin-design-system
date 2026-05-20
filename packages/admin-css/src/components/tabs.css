@@ -1,0 +1,157 @@
+@layer components {
+  .tabs {
+    @apply flex flex-col;
+  }
+
+  /* List + tab buttons. Same classes are produced by Base UI (React) and the
+     vanilla radio-input markup, so styling is shared. */
+  .tab-list {
+    @apply inline-flex items-center gap-1 border-b border-border;
+    /* Anchor for the optional .tab-indicator */
+    position: relative;
+  }
+
+  .tab {
+    @apply inline-flex items-center gap-1.5
+           px-3 h-9
+           text-sm leading-none font-medium
+           text-text-muted bg-transparent
+           border-0 cursor-pointer select-none
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           hover:text-text
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .tab[data-selected],
+  .tab[aria-selected="true"] {
+    @apply text-text;
+  }
+
+  /* Vanilla radio-input pattern: hide the inputs visually, treat the following
+     <label class="tab"> as the selected tab when the radio is :checked.
+     Pairs with `:has(input:checked)` below to show the right panel. */
+  .tab-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .tab-input:checked + .tab {
+    @apply text-text;
+  }
+
+  .tab-input:focus-visible + .tab {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Bordered (default) — underline marker on the active tab. The pseudo sits
+     below the .tab, overlapping the .tab-list bottom border. */
+  .tabs-bordered .tab,
+  .tabs:not(.tabs-boxed) .tab {
+    position: relative;
+  }
+
+  .tabs-bordered .tab::after,
+  .tabs:not(.tabs-boxed) .tab::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -1px;
+    block-size: 2px;
+    background-color: var(--color-primary);
+    transform: scaleX(0);
+    transition: transform 150ms ease;
+  }
+
+  .tabs-bordered .tab[data-selected]::after,
+  .tabs-bordered .tab[aria-selected="true"]::after,
+  .tabs-bordered .tab-input:checked + .tab::after,
+  .tabs:not(.tabs-boxed) .tab[data-selected]::after,
+  .tabs:not(.tabs-boxed) .tab[aria-selected="true"]::after,
+  .tabs:not(.tabs-boxed) .tab-input:checked + .tab::after {
+    transform: scaleX(1);
+  }
+
+  /* Boxed (segmented control) — adjacent tabs share borders. */
+  .tabs-boxed .tab-list {
+    @apply gap-0 p-0.5 border border-border rounded-md bg-surface-muted;
+  }
+
+  .tabs-boxed .tab {
+    @apply rounded;
+  }
+
+  .tabs-boxed .tab[data-selected],
+  .tabs-boxed .tab[aria-selected="true"],
+  .tabs-boxed .tab-input:checked + .tab {
+    @apply bg-surface text-text shadow-sm;
+  }
+
+  /* Sizes — cascade to nested tabs. */
+  .tabs-sm .tab {
+    @apply px-2 h-7 text-xs;
+  }
+
+  .tabs-lg .tab {
+    @apply px-4 h-11 text-base;
+  }
+
+  /* Panels — Base UI handles hidden state via data-hidden / hidden attr. */
+  .tab-panel {
+    @apply pt-3 outline-none;
+  }
+
+  /* Vanilla radio-input pattern: only the panel whose data-for matches the
+     checked input is shown. Each .tabs root scopes its own selectors. */
+  .tabs .tab-panel {
+    display: none;
+  }
+
+  .tabs:has(.tab-input[value="1"]:checked) .tab-panel[data-value="1"],
+  .tabs:has(.tab-input[value="2"]:checked) .tab-panel[data-value="2"],
+  .tabs:has(.tab-input[value="3"]:checked) .tab-panel[data-value="3"],
+  .tabs:has(.tab-input[value="4"]:checked) .tab-panel[data-value="4"],
+  .tabs:has(.tab-input[value="5"]:checked) .tab-panel[data-value="5"],
+  .tabs:has(.tab-input[value="6"]:checked) .tab-panel[data-value="6"] {
+    display: block;
+  }
+
+  /* Base UI path: it renders the panel and applies `hidden`, so the rule
+     above is a no-op there. Reinstate display when the panel is shown by
+     Base UI. */
+  .tabs .tab-panel:not([hidden]):not([data-value]) {
+    display: block;
+  }
+
+  /* Vertical orientation. */
+  .tabs[data-orientation="vertical"] {
+    @apply flex-row gap-3;
+  }
+
+  .tabs[data-orientation="vertical"] .tab-list {
+    @apply flex-col border-b-0 border-r border-border;
+  }
+
+  .tabs[data-orientation="vertical"].tabs-bordered .tab::after,
+  .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab::after {
+    inset-inline: auto;
+    inset-inline-end: -1px;
+    inset-block: 0;
+    inline-size: 2px;
+    block-size: auto;
+    transform: scaleY(0);
+  }
+
+  .tabs[data-orientation="vertical"].tabs-bordered .tab[data-selected]::after,
+  .tabs[data-orientation="vertical"].tabs-bordered .tab[aria-selected="true"]::after,
+  .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[data-selected]::after,
+  .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[aria-selected="true"]::after {
+    transform: scaleY(1);
+  }
+}

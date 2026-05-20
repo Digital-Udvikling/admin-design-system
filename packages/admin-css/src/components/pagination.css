@@ -1,0 +1,43 @@
+@layer components {
+  .pagination > ol,
+  .pagination > ul {
+    @apply inline-flex items-center gap-1 m-0 p-0 list-none;
+  }
+
+  .page-item {
+    @apply inline-flex;
+  }
+
+  /* Square button shared by number, prev/next, and ellipsis containers. */
+  .page-link {
+    @apply inline-flex items-center justify-center
+           min-w-8 h-8 px-2
+           rounded-md
+           text-sm font-medium leading-none
+           text-text bg-transparent
+           border border-transparent
+           hover:bg-surface-muted
+           cursor-pointer select-none no-underline
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+  }
+
+  /* Current page — same surface as a sidebar's active item so the visual
+     metaphor is consistent. */
+  .page-link.active,
+  .page-link[aria-current="page"] {
+    @apply bg-primary-muted text-primary border-primary-muted;
+  }
+
+  .page-link[aria-disabled="true"] {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  /* Ellipsis — non-interactive placeholder between groups of pages. */
+  .page-ellipsis {
+    @apply inline-flex items-center justify-center
+           min-w-8 h-8 px-2
+           text-sm text-text-muted select-none;
+  }
+}

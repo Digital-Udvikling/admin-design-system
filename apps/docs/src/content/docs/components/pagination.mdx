@@ -1,0 +1,96 @@
+---
+title: Pagination
+description: Numbered page navigation with prev/next controls and ellipses for large ranges.
+---
+
+import { Pagination } from "@aortl/admin-react";
+
+The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component is the smart helper — pass `page`, `total`, and `onPageChange` and it computes the visible range with ellipses, prev/next buttons, and edge disabling. Always controlled by the consumer.
+
+## Examples
+
+### Small range
+
+When everything fits, all page numbers render with no ellipses.
+
+:::example
+
+```html
+<nav class="pagination" aria-label="Pagination">
+  <ul>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Previous page" disabled>‹</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link active" type="button" aria-current="page" aria-label="Page 1">
+        1
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 2">2</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 3">3</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Next page">›</button>
+    </li>
+  </ul>
+</nav>
+```
+
+```tsx
+<Pagination page={1} total={3} onPageChange={() => {}} />
+```
+
+:::
+
+### Large range with ellipses
+
+`siblingCount` (default `1`) controls how many pages flank the current page; `boundaryCount` (default `1`) controls how many pages stick to each end.
+
+:::example
+
+```tsx
+<Pagination page={10} total={50} onPageChange={() => {}} />
+```
+
+:::
+
+### Custom renderer (routing libraries)
+
+`renderItem` is called once per item — a "page", "previous", "next", or "ellipsis" — and returns the inner element. Use this to render `<Link>` components from your router so prev/next/numbers are real anchors.
+
+```tsx
+<Pagination
+  page={2}
+  total={5}
+  onPageChange={() => {}}
+  renderItem={(item) => {
+    if (item.type === "page") {
+      return (
+        <a className={item.selected ? "page-link active" : "page-link"} href={`?p=${item.page}`}>
+          {item.page}
+        </a>
+      );
+    }
+    if (item.type === "ellipsis") {
+      return (
+        <span className="page-ellipsis" aria-hidden="true">
+          …
+        </span>
+      );
+    }
+    const label = item.type === "previous" ? "‹" : "›";
+    return (
+      <a
+        className="page-link"
+        aria-disabled={item.disabled || undefined}
+        href={item.disabled ? undefined : `?p=${item.page}`}
+      >
+        {label}
+      </a>
+    );
+  }}
+/>
+```

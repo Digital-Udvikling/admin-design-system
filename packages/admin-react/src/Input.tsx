@@ -1,6 +1,6 @@
 import { Input as BaseInput } from "@base-ui/react/input";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type InputVariant = "bordered" | "ghost" | "danger";
 export type InputSize = "sm" | "md" | "lg";
@@ -22,11 +22,9 @@ export function Input({
   return (
     <BaseInput
       type={type}
-      className={clsx(
-        "input",
-        `input-${variant}`,
-        inputSize !== "md" && `input-${inputSize}`,
-        typeof className === "string" ? className : undefined,
+      className={cn(
+        ["input", `input-${variant}`, inputSize !== "md" && `input-${inputSize}`],
+        className,
       )}
       {...rest}
     />

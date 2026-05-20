@@ -1,6 +1,6 @@
 import { Field as BaseField } from "@base-ui/react/field";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 /**
  * Thin wrappers around Base UI's Field primitives that apply the design
@@ -17,12 +17,7 @@ import type { ComponentProps } from "react";
 export type FieldProps = ComponentProps<typeof BaseField.Root>;
 
 function FieldRoot({ className, ...rest }: FieldProps) {
-  return (
-    <BaseField.Root
-      className={clsx("field", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseField.Root className={cn("field", className)} {...rest} />;
 }
 
 export type FieldLabelProps = ComponentProps<typeof BaseField.Label> & {
@@ -34,7 +29,7 @@ function FieldLabel({ className, required, ...rest }: FieldLabelProps) {
   return (
     <BaseField.Label
       data-required={required ? "" : undefined}
-      className={clsx("field-label", typeof className === "string" ? className : undefined)}
+      className={cn("field-label", className)}
       {...rest}
     />
   );
@@ -43,23 +38,13 @@ function FieldLabel({ className, required, ...rest }: FieldLabelProps) {
 export type FieldDescriptionProps = ComponentProps<typeof BaseField.Description>;
 
 function FieldDescription({ className, ...rest }: FieldDescriptionProps) {
-  return (
-    <BaseField.Description
-      className={clsx("field-description", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseField.Description className={cn("field-description", className)} {...rest} />;
 }
 
 export type FieldErrorProps = ComponentProps<typeof BaseField.Error>;
 
 function FieldError({ className, ...rest }: FieldErrorProps) {
-  return (
-    <BaseField.Error
-      className={clsx("field-error", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseField.Error className={cn("field-error", className)} {...rest} />;
 }
 
 export const Field = Object.assign(FieldRoot, {

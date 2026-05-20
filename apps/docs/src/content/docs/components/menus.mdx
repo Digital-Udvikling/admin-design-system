@@ -50,19 +50,10 @@ The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout
 <Menu>
   <Menu.Trigger>Open menu</Menu.Trigger>
   <Menu.Popup>
-    <Menu.Item>
-      <IconPencil size={16} aria-hidden />
-      Edit
-    </Menu.Item>
-    <Menu.Item>
-      <IconCopy size={16} aria-hidden />
-      Duplicate
-    </Menu.Item>
+    <Menu.Item icon={IconPencil}>Edit</Menu.Item>
+    <Menu.Item icon={IconCopy}>Duplicate</Menu.Item>
     <Menu.Separator />
-    <Menu.Item>
-      <IconTrash size={16} aria-hidden />
-      Delete
-    </Menu.Item>
+    <Menu.Item icon={IconTrash}>Delete</Menu.Item>
   </Menu.Popup>
 </Menu>
 ```
@@ -81,22 +72,19 @@ Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is 
   <Menu.Popup>
     <Menu.Group>
       <Menu.GroupLabel>Internal</Menu.GroupLabel>
-      <Menu.LinkItem href="#docs">
-        <IconBook size={16} aria-hidden />
+      <Menu.Item href="#docs" icon={IconBook}>
         Docs
-      </Menu.LinkItem>
-      <Menu.LinkItem href="#changelog">
-        <IconHistory size={16} aria-hidden />
+      </Menu.Item>
+      <Menu.Item href="#changelog" icon={IconHistory}>
         Changelog
-      </Menu.LinkItem>
+      </Menu.Item>
     </Menu.Group>
     <Menu.Separator />
     <Menu.Group>
       <Menu.GroupLabel>External</Menu.GroupLabel>
-      <Menu.LinkItem href="#support">
-        <IconLifebuoy size={16} aria-hidden />
+      <Menu.Item href="#support" icon={IconLifebuoy}>
         Support
-      </Menu.LinkItem>
+      </Menu.Item>
     </Menu.Group>
   </Menu.Popup>
 </Menu>
@@ -104,7 +92,7 @@ Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is 
 
 :::
 
-Use `<Menu.LinkItem>` (an anchor) when the entry should be a real link — right-click to open in a new tab, copy URL, etc. Use `<Menu.Item>` (a button) for client-side actions.
+Set `href` on `<Menu.Item>` when the entry should be a real link — right-click to open in a new tab, copy URL, etc. Without `href`, it renders as a `<button>` for client-side actions.
 
 ### Button-styled trigger
 

@@ -82,16 +82,13 @@ Icons inherit `color` and `font-size` from their parent. Drop one into a button 
 ```
 
 ```tsx
-<Button variant="primary">
-  <IconPlus size={16} aria-hidden />
+<Button variant="primary" icon={IconPlus}>
   New order
 </Button>
-<Button variant="secondary">
-  <IconPencil size={16} aria-hidden />
+<Button variant="secondary" icon={IconPencil}>
   Edit
 </Button>
-<Button variant="danger">
-  <IconTrash size={16} aria-hidden />
+<Button variant="danger" icon={IconTrash}>
   Delete
 </Button>
 ```
@@ -138,7 +135,7 @@ For the webfont, set `font-size` on the `<i>` (or its parent). For React compone
 
 ## Accessibility
 
-Icons are usually **decorative** — they sit next to a text label that already conveys the meaning. In that case, hide them from assistive tech:
+Icons are usually **decorative** — they sit next to a text label that already conveys the meaning. The React `icon` props (`<Button icon={…}>`, `<Alert icon={…}>`, etc.) already set `aria-hidden` for you. In vanilla HTML, add it yourself:
 
 ```html
 <button class="btn btn-primary">
@@ -148,10 +145,7 @@ Icons are usually **decorative** — they sit next to a text label that already 
 ```
 
 ```tsx
-<Button>
-  <IconPlus aria-hidden />
-  Add product
-</Button>
+<Button icon={IconPlus}>Add product</Button>
 ```
 
 When an icon is the **only** content (icon-only button, status badge), give the surrounding element an accessible name:
@@ -165,9 +159,7 @@ When an icon is the **only** content (icon-only button, status badge), give the 
 ```
 
 ```tsx
-<Button variant="ghost" aria-label="Delete row">
-  <IconTrash aria-hidden />
-</Button>
+<Button variant="ghost" icon={IconTrash} aria-label="Delete row" />
 ```
 
 :::
@@ -202,20 +194,16 @@ The `.alert` class detects a leading `<i>` or `<svg>` and switches to a two-colu
 ```
 
 ```tsx
-<Alert variant="info">
-  <IconInfoCircle size={16} aria-hidden />
+<Alert variant="info" icon={IconInfoCircle}>
   Backups run nightly at 02:00 UTC.
 </Alert>
-<Alert variant="success">
-  <IconCircleCheck size={16} aria-hidden />
+<Alert variant="success" icon={IconCircleCheck}>
   Changes saved.
 </Alert>
-<Alert variant="warning">
-  <IconAlertTriangle size={16} aria-hidden />
+<Alert variant="warning" icon={IconAlertTriangle}>
   This action is not reversible.
 </Alert>
-<Alert variant="danger">
-  <IconAlertOctagon size={16} aria-hidden />
+<Alert variant="danger" icon={IconAlertOctagon}>
   Connection to the database failed.
 </Alert>
 ```
@@ -251,19 +239,10 @@ The `.alert` class detects a leading `<i>` or `<svg>` and switches to a two-colu
 <Menu>
   <Menu.Trigger>Account</Menu.Trigger>
   <Menu.Popup>
-    <Menu.Item>
-      <IconUser size={16} aria-hidden />
-      Profile
-    </Menu.Item>
-    <Menu.Item>
-      <IconSettings size={16} aria-hidden />
-      Settings
-    </Menu.Item>
+    <Menu.Item icon={IconUser}>Profile</Menu.Item>
+    <Menu.Item icon={IconSettings}>Settings</Menu.Item>
     <Menu.Separator />
-    <Menu.Item>
-      <IconTrash size={16} aria-hidden />
-      Delete account
-    </Menu.Item>
+    <Menu.Item icon={IconTrash}>Delete account</Menu.Item>
   </Menu.Popup>
 </Menu>
 ```

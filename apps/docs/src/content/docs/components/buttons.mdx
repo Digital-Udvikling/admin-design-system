@@ -78,7 +78,7 @@ import { IconPlus, IconTrash, IconDownload, IconDotsVertical } from "@tabler/ico
 
 ### With icons
 
-The button's `gap` handles spacing automatically — drop an icon in as a child and it sits next to the label. Hide decorative icons from assistive tech with `aria-hidden`. For icon-only buttons, give the button an `aria-label`. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+Pass an icon component to `icon` for a leading icon, or `iconTrailing` for a trailing one. The wrapper renders it at `size={16}` with `aria-hidden`. For an icon-only button, pass just `icon` and add an `aria-label`. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
 
 :::example
 
@@ -101,21 +101,10 @@ The button's `gap` handles spacing automatically — drop an icon in as a child 
 ```
 
 ```tsx
-<Button variant="primary">
-  <IconPlus size={16} aria-hidden />
-  New order
-</Button>
-<Button variant="secondary">
-  Export
-  <IconDownload size={16} aria-hidden />
-</Button>
-<Button variant="ghost" aria-label="More actions">
-  <IconDotsVertical size={16} aria-hidden />
-</Button>
-<Button variant="danger">
-  <IconTrash size={16} aria-hidden />
-  Delete
-</Button>
+<Button variant="primary" icon={IconPlus}>New order</Button>
+<Button variant="secondary" iconTrailing={IconDownload}>Export</Button>
+<Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
+<Button variant="danger" icon={IconTrash}>Delete</Button>
 ```
 
 :::

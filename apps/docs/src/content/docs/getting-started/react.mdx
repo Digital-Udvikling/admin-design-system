@@ -49,13 +49,12 @@ Then import icons by name — bundlers will tree-shake unused ones:
 ```tsx
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 
-<Button variant="primary">
-  <IconPlus size={16} aria-hidden />
+<Button variant="primary" icon={IconPlus}>
   New order
 </Button>;
 ```
 
-Components like `<Button>`, `<Menu.Item>`, `<Alert>`, and `<Sidebar.Icon>` already lay icons out — no wrapper required.
+Components like `<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component itself and the wrapper renders it at the right size with `aria-hidden`.
 
 ## Notes
 

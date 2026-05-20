@@ -1,6 +1,6 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
 
@@ -26,11 +26,9 @@ function SelectTrigger({
 }: SelectTriggerProps) {
   return (
     <BaseSelect.Trigger
-      className={clsx(
-        "select",
-        `select-${variant}`,
-        triggerSize !== "md" && `select-${triggerSize}`,
-        typeof className === "string" ? className : undefined,
+      className={cn(
+        ["select", `select-${variant}`, triggerSize !== "md" && `select-${triggerSize}`],
+        className,
       )}
       {...rest}
     />
@@ -47,10 +45,7 @@ export type SelectIconProps = ComponentProps<typeof BaseSelect.Icon>;
 
 function SelectIcon({ className, children, ...rest }: SelectIconProps) {
   return (
-    <BaseSelect.Icon
-      className={clsx("select-icon", typeof className === "string" ? className : undefined)}
-      {...rest}
-    >
+    <BaseSelect.Icon className={cn("select-icon", className)} {...rest}>
       {children ?? <ChevronDownIcon />}
     </BaseSelect.Icon>
   );
@@ -64,10 +59,7 @@ function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPop
   return (
     <BaseSelect.Portal>
       <BaseSelect.Positioner sideOffset={sideOffset}>
-        <BaseSelect.Popup
-          className={clsx("select-popup", typeof className === "string" ? className : undefined)}
-          {...rest}
-        >
+        <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
           {children}
         </BaseSelect.Popup>
       </BaseSelect.Positioner>
@@ -78,12 +70,7 @@ function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPop
 export type SelectItemProps = ComponentProps<typeof BaseSelect.Item>;
 
 function SelectItem({ className, ...rest }: SelectItemProps) {
-  return (
-    <BaseSelect.Item
-      className={clsx("select-item", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseSelect.Item className={cn("select-item", className)} {...rest} />;
 }
 
 export type SelectItemTextProps = ComponentProps<typeof BaseSelect.ItemText>;
@@ -96,13 +83,7 @@ export type SelectItemIndicatorProps = ComponentProps<typeof BaseSelect.ItemIndi
 
 function SelectItemIndicator({ className, children, ...rest }: SelectItemIndicatorProps) {
   return (
-    <BaseSelect.ItemIndicator
-      className={clsx(
-        "select-item-indicator",
-        typeof className === "string" ? className : undefined,
-      )}
-      {...rest}
-    >
+    <BaseSelect.ItemIndicator className={cn("select-item-indicator", className)} {...rest}>
       {children ?? <CheckIcon />}
     </BaseSelect.ItemIndicator>
   );
@@ -117,12 +98,7 @@ function SelectGroup(props: SelectGroupProps) {
 export type SelectGroupLabelProps = ComponentProps<typeof BaseSelect.GroupLabel>;
 
 function SelectGroupLabel({ className, ...rest }: SelectGroupLabelProps) {
-  return (
-    <BaseSelect.GroupLabel
-      className={clsx("select-group-label", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseSelect.GroupLabel className={cn("select-group-label", className)} {...rest} />;
 }
 
 function CheckIcon() {

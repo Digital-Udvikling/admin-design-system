@@ -37,6 +37,8 @@ Use alerts to surface form-level errors, success confirmations, and other contex
 
 ### With title and description
 
+`<Alert>` accepts `title` and `description` props for the common case. Use the sub-components if you need to interleave them with other content.
+
 :::example
 
 ```html
@@ -47,17 +49,18 @@ Use alerts to surface form-level errors, success confirmations, and other contex
 ```
 
 ```tsx
-<Alert variant="danger">
-  <Alert.Title>Form has errors</Alert.Title>
-  <Alert.Description>Please fix the issues below before submitting.</Alert.Description>
-</Alert>
+<Alert
+  variant="danger"
+  title="Form has errors"
+  description="Please fix the issues below before submitting."
+/>
 ```
 
 :::
 
 ### With a leading icon
 
-An icon (or any inline SVG) as the first child switches the alert to a two-column grid — the icon spans all rows on the left and inherits the variant colour automatically. Works for one-line alerts and for title + description alike. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+Pass an icon via the `icon` prop. Internally it renders as the first child, which the CSS picks up to switch the alert into a two-column grid — the icon spans all rows on the left and inherits the variant colour. Works for one-line alerts and for title + description alike. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
 
 :::example
 
@@ -82,23 +85,21 @@ An icon (or any inline SVG) as the first child switches the alert to a two-colum
 ```
 
 ```tsx
-<Alert variant="info">
-  <IconInfoCircle size={16} aria-hidden />
+<Alert variant="info" icon={IconInfoCircle}>
   Backups run nightly at 02:00 UTC.
 </Alert>
-<Alert variant="success">
-  <IconCircleCheck size={16} aria-hidden />
+<Alert variant="success" icon={IconCircleCheck}>
   Changes saved.
 </Alert>
-<Alert variant="warning">
-  <IconAlertTriangle size={16} aria-hidden />
+<Alert variant="warning" icon={IconAlertTriangle}>
   This action is not reversible.
 </Alert>
-<Alert variant="danger">
-  <IconAlertOctagon size={16} aria-hidden />
-  <Alert.Title>Connection failed</Alert.Title>
-  <Alert.Description>Could not reach the database. Retrying in 30s.</Alert.Description>
-</Alert>
+<Alert
+  variant="danger"
+  icon={IconAlertOctagon}
+  title="Connection failed"
+  description="Could not reach the database. Retrying in 30s."
+/>
 ```
 
 :::

@@ -1,8 +1,9 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { clsx } from "clsx";
 import { createContext, useContext, useState } from "react";
-import type { ChangeEvent, ComponentProps, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
+import { renderIcon, type IconProp } from "./icon";
 
 interface SidebarContextValue {
   collapsed?: boolean;
@@ -37,7 +38,7 @@ function SidebarRoot({
   return (
     <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
       <aside className={clsx("sidebar", className)} {...rest}>
-        {children}
+        {drawerOpen ? null : children}
       </aside>
       {shell ? (
         <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
@@ -88,16 +89,22 @@ function SidebarGroupLabel({ className, ...rest }: SidebarGroupLabelProps) {
 
 export interface SidebarItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Leading icon. Rendered inside `<Sidebar.Icon>`. */
+  icon?: IconProp;
+  /** Trailing badge. Rendered inside `<Sidebar.Badge>`. */
+  badge?: ReactNode;
 }
 
-function SidebarItem({ active, className, children, ...rest }: SidebarItemProps) {
+function SidebarItem({ active, icon, badge, className, children, ...rest }: SidebarItemProps) {
   return (
     <a
       className={clsx("sidebar-item", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
-      {children}
+      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
+      {children !== undefined ? <SidebarLabel>{children}</SidebarLabel> : null}
+      {badge !== undefined ? <SidebarBadge>{badge}</SidebarBadge> : null}
     </a>
   );
 }
@@ -124,8 +131,12 @@ export interface SidebarCollapsibleProps extends Omit<
   ComponentProps<"details">,
   "onToggle" | "open"
 > {
-  /** The trigger button content (icon + label). */
-  trigger: ReactNode;
+  /** Leading icon for the trigger. Rendered inside `<Sidebar.Icon>`. */
+  icon?: IconProp;
+  /** Label shown next to the icon. Rendered inside `<Sidebar.Label>`. */
+  label?: ReactNode;
+  /** Full trigger content. Overrides `icon` + `label`. */
+  trigger?: ReactNode;
   /** Controlled open state. */
   open?: boolean;
   /** Uncontrolled initial open state. */
@@ -135,6 +146,8 @@ export interface SidebarCollapsibleProps extends Omit<
 }
 
 function SidebarCollapsible({
+  icon,
+  label,
   trigger,
   children,
   className,
@@ -147,6 +160,13 @@ function SidebarCollapsible({
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
   const isOpen = isControlled ? open : internalOpen;
 
+  const triggerContent = trigger ?? (
+    <>
+      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
+      {label !== undefined ? <SidebarLabel>{label}</SidebarLabel> : null}
+    </>
+  );
+
   return (
     <details
       className={clsx("sidebar-collapsible", className)}
@@ -158,7 +178,7 @@ function SidebarCollapsible({
       }}
       {...rest}
     >
-      <summary className="sidebar-collapsible-trigger">{trigger}</summary>
+      <summary className="sidebar-collapsible-trigger">{triggerContent}</summary>
       <div className="sidebar-collapsible-panel">{children}</div>
     </details>
   );
@@ -166,16 +186,28 @@ function SidebarCollapsible({
 
 export interface SidebarSubItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Leading icon. */
+  icon?: IconProp;
+  badge?: ReactNode;
 }
 
-function SidebarSubItem({ active, className, children, ...rest }: SidebarSubItemProps) {
+function SidebarSubItem({
+  active,
+  icon,
+  badge,
+  className,
+  children,
+  ...rest
+}: SidebarSubItemProps) {
   return (
     <a
       className={clsx("sidebar-subitem", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
+      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
       {children}
+      {badge !== undefined ? <SidebarBadge>{badge}</SidebarBadge> : null}
     </a>
   );
 }
@@ -198,29 +230,20 @@ function SidebarCollapseToggle({
   ...rest
 }: SidebarCollapseToggleProps) {
   const ctx = useContext(SidebarContext);
-  const isControlled = ctx?.collapsed !== undefined;
-  const onChange = (event: ChangeEvent<HTMLInputElement>) =>
-    ctx?.onCollapsedChange?.(event.currentTarget.checked);
+  const controlledChecked = ctx?.collapsed;
+  const isControlled = controlledChecked !== undefined;
 
   return (
     <label className={clsx("sidebar-collapse-toggle", className)} {...rest}>
-      {isControlled ? (
-        <input
-          type="checkbox"
-          className="sidebar-toggle"
-          aria-label={label}
-          checked={ctx.collapsed}
-          onChange={onChange}
-        />
-      ) : (
-        <input
-          type="checkbox"
-          className="sidebar-toggle"
-          aria-label={label}
-          defaultChecked={ctx?.defaultCollapsed}
-          onChange={onChange}
-        />
-      )}
+      <input
+        type="checkbox"
+        className="sidebar-toggle"
+        aria-label={label}
+        {...(isControlled
+          ? { checked: controlledChecked }
+          : { defaultChecked: ctx?.defaultCollapsed })}
+        onChange={(event) => ctx?.onCollapsedChange?.(event.currentTarget.checked)}
+      />
       <span className="sr-only">{label}</span>
       {children}
     </label>

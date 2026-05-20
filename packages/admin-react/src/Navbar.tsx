@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
+import { renderIcon, type IconProp } from "./icon";
 import { Menu } from "./Menu";
 
 export type NavbarProps = ComponentProps<"header">;
@@ -23,15 +24,18 @@ function NavbarItems({ className, ...rest }: NavbarItemsProps) {
 
 export interface NavbarItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Leading icon. */
+  icon?: IconProp;
 }
 
-function NavbarItem({ active, className, children, ...rest }: NavbarItemProps) {
+function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemProps) {
   return (
     <a
       className={clsx("navbar-item", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
+      {renderIcon(icon)}
       {children}
     </a>
   );

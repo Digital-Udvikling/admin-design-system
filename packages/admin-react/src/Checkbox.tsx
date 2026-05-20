@@ -1,15 +1,12 @@
 import { Checkbox as BaseCheckbox } from "@base-ui/react/checkbox";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type CheckboxProps = ComponentProps<typeof BaseCheckbox.Root>;
 
 function CheckboxRoot({ className, children, ...rest }: CheckboxProps) {
   return (
-    <BaseCheckbox.Root
-      className={clsx("checkbox", typeof className === "string" ? className : undefined)}
-      {...rest}
-    >
+    <BaseCheckbox.Root className={cn("checkbox", className)} {...rest}>
       {children ?? (
         <CheckboxIndicator>
           <CheckIcon />
@@ -22,12 +19,7 @@ function CheckboxRoot({ className, children, ...rest }: CheckboxProps) {
 export type CheckboxIndicatorProps = ComponentProps<typeof BaseCheckbox.Indicator>;
 
 function CheckboxIndicator({ className, ...rest }: CheckboxIndicatorProps) {
-  return (
-    <BaseCheckbox.Indicator
-      className={clsx("checkbox-indicator", typeof className === "string" ? className : undefined)}
-      {...rest}
-    />
-  );
+  return <BaseCheckbox.Indicator className={cn("checkbox-indicator", className)} {...rest} />;
 }
 
 function CheckIcon() {

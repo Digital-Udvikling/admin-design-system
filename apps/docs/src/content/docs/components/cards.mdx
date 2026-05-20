@@ -12,6 +12,8 @@ A container with optional title, description, and actions.
 
 ### Basic
 
+`<Card>` accepts `title`, `description`, and `actions` props — children render as the body. Everything is wrapped in a single `<Card.Body>` automatically. For layouts that don't fit that shape (media block above the body, multiple bodies, custom header), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
+
 :::example
 
 ```html
@@ -28,23 +30,25 @@ A container with optional title, description, and actions.
 ```
 
 ```tsx
-<Card>
-  <Card.Body>
-    <Card.Title>Welcome</Card.Title>
-    <Card.Description>A short description sits here.</Card.Description>
-    <Card.Actions>
+<Card
+  title="Welcome"
+  description="A short description sits here."
+  actions={
+    <>
       <Button size="sm">Get started</Button>
       <Button variant="ghost" size="sm">
         Maybe later
       </Button>
-    </Card.Actions>
-  </Card.Body>
-</Card>
+    </>
+  }
+/>
 ```
 
 :::
 
 ### Sign-in form
+
+For free-form content between the title and the actions, pass it as children. Title and description go above; actions go at the bottom.
 
 :::example
 
@@ -63,16 +67,17 @@ A container with optional title, description, and actions.
 ```
 
 ```tsx
-<Card>
-  <Card.Body>
-    <Card.Title>Sign in</Card.Title>
-    <Input placeholder="Email" />
-    <Input type="password" placeholder="Password" />
-    <Card.Actions>
+<Card
+  title="Sign in"
+  actions={
+    <>
       <Button>Sign in</Button>
       <Button variant="ghost">Cancel</Button>
-    </Card.Actions>
-  </Card.Body>
+    </>
+  }
+>
+  <Input placeholder="Email" />
+  <Input type="password" placeholder="Password" />
 </Card>
 ```
 
@@ -92,19 +97,19 @@ A container with optional title, description, and actions.
 ```
 
 ```tsx
-<Card compact bordered>
-  <Card.Body>
-    <Card.Title>Flat & dense</Card.Title>
-    <Card.Description>Less padding, stronger border, no shadow.</Card.Description>
-  </Card.Body>
-</Card>
+<Card
+  compact
+  bordered
+  title="Flat & dense"
+  description="Less padding, stronger border, no shadow."
+/>
 ```
 
 :::
 
 ### With icon
 
-Card titles are headings — drop a Tabler icon inside the heading or use one in an action button. See [Icons](/admin-design-system/theme/icons/).
+Pass an icon component via the `icon` prop — it lands inside the title row. Buttons and other components follow the same shape with `icon` and `iconTrailing`. See [Icons](/admin-design-system/theme/icons/).
 
 :::example
 
@@ -127,21 +132,61 @@ Card titles are headings — drop a Tabler icon inside the heading or use one in
 ```
 
 ```tsx
-<Card bordered>
-  <Card.Body>
-    <Card.Title>
-      <IconShoppingBag size={16} aria-hidden />
-      Today's orders
-    </Card.Title>
-    <Card.Description>128 placed, 14 awaiting fulfilment.</Card.Description>
-    <Card.Actions>
-      <Button size="sm">
-        Open queue
-        <IconArrowRight size={16} aria-hidden />
-      </Button>
-    </Card.Actions>
-  </Card.Body>
-</Card>
+<Card
+  bordered
+  icon={IconShoppingBag}
+  title="Today's orders"
+  description="128 placed, 14 awaiting fulfilment."
+  actions={
+    <Button size="sm" iconTrailing={IconArrowRight}>
+      Open queue
+    </Button>
+  }
+/>
 ```
 
 :::
+
+## Advanced: layout with `Card.Container`
+
+`<Card>` is opinionated: always a single `<Card.Body>`, with the title row at the top and actions at the bottom. When the layout you need doesn't fit that — a media strip above the body, two stacked bodies separated by a divider, a custom header — drop down to `<Card.Container>`. It renders the bare `.card` element (with the `bordered`/`compact` modifiers) and nothing else; you compose the sub-parts yourself.
+
+:::example
+
+```html
+<div class="card card-bordered">
+  <div class="card-body" style="border-bottom: 1px solid var(--color-border)">
+    <h3 class="card-title">Connected</h3>
+    <p class="card-description">Last sync 3 minutes ago.</p>
+  </div>
+  <div class="card-body">
+    <div class="card-actions">
+      <button class="btn btn-ghost btn-sm">Re-sync now</button>
+      <button class="btn btn-danger btn-sm">Disconnect</button>
+    </div>
+  </div>
+</div>
+```
+
+```tsx
+<Card.Container bordered>
+  <Card.Body style={{ borderBottom: "1px solid var(--color-border)" }}>
+    <Card.Title>Connected</Card.Title>
+    <Card.Description>Last sync 3 minutes ago.</Card.Description>
+  </Card.Body>
+  <Card.Body>
+    <Card.Actions>
+      <Button variant="ghost" size="sm">
+        Re-sync now
+      </Button>
+      <Button variant="danger" size="sm">
+        Disconnect
+      </Button>
+    </Card.Actions>
+  </Card.Body>
+</Card.Container>
+```
+
+:::
+
+`<Card.Title>` still accepts the `icon` prop in the advanced path, so you don't lose the shorthand when you reach for the lower-level pieces.

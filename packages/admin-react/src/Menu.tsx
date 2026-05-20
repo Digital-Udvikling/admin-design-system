@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { renderIcon, type IconProp } from "./icon";
 
 export interface MenuProps extends ComponentProps<"details"> {}
 
@@ -19,19 +20,27 @@ function MenuPopup({ className, role = "menu", ...rest }: MenuPopupProps) {
   return <div role={role} className={clsx("menu-popup", className)} {...rest} />;
 }
 
-export type MenuItemProps = ComponentProps<"button">;
+type MenuItemAsButton = ComponentProps<"button"> & { href?: undefined; icon?: IconProp };
+type MenuItemAsLink = ComponentProps<"a"> & { href: string; icon?: IconProp };
 
-function MenuItem({ className, type = "button", role = "menuitem", ...rest }: MenuItemProps) {
-  return <button type={type} role={role} className={clsx("menu-item", className)} {...rest} />;
-}
+export type MenuItemProps = MenuItemAsButton | MenuItemAsLink;
 
-export type MenuLinkItemProps = ComponentProps<"a">;
-
-function MenuLinkItem({ className, role = "menuitem", children, ...rest }: MenuLinkItemProps) {
+function MenuItem(props: MenuItemProps) {
+  if (props.href !== undefined) {
+    const { className, role = "menuitem", icon, children, ...rest } = props;
+    return (
+      <a role={role} className={clsx("menu-item", className)} {...rest}>
+        {renderIcon(icon)}
+        {children}
+      </a>
+    );
+  }
+  const { className, type = "button", role = "menuitem", icon, children, ...rest } = props;
   return (
-    <a role={role} className={clsx("menu-item", className)} {...rest}>
+    <button type={type} role={role} className={clsx("menu-item", className)} {...rest}>
+      {renderIcon(icon)}
       {children}
-    </a>
+    </button>
   );
 }
 
@@ -57,7 +66,6 @@ export const Menu = Object.assign(MenuRoot, {
   Trigger: MenuTrigger,
   Popup: MenuPopup,
   Item: MenuItem,
-  LinkItem: MenuLinkItem,
   Separator: MenuSeparator,
   Group: MenuGroup,
   GroupLabel: MenuGroupLabel,

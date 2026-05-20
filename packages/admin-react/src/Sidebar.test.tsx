@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { AppShell } from "./AppShell";
 import { Sidebar } from "./Sidebar";
 
 describe("Sidebar", () => {
@@ -13,11 +14,9 @@ describe("Sidebar", () => {
           <Sidebar.Group>
             <Sidebar.GroupLabel>Section</Sidebar.GroupLabel>
             <Sidebar.Item href="#a" active>
-              <Sidebar.Label>Home</Sidebar.Label>
+              Home
             </Sidebar.Item>
-            <Sidebar.Item href="#b">
-              <Sidebar.Label>Settings</Sidebar.Label>
-            </Sidebar.Item>
+            <Sidebar.Item href="#b">Settings</Sidebar.Item>
           </Sidebar.Group>
         </Sidebar.Nav>
         <Sidebar.Footer>
@@ -27,6 +26,44 @@ describe("Sidebar", () => {
     );
     expect(screen.getByText("Brand")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+  });
+
+  it("Item: renders icon/badge into the matching slots and wraps children in a label", () => {
+    render(
+      <Sidebar>
+        <Sidebar.Item href="#x" icon={<svg data-testid="icon" aria-hidden />} badge="12">
+          Orders
+        </Sidebar.Item>
+      </Sidebar>,
+    );
+    const link = screen.getByRole("link", { name: /Orders/ });
+    expect(link.querySelector(".sidebar-icon")).toContainElement(screen.getByTestId("icon"));
+    expect(link.querySelector(".sidebar-label")).toHaveTextContent("Orders");
+    expect(link.querySelector(".sidebar-badge")).toHaveTextContent("12");
+  });
+
+  it("does not render children twice when the mobile drawer is closed", () => {
+    render(
+      <AppShell hasSidebar>
+        <Sidebar>
+          <Sidebar.Item href="#a">Unique</Sidebar.Item>
+        </Sidebar>
+        <AppShell.Main />
+      </AppShell>,
+    );
+    expect(screen.getAllByText("Unique")).toHaveLength(1);
+  });
+
+  it("does not render children twice when the mobile drawer is open", () => {
+    render(
+      <AppShell hasSidebar mobileDrawerOpen>
+        <Sidebar>
+          <Sidebar.Item href="#a">Unique</Sidebar.Item>
+        </Sidebar>
+        <AppShell.Main />
+      </AppShell>,
+    );
+    expect(screen.getAllByText("Unique")).toHaveLength(1);
   });
 
   describe("collapse", () => {
@@ -95,7 +132,7 @@ describe("Sidebar", () => {
       render(
         <Sidebar>
           <Sidebar.Nav>
-            <Sidebar.Collapsible trigger={<Sidebar.Label>Webshop</Sidebar.Label>}>
+            <Sidebar.Collapsible label="Webshop">
               <Sidebar.SubItem href="#cms">CMS</Sidebar.SubItem>
             </Sidebar.Collapsible>
           </Sidebar.Nav>

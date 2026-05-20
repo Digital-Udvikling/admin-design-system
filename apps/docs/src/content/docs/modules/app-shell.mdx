@@ -73,17 +73,11 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#" active>
-        <Sidebar.Icon>
-          <IconHome size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Dashboard</Sidebar.Label>
+      <Sidebar.Item href="#" active icon={IconHome}>
+        Dashboard
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconReceipt size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Orders</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
       </Sidebar.Item>
     </Sidebar.Nav>
   </Sidebar>
@@ -263,32 +257,20 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
   <Sidebar.Nav>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Workspace</Sidebar.GroupLabel>
-      <Sidebar.Item href="#" active>
-        <Sidebar.Icon>
-          <IconHome size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Dashboard</Sidebar.Label>
+      <Sidebar.Item href="#" active icon={IconHome}>
+        Dashboard
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconReceipt size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Orders</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
       </Sidebar.Item>
     </Sidebar.Group>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Catalogue</Sidebar.GroupLabel>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconPackage size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Products</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconPackage}>
+        Products
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconChartBar size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Categories</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconChartBar}>
+        Categories
       </Sidebar.Item>
     </Sidebar.Group>
   </Sidebar.Nav>
@@ -333,23 +315,10 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 ```tsx
 <Sidebar style={{ height: "22rem" }}>
   <Sidebar.Nav>
-    <Sidebar.Item href="#">
-      <Sidebar.Icon>
-        <IconReceipt size={16} aria-hidden />
-      </Sidebar.Icon>
-      <Sidebar.Label>Ordrer</Sidebar.Label>
+    <Sidebar.Item href="#" icon={IconReceipt}>
+      Ordrer
     </Sidebar.Item>
-    <Sidebar.Collapsible
-      defaultOpen
-      trigger={
-        <>
-          <Sidebar.Icon>
-            <IconShoppingCart size={16} aria-hidden />
-          </Sidebar.Icon>
-          <Sidebar.Label>Webshop</Sidebar.Label>
-        </>
-      }
-    >
+    <Sidebar.Collapsible defaultOpen icon={IconShoppingCart} label="Webshop">
       <Sidebar.SubItem href="#" active>
         CMS
       </Sidebar.SubItem>
@@ -357,11 +326,8 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
       <Sidebar.SubItem href="#">Søgeord</Sidebar.SubItem>
       <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
     </Sidebar.Collapsible>
-    <Sidebar.Item href="#">
-      <Sidebar.Icon>
-        <IconPackage size={16} aria-hidden />
-      </Sidebar.Icon>
-      <Sidebar.Label>Lager</Sidebar.Label>
+    <Sidebar.Item href="#" icon={IconPackage}>
+      Lager
     </Sidebar.Item>
   </Sidebar.Nav>
 </Sidebar>
@@ -371,7 +337,7 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 
 ### Click to collapse
 
-`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox. The rail responds to `.sidebar:has(.sidebar-toggle:checked)` — pure CSS. Wrap each item's glyph in `<Sidebar.Icon>` so it stays visible in the collapsed rail.
+`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox. The rail responds to `.sidebar:has(.sidebar-toggle:checked)` — pure CSS. Pass each item's glyph via the `icon` prop so it stays visible in the collapsed rail.
 
 React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `defaultCollapsed` / `onCollapsedChange`) that drives the same checkbox.
 
@@ -405,17 +371,11 @@ React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `default
 ```tsx
 <Sidebar style={{ height: "20rem" }}>
   <Sidebar.Nav>
-    <Sidebar.Item href="#" active>
-      <Sidebar.Icon>
-        <IconHome size={16} aria-hidden />
-      </Sidebar.Icon>
-      <Sidebar.Label>Dashboard</Sidebar.Label>
+    <Sidebar.Item href="#" active icon={IconHome}>
+      Dashboard
     </Sidebar.Item>
-    <Sidebar.Item href="#">
-      <Sidebar.Icon>
-        <IconReceipt size={16} aria-hidden />
-      </Sidebar.Icon>
-      <Sidebar.Label>Orders</Sidebar.Label>
+    <Sidebar.Item href="#" icon={IconReceipt}>
+      Orders
     </Sidebar.Item>
   </Sidebar.Nav>
   <Sidebar.Footer>
@@ -440,17 +400,11 @@ Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below the `md` bre
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#" active>
-        <Sidebar.Icon>
-          <IconHome size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Dashboard</Sidebar.Label>
+      <Sidebar.Item href="#" active icon={IconHome}>
+        Dashboard
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconReceipt size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Orders</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
       </Sidebar.Item>
     </Sidebar.Nav>
   </Sidebar>
@@ -537,41 +491,19 @@ Sidebar-first with a shop selector in the navbar, tree navigation for a section 
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconSettings size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Indstillinger</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconSettings}>
+        Indstillinger
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconReceipt size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Ordrer</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Ordrer
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconHeadset size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Kundeservice</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconHeadset}>
+        Kundeservice
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconPackage size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Produkter</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconPackage}>
+        Produkter
       </Sidebar.Item>
-      <Sidebar.Collapsible
-        defaultOpen
-        trigger={
-          <>
-            <Sidebar.Icon>
-              <IconShoppingCart size={16} aria-hidden />
-            </Sidebar.Icon>
-            <Sidebar.Label>Webshop</Sidebar.Label>
-          </>
-        }
-      >
+      <Sidebar.Collapsible defaultOpen icon={IconShoppingCart} label="Webshop">
         <Sidebar.SubItem href="#" active>
           CMS
         </Sidebar.SubItem>
@@ -579,17 +511,11 @@ Sidebar-first with a shop selector in the navbar, tree navigation for a section 
         <Sidebar.SubItem href="#">Søgeord</Sidebar.SubItem>
         <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
       </Sidebar.Collapsible>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconTruck size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Lager</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconTruck}>
+        Lager
       </Sidebar.Item>
-      <Sidebar.Item href="#">
-        <Sidebar.Icon>
-          <IconChartBar size={16} aria-hidden />
-        </Sidebar.Icon>
-        <Sidebar.Label>Statistik</Sidebar.Label>
+      <Sidebar.Item href="#" icon={IconChartBar}>
+        Statistik
       </Sidebar.Item>
     </Sidebar.Nav>
     <Sidebar.Footer>

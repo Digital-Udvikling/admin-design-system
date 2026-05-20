@@ -1,6 +1,6 @@
 import { Input as BaseInput } from "@base-ui/react/input";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type FileInputVariant = "bordered" | "ghost" | "danger";
 export type FileInputSize = "sm" | "md" | "lg";
@@ -21,11 +21,9 @@ export function FileInput({
   return (
     <BaseInput
       type="file"
-      className={clsx(
-        "file-input",
-        `file-input-${variant}`,
-        inputSize !== "md" && `file-input-${inputSize}`,
-        typeof className === "string" ? className : undefined,
+      className={cn(
+        ["file-input", `file-input-${variant}`, inputSize !== "md" && `file-input-${inputSize}`],
+        className,
       )}
       {...rest}
     />

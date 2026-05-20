@@ -52,6 +52,7 @@ export {
 export {
   Card,
   type CardProps,
+  type CardContainerProps,
   type CardBodyProps,
   type CardTitleProps,
   type CardDescriptionProps,
@@ -77,7 +78,6 @@ export {
   type MenuTriggerProps,
   type MenuPopupProps,
   type MenuItemProps,
-  type MenuLinkItemProps,
   type MenuSeparatorProps,
   type MenuGroupProps,
   type MenuGroupLabelProps,

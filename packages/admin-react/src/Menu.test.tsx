@@ -40,6 +40,22 @@ describe("Menu", () => {
       expect(onSelect).toHaveBeenCalledTimes(1);
     });
 
+    it("renders Menu.Item as an anchor when href is set", () => {
+      render(
+        <Menu>
+          <Menu.Trigger>Resources</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item href="#docs">Docs</Menu.Item>
+            <Menu.Item>Action</Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      const docs = screen.getByRole("menuitem", { name: "Docs" });
+      expect(docs.tagName).toBe("A");
+      expect(docs).toHaveAttribute("href", "#docs");
+      expect(screen.getByRole("menuitem", { name: "Action" }).tagName).toBe("BUTTON");
+    });
+
     it("closes when the trigger is clicked a second time", async () => {
       const user = userEvent.setup();
       render(

@@ -66,6 +66,21 @@ Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (op
 
 React components stay tiny by wrapping Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) — Base UI handles a11y wiring, focus, validation. Don't reimplement that. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
 
+### High-level component + `.Container` escape hatch
+
+When a component (a) has a meaningful container/inner-wrapper distinction in the CSS (e.g. `.card` + `.card-body`) and (b) shorthand props that auto-fill the wrapper, **don't** branch the root between "use shorthand" and "pass children through unchanged." Instead:
+
+- The default export (`<Card>`) is opinionated — always renders the inner wrapper, with shorthand props (`title`, `description`, `icon`, `actions`, …) slotting in around children.
+- Expose `<Card.Container>` (or `<X.Container>`) as the bare primitive — just the outer class, no inner wrapper — for layouts that don't fit the default (multiple bodies, media headers, custom dividers).
+
+Document the container in an "Advanced" section, not in the basic examples. This keeps the easy path easy and gives power users a clean exit without hidden conditionals in the root.
+
+Only reach for this split when there's real layout variation in usage. For leaf components (`Button`), linear layouts (`Alert`, `Sidebar.Item`), and Base UI compound primitives (`Field`, `Select`), the standard sub-component pattern is enough — `.Container` is overkill.
+
+### Icons (component-reference props)
+
+Components that show icons take an `icon` prop (and where applicable `iconTrailing`) that accepts a Tabler-style component reference: `<Button icon={IconPlus}>Add</Button>`. The wrapper renders it at `size={16}` with `aria-hidden` via the shared `renderIcon()` helper in `src/icon.ts` — that helper accepts both component references and pre-instantiated elements (`icon={<IconPlus size={20} />}`), so callers can override size when they need to. Components currently exposing this prop: `Button`, `Menu.Item`, `Card` / `Card.Title`, `Navbar.Item`, `Alert`, `Sidebar.Item` / `SubItem` / `Collapsible`. New iconized components should follow the same convention.
+
 ### Token system (Flexoki, two layers)
 
 `packages/admin-css/src/theme.css` is the heart of the design system. Two `@theme static` blocks, both registered with Tailwind so it generates utilities AND emits CSS variables:
@@ -81,7 +96,9 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 The system recommends **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. It's a recommendation, not a hard dep: nothing in `admin-css` or `admin-react` imports Tabler. `apps/docs` has both as devDeps so `:::example` previews render in both tabs; end-user install lives in the `getting-started/*` pages and `/theme/icons/` covers usage.
 
-Components accommodate icons as a direct child of the root — `(inline-)flex items-center gap-2`, or `:has()` to switch layout when a leading `<i>`/`<svg>` is present (`.alert`, `.accordion-summary`). No wrapper class needed, and no named icon slot unless one is structurally required — `<Sidebar.Icon>` is the exception because it has to stay visible in the collapsed rail.
+CSS-side, components accommodate an icon as a direct child of the root — `(inline-)flex items-center gap-2`, or `:has()` to switch layout when a leading `<i>`/`<svg>` is present (`.alert`, `.accordion-summary`). No wrapper class needed, and no named icon slot unless one is structurally required — `.sidebar-icon` is the exception because it has to stay visible in the collapsed rail.
+
+React-side, prefer the `icon` prop convention (see "Icons (component-reference props)" above) over passing icon JSX as children. The two render to identical DOM — the prop is just terser at the call site and ensures consistent `size`/`aria-hidden` defaults.
 
 ### Build pipeline
 

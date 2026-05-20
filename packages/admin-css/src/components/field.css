@@ -28,7 +28,7 @@
      Base UI applies data-invalid on the Field root once validation fails. */
   .field[data-invalid] .input,
   .field[data-invalid] .textarea,
-  .field[data-invalid] .select-trigger,
+  .field[data-invalid] .select,
   .field[data-invalid] .file-input {
     @apply border-danger;
   }

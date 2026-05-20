@@ -5,7 +5,7 @@ description: Compound Select with Trigger + Popup + Item. React wraps Base UI; v
 
 import { Field, Select } from "@aortl/admin-react";
 
-The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select.Popup`, `Select.Item` — that renders a custom popup. The vanilla example uses a native `<select>` styled with `.select-trigger` so the class-name contract still holds, even though the popup chrome can only be customized in React.
+The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select.Popup`, `Select.Item` — that renders a custom popup. The vanilla example uses a native `<select>` styled with `.select` so the class-name contract still holds, even though the popup chrome can only be customized in React.
 
 ## Examples
 
@@ -14,7 +14,7 @@ The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select
 :::example
 
 ```html
-<select class="select-trigger select-trigger-bordered">
+<select class="select select-bordered">
   <option value="">Select a status…</option>
   <option value="open">Open</option>
   <option value="in-progress">In progress</option>
@@ -52,13 +52,13 @@ The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select
 :::example
 
 ```html
-<select class="select-trigger select-trigger-bordered select-trigger-sm">
+<select class="select select-bordered select-sm">
   <option>Small</option>
 </select>
-<select class="select-trigger select-trigger-bordered">
+<select class="select select-bordered">
   <option>Medium</option>
 </select>
-<select class="select-trigger select-trigger-bordered select-trigger-lg">
+<select class="select select-bordered select-lg">
   <option>Large</option>
 </select>
 ```
@@ -84,7 +84,7 @@ The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select
 :::example
 
 ```html
-<select class="select-trigger select-trigger-bordered">
+<select class="select select-bordered">
   <optgroup label="Fruit">
     <option>Apple</option>
     <option>Banana</option>
@@ -136,7 +136,7 @@ The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select
 :::example
 
 ```html
-<select class="select-trigger select-trigger-bordered" disabled>
+<select class="select select-bordered" disabled>
   <option>Disabled</option>
 </select>
 ```
@@ -162,7 +162,7 @@ The React `Select` is a Base UI compound primitive — `Select.Trigger`, `Select
 ```html
 <div class="field">
   <label class="field-label" for="role">Role</label>
-  <select id="role" class="select-trigger select-trigger-bordered" required>
+  <select id="role" class="select select-bordered" required>
     <option value="">Pick a role…</option>
     <option value="admin">Admin</option>
     <option value="member">Member</option>

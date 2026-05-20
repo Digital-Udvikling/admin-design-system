@@ -1,5 +1,5 @@
 @layer components {
-  .select-trigger {
+  .select {
     @apply inline-flex items-center justify-between gap-2 w-full px-3 py-2
            rounded-lg text-sm leading-none text-left
            bg-surface text-text
@@ -10,33 +10,55 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .select-trigger[data-popup-open] {
+  .select[data-popup-open] {
     @apply outline-2 outline-offset-2 outline-primary;
   }
 
-  .select-trigger[data-placeholder] {
+  .select[data-placeholder] {
     @apply text-text-muted;
   }
 
-  .select-trigger-bordered {
+  .select-bordered {
     @apply border-border hover:border-border-strong;
   }
 
-  .select-trigger-ghost {
+  .select-ghost {
     @apply bg-transparent hover:bg-surface-muted;
   }
 
-  .select-trigger-danger {
+  .select-danger {
     @apply border-danger focus-visible:outline-danger;
   }
 
   /* Sizes */
-  .select-trigger-sm {
+  .select-sm {
     @apply text-xs px-2.5 py-1.5;
   }
 
-  .select-trigger-lg {
+  .select-lg {
     @apply text-base px-4 py-2.5;
+  }
+
+  /* Native <select> usage: same class, but suppress the native chevron and
+     supply our own via background-image so the look matches the Base UI
+     trigger. Chevron stroke uses Flexoki base-500, which reads as neutral
+     in both light and dark mode. */
+  select.select {
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23878580' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+  }
+
+  select.select-sm {
+    padding-right: 1.75rem;
+    background-size: 0.875rem;
+  }
+
+  select.select-lg {
+    padding-right: 2.25rem;
   }
 
   .select-icon {
@@ -44,7 +66,7 @@
            text-text-muted transition-transform duration-150;
   }
 
-  .select-trigger[data-popup-open] .select-icon {
+  .select[data-popup-open] .select-icon {
     @apply rotate-180;
   }
 

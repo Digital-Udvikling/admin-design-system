@@ -27,9 +27,9 @@ function SelectTrigger({
   return (
     <BaseSelect.Trigger
       className={clsx(
-        "select-trigger",
-        `select-trigger-${variant}`,
-        triggerSize !== "md" && `select-trigger-${triggerSize}`,
+        "select",
+        `select-${variant}`,
+        triggerSize !== "md" && `select-${triggerSize}`,
         typeof className === "string" ? className : undefined,
       )}
       {...rest}

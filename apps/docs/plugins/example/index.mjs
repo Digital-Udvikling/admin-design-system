@@ -4,6 +4,7 @@ import jsx from "acorn-jsx";
 import { generate } from "astring";
 import { format } from "oxfmt";
 import { visit, SKIP } from "unist-util-visit";
+import { buildPreviewSource, parseControls } from "./buildPreview.mjs";
 import { previewId, registerPreview } from "./virtual-previews.mjs";
 
 const JsxParser = Parser.extend(jsx());
@@ -86,6 +87,24 @@ export default function remarkExample() {
           file.message("`:::example` block needs at least one ```html or ```tsx fence", node);
           return;
         }
+        if (fences.controls !== undefined && fences.tsx === undefined) {
+          file.message("`:::example` block has a ```controls fence but no ```tsx fence", node);
+          return;
+        }
+
+        /** @type {import("./buildPreview.mjs").Control[] | undefined} */
+        let controls;
+        if (fences.controls !== undefined) {
+          try {
+            controls = parseControls(fences.controls);
+          } catch (err) {
+            file.message(
+              `\`:::example\` controls: ${err instanceof Error ? err.message : String(err)}`,
+              node,
+            );
+            return;
+          }
+        }
 
         const [html, react] = await Promise.all([
           fences.html !== undefined ? formatHtml(fences.html) : undefined,
@@ -95,11 +114,18 @@ export default function remarkExample() {
         const attributes = [];
         if (html !== undefined) attributes.push(stringAttr("html", html));
         if (react !== undefined) attributes.push(stringAttr("react", react));
+        if (controls && controls.length > 0) {
+          attributes.push({ type: "mdxJsxAttribute", name: "hasControls", value: null });
+        }
 
         /** @type {any[]} */
         const children = [];
         if (react !== undefined) {
-          const previewSource = buildPreviewSource(userImportsBlock, react);
+          const previewSource = buildPreviewSource({
+            importsBlock: userImportsBlock,
+            reactSource: react,
+            controls,
+          });
           const moduleId = previewId(hash(previewSource));
           registerPreview(moduleId, previewSource);
 
@@ -159,26 +185,6 @@ function collectMdxImports(tree) {
   return sources;
 }
 
-/**
- * Build the TSX source for one preview's virtual module. The returned source
- * is hashed to derive the module id, so any change here invalidates the
- * cache across the workspace.
- *
- * @param {string} importsBlock
- * @param {string} reactSource
- */
-function buildPreviewSource(importsBlock, reactSource) {
-  const header = importsBlock.length > 0 ? `${importsBlock}\n\n` : "";
-  return `${header}export default function ExamplePreview() {
-  return (
-    <>
-${indent(reactSource, 6)}
-    </>
-  );
-}
-`;
-}
-
 /** @param {string} s */
 function hash(s) {
   return createHash("sha1").update(s).digest("hex").slice(0, 16);
@@ -186,16 +192,18 @@ function hash(s) {
 
 /**
  * @param {readonly any[]} children
- * @returns {{ html?: string; tsx?: string }}
+ * @returns {{ html?: string; tsx?: string; controls?: string }}
  */
 function collectFences(children) {
-  /** @type {{ html?: string; tsx?: string }} */
+  /** @type {{ html?: string; tsx?: string; controls?: string }} */
   const out = {};
   for (const child of children) {
     if (child?.type !== "code") continue;
     if (child.lang === "html" && out.html === undefined) out.html = child.value;
     else if ((child.lang === "tsx" || child.lang === "jsx") && out.tsx === undefined) {
       out.tsx = child.value;
+    } else if (child.lang === "controls" && out.controls === undefined) {
+      out.controls = child.value;
     }
   }
   return out;
@@ -231,18 +239,6 @@ function injectEsm(tree, source) {
     data: { estree: program },
   };
   tree.children.unshift(node);
-}
-
-/**
- * @param {string} text
- * @param {number} n
- */
-function indent(text, n) {
-  const pad = " ".repeat(n);
-  return text
-    .split("\n")
-    .map((l) => (l.length > 0 ? pad + l : l))
-    .join("\n");
 }
 
 /** @param {string} s */

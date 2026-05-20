@@ -6,25 +6,41 @@ interface Props {
   html?: string;
   /** Pre-formatted React source. Drives the React tab. */
   react?: string;
+  /**
+   * When set, the React preview island renders its own ControlsPanel and a
+   * live-updating source block (substituting current control values). The
+   * source-tabs area below is then HTML-only — there's no static React
+   * `<Code>` to render because the live one lives inside the island.
+   */
+  hasControls?: boolean;
 }
 
-const { html, react } = Astro.props;
+const { html, react, hasControls } = Astro.props;
 const hasReact = !!react;
 const hasBoth = !!html && hasReact;
+const showReactSource = hasReact && !hasControls;
+const showSourceTabs = !!html && showReactSource;
+const hasSource = showSourceTabs || !!html || showReactSource;
 ---
 
 <section class="not-content example-block">
   <div class="example-frame">
     {
       hasBoth ? (
-        <package-preview class="example-preview">
-          <div class="preview-variant" data-variant="html" set:html={html!} />
+        <package-preview class:list={["example-preview", hasControls && "example-preview-stacked"]}>
+          <div class="preview-variant" data-variant="html">
+            {hasControls ? (
+              <div class="example-preview-body" set:html={html!} />
+            ) : (
+              <Fragment set:html={html!} />
+            )}
+          </div>
           <div class="preview-variant" data-variant="react" hidden>
             <slot name="preview" />
           </div>
         </package-preview>
       ) : (
-        <div class="example-preview">
+        <div class:list={["example-preview", hasControls && "example-preview-stacked"]}>
           {hasReact ? (
             <slot name="preview" />
           ) : html ? (
@@ -33,24 +49,26 @@ const hasBoth = !!html && hasReact;
         </div>
       )
     }
-    <div class="example-source">
-      {
-        hasBoth ? (
-          <Tabs syncKey="package">
-            <TabItem label="Vanilla CSS">
-              <Code code={html!} lang="html" />
-            </TabItem>
-            <TabItem label="React">
-              <Code code={react!} lang="tsx" />
-            </TabItem>
-          </Tabs>
-        ) : html ? (
-          <Code code={html} lang="html" />
-        ) : react ? (
-          <Code code={react} lang="tsx" />
-        ) : null
-      }
-    </div>
+    {
+      hasSource && (
+        <div class="example-source">
+          {showSourceTabs ? (
+            <Tabs syncKey="package">
+              <TabItem label="Vanilla CSS">
+                <Code code={html!} lang="html" />
+              </TabItem>
+              <TabItem label="React">
+                <Code code={react!} lang="tsx" />
+              </TabItem>
+            </Tabs>
+          ) : html ? (
+            <Code code={html} lang="html" />
+          ) : showReactSource ? (
+            <Code code={react!} lang="tsx" />
+          ) : null}
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -135,6 +153,63 @@ storage key, sync attribute, and tab selectors below intentionally track
   }
   .example-preview .preview-variant[hidden] {
     display: none;
+  }
+  /* When controls are present, the outer preview is a vertical stack of
+  three sections (controls strip, preview body, live source). Variants
+  become normal blocks so each section sits on its own row, and the body's
+  padding/flex-center moves down to .example-preview-body (rendered both in
+  the React island and around the static HTML wrap above). */
+  .example-preview-stacked {
+    display: block;
+    padding: 0;
+    gap: 0;
+  }
+  .example-preview-stacked .preview-variant {
+    display: block;
+  }
+  .example-preview-stacked .preview-variant[hidden] {
+    display: none;
+  }
+  .example-preview-stacked :global(.example-preview-body) {
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-surface);
+  }
+  .example-preview-stacked :global(.example-controls) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: end;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+    background: var(--sl-color-bg-nav);
+  }
+  .example-preview-stacked :global(.example-control) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 8rem;
+  }
+  .example-preview-stacked :global(.example-control-label) {
+    color: var(--sl-color-gray-2);
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+  }
+  .example-preview-stacked :global(.example-live-source) {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+    border-radius: 0;
   }
   .example-source :global(starlight-tabs),
   .example-source :global(div[role="tabpanel"]) {

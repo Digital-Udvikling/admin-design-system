@@ -11,17 +11,24 @@ hero:
       variant: primary
 ---
 
-import { CardGrid, LinkCard } from "@astrojs/starlight/components";
+import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
 
-## Built for admin tooling
+<CardGrid>
+  <Card title="Built for admin tooling" icon="rocket">
+    Density-first defaults for the screens an operator sits in all day — dashboards, CRMs, control panels. Predictable primitives, restrained chrome, operator UX over marketing polish.
+  </Card>
+  <Card title="Modern web platform" icon="star">
+    Evergreen browsers only, so we lean on the platform. Disclosure uses `<details>` and `popover`, modals use `<dialog>`, animation is CSS transitions and `@starting-style`, state is read with `:has()` and `:user-valid`. Less JavaScript shipped, less to maintain.
+  </Card>
+  <Card title="Two flavors, one source of truth" icon="puzzle">
+    Vanilla CSS for drop-in use in any stack, React components for typed call sites. Both render the same class names — HTML and JSX look identical on screen.
+  </Card>
+  <Card title="Not for marketing surfaces" icon="warning">
+    Use this for a 40-column table or a 12-input form. Reach for a different system if the goal is to _feel_ polished rather than _operate_ quickly.
+  </Card>
+</CardGrid>
 
-Tuned for the screens an operator sits in all day — dashboards, CRMs, ops consoles, settings panels. It favors information density over hero spacing, predictable primitives over decorative flair, and operator UX over marketing polish.
-
-**Use this if** you're building a form with twelve inputs, a table with forty columns, or a control panel with a dozen actions.
-
-**Look elsewhere if** you need a marketing site, a consumer-facing product surface, or anything where the goal is to _feel_ polished rather than _operate_ quickly.
-
-## Two flavors, one source of truth
+## Pick a flavor
 
 <CardGrid>
   <LinkCard

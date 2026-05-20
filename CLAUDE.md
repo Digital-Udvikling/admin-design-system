@@ -21,6 +21,22 @@ This is a system for **internal admin tooling**, not customer-facing marketing s
 
 When in doubt: would this make a 12-row form on a busy admin screen _easier_ or _prettier_? Pick easier.
 
+## Prefer the platform
+
+Reach for modern HTML and CSS before reaching for JavaScript. Admin users run current browsers — there is no IE/legacy budget, no need for polyfills, and no need for graceful fallbacks. If a behavior can be expressed declaratively, it should be.
+
+- **Animations and transitions** — use CSS `transition`, `@keyframes`, `animation-timeline` / scroll-driven animations, and `@starting-style` / `transition-behavior: allow-discrete`. Don't add `framer-motion`, `react-spring`, or hand-rolled `requestAnimationFrame` loops.
+- **Disclosure and overlays** — use `<dialog>` + `showModal()`, the `popover` attribute, and `anchor-name` / `position-anchor` for tooltips and menus. Don't manually portal, trap focus, or compute float positions in JS unless Base UI already does it for you.
+- **Details / accordions** — `<details>` + `<summary>`, with `interactivity: inert` and `::details-content` for animated open/close. No state hook needed.
+- **Selection and form state** — `:has()`, `:user-valid`, `:user-invalid`, `:placeholder-shown`, `accent-color`, `field-sizing: content` for auto-growing textareas. No `useState` to mirror what the DOM already tracks.
+- **Layout** — container queries (`@container`), `subgrid`, `aspect-ratio`, logical properties, `text-wrap: balance` / `pretty`. Don't measure with `ResizeObserver` if a container query covers it.
+- **Sticky / scroll behavior** — `position: sticky`, `scroll-snap-*`, `overscroll-behavior`, `scroll-margin-*`. Don't recreate any of these with scroll listeners.
+- **Color and theming** — `light-dark()`, `color-mix()`, relative color syntax, `@property` for animatable custom properties. Already the convention in `theme.css` — keep it that way.
+
+JavaScript is appropriate when the behavior is genuinely stateful, requires data fetching, or has no declarative equivalent (drag-and-drop, complex keyboard composition that Base UI doesn't handle, etc.). In those cases, prefer Base UI primitives over building from scratch.
+
+This applies to both packages. `admin-css` should never require JS to make a component look or feel right; `admin-react` should be a thin wrapper that emits the same classes and lets the CSS do the work.
+
 ## Commands
 
 ```fish

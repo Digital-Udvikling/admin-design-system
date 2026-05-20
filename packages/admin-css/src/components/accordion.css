@@ -58,18 +58,18 @@
 
   /* Smooth open/close via ::details-content. With interpolate-size enabled
      on the parent, the height auto ↔ 0 transition animates instead of
-     snapping. allow-discrete coordinates the content-visibility flip so the
-     content stays in the render tree throughout the animation. Browsers
-     without ::details-content degrade to the native instant toggle. */
+     snapping. content-visibility is pinned to visible so the closed content
+     still contributes to intrinsic width — without this, a shrink-to-fit
+     parent reflows narrower on close. Browsers without ::details-content
+     degrade to the native instant toggle. */
   .accordion-item::details-content {
     opacity: 0;
     height: 0;
     overflow: clip;
+    content-visibility: visible;
     transition:
       opacity 200ms ease,
-      height 200ms ease,
-      content-visibility 200ms;
-    transition-behavior: allow-discrete;
+      height 200ms ease;
   }
 
   .accordion-item[open]::details-content {

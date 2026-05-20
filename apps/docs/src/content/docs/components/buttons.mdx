@@ -98,6 +98,26 @@ The spinner sits where a leading `icon` would, so if you pass both `icon` and `l
 
 :::
 
+### As a link
+
+When the action navigates rather than mutates, use an anchor. The `.btn` classes are purely visual, so they apply cleanly to `<a>`. In React, pass `render={<a href="…" />}` and `nativeButton={false}` so Base UI knows the underlying element is no longer a `<button>` — keyboard and ARIA wiring adjust accordingly.
+
+:::example
+
+```html
+<a href="/orders/new" class="btn btn-primary">New order</a>
+<a href="/reports" class="btn btn-secondary">View reports</a>
+```
+
+```tsx
+<Button render={<a href="/orders/new" />} nativeButton={false}>New order</Button>
+<Button variant="secondary" render={<a href="/reports" />} nativeButton={false}>View reports</Button>
+```
+
+:::
+
+The `disabled` state doesn't apply to anchors — if a link can be unavailable, omit it (or render plain text) rather than styling a non-interactive link as disabled.
+
 ### With icons
 
 Pass an icon component to `icon` for a leading icon, or `iconTrailing` for a trailing one. The wrapper renders it at `size={16}` with `aria-hidden`. For an icon-only button, pass just `icon` and add an `aria-label`. See [Icons](/admin-design-system/theme/icons/) for the recommended library.

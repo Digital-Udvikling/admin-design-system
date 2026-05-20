@@ -1,0 +1,108 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aortl-admin"
+version = "0.0.1"
+description = "Django distribution of the @aortl/admin design system. Pairs with django-tailwind-cli for a Node-free build."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = ["django", "design-system", "tailwind", "crispy-forms", "admin", "aortl"]
+authors = [{ name = "Digital-Udvikling" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: User Interfaces",
+]
+dependencies = [
+    "django>=4.2",
+    "django-tailwind-cli>=2.21",
+]
+
+[project.optional-dependencies]
+crispy = ["django-crispy-forms>=2.3"]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.9",
+    "ruff>=0.7",
+    "django-crispy-forms>=2.3",
+    "build>=1.2",
+]
+
+[project.urls]
+Homepage = "https://digital-udvikling.github.io/admin-design-system/"
+Documentation = "https://digital-udvikling.github.io/admin-design-system/modules/django/"
+Repository = "https://github.com/Digital-Udvikling/admin-design-system"
+Issues = "https://github.com/Digital-Udvikling/admin-design-system/issues"
+
+[tool.hatch.version]
+path = "src/aortl_admin/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aortl_admin"]
+# Hatchling skips data dirs that look like Python packages but lack __init__.py
+# by default. The static/ and templates/ trees need to ship — re-include them.
+artifacts = [
+    "src/aortl_admin/static/**",
+    "src/aortl_admin/templates/**",
+]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "hatch_build.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/aortl_admin",
+    "scripts/sync_css.py",
+    "hatch_build.py",
+    "tests",
+    "README.md",
+]
+# The vendored CSS is gitignored, so hatchling's VCS-aware discovery skips it.
+# Force-include the freshly synced files (produced by the build hook below) so
+# the sdist is self-contained — the wheel-from-sdist build can then ship the
+# CSS without needing to reach back into the monorepo.
+artifacts = [
+    "src/aortl_admin/static/**",
+]
+
+[tool.hatch.build.targets.sdist.hooks.custom]
+path = "hatch_build.py"
+
+[tool.hatch.build.targets.editable.hooks.custom]
+path = "hatch_build.py"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = ["test_*.py"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",  # pycodestyle + pyflakes
+    "I",            # isort
+    "B",            # flake8-bugbear
+    "UP",           # pyupgrade
+    "DJ",           # flake8-django
+]
+ignore = ["E501"]  # line too long (handled by formatter)
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B"]

@@ -1,0 +1,12 @@
+{% load aortl_admin %}<header class="navbar">
+  <div class="navbar-brand">
+    {% block navbar_brand %}{{ AORTL_BRAND|default:"aortl admin" }}{% endblock %}
+  </div>
+  <nav class="navbar-items">
+    {% block navbar_items %}{% endblock %}
+  </nav>
+  <div class="navbar-actions">
+    {% block navbar_actions %}{% endblock %}
+  </div>
+  <button type="button" class="navbar-mobile-toggle" aria-label="Open menu"></button>
+</header>

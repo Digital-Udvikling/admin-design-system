@@ -10,3 +10,14 @@ dist
 .turbo
 coverage
 .claude/worktrees
+
+# Python
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+*.egg-info
+build
+htmlcov
+.coverage

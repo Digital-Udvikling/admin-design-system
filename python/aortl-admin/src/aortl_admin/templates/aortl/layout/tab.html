@@ -1,0 +1,19 @@
+{% load crispy_forms_tags %}
+<div class="tabs tabs-bordered {{ css_class }}"{% if tabs_id %} id="{{ tabs_id }}"{% endif %}>
+  <div class="tab-list" role="tablist">
+    {% for tab in tabs %}
+      <input type="radio"
+             name="{{ tabs_id|default:'crispy-tabs' }}"
+             id="{{ tab.tab_id }}-input"
+             class="tab-input"
+             value="{{ forloop.counter }}"
+             {% if forloop.first %}checked{% endif %}>
+      <label for="{{ tab.tab_id }}-input" class="tab">{{ tab.name }}</label>
+    {% endfor %}
+  </div>
+  {% for tab in tabs %}
+    <div class="tab-panel" data-value="{{ forloop.counter }}" id="{{ tab.tab_id }}">
+      {{ tab.fields_output|safe }}
+    </div>
+  {% endfor %}
+</div>

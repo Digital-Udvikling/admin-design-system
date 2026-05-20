@@ -1,0 +1,6 @@
+<input type="{{ input.input_type }}"
+       name="{{ input.name }}"
+       value="{{ input.value }}"
+       {% if input.id %}id="{{ input.id }}"{% endif %}
+       class="{{ input.field_classes }}"
+       {{ input.flat_attrs|safe }}>

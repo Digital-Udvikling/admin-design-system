@@ -9,6 +9,7 @@
     "dev": "pnpm --filter docs dev",
     "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
     "test": "pnpm --filter @aortl/admin-react test",
+    "sync:django-css": "python python/aortl-admin/scripts/sync_css.py",
     "clean": "pnpm -r exec rm -rf dist .astro node_modules/.vite",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

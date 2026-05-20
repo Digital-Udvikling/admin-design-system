@@ -1,0 +1,15 @@
+{% if form_show_errors %}{% include "aortl/errors.html" %}{% endif %}
+{% if form.form_html %}
+  {{ form.form_html|safe }}
+{% else %}
+  <div class="flex flex-col gap-4">
+    {% for field in form %}
+      {% include 'aortl/field.html' %}
+    {% endfor %}
+  </div>
+{% endif %}
+{% if inputs %}
+  <div class="flex items-center gap-2 mt-4">
+    {% for input in inputs %}{{ input|safe }}{% endfor %}
+  </div>
+{% endif %}

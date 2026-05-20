@@ -1,0 +1,16 @@
+{% load crispy_forms_field %}
+<div class="field {% if bound_fields.0.errors %}has-error{% endif %} {{ wrapper_class }}"
+     {% if bound_fields.0.errors %}data-invalid{% endif %}>
+  {% if label_html %}
+    <label class="field-label">{{ label_html|safe }}</label>
+  {% endif %}
+  <div class="flex items-center gap-2">
+    {% for field in fields_output %}{{ field }}{% endfor %}
+  </div>
+  {% if help_text %}<p class="field-description">{{ help_text|safe }}</p>{% endif %}
+  {% for bound_field in bound_fields %}
+    {% if bound_field.errors %}
+      {% for error in bound_field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>

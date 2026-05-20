@@ -1,0 +1,108 @@
+---
+title: App shell
+description: Base template, navbar/sidebar partials, and template tags for active state.
+sidebar:
+  order: 2
+---
+
+The `aortl_admin/base.html` template wires `.app-shell` + `.app-shell-with-sidebar` from the design system. Your `templates/aortl_base.html` (scaffolded by `manage.py aortl_admin_init`) extends it; your pages then extend `aortl_base.html`.
+
+## Block reference
+
+```django
+{% extends "aortl_admin/base.html" %}
+
+{% block title %}…{% endblock %}                {# <title> #}
+{% block app_shell_classes %}…{% endblock %}    {# default: "app-shell-with-sidebar" #}
+{% block navbar %}…{% endblock %}               {# replace the whole header #}
+{% block navbar_brand %}…{% endblock %}         {# replace just the brand text/markup #}
+{% block navbar_items %}…{% endblock %}         {# nav links area #}
+{% block navbar_actions %}…{% endblock %}       {# right-aligned actions #}
+{% block sidebar %}…{% endblock %}              {# replace the whole sidebar #}
+{% block sidebar_header %}…{% endblock %}       {# above the nav #}
+{% block sidebar_nav %}…{% endblock %}          {# the main nav body #}
+{% block sidebar_footer %}…{% endblock %}       {# defaults to the collapse toggle #}
+{% block icon_font %}…{% endblock %}            {# add a Tabler <link> if you want #}
+{% block extra_css %}…{% endblock %}
+{% block extra_js %}…{% endblock %}
+{% block content %}…{% endblock %}              {# your page #}
+```
+
+## Template tags
+
+`{% load aortl_admin %}` exposes three helpers.
+
+### `{% nav_item url label %}`
+
+Renders an `<a class="navbar-item">`. Marks `aria-current="page"` when the URL prefix matches `request.path`.
+
+:::example
+
+```html
+<a class="navbar-item" href="/dashboard/">Dashboard</a>
+<a class="navbar-item" aria-current="page" href="/users/">Users</a>
+```
+
+:::
+
+```django
+{% load aortl_admin %}
+{% nav_item url="/dashboard/" label="Dashboard" %}
+{% nav_item url="users:index" label="Users" %}
+```
+
+URL names are reversed; literal paths starting with `/`, `http://`, `https://`, or `#` are used as-is.
+
+### `{% sidebar_item url label icon badge %}`
+
+Renders an `<a class="sidebar-item">` with an optional Tabler icon and a right-aligned badge.
+
+:::example
+
+```html
+<a class="sidebar-item" aria-current="page" href="/inbox/">
+  <span class="sidebar-icon"><i class="ti ti-mail"></i></span>
+  <span class="sidebar-label">Inbox</span>
+  <span class="sidebar-badge">7</span>
+</a>
+```
+
+:::
+
+```django
+{% sidebar_item url="/inbox/" label="Inbox" icon="ti-mail" badge="7" %}
+{% sidebar_item url="/settings/" label="Settings" icon="ti-settings" %}
+{% sidebar_item url="/help/" label="Help" %}
+```
+
+### `is_active` filter
+
+For ad-hoc active-state logic outside the helpers:
+
+```django
+<a class="sidebar-item {% if request.path|is_active:'/users/' %}sidebar-item-active{% endif %}" href="/users/">…</a>
+```
+
+## Customizing the shell
+
+Three escalating levels of ownership:
+
+1. **Extend `aortl_admin/base.html` directly.** Cheapest. Future package updates flow into your pages.
+2. **Use the scaffolded `templates/aortl_base.html`.** Your project owns the file but starts from a known base — edit blocks freely.
+3. **Replace partials entirely.** Override `templates/aortl_admin/_navbar.html` or `_sidebar.html` in your own app's templates dir (Django's `APP_DIRS` loader finds your copy first).
+
+### Tabler icons
+
+The package doesn't bundle Tabler icons. To use the webfont everywhere:
+
+```django
+{% block icon_font %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+{% endblock %}
+```
+
+Or self-host — see [theming](../theming/) for the full set of icon options.
+
+## Responsive behavior
+
+The shell collapses to single-column below `48rem` (the design system's `md` breakpoint), and the sidebar is hidden by default. To render a mobile drawer, drop a Base UI–style `<dialog>` into `{% block sidebar %}` with the `.sidebar-drawer` and `.sidebar-drawer-backdrop` classes — see `packages/admin-css/src/components/sidebar.css` for the contract.

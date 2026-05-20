@@ -1,0 +1,23 @@
+{% load static %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" {% block html_attrs %}{% endblock %}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}aortl admin{% endblock %}</title>
+    {% block icon_font %}{# add a tabler icons <link> here if you want webfont icons #}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/aortl.output.css' %}" />
+    {% block extra_css %}{% endblock %}
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body>
+    <div class="app-shell {% block app_shell_classes %}app-shell-with-sidebar{% endblock %}">
+      {% block navbar %}{% include "aortl_admin/_navbar.html" %}{% endblock %}
+      {% block sidebar %}{% include "aortl_admin/_sidebar.html" %}{% endblock %}
+      <main class="app-shell-main">
+        {% block content %}{% endblock %}
+      </main>
+      {% block footer %}{% endblock %}
+    </div>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

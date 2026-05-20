@@ -1,0 +1,4 @@
+<details class="accordion-item"{% if group.active %} open{% endif %}>
+  <summary class="accordion-summary">{{ group.name }}</summary>
+  <div class="accordion-content">{{ group.fields_output|safe }}</div>
+</details>

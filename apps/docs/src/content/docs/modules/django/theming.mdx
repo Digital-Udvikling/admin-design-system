@@ -1,0 +1,129 @@
+---
+title: Theming
+description: Dark mode, token overrides, scoped themes, and Tabler icon installation in a Django context.
+sidebar:
+  order: 5
+---
+
+The design system's theming surface — dark mode, semantic tokens, scoped overrides — works identically in Django; there's nothing Django-specific to learn beyond _where_ to put the rules.
+
+## Dark mode
+
+`color-scheme` is set on `:root` in `theme.css`. Three modes:
+
+```django
+<html>                          {# follow OS preference (default) #}
+<html data-theme="light">       {# force light #}
+<html data-theme="dark">        {# force dark #}
+```
+
+Scope to a subtree:
+
+```html
+<aside data-theme="dark">
+  <!-- this aside is always dark, even on a light page -->
+</aside>
+```
+
+### Wiring a theme toggle
+
+The shell's `<html>` tag is rendered from `aortl_admin/base.html`. Override the `html_attrs` block (or copy the template) to bind a server-stored preference:
+
+```django
+{% block html_attrs %}data-theme="{{ request.user.theme|default:'' }}"{% endblock %}
+```
+
+For client-side toggling, set the attribute directly with vanilla JS — the design system reacts to the attribute change without any framework reconciliation.
+
+## Token overrides
+
+Override semantic tokens in `assets/css/aortl.input.css`:
+
+```css
+@theme inline {
+  /* Re-skin: purple primary, amber danger */
+  --color-primary: var(--color-purple-600);
+  --color-primary-hover: var(--color-purple-700);
+  --color-primary-content: var(--color-paper);
+  --color-danger: var(--color-orange-600);
+}
+```
+
+Or with `light-dark()` for per-mode values:
+
+```css
+@theme inline {
+  --color-surface: light-dark(var(--color-paper), oklch(0.18 0.01 280));
+}
+```
+
+The Flexoki ramps (`--color-blue-600`, `--color-base-50`, etc.) are absolute — don't override these. Override the _semantic_ aliases (`--color-primary`, `--color-surface`) and every component follows.
+
+## Per-section themes
+
+Use a `data-section` attribute on a wrapper to apply tokens only inside:
+
+```css
+[data-section="reports"] {
+  --color-primary: var(--color-cyan-600);
+  --color-primary-hover: var(--color-cyan-700);
+}
+```
+
+```django
+<section data-section="reports">
+  {# Every .btn-primary, .badge-primary, etc. inside is cyan. #}
+</section>
+```
+
+## Tabler icons
+
+The package recommends but doesn't bundle [Tabler Icons](https://tabler.io/icons). Three install paths:
+
+### 1. CDN (zero install)
+
+In your base template, fill the `icon_font` block:
+
+```django
+{% extends "aortl_admin/base.html" %}
+
+{% block icon_font %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+{% endblock %}
+```
+
+Then use anywhere:
+
+```html
+<i class="ti ti-home"></i>
+```
+
+### 2. Self-host
+
+Download `tabler-icons.min.css` and the `fonts/` directory from the latest [Tabler release](https://github.com/tabler/tabler-icons/releases/latest), drop into your `STATICFILES_DIRS`, and reference via `{% static %}`:
+
+```django
+{% block icon_font %}
+  <link rel="stylesheet" href="{% static 'tabler/tabler-icons.min.css' %}">
+{% endblock %}
+```
+
+Bonus: subset the font to only the icons you use (via `pyftsubset` or `fonttools subset`) to cut payload from ~400 KB to ~10 KB.
+
+### 3. Skip Tabler entirely
+
+The design system doesn't require Tabler — it just uses generic `<i>` or `<svg>` elements as direct children where icons fit naturally (via `:has()` selectors). Substitute Heroicons, Lucide, Feather, your own SVG sprite — anything that renders as a child element of the right components.
+
+## Scoped overrides
+
+To re-skin one page or one subtree without touching the global theme:
+
+```html
+<div style="--color-primary: oklch(0.6 0.15 30);">
+  <button class="btn btn-primary">Save</button>
+</div>
+```
+
+CSS custom properties cascade like regular declarations — local `--color-primary` overrides the value coming from `@theme` for the subtree only.
+
+See the [Customize](../../../theme/customize/) page for the full token list.

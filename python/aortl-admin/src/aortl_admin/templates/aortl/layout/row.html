@@ -1,0 +1,6 @@
+{% load crispy_forms_tags %}
+<div class="grid grid-cols-1 md:grid-cols-{{ columns|default:2 }} gap-4 {{ css_class }}"
+     {% if div.id %}id="{{ div.id }}"{% endif %}
+     {{ flat_attrs|safe }}>
+  {{ fields|safe }}
+</div>

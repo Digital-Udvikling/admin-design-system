@@ -1,0 +1,56 @@
+name: Python CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "python/**"
+      - "packages/admin-css/src/**"
+      - ".github/workflows/python-ci.yml"
+  pull_request:
+    paths:
+      - "python/**"
+      - "packages/admin-css/src/**"
+      - ".github/workflows/python-ci.yml"
+
+concurrency:
+  group: python-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install ${{ matrix.python }}
+
+      - name: Install (build hook vendors admin-css automatically)
+        working-directory: python/aortl-admin
+        run: uv sync --extra dev
+
+      - name: Lint (ruff)
+        working-directory: python/aortl-admin
+        run: uv run ruff check .
+
+      - name: Format check (ruff)
+        working-directory: python/aortl-admin
+        run: uv run ruff format --check .
+
+      - name: Test (pytest)
+        working-directory: python/aortl-admin
+        run: uv run pytest -q
+
+      - name: Verify CSS sync produces no drift
+        run: |
+          diff -r packages/admin-css/src/ python/aortl-admin/src/aortl_admin/static/aortl_admin/css/ \
+            --exclude=SOURCE_VERSION

@@ -1,0 +1,104 @@
+---
+title: Tailwind config
+description: The aortl.input.css file — @source paths, custom components, refreshing imports after a venv move.
+sidebar:
+  order: 4
+---
+
+`manage.py aortl_admin_init` scaffolds `assets/css/aortl.input.css` as your Tailwind v4 entry point. This is the file `TAILWIND_CLI_SRC_CSS` points to and the only CSS file you typically need to edit.
+
+## Generated structure
+
+```css
+@import "tailwindcss";
+
+@source "/path/to/project/**/templates/**/*.html";
+@source "/path/to/project/**/*.py";
+
+@import "/path/to/.venv/lib/python3.12/site-packages/aortl_admin/static/aortl_admin/css/theme.css";
+@import "/path/to/.venv/lib/python3.12/site-packages/aortl_admin/static/aortl_admin/css/base.css";
+@import "/path/to/.venv/lib/python3.12/site-packages/aortl_admin/static/aortl_admin/css/components/index.css";
+```
+
+Three parts:
+
+1. **`@import "tailwindcss";`** — Tailwind itself, including preflight.
+2. **`@source` directives** — paths Tailwind scans for utility class usage. Defaults scan all template directories and `.py` files in your project.
+3. **Design-system imports** — `theme.css` (palette + semantic tokens), `base.css` (html/body reset), `components/index.css` (all 25 component classes).
+
+## Adding `@source` patterns
+
+If you keep templates outside the default scan, add them:
+
+```css
+@source "/path/to/project/cms/snippets/**/*.html";
+@source "/path/to/project/emails/**/*.txt"; /* don't forget non-.html templates */
+```
+
+If you reference classes from Python views (`<button class="btn btn-primary">` in a `HttpResponse` body), keep the `@source "../**/*.py"` line — Tailwind will pick them up.
+
+## Custom components
+
+Add your own classes in the input CSS, after the design-system imports:
+
+```css
+@layer components {
+  .stat-card {
+    @apply card p-4 flex items-center gap-3;
+  }
+
+  .stat-card-value {
+    @apply text-2xl font-semibold tabular-nums;
+  }
+}
+```
+
+Use the design system's semantic tokens (`bg-surface`, `text-text-muted`, `border-border`) rather than Flexoki ramps (`bg-base-100`) — your overrides will follow theming and dark mode automatically.
+
+## Overriding tokens
+
+Override semantic tokens in your input CSS:
+
+```css
+@theme inline {
+  --color-primary: var(--color-purple-600);
+  --color-primary-hover: var(--color-purple-700);
+}
+```
+
+Or scope an override to a subtree:
+
+```css
+[data-section="admin"] {
+  --color-primary: oklch(0.62 0.2 25);
+}
+```
+
+See the [theming page](../theming/) for the full token list.
+
+## Refreshing absolute paths
+
+The `@import` paths in `aortl.input.css` are absolute filesystem paths pointing into your venv's `site-packages`. If you switch virtualenvs (or someone else clones the repo into a different path), Tailwind will fail with `Cannot find module`.
+
+Fix it without losing your other edits:
+
+```fish
+uv run python manage.py aortl_admin_init --refresh-paths
+```
+
+This rewrites only the `@import` lines that point into `aortl_admin/static/`. Your `@source` directives, custom components, and token overrides are left untouched.
+
+## Build commands
+
+```fish
+# One-shot build (CI, production)
+uv run python manage.py tailwind build
+
+# Watch + livereload during development
+uv run python manage.py tailwind runserver
+
+# Print the version of the Tailwind binary in use
+uv run python manage.py tailwind --version
+```
+
+The output lands at `STATIC_ROOT/{TAILWIND_CLI_DIST_CSS}` (or `STATICFILES_DIRS[0]` in dev), referenced by `aortl_admin/base.html` as `<link rel="stylesheet" href="{% static 'css/aortl.output.css' %}">`.

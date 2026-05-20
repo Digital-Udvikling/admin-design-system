@@ -1,0 +1,9 @@
+{% if form_show_errors %}{% include "aortl/errors.html" %}{% endif %}
+<div class="flex flex-col gap-4 {{ form_class }}"{% if form_id %} id="{{ form_id }}"{% endif %}>
+  {{ inputs|safe }}
+  {% if form_html %}{{ form_html|safe }}{% else %}
+    {% for field in form %}
+      {% include 'aortl/field.html' %}
+    {% endfor %}
+  {% endif %}
+</div>

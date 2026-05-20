@@ -1,0 +1,44 @@
+---
+title: Django module overview
+description: The aortl-admin Python package — what it ships and how it relates to admin-css.
+sidebar:
+  label: Overview
+  order: 1
+---
+
+`aortl-admin` is the Python sibling of [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css). It distributes the same design system into Django projects via a single `pip install` (or `uv add`), with zero Node dependency in the consumer's build pipeline.
+
+## What's in the package
+
+| Surface                               | What it is                                                                      | Path inside the package                               |
+| ------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| **CSS source**                        | The `admin-css` source files, vendored at release time                          | `aortl_admin/static/aortl_admin/css/`                 |
+| **App-shell templates**               | Extendable `base.html`, plus `_navbar.html` and `_sidebar.html` partials        | `aortl_admin/templates/aortl_admin/`                  |
+| **Template tags**                     | `{% nav_item %}`, `{% sidebar_item %}`, `is_active` filter                      | `aortl_admin/templatetags/aortl_admin.py`             |
+| **Init command**                      | `manage.py aortl_admin_init` scaffolds the Tailwind input CSS and base template | `aortl_admin/management/commands/aortl_admin_init.py` |
+| **Crispy template pack** _(optional)_ | The `aortl` template pack for `django-crispy-forms`                             | `aortl_admin/templates/aortl/`                        |
+| **Form mixin**                        | `AortlFormMixin` — applies design-system classes to widgets without crispy      | `aortl_admin/forms.py`                                |
+
+## How it relates to admin-css
+
+The CSS in `aortl_admin/static/aortl_admin/css/` is **byte-identical** to `packages/admin-css/src/` in the monorepo. A sync script (`scripts/sync_css.py`) runs at every release of `aortl-admin`. The two packages are versioned in lockstep — `aortl-admin 0.5.2` always wraps `@aortl/admin-css 0.5.2`.
+
+Your input CSS `@import`s those source files directly. Tailwind v4's standalone CLI compiles everything in a single pass — your own utility usage, the design-system components, the theme tokens. No double preflight, no duplicate utilities.
+
+## The no-Node promise
+
+The only "compile" your project runs is `python manage.py tailwind build`, provided by [`django-tailwind-cli`](https://github.com/oliverandrich/django-tailwind-cli). On first run it downloads the [Tailwind v4 standalone binary](https://github.com/tailwindlabs/tailwindcss/releases) — a single ~10 MB Rust executable — into `~/.local/bin/` or your project's `.bin/`. No `node_modules`, no `package.json`, no Node runtime.
+
+## What you still own
+
+- Your `assets/css/aortl.input.css` — the Tailwind entry file with your `@source` patterns and any custom components or token overrides.
+- Your `templates/aortl_base.html` — the project-level shell template that extends `aortl_admin/base.html` and sets your brand, sidebar items, etc.
+
+Both are scaffolded by `manage.py aortl_admin_init` and then yours to edit. The package itself doesn't touch them.
+
+## Read next
+
+- [App shell](./app-shell/) — wiring the navbar + sidebar.
+- [Forms](./forms/) — crispy template pack and the form mixin.
+- [Tailwind config](./tailwind-config/) — `@source` paths, custom components, refresh-paths.
+- [Theming](./theming/) — dark mode, token overrides, Tabler icons.

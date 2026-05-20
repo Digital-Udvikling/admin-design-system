@@ -1,0 +1,128 @@
+---
+title: Forms
+description: Render Django forms with the design-system DOM via django-crispy-forms or a lightweight widget mixin.
+sidebar:
+  order: 3
+---
+
+Two ways to render Django forms with design-system classes — pick one or mix:
+
+- **`aortl` crispy template pack** — full `django-crispy-forms` integration. Auto-renders labels, descriptions, error states, and supports the full crispy Layout API.
+- **`AortlFormMixin`** — applies widget classes at form instantiation. Lets you render plain `{{ form.field }}` without crispy.
+
+## Crispy template pack
+
+Install with the extra:
+
+```fish
+uv add 'aortl-admin[crispy]'
+```
+
+Configure:
+
+```python
+# settings.py
+INSTALLED_APPS = ["crispy_forms", "aortl_admin", ...]
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["aortl"]
+CRISPY_TEMPLATE_PACK = "aortl"
+```
+
+Render any form:
+
+```django
+{% load crispy_forms_tags %}
+{% crispy form %}
+```
+
+### What gets emitted
+
+The pack maps Django widgets to design-system DOM:
+
+| Django widget                                                                           | Emitted DOM                                                                  |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `TextInput`, `EmailInput`, `URLInput`, `NumberInput`, `PasswordInput`, date/time inputs | `<input class="input input-bordered">` inside `<div class="field">`          |
+| `Textarea`                                                                              | `<textarea class="textarea textarea-bordered">`                              |
+| `Select`, `NullBooleanSelect`, `SelectMultiple`                                         | `<select class="select select-bordered">`                                    |
+| `CheckboxInput` (BooleanField)                                                          | `<label><input class="checkbox"> Label</label>` inside `<div class="field">` |
+| `RadioSelect`                                                                           | `<div class="radio-group radio-group-vertical">`                             |
+| `CheckboxSelectMultiple`                                                                | Vertical stack of `<input class="checkbox">`                                 |
+| Errors                                                                                  | `<p class="field-error">`                                                    |
+| Help text                                                                               | `<p class="field-description">`                                              |
+| `required`                                                                              | `data-required` on the `field-label` (renders red `*` via CSS)               |
+| Invalid state                                                                           | `data-invalid` on the field root (cascades to control border)                |
+
+### Layout primitives use Tailwind utilities
+
+`Row`, `Column`, `Div`, `Fieldset` render with Tailwind utility classes (`grid`, `flex flex-col`, `gap-4`) — they don't introduce new design-system classes for layout.
+
+```python
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Row, Column, Submit
+
+
+class UserForm(forms.Form):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    email = forms.EmailField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(Column("first_name"), Column("last_name")),
+            "email",
+            Submit("save", "Save"),
+        )
+```
+
+The `Row` renders as `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`; `Submit` renders as `<input type="submit" class="btn btn-primary">`.
+
+### Tabs and accordions
+
+Crispy's `TabHolder` / `Tab` and `Accordion` / `AccordionGroup` map onto the design-system `.tabs` and `.accordion` classes — same DOM as the [Tabs](../../../components/tabs/) and [Accordion](../../../components/accordion/) components.
+
+## AortlFormMixin (without crispy)
+
+If you don't want crispy, the mixin applies widget classes at instantiation time:
+
+```python
+from django import forms
+from aortl_admin.forms import AortlFormMixin
+
+
+class UserForm(AortlFormMixin, forms.Form):
+    name = forms.CharField()
+    bio = forms.CharField(widget=forms.Textarea)
+```
+
+Then in a template:
+
+```django
+<form method="post">
+  {% csrf_token %}
+  <div class="field">
+    <label class="field-label" for="{{ form.name.id_for_label }}">Name</label>
+    {{ form.name }}
+    {% if form.name.errors %}
+      {% for error in form.name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+    {% endif %}
+  </div>
+  …
+  <button class="btn btn-primary" type="submit">Save</button>
+</form>
+```
+
+Existing `widget.attrs["class"]` values are preserved (appended, not overwritten).
+
+## Error states
+
+Crispy sets `data-invalid` on `<div class="field">` when the bound field has errors. The CSS in `field.css` cascades that to tint the contained input/textarea/select borders red and shows the `<p class="field-error">` message below.
+
+Without crispy: set `data-invalid` manually based on `form.field.errors`:
+
+```django
+<div class="field" {% if form.email.errors %}data-invalid{% endif %}>
+  {{ form.email }}
+  {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+</div>
+```

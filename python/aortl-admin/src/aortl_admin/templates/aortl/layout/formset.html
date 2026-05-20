@@ -1,0 +1,16 @@
+{% load crispy_forms_tags %}
+{% if formset_tag %}<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+  {% if formset_method|lower == 'post' and not disable_csrf %}{% csrf_token %}{% endif %}
+
+  <div>
+    {{ formset.management_form|crispy }}
+  </div>
+
+  <div class="flex flex-col gap-6 {{ form_class }}"{% if form_id %} id="{{ form_id }}"{% endif %}>
+    {% include "aortl/errors_formset.html" %}
+    {% for form in formset %}
+      {% include "aortl/whole_uni_form.html" %}
+    {% endfor %}
+    {{ inputs|safe }}
+  </div>
+{% if formset_tag %}</form>{% endif %}

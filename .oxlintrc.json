@@ -23,6 +23,8 @@
     "**/coverage",
     "**/.turbo",
     "**/.vite",
+    "**/.venv",
+    "python/**",
     "pnpm-lock.yaml"
   ]
 }

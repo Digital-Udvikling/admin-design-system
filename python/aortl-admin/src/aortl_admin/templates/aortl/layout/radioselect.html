@@ -1,0 +1,16 @@
+{% load crispy_forms_filters %}
+<div class="radio-group {% if inline_class %}{{ inline_class }}{% else %}radio-group-vertical{% endif %}" role="radiogroup">
+  {% for choice in field.field.choices %}
+    <label>
+      <input type="radio"
+             class="radio"
+             name="{{ field.html_name }}"
+             value="{{ choice.0|stringformat:'s' }}"
+             id="id_{{ field.html_name }}_{{ forloop.counter0 }}"
+             {% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %}checked{% endif %}
+             {% if field.field.required %}required{% endif %}
+             {% if field.field.disabled %}disabled{% endif %}>
+      <span class="text-sm">{{ choice.1 }}</span>
+    </label>
+  {% endfor %}
+</div>

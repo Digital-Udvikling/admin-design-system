@@ -1,0 +1,9 @@
+{% load crispy_forms_tags %}
+<div class="accordion {{ css_class }}"{% if accordion_id %} id="{{ accordion_id }}"{% endif %}>
+  {% for group in accordion_groups %}
+    <details class="accordion-item"{% if group.active %} open{% endif %}>
+      <summary class="accordion-summary">{{ group.name }}</summary>
+      <div class="accordion-content">{{ group.fields_output|safe }}</div>
+    </details>
+  {% endfor %}
+</div>

@@ -1,0 +1,8 @@
+{% if field.errors %}
+  {% for error in field.errors %}
+    <p class="field-error" id="error_{{ forloop.counter }}_{{ field.auto_id }}">{{ error }}</p>
+  {% endfor %}
+{% endif %}
+{% if field.help_text %}
+  <p class="field-description" id="hint_{{ field.auto_id }}">{{ field.help_text|safe }}</p>
+{% endif %}

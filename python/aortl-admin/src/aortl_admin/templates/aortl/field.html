@@ -1,0 +1,51 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+  {{ field }}
+{% else %}
+  {% if field|is_checkbox %}
+    <div class="field {% if field.errors %}has-error{% endif %} {{ wrapper_class }}"
+         {% if field.errors %}data-invalid{% endif %}>
+      <label class="inline-flex items-center gap-2 cursor-pointer" for="{{ field.id_for_label }}">
+        {% crispy_field field 'class' 'checkbox' %}
+        <span class="text-sm text-text">{{ field.label|safe }}{% if field.field.required %} <span class="asteriskField">*</span>{% endif %}</span>
+      </label>
+      {% include 'aortl/layout/help_text_and_errors.html' %}
+    </div>
+  {% elif field|is_radioselect %}
+    <div class="field {% if field.errors %}has-error{% endif %} {{ wrapper_class }}"
+         {% if field.errors %}data-invalid{% endif %}>
+      {% if field.label %}
+        <label class="field-label" {% if field.field.required %}data-required{% endif %}>{{ field.label|safe }}</label>
+      {% endif %}
+      {% include 'aortl/layout/radioselect.html' %}
+      {% include 'aortl/layout/help_text_and_errors.html' %}
+    </div>
+  {% elif field|is_checkboxselectmultiple %}
+    <div class="field {% if field.errors %}has-error{% endif %} {{ wrapper_class }}"
+         {% if field.errors %}data-invalid{% endif %}>
+      {% if field.label %}
+        <label class="field-label" {% if field.field.required %}data-required{% endif %}>{{ field.label|safe }}</label>
+      {% endif %}
+      {% include 'aortl/layout/checkboxselectmultiple.html' %}
+      {% include 'aortl/layout/help_text_and_errors.html' %}
+    </div>
+  {% else %}
+    <div class="field {% if field.errors %}has-error{% endif %} {{ wrapper_class }}"
+         {% if field.errors %}data-invalid{% endif %}>
+      {% if field.label %}
+        <label class="field-label" for="{{ field.id_for_label }}" {% if field.field.required %}data-required{% endif %}>{{ field.label|safe }}</label>
+      {% endif %}
+      {% if field|is_select %}
+        {% crispy_field field 'class' 'select select-bordered' %}
+      {% elif field|is_file %}
+        {% crispy_field field 'class' 'input input-bordered' %}
+      {% elif field.field.widget.template_name == "django/forms/widgets/textarea.html" %}
+        {% crispy_field field 'class' 'textarea textarea-bordered' %}
+      {% else %}
+        {% crispy_field field 'class' 'input input-bordered' %}
+      {% endif %}
+      {% include 'aortl/layout/help_text_and_errors.html' %}
+    </div>
+  {% endif %}
+{% endif %}

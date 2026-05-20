@@ -1,0 +1,60 @@
+name: Release (Python)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "python/aortl-admin/pyproject.toml"
+      - "python/aortl-admin/src/aortl_admin/__init__.py"
+  workflow_dispatch:
+
+concurrency:
+  group: release-python
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Determine if a release is needed
+        id: plan
+        run: |
+          set -euo pipefail
+          VERSION="$(grep -E '^__version__' python/aortl-admin/src/aortl_admin/__init__.py | sed -E 's/.*"([^"]+)".*/\1/')"
+          TAG="aortl-admin@$VERSION"
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "✓ $TAG already tagged, skipping"
+            echo "release=" >> "$GITHUB_OUTPUT"
+          else
+            echo "→ Will release $TAG"
+            echo "release=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build (build hook vendors admin-css automatically)
+        if: steps.plan.outputs.release != ''
+        working-directory: python/aortl-admin
+        run: uv build
+
+      - name: Publish to PyPI
+        if: steps.plan.outputs.release != ''
+        working-directory: python/aortl-admin
+        run: uv publish
+
+      - name: Tag release
+        if: steps.plan.outputs.release != ''
+        run: |
+          git tag "${{ steps.plan.outputs.tag }}"
+          git push origin "${{ steps.plan.outputs.tag }}"

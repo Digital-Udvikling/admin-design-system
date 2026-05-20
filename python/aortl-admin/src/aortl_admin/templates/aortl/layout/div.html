@@ -1,0 +1,6 @@
+{% load crispy_forms_tags %}
+<div class="{{ css_class }}"
+     {% if div.id %}id="{{ div.id }}"{% endif %}
+     {{ flat_attrs|safe }}>
+  {{ fields|safe }}
+</div>

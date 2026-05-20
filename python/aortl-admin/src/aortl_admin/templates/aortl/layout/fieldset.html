@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+<fieldset class="flex flex-col gap-4 {{ css_class }}"
+          {% if fieldset_id %}id="{{ fieldset_id }}"{% endif %}
+          {{ flat_attrs|safe }}>
+  {% if legend %}<legend class="text-sm font-semibold text-text mb-2">{{ legend|safe }}</legend>{% endif %}
+  {{ fields|safe }}
+</fieldset>

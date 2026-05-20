@@ -1,0 +1,87 @@
+---
+title: Django
+description: Use the design system in a Django project via the aortl-admin Python package and django-tailwind-cli — no Node toolchain required.
+sidebar:
+  order: 4
+---
+
+`aortl-admin` is a Django distribution of the design system. It vendors the same `admin-css` source the React side uses and pairs with [`django-tailwind-cli`](https://github.com/oliverandrich/django-tailwind-cli) to compile via Tailwind v4's standalone Rust binary — your build pipeline stays Node-free.
+
+## Install
+
+```fish
+uv add aortl-admin django django-tailwind-cli
+```
+
+For the optional crispy template pack:
+
+```fish
+uv add 'aortl-admin[crispy]' django-crispy-forms
+```
+
+## Configure
+
+```python
+# settings.py
+INSTALLED_APPS = [
+    # ...
+    "django_tailwind_cli",
+    "aortl_admin",
+    "crispy_forms",  # optional
+]
+
+TAILWIND_CLI_SRC_CSS = "assets/css/aortl.input.css"
+TAILWIND_CLI_DIST_CSS = "css/aortl.output.css"
+
+# Optional, only with the crispy extra:
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["aortl"]
+CRISPY_TEMPLATE_PACK = "aortl"
+```
+
+## Scaffold
+
+```fish
+uv run python manage.py aortl_admin_init
+```
+
+This writes two files into your project:
+
+- `assets/css/aortl.input.css` — Tailwind entry CSS that `@import`s the design-system source from the package's site-packages location (the absolute paths are resolved at scaffold time).
+- `templates/aortl_base.html` — a starter base template that extends `aortl_admin/base.html`.
+
+Re-run with `--refresh-paths` if you move to a different virtualenv.
+
+## Build CSS
+
+```fish
+uv run python manage.py tailwind build
+```
+
+The first run downloads the [Tailwind v4 Oxide standalone binary](https://github.com/tailwindlabs/tailwindcss/releases) (single Rust executable, ~10 MB). No Node, no npm, no `package.json`.
+
+For development with watch + livereload:
+
+```fish
+uv run python manage.py tailwind runserver
+```
+
+## Render a page
+
+```django
+{% extends "aortl_base.html" %}
+
+{% block content %}
+  <div class="p-6">
+    <h1 class="text-2xl font-semibold mb-4">Dashboard</h1>
+    <button class="btn btn-primary">Save</button>
+  </div>
+{% endblock %}
+```
+
+## Next
+
+- [Django module overview](../../modules/django/) — what's in the package, how the pieces fit together.
+- [App shell](../../modules/django/app-shell/) — base template blocks, sidebar/navbar tags, customization.
+- [Forms](../../modules/django/forms/) — the `aortl` crispy template pack and the non-crispy `AortlFormMixin`.
+- [Tailwind config](../../modules/django/tailwind-config/) — `@source` patterns, project-local components, path refresh.
+- [Theming](../../modules/django/theming/) — dark mode, token overrides, Tabler icons setup.

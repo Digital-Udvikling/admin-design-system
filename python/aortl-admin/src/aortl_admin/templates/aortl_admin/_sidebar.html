@@ -1,0 +1,13 @@
+<aside class="sidebar">
+  {% block sidebar_header %}{% endblock %}
+  <nav class="sidebar-nav">
+    {% block sidebar_nav %}{% endblock %}
+  </nav>
+  {% block sidebar_footer %}
+    <div class="sidebar-footer">
+      <label class="sidebar-collapse-toggle">
+        <input type="checkbox" class="sidebar-toggle" aria-label="Collapse sidebar" />
+      </label>
+    </div>
+  {% endblock %}
+</aside>

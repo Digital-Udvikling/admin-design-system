@@ -157,9 +157,25 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 
 No build config changes needed for new components.
 
+## Django distribution (`python/aortl-admin/`)
+
+A sibling Python package distributes the same design system to Django projects without requiring Node. It pairs with [`django-tailwind-cli`](https://github.com/oliverandrich/django-tailwind-cli), which downloads the Tailwind v4 standalone Rust binary on demand.
+
+- **CSS vendoring** — A hatchling build hook (`hatch_build.py`) runs `scripts/sync_css.py` on every `uv build` / `uv pip install -e .`, copying `packages/admin-css/src/*` into `python/aortl-admin/src/aortl_admin/static/aortl_admin/css/`. That destination is **gitignored** — it's a build artifact, not a checked-in mirror. Sdists carry the vendored files via `[tool.hatch.build.targets.sdist] artifacts = [...]` so wheel-from-sdist builds (the PyPI path) work without reaching back into the monorepo. The script bails gracefully when source is missing but dest is already populated. The two packages still version in lockstep — bump both in the same commit so `SOURCE_VERSION` matches.
+- **App-shell + templatetags** — `aortl_admin/templates/aortl_admin/{base,_navbar,_sidebar}.html` and `templatetags/aortl_admin.py` (`{% nav_item %}`, `{% sidebar_item %}`, `is_active` filter).
+- **Init command** — `manage.py aortl_admin_init` scaffolds `assets/css/aortl.input.css` (with absolute `@import` paths resolved at scaffold time) and `templates/aortl_base.html`. `--refresh-paths` re-resolves the absolute paths after a venv move.
+- **Crispy template pack** _(optional extra)_ — `aortl_admin/templates/aortl/` plus `crispy` install extra. Layout primitives (`Row`, `Column`, `Div`, `Fieldset`) emit Tailwind utility classes, not new design-system classes.
+- **Form mixin** — `aortl_admin.forms.AortlFormMixin` for non-crispy projects, applies widget classes at form instantiation.
+
+Tests are `pytest` + `pytest-django` (`python/aortl-admin/tests/`); crispy tests use `pytest.importorskip("crispy_forms")` so they're skipped when the extra isn't installed. CI is `.github/workflows/python-ci.yml` (matrix on Python 3.11–3.13). Release is `release-python.yml`, triggered by changes to `python/aortl-admin/pyproject.toml` or `__init__.py` — mirrors the npm release flow, uses PyPI trusted publishing.
+
+Docs live under `apps/docs/src/content/docs/getting-started/django.mdx` and `modules/django/*.mdx`.
+
 ## Releasing
 
 Bump `version` in a package's `package.json`, commit, push to `main`. `.github/workflows/release.yml` triggers on path `packages/*/package.json`, diffs the version against existing git tags, then builds + `pnpm publish --provenance` + tags `<name>@<version>` for each package that's ahead. Do not publish manually; do not amend version commits after push.
+
+For `aortl-admin` (Python): bump `__version__` in `python/aortl-admin/src/aortl_admin/__init__.py` (`pyproject.toml` reads it via hatchling), commit, push. The build hook re-vendors CSS during `uv build` so there's nothing manual to do. `release-python.yml` builds + `uv publish` + tags `aortl-admin@<version>`. Keep this in lockstep with `@aortl/admin-css` bumps.
 
 Docs deploy is a separate workflow (`deploy.yml`) — runs on every push to `main`, publishes `apps/docs/dist` to GitHub Pages.
 

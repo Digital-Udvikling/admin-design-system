@@ -1,0 +1,12 @@
+# Vendored at build time from packages/admin-css/src/ by hatch_build.py.
+# Regenerated automatically on every `uv build` and `uv pip install -e .`.
+src/aortl_admin/static/aortl_admin/css/
+
+# Build artifacts
+dist/
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.pyc

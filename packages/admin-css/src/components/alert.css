@@ -12,15 +12,29 @@
     grid-template-columns: auto 1fr;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
-    align-items: start;
+    align-items: center;
   }
 
   .alert > :is(i, svg):first-child {
-    grid-row: 1 / -1;
-    align-self: start;
     font-size: 1rem;
     line-height: 1.25;
-    flex-shrink: 0;
+  }
+
+  /* With a title/description, declare two explicit rows so the icon can span
+     them (`grid-row: 1 / -1` only resolves correctly against an explicit grid)
+     and force the text parts into column 2 so the description doesn't wrap
+     under the icon. */
+  .alert:has(> :is(i, svg):first-child):has(> .alert-title) {
+    grid-template-rows: auto auto;
+    align-items: start;
+  }
+
+  .alert:has(> .alert-title) > :is(i, svg):first-child {
+    grid-row: 1 / -1;
+  }
+
+  .alert > :is(.alert-title, .alert-description) {
+    grid-column: 2;
   }
 
   .alert-info {
@@ -40,7 +54,7 @@
   }
 
   .alert-title {
-    @apply font-medium leading-none;
+    @apply font-medium;
   }
 
   .alert-info .alert-title,
@@ -64,6 +78,6 @@
   }
 
   .alert-description {
-    @apply text-text-muted leading-relaxed;
+    @apply text-text-muted;
   }
 }

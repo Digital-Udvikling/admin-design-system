@@ -9,3 +9,4 @@ dist
 .vite
 .turbo
 coverage
+.claude/worktrees

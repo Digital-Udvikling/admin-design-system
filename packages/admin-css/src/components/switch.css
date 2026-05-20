@@ -8,6 +8,7 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
+  /* Base UI button variant: state is driven by data-* attributes. */
   .switch[data-unchecked] {
     @apply bg-border-strong;
   }
@@ -26,6 +27,25 @@
   }
 
   .switch[data-checked] .switch-thumb {
+    @apply translate-x-4;
+  }
+
+  /* Native input variant: state is driven by :checked, thumb is ::before. */
+  input.switch {
+    @apply appearance-none bg-border-strong m-0;
+  }
+
+  input.switch:checked {
+    @apply bg-primary;
+  }
+
+  input.switch::before {
+    content: "";
+    @apply size-4 rounded-full bg-paper shadow-sm
+           transition-transform duration-150;
+  }
+
+  input.switch:checked::before {
     @apply translate-x-4;
   }
 }

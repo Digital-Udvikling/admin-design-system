@@ -14,12 +14,8 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 :::example
 
 ```html
-<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked>
-  <span class="switch-thumb"></span>
-</button>
-<button type="button" role="switch" aria-checked="true" class="switch" data-checked>
-  <span class="switch-thumb"></span>
-</button>
+<input type="checkbox" role="switch" class="switch" />
+<input type="checkbox" role="switch" class="switch" checked />
 ```
 
 ```tsx
@@ -34,12 +30,8 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 :::example
 
 ```html
-<button type="button" role="switch" aria-checked="false" class="switch" data-unchecked disabled>
-  <span class="switch-thumb"></span>
-</button>
-<button type="button" role="switch" aria-checked="true" class="switch" data-checked disabled>
-  <span class="switch-thumb"></span>
-</button>
+<input type="checkbox" role="switch" class="switch" disabled />
+<input type="checkbox" role="switch" class="switch" disabled checked />
 ```
 
 ```tsx
@@ -55,9 +47,7 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 
 ```html
 <div class="field" style="flex-direction: row; align-items: center; gap: 0.75rem;">
-  <button type="button" role="switch" aria-checked="true" class="switch" data-checked>
-    <span class="switch-thumb"></span>
-  </button>
+  <input type="checkbox" role="switch" class="switch" checked />
   <label class="field-label">Email notifications</label>
 </div>
 ```

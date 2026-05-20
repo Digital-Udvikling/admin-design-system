@@ -77,6 +77,12 @@ React components stay tiny by wrapping Base UI primitives (`@base-ui/react/butto
 
 Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) by default; `[data-theme="dark"]` / `[data-theme="light"]` force a mode and can be scoped to any subtree. A `@custom-variant dark` block aligns Tailwind's `dark:` variant with the same `[data-theme]` rules — important so authored utilities track the tokens.
 
+### Icons (Tabler)
+
+The system recommends **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. It's a recommendation, not a hard dep: nothing in `admin-css` or `admin-react` imports Tabler. `apps/docs` has both as devDeps so `:::example` previews render in both tabs; end-user install lives in the `getting-started/*` pages and `/theme/icons/` covers usage.
+
+Components accommodate icons as a direct child of the root — `(inline-)flex items-center gap-2`, or `:has()` to switch layout when a leading `<i>`/`<svg>` is present (`.alert`, `.accordion-summary`). No wrapper class needed, and no named icon slot unless one is structurally required — `<Sidebar.Icon>` is the exception because it has to stay visible in the collapsed rail.
+
 ### Build pipeline
 
 Workspace order matters: `admin-css` builds first (Tailwind CLI produces `dist/admin.css` + `.min.css`); `admin-react` builds second (Vite lib mode, externals everything; then `cp ../admin-css/dist/admin.css ./dist/admin.css` for the `./styles.css` subpath export); `docs` builds last.
@@ -126,7 +132,7 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 
 ## Adding a component
 
-1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, ...).
+1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, ...). If the component might host an icon, lay out the root with flex + gap so a leading `<i>`/`<svg>` works without a wrapper — see **Icons (Tabler)**.
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
 3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose class names with `clsx`, re-export from `src/index.ts` (export both the component and its types).
 4. (If you added a React component) `packages/admin-react/src/<Name>.test.tsx` — at minimum a smoke test; add interaction tests for any controlled state. See the **Tests** section above.

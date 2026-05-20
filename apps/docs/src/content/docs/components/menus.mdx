@@ -4,6 +4,14 @@ description: Dropdown menu built on native <details> + <summary>. CSS-only — o
 ---
 
 import { Menu, Button, ButtonGroup } from "@aortl/admin-react";
+import {
+  IconPencil,
+  IconCopy,
+  IconTrash,
+  IconBook,
+  IconHistory,
+  IconLifebuoy,
+} from "@tabler/icons-react";
 
 Menus are a `<details>` element with a `<summary>` trigger and a positioned popup. The browser handles open/close and the chevron rotation tracks `[open]` via CSS. There is no light dismiss; click the trigger again, or move focus, to close.
 
@@ -13,16 +21,27 @@ The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout
 
 ### Basic
 
+`.menu-item` already lays out as `flex items-center gap-2`, so a leading icon as the first child sits naturally next to the label. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+
 :::example
 
 ```html
 <details class="menu">
   <summary class="menu-trigger">Open menu</summary>
   <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">Edit</button>
-    <button class="menu-item" type="button">Duplicate</button>
+    <button class="menu-item" type="button">
+      <i class="ti ti-pencil" aria-hidden="true"></i>
+      Edit
+    </button>
+    <button class="menu-item" type="button">
+      <i class="ti ti-copy" aria-hidden="true"></i>
+      Duplicate
+    </button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button">Delete</button>
+    <button class="menu-item" type="button">
+      <i class="ti ti-trash" aria-hidden="true"></i>
+      Delete
+    </button>
   </div>
 </details>
 ```
@@ -31,10 +50,19 @@ The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout
 <Menu>
   <Menu.Trigger>Open menu</Menu.Trigger>
   <Menu.Popup>
-    <Menu.Item>Edit</Menu.Item>
-    <Menu.Item>Duplicate</Menu.Item>
+    <Menu.Item>
+      <IconPencil size={16} aria-hidden />
+      Edit
+    </Menu.Item>
+    <Menu.Item>
+      <IconCopy size={16} aria-hidden />
+      Duplicate
+    </Menu.Item>
     <Menu.Separator />
-    <Menu.Item>Delete</Menu.Item>
+    <Menu.Item>
+      <IconTrash size={16} aria-hidden />
+      Delete
+    </Menu.Item>
   </Menu.Popup>
 </Menu>
 ```
@@ -53,13 +81,22 @@ Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is 
   <Menu.Popup>
     <Menu.Group>
       <Menu.GroupLabel>Internal</Menu.GroupLabel>
-      <Menu.LinkItem href="#docs">Docs</Menu.LinkItem>
-      <Menu.LinkItem href="#changelog">Changelog</Menu.LinkItem>
+      <Menu.LinkItem href="#docs">
+        <IconBook size={16} aria-hidden />
+        Docs
+      </Menu.LinkItem>
+      <Menu.LinkItem href="#changelog">
+        <IconHistory size={16} aria-hidden />
+        Changelog
+      </Menu.LinkItem>
     </Menu.Group>
     <Menu.Separator />
     <Menu.Group>
       <Menu.GroupLabel>External</Menu.GroupLabel>
-      <Menu.LinkItem href="#support">Support</Menu.LinkItem>
+      <Menu.LinkItem href="#support">
+        <IconLifebuoy size={16} aria-hidden />
+        Support
+      </Menu.LinkItem>
     </Menu.Group>
   </Menu.Popup>
 </Menu>

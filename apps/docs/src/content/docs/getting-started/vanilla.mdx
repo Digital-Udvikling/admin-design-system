@@ -20,3 +20,26 @@ npm install @aortl/admin-css
 ```
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry.
+
+## Add icons (optional)
+
+The design system recommends [Tabler Icons](https://tabler.io/icons) as the icon library — see [Icons](../../theme/icons/) for the rationale, sizing convention, and usage patterns. The webfont distribution drops in without a bundler:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+/>
+```
+
+Pin a version (`@3.44.0` instead of `@latest`) for production. If you already have a CSS pipeline, install the package and `@import` the stylesheet instead:
+
+```bash
+npm install @tabler/icons-webfont
+```
+
+```css
+@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+```
+
+Then use icons with `<i class="ti ti-{name}"></i>`. Components like `.btn`, `.menu-item`, `.alert`, and `.sidebar-icon` already lay them out — no wrapper classes needed.

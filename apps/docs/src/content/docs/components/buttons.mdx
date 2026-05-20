@@ -4,6 +4,7 @@ description: Base class .btn + a variant + an optional size. Identical DOM from 
 ---
 
 import { Button } from "@aortl/admin-react";
+import { IconPlus, IconTrash, IconDownload, IconDotsVertical } from "@tabler/icons-react";
 
 ## Examples
 
@@ -71,6 +72,50 @@ import { Button } from "@aortl/admin-react";
 
 ```tsx
 <Button block>Continue</Button>
+```
+
+:::
+
+### With icons
+
+The button's `gap` handles spacing automatically — drop an icon in as a child and it sits next to the label. Hide decorative icons from assistive tech with `aria-hidden`. For icon-only buttons, give the button an `aria-label`. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+
+:::example
+
+```html
+<button class="btn btn-primary">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+  New order
+</button>
+<button class="btn btn-secondary">
+  Export
+  <i class="ti ti-download" aria-hidden="true"></i>
+</button>
+<button class="btn btn-ghost" aria-label="More actions">
+  <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+</button>
+<button class="btn btn-danger">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+  Delete
+</button>
+```
+
+```tsx
+<Button variant="primary">
+  <IconPlus size={16} aria-hidden />
+  New order
+</Button>
+<Button variant="secondary">
+  Export
+  <IconDownload size={16} aria-hidden />
+</Button>
+<Button variant="ghost" aria-label="More actions">
+  <IconDotsVertical size={16} aria-hidden />
+</Button>
+<Button variant="danger">
+  <IconTrash size={16} aria-hidden />
+  Delete
+</Button>
 ```
 
 :::

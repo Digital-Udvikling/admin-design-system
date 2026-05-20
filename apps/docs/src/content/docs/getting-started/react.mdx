@@ -36,6 +36,27 @@ export function SignIn() {
 }
 ```
 
+## Add icons (optional)
+
+The design system recommends [Tabler Icons](https://tabler.io/icons) as the icon library — see [Icons](../../theme/icons/) for the rationale, sizing convention, and usage patterns. Install the typed React package:
+
+```bash
+npm install @tabler/icons-react
+```
+
+Then import icons by name — bundlers will tree-shake unused ones:
+
+```tsx
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+
+<Button variant="primary">
+  <IconPlus size={16} aria-hidden />
+  New order
+</Button>;
+```
+
+Components like `<Button>`, `<Menu.Item>`, `<Alert>`, and `<Sidebar.Icon>` already lay icons out — no wrapper required.
+
 ## Notes
 
 - Styles come from one CSS file — see [Customize](../../theme/customize/) to override design tokens.

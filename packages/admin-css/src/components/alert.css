@@ -3,6 +3,26 @@
     @apply flex flex-col gap-1 w-full px-3 py-2 rounded-md border text-sm text-text;
   }
 
+  /* Leading icon as a direct child switches the layout to a two-column grid:
+     icon spans all rows on the left, title/description stack on the right.
+     No wrapper needed — works with `<i class="ti …">`, `@tabler/icons-react`,
+     or any other inline SVG. */
+  .alert:has(> :is(i, svg):first-child) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    align-items: start;
+  }
+
+  .alert > :is(i, svg):first-child {
+    grid-row: 1 / -1;
+    align-self: start;
+    font-size: 1rem;
+    line-height: 1.25;
+    flex-shrink: 0;
+  }
+
   .alert-info {
     @apply bg-info-muted border-info-muted;
   }
@@ -23,19 +43,23 @@
     @apply font-medium leading-none;
   }
 
-  .alert-info .alert-title {
+  .alert-info .alert-title,
+  .alert-info > :is(i, svg):first-child {
     @apply text-info;
   }
 
-  .alert-success .alert-title {
+  .alert-success .alert-title,
+  .alert-success > :is(i, svg):first-child {
     @apply text-success;
   }
 
-  .alert-warning .alert-title {
+  .alert-warning .alert-title,
+  .alert-warning > :is(i, svg):first-child {
     @apply text-warning;
   }
 
-  .alert-danger .alert-title {
+  .alert-danger .alert-title,
+  .alert-danger > :is(i, svg):first-child {
     @apply text-danger;
   }
 

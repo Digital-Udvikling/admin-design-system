@@ -13,7 +13,7 @@
   }
 
   .card-title {
-    @apply text-lg font-semibold leading-tight;
+    @apply flex items-center gap-2 text-lg font-semibold leading-tight;
   }
 
   .card-description {

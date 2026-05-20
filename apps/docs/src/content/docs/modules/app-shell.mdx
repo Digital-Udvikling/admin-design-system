@@ -6,6 +6,16 @@ sidebar:
 ---
 
 import { AppShell, Navbar, Sidebar, Footer, Menu, Select } from "@aortl/admin-react";
+import {
+  IconHome,
+  IconReceipt,
+  IconPackage,
+  IconChartBar,
+  IconSettings,
+  IconTruck,
+  IconShoppingCart,
+  IconHeadset,
+} from "@tabler/icons-react";
 
 The app shell is the layout primitive every admin page sits inside. It owns a CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — and a small React context for the mobile drawer state. The pieces it composes work standalone outside the shell, too.
 
@@ -64,9 +74,15 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
   <Sidebar>
     <Sidebar.Nav>
       <Sidebar.Item href="#" active>
+        <Sidebar.Icon>
+          <IconHome size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Dashboard</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconReceipt size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Orders</Sidebar.Label>
       </Sidebar.Item>
     </Sidebar.Nav>
@@ -248,18 +264,30 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
     <Sidebar.Group>
       <Sidebar.GroupLabel>Workspace</Sidebar.GroupLabel>
       <Sidebar.Item href="#" active>
+        <Sidebar.Icon>
+          <IconHome size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Dashboard</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconReceipt size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Orders</Sidebar.Label>
       </Sidebar.Item>
     </Sidebar.Group>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Catalogue</Sidebar.GroupLabel>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconPackage size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Products</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconChartBar size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Categories</Sidebar.Label>
       </Sidebar.Item>
     </Sidebar.Group>
@@ -278,9 +306,13 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 ```html
 <aside class="sidebar" style="height: 22rem">
   <nav class="sidebar-nav">
-    <a class="sidebar-item" href="#"><span class="sidebar-label">Ordrer</span></a>
+    <a class="sidebar-item" href="#">
+      <span class="sidebar-icon"><i class="ti ti-receipt" aria-hidden="true"></i></span>
+      <span class="sidebar-label">Ordrer</span>
+    </a>
     <details class="sidebar-collapsible" open>
       <summary class="sidebar-collapsible-trigger">
+        <span class="sidebar-icon"><i class="ti ti-shopping-cart" aria-hidden="true"></i></span>
         <span class="sidebar-label">Webshop</span>
       </summary>
       <div class="sidebar-collapsible-panel">
@@ -290,7 +322,10 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
         <a class="sidebar-subitem" href="#">Redirects</a>
       </div>
     </details>
-    <a class="sidebar-item" href="#"><span class="sidebar-label">Lager</span></a>
+    <a class="sidebar-item" href="#">
+      <span class="sidebar-icon"><i class="ti ti-package" aria-hidden="true"></i></span>
+      <span class="sidebar-label">Lager</span>
+    </a>
   </nav>
 </aside>
 ```
@@ -299,9 +334,22 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 <Sidebar style={{ height: "22rem" }}>
   <Sidebar.Nav>
     <Sidebar.Item href="#">
+      <Sidebar.Icon>
+        <IconReceipt size={16} aria-hidden />
+      </Sidebar.Icon>
       <Sidebar.Label>Ordrer</Sidebar.Label>
     </Sidebar.Item>
-    <Sidebar.Collapsible defaultOpen trigger={<Sidebar.Label>Webshop</Sidebar.Label>}>
+    <Sidebar.Collapsible
+      defaultOpen
+      trigger={
+        <>
+          <Sidebar.Icon>
+            <IconShoppingCart size={16} aria-hidden />
+          </Sidebar.Icon>
+          <Sidebar.Label>Webshop</Sidebar.Label>
+        </>
+      }
+    >
       <Sidebar.SubItem href="#" active>
         CMS
       </Sidebar.SubItem>
@@ -310,6 +358,9 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
       <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
     </Sidebar.Collapsible>
     <Sidebar.Item href="#">
+      <Sidebar.Icon>
+        <IconPackage size={16} aria-hidden />
+      </Sidebar.Icon>
       <Sidebar.Label>Lager</Sidebar.Label>
     </Sidebar.Item>
   </Sidebar.Nav>
@@ -331,33 +382,13 @@ React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `default
   <nav class="sidebar-nav">
     <a class="sidebar-item" href="#" aria-current="page">
       <span class="sidebar-icon">
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M3 12l9-9 9 9" />
-          <path d="M5 10v10h14V10" />
-        </svg>
+        <i class="ti ti-home" aria-hidden="true"></i>
       </span>
       <span class="sidebar-label">Dashboard</span>
     </a>
     <a class="sidebar-item" href="#">
       <span class="sidebar-icon">
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <rect x="3" y="4" width="18" height="16" rx="2" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
+        <i class="ti ti-receipt" aria-hidden="true"></i>
       </span>
       <span class="sidebar-label">Orders</span>
     </a>
@@ -376,33 +407,13 @@ React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `default
   <Sidebar.Nav>
     <Sidebar.Item href="#" active>
       <Sidebar.Icon>
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path d="M3 12l9-9 9 9" />
-          <path d="M5 10v10h14V10" />
-        </svg>
+        <IconHome size={16} aria-hidden />
       </Sidebar.Icon>
       <Sidebar.Label>Dashboard</Sidebar.Label>
     </Sidebar.Item>
     <Sidebar.Item href="#">
       <Sidebar.Icon>
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <rect x="3" y="4" width="18" height="16" rx="2" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
+        <IconReceipt size={16} aria-hidden />
       </Sidebar.Icon>
       <Sidebar.Label>Orders</Sidebar.Label>
     </Sidebar.Item>
@@ -430,9 +441,15 @@ Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below the `md` bre
   <Sidebar>
     <Sidebar.Nav>
       <Sidebar.Item href="#" active>
+        <Sidebar.Icon>
+          <IconHome size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Dashboard</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconReceipt size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Orders</Sidebar.Label>
       </Sidebar.Item>
     </Sidebar.Nav>
@@ -521,18 +538,40 @@ Sidebar-first with a shop selector in the navbar, tree navigation for a section 
   <Sidebar>
     <Sidebar.Nav>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconSettings size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Indstillinger</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconReceipt size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Ordrer</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconHeadset size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Kundeservice</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconPackage size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Produkter</Sidebar.Label>
       </Sidebar.Item>
-      <Sidebar.Collapsible defaultOpen trigger={<Sidebar.Label>Webshop</Sidebar.Label>}>
+      <Sidebar.Collapsible
+        defaultOpen
+        trigger={
+          <>
+            <Sidebar.Icon>
+              <IconShoppingCart size={16} aria-hidden />
+            </Sidebar.Icon>
+            <Sidebar.Label>Webshop</Sidebar.Label>
+          </>
+        }
+      >
         <Sidebar.SubItem href="#" active>
           CMS
         </Sidebar.SubItem>
@@ -541,9 +580,15 @@ Sidebar-first with a shop selector in the navbar, tree navigation for a section 
         <Sidebar.SubItem href="#">Redirects</Sidebar.SubItem>
       </Sidebar.Collapsible>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconTruck size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Lager</Sidebar.Label>
       </Sidebar.Item>
       <Sidebar.Item href="#">
+        <Sidebar.Icon>
+          <IconChartBar size={16} aria-hidden />
+        </Sidebar.Icon>
         <Sidebar.Label>Statistik</Sidebar.Label>
       </Sidebar.Item>
     </Sidebar.Nav>

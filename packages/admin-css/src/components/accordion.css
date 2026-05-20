@@ -22,7 +22,7 @@
   }
 
   .accordion-summary {
-    @apply flex items-center justify-between gap-2
+    @apply flex items-center gap-2
            px-4 py-3 cursor-pointer select-none
            text-sm font-medium text-text
            hover:bg-surface-muted
@@ -34,7 +34,8 @@
     display: none;
   }
 
-  /* Chevron — rotates when the item is open. */
+  /* Chevron — pushed to the end with margin-left: auto so any number of
+     leading items (label, optional icon) sit together on the start side. */
   .accordion-summary::after {
     content: "";
     width: 0.5rem;
@@ -44,6 +45,7 @@
     transform: rotate(45deg);
     transition: transform 150ms ease;
     flex-shrink: 0;
+    margin-left: auto;
   }
 
   .accordion-item[open] > .accordion-summary::after {

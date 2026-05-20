@@ -4,6 +4,7 @@ description: Native <details> + <summary>, smoothed by interpolate-size and ::de
 ---
 
 import { Accordion } from "@aortl/admin-react";
+import { IconUser, IconBell, IconCreditCard } from "@tabler/icons-react";
 
 Native disclosure widgets ship with the correct ARIA semantics, keyboard handling, and browser find-in-page behaviour out of the box. The `.accordion-*` classes layer purely visual styling on top of `<details>` and `<summary>`, and `interpolate-size: allow-keywords` plus `::details-content` give them a smooth open/close animation in modern browsers. Older browsers degrade to the default instant toggle — no JavaScript, no fallback to ship.
 
@@ -35,22 +36,31 @@ Native disclosure widgets ship with the correct ARIA semantics, keyboard handlin
 
 ### Grouped items
 
-Adjacent items collapse their shared border and the group rounds only on the outer corners.
+Adjacent items collapse their shared border and the group rounds only on the outer corners. A leading icon in the summary sits next to the label — the chevron stays on the right. See [Icons](/admin-design-system/theme/icons/).
 
 :::example
 
 ```html
 <div class="accordion">
   <details class="accordion-item">
-    <summary class="accordion-summary">Account</summary>
+    <summary class="accordion-summary">
+      <i class="ti ti-user" aria-hidden="true"></i>
+      Account
+    </summary>
     <div class="accordion-content">Name, email, password.</div>
   </details>
   <details class="accordion-item">
-    <summary class="accordion-summary">Notifications</summary>
+    <summary class="accordion-summary">
+      <i class="ti ti-bell" aria-hidden="true"></i>
+      Notifications
+    </summary>
     <div class="accordion-content">Email digests, push, in-app banners.</div>
   </details>
   <details class="accordion-item">
-    <summary class="accordion-summary">Billing</summary>
+    <summary class="accordion-summary">
+      <i class="ti ti-credit-card" aria-hidden="true"></i>
+      Billing
+    </summary>
     <div class="accordion-content">Plan, payment methods, invoices.</div>
   </details>
 </div>
@@ -59,15 +69,24 @@ Adjacent items collapse their shared border and the group rounds only on the out
 ```tsx
 <Accordion>
   <Accordion.Item>
-    <Accordion.Summary>Account</Accordion.Summary>
+    <Accordion.Summary>
+      <IconUser size={16} aria-hidden />
+      Account
+    </Accordion.Summary>
     <Accordion.Content>Name, email, password.</Accordion.Content>
   </Accordion.Item>
   <Accordion.Item>
-    <Accordion.Summary>Notifications</Accordion.Summary>
+    <Accordion.Summary>
+      <IconBell size={16} aria-hidden />
+      Notifications
+    </Accordion.Summary>
     <Accordion.Content>Email digests, push, in-app banners.</Accordion.Content>
   </Accordion.Item>
   <Accordion.Item>
-    <Accordion.Summary>Billing</Accordion.Summary>
+    <Accordion.Summary>
+      <IconCreditCard size={16} aria-hidden />
+      Billing
+    </Accordion.Summary>
     <Accordion.Content>Plan, payment methods, invoices.</Accordion.Content>
   </Accordion.Item>
 </Accordion>

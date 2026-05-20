@@ -4,6 +4,7 @@ description: A container with optional title, description, and actions. Identica
 ---
 
 import { Button, Card, Input } from "@aortl/admin-react";
+import { IconShoppingBag, IconArrowRight } from "@tabler/icons-react";
 
 A container with optional title, description, and actions.
 
@@ -95,6 +96,50 @@ A container with optional title, description, and actions.
   <Card.Body>
     <Card.Title>Flat & dense</Card.Title>
     <Card.Description>Less padding, stronger border, no shadow.</Card.Description>
+  </Card.Body>
+</Card>
+```
+
+:::
+
+### With icon
+
+Card titles are headings — drop a Tabler icon inside the heading or use one in an action button. See [Icons](/admin-design-system/theme/icons/).
+
+:::example
+
+```html
+<div class="card card-bordered">
+  <div class="card-body">
+    <h3 class="card-title">
+      <i class="ti ti-shopping-bag" aria-hidden="true"></i>
+      Today's orders
+    </h3>
+    <p class="card-description">128 placed, 14 awaiting fulfilment.</p>
+    <div class="card-actions">
+      <button class="btn btn-primary btn-sm">
+        Open queue
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+```tsx
+<Card bordered>
+  <Card.Body>
+    <Card.Title>
+      <IconShoppingBag size={16} aria-hidden />
+      Today's orders
+    </Card.Title>
+    <Card.Description>128 placed, 14 awaiting fulfilment.</Card.Description>
+    <Card.Actions>
+      <Button size="sm">
+        Open queue
+        <IconArrowRight size={16} aria-hidden />
+      </Button>
+    </Card.Actions>
   </Card.Body>
 </Card>
 ```

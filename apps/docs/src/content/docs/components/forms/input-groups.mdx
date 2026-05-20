@@ -4,6 +4,7 @@ description: Combine inputs, addons, and buttons into a single flush row with me
 ---
 
 import { Button, Input, InputGroup } from "@aortl/admin-react";
+import { IconSearch, IconAt, IconArrowRight } from "@tabler/icons-react";
 
 Use input groups to attach a prefix, suffix, or action button directly to an input. The group collapses the shared border between adjacent children and keeps the outer corners rounded — replacements for crispy's `PrependedText`, `AppendedText`, and `FieldWithButtons` layout objects.
 
@@ -86,6 +87,52 @@ Use input groups to attach a prefix, suffix, or action button directly to an inp
 <InputGroup>
   <Input type="search" placeholder="Search orders…" />
   <Button type="submit">Search</Button>
+</InputGroup>
+```
+
+:::
+
+### With icon addons
+
+`.input-group-addon` accepts any content — drop a Tabler icon for a quick visual hint. See [Icons](/admin-design-system/theme/icons/).
+
+:::example
+
+```html
+<div class="input-group">
+  <span class="input-group-addon" aria-hidden="true"><i class="ti ti-search"></i></span>
+  <input class="input input-bordered" type="search" placeholder="Search products…" />
+</div>
+<div class="input-group">
+  <span class="input-group-addon" aria-hidden="true"><i class="ti ti-at"></i></span>
+  <input class="input input-bordered" type="email" placeholder="you@example.com" />
+</div>
+<div class="input-group">
+  <input class="input input-bordered" type="text" placeholder="Enter command" />
+  <button class="btn btn-primary" type="submit" aria-label="Run">
+    <i class="ti ti-arrow-right" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<InputGroup>
+  <InputGroup.Addon aria-hidden>
+    <IconSearch size={16} />
+  </InputGroup.Addon>
+  <Input type="search" placeholder="Search products…" />
+</InputGroup>
+<InputGroup>
+  <InputGroup.Addon aria-hidden>
+    <IconAt size={16} />
+  </InputGroup.Addon>
+  <Input type="email" placeholder="you@example.com" />
+</InputGroup>
+<InputGroup>
+  <Input placeholder="Enter command" />
+  <Button type="submit" aria-label="Run">
+    <IconArrowRight size={16} aria-hidden />
+  </Button>
 </InputGroup>
 ```
 

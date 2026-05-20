@@ -4,6 +4,12 @@ description: Inline notifications for form errors, success messages, and other c
 ---
 
 import { Alert } from "@aortl/admin-react";
+import {
+  IconInfoCircle,
+  IconCircleCheck,
+  IconAlertTriangle,
+  IconAlertOctagon,
+} from "@tabler/icons-react";
 
 Use alerts to surface form-level errors, success confirmations, and other contextual messages above the content they relate to. For single-field validation messages, use [Fields](/admin-design-system/components/forms/fields/) instead.
 
@@ -44,6 +50,54 @@ Use alerts to surface form-level errors, success confirmations, and other contex
 <Alert variant="danger">
   <Alert.Title>Form has errors</Alert.Title>
   <Alert.Description>Please fix the issues below before submitting.</Alert.Description>
+</Alert>
+```
+
+:::
+
+### With a leading icon
+
+An icon (or any inline SVG) as the first child switches the alert to a two-column grid — the icon spans all rows on the left and inherits the variant colour automatically. Works for one-line alerts and for title + description alike. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+
+:::example
+
+```html
+<div class="alert alert-info" role="status">
+  <i class="ti ti-info-circle" aria-hidden="true"></i>
+  Backups run nightly at 02:00 UTC.
+</div>
+<div class="alert alert-success" role="status">
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  Changes saved.
+</div>
+<div class="alert alert-warning" role="alert">
+  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  This action is not reversible.
+</div>
+<div class="alert alert-danger" role="alert">
+  <i class="ti ti-alert-octagon" aria-hidden="true"></i>
+  <strong class="alert-title">Connection failed</strong>
+  <p class="alert-description">Could not reach the database. Retrying in 30s.</p>
+</div>
+```
+
+```tsx
+<Alert variant="info">
+  <IconInfoCircle size={16} aria-hidden />
+  Backups run nightly at 02:00 UTC.
+</Alert>
+<Alert variant="success">
+  <IconCircleCheck size={16} aria-hidden />
+  Changes saved.
+</Alert>
+<Alert variant="warning">
+  <IconAlertTriangle size={16} aria-hidden />
+  This action is not reversible.
+</Alert>
+<Alert variant="danger">
+  <IconAlertOctagon size={16} aria-hidden />
+  <Alert.Title>Connection failed</Alert.Title>
+  <Alert.Description>Could not reach the database. Retrying in 30s.</Alert.Description>
 </Alert>
 ```
 

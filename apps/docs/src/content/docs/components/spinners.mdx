@@ -1,0 +1,51 @@
+---
+title: Spinners
+description: Compact CSS-only loading indicator that tracks the host's currentColor.
+---
+
+import { Spinner } from "@aortl/admin-react";
+
+A pure-CSS rotating arc, sized in fractions of a rem so it lines up with text. The visible edge uses `currentColor`, so dropping a `.spinner` into any text context picks up the surrounding colour for free.
+
+For buttons specifically, prefer the `.btn-loading` modifier (or the React `loading` prop) — see [Buttons → Loading](/admin-design-system/components/buttons/#loading).
+
+## Examples
+
+### Sizes
+
+:::example
+
+```html
+<span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
+<span class="spinner" role="status" aria-label="Loading"></span>
+<span class="spinner spinner-lg" role="status" aria-label="Loading"></span>
+```
+
+```tsx
+<Spinner size="sm" />
+<Spinner />
+<Spinner size="lg" />
+```
+
+:::
+
+### Inherits text colour
+
+Drop a spinner into any text context — the arc colour follows.
+
+:::example
+
+```html
+<span style="color: var(--color-danger)">
+  <span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
+  Retrying connection
+</span>
+```
+
+```tsx
+<span style={{ color: "var(--color-danger)" }}>
+  <Spinner size="sm" /> Retrying connection
+</span>
+```
+
+:::

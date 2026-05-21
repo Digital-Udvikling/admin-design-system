@@ -40,6 +40,21 @@
     @apply w-full;
   }
 
+  /* Icon-only — equalises padding so the button reads as a square. The React
+     wrapper adds this automatically when `.btn` has an icon but no text
+     children; vanilla callers add it themselves. Pair with `aria-label`. */
+  .btn-square {
+    @apply px-2;
+  }
+
+  .btn-sm.btn-square {
+    @apply px-1.5;
+  }
+
+  .btn-lg.btn-square {
+    @apply px-2.5;
+  }
+
   /* Loading state — paints a spinner via ::before, so no extra markup is
      required. Sized in `em` so it tracks btn-sm / btn-lg. Pair with the
      `disabled` attribute (or the React wrapper, which sets it for you) for

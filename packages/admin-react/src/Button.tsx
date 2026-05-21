@@ -32,6 +32,7 @@ export function Button({
   children,
   ...rest
 }: ButtonProps) {
+  const iconOnly = children == null && (icon != null || iconTrailing != null);
   return (
     <BaseButton
       type={type}
@@ -44,6 +45,7 @@ export function Button({
           size !== "md" && `btn-${size}`,
           block && "btn-block",
           loading && "btn-loading",
+          iconOnly && "btn-square",
         ],
         className,
       )}

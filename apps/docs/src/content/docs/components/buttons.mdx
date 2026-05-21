@@ -4,7 +4,13 @@ description: Base class .btn + a variant + an optional size.
 ---
 
 import { Button } from "@aortl/admin-react";
-import { IconPlus, IconTrash, IconDownload, IconDotsVertical } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconTrash,
+  IconDownload,
+  IconDotsVertical,
+  IconPencil,
+} from "@tabler/icons-react";
 
 ## Examples
 
@@ -120,7 +126,7 @@ The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a hre
 
 ### With icons
 
-Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size={16}` with `aria-hidden`. For an icon-only button, pass just `icon` and add an `aria-label`. See [Icons](/admin-design-system/basics/icons/).
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size={16}` with `aria-hidden`. See [Icons](/admin-design-system/basics/icons/).
 
 :::example
 
@@ -133,9 +139,6 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
   Export
   <i class="ti ti-download" aria-hidden="true"></i>
 </button>
-<button class="btn btn-ghost" aria-label="More actions">
-  <i class="ti ti-dots-vertical" aria-hidden="true"></i>
-</button>
 <button class="btn btn-danger">
   <i class="ti ti-trash" aria-hidden="true"></i>
   Delete
@@ -145,8 +148,33 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
 ```tsx
 <Button variant="primary" icon={IconPlus}>New order</Button>
 <Button variant="secondary" iconTrailing={IconDownload}>Export</Button>
-<Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
 <Button variant="danger" icon={IconTrash}>Delete</Button>
+```
+
+:::
+
+### Icon-only
+
+Drop the label and pass `aria-label` for a square button — table row controls, toolbar icons, dismiss. The React wrapper adds `.btn-square` automatically when a button has an icon but no children; vanilla callers add the class themselves.
+
+:::example
+
+```html
+<button class="btn btn-ghost btn-square" type="button" aria-label="More actions">
+  <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+</button>
+<button class="btn btn-secondary btn-square btn-sm" type="button" aria-label="Edit">
+  <i class="ti ti-pencil" aria-hidden="true"></i>
+</button>
+<button class="btn btn-danger btn-square btn-lg" type="button" aria-label="Delete">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+</button>
+```
+
+```tsx
+<Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
+<Button variant="secondary" size="sm" icon={IconPencil} aria-label="Edit" />
+<Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
 ```
 
 :::

@@ -33,6 +33,32 @@ describe("Button", () => {
     expect(btn.lastElementChild).toBe(screen.getByTestId("trail"));
   });
 
+  describe("auto-squares for icon-only", () => {
+    function Icon(props: { "aria-hidden"?: boolean | "true" | "false" }) {
+      return <svg data-testid="icon" {...props} />;
+    }
+
+    it("adds btn-square when there is an icon but no children", () => {
+      render(<Button icon={Icon} aria-label="more" />);
+      expect(screen.getByRole("button")).toHaveClass("btn-square");
+    });
+
+    it("adds btn-square when there is a trailing icon but no children", () => {
+      render(<Button iconTrailing={Icon} aria-label="more" />);
+      expect(screen.getByRole("button")).toHaveClass("btn-square");
+    });
+
+    it("does not add btn-square when children sit alongside the icon", () => {
+      render(<Button icon={Icon}>Add</Button>);
+      expect(screen.getByRole("button")).not.toHaveClass("btn-square");
+    });
+
+    it("does not add btn-square when there is no icon", () => {
+      render(<Button aria-label="empty" />);
+      expect(screen.getByRole("button")).not.toHaveClass("btn-square");
+    });
+  });
+
   it("renders forwardRef icon components (the shape `@tabler/icons-react` uses)", () => {
     const IconForwarded = forwardRef<SVGSVGElement, { size?: number | string }>((props, ref) => (
       <svg ref={ref} data-testid="forwarded" {...props} />

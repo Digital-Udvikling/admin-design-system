@@ -4,14 +4,16 @@
   }
 
   /* List + tab buttons. Same classes are produced by Base UI (React) and the
-     vanilla radio-input markup, so styling is shared. */
-  .tab-list {
+     vanilla radio-input markup, so styling is shared. All selectors are
+     scoped under `.tabs` so generic `class="tab"` markup elsewhere on the
+     page (e.g. Starlight's own <Tabs> component) doesn't pick them up. */
+  .tabs .tab-list {
     @apply inline-flex items-center gap-1 border-b border-border;
     /* Anchor for the optional .tab-indicator */
     position: relative;
   }
 
-  .tab {
+  .tabs .tab {
     @apply inline-flex items-center gap-1.5
            px-3 h-9
            text-sm leading-none font-medium
@@ -23,15 +25,15 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .tab[data-selected],
-  .tab[aria-selected="true"] {
+  .tabs .tab[data-selected],
+  .tabs .tab[aria-selected="true"] {
     @apply text-text;
   }
 
   /* Vanilla radio-input pattern: hide the inputs visually, treat the following
      <label class="tab"> as the selected tab when the radio is :checked.
      Pairs with `:has(input:checked)` below to show the right panel. */
-  .tab-input {
+  .tabs .tab-input {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -42,11 +44,11 @@
     pointer-events: none;
   }
 
-  .tab-input:checked + .tab {
+  .tabs .tab-input:checked + .tab {
     @apply text-text;
   }
 
-  .tab-input:focus-visible + .tab {
+  .tabs .tab-input:focus-visible + .tab {
     @apply outline-2 outline-offset-2 outline-primary;
   }
 
@@ -103,7 +105,7 @@
   }
 
   /* Panels — Base UI handles hidden state via data-hidden / hidden attr. */
-  .tab-panel {
+  .tabs .tab-panel {
     @apply pt-3 outline-none;
   }
 
@@ -135,7 +137,11 @@
   }
 
   .tabs[data-orientation="vertical"] .tab-list {
-    @apply flex-col border-b-0 border-r border-border;
+    @apply flex-col items-stretch border-b-0 border-r border-border;
+  }
+
+  .tabs[data-orientation="vertical"] .tab {
+    @apply w-full justify-start;
   }
 
   .tabs[data-orientation="vertical"].tabs-bordered .tab::after,

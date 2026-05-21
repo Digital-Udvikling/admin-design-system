@@ -27,6 +27,7 @@
  * we remap Starlight's --sl-color-* variables onto the Flexoki palette below
  * so the page chrome shares the design system's tokens.
  */
+@import "@aortl/admin-css/src/fonts.css";
 @import "@aortl/admin-css/src/theme.css";
 @import "@aortl/admin-css/src/components/index.css";
 
@@ -38,6 +39,10 @@
  */
 :root,
 ::backdrop {
+  /* Font — share the design system stack (IBM Plex + system fallback) */
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+
   /* Dark mode — Flexoki dark base ramp */
   --sl-color-white: var(--color-base-50);
   --sl-color-gray-1: var(--color-base-100);

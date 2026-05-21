@@ -172,6 +172,21 @@
 
 @theme static {
   /*
+   * Typography — only the font stack is tokenized. Sizes, weights, and
+   * line-heights compose from Tailwind's default scale at the call site
+   * (`text-sm`, `font-semibold`, `leading-tight`, …) — the system is
+   * dense and small enough that an extra semantic layer would just be
+   * indirection. Override `--font-sans` to swap the entire UI font.
+   */
+  --font-sans:
+    "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+}
+
+@theme static {
+  /*
    * Semantic tokens — each declared once via `light-dark()`. The two
    * branches are Flexoki's symmetric ramp pairs:
    *   - paper ↔ black, base-50 ↔ base-950, base-150 ↔ base-850, …

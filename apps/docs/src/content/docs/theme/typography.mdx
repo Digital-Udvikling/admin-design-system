@@ -1,0 +1,122 @@
+---
+title: Typography
+description: Type scale, weights, and font stack for admin tooling. Dense, system-font, no marketing-scale headings.
+sidebar:
+  order: 5
+---
+
+Admin screens optimize for information density, so the type scale is small and tight. Body text is **14px**, headings step up modestly, and the UI typeface is IBM Plex — loaded with `font-display: optional` so the system fallback paints first on slow networks and Plex takes over on subsequent visits.
+
+## Font stack
+
+The UI font is [IBM Plex Sans](https://www.ibm.com/plex/) — a humanist sans designed by IBM for product UIs. It has a warm, slightly slab-influenced character that pairs well with Flexoki's paper-leaning palette, ships with tabular figures, and reads cleanly at 14px. The companion monospace, IBM Plex Mono, is used for IDs, hashes, and any cell where fixed-width digits aid scanning.
+
+```css
+--font-sans:
+  "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+--font-mono:
+  "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+  monospace;
+```
+
+Both fonts are loaded from Google's CDN (`fonts.gstatic.com`) with the latin and latin-ext subsets only — about 30KB total over the wire on first visit, cached aggressively afterwards. Plex Sans is delivered as a variable font, so one file covers 400 / 500 / 600 via the `wght` axis.
+
+### `font-display: optional`
+
+Each `@font-face` rule uses `font-display: optional`. The browser allows ~100ms for the font to arrive on the **first** page load:
+
+- **Font ready in time** → Plex paints on first render. No FOUT.
+- **Font not ready in time** → the system fallback paints on first render, the font is silently cached, and **subsequent page loads use Plex**.
+
+This trades "always see the chosen font" for "never see layout shift or unstyled text." Admin users hit the same screens repeatedly, so the cache hit rate is high and the cost is small.
+
+### Opting out
+
+Override `--font-sans` (or `--font-mono`) in your own CSS — every component and the body baseline follows automatically:
+
+```css
+:root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+To skip the Plex network requests entirely, import admin-css's source files individually and leave out `fonts.css`. The default `<link rel="stylesheet">` install (`dist/admin.css`) always includes Plex.
+
+## Scale
+
+| Selector | Size            | Weight    | Line-height     | Use                            |
+| -------- | --------------- | --------- | --------------- | ------------------------------ |
+| `<h1>`   | 1.25rem (20px)  | 600       | `leading-tight` | Page title                     |
+| `<h2>`   | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
+| `<h3>`   | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
+| `<body>` | 0.875rem (14px) | 400       | 1.5             | Default text                   |
+| —        | 0.75rem (12px)  | 400 / 500 | 1.4             | Captions, hints, table meta    |
+
+Heading sizes are applied at the element level in `admin-css/base.css` — drop a `<h1>` into your page and it picks up the right size, weight, and line-height automatically. No defaults for `h4`–`h6`; if a page needs another step, reach for `text-sm font-medium` on a `<p>` deliberately rather than getting a built-in step.
+
+## Body and small text
+
+Body text defaults to 14px. Drop a paragraph in without any class and it inherits the right size, weight, and line-height. Smaller text — captions, hints under form fields, secondary meta in tables — uses `text-xs` (12px), often paired with `text-text-muted` for visual de-emphasis.
+
+:::example
+
+```html
+<p>Customers are billed at the end of each calendar month.</p>
+<p class="text-xs text-text-muted">Last invoice generated 14 days ago.</p>
+```
+
+```tsx
+<p>Customers are billed at the end of each calendar month.</p>
+<p className="text-xs text-text-muted">
+  Last invoice generated 14 days ago.
+</p>
+```
+
+:::
+
+## Weights
+
+Three weights cover everything: regular (400), medium (500), and semibold (600). Bold (700) is available via Tailwind but isn't used inside the system — at 14px on a 1× display it reads as noise more than emphasis.
+
+:::example
+
+```html
+<p>Regular — body copy and long-form text.</p>
+<p class="font-medium">Medium — labels, button text, active states.</p>
+<p class="font-semibold">Semibold — headings, KPI numbers, table column headers.</p>
+```
+
+```tsx
+<p>Regular — body copy and long-form text.</p>
+<p className="font-medium">Medium — labels, button text, active states.</p>
+<p className="font-semibold">
+  Semibold — headings, KPI numbers, table column headers.
+</p>
+```
+
+:::
+
+## Monospace
+
+Use `font-mono` for IDs, hashes, currency amounts in tables, and any place where fixed-width digits aid scanning.
+
+:::example
+
+```html
+<p>
+  Order <span class="font-mono">#A7F31B-2014</span> was processed in
+  <span class="font-mono">142 ms</span>.
+</p>
+```
+
+```tsx
+<p>
+  Order <span className="font-mono">#A7F31B-2014</span> was processed in
+  <span className="font-mono">142 ms</span>.
+</p>
+```
+
+:::
+
+See [Customize](../customize/) for the broader pattern of overriding design tokens via CSS variables — `--font-sans` and `--font-mono` follow the same conventions as the color tokens.

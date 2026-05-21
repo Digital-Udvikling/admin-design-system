@@ -21,6 +21,7 @@ export default defineConfig({
         { label: "Basics", items: [{ autogenerate: { directory: "basics/" } }] },
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
         { label: "Modules", items: [{ autogenerate: { directory: "modules/" } }] },
+        { label: "Contributing", items: [{ autogenerate: { directory: "contributing/" } }] },
       ],
     }),
     mdx({ remarkPlugins: [remarkDirective, remarkExample] }),

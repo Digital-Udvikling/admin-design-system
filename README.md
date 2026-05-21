@@ -20,12 +20,13 @@ pnpm dev            # runs the docs site at http://localhost:4321 in watch mode
 
 ## Adding a new component
 
-1. Create `packages/admin-css/src/components/<name>.css`.
-2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
-3. (Optional) Add `packages/admin-react/src/<Name>.tsx` and re-export from `src/index.ts`.
-4. Add `apps/docs/src/content/docs/components/<name>.mdx` (use `Example` with both `html` and `react` props).
+See [**Contributing → Adding a component**](https://digital-udvikling.github.io/admin-design-system/contributing/adding-a-component/) in the docs for the full walkthrough, conventions, and skill-bundle regeneration. The short version:
 
-No build-config changes needed.
+1. `packages/admin-css/src/components/<name>.css` + an `@import` in `index.css`.
+2. (Optional) `packages/admin-react/src/<Name>.tsx` + re-export from `src/index.ts`.
+3. (If React) `packages/admin-react/src/<Name>.test.tsx`.
+4. `apps/docs/src/content/docs/components/<name>.mdx`.
+5. `pnpm generate-skill`.
 
 ## Releasing a package
 

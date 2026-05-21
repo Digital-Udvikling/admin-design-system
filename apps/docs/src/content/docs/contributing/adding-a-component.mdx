@@ -1,0 +1,277 @@
+---
+title: Adding a component
+description: One CSS file, one (optional) React wrapper, one docs page.
+sidebar:
+  order: 1
+---
+
+A component is three or four files that ship together. Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as the base class.
+
+1. `packages/admin-css/src/components/<name>.css` — base class, variants, sizes, modifiers.
+2. `packages/admin-css/src/components/index.css` — add `@import "./<name>.css";`.
+3. (Optional) `packages/admin-react/src/<Name>.tsx` + re-export from `src/index.ts`.
+4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke + interactions.
+5. `apps/docs/src/content/docs/components/<name>.mdx` — paired examples + reference.
+6. `pnpm generate-skill` — regenerate the bundle.
+
+No build-config changes needed.
+
+## The class-name contract
+
+Both packages emit the same class names. `<Button variant="primary" size="sm">` renders as `<button class="btn btn-primary btn-sm">`. **Both must change together** — a new CSS modifier needs a React prop; a new React prop needs a class. Renaming a class is a breaking change.
+
+Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes are `sm` / `md` (default, omitted) / `lg`.
+
+## 1. CSS
+
+Wrap rules in `@layer components` so they sit at the right cascade level next to Tailwind's utilities. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code.
+
+```css
+/* packages/admin-css/src/components/badge.css */
+@layer components {
+  .badge {
+    @apply inline-flex items-center justify-center gap-1
+           px-2 h-5 rounded-full
+           text-xs font-medium leading-none whitespace-nowrap
+           border border-transparent;
+  }
+
+  .badge-neutral {
+    @apply bg-surface-strong text-text;
+  }
+  .badge-info {
+    @apply bg-info-muted text-info border-info-muted;
+  }
+  .badge-danger {
+    @apply bg-danger-muted text-danger border-danger-muted;
+  }
+
+  /* md is the default; modifiers override */
+  .badge-sm {
+    @apply h-4 px-1.5 text-[0.625rem] gap-0.5;
+  }
+  .badge-lg {
+    @apply h-6 px-2.5 text-sm gap-1.5;
+  }
+}
+```
+
+If the component can host a leading icon, lay the root out with `flex items-center gap-2` (or `:has()` to switch layout when a leading `<i>`/`<svg>` is present). No wrapper class — the icon goes directly into the root in both flavors.
+
+```css
+.alert:has(> :is(i, svg):first-child) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.5rem;
+}
+```
+
+Register the file in `packages/admin-css/src/components/index.css`:
+
+```css
+@import "./badge.css";
+```
+
+That's everything for vanilla. The docs site imports `admin-css` **source**, so the dev server picks it up immediately.
+
+## 2. React (optional)
+
+Skip if the component is just CSS — `Spinner`, `Footer`, and the rail-only `Sidebar` parts are all-vanilla in places where Base UI adds nothing. Otherwise:
+
+- Wrap a Base UI primitive (`@base-ui/react/button`, `/input`, `/field`) when the component is interactive or needs a11y wiring.
+- Compose class names with `clsx` (or the local `cn` helper).
+- Spread the rest of the props so callers can pass `id`, `aria-*`, event handlers, `ref`, etc.
+- Take an `icon` (and `iconTrailing` if structural) prop instead of letting callers pass icon JSX as children — see [Icons](#icons) below.
+
+```tsx
+// packages/admin-react/src/Badge.tsx
+import { clsx } from "clsx";
+import type { ComponentProps } from "react";
+import { renderIcon, type IconProp } from "./icon";
+
+export type BadgeVariant = "neutral" | "info" | "success" | "warning" | "danger" | "primary";
+export type BadgeSize = "sm" | "md" | "lg";
+
+export interface BadgeProps extends ComponentProps<"span"> {
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  /** Leading icon. */
+  icon?: IconProp;
+}
+
+export function Badge({
+  variant = "neutral",
+  size = "md",
+  icon,
+  className,
+  children,
+  ...rest
+}: BadgeProps) {
+  return (
+    <span
+      className={clsx("badge", `badge-${variant}`, size !== "md" && `badge-${size}`, className)}
+      {...rest}
+    >
+      {renderIcon(icon, size === "sm" ? 10 : 12)}
+      {children}
+    </span>
+  );
+}
+```
+
+Export the component and every public type from `packages/admin-react/src/index.ts`:
+
+```ts
+export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
+```
+
+### Default-omit the default size
+
+`size !== "md" && "badge-md"` — skip the class when the size is the default. Keeps the rendered DOM minimal and means `<Badge>` and `<Badge size="md">` produce identical output.
+
+### Compound components: `Object.assign` dot-notation
+
+When the component has named parts (`Card.Body`, `Field.Label`, `Sidebar.Item`), define each part as a standalone function and stitch them onto the root with `Object.assign`:
+
+```tsx
+export const Card = Object.assign(CardRoot, {
+  Container: CardContainer,
+  Body: CardBody,
+  Title: CardTitle,
+  Description: CardDescription,
+  Actions: CardActions,
+});
+```
+
+Export every part's props type from `index.ts`.
+
+### High-level component + `.Container` escape hatch
+
+When a component has a meaningful container / inner-wrapper distinction in CSS (e.g. `.card` + `.card-body`) **and** shorthand props that auto-fill the wrapper:
+
+- The default export (`<Card>`) is opinionated — always renders the inner wrapper, accepts shorthand props (`title`, `description`, `icon`, `actions`) around children.
+- `<Card.Container>` is the bare primitive — just the outer class — for layouts that don't fit the default (multiple bodies, media headers, custom dividers).
+
+Only use this split when there's real layout variation. Leaf components (`Button`), linear layouts (`Alert`, `Sidebar.Item`), and Base UI compounds (`Field`, `Select`) don't need it.
+
+### Icons
+
+Components that can host an icon take an `icon` prop (and `iconTrailing` where applicable) accepting a component reference:
+
+```tsx
+<Button icon={IconPlus}>Add</Button>
+```
+
+Use `renderIcon` from `src/icon.ts`. It renders at `size={16}` with `aria-hidden` by default and also accepts a pre-instantiated element (`icon={<IconPlus size={20} />}`) when callers need a different size.
+
+```tsx
+import { renderIcon, type IconProp } from "./icon";
+
+export interface ButtonProps {
+  icon?: IconProp;
+  iconTrailing?: IconProp;
+  children?: React.ReactNode;
+  // …
+}
+
+export function Button({ icon, iconTrailing, children }: ButtonProps) {
+  return (
+    <button>
+      {renderIcon(icon)}
+      {children}
+      {renderIcon(iconTrailing)}
+    </button>
+  );
+}
+```
+
+Prefer this prop over passing icon JSX as children — the rendered DOM is identical, but the prop ensures consistent sizing and `aria-hidden`. See the [Icons](../../basics/icons/) basics page for the consumer-facing convention.
+
+## 3. Tests
+
+Tests live next to the component as `<Name>.test.tsx`. Two shapes:
+
+1. **Smoke** — one `it("renders", ...)` that mounts the component (with subparts) and asserts the root is queryable. Just "doesn't throw".
+2. **Interactions** — controlled + uncontrolled paths for stateful components (`Input`, `Textarea`, `Checkbox`, `Switch`, `Radio`, `Select`), plus a "parent ignores change → state stays put" case.
+
+Use `@testing-library/user-event`, not `fireEvent`.
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import { Badge } from "./Badge";
+
+describe("Badge", () => {
+  it("renders", () => {
+    render(<Badge>3</Badge>);
+    expect(screen.getByText("3")).toBeInTheDocument();
+  });
+});
+```
+
+`src/test-setup.ts` wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup hooks vitest at module-load time, before `afterEach` is exposed. Without this the DOM leaks across tests in the same file.
+
+Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` keeps visual checks where they belong — in the docs.
+
+## 4. Docs page
+
+Add `apps/docs/src/content/docs/components/<name>.mdx`. The frontmatter `description` is one short sentence (≤ ~10 words); don't restate it as the body's first paragraph.
+
+````mdx
+---
+title: Badges
+description: Base class .badge + a variant + an optional size.
+---
+
+import { Badge } from "@aortl/admin-react";
+
+## Examples
+
+### Variants
+
+:::example
+
+```html
+<span class="badge badge-info">Info</span> <span class="badge badge-danger">Danger</span>
+```
+````
+
+```tsx
+<Badge variant="info">Info</Badge>
+<Badge variant="danger">Danger</Badge>
+```
+
+:::
+
+## Reference
+
+**Variants** — `variant` prop. Default `neutral`.
+
+| Name      | Class            |
+| --------- | ---------------- |
+| `neutral` | `.badge-neutral` |
+| `info`    | `.badge-info`    |
+| `danger`  | `.badge-danger`  |
+
+**Sizes** — `size` prop. Default `md`.
+
+| Name | Class       |
+| ---- | ----------- |
+| `sm` | `.badge-sm` |
+| `md` | —           |
+| `lg` | `.badge-lg` |
+
+````
+
+See [Writing docs](../writing-docs/) for the `:::example` directive, the `## Reference` table convention, and how to regenerate the agent skill.
+
+## 5. Regenerate the skill
+
+The repo ships an [agent skill](../../getting-started/skill/) bundle at `skills/admin-design-system/`. It's generated from the docs MDX and committed to the repo.
+
+```bash
+pnpm generate-skill
+````
+
+CI fails on drift via `git diff --exit-code -- skills`, so commit the regenerated bundle alongside your MDX change in the same commit.

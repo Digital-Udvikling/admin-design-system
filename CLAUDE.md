@@ -158,7 +158,7 @@ Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publi
 
 ## Conventions
 
-- pnpm 10.13.1, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges.
+- pnpm ≥10, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges.
 - Tailwind v4 (`@theme`, `@custom-variant`, `light-dark()`). No `tailwind.config.js` — everything is CSS.
 - TypeScript strict + `noUncheckedIndexedAccess` + `verbatimModuleSyntax` (use `import type` for types).
 - Conventional Commits.

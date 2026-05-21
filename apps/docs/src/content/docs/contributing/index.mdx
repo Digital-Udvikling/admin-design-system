@@ -1,0 +1,50 @@
+---
+title: Contributing
+description: How the repo is laid out, how to run it locally, and where to look next.
+sidebar:
+  order: 0
+---
+
+The design system is a pnpm workspace. One source of truth for class names, two packages that emit them, plus a docs site that previews both side-by-side.
+
+```
+packages/
+  admin-css/      Tailwind v4 source → pre-built CSS + semantic class names.
+  admin-react/    React wrappers around Base UI; emit the same class names.
+apps/
+  docs/           Astro + Starlight; imports admin-css *source* in dev.
+skills/
+  admin-design-system/   Generated agent skill bundle. See Writing docs.
+```
+
+The two packages share class names. A change in one almost always implies a change in the other — see [Adding a component](./adding-a-component/).
+
+## Local setup
+
+Requires pnpm ≥ 10 and Node ≥ 22. `.npmrc` pins exact versions — don't introduce caret ranges.
+
+```bash
+pnpm install
+pnpm dev        # docs at http://localhost:4321, HMR into source CSS + React
+```
+
+`pnpm dev` watches `packages/admin-css/src/**` and `packages/admin-react/src/**` through the docs site. Editing a component's CSS or React source reloads the docs immediately.
+
+## Commands
+
+```bash
+pnpm build          # admin-css → admin-react → docs (order matters)
+pnpm check-types    # tsc on admin-react + astro check on docs
+pnpm test           # vitest on admin-react (happy-dom + RTL)
+pnpm lint           # oxlint
+pnpm format         # oxfmt
+pnpm generate-skill # regenerate skills/ from docs MDX
+```
+
+CI runs `lint`, `format:check`, `build`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+
+## Releasing
+
+Bump the `version` field in a package's `package.json`, commit, push to `main`. `.github/workflows/release.yml` watches `packages/*/package.json`, builds, runs `pnpm publish --provenance`, and tags `<name>@<version>` for each package whose version is ahead of its latest tag. Don't publish manually and don't amend version commits after push.
+
+Docs deploy is a separate workflow — every push to `main` publishes `apps/docs/dist` to GitHub Pages.

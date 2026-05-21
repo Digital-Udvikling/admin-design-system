@@ -151,9 +151,11 @@ function collectMdxImports(tree) {
       return;
     }
     for (const stmt of program.body) {
-      if (stmt.type === "ImportDeclaration") {
-        sources.push(generate(stmt).trim());
-      }
+      if (stmt.type !== "ImportDeclaration") continue;
+      // Astro components (other docs-only helpers like <Reference>) can't live
+      // inside the React preview's virtual TSX module — skip them.
+      if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
+      sources.push(generate(stmt).trim());
     }
   });
   return sources;

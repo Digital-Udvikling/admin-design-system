@@ -1,0 +1,78 @@
+---
+title: Writing docs
+description: The :::example directive, the Reference table, and the skill bundle.
+sidebar:
+  order: 2
+---
+
+Docs live in `apps/docs/src/content/docs/**/*.mdx`. Each page mirrors a feature in the system, and most of the surface is generated through one custom remark directive.
+
+## The `:::example` directive
+
+A paired-tabs example with a rendered preview. The block accepts one `html` fence and one `tsx` fence — either may be omitted.
+
+````markdown
+:::example
+
+```html
+<button class="btn btn-primary">Save</button>
+```
+
+```tsx
+<Button variant="primary">Save</Button>
+```
+
+:::
+````
+
+What happens at build time, from `apps/docs/plugins/example/index.mjs`:
+
+- Both fences are run through `oxfmt` (the prettier-compatible API), so source in MDX doesn't need to be hand-aligned.
+- The `html` fence drives the **vanilla preview** (`set:html`) and the **Vanilla CSS** code tab.
+- The `tsx` fence is compiled into a default-exported React component, registered as a virtual module (`virtual:example-preview/<hash>.tsx`), hydrated as a client island, and shown when the **React** tab is selected.
+- Top-level `import` statements in the MDX are forwarded into the virtual module, so identifiers used in the `tsx` fence (`<Button>`, `<IconPlus>`) resolve the same way they do in the surrounding page.
+
+Don't author `<Example>` JSX directly — always use the directive.
+
+### Astro imports in MDX
+
+Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component, which is the right outcome.
+
+## Prose style
+
+Examples carry the page; prose orients and steps out of the way.
+
+- **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
+- **Subsection intros are optional.** `### Variants`, `### Sizes`, `### Disabled` usually need no prose. Add a sentence only when the example would surprise (a constraint, a gotcha, an invariant).
+- **No marketing voice, no rationale for third-party choices.** Name the library, link it, move on. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
+- **Cross-references are tight.** `See [Icons](../../basics/icons/).` not "for the recommended library, sizing convention, and usage patterns."
+
+Keep: code examples, a11y hooks, version-pinning, override / escape-hatch APIs, non-obvious constraints. Cut: cheerleading, restated descriptions, explanations of what the next code block plainly demonstrates.
+
+## Linking
+
+The site is served from `/admin-design-system/` on GitHub Pages, so absolute URLs must go through `import.meta.env.BASE_URL`:
+
+```astro
+<a href={`${import.meta.env.BASE_URL}components/buttons/`}>Buttons</a>
+```
+
+In MDX body prose, prefer **relative Markdown links** so the source stays portable:
+
+```markdown
+See [Icons](../../basics/icons/).
+```
+
+Don't hard-code `/admin-design-system/...` in MDX.
+
+## Regenerating the agent skill
+
+The repo ships an [agent skill](../../getting-started/skill/) bundle at `skills/admin-design-system/`. The bundle is **generated** — committed but produced by `apps/docs/scripts/generate-skill.mjs` walking every MDX page and writing per-page markdown plus a top-level `SKILL.md`.
+
+After any change under `apps/docs/src/content/docs/`:
+
+```bash
+pnpm generate-skill
+```
+
+Commit the updated `skills/` alongside the MDX change in the same commit. CI runs the generator and fails on drift via `git diff --exit-code -- skills`.

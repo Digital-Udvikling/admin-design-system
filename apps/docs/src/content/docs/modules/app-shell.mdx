@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-import { AppShell, Navbar, Sidebar, Footer, Menu, Select } from "@aortl/admin-react";
+import { AppShell, BrandTile, Navbar, Sidebar, Footer, Menu, Select } from "@aortl/admin-react";
 import {
   IconHome,
   IconReceipt,
@@ -41,18 +41,24 @@ Navbar above, `main` below.
 :::example
 
 ```html
-<div class="app-shell" style="min-height: 16rem">
+<div class="app-shell" style="min-height: 16rem; --color-system-accent: var(--color-purple-600)">
   <header class="navbar">
-    <div class="navbar-brand">Acme</div>
+    <div class="navbar-brand">
+      <span class="brand-tile" aria-hidden>A</span>
+      Acme
+    </div>
   </header>
   <main class="app-shell-main" style="padding: 1rem">Page content</main>
 </div>
 ```
 
 ```tsx
-<AppShell style={{ minHeight: "16rem" }}>
+<AppShell style={{ minHeight: "16rem", "--color-system-accent": "var(--color-purple-600)" }}>
   <Navbar>
-    <Navbar.Brand>Acme</Navbar.Brand>
+    <Navbar.Brand>
+      <BrandTile monogram="A" />
+      Acme
+    </Navbar.Brand>
   </Navbar>
   <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
 </AppShell>
@@ -65,9 +71,16 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 :::example
 
 ```tsx
-<AppShell hasSidebar hasFooter style={{ minHeight: "20rem" }}>
+<AppShell
+  hasSidebar
+  hasFooter
+  style={{ minHeight: "20rem", "--color-system-accent": "var(--color-purple-600)" }}
+>
   <Navbar>
-    <Navbar.Brand>Acme</Navbar.Brand>
+    <Navbar.Brand>
+      <BrandTile monogram="A" />
+      Acme
+    </Navbar.Brand>
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
@@ -95,8 +108,11 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 :::example
 
 ```html
-<header class="navbar">
-  <div class="navbar-brand">Acme</div>
+<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+  <div class="navbar-brand">
+    <span class="brand-tile" aria-hidden>A</span>
+    Acme
+  </div>
   <nav class="navbar-items">
     <a class="navbar-item" href="#" aria-current="page">Dashboard</a>
     <a class="navbar-item" href="#">Orders</a>
@@ -109,8 +125,11 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 ```
 
 ```tsx
-<Navbar>
-  <Navbar.Brand>Acme</Navbar.Brand>
+<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+  <Navbar.Brand>
+    <BrandTile monogram="A" />
+    Acme
+  </Navbar.Brand>
   <Navbar.Items>
     <Navbar.Item href="#" active>
       Dashboard
@@ -135,8 +154,11 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 :::example
 
 ```html
-<header class="navbar">
-  <div class="navbar-brand">Acme</div>
+<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+  <div class="navbar-brand">
+    <span class="brand-tile" aria-hidden>A</span>
+    Acme
+  </div>
   <nav class="navbar-items">
     <a class="navbar-item" href="#">Dashboard</a>
     <details class="menu">
@@ -153,8 +175,11 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 ```
 
 ```tsx
-<Navbar>
-  <Navbar.Brand>Acme</Navbar.Brand>
+<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+  <Navbar.Brand>
+    <BrandTile monogram="A" />
+    Acme
+  </Navbar.Brand>
   <Navbar.Items>
     <Navbar.Item href="#">Dashboard</Navbar.Item>
     <Navbar.Dropdown label="Products">
@@ -176,8 +201,11 @@ Right-aligned slot for shop switcher, user menu, sign-out, etc. The vanilla exam
 :::example
 
 ```html
-<header class="navbar">
-  <div class="navbar-brand">AO Retail</div>
+<header class="navbar" style="--color-system-accent: var(--color-green-600)">
+  <div class="navbar-brand">
+    <span class="brand-tile" aria-hidden>AO</span>
+    AO Retail
+  </div>
   <div class="navbar-actions">
     <select class="select select-bordered select-sm" style="width: auto" aria-label="Shop">
       <option value="billigvvs.dk">BilligVVS.dk</option>
@@ -197,8 +225,11 @@ Right-aligned slot for shop switcher, user menu, sign-out, etc. The vanilla exam
 ```
 
 ```tsx
-<Navbar>
-  <Navbar.Brand>AO Retail</Navbar.Brand>
+<Navbar style={{ "--color-system-accent": "var(--color-green-600)" }}>
+  <Navbar.Brand>
+    <BrandTile monogram="AO" />
+    AO Retail
+  </Navbar.Brand>
   <Navbar.Actions>
     <Select defaultValue="billigvvs.dk">
       <Select.Trigger triggerSize="sm" aria-label="Shop">
@@ -389,10 +420,16 @@ Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below `md`, the de
 :::example
 
 ```tsx
-<AppShell hasSidebar style={{ minHeight: "24rem" }}>
+<AppShell
+  hasSidebar
+  style={{ minHeight: "24rem", "--color-system-accent": "var(--color-purple-600)" }}
+>
   <Navbar>
     <Navbar.MobileToggle />
-    <Navbar.Brand>Acme</Navbar.Brand>
+    <Navbar.Brand>
+      <BrandTile monogram="A" />
+      Acme
+    </Navbar.Brand>
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
@@ -453,10 +490,17 @@ Sidebar-first with a shop selector in the navbar, tree navigation, and a collaps
 :::example
 
 ```tsx
-<AppShell hasSidebar hasFooter style={{ minHeight: "32rem" }}>
+<AppShell
+  hasSidebar
+  hasFooter
+  style={{ minHeight: "32rem", "--color-system-accent": "var(--color-green-600)" }}
+>
   <Navbar>
     <Navbar.MobileToggle />
-    <Navbar.Brand>AO Retail</Navbar.Brand>
+    <Navbar.Brand>
+      <BrandTile monogram="AO" />
+      AO Retail
+    </Navbar.Brand>
     <Navbar.Actions>
       <Select defaultValue="billigvvs.dk">
         <Select.Trigger triggerSize="sm" aria-label="Shop">
@@ -538,9 +582,15 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. Good fo
 :::example
 
 ```tsx
-<AppShell hasFooter style={{ minHeight: "28rem" }}>
+<AppShell
+  hasFooter
+  style={{ minHeight: "28rem", "--color-system-accent": "var(--color-orange-600)" }}
+>
   <Navbar>
-    <Navbar.Brand>Insights</Navbar.Brand>
+    <Navbar.Brand>
+      <BrandTile icon={IconChartBar} />
+      Insights
+    </Navbar.Brand>
     <Navbar.Items>
       <Navbar.Item href="#" active>
         Dashboard
@@ -594,3 +644,39 @@ Two CSS variables on `.app-shell` set the rail width:
   --app-shell-sidebar-w: 280px;
 }
 ```
+
+## Branding multiple systems
+
+The navbar always renders a 2px bottom stripe driven by `--color-system-accent`. Drop a [`<BrandTile>`](../../components/brand-tile/) into `<Navbar.Brand>` and override the variable at `:root` to tag a system:
+
+```css
+:root {
+  --color-system-accent: var(--color-purple-600);
+}
+```
+
+The default is a neutral gray, so un-branded apps read as chrome.
+
+:::example
+
+```html
+<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+  <div class="navbar-brand">
+    <span class="brand-tile" aria-hidden>OR</span>
+    Orders
+  </div>
+</header>
+```
+
+```tsx
+<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+  <Navbar.Brand>
+    <BrandTile monogram="OR" />
+    Orders
+  </Navbar.Brand>
+</Navbar>
+```
+
+:::
+
+For derived tokens (`-hover`, `-muted`, `-content`) and the yellow-accent contrast caveat, see [Customize › System accent](../../basics/customize/#system-accent).

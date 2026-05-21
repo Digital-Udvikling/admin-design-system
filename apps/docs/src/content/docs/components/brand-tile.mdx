@@ -1,0 +1,47 @@
+---
+title: Brand tile
+description: A 24px monogram or icon square, used to brand the navbar per system.
+---
+
+import { BrandTile } from "@aortl/admin-react";
+import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react";
+
+A small tinted square for `<Navbar.Brand>`, carrying a 1–2 letter monogram or a [Tabler icon](../../basics/icons/) — the at-a-glance system tag when the same chrome ships across many admin tools. Color follows `--color-system-accent`; see [Customize](../../basics/customize/#system-accent) for the override.
+
+## Monogram
+
+:::example
+
+```html
+<span class="brand-tile" aria-hidden>OR</span>
+<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-purple-600)">
+  OR
+</span>
+<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-green-600)">
+  AO
+</span>
+```
+
+```tsx
+<BrandTile monogram="OR" />
+<BrandTile monogram="OR" style={{ "--color-system-accent": "var(--color-purple-600)" }} />
+<BrandTile monogram="AO" style={{ "--color-system-accent": "var(--color-green-600)" }} />
+```
+
+:::
+
+Without an override the tile is neutral gray. Keep monograms to 1–2 characters — the 24px box won't fit more.
+
+## Icon
+
+When the system has a recognisable icon, pass it instead. It renders at 14px. `icon` wins if both are passed.
+
+:::example
+
+```tsx
+<BrandTile icon={IconShoppingCart} style={{ "--color-system-accent": "var(--color-green-600)" }} />
+<BrandTile icon={IconChartBar} style={{ "--color-system-accent": "var(--color-orange-600)" }} />
+<BrandTile icon={IconPackage} style={{ "--color-system-accent": "var(--color-cyan-600)" }} />
+```
+
+:::

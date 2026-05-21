@@ -7,6 +7,10 @@ sidebar:
 
 A parallel bundle that wraps every rule in `@scope (.admin-root)`. Use it when you're embedding admin pieces — a settings menu, an internal toolbar — inside an app that owns its own design system. The wrapper element opts a subtree into admin styles; everything outside is left alone.
 
+:::tip[Branding multiple apps]
+Set `--color-system-accent` on `.admin-root` to brand-shift the navbar stripe and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+:::
+
 The default bundle still ships unchanged. The scoped variant lives at separate subpaths so you load one or the other.
 
 ## Vanilla CSS

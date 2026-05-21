@@ -15,6 +15,8 @@ npm install @aortl/admin-react react react-dom
 
 ## Import styles + components
 
+If you're embedding admin components inside a non-admin app, import [`@aortl/admin-react/styles.scoped.css`](../scoped/) and wrap with `<AdminRoot>` instead.
+
 ```tsx
 import "@aortl/admin-react/styles.css";
 import { Button, Card, Input } from "@aortl/admin-react";

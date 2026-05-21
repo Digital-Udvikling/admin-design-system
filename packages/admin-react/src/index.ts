@@ -5,6 +5,7 @@ export {
   type AccordionSummaryProps,
   type AccordionContentProps,
 } from "./Accordion";
+export { AdminRoot, type AdminRootProps } from "./AdminRoot";
 export {
   Alert,
   type AlertProps,

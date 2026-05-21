@@ -1,0 +1,57 @@
+---
+title: Scoped bundle
+description: Drop admin components into a non-admin app without leaking styles.
+sidebar:
+  order: 4
+---
+
+A parallel bundle that wraps every rule in `@scope (.admin-root)`. Use it when you're embedding admin pieces — a settings menu, an internal toolbar — inside an app that owns its own design system. The wrapper element opts a subtree into admin styles; everything outside is left alone.
+
+The default bundle still ships unchanged. The scoped variant lives at separate subpaths so you load one or the other.
+
+## Vanilla CSS
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.scoped.min.css" />
+
+<div class="admin-root">
+  <button class="btn btn-primary">Save</button>
+</div>
+```
+
+Via npm: import `@aortl/admin-css/admin.scoped.css` (or `.min.css`) from your bundler entry, then wrap admin markup in any element with `class="admin-root"`.
+
+## React
+
+```tsx
+import "@aortl/admin-react/styles.scoped.css";
+import { AdminRoot, Button } from "@aortl/admin-react";
+
+export function ProductPageAdminMenu() {
+  return (
+    <AdminRoot>
+      <Button variant="primary">Save</Button>
+    </AdminRoot>
+  );
+}
+```
+
+`<AdminRoot>` is a thin `<div>` that emits `class="admin-root"` and forwards every prop, including `data-theme`, `style`, and `ref`. Use a plain `<div className="admin-root">` if you'd rather skip the wrapper component.
+
+## Dark mode
+
+`data-theme` works on the wrapper, not just on `<html>`:
+
+```html
+<div class="admin-root" data-theme="dark">
+  <!-- always dark, regardless of the host page -->
+</div>
+```
+
+The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../../basics/dark-mode/) for the full picture.
+
+## Caveats
+
+- Tailwind utility classes in the scoped bundle only match inside `.admin-root`. If you want to author with admin's tokens or utilities directly across the host app, use the default unscoped bundle instead.
+- `@scope` is Baseline-modern (Chrome, Firefox, Safari). There is no legacy fallback.
+- Custom property registrations (`@property`), `@font-face`, and the cascade-layer order declaration stay at the document root — they're document-wide by spec. Everything else is scoped.

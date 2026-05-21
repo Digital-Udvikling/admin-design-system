@@ -118,6 +118,17 @@ export {
   type TabsIndicatorProps,
 } from "./Tabs";
 export {
+  Table,
+  type TableProps,
+  type TableAlign,
+  type TableHeadProps,
+  type TableBodyProps,
+  type TableFootProps,
+  type TableRowProps,
+  type TableHeaderCellProps,
+  type TableCellProps,
+} from "./Table";
+export {
   Sidebar,
   type SidebarProps,
   type SidebarHeaderProps,

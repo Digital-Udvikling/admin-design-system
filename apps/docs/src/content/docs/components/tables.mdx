@@ -1,0 +1,704 @@
+---
+title: Tables
+description: Dense, scannable tables for admin screens. Native <table> semantics with optional row selection, sticky headers, status gutter, and whole-row links.
+---
+
+import { Checkbox, Table } from "@aortl/admin-react";
+import { IconCircleCheck, IconCircleX, IconClock } from "@tabler/icons-react";
+
+Tables are the backbone of admin tooling — order lists, generated content, audit logs, inventory. `<Table>` keeps the contract simple: native `<table>` semantics, descendant CSS selectors so cells don't need a class each, and a few opt-in modifiers (`striped`, `bordered`, `relaxed`, `sticky`) that compose freely.
+
+The default density is intentionally tight (~32px rows) so a hundred orders fit on one screen. For lighter layouts, reach for `relaxed`.
+
+## Examples
+
+### Basic
+
+A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>` for you — no class per cell required. The React API mirrors the HTML structure exactly via dot-notation subparts.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ada Lovelace</td>
+      <td>ada@example.com</td>
+      <td>Admin</td>
+    </tr>
+    <tr>
+      <td>Grace Hopper</td>
+      <td>grace@example.com</td>
+      <td>Editor</td>
+    </tr>
+    <tr>
+      <td>Alan Turing</td>
+      <td>alan@example.com</td>
+      <td>Viewer</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Name</Table.HeaderCell>
+      <Table.HeaderCell>Email</Table.HeaderCell>
+      <Table.HeaderCell>Role</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+      <Table.Cell>ada@example.com</Table.Cell>
+      <Table.Cell>Admin</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Grace Hopper</Table.Cell>
+      <Table.Cell>grace@example.com</Table.Cell>
+      <Table.Cell>Editor</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Alan Turing</Table.Cell>
+      <Table.Cell>alan@example.com</Table.Cell>
+      <Table.Cell>Viewer</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Modifiers
+
+Four modifiers, all independent: `striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding, and `sticky` pins the header (requires a scrolling ancestor — see below).
+
+:::example
+
+```html
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>#1001</td>
+      <td>Shipped</td>
+    </tr>
+    <tr>
+      <td>#1002</td>
+      <td>Processing</td>
+    </tr>
+    <tr>
+      <td>#1003</td>
+      <td>Shipped</td>
+    </tr>
+    <tr>
+      <td>#1004</td>
+      <td>Processing</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table striped>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Order</Table.HeaderCell>
+      <Table.HeaderCell>Status</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>#1001</Table.Cell>
+      <Table.Cell>Shipped</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>#1002</Table.Cell>
+      <Table.Cell>Processing</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>#1003</Table.Cell>
+      <Table.Cell>Shipped</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>#1004</Table.Cell>
+      <Table.Cell>Processing</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+:::example
+
+```html
+<table class="table table-bordered table-relaxed">
+  <thead>
+    <tr>
+      <th>SKU</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A-001</td>
+      <td>Widget</td>
+    </tr>
+    <tr>
+      <td>A-002</td>
+      <td>Gadget</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table bordered relaxed>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>SKU</Table.HeaderCell>
+      <Table.HeaderCell>Name</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>A-001</Table.Cell>
+      <Table.Cell>Widget</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>A-002</Table.Cell>
+      <Table.Cell>Gadget</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Sticky header
+
+`sticky` keeps the header visible while the body scrolls. The table itself doesn't establish the scroll region — wrap it in an overflowing container (`<div style="overflow:auto; max-height: …">`). Scroll the example below to see the header pin.
+
+:::example
+
+```html
+<div style="overflow: auto; max-height: 240px">
+  <table class="table table-sticky">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#1001</td>
+        <td>Ada</td>
+      </tr>
+      <tr>
+        <td>#1002</td>
+        <td>Grace</td>
+      </tr>
+      <tr>
+        <td>#1003</td>
+        <td>Alan</td>
+      </tr>
+      <tr>
+        <td>#1004</td>
+        <td>Donald</td>
+      </tr>
+      <tr>
+        <td>#1005</td>
+        <td>Edsger</td>
+      </tr>
+      <tr>
+        <td>#1006</td>
+        <td>Linus</td>
+      </tr>
+      <tr>
+        <td>#1007</td>
+        <td>Tony</td>
+      </tr>
+      <tr>
+        <td>#1008</td>
+        <td>Margaret</td>
+      </tr>
+      <tr>
+        <td>#1009</td>
+        <td>Barbara</td>
+      </tr>
+      <tr>
+        <td>#1010</td>
+        <td>Frances</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+```tsx
+<div style={{ overflow: "auto", maxHeight: 240 }}>
+  <Table sticky>
+    <Table.Head>
+      <Table.Row>
+        <Table.HeaderCell>ID</Table.HeaderCell>
+        <Table.HeaderCell>Customer</Table.HeaderCell>
+      </Table.Row>
+    </Table.Head>
+    <Table.Body>
+      {[
+        ["#1001", "Ada"],
+        ["#1002", "Grace"],
+        ["#1003", "Alan"],
+        ["#1004", "Donald"],
+        ["#1005", "Edsger"],
+        ["#1006", "Linus"],
+        ["#1007", "Tony"],
+        ["#1008", "Margaret"],
+        ["#1009", "Barbara"],
+        ["#1010", "Frances"],
+      ].map(([id, name]) => (
+        <Table.Row key={id}>
+          <Table.Cell>{id}</Table.Cell>
+          <Table.Cell>{name}</Table.Cell>
+        </Table.Row>
+      ))}
+    </Table.Body>
+  </Table>
+</div>
+```
+
+:::
+
+### Cell alignment
+
+Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. Both header and body should agree so the column lines up. The `numeric` modifier on `<Table.Cell>` also turns on `tabular-nums` for currency-style columns, so the digits don't shimmy.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th data-align="right">Qty</th>
+      <th data-align="right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Widget</td>
+      <td data-align="right">3</td>
+      <td data-align="right">$129.00</td>
+    </tr>
+    <tr>
+      <td>Gadget</td>
+      <td data-align="right">12</td>
+      <td data-align="right">$1,344.50</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Item</Table.HeaderCell>
+      <Table.HeaderCell align="right">Qty</Table.HeaderCell>
+      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Widget</Table.Cell>
+      <Table.Cell numeric>3</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Gadget</Table.Cell>
+      <Table.Cell numeric>12</Table.Cell>
+      <Table.Cell numeric>$1,344.50</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Status gutter
+
+Use a narrow leading gutter cell for row-level status glyphs — fulfilment state, sync status, error markers. The `.table-cell-gutter` class (or `gutter` prop) centers the icon and uses muted text by default; color the icon explicitly when status carries meaning.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th class="table-cell-gutter"></th>
+      <th>Order</th>
+      <th>Customer</th>
+      <th data-align="right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="table-cell-gutter">
+        <i class="ti ti-circle-check" style="color: var(--color-success)" aria-hidden="true"></i>
+      </td>
+      <td>#1001</td>
+      <td>Ada Lovelace</td>
+      <td data-align="right">$129.00</td>
+    </tr>
+    <tr>
+      <td class="table-cell-gutter"><i class="ti ti-clock" aria-hidden="true"></i></td>
+      <td>#1002</td>
+      <td>Grace Hopper</td>
+      <td data-align="right">$72.50</td>
+    </tr>
+    <tr>
+      <td class="table-cell-gutter">
+        <i class="ti ti-circle-x" style="color: var(--color-danger)" aria-hidden="true"></i>
+      </td>
+      <td>#1003</td>
+      <td>Alan Turing</td>
+      <td data-align="right">$310.00</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell gutter />
+      <Table.HeaderCell>Order</Table.HeaderCell>
+      <Table.HeaderCell>Customer</Table.HeaderCell>
+      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell gutter>
+        <IconCircleCheck size={16} style={{ color: "var(--color-success)" }} aria-hidden />
+      </Table.Cell>
+      <Table.Cell>#1001</Table.Cell>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell gutter>
+        <IconClock size={16} aria-hidden />
+      </Table.Cell>
+      <Table.Cell>#1002</Table.Cell>
+      <Table.Cell>Grace Hopper</Table.Cell>
+      <Table.Cell numeric>$72.50</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell gutter>
+        <IconCircleX size={16} style={{ color: "var(--color-danger)" }} aria-hidden />
+      </Table.Cell>
+      <Table.Cell>#1003</Table.Cell>
+      <Table.Cell>Alan Turing</Table.Cell>
+      <Table.Cell numeric>$310.00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Row selection
+
+Put a [Checkbox](/admin-design-system/components/forms/checkbox/) in the first cell — the row tint is driven entirely by CSS (`:has(input:checked)`), no React state mirror needed. The select-all header checkbox is wired by the consumer.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th class="table-cell-gutter">
+        <input type="checkbox" class="checkbox" aria-label="Select all" />
+      </th>
+      <th>Order</th>
+      <th>Customer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="table-cell-gutter">
+        <input type="checkbox" class="checkbox" aria-label="Select #1001" />
+      </td>
+      <td>#1001</td>
+      <td>Ada Lovelace</td>
+    </tr>
+    <tr>
+      <td class="table-cell-gutter">
+        <input type="checkbox" class="checkbox" aria-label="Select #1002" checked />
+      </td>
+      <td>#1002</td>
+      <td>Grace Hopper</td>
+    </tr>
+    <tr>
+      <td class="table-cell-gutter">
+        <input type="checkbox" class="checkbox" aria-label="Select #1003" />
+      </td>
+      <td>#1003</td>
+      <td>Alan Turing</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell gutter>
+        <Checkbox aria-label="Select all" />
+      </Table.HeaderCell>
+      <Table.HeaderCell>Order</Table.HeaderCell>
+      <Table.HeaderCell>Customer</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell gutter>
+        <Checkbox aria-label="Select #1001" />
+      </Table.Cell>
+      <Table.Cell>#1001</Table.Cell>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell gutter>
+        <Checkbox aria-label="Select #1002" defaultChecked />
+      </Table.Cell>
+      <Table.Cell>#1002</Table.Cell>
+      <Table.Cell>Grace Hopper</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell gutter>
+        <Checkbox aria-label="Select #1003" />
+      </Table.Cell>
+      <Table.Cell>#1003</Table.Cell>
+      <Table.Cell>Alan Turing</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+For programmatic selection without a checkbox (single-select on row click, server-driven highlight), use `<Table.Row selected>` — it sets `data-selected` and applies the same tint.
+
+:::example
+
+```html
+<table class="table">
+  <tbody>
+    <tr>
+      <td>#1001</td>
+      <td>Ada</td>
+    </tr>
+    <tr data-selected>
+      <td>#1002</td>
+      <td>Grace</td>
+    </tr>
+    <tr>
+      <td>#1003</td>
+      <td>Alan</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>#1001</Table.Cell>
+      <Table.Cell>Ada</Table.Cell>
+    </Table.Row>
+    <Table.Row selected>
+      <Table.Cell>#1002</Table.Cell>
+      <Table.Cell>Grace</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>#1003</Table.Cell>
+      <Table.Cell>Alan</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Whole-row link
+
+Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the link in the first cell. CSS expands the anchor's hit area to cover the row via `::after`, so the entire row is clickable and keyboard-focusable through the real `<a>` — no JS click handler or `<tr onClick>` indirection.
+
+Other in-row buttons or links sit above the spanning pseudo-element automatically because `.btn` and `<a>`s with their own `position: relative` aren't covered.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Customer</th>
+      <th data-align="right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="table-row-link">
+      <td><a href="#1001">#1001</a></td>
+      <td>Ada Lovelace</td>
+      <td data-align="right">$129.00</td>
+    </tr>
+    <tr class="table-row-link">
+      <td><a href="#1002">#1002</a></td>
+      <td>Grace Hopper</td>
+      <td data-align="right">$72.50</td>
+    </tr>
+    <tr class="table-row-link">
+      <td><a href="#1003">#1003</a></td>
+      <td>Alan Turing</td>
+      <td data-align="right">$310.00</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Order</Table.HeaderCell>
+      <Table.HeaderCell>Customer</Table.HeaderCell>
+      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row asLink>
+      <Table.Cell>
+        <a href="#1001">#1001</a>
+      </Table.Cell>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
+    </Table.Row>
+    <Table.Row asLink>
+      <Table.Cell>
+        <a href="#1002">#1002</a>
+      </Table.Cell>
+      <Table.Cell>Grace Hopper</Table.Cell>
+      <Table.Cell numeric>$72.50</Table.Cell>
+    </Table.Row>
+    <Table.Row asLink>
+      <Table.Cell>
+        <a href="#1003">#1003</a>
+      </Table.Cell>
+      <Table.Cell>Alan Turing</Table.Cell>
+      <Table.Cell numeric>$310.00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+:::
+
+### Footer row
+
+`<Table.Foot>` (or `<tfoot>`) is plain by default — class it as you need. Common use: a totals row that mirrors the body's column alignment.
+
+:::example
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th data-align="right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Widget</td>
+      <td data-align="right">$129.00</td>
+    </tr>
+    <tr>
+      <td>Gadget</td>
+      <td data-align="right">$72.50</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td data-align="right"><strong>$201.50</strong></td>
+    </tr>
+  </tfoot>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Item</Table.HeaderCell>
+      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Widget</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Gadget</Table.Cell>
+      <Table.Cell numeric>$72.50</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+  <Table.Foot>
+    <Table.Row>
+      <Table.Cell>
+        <strong>Total</strong>
+      </Table.Cell>
+      <Table.Cell numeric>
+        <strong>$201.50</strong>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Foot>
+</Table>
+```
+
+:::
+
+## Horizontal overflow
+
+`<Table>` doesn't wrap itself in a scroll container — it can't, since the vanilla `<table>` has no equivalent and an added wrapper would break compositions like `<details><Table>…`. Wrap explicitly when you need horizontal scroll on narrow viewports:
+
+```html
+<div style="overflow-x: auto">
+  <table class="table">
+    …
+  </table>
+</div>
+```

@@ -95,6 +95,15 @@
     @apply bg-surface text-text shadow-sm;
   }
 
+  /* Full width — list stretches across the container, tabs share space evenly. */
+  .tabs-full-width:not([data-orientation="vertical"]) .tab-list {
+    @apply flex w-full;
+  }
+
+  .tabs-full-width:not([data-orientation="vertical"]) .tab {
+    @apply flex-1 justify-center;
+  }
+
   /* Sizes — cascade to nested tabs. */
   .tabs-sm .tab {
     @apply px-2 h-7 text-xs;

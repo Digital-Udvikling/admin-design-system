@@ -63,6 +63,62 @@ The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interact
 
 :::
 
+### Full width
+
+`fullWidth` stretches the list across the container and divides space evenly between tabs. Composes with both variants.
+
+:::example
+
+```html
+<div class="tabs tabs-bordered tabs-full-width">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="full" id="full-1" value="1" checked />
+    <label class="tab" for="full-1">Inbox</label>
+    <input class="tab-input" type="radio" name="full" id="full-2" value="2" />
+    <label class="tab" for="full-2">Archive</label>
+    <input class="tab-input" type="radio" name="full" id="full-3" value="3" />
+    <label class="tab" for="full-3">Spam</label>
+  </div>
+  <div class="tab-panel" data-value="1">Inbox content.</div>
+  <div class="tab-panel" data-value="2">Archive content.</div>
+  <div class="tab-panel" data-value="3">Spam content.</div>
+</div>
+```
+
+```tsx
+<Tabs defaultValue="inbox" fullWidth>
+  <Tabs.List>
+    <Tabs.Tab value="inbox">Inbox</Tabs.Tab>
+    <Tabs.Tab value="archive">Archive</Tabs.Tab>
+    <Tabs.Tab value="spam">Spam</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="inbox">Inbox content.</Tabs.Panel>
+  <Tabs.Panel value="archive">Archive content.</Tabs.Panel>
+  <Tabs.Panel value="spam">Spam content.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
+Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its row.
+
+:::example
+
+```tsx
+<Tabs defaultValue="week" variant="boxed" fullWidth>
+  <Tabs.List>
+    <Tabs.Tab value="day">Day</Tabs.Tab>
+    <Tabs.Tab value="week">Week</Tabs.Tab>
+    <Tabs.Tab value="month">Month</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="day">Daily breakdown.</Tabs.Panel>
+  <Tabs.Panel value="week">Weekly breakdown.</Tabs.Panel>
+  <Tabs.Panel value="month">Monthly breakdown.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
 ### Vertical orientation
 
 `orientation="vertical"` puts the tab strip on the left, panels on the right.

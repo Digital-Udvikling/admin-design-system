@@ -9,7 +9,7 @@ export type ButtonSize = "sm" | "md" | "lg";
 export interface ButtonProps extends ComponentProps<typeof BaseButton> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  block?: boolean;
+  fullWidth?: boolean;
   /** Shows a spinner in place of the leading icon and disables interaction.
    *  Sets `aria-busy="true"` and the native `disabled` attribute. */
   loading?: boolean;
@@ -22,7 +22,7 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
 export function Button({
   variant = "primary",
   size = "md",
-  block,
+  fullWidth,
   loading,
   icon,
   iconTrailing,
@@ -43,7 +43,7 @@ export function Button({
           "btn",
           `btn-${variant}`,
           size !== "md" && `btn-${size}`,
-          block && "btn-block",
+          fullWidth && "btn-full-width",
           loading && "btn-loading",
           iconOnly && "btn-square",
         ],

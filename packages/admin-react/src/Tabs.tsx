@@ -8,12 +8,27 @@ export type TabsSize = "sm" | "md" | "lg";
 export interface TabsProps extends ComponentProps<typeof BaseTabs.Root> {
   variant?: TabsVariant;
   size?: TabsSize;
+  fullWidth?: boolean;
 }
 
-function TabsRoot({ variant = "bordered", size = "md", className, ...rest }: TabsProps) {
+function TabsRoot({
+  variant = "bordered",
+  size = "md",
+  fullWidth = false,
+  className,
+  ...rest
+}: TabsProps) {
   return (
     <BaseTabs.Root
-      className={cn(["tabs", `tabs-${variant}`, size !== "md" && `tabs-${size}`], className)}
+      className={cn(
+        [
+          "tabs",
+          `tabs-${variant}`,
+          size !== "md" && `tabs-${size}`,
+          fullWidth && "tabs-full-width",
+        ],
+        className,
+      )}
       {...rest}
     />
   );

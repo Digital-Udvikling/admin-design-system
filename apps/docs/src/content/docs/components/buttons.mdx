@@ -3,13 +3,15 @@ title: Buttons
 description: Base class .btn + a variant + an optional size.
 ---
 
-import { Button } from "@aortl/admin-react";
+import { Button, ButtonGroup } from "@aortl/admin-react";
 import {
   IconPlus,
   IconTrash,
   IconDownload,
   IconDotsVertical,
   IconPencil,
+  IconCopy,
+  IconArchive,
 } from "@tabler/icons-react";
 
 ## Examples
@@ -175,6 +177,98 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
 <Button variant="secondary" size="sm" icon={IconPencil} aria-label="Edit" />
 <Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
+```
+
+:::
+
+## Groups
+
+Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit: shared borders, rounded outer corners, square inner corners. Presentational only — each child is an independently focusable button. For single-select toggles, reach for a dedicated segmented control.
+
+### Horizontal
+
+:::example
+
+```html
+<div class="btn-group">
+  <button class="btn btn-secondary">Day</button>
+  <button class="btn btn-secondary">Week</button>
+  <button class="btn btn-secondary">Month</button>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <Button variant="secondary">Day</Button>
+  <Button variant="secondary">Week</Button>
+  <Button variant="secondary">Month</Button>
+</ButtonGroup>
+```
+
+:::
+
+### Vertical
+
+:::example
+
+```html
+<div class="btn-group btn-group-vertical">
+  <button class="btn btn-secondary">Up</button>
+  <button class="btn btn-secondary">Center</button>
+  <button class="btn btn-secondary">Down</button>
+</div>
+```
+
+```tsx
+<ButtonGroup orientation="vertical">
+  <Button variant="secondary">Up</Button>
+  <Button variant="secondary">Center</Button>
+  <Button variant="secondary">Down</Button>
+</ButtonGroup>
+```
+
+:::
+
+### With variants and icons
+
+A row-action menu stacked into a sidebar — mixed variants, leading icons, primary on top, destructive at the bottom.
+
+:::example
+
+```html
+<div class="btn-group btn-group-vertical">
+  <button class="btn btn-primary">
+    <i class="ti ti-pencil" aria-hidden="true"></i>
+    Edit
+  </button>
+  <button class="btn btn-secondary">
+    <i class="ti ti-copy" aria-hidden="true"></i>
+    Duplicate
+  </button>
+  <button class="btn btn-secondary">
+    <i class="ti ti-archive" aria-hidden="true"></i>
+    Archive
+  </button>
+  <button class="btn btn-danger">
+    <i class="ti ti-trash" aria-hidden="true"></i>
+    Delete
+  </button>
+</div>
+```
+
+```tsx
+<ButtonGroup orientation="vertical">
+  <Button icon={IconPencil}>Edit</Button>
+  <Button variant="secondary" icon={IconCopy}>
+    Duplicate
+  </Button>
+  <Button variant="secondary" icon={IconArchive}>
+    Archive
+  </Button>
+  <Button variant="danger" icon={IconTrash}>
+    Delete
+  </Button>
+</ButtonGroup>
 ```
 
 :::

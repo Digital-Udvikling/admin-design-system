@@ -14,7 +14,7 @@ export default defineConfig({
   integrations: [
     react(),
     starlight({
-      title: "aortl design system",
+      title: "admin design system",
       customCss: ["./src/styles/global.css"],
       sidebar: [
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },

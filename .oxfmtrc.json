@@ -16,6 +16,7 @@
     "**/coverage",
     "**/.turbo",
     "**/.vite",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "skills"
   ]
 }

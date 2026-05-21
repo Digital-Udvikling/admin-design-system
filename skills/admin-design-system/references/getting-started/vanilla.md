@@ -1,0 +1,48 @@
+# Vanilla CSS
+
+> A single pre-built stylesheet. No build tooling required on your end.
+
+A single pre-built stylesheet. No build tooling required on your end.
+
+:::tip[Branding multiple apps]
+Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+:::
+
+## Install via CDN
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
+```
+
+## Or via npm
+
+```bash
+npm install @aortl/admin-css
+```
+
+Then import `@aortl/admin-css/admin.min.css` from your bundler entry.
+
+Embedding admin markup inside a non-admin page? See [Scoped bundle](../scoped/) for a variant that contains all styles inside a wrapper element.
+
+## Add icons (optional)
+
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage. The webfont drops in without a bundler:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+/>
+```
+
+Pin a version (e.g. `@3.44.0`) for production. With an existing CSS pipeline, install the package and `@import` it instead:
+
+```bash
+npm install @tabler/icons-webfont
+```
+
+```css
+@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+```
+
+Use icons with `<i class="ti ti-{name}"></i>` — `.btn`, `.menu-item`, `.alert`, and `.sidebar-icon` lay them out without wrappers.

@@ -33,6 +33,14 @@ jobs:
       - name: Build (workspace types for docs check)
         run: pnpm build
 
+      - name: Skill bundle is in sync
+        run: |
+          pnpm generate-skill
+          if ! git diff --exit-code -- skills; then
+            echo "::error::skills/ is out of sync with apps/docs/src/content/docs. Run 'pnpm generate-skill' locally and commit the changes."
+            exit 1
+          fi
+
       - name: Type check (tsc / astro)
         run: pnpm check-types
 

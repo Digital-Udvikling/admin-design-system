@@ -1,0 +1,43 @@
+# Tailwind
+
+> Drop the design system into an existing Tailwind v4 project.
+
+Built on Tailwind v4. Importing the source CSS gives utilities like `bg-primary` the same tokens that power `.btn`, `.card`, and `.input`. Radii and shadows use Tailwind's built-in scale (`rounded-lg`, `shadow-xs`, …).
+
+:::tip[Branding multiple apps]
+Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+:::
+
+## Install
+
+```bash
+npm install @aortl/admin-css
+```
+
+## Import into your Tailwind entry
+
+```css
+@import "tailwindcss";
+@import "@aortl/admin-css/src/theme.css";
+@import "@aortl/admin-css/src/components/index.css";
+```
+
+- `theme.css` registers the design tokens — Tailwind generates utilities like `bg-primary` and `text-text-muted`.
+- `components/index.css` ships the semantic classes (`.btn`, `.input`, `.card`, `.field`).
+
+Skip either import if you only want one half.
+
+## Mix utilities and components
+
+```html
+<div class="card p-6">
+  <h3 class="card-title">Inbox</h3>
+  <p class="text-text-muted text-sm">3 unread</p>
+  <div class="mt-4 flex gap-2">
+    <button class="btn btn-primary">Open</button>
+    <button class="btn btn-ghost">Archive</button>
+  </div>
+</div>
+```
+
+Override tokens the same way as with vanilla CSS — see [Customize](../../basics/customize/).

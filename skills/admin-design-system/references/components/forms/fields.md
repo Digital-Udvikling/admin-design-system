@@ -1,0 +1,86 @@
+# Fields
+
+> Accessibility wiring (label, description, validation) around inputs.
+
+Vanilla: wire `<label for>` and `aria-describedby` yourself. React: wrap an `Input` in `Field` + `Field.Label` and Base UI handles the wiring.
+
+## Examples
+
+### Label + description
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="email">Email</label>
+  <input
+    id="email"
+    type="email"
+    class="input input-bordered"
+    placeholder="you@example.com"
+    aria-describedby="email-desc"
+  />
+  <p id="email-desc" class="field-description">We'll never share your email.</p>
+</div>
+```
+
+```tsx
+<Field name="email">
+  <Field.Label>Email</Field.Label>
+  <Input type="email" placeholder="you@example.com" />
+  <Field.Description>We'll never share your email.</Field.Description>
+</Field>
+```
+
+### Required
+
+Pass `required` to `Field.Label` (React) or `data-required` to the label (vanilla) for a red asterisk. The `.asteriskField` class also works, for template generators that emit `<span class="asteriskField">*</span>` (e.g. django-crispy-forms).
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="email-required" data-required>Email</label>
+  <input id="email-required" type="email" class="input input-bordered" required />
+</div>
+<div class="field">
+  <label class="field-label" for="email-asterisk">Email <span class="asteriskField">*</span></label>
+  <input id="email-asterisk" type="email" class="input input-bordered" required />
+</div>
+```
+
+```tsx
+<Field name="email">
+  <Field.Label required>Email</Field.Label>
+  <Input type="email" required />
+</Field>
+```
+
+### With validation
+
+**Example**
+
+```html
+<form>
+  <div class="field">
+    <label class="field-label" for="username">Username</label>
+    <input
+      id="username"
+      class="input input-bordered"
+      required
+      minlength="3"
+      placeholder="At least 3 characters"
+    />
+    <!-- Vanilla relies on the browser's built-in :invalid + ValidityState. -->
+  </div>
+</form>
+```
+
+```tsx
+<Field name="username" validationMode="onChange">
+  <Field.Label>Username</Field.Label>
+  <Input required minLength={3} placeholder="At least 3 characters" />
+  <Field.Error match="valueMissing">Username is required.</Field.Error>
+  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
+</Field>
+```

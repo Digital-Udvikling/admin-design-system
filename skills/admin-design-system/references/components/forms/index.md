@@ -1,0 +1,11 @@
+# Usage
+
+> Input controls and composition primitives.
+
+- **[Inputs](./inputs/)** — single-line text, email, password, number, date, file, …
+- **[Textareas](./textareas/)** — multi-line text.
+- **[Selects](./selects/)** — single-choice dropdown with a custom popup.
+- **[Checkboxes](./checkboxes/)** — independent on/off toggles.
+- **[Radios](./radios/)** — mutually exclusive choice within a `RadioGroup`.
+- **[Switches](./switches/)** — immediate on/off settings (for form submissions, prefer a checkbox).
+- **[Fields](./fields/)** — labels, descriptions, and validation messaging.

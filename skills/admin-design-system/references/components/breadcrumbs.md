@@ -1,0 +1,85 @@
+# Breadcrumbs
+
+> Trail of links to ancestor pages, ending in the current page.
+
+A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link current entry (marked `aria-current="page"`). Separators are CSS-driven — supply a child element in `.breadcrumb-separator` to override the default slash.
+
+## Examples
+
+### Basic
+
+**Example**
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a class="breadcrumb-item" href="/">Home</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li><a class="breadcrumb-item" href="/users">Users</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
+  </ol>
+</nav>
+```
+
+```tsx
+<Breadcrumbs>
+  <Breadcrumbs.Item href="/">Home</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/users">Users</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Detail</Breadcrumbs.Item>
+</Breadcrumbs>
+```
+
+### With a chevron separator
+
+Drop an icon inside `.breadcrumb-separator` — the `:empty::before` default steps aside.
+
+**Example**
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a class="breadcrumb-item" href="/">
+        <i class="ti ti-home" aria-hidden="true"></i>
+        Home
+      </a>
+    </li>
+    <span class="breadcrumb-separator" aria-hidden="true">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </span>
+    <li><a class="breadcrumb-item" href="/users">Users</a></li>
+    <span class="breadcrumb-separator" aria-hidden="true">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </span>
+    <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
+  </ol>
+</nav>
+```
+
+```tsx
+<Breadcrumbs separator={<IconChevronRight size={14} />}>
+  <Breadcrumbs.Item href="/" icon={IconHome}>
+    Home
+  </Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/users">Users</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Detail</Breadcrumbs.Item>
+</Breadcrumbs>
+```
+
+### Deep paths
+
+Long paths wrap onto a second line on narrow viewports instead of overflowing.
+
+**Example**
+
+```tsx
+<Breadcrumbs>
+  <Breadcrumbs.Item href="/">Home</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs">Organisations</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme">Acme Inc.</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme/projects">Projects</Breadcrumbs.Item>
+  <Breadcrumbs.Item href="/orgs/acme/projects/123">Q3 launch</Breadcrumbs.Item>
+  <Breadcrumbs.Item current>Settings</Breadcrumbs.Item>
+</Breadcrumbs>
+```

@@ -1,0 +1,14 @@
+{
+  "name": "digital-udvikling",
+  "owner": {
+    "name": "Digital-Udvikling"
+  },
+  "plugins": [
+    {
+      "name": "admin-design-system",
+      "source": "./",
+      "description": "Agent Skill for the @aortl/admin design system — class names, React component API, theming, and conventions.",
+      "homepage": "https://digital-udvikling.github.io/admin-design-system/"
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+# Buttons
+
+> Base class .btn + a variant + an optional size.
+
+IconPlus,
+  IconTrash,
+  IconDownload,
+  IconDotsVertical,
+  IconPencil,
+  IconCopy,
+  IconArchive,
+} from "@tabler/icons-react";
+
+## Examples
+
+### Variants
+
+**Example**
+
+```html
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-ghost">Ghost</button>
+<button class="btn btn-danger">Danger</button>
+```
+
+```tsx
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="danger">Danger</Button>
+```
+
+### Sizes
+
+**Example**
+
+```html
+<button class="btn btn-primary btn-sm">Small</button>
+<button class="btn btn-primary">Medium</button>
+<button class="btn btn-primary btn-lg">Large</button>
+```
+
+```tsx
+<Button size="sm">Small</Button>
+<Button>Medium</Button>
+<Button size="lg">Large</Button>
+```
+
+### Disabled
+
+**Example**
+
+```html
+<button class="btn btn-primary" disabled>Disabled</button>
+<button class="btn btn-secondary" disabled>Disabled</button>
+```
+
+```tsx
+<Button disabled>Disabled</Button>
+<Button variant="secondary" disabled>Disabled</Button>
+```
+
+### Loading
+
+`.btn-loading` paints a spinner in place of the leading icon and freezes interaction. The React `loading` prop also sets `disabled` and `aria-busy="true"`.
+
+**Example**
+
+```html
+<button class="btn btn-primary btn-loading" type="button" disabled aria-busy="true">Saving</button>
+<button class="btn btn-secondary btn-loading" type="button" disabled aria-busy="true">
+  Loading
+</button>
+```
+
+```tsx
+<Button loading>Saving</Button>
+<Button variant="secondary" loading>Loading</Button>
+```
+
+If you pass both `icon` and `loading`, the leading icon is suppressed. A trailing icon stays visible.
+
+### Full width
+
+**Example**
+
+```html
+<button class="btn btn-primary btn-full-width">Continue</button>
+```
+
+```tsx
+<Button fullWidth>Continue</Button>
+```
+
+### As a link
+
+The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="…" />}` and `nativeButton={false}` so Base UI's keyboard and ARIA wiring adjust.
+
+**Example**
+
+```html
+<a href="/orders/new" class="btn btn-primary">New order</a>
+<a href="/reports" class="btn btn-secondary">View reports</a>
+```
+
+```tsx
+<Button render={<a href="/orders/new" />} nativeButton={false}>New order</Button>
+<Button variant="secondary" render={<a href="/reports" />} nativeButton={false}>View reports</Button>
+```
+
+`disabled` doesn't apply to anchors — omit the link (or render plain text) instead of styling a non-interactive link as disabled.
+
+### With icons
+
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size={16}` with `aria-hidden`. See [Icons](/admin-design-system/basics/icons/).
+
+**Example**
+
+```html
+<button class="btn btn-primary">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+  New order
+</button>
+<button class="btn btn-secondary">
+  Export
+  <i class="ti ti-download" aria-hidden="true"></i>
+</button>
+<button class="btn btn-danger">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+  Delete
+</button>
+```
+
+```tsx
+<Button variant="primary" icon={IconPlus}>New order</Button>
+<Button variant="secondary" iconTrailing={IconDownload}>Export</Button>
+<Button variant="danger" icon={IconTrash}>Delete</Button>
+```
+
+### Icon-only
+
+Drop the label and pass `aria-label` for a square button — table row controls, toolbar icons, dismiss. The React wrapper adds `.btn-square` automatically when a button has an icon but no children; vanilla callers add the class themselves.
+
+**Example**
+
+```html
+<button class="btn btn-ghost btn-square" type="button" aria-label="More actions">
+  <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+</button>
+<button class="btn btn-secondary btn-square btn-sm" type="button" aria-label="Edit">
+  <i class="ti ti-pencil" aria-hidden="true"></i>
+</button>
+<button class="btn btn-danger btn-square btn-lg" type="button" aria-label="Delete">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+</button>
+```
+
+```tsx
+<Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
+<Button variant="secondary" size="sm" icon={IconPencil} aria-label="Edit" />
+<Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
+```
+
+## Groups
+
+Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit: shared borders, rounded outer corners, square inner corners. Presentational only — each child is an independently focusable button. For single-select toggles, reach for a dedicated segmented control.
+
+### Horizontal
+
+**Example**
+
+```html
+<div class="btn-group">
+  <button class="btn btn-secondary">Day</button>
+  <button class="btn btn-secondary">Week</button>
+  <button class="btn btn-secondary">Month</button>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <Button variant="secondary">Day</Button>
+  <Button variant="secondary">Week</Button>
+  <Button variant="secondary">Month</Button>
+</ButtonGroup>
+```
+
+### Vertical
+
+**Example**
+
+```html
+<div class="btn-group btn-group-vertical">
+  <button class="btn btn-secondary">Up</button>
+  <button class="btn btn-secondary">Center</button>
+  <button class="btn btn-secondary">Down</button>
+</div>
+```
+
+```tsx
+<ButtonGroup orientation="vertical">
+  <Button variant="secondary">Up</Button>
+  <Button variant="secondary">Center</Button>
+  <Button variant="secondary">Down</Button>
+</ButtonGroup>
+```
+
+### With variants and icons
+
+A row-action menu stacked into a sidebar — mixed variants, leading icons, primary on top, destructive at the bottom.
+
+**Example**
+
+```html
+<div class="btn-group btn-group-vertical">
+  <button class="btn btn-primary">
+    <i class="ti ti-pencil" aria-hidden="true"></i>
+    Edit
+  </button>
+  <button class="btn btn-secondary">
+    <i class="ti ti-copy" aria-hidden="true"></i>
+    Duplicate
+  </button>
+  <button class="btn btn-secondary">
+    <i class="ti ti-archive" aria-hidden="true"></i>
+    Archive
+  </button>
+  <button class="btn btn-danger">
+    <i class="ti ti-trash" aria-hidden="true"></i>
+    Delete
+  </button>
+</div>
+```
+
+```tsx
+<ButtonGroup orientation="vertical">
+  <Button icon={IconPencil}>Edit</Button>
+  <Button variant="secondary" icon={IconCopy}>
+    Duplicate
+  </Button>
+  <Button variant="secondary" icon={IconArchive}>
+    Archive
+  </Button>
+  <Button variant="danger" icon={IconTrash}>
+    Delete
+  </Button>
+</ButtonGroup>
+```

@@ -1,0 +1,42 @@
+# Spinners
+
+> Compact CSS-only loading indicator.
+
+A pure-CSS rotating arc. The visible edge uses `currentColor`, so it inherits the surrounding text colour.
+
+For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — see [Buttons → Loading](/admin-design-system/components/buttons/#loading).
+
+## Examples
+
+### Sizes
+
+**Example**
+
+```html
+<span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
+<span class="spinner" role="status" aria-label="Loading"></span>
+<span class="spinner spinner-lg" role="status" aria-label="Loading"></span>
+```
+
+```tsx
+<Spinner size="sm" />
+<Spinner />
+<Spinner size="lg" />
+```
+
+### Inherits text colour
+
+**Example**
+
+```html
+<span style="color: var(--color-danger)">
+  <span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
+  Retrying connection
+</span>
+```
+
+```tsx
+<span style={{ color: "var(--color-danger)" }}>
+  <Spinner size="sm" /> Retrying connection
+</span>
+```

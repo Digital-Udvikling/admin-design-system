@@ -147,8 +147,19 @@ Keep: code examples, a11y hooks, version-pinning, override/escape-hatch APIs, no
 3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose with `clsx`, re-export from `src/index.ts` (component + types).
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke test at minimum; interaction tests for controlled state.
 5. `apps/docs/src/content/docs/components/<name>.mdx` — each example as a `:::example` block.
+6. `pnpm generate-skill` to regenerate the agent-skill bundle from the new MDX. CI verifies the bundle is in sync via `git diff --exit-code -- skills`, so a forgotten regen turns into a red build.
 
 No build config changes needed.
+
+## Agent skill bundle
+
+The repo ships an Agent Skill at `skills/admin-design-system/` (see [getting-started/skill/](apps/docs/src/content/docs/getting-started/skill.mdx) for install instructions). It is **generated** — committed but produced by `apps/docs/scripts/generate-skill.mjs` walking `apps/docs/src/content/docs/**/*.mdx` and writing per-page markdown plus a top-level `SKILL.md`. CI re-runs the generator and fails on drift, so:
+
+- **After any change under `apps/docs/src/content/docs/`** (new component page, edited examples, new section): run `pnpm generate-skill` and commit the updated `skills/` alongside your MDX change. Same commit. CI catches it if you forget.
+- **When introducing a new system-wide convention** (a new prop pattern, a new token layer, a new "prefer the platform" rule, a different way to compose primitives): edit `apps/docs/scripts/skill-header.md`. That file is the hand-curated header of `SKILL.md` and holds everything that isn't per-component reference material — frontmatter, "when to use this skill" trigger, conventions, the contributing-back note. Then run `pnpm generate-skill`.
+- **When the transform logic needs to change** (a new MDX directive to handle, a new piece of Starlight JSX to strip, a different output layout): edit `apps/docs/scripts/generate-skill.mjs`. The script is deterministic — no timestamps, sorted file enumeration — so `git diff --exit-code` is a meaningful staleness check.
+
+`skills/` is in `.oxfmtrc.json`'s `ignorePatterns` because it's a generated artifact. `apps/docs/scripts/skill-header.md` is NOT ignored — oxfmt formats it as normal markdown.
 
 ## Releasing
 

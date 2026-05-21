@@ -1,0 +1,81 @@
+# Badges
+
+> Compact status indicator for tags, counts, and chips.
+
+Status columns, counts on tabs, category chips. Inline-flex pills at `text-xs` by default.
+
+## Examples
+
+### Variants
+
+**Example**
+
+```html
+<span class="badge badge-neutral">Draft</span>
+<span class="badge badge-info">Info</span>
+<span class="badge badge-success">Active</span>
+<span class="badge badge-warning">Review</span>
+<span class="badge badge-danger">Blocked</span>
+<span class="badge badge-primary">New</span>
+```
+
+```tsx
+<Badge variant="neutral">Draft</Badge>
+<Badge variant="info">Info</Badge>
+<Badge variant="success">Active</Badge>
+<Badge variant="warning">Review</Badge>
+<Badge variant="danger">Blocked</Badge>
+<Badge variant="primary">New</Badge>
+```
+
+### Sizes
+
+**Example**
+
+```html
+<span class="badge badge-success badge-sm">SM</span>
+<span class="badge badge-success">MD</span>
+<span class="badge badge-success badge-lg">LG</span>
+```
+
+```tsx
+<Badge variant="success" size="sm">SM</Badge>
+<Badge variant="success">MD</Badge>
+<Badge variant="success" size="lg">LG</Badge>
+```
+
+### With a leading icon
+
+Pass `icon` or drop an `<i>`/`<svg>` as the first child.
+
+**Example**
+
+```html
+<span class="badge badge-success">
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  Passed
+</span>
+<span class="badge badge-warning">
+  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  Needs review
+</span>
+```
+
+```tsx
+<Badge variant="success" icon={IconCircleCheck}>Passed</Badge>
+<Badge variant="warning" icon={IconAlertTriangle}>Needs review</Badge>
+```
+
+### Counts
+
+**Example**
+
+```html
+<span class="badge badge-primary badge-sm">12</span>
+<span class="badge badge-neutral badge-sm">99+</span>
+```
+
+```tsx
+<Badge variant="primary" size="sm">12</Badge>
+<Badge variant="neutral" size="sm">99+</Badge>
+```

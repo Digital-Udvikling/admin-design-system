@@ -1,0 +1,46 @@
+# Agent skill
+
+> Install the design system as an Agent Skill so Claude (or any compatible agent) knows the class names, component API, and conventions.
+
+The repo ships an [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) bundle at [`skills/admin-design-system/`](https://github.com/Digital-Udvikling/admin/tree/main/skills/admin-design-system). It's a self-contained set of markdown files that teach an AI coding agent the class-name contract, the React component API, the icon and token conventions, and the project's "prefer the platform" philosophy — plus one reference file per component with paired vanilla HTML and React examples.
+
+Once installed, an agent working in a project that uses `@aortl/admin-css` or `@aortl/admin-react` will pull the skill in automatically and produce output that matches the system's idioms.
+
+## Install with `npx skills` (recommended)
+
+[`vercel-labs/skills`](https://github.com/vercel-labs/skills) is a small CLI that fetches a skills repo and wires it into whichever agents you have installed. It's the simplest path and works with Claude Code, OpenCode, Codex, Cursor, and others.
+
+```bash
+npx skills add Digital-Udvikling/admin
+```
+
+You'll be prompted for which agents to target. To install once for your user account (rather than the current project) and skip the prompts:
+
+```bash
+npx skills add Digital-Udvikling/admin -g -a claude-code -y
+```
+
+To list available skills in the repo without installing:
+
+```bash
+npx skills add Digital-Udvikling/admin --list
+```
+
+See [the `skills` CLI README](https://github.com/vercel-labs/skills#install-a-skill) for the full set of flags.
+
+## Install as a Claude Code plugin
+
+If you only use Claude Code and prefer its built-in plugin manager, the repo also acts as a single-plugin marketplace. From inside Claude Code:
+
+```text
+/plugin marketplace add Digital-Udvikling/admin
+/plugin install admin-design-system@digital-udvikling
+```
+
+Updates land when you push commits to `main`; refresh with `/plugin marketplace update digital-udvikling`.
+
+See [the Claude Code plugins docs](https://docs.claude.com/en/docs/claude-code/plugins) for managing installed plugins.
+
+## Keeping the skill current
+
+The bundle is generated from the `.mdx` files in this docs site by [`apps/docs/scripts/generate-skill.mjs`](https://github.com/Digital-Udvikling/admin/blob/main/apps/docs/scripts/generate-skill.mjs) and committed to the repo. CI fails if the committed bundle drifts from the source, so what you install is always in sync with the latest docs.

@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check-types": "astro check"
+    "check-types": "astro check",
+    "generate-skill": "node scripts/generate-skill.mjs"
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",

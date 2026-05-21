@@ -1,0 +1,215 @@
+# Icons
+
+> Tabler Icons — webfont for vanilla, typed components for React.
+
+IconHome,
+  IconSearch,
+  IconSettings,
+  IconUser,
+  IconTrash,
+  IconPencil,
+  IconPlus,
+  IconChevronDown,
+  IconInfoCircle,
+  IconCircleCheck,
+  IconAlertTriangle,
+  IconAlertOctagon,
+} from "@tabler/icons-react";
+
+The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React.
+
+Tabler ships in two flavours: a **webfont** for plain HTML (`<i class="ti ti-home"></i>`) and **React components** (`@tabler/icons-react`).
+
+## Install
+
+- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../../getting-started/vanilla/#add-icons-optional).
+- **React** — see [Getting Started › React](../../getting-started/react/#add-icons-optional).
+
+## Vanilla usage
+
+**Example**
+
+```html
+<i class="ti ti-home"></i>
+<i class="ti ti-search"></i>
+<i class="ti ti-settings"></i>
+<i class="ti ti-user"></i>
+<i class="ti ti-trash"></i>
+```
+
+```tsx
+<IconHome />
+<IconSearch />
+<IconSettings />
+<IconUser />
+<IconTrash />
+```
+
+Icons inherit `color` and `font-size` from their parent.
+
+**Example**
+
+```html
+<button class="btn btn-primary">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+  New order
+</button>
+<button class="btn btn-secondary">
+  <i class="ti ti-pencil" aria-hidden="true"></i>
+  Edit
+</button>
+<button class="btn btn-danger">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+  Delete
+</button>
+```
+
+```tsx
+<Button variant="primary" icon={IconPlus}>
+  New order
+</Button>
+<Button variant="secondary" icon={IconPencil}>
+  Edit
+</Button>
+<Button variant="danger" icon={IconTrash}>
+  Delete
+</Button>
+```
+
+## React usage
+
+```tsx
+import { IconHome, IconSearch } from "@tabler/icons-react";
+```
+
+Components forward standard SVG props plus:
+
+| Prop     | Default        | What it does                       |
+| -------- | -------------- | ---------------------------------- |
+| `size`   | `24`           | Width and height in pixels.        |
+| `stroke` | `2`            | Stroke width (try `1.5` for thin). |
+| `color`  | `currentColor` | Stroke colour.                     |
+
+**Example**
+
+```tsx
+<IconChevronDown size={16} />
+<IconChevronDown size={24} />
+<IconChevronDown size={32} stroke={1.5} />
+```
+
+## Sizing
+
+Tabler's natural size is `24`, but admin chrome looks better smaller:
+
+| Context                                      | Size |
+| -------------------------------------------- | ---- |
+| Inline next to text (button label, menu row) | `16` |
+| Icon-only button or large action             | `20` |
+| Dense table rows or compact toolbars         | `14` |
+
+## Accessibility
+
+Icons next to a text label are decorative — React `icon` props set `aria-hidden` for you; in vanilla HTML, add it yourself:
+
+```html
+<button class="btn btn-primary">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+  Add product
+</button>
+```
+
+When an icon is the only content, give the surrounding element an accessible name:
+
+**Example**
+
+```html
+<button class="btn btn-ghost" aria-label="Delete row">
+  <i class="ti ti-trash" aria-hidden="true"></i>
+</button>
+```
+
+```tsx
+<Button variant="ghost" icon={IconTrash} aria-label="Delete row" />
+```
+
+## In context
+
+### Alert with status icon
+
+**Example**
+
+```html
+<div class="alert alert-info" role="status">
+  <i class="ti ti-info-circle" aria-hidden="true"></i>
+  Backups run nightly at 02:00 UTC.
+</div>
+<div class="alert alert-success" role="status">
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  Changes saved.
+</div>
+<div class="alert alert-warning" role="alert">
+  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  This action is not reversible.
+</div>
+<div class="alert alert-danger" role="alert">
+  <i class="ti ti-alert-octagon" aria-hidden="true"></i>
+  Connection to the database failed.
+</div>
+```
+
+```tsx
+<Alert variant="info" icon={IconInfoCircle}>
+  Backups run nightly at 02:00 UTC.
+</Alert>
+<Alert variant="success" icon={IconCircleCheck}>
+  Changes saved.
+</Alert>
+<Alert variant="warning" icon={IconAlertTriangle}>
+  This action is not reversible.
+</Alert>
+<Alert variant="danger" icon={IconAlertOctagon}>
+  Connection to the database failed.
+</Alert>
+```
+
+### Menu items with leading icons
+
+**Example**
+
+```html
+<details class="menu">
+  <summary class="menu-trigger">Account</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button">
+      <i class="ti ti-user" aria-hidden="true"></i>
+      Profile
+    </button>
+    <button class="menu-item" type="button">
+      <i class="ti ti-settings" aria-hidden="true"></i>
+      Settings
+    </button>
+    <hr class="menu-separator" />
+    <button class="menu-item" type="button">
+      <i class="ti ti-trash" aria-hidden="true"></i>
+      Delete account
+    </button>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger>Account</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item icon={IconUser}>Profile</Menu.Item>
+    <Menu.Item icon={IconSettings}>Settings</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item icon={IconTrash}>Delete account</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+## Substituting your own set
+
+Nothing in the design system is hard-wired to Tabler. Icon slots accept any element — use Phosphor, Heroicons, or your own SVG sprite the same way.

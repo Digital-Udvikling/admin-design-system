@@ -1,0 +1,58 @@
+# React
+
+> Thin React wrappers that emit the same class names as the vanilla CSS.
+
+Thin React wrappers that emit the same class names as the vanilla CSS.
+
+:::tip[Branding multiple apps]
+Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+:::
+
+## Install
+
+```bash
+npm install @aortl/admin-react react react-dom
+```
+
+## Import styles + components
+
+If you're embedding admin components inside a non-admin app, import [`@aortl/admin-react/styles.scoped.css`](../scoped/) and wrap with `<AdminRoot>` instead.
+
+```tsx
+import "@aortl/admin-react/styles.css";
+import { Button, Card, Input } from "@aortl/admin-react";
+
+export function SignIn() {
+  return (
+    <Card>
+      <Card.Body>
+        <Card.Title>Sign in</Card.Title>
+        <Input placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <Card.Actions>
+          <Button variant="primary">Sign in</Button>
+          <Button variant="ghost">Cancel</Button>
+        </Card.Actions>
+      </Card.Body>
+    </Card>
+  );
+}
+```
+
+## Add icons (optional)
+
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage.
+
+```bash
+npm install @tabler/icons-react
+```
+
+```tsx
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+
+<Button variant="primary" icon={IconPlus}>
+  New order
+</Button>;
+```
+
+`<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component and the wrapper sizes it and adds `aria-hidden`.

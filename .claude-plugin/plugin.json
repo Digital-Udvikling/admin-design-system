@@ -1,0 +1,10 @@
+{
+  "name": "admin-design-system",
+  "description": "Internal admin tooling design system from Digital-Udvikling. Ships an Agent Skill that teaches Claude the @aortl/admin-css class names, the @aortl/admin-react component API, the icon and token conventions, and the project's 'prefer the platform' philosophy.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Digital-Udvikling"
+  },
+  "homepage": "https://digital-udvikling.github.io/admin-design-system/",
+  "repository": "https://github.com/Digital-Udvikling/admin"
+}

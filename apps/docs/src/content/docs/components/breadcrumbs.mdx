@@ -1,12 +1,12 @@
 ---
 title: Breadcrumbs
-description: Compact trail of links to ancestor pages, with the current page as the trailing non-link entry.
+description: Trail of links to ancestor pages, ending in the current page.
 ---
 
 import { Breadcrumbs } from "@aortl/admin-react";
 import { IconChevronRight, IconHome } from "@tabler/icons-react";
 
-A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links and a final non-link entry. The current page is marked with `aria-current="page"` and styled as body text. Separators are CSS-driven so a single `<span class="breadcrumb-separator">` between items is all you need; supply a child element if you want a chevron instead of the default slash.
+A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link current entry (marked `aria-current="page"`). Separators are CSS-driven — supply a child element in `.breadcrumb-separator` to override the default slash.
 
 ## Examples
 
@@ -38,7 +38,7 @@ A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links and a final non-li
 
 ### With a chevron separator
 
-Drop an icon inside `.breadcrumb-separator` — the empty-`:empty::before` rule steps aside, so the icon becomes the separator.
+Drop an icon inside `.breadcrumb-separator` — the `:empty::before` default steps aside.
 
 :::example
 
@@ -77,7 +77,7 @@ Drop an icon inside `.breadcrumb-separator` — the empty-`:empty::before` rule 
 
 ### Deep paths
 
-The `<ol>` is `inline-flex flex-wrap`, so long paths reflow onto a second line on narrow viewports instead of forcing horizontal overflow.
+Long paths wrap onto a second line on narrow viewports instead of overflowing.
 
 :::example
 

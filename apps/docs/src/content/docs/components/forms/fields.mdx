@@ -1,11 +1,11 @@
 ---
 title: Fields
-description: Field composition adds accessibility wiring around inputs. Identical DOM from either package.
+description: Accessibility wiring (label, description, validation) around inputs.
 ---
 
 import { Field, Input } from "@aortl/admin-react";
 
-In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wrap an `Input` in `Field` + `Field.Label` to get the same wiring automatically — Base UI handles association, description, and validation messaging.
+Vanilla: wire `<label for>` and `aria-describedby` yourself. React: wrap an `Input` in `Field` + `Field.Label` and Base UI handles the wiring.
 
 ## Examples
 
@@ -39,7 +39,7 @@ In vanilla, wire up `<label for>` and `aria-describedby` yourself. In React, wra
 
 ### Required
 
-Pass `required` to `Field.Label` (React) or add `data-required` to the label (vanilla) to render a red asterisk. The `.asteriskField` class is also available for compatibility with template generators that emit `<span class="asteriskField">*</span>` inside the label (e.g. django-crispy-forms).
+Pass `required` to `Field.Label` (React) or `data-required` to the label (vanilla) for a red asterisk. The `.asteriskField` class also works, for template generators that emit `<span class="asteriskField">*</span>` (e.g. django-crispy-forms).
 
 :::example
 

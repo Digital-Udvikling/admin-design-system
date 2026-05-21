@@ -15,16 +15,16 @@ import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
 
 <CardGrid>
   <Card title="Built for admin tooling" icon="rocket">
-    Density-first defaults for the screens an operator sits in all day — dashboards, CRMs, control panels. Predictable primitives, restrained chrome, operator UX over marketing polish.
+    Density-first defaults for screens an operator sits in all day. Predictable primitives, restrained chrome.
   </Card>
   <Card title="Modern web platform" icon="star">
-    Evergreen browsers only, so we lean on the platform. Disclosure uses `<details>` and `popover`, modals use `<dialog>`, animation is CSS transitions and `@starting-style`, state is read with `:has()` and `:user-valid`. Less JavaScript shipped, less to maintain.
+    Disclosure uses `<details>` and `popover`, modals use `<dialog>`, animation is CSS transitions, state is read with `:has()` and `:user-valid`. Less JavaScript to ship and maintain.
   </Card>
   <Card title="Two flavors, one source of truth" icon="puzzle">
-    Vanilla CSS for drop-in use in any stack, React components for typed call sites. Both render the same class names — HTML and JSX look identical on screen.
+    Vanilla CSS for any stack, React components for typed call sites. Both render the same class names.
   </Card>
   <Card title="Not for marketing surfaces" icon="warning">
-    Use this for a 40-column table or a 12-input form. Reach for a different system if the goal is to _feel_ polished rather than _operate_ quickly.
+    Reach for a different system if the goal is to _feel_ polished rather than _operate_ quickly.
   </Card>
 </CardGrid>
 
@@ -34,11 +34,11 @@ import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
   <LinkCard
     title="Vanilla CSS"
     href={`${import.meta.env.BASE_URL}getting-started/vanilla/`}
-    description="A pre-built stylesheet. Drop it in via <link> and use semantic class names — no build setup, no Tailwind required."
+    description="A pre-built stylesheet. Drop it in via <link> — no build setup, no Tailwind required."
   />
   <LinkCard
     title="React"
     href={`${import.meta.env.BASE_URL}getting-started/react/`}
-    description="A tree-shakeable component library. Same class names as the CSS package, so vanilla HTML and React render identically."
+    description="A tree-shakeable component library. Same class names as the CSS package."
   />
 </CardGrid>

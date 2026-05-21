@@ -59,7 +59,7 @@ import { Input } from "@aortl/admin-react";
 
 ### Types
 
-`Input` forwards the native `type` attribute, so every HTML input type works — the browser handles affordances like date pickers, number steppers, and password masking.
+`Input` forwards the native `type` attribute.
 
 :::example
 
@@ -89,7 +89,7 @@ import { Input } from "@aortl/admin-react";
 
 ### Date and time
 
-The browser renders the native picker; the design system tones the calendar glyph (`::-webkit-calendar-picker-indicator`) to read as interactive without overwhelming the input. Dark-mode colouring comes for free via `color-scheme`.
+The browser renders the native picker. The calendar glyph is toned via `::-webkit-calendar-picker-indicator`; dark mode is handled by `color-scheme`.
 
 :::example
 
@@ -113,4 +113,4 @@ The browser renders the native picker; the design system tones the calendar glyp
 
 ### File
 
-For richer chrome around the picker button, use the dedicated [FileInput](../file-inputs/) component (`.file-input` class). Plain `<input type="file" class="input">` works but the file-selector button stays browser-default.
+Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button. Plain `<input type="file" class="input">` leaves it browser-default.

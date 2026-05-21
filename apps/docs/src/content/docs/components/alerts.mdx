@@ -1,6 +1,6 @@
 ---
 title: Alerts
-description: Inline notifications for form errors, success messages, and other contextual feedback.
+description: Inline notifications for errors, confirmations, and contextual feedback.
 ---
 
 import { Alert } from "@aortl/admin-react";
@@ -11,7 +11,7 @@ import {
   IconAlertOctagon,
 } from "@tabler/icons-react";
 
-Use alerts to surface form-level errors, success confirmations, and other contextual messages above the content they relate to. For single-field validation messages, use [Fields](/admin-design-system/components/forms/fields/) instead.
+For single-field validation, use [Fields](/admin-design-system/components/forms/fields/) instead.
 
 ## Examples
 
@@ -37,7 +37,7 @@ Use alerts to surface form-level errors, success confirmations, and other contex
 
 ### With title and description
 
-`<Alert>` accepts `title` and `description` props for the common case. Use the sub-components if you need to interleave them with other content.
+`<Alert>` accepts `title` and `description` props. Use the sub-components to interleave them with other content.
 
 :::example
 
@@ -60,7 +60,7 @@ Use alerts to surface form-level errors, success confirmations, and other contex
 
 ### With a leading icon
 
-Pass an icon via the `icon` prop. Internally it renders as the first child, which the CSS picks up to switch the alert into a two-column grid — the icon spans all rows on the left and inherits the variant colour. Works for one-line alerts and for title + description alike. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+Pass `icon` — the CSS switches the alert to a two-column grid; the icon spans all rows and inherits the variant colour. See [Icons](/admin-design-system/basics/icons/).
 
 :::example
 

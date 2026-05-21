@@ -1,6 +1,6 @@
 ---
 title: Buttons
-description: Base class .btn + a variant + an optional size. Identical DOM from either package.
+description: Base class .btn + a variant + an optional size.
 ---
 
 import { Button } from "@aortl/admin-react";
@@ -64,7 +64,7 @@ import { IconPlus, IconTrash, IconDownload, IconDotsVertical } from "@tabler/ico
 
 ### Loading
 
-Add `.btn-loading` to paint a spinner in place of the leading icon and freeze interaction. In React, the `loading` prop also sets `disabled` and `aria-busy="true"` so screen readers announce the pending state.
+`.btn-loading` paints a spinner in place of the leading icon and freezes interaction. The React `loading` prop also sets `disabled` and `aria-busy="true"`.
 
 :::example
 
@@ -82,7 +82,7 @@ Add `.btn-loading` to paint a spinner in place of the leading icon and freeze in
 
 :::
 
-The spinner sits where a leading `icon` would, so if you pass both `icon` and `loading` the icon is suppressed while the spinner is shown — no double-glyph. A trailing icon stays visible.
+If you pass both `icon` and `loading`, the leading icon is suppressed. A trailing icon stays visible.
 
 ### Block (full width)
 
@@ -100,7 +100,7 @@ The spinner sits where a leading `icon` would, so if you pass both `icon` and `l
 
 ### As a link
 
-When the action navigates rather than mutates, use an anchor. The `.btn` classes are purely visual, so they apply cleanly to `<a>`. In React, pass `render={<a href="…" />}` and `nativeButton={false}` so Base UI knows the underlying element is no longer a `<button>` — keyboard and ARIA wiring adjust accordingly.
+The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="…" />}` and `nativeButton={false}` so Base UI's keyboard and ARIA wiring adjust.
 
 :::example
 
@@ -116,11 +116,11 @@ When the action navigates rather than mutates, use an anchor. The `.btn` classes
 
 :::
 
-The `disabled` state doesn't apply to anchors — if a link can be unavailable, omit it (or render plain text) rather than styling a non-interactive link as disabled.
+`disabled` doesn't apply to anchors — omit the link (or render plain text) instead of styling a non-interactive link as disabled.
 
 ### With icons
 
-Pass an icon component to `icon` for a leading icon, or `iconTrailing` for a trailing one. The wrapper renders it at `size={16}` with `aria-hidden`. For an icon-only button, pass just `icon` and add an `aria-label`. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size={16}` with `aria-hidden`. For an icon-only button, pass just `icon` and add an `aria-label`. See [Icons](/admin-design-system/basics/icons/).
 
 :::example
 

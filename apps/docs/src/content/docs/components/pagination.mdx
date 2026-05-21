@@ -1,17 +1,15 @@
 ---
 title: Pagination
-description: Numbered page navigation with prev/next controls and ellipses for large ranges.
+description: Numbered page navigation with prev/next controls.
 ---
 
 import { Pagination } from "@aortl/admin-react";
 
-The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component is the smart helper — pass `page`, `total`, and `onPageChange` and it computes the visible range with ellipses, prev/next buttons, and edge disabling. Always controlled by the consumer.
+The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange` — always controlled.
 
 ## Examples
 
 ### Small range
-
-When everything fits, all page numbers render with no ellipses.
 
 :::example
 
@@ -59,7 +57,7 @@ When everything fits, all page numbers render with no ellipses.
 
 ### Custom renderer (routing libraries)
 
-`renderItem` is called once per item — a "page", "previous", "next", or "ellipsis" — and returns the inner element. Use this to render `<Link>` components from your router so prev/next/numbers are real anchors.
+`renderItem` is called once per item (`"page"`, `"previous"`, `"next"`, `"ellipsis"`) — use it to render router `<Link>` components so prev/next/numbers are real anchors.
 
 ```tsx
 <Pagination

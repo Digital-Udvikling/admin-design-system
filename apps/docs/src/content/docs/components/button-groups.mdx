@@ -1,11 +1,11 @@
 ---
 title: Button groups
-description: Combine related .btn elements into a single segmented row or column. Same DOM from either package.
+description: Combine related .btn elements into a single segmented row or column.
 ---
 
 import { Button, ButtonGroup } from "@aortl/admin-react";
 
-A button group renders multiple `.btn` children as one visually combined unit: shared borders, rounded outer corners, square inner corners. It is presentational only — each child is still an independently focusable button. For single-select toggles, reach for a dedicated toggle / segmented control instead.
+Multiple `.btn` children render as one visually combined unit: shared borders, rounded outer corners, square inner corners. Presentational only — each child is an independently focusable button. For single-select toggles, use a dedicated segmented control instead.
 
 ## Examples
 
@@ -55,8 +55,6 @@ A button group renders multiple `.btn` children as one visually combined unit: s
 
 ### Split action
 
-A primary action plus a related secondary action read as one unit.
-
 :::example
 
 ```html
@@ -77,7 +75,7 @@ A primary action plus a related secondary action read as one unit.
 
 ### Sizing
 
-Set the size on each child, not the group. Keep all children the same size for a clean group.
+Set the size on each child, not the group — and keep all children the same size.
 
 :::example
 

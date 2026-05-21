@@ -1,6 +1,6 @@
 ---
-title: App Shell
-description: Page chrome — navbar, optional sidebar, optional footer — laid out around a main content area.
+title: App shell
+description: Page chrome — navbar, optional sidebar, optional footer — around a main content area.
 sidebar:
   order: 1
 ---
@@ -17,9 +17,7 @@ import {
   IconHeadset,
 } from "@tabler/icons-react";
 
-The app shell is the layout primitive every admin page sits inside. It owns a CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — and a small React context for the mobile drawer state. The pieces it composes work standalone outside the shell, too.
-
-Built to live inside a host frame: it doesn't assume it owns the viewport.
+A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context for the mobile drawer. The composed pieces (navbar, sidebar, footer) also work standalone. The shell doesn't assume it owns the viewport.
 
 ## Anatomy
 
@@ -38,7 +36,7 @@ Built to live inside a host frame: it doesn't assume it owns the viewport.
 
 ## Quick start
 
-The simplest shell: navbar above, `main` below.
+Navbar above, `main` below.
 
 :::example
 
@@ -92,7 +90,7 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 
 ## Navbar
 
-A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from the left, `<Navbar.Actions>` to the right. Items mark the active page via `active` (sets `aria-current="page"`).
+48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `active` on an item sets `aria-current="page"`.
 
 :::example
 
@@ -132,7 +130,7 @@ A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from th
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](/admin-design-system/components/menus/) styled as a navbar item — `menu-trigger` plus `navbar-item` on the `<summary>`. The chevron lives in CSS, no SVG needed.
+`<Navbar.Dropdown>` is a [`<Menu>`](/admin-design-system/components/menus/) styled as a navbar item — `menu-trigger` plus `navbar-item` on the `<summary>`.
 
 :::example
 
@@ -173,9 +171,7 @@ A 48px-tall strip with a flex row: `<Navbar.Brand>` and `<Navbar.Items>` from th
 
 ### Actions slot
 
-Drop in a shop switcher, user menu, sign-out — anything right-aligned.
-
-The vanilla example uses a native `<select>` with the same `.select` classes — the rule set targets `<select>` specifically with `appearance: none` plus a CSS chevron, so the look matches the React Base UI version. The React `<Select>` is preferable when option rows need custom rendering (icons, two lines, etc.).
+Right-aligned slot for shop switcher, user menu, sign-out, etc. The vanilla example uses a native `<select>`; React's `<Select>` is preferable when option rows need custom rendering (icons, two lines, etc.).
 
 :::example
 
@@ -234,7 +230,7 @@ The vanilla example uses a native `<select>` with the same `.select` classes —
 
 ### Mobile toggle
 
-`<Navbar.MobileToggle>` is hidden above the `md` breakpoint and flips `AppShell`'s mobile drawer state. The hamburger is drawn with one element + two box-shadow strokes — no SVG.
+`<Navbar.MobileToggle>` is hidden above the `md` breakpoint and flips `AppShell`'s mobile drawer state.
 
 ```html
 <button class="navbar-mobile-toggle" type="button" aria-label="Open menu"></button>
@@ -244,11 +240,11 @@ See [mobile drawer](#mobile-drawer) below.
 
 ## Sidebar
 
-A left rail for systems with many sub-pages. Three pieces to know: flat items, tree-shaped groups, and click-to-collapse — all driven by native HTML, so the vanilla examples work without any JS.
+Flat items, tree groups, and click-to-collapse — all driven by native HTML.
 
 ### Items and groups
 
-`<Sidebar.Item>` is a leaf link with `active` for the current route. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>`. The label hides when the sidebar collapses.
+`<Sidebar.Item>` is a leaf link; `active` marks the current route. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>` that hides when collapsed.
 
 :::example
 
@@ -281,7 +277,7 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 
 ### Tree navigation
 
-`<Sidebar.Collapsible>` is a `<details>` element. Click the trigger to reveal `<Sidebar.SubItem>` rows underneath. Pass `defaultOpen` to start expanded.
+`<Sidebar.Collapsible>` is a `<details>` revealing `<Sidebar.SubItem>` rows. Pass `defaultOpen` to start expanded.
 
 :::example
 
@@ -337,9 +333,9 @@ A left rail for systems with many sub-pages. Three pieces to know: flat items, t
 
 ### Click to collapse
 
-`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox. The rail responds to `.sidebar:has(.sidebar-toggle:checked)` — pure CSS. Pass each item's glyph via the `icon` prop so it stays visible in the collapsed rail.
+`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox; the rail responds to `.sidebar:has(.sidebar-toggle:checked)`. Pass each item's `icon` so it stays visible when collapsed.
 
-React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `defaultCollapsed` / `onCollapsedChange`) that drives the same checkbox.
+React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChange` for controlled state.
 
 :::example
 
@@ -388,7 +384,7 @@ React keeps a controlled/uncontrolled API on `<Sidebar>` (`collapsed` / `default
 
 ### Mobile drawer
 
-Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below the `md` breakpoint the desktop column hides and `<Navbar.MobileToggle>` opens the drawer. Esc, backdrop click, and link clicks all close it; focus is trapped while open.
+Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below `md`, the desktop column hides and `<Navbar.MobileToggle>` opens the drawer. Esc, backdrop click, and link clicks all close it; focus is trapped while open.
 
 :::example
 
@@ -418,7 +414,7 @@ Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below the `md` bre
 
 ## Footer
 
-Small horizontal strip. `<Footer.Links>` on the left, `<Footer.Meta>` on the right; both wrap on narrow viewports.
+`<Footer.Links>` on the left, `<Footer.Meta>` on the right; both wrap on narrow viewports.
 
 :::example
 
@@ -448,11 +444,11 @@ Small horizontal strip. `<Footer.Links>` on the left, `<Footer.Meta>` on the rig
 
 ## Examples
 
-Full compositions to copy and adapt. The parts above show each primitive in isolation; these show how they fit together.
+Full compositions to copy and adapt.
 
 ### Classic admin
 
-Sidebar-first with a shop selector in the navbar, tree navigation for a section with sub-pages, and a click toggle for the rail. Closest to existing AO Retail systems.
+Sidebar-first with a shop selector in the navbar, tree navigation, and a collapse toggle.
 
 :::example
 
@@ -537,7 +533,7 @@ Sidebar-first with a shop selector in the navbar, tree navigation for a section 
 
 ### Top-nav heavy
 
-No sidebar. Primary navigation lives in the navbar, organised through `<Navbar.Dropdown>`. Good for tools with few top-level destinations and per-destination tabs handled in `main`.
+No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. Good for tools with few top-level destinations and per-destination tabs in `main`.
 
 :::example
 
@@ -592,8 +588,6 @@ Two CSS variables on `.app-shell` set the rail width:
 | --------------------------------- | ------- | -------------------------------------- |
 | `--app-shell-sidebar-w`           | `240px` | Expanded sidebar / drawer width.       |
 | `--app-shell-sidebar-w-collapsed` | `56px`  | Width of the icon rail when collapsed. |
-
-Override them at the root or on a specific shell instance to retune the layout.
 
 ```css
 .app-shell {

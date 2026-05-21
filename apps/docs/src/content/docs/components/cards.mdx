@@ -1,18 +1,16 @@
 ---
 title: Cards
-description: A container with optional title, description, and actions. Identical DOM from either package.
+description: A container with optional title, description, and actions.
 ---
 
 import { Button, Card, Input } from "@aortl/admin-react";
 import { IconShoppingBag, IconArrowRight } from "@tabler/icons-react";
 
-A container with optional title, description, and actions.
-
 ## Examples
 
 ### Basic
 
-`<Card>` accepts `title`, `description`, and `actions` props — children render as the body. Everything is wrapped in a single `<Card.Body>` automatically. For layouts that don't fit that shape (media block above the body, multiple bodies, custom header), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
+`<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (media above the body, multiple bodies, custom header), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
 
 :::example
 
@@ -48,7 +46,7 @@ A container with optional title, description, and actions.
 
 ### Sign-in form
 
-For free-form content between the title and the actions, pass it as children. Title and description go above; actions go at the bottom.
+Free-form content goes as children, between the title and the actions.
 
 :::example
 
@@ -109,7 +107,7 @@ For free-form content between the title and the actions, pass it as children. Ti
 
 ### With icon
 
-Pass an icon component via the `icon` prop — it lands inside the title row. Buttons and other components follow the same shape with `icon` and `iconTrailing`. See [Icons](/admin-design-system/theme/icons/).
+Pass `icon` — it lands in the title row. See [Icons](/admin-design-system/basics/icons/).
 
 :::example
 
@@ -149,7 +147,7 @@ Pass an icon component via the `icon` prop — it lands inside the title row. Bu
 
 ## Advanced: layout with `Card.Container`
 
-`<Card>` is opinionated: always a single `<Card.Body>`, with the title row at the top and actions at the bottom. When the layout you need doesn't fit that — a media strip above the body, two stacked bodies separated by a divider, a custom header — drop down to `<Card.Container>`. It renders the bare `.card` element (with the `bordered`/`compact` modifiers) and nothing else; you compose the sub-parts yourself.
+`<Card>` is opinionated — single body, title on top, actions at the bottom. For layouts that don't fit, drop down to `<Card.Container>`: it renders the bare `.card` element (with `bordered`/`compact` modifiers) and lets you compose the sub-parts yourself.
 
 :::example
 
@@ -189,4 +187,4 @@ Pass an icon component via the `icon` prop — it lands inside the title row. Bu
 
 :::
 
-`<Card.Title>` still accepts the `icon` prop in the advanced path, so you don't lose the shorthand when you reach for the lower-level pieces.
+`<Card.Title>` still accepts the `icon` prop in the advanced path.

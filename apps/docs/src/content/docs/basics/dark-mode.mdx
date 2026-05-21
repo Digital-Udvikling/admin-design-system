@@ -1,15 +1,15 @@
 ---
 title: Dark mode
-description: Token-level dark mode driven by Flexoki's inverted ramp. Single source of truth, follows the OS by default, manual override per page or per subtree.
+description: Follows the OS by default, with manual override per page or subtree.
 sidebar:
   order: 3
 ---
 
-Dark mode tokens follow Flexoki's [inverted ramp](https://stephango.com/flexoki) — `paper ↔ black`, `base-50 ↔ base-950`, accent `-600 ↔ -400`, accent muted `-50 ↔ -950`. Every semantic token is declared once via `light-dark()`, so components automatically follow whichever mode is active.
+Semantic tokens are declared once via `light-dark()` and dark mode flips them to Flexoki's [inverted ramp](https://stephango.com/flexoki) — `paper ↔ black`, `base-50 ↔ base-950`, accent `-600 ↔ -400`.
 
 ## How it switches
 
-The active mode is resolved from CSS `color-scheme`, declared at `:root`:
+Mode is resolved from CSS `color-scheme` at `:root`:
 
 | Selector               | `color-scheme` | When it wins             |
 | ---------------------- | -------------- | ------------------------ |
@@ -44,7 +44,7 @@ The selector isn't scoped to `:root`, so any element can flip its own subtree �
 
 ## Tailwind `dark:` variant
 
-Tailwind's `dark:` variant is wired to the same rules: it fires under `prefers-color-scheme: dark` _or_ inside `[data-theme="dark"]`, and is suppressed inside `[data-theme="light"]`. Authored utilities stay in sync with the tokens:
+The `dark:` variant fires under `prefers-color-scheme: dark` or inside `[data-theme="dark"]`, and is suppressed inside `[data-theme="light"]`:
 
 ```html
 <div class="shadow-md dark:shadow-xl">...</div>

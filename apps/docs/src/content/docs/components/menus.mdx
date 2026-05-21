@@ -1,6 +1,6 @@
 ---
 title: Menus
-description: Dropdown menu built on native <details> + <summary>. CSS-only — open/close, click-to-toggle, and chevron rotation are all platform behaviour. Composes with .btn and .btn-group for split buttons.
+description: Dropdown menu built on native <details> + <summary>.
 ---
 
 import { Menu, Button, ButtonGroup } from "@aortl/admin-react";
@@ -13,15 +13,15 @@ import {
   IconLifebuoy,
 } from "@tabler/icons-react";
 
-Menus are a `<details>` element with a `<summary>` trigger and a positioned popup. The browser handles open/close and the chevron rotation tracks `[open]` via CSS. There is no light dismiss; click the trigger again, or move focus, to close.
+A `<details>` with a `<summary>` trigger and a positioned popup. The browser handles open/close; the chevron tracks `[open]` via CSS. There is no light dismiss — click the trigger again or move focus to close.
 
-The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout). Its default appearance steps aside when `.btn` is also applied, so you can drop a menu into a `<ButtonGroup>` to build a split button without fighting the cascade.
+`.menu-trigger` carries only behaviour, so adding `.btn` overrides its appearance — drop the trigger into a `<ButtonGroup>` to build a split button.
 
 ## Examples
 
 ### Basic
 
-`.menu-item` already lays out as `flex items-center gap-2`, so a leading icon as the first child sits naturally next to the label. See [Icons](/admin-design-system/theme/icons/) for the recommended library.
+See [Icons](/admin-design-system/basics/icons/) for the recommended library.
 
 :::example
 
@@ -62,7 +62,7 @@ The `.menu-trigger` class only carries behaviour (marker hiding, chevron, layout
 
 ### Grouped items
 
-Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is non-interactive.
+Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`.
 
 :::example
 
@@ -92,11 +92,11 @@ Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`. The label is 
 
 :::
 
-Set `href` on `<Menu.Item>` when the entry should be a real link — right-click to open in a new tab, copy URL, etc. Without `href`, it renders as a `<button>` for client-side actions.
+Set `href` on `<Menu.Item>` for a real link (right-click → open in new tab, copy URL). Without `href` it renders as a `<button>`.
 
 ### Button-styled trigger
 
-Add `btn` + a variant class to the `<summary>`. The `.menu-trigger` default appearance steps aside (`:not(.btn)` in the CSS), so background, hover, padding, and text colour come from the button class.
+Add `btn` + a variant class to the `<summary>` — `.menu-trigger`'s default appearance steps aside.
 
 :::example
 
@@ -128,7 +128,7 @@ Add `btn` + a variant class to the `<summary>`. The `.menu-trigger` default appe
 
 ### Split button
 
-A primary action on the left, a related set of actions on the right. The right side is a `<details>` inside a `<ButtonGroup>` — the group rules round the outer edges of the menu trigger to match the strip.
+A primary action on the left, related actions on the right via a `<details>` inside a `<ButtonGroup>`.
 
 :::example
 
@@ -172,6 +172,4 @@ A primary action on the left, a related set of actions on the right. The right s
 
 :::
 
-The summary's content is empty — the chevron from `.menu-trigger::after` is all that's needed. The narrow horizontal padding makes the trigger feel like an icon button next to the wider primary action. Add `aria-label` for screen readers since the visible glyph is decorative.
-
-The same pattern works with any variant: `btn-secondary`, `btn-danger`, `btn-ghost`. The chevron inherits `currentColor`, so it always matches the surrounding text.
+The summary is empty — the chevron from `.menu-trigger::after` is the only visible glyph, so add `aria-label` for screen readers.

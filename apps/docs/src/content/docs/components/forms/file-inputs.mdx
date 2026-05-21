@@ -1,11 +1,11 @@
 ---
 title: File inputs
-description: Native file picker styled with consistent button chrome.
+description: Styled native file picker.
 ---
 
 import { FileInput } from "@aortl/admin-react";
 
-The native `<input type="file">` is the only HTML control whose internal chrome (the "Choose file" button) is browser-styled. The `.file-input` class uses `::file-selector-button` to bring that button in line with the design system. `FileInput` does the same in React.
+The `.file-input` class uses `::file-selector-button` to style the "Choose file" button. `FileInput` does the same in React.
 
 ## Examples
 
@@ -47,7 +47,7 @@ The native `<input type="file">` is the only HTML control whose internal chrome 
 
 ### Restricting file types
 
-The native `accept` and `multiple` attributes flow through unchanged.
+Native `accept` and `multiple` flow through unchanged.
 
 :::example
 

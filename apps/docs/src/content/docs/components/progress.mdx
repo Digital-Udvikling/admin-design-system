@@ -1,11 +1,11 @@
 ---
 title: Progress
-description: Styled native <progress> element for determinate and indeterminate work.
+description: Styled native <progress> element.
 ---
 
 import { Progress } from "@aortl/admin-react";
 
-A thin wrapper around the native `<progress>` element. The browser handles ARIA semantics (`role="progressbar"`, `aria-valuenow`, etc.); we just style the track and fill across engines. Omit `value` for an indeterminate bar.
+A styled native `<progress>` element — the browser handles ARIA semantics. Omit `value` for an indeterminate bar.
 
 ## Examples
 
@@ -29,7 +29,7 @@ A thin wrapper around the native `<progress>` element. The browser handles ARIA 
 
 ### Indeterminate
 
-Drop the `value` attribute (or pass `value={undefined}` in React) when you don't know how long something will take.
+Drop the `value` attribute (or pass `value={undefined}` in React).
 
 :::example
 
@@ -45,7 +45,7 @@ Drop the `value` attribute (or pass `value={undefined}` in React) when you don't
 
 ### Variants
 
-The fill uses `currentColor` so swap variants without touching the track.
+The fill uses `currentColor`.
 
 :::example
 

@@ -94,7 +94,7 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 ### Icons (Tabler)
 
-The system recommends **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. It's a recommendation, not a hard dep: nothing in `admin-css` or `admin-react` imports Tabler. `apps/docs` has both as devDeps so `:::example` previews render in both tabs; end-user install lives in the `getting-started/*` pages and `/theme/icons/` covers usage.
+The system recommends **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. It's a recommendation, not a hard dep: nothing in `admin-css` or `admin-react` imports Tabler. `apps/docs` has both as devDeps so `:::example` previews render in both tabs; end-user install lives in the `getting-started/*` pages and `/basics/icons/` covers usage.
 
 CSS-side, components accommodate an icon as a direct child of the root — `(inline-)flex items-center gap-2`, or `:has()` to switch layout when a leading `<i>`/`<svg>` is present (`.alert`, `.accordion-summary`). No wrapper class needed, and no named icon slot unless one is structurally required — `.sidebar-icon` is the exception because it has to stay visible in the collapsed rail.
 
@@ -145,7 +145,21 @@ Authoring syntax (either fence may be omitted):
 
 The plugin wraps each tsx fence in a synthetic root for formatting, then strips and dedents. Same for the html fence. Keep that in mind if you touch the formatter helpers.
 
-URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.env.BASE_URL}components/buttons/` ``) — the site is served from `/admin-design-system/` on GitHub Pages.
+URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.env.BASE_URL}components/buttons/` ``) — the site is served from `/admin-design-system/` on GitHub Pages. Inside `.mdx` body prose, prefer relative Markdown links (`../../basics/icons/`) over hardcoded `/admin-design-system/...` paths so they don't break if `base` changes.
+
+### Docs writing style
+
+The docs serve operators reading reference, not visitors being sold a product. Match the design philosophy: dense, predictable, low chrome. Examples carry the page — prose should orient the reader and step out of the way.
+
+- **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the first paragraph of the body. Use sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
+- **No rationale for third-party choices** — don't explain why we chose Tabler, IBM Plex, Flexoki, or Base UI. Name the library, link it, move on. Designer credits and typeface character descriptions belong on the library's own site.
+- **No marketing voice** — drop "the heart of the design system", "natural fit", "the backbone of admin tooling", "warm humanist sans". State the fact directly.
+- **Subsection intros are optional** — `### Variants`, `### Sizes`, `### Disabled` etc. usually need no prose; the example IS the documentation. Add a sentence only when the example would surprise the reader (constraint, gotcha, hidden invariant). Don't summarize what the example obviously shows.
+- **Trust the platform reader** — admin devs know `<details>`, `:has()`, `color-scheme`. Don't explain that the browser renders native pickers or that ARIA attributes are set; just mention the API and the override hook.
+- **No trailing "Notes" bullets** — if a fact is worth keeping, it belongs in the relevant section. A grab-bag at the end is noise.
+- **Cross-references are tight** — `See [Icons](../../basics/icons/).` Don't pad with "for the recommended library, sizing convention, and usage patterns" — the linked page's title is enough.
+
+When trimming, keep: code examples, accessibility hooks (`aria-label`, `role`), version-pinning advice, override/escape-hatch APIs, and any non-obvious constraint. Cut: implementation cheerleading, restated descriptions, rationale paragraphs, and explanations of what the next code block plainly demonstrates.
 
 ## Adding a component
 

@@ -1,6 +1,6 @@
 ---
 title: Icons
-description: The recommended icon library — Tabler Icons. Webfont for vanilla projects, typed React components for the React package.
+description: Tabler Icons — webfont for vanilla, typed components for React.
 sidebar:
   order: 4
 ---
@@ -21,26 +21,16 @@ import {
   IconAlertOctagon,
 } from "@tabler/icons-react";
 
-The design system recommends [Tabler Icons](https://tabler.io/icons) — a free, MIT-licensed set of 5000+ outline icons designed for UI. They're a natural fit for admin interfaces: thin, consistent strokes; uniform 24×24 grid; visually quiet enough to sit inside dense forms and tables without competing with content.
+The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React.
 
-Tabler ships in two flavours that map cleanly onto this system: a **webfont** (CSS classes, used in plain HTML via `<i class="ti ti-home"></i>`) and **React components** (`@tabler/icons-react`, fully typed and tree-shakeable).
-
-## Browse and search
-
-The full set is browsable at [tabler.io/icons](https://tabler.io/icons). Each icon page lists its name (e.g. `arrow-right`) in both forms: the CSS class becomes `ti-arrow-right`, the React component becomes `IconArrowRight`.
+Tabler ships in two flavours: a **webfont** for plain HTML (`<i class="ti ti-home"></i>`) and **React components** (`@tabler/icons-react`).
 
 ## Install
 
-Install instructions live next to the rest of the setup for each package:
-
-- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../../getting-started/vanilla/#add-icons-optional) for the CDN `<link>` or `@tabler/icons-webfont` import.
-- **React** — see [Getting Started › React](../../getting-started/react/#add-icons-optional) for the `@tabler/icons-react` install.
-
-You can mix both in the same app — vanilla pages use the webfont, React surfaces use the components, and the rendered glyphs are identical.
+- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../../getting-started/vanilla/#add-icons-optional).
+- **React** — see [Getting Started › React](../../getting-started/react/#add-icons-optional).
 
 ## Vanilla usage
-
-Drop an `<i>` (or any element) with the class `ti` plus the icon name prefixed with `ti-`:
 
 :::example
 
@@ -62,7 +52,7 @@ Drop an `<i>` (or any element) with the class `ti` plus the icon name prefixed w
 
 :::
 
-Icons inherit `color` and `font-size` from their parent. Drop one into a button and it picks up the button's text colour automatically.
+Icons inherit `color` and `font-size` from their parent.
 
 :::example
 
@@ -97,13 +87,11 @@ Icons inherit `color` and `font-size` from their parent. Drop one into a button 
 
 ## React usage
 
-Import each icon by name (see the [React getting-started page](../../getting-started/react/#add-icons-optional) for the install step):
-
 ```tsx
 import { IconHome, IconSearch } from "@tabler/icons-react";
 ```
 
-Components forward standard SVG props plus a few Tabler-specific ones:
+Components forward standard SVG props plus:
 
 | Prop     | Default        | What it does                       |
 | -------- | -------------- | ---------------------------------- |
@@ -121,9 +109,9 @@ Components forward standard SVG props plus a few Tabler-specific ones:
 
 :::
 
-## Sizing convention
+## Sizing
 
-Tabler's natural size is `24`. Inside this design system, smaller looks better — admin chrome leans dense. Recommended sizes:
+Tabler's natural size is `24`, but admin chrome looks better smaller:
 
 | Context                                      | Size |
 | -------------------------------------------- | ---- |
@@ -131,11 +119,9 @@ Tabler's natural size is `24`. Inside this design system, smaller looks better �
 | Icon-only button or large action             | `20` |
 | Dense table rows or compact toolbars         | `14` |
 
-For the webfont, set `font-size` on the `<i>` (or its parent). For React components, pass `size={n}`.
-
 ## Accessibility
 
-Icons are usually **decorative** — they sit next to a text label that already conveys the meaning. The React `icon` props (`<Button icon={…}>`, `<Alert icon={…}>`, etc.) already set `aria-hidden` for you. In vanilla HTML, add it yourself:
+Icons next to a text label are decorative — React `icon` props set `aria-hidden` for you; in vanilla HTML, add it yourself:
 
 ```html
 <button class="btn btn-primary">
@@ -144,11 +130,7 @@ Icons are usually **decorative** — they sit next to a text label that already 
 </button>
 ```
 
-```tsx
-<Button icon={IconPlus}>Add product</Button>
-```
-
-When an icon is the **only** content (icon-only button, status badge), give the surrounding element an accessible name:
+When an icon is the only content, give the surrounding element an accessible name:
 
 :::example
 
@@ -166,11 +148,7 @@ When an icon is the **only** content (icon-only button, status badge), give the 
 
 ## In context
 
-A few common patterns. See the [Alerts](../../components/alerts/), [Menus](../../components/menus/), and [App Shell](../../modules/app-shell/) pages for more.
-
 ### Alert with status icon
-
-The `.alert` class detects a leading `<i>` or `<svg>` and switches to a two-column grid — no wrapper needed, and the icon picks up the variant colour automatically.
 
 :::example
 
@@ -251,4 +229,4 @@ The `.alert` class detects a leading `<i>` or `<svg>` and switches to a two-colu
 
 ## Substituting your own set
 
-Nothing in the design system is hard-wired to Tabler. Component icon slots — `<Sidebar.Icon>`, `<Select.Icon>`, `<Select.ItemIndicator>`, the leading `<i>` in `.menu-item` — accept any element. Use Phosphor, Heroicons, your own SVG sprite, or inline SVGs the same way. Tabler is the recommendation, not a requirement.
+Nothing in the design system is hard-wired to Tabler. Icon slots accept any element — use Phosphor, Heroicons, or your own SVG sprite the same way.

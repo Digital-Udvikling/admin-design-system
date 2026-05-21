@@ -1,6 +1,6 @@
 ---
 title: Colors
-description: The color tokens that drive the Tailwind theme — brand, surfaces, borders, text, and state.
+description: Color tokens — brand, surfaces, borders, text, and state.
 sidebar:
   order: 1
 ---
@@ -11,18 +11,16 @@ import ColorCopy from "../../../components/ColorCopy.astro";
 
 <ColorCopy />
 
-The palette is [Flexoki](https://stephango.com/flexoki) — an inky, paper-warm scheme by Steph Ango. Colors live in two layers, both registered with Tailwind's `@theme`:
+The palette is [Flexoki](https://stephango.com/flexoki). Colors live in two layers, both registered with Tailwind's `@theme`:
 
 1. **Palette** — Flexoki's ramps (`--color-blue-600`, `--color-base-50`, ...) replace Tailwind's defaults. Generates utilities like `bg-blue-600`, `text-base-700`.
 2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, ...) point at palette tones. Components only ever reference these.
 
-Use a utility (`bg-primary`, `text-text-muted`) or reference the variable directly (`var(--color-primary)`). Override either layer to reskin the system — see [Customize](../customize/).
-
-Click any swatch to copy its hex, Tailwind class token, or CSS variable.
+Override either layer to reskin the system — see [Customize](../customize/). Click any swatch to copy its hex, Tailwind class, or CSS variable.
 
 ## Semantic tokens
 
-Components only reference these — never the palette directly. Each family below shares the same four-slot layout: **Base**, **Hover** (interactive state), **Muted** (low-saturation background for alerts and tinted surfaces), and **Content** (text/icons on top of the base).
+Each family shares the same four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base).
 
 <ColorFamily
   family="Primary"
@@ -109,7 +107,7 @@ Components only reference these — never the palette directly. Each family belo
 
 ## Palette
 
-Every Flexoki tone is available as a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp is bookended by `paper` (warm white) and `black` (ink).
+Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp is bookended by `paper` and `black`.
 
 <ColorRamp
   family="Base"

@@ -1,12 +1,12 @@
 ---
 title: Badges
-description: Compact status indicator for tags, counts, and chips in tables and lists.
+description: Compact status indicator for tags, counts, and chips.
 ---
 
 import { Badge } from "@aortl/admin-react";
 import { IconCircleCheck, IconAlertTriangle } from "@tabler/icons-react";
 
-Badges decorate status columns, counts on tabs, and category chips. They're inline-flex pills that inherit `currentColor` for icons and sit at `text-xs` by default to fit dense rows.
+Status columns, counts on tabs, category chips. Inline-flex pills at `text-xs` by default.
 
 ## Examples
 
@@ -54,7 +54,7 @@ Badges decorate status columns, counts on tabs, and category chips. They're inli
 
 ### With a leading icon
 
-Pass an icon via the `icon` prop or as the first child. The badge lays out as `inline-flex gap-1` so an `<i>`/`<svg>` sits naturally before the label.
+Pass `icon` or drop an `<i>`/`<svg>` as the first child.
 
 :::example
 
@@ -77,8 +77,6 @@ Pass an icon via the `icon` prop or as the first child. The badge lays out as `i
 :::
 
 ### Counts
-
-The `primary` variant pairs well with numeric counts inside tab labels or sidebar items.
 
 :::example
 

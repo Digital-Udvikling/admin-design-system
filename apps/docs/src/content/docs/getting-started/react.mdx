@@ -1,6 +1,6 @@
 ---
 title: React
-description: Thin React wrappers that emit the same class names as the vanilla CSS
+description: Thin React wrappers that emit the same class names as the vanilla CSS.
 sidebar:
   order: 2
 ---
@@ -38,13 +38,11 @@ export function SignIn() {
 
 ## Add icons (optional)
 
-The design system recommends [Tabler Icons](https://tabler.io/icons) as the icon library — see [Icons](../../theme/icons/) for the rationale, sizing convention, and usage patterns. Install the typed React package:
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage.
 
 ```bash
 npm install @tabler/icons-react
 ```
-
-Then import icons by name — bundlers will tree-shake unused ones:
 
 ```tsx
 import { IconPlus, IconTrash } from "@tabler/icons-react";
@@ -54,9 +52,4 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 </Button>;
 ```
 
-Components like `<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component itself and the wrapper renders it at the right size with `aria-hidden`.
-
-## Notes
-
-- Styles come from one CSS file — see [Customize](../../theme/customize/) to override design tokens.
-- `<Button>`, `<Input>`, and `<Field>` wrap [Base UI](https://base-ui.com) primitives — keyboard, focus, and validation accessibility are handled for you.
+`<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component and the wrapper sizes it and adds `aria-hidden`.

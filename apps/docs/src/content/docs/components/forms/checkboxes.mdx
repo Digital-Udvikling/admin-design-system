@@ -1,11 +1,11 @@
 ---
 title: Checkboxes
-description: Base class .checkbox with an inner .checkbox-indicator. React wraps Base UI; vanilla styles a native input.
+description: Base class .checkbox with an inner .checkbox-indicator.
 ---
 
 import { Checkbox, Field } from "@aortl/admin-react";
 
-The React component wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">`) so the indicator can be styled freely. The vanilla example styles a native `<input type="checkbox">` with the same class names — visually equivalent, different rendered DOM.
+React wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">`); vanilla styles a native `<input type="checkbox">` with the same classes.
 
 ## Examples
 
@@ -42,7 +42,7 @@ The React component wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">
 
 ### Indeterminate
 
-The indeterminate state is set imperatively in React; vanilla mirrors it by setting `indeterminate` on the DOM node. The CSS treats indeterminate identically to checked.
+Set imperatively in vanilla via `node.indeterminate = true`; React takes an `indeterminate` prop. The CSS treats it identically to checked.
 
 :::example
 
@@ -61,9 +61,9 @@ The indeterminate state is set imperatively in React; vanilla mirrors it by sett
 
 ### Inside a Field
 
-:::example
+A `<label>` wrapping a `.checkbox` lays out inline automatically.
 
-A `<label>` wrapping a `.checkbox` lays out inline automatically — no extra class is needed on `Field.Label`.
+:::example
 
 ```html
 <div class="field">

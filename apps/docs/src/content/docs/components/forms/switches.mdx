@@ -1,11 +1,11 @@
 ---
 title: Switches
-description: Base class .switch with an inner .switch-thumb. React wraps Base UI; vanilla styles a native input.
+description: Base class .switch with an inner .switch-thumb.
 ---
 
 import { Field, Switch } from "@aortl/admin-react";
 
-A toggle for on/off state. Use a switch when the change applies immediately (e.g. enable a feature). For form-submission booleans, prefer a [checkbox](../checkboxes/).
+Use when the change applies immediately. For form submissions, prefer a [checkbox](../checkboxes/).
 
 ## Examples
 
@@ -43,9 +43,9 @@ A toggle for on/off state. Use a switch when the change applies immediately (e.g
 
 ### Inside a Field
 
-:::example
+`.field-row` lays the switch and label out on one line; the default `.field` stacks vertically.
 
-Add `.field-row` to lay the switch and its label out on one line. The default `.field` stacks vertically.
+:::example
 
 ```html
 <div class="field field-row">

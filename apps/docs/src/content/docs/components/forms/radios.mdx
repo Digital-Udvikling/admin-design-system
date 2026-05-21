@@ -1,13 +1,11 @@
 ---
 title: Radios
-description: Radio + RadioGroup. React wraps Base UI; vanilla styles native inputs.
+description: Radio + RadioGroup.
 ---
 
 import { Radio, RadioGroup } from "@aortl/admin-react";
 
-`RadioGroup` provides the selection state for its child `Radio`s. The React side wraps Base UI's `Radio.Root` (rendered as a `<span>` with a hidden `<input>`); vanilla styles a native `<input type="radio">` with the same class names.
-
-A `<label>` wrapping a `.radio` is laid out inline automatically — no extra class is needed.
+`RadioGroup` owns the selection state. React wraps Base UI's `Radio.Root`; vanilla styles a native `<input type="radio">`. A `<label>` wrapping a `.radio` lays out inline automatically.
 
 ## Examples
 

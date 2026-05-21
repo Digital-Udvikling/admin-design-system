@@ -1,17 +1,15 @@
 ---
 title: Tabs
-description: Section a view into named panels. Vanilla works without JS via hidden radio inputs; React wraps Base UI for full ARIA semantics.
+description: Section a view into named panels.
 ---
 
 import { Tabs } from "@aortl/admin-react";
 
-Tabs split a workspace into named panels — useful on detail pages where settings, activity, and related entities all live under the same record. The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interactive without JavaScript; React wraps Base UI Tabs for full ARIA semantics, arrow-key navigation, and controlled state.
+The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interactive without JavaScript. React wraps Base UI Tabs for ARIA semantics, arrow-key navigation, and controlled state.
 
 ## Examples
 
 ### Basic (bordered)
-
-The default variant uses an animated underline on the selected tab.
 
 :::example
 
@@ -48,8 +46,6 @@ The default variant uses an animated underline on the selected tab.
 
 ### Boxed (segmented control)
 
-A grouped, bordered control — handy as a small mode switch above a chart or list.
-
 :::example
 
 ```tsx
@@ -69,7 +65,7 @@ A grouped, bordered control — handy as a small mode switch above a chart or li
 
 ### Vertical orientation
 
-Set `orientation="vertical"` for a left-aligned tab strip with panels to the right. Common for settings screens with many sections.
+`orientation="vertical"` puts the tab strip on the left, panels on the right.
 
 :::example
 

@@ -1,0 +1,32 @@
+---
+title: Customize
+description: Override design tokens via CSS variables.
+sidebar:
+  order: 2
+---
+
+Browse the available tokens on the [Colors](../colors/) page.
+
+## Override a semantic token
+
+Remap a role to a different palette tone — or to any color. Components follow automatically.
+
+```css
+:root {
+  --color-primary: var(--color-green-600);
+}
+```
+
+## Override a palette tone
+
+Replace a Flexoki tone everywhere it's used:
+
+```css
+:root {
+  --color-blue-600: oklch(0.55 0.18 250);
+}
+```
+
+## Swap the whole palette
+
+Both blocks are stacked on `:root` — redefine the palette in your own stylesheet to ship a different brand while keeping every semantic role intact.

@@ -1,20 +1,18 @@
 ---
 title: Tables
-description: Dense, scannable tables for admin screens. Native <table> semantics with optional row selection, sticky headers, status gutter, and whole-row links.
+description: Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
 ---
 
 import { Checkbox, Table } from "@aortl/admin-react";
 import { IconCircleCheck, IconCircleX, IconClock } from "@tabler/icons-react";
 
-Tables are the backbone of admin tooling — order lists, generated content, audit logs, inventory. `<Table>` keeps the contract simple: native `<table>` semantics, descendant CSS selectors so cells don't need a class each, and a few opt-in modifiers (`striped`, `bordered`, `relaxed`, `sticky`) that compose freely.
-
-The default density is intentionally tight (~32px rows) so a hundred orders fit on one screen. For lighter layouts, reach for `relaxed`.
+Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `relaxed`, `sticky`) compose freely. Default row height is ~32px; use `relaxed` for lighter layouts.
 
 ## Examples
 
 ### Basic
 
-A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>` for you — no class per cell required. The React API mirrors the HTML structure exactly via dot-notation subparts.
+A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>`. The React API mirrors the HTML via dot-notation subparts.
 
 :::example
 
@@ -80,7 +78,7 @@ A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>` for you 
 
 ### Modifiers
 
-Four modifiers, all independent: `striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding, and `sticky` pins the header (requires a scrolling ancestor — see below).
+`striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding, `sticky` pins the header (requires a scrolling ancestor — see below).
 
 :::example
 
@@ -192,7 +190,7 @@ Four modifiers, all independent: `striped` zebra-stripes the body, `bordered` dr
 
 ### Sticky header
 
-`sticky` keeps the header visible while the body scrolls. The table itself doesn't establish the scroll region — wrap it in an overflowing container (`<div style="overflow:auto; max-height: …">`). Scroll the example below to see the header pin.
+`sticky` pins the header while the body scrolls. The table doesn't own the scroll region — wrap it in an overflowing container.
 
 :::example
 
@@ -287,7 +285,7 @@ Four modifiers, all independent: `striped` zebra-stripes the body, `bordered` dr
 
 ### Cell alignment
 
-Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. Both header and body should agree so the column lines up. The `numeric` modifier on `<Table.Cell>` also turns on `tabular-nums` for currency-style columns, so the digits don't shimmy.
+Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. Header and body should agree. The `numeric` modifier also turns on `tabular-nums` so currency digits don't shimmy.
 
 :::example
 
@@ -343,7 +341,7 @@ Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to
 
 ### Status gutter
 
-Use a narrow leading gutter cell for row-level status glyphs — fulfilment state, sync status, error markers. The `.table-cell-gutter` class (or `gutter` prop) centers the icon and uses muted text by default; color the icon explicitly when status carries meaning.
+A narrow leading cell for row-level status glyphs. `.table-cell-gutter` (or `gutter` prop) centers the icon and uses muted text; colour the icon explicitly when status carries meaning.
 
 :::example
 
@@ -427,7 +425,7 @@ Use a narrow leading gutter cell for row-level status glyphs — fulfilment stat
 
 ### Row selection
 
-Put a [Checkbox](/admin-design-system/components/forms/checkbox/) in the first cell — the row tint is driven entirely by CSS (`:has(input:checked)`), no React state mirror needed. The select-all header checkbox is wired by the consumer.
+Put a [Checkbox](/admin-design-system/components/forms/checkboxes/) in the first cell — row tint is driven by `:has(input:checked)`, no state mirror needed. Wire the select-all header checkbox yourself.
 
 :::example
 
@@ -507,7 +505,7 @@ Put a [Checkbox](/admin-design-system/components/forms/checkbox/) in the first c
 
 :::
 
-For programmatic selection without a checkbox (single-select on row click, server-driven highlight), use `<Table.Row selected>` — it sets `data-selected` and applies the same tint.
+For programmatic selection without a checkbox, use `<Table.Row selected>` — it sets `data-selected` and applies the same tint.
 
 :::example
 
@@ -553,9 +551,7 @@ For programmatic selection without a checkbox (single-select on row click, serve
 
 ### Whole-row link
 
-Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the link in the first cell. CSS expands the anchor's hit area to cover the row via `::after`, so the entire row is clickable and keyboard-focusable through the real `<a>` — no JS click handler or `<tr onClick>` indirection.
-
-Other in-row buttons or links sit above the spanning pseudo-element automatically because `.btn` and `<a>`s with their own `position: relative` aren't covered.
+Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the link in the first cell. CSS expands the anchor's hit area via `::after`, so the whole row is clickable and keyboard-focusable through the real `<a>`. Other in-row buttons and links stay clickable because they sit above the pseudo-element.
 
 :::example
 
@@ -627,7 +623,7 @@ Other in-row buttons or links sit above the spanning pseudo-element automaticall
 
 ### Footer row
 
-`<Table.Foot>` (or `<tfoot>`) is plain by default — class it as you need. Common use: a totals row that mirrors the body's column alignment.
+`<Table.Foot>` (or `<tfoot>`) is unstyled — class it yourself. Common use: a totals row mirroring the body's column alignment.
 
 :::example
 
@@ -693,7 +689,7 @@ Other in-row buttons or links sit above the spanning pseudo-element automaticall
 
 ## Horizontal overflow
 
-`<Table>` doesn't wrap itself in a scroll container — it can't, since the vanilla `<table>` has no equivalent and an added wrapper would break compositions like `<details><Table>…`. Wrap explicitly when you need horizontal scroll on narrow viewports:
+`<Table>` doesn't wrap itself in a scroll container. Wrap explicitly when you need horizontal scroll on narrow viewports:
 
 ```html
 <div style="overflow-x: auto">

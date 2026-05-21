@@ -6,7 +6,7 @@ description: Native <details> + <summary>, smoothed by interpolate-size and ::de
 import { Accordion } from "@aortl/admin-react";
 import { IconUser, IconBell, IconCreditCard } from "@tabler/icons-react";
 
-Native disclosure widgets ship with the correct ARIA semantics, keyboard handling, and browser find-in-page behaviour out of the box. The `.accordion-*` classes layer purely visual styling on top of `<details>` and `<summary>`, and `interpolate-size: allow-keywords` plus `::details-content` give them a smooth open/close animation in modern browsers. Older browsers degrade to the default instant toggle — no JavaScript, no fallback to ship.
+`.accordion-*` styles native `<details>`/`<summary>`. `interpolate-size: allow-keywords` plus `::details-content` give the open/close a smooth animation in modern browsers; older browsers degrade to instant toggle.
 
 ## Examples
 
@@ -36,7 +36,7 @@ Native disclosure widgets ship with the correct ARIA semantics, keyboard handlin
 
 ### Grouped items
 
-Adjacent items collapse their shared border and the group rounds only on the outer corners. A leading icon in the summary sits next to the label — the chevron stays on the right. See [Icons](/admin-design-system/theme/icons/).
+Adjacent items collapse their shared border; the chevron stays on the right. See [Icons](/admin-design-system/basics/icons/).
 
 :::example
 

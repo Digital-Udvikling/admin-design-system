@@ -1,0 +1,107 @@
+---
+title: Typography
+description: Type scale, weights, and font stack.
+sidebar:
+  order: 5
+---
+
+Body text is **14px**, headings step up modestly, and the UI typeface is IBM Plex.
+
+## Font stack
+
+```css
+--font-sans:
+  "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+--font-mono:
+  "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+  monospace;
+```
+
+Fonts are loaded from `fonts.gstatic.com` (latin + latin-ext subsets) with `font-display: optional` — the system fallback paints on first load if the font isn't ready in ~100ms, and Plex takes over on subsequent visits.
+
+To opt out, override `--font-sans` / `--font-mono`:
+
+```css
+:root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+To skip the Plex network requests entirely, import admin-css's source files individually and leave out `fonts.css`. The default `dist/admin.css` bundle includes Plex.
+
+## Scale
+
+| Selector | Size            | Weight    | Line-height     | Use                            |
+| -------- | --------------- | --------- | --------------- | ------------------------------ |
+| `<h1>`   | 1.25rem (20px)  | 600       | `leading-tight` | Page title                     |
+| `<h2>`   | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
+| `<h3>`   | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
+| `<body>` | 0.875rem (14px) | 400       | 1.5             | Default text                   |
+| —        | 0.75rem (12px)  | 400 / 500 | 1.4             | Captions, hints, table meta    |
+
+Heading sizes are applied at the element level — no defaults for `h4`–`h6`.
+
+## Body and small text
+
+Body text defaults to 14px. Smaller text — captions, hints, secondary meta — uses `text-xs` (12px), often paired with `text-text-muted`.
+
+:::example
+
+```html
+<p>Customers are billed at the end of each calendar month.</p>
+<p class="text-xs text-text-muted">Last invoice generated 14 days ago.</p>
+```
+
+```tsx
+<p>Customers are billed at the end of each calendar month.</p>
+<p className="text-xs text-text-muted">
+  Last invoice generated 14 days ago.
+</p>
+```
+
+:::
+
+## Weights
+
+Regular (400), medium (500), and semibold (600).
+
+:::example
+
+```html
+<p>Regular — body copy and long-form text.</p>
+<p class="font-medium">Medium — labels, button text, active states.</p>
+<p class="font-semibold">Semibold — headings, KPI numbers, table column headers.</p>
+```
+
+```tsx
+<p>Regular — body copy and long-form text.</p>
+<p className="font-medium">Medium — labels, button text, active states.</p>
+<p className="font-semibold">
+  Semibold — headings, KPI numbers, table column headers.
+</p>
+```
+
+:::
+
+## Monospace
+
+Use `font-mono` for IDs, hashes, currency amounts, and anywhere fixed-width digits aid scanning.
+
+:::example
+
+```html
+<p>
+  Order <span class="font-mono">#A7F31B-2014</span> was processed in
+  <span class="font-mono">142 ms</span>.
+</p>
+```
+
+```tsx
+<p>
+  Order <span className="font-mono">#A7F31B-2014</span> was processed in
+  <span className="font-mono">142 ms</span>.
+</p>
+```
+
+:::

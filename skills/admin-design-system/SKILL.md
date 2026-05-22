@@ -123,6 +123,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Base class .btn + a variant + an optional size.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
+- [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Base class .checkbox with an inner .checkbox-indicator.
 - [Forms: Fields](references/components/forms/fields.md) — Accessibility wiring (label, description, validation) around inputs.

@@ -1,0 +1,91 @@
+@layer components {
+  .dialog {
+    @apply m-auto p-0
+           bg-surface text-text
+           border border-border
+           rounded-xl
+           shadow-lg
+           overflow-hidden
+           flex-col;
+    width: calc(100% - 2rem);
+    max-width: 32rem;
+    max-height: calc(100dvh - 2rem);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition:
+      display 150ms allow-discrete,
+      overlay 150ms allow-discrete,
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+  }
+
+  /* `display: flex` only when open — without this gate, our flex rule would
+     override the UA `dialog:not([open]) { display: none }` and the dialog
+     would render in-flow before showModal() was ever called. */
+  .dialog[open] {
+    display: flex;
+  }
+
+  .dialog::backdrop {
+    background: rgb(0 0 0 / 0.4);
+    transition:
+      display 150ms allow-discrete,
+      overlay 150ms allow-discrete,
+      background 150ms ease-out;
+  }
+
+  /* Entry — animate from these values up to the open state. */
+  @starting-style {
+    .dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+    .dialog[open]::backdrop {
+      background: rgb(0 0 0 / 0);
+    }
+  }
+
+  /* Sizes */
+  .dialog-sm {
+    max-width: 24rem;
+  }
+
+  .dialog-lg {
+    max-width: 48rem;
+  }
+
+  /* Subparts */
+  .dialog-header {
+    @apply flex items-start gap-3 px-5 pt-5 pb-3;
+  }
+
+  .dialog-title {
+    @apply flex-1 flex items-center gap-2 text-lg font-semibold leading-tight m-0;
+  }
+
+  .dialog-description {
+    @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
+  }
+
+  .dialog-body {
+    @apply px-5 py-3 overflow-y-auto flex flex-col gap-3;
+  }
+
+  .dialog-footer {
+    @apply flex flex-wrap items-center justify-end gap-2
+           px-5 py-3
+           border-t border-border
+           bg-surface-muted;
+  }
+
+  .dialog-close {
+    @apply inline-flex items-center justify-center
+           size-7 shrink-0
+           rounded-md text-text-muted
+           bg-transparent
+           hover:bg-surface-strong hover:text-text
+           cursor-pointer
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+  }
+}

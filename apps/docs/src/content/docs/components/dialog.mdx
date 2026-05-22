@@ -1,0 +1,384 @@
+---
+title: Dialogs
+description: Modal dialogs built on the native <dialog> element.
+---
+
+import { Button, Dialog, Field, Input } from "@aortl/admin-react";
+import { IconAlertTriangle } from "@tabler/icons-react";
+
+A thin wrapper around `<dialog>` + `showModal()`. The browser handles the focus trap, scroll lock, Esc dismissal, and `::backdrop` — the wrapper just bridges React's `open` prop to the imperative API and exposes a Card-style shorthand surface.
+
+The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. No JavaScript glue, no React state. The wrapper still accepts a controlled `open` / `onOpenChange` pair for state-driven flows — see [Controlled state](#controlled-state).
+
+## Examples
+
+### Basic
+
+Open with a button, close via Esc, backdrop click, or the X. `closedby="any"` is the default.
+
+:::example
+
+```html
+<button type="button" class="btn btn-primary" commandfor="dialog-basic" command="show-modal">
+  Open dialog
+</button>
+<dialog id="dialog-basic" class="dialog" closedby="any">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Invite teammate</h2>
+    <button
+      type="button"
+      class="dialog-close"
+      commandfor="dialog-basic"
+      command="close"
+      aria-label="Close"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </div>
+  <p class="dialog-description">They'll receive an email with a sign-up link.</p>
+  <div class="dialog-body">
+    <p>Pick a role after they accept.</p>
+  </div>
+  <div class="dialog-footer">
+    <button type="button" class="btn btn-ghost" commandfor="dialog-basic" command="close">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" commandfor="dialog-basic" command="close">
+      Send invite
+    </button>
+  </div>
+</dialog>
+```
+
+```tsx
+<Button commandfor="dialog-basic-r" command="show-modal">
+  Open dialog
+</Button>
+<Dialog
+  id="dialog-basic-r"
+  title="Invite teammate"
+  description="They'll receive an email with a sign-up link."
+  actions={
+    <>
+      <Button variant="ghost" commandfor="dialog-basic-r" command="close">
+        Cancel
+      </Button>
+      <Button commandfor="dialog-basic-r" command="close">
+        Send invite
+      </Button>
+    </>
+  }
+>
+  <p>Pick a role after they accept.</p>
+</Dialog>
+```
+
+:::
+
+### Sizes
+
+`size="sm"` for confirms, `"md"` (default) for short forms, `"lg"` for longer ones.
+
+:::example
+
+```html
+<button type="button" class="btn" commandfor="dialog-sm" command="show-modal">Small</button>
+<button type="button" class="btn" commandfor="dialog-md" command="show-modal">Medium</button>
+<button type="button" class="btn" commandfor="dialog-lg" command="show-modal">Large</button>
+
+<dialog id="dialog-sm" class="dialog dialog-sm">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Small</h2>
+  </div>
+  <div class="dialog-body">Up to 24rem wide.</div>
+  <div class="dialog-footer">
+    <button type="button" class="btn" commandfor="dialog-sm" command="close">Close</button>
+  </div>
+</dialog>
+
+<dialog id="dialog-md" class="dialog">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Medium</h2>
+  </div>
+  <div class="dialog-body">Default — up to 32rem.</div>
+  <div class="dialog-footer">
+    <button type="button" class="btn" commandfor="dialog-md" command="close">Close</button>
+  </div>
+</dialog>
+
+<dialog id="dialog-lg" class="dialog dialog-lg">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Large</h2>
+  </div>
+  <div class="dialog-body">Up to 48rem — room for two-column forms.</div>
+  <div class="dialog-footer">
+    <button type="button" class="btn" commandfor="dialog-lg" command="close">Close</button>
+  </div>
+</dialog>
+```
+
+```tsx
+<Button commandfor="dialog-sm-r" command="show-modal">Small</Button>
+<Button commandfor="dialog-md-r" command="show-modal">Medium</Button>
+<Button commandfor="dialog-lg-r" command="show-modal">Large</Button>
+
+<Dialog
+  id="dialog-sm-r"
+  size="sm"
+  title="Small"
+  dismissible={false}
+  actions={<Button commandfor="dialog-sm-r" command="close">Close</Button>}
+>
+  Up to 24rem wide.
+</Dialog>
+<Dialog
+  id="dialog-md-r"
+  title="Medium"
+  dismissible={false}
+  actions={<Button commandfor="dialog-md-r" command="close">Close</Button>}
+>
+  Default — up to 32rem.
+</Dialog>
+<Dialog
+  id="dialog-lg-r"
+  size="lg"
+  title="Large"
+  dismissible={false}
+  actions={<Button commandfor="dialog-lg-r" command="close">Close</Button>}
+>
+  Up to 48rem — room for two-column forms.
+</Dialog>
+```
+
+:::
+
+### Form dialog
+
+Wrap the body in `<form method="dialog">` — submitting any button inside closes the dialog, and the submitter's `value` lands on `<dialog>.returnValue`.
+
+:::example
+
+```html
+<button type="button" class="btn btn-primary" commandfor="dialog-form" command="show-modal">
+  Rename project
+</button>
+<dialog id="dialog-form" class="dialog">
+  <form method="dialog">
+    <div class="dialog-header">
+      <h2 class="dialog-title">Rename project</h2>
+      <button
+        type="button"
+        class="dialog-close"
+        commandfor="dialog-form"
+        command="close"
+        aria-label="Close"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <div class="field">
+        <label class="field-label" for="dialog-form-name">Name</label>
+        <input id="dialog-form-name" class="input input-bordered" name="name" required />
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="submit" class="btn btn-ghost" value="cancel" formnovalidate>Cancel</button>
+      <button type="submit" class="btn btn-primary" value="save">Save</button>
+    </div>
+  </form>
+</dialog>
+```
+
+```tsx
+<Button commandfor="dialog-form-r" command="show-modal">
+  Rename project
+</Button>
+<Dialog.Container id="dialog-form-r">
+  <form method="dialog">
+    <Dialog.Header>
+      <Dialog.Title>Rename project</Dialog.Title>
+      <Dialog.CloseButton />
+    </Dialog.Header>
+    <Dialog.Body>
+      <Field>
+        <Field.Label>Name</Field.Label>
+        <Input name="name" required />
+      </Field>
+    </Dialog.Body>
+    <Dialog.Footer>
+      <Button type="submit" variant="ghost" value="cancel" formNoValidate>
+        Cancel
+      </Button>
+      <Button type="submit" value="save">
+        Save
+      </Button>
+    </Dialog.Footer>
+  </form>
+</Dialog.Container>
+```
+
+:::
+
+### Destructive: no light dismiss
+
+For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no longer dismiss — the user has to make an explicit choice.
+
+:::example
+
+```html
+<button type="button" class="btn btn-danger" commandfor="dialog-destroy" command="show-modal">
+  Delete project
+</button>
+<dialog id="dialog-destroy" class="dialog dialog-sm" closedby="closerequest">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Delete project?</h2>
+  </div>
+  <p class="dialog-description">This permanently removes all data. This cannot be undone.</p>
+  <div class="dialog-footer">
+    <button type="button" class="btn btn-ghost" commandfor="dialog-destroy" command="close">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-danger" commandfor="dialog-destroy" command="close">
+      Delete
+    </button>
+  </div>
+</dialog>
+```
+
+```tsx
+<Button variant="danger" commandfor="dialog-destroy-r" command="show-modal">
+  Delete project
+</Button>
+<Dialog
+  id="dialog-destroy-r"
+  size="sm"
+  closedby="closerequest"
+  dismissible={false}
+  icon={IconAlertTriangle}
+  title="Delete project?"
+  description="This permanently removes all data. This cannot be undone."
+  actions={
+    <>
+      <Button variant="ghost" commandfor="dialog-destroy-r" command="close">
+        Cancel
+      </Button>
+      <Button variant="danger" commandfor="dialog-destroy-r" command="close">
+        Delete
+      </Button>
+    </>
+  }
+/>
+```
+
+:::
+
+## Advanced: layout with `Dialog.Container`
+
+`<Dialog>` is opinionated — single header, single body, single footer. For layouts that don't fit (media block, multiple bodies, segmented content), drop down to `<Dialog.Container>`: it renders the bare `<dialog>` element with size + `closedby` props, and lets you compose subparts yourself.
+
+:::example
+
+```tsx
+<Button commandfor="dialog-custom-r" command="show-modal">
+  Settings
+</Button>
+<Dialog.Container id="dialog-custom-r" size="lg">
+  <Dialog.Header>
+    <Dialog.Title>Workspace settings</Dialog.Title>
+    <Dialog.CloseButton />
+  </Dialog.Header>
+  <Dialog.Body>
+    <Field>
+      <Field.Label>Name</Field.Label>
+      <Input defaultValue="Acme Inc." />
+    </Field>
+    <Field>
+      <Field.Label>Billing email</Field.Label>
+      <Input type="email" defaultValue="ops@acme.test" />
+    </Field>
+  </Dialog.Body>
+  <Dialog.Footer>
+    <Button variant="ghost" commandfor="dialog-custom-r" command="close">
+      Cancel
+    </Button>
+    <Button commandfor="dialog-custom-r" command="close">
+      Save changes
+    </Button>
+  </Dialog.Footer>
+</Dialog.Container>
+```
+
+:::
+
+`<Dialog.Title>` accepts the `icon` prop in the advanced path.
+
+## Controlled state
+
+When the open state lives in React (multi-step flow, async submit, deep-linked routes), pair `open` with `onOpenChange`. The wrapper bridges to `showModal()` / `close()` and forwards the native `close` event back through `onOpenChange(false)`.
+
+```tsx
+import { useState } from "react";
+import { Button, Dialog } from "@aortl/admin-react";
+
+function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="danger" onClick={() => setOpen(true)}>
+        Delete
+      </Button>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        size="sm"
+        closedby="closerequest"
+        title="Delete project?"
+        description="This cannot be undone."
+        actions={
+          <>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                onConfirm();
+                setOpen(false);
+              }}
+            >
+              Delete
+            </Button>
+          </>
+        }
+      />
+    </>
+  );
+}
+```

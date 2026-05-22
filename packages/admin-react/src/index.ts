@@ -76,6 +76,19 @@ export {
   type CardActionsProps,
 } from "./Card";
 export {
+  Dialog,
+  type DialogProps,
+  type DialogContainerProps,
+  type DialogSize,
+  type DialogClosedBy,
+  type DialogHeaderProps,
+  type DialogTitleProps,
+  type DialogDescriptionProps,
+  type DialogBodyProps,
+  type DialogFooterProps,
+  type DialogCloseButtonProps,
+} from "./Dialog";
+export {
   Field,
   type FieldProps,
   type FieldLabelProps,

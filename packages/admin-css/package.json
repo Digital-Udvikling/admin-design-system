@@ -8,6 +8,13 @@
     "design-system",
     "tailwind"
   ],
+  "homepage": "https://digital-udvikling.github.io/admin-design-system/",
+  "bugs": "https://github.com/Digital-Udvikling/admin-design-system/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Digital-Udvikling/admin-design-system.git",
+    "directory": "packages/admin-css"
+  },
   "style": "./dist/admin.css",
   "files": [
     "dist",

@@ -1,5 +1,18 @@
 name: Release
 
+# Path-triggered: bump a package's `version` in package.json on `main` and this
+# workflow builds, publishes, and tags each package whose version is ahead of
+# its `<name>@<version>` git tag.
+#
+# Auth: OIDC trusted publishing — no NPM_TOKEN secret required.
+# Configure the trusted publisher on each npm package page:
+#   Settings → Trusted Publishers → Add → GitHub Actions
+#     Repository owner:  Digital-Udvikling
+#     Repository:        admin-design-system
+#     Workflow filename: release.yml
+#     Environment:       (leave empty)
+# Must be done once per package (@aortl/admin-css, @aortl/admin-react).
+
 on:
   push:
     branches: [main]
@@ -15,8 +28,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: write
+      contents: write # for git push tag
+      id-token: write # OIDC handshake with npm
+      attestations: write # build provenance attestations
     steps:
       - uses: actions/checkout@v5
         with:
@@ -45,10 +59,11 @@ jobs:
       - uses: pnpm/action-setup@v4
         if: steps.plan.outputs.packages != ''
 
+      # Node 24 ships npm 11.x; OIDC trusted publishing needs npm >= 11.5.
       - uses: actions/setup-node@v5
         if: steps.plan.outputs.packages != ''
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
@@ -56,6 +71,10 @@ jobs:
         if: steps.plan.outputs.packages != ''
         run: pnpm install --frozen-lockfile
 
+      # Publish via `pnpm pack` + `npm publish <tarball>` rather than
+      # `pnpm publish`: pnpm pack rewrites `workspace:*` deps to real
+      # versions in the tarball, and npm CLI 11.5+ has first-class support
+      # for OIDC trusted publishing and provenance — pnpm publish does not.
       - name: Build, publish, and tag each package
         if: steps.plan.outputs.packages != ''
         run: |
@@ -72,7 +91,12 @@ jobs:
             TAG="$NAME@$VERSION"
             echo "::group::Release $TAG"
             pnpm -r --filter "$NAME..." build
-            pnpm --filter "$NAME" publish --no-git-checks --access public --provenance
+            (
+              cd "$DIR"
+              pnpm pack
+              npm publish ./*.tgz --access public --provenance
+              rm -f ./*.tgz
+            )
             git tag "$TAG"
             git push origin "$TAG"
             echo "::endgroup::"

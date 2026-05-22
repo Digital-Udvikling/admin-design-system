@@ -1,0 +1,9 @@
+@layer components {
+  .brand-tile {
+    @apply inline-flex items-center justify-center
+           size-6 rounded
+           text-[11px] font-semibold leading-none
+           bg-system-accent text-system-accent-content
+           shrink-0 select-none;
+  }
+}

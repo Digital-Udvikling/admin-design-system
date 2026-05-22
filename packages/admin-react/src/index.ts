@@ -15,6 +15,7 @@ export {
 } from "./Alert";
 export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
+export { BrandTile, type BrandTileProps } from "./BrandTile";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export {

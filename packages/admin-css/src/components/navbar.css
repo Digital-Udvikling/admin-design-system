@@ -1,8 +1,11 @@
 @layer components {
+  /* 2px bottom stripe is always rendered — defaults to a neutral gray via
+     `--color-system-accent` and brand-shifts when the consuming app overrides
+     that variable at :root (see also `.footer` and `.brand-tile`). */
   .navbar {
     @apply flex items-center gap-3 px-4 h-12
            bg-surface-muted text-text
-           border-b border-border;
+           border-b-2 border-system-accent;
   }
 
   .navbar-brand {

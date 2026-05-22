@@ -1,8 +1,11 @@
 @layer components {
+  /* 2px top stripe mirrors the navbar's bottom stripe — both default to
+     a neutral gray via `--color-system-accent` and brand-shift together
+     when the consuming app overrides that variable at :root. */
   .footer {
     @apply flex flex-wrap items-center justify-between gap-3 px-4 py-3
            bg-surface-muted text-text-muted
-           border-t border-border
+           border-t-2 border-system-accent
            text-xs;
   }
 

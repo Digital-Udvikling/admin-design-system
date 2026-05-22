@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { createContext, useContext, useMemo, useState } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 interface AppShellContextValue {
   mobileDrawerOpen: boolean;
@@ -20,6 +20,11 @@ export interface AppShellProps extends ComponentProps<"div"> {
   mobileDrawerOpen?: boolean;
   defaultMobileDrawerOpen?: boolean;
   onMobileDrawerOpenChange?: (open: boolean) => void;
+  /**
+   * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
+   * to the shell root. See [Customize › System accent](https://digital-udvikling.github.io/admin-design-system/basics/customize/#system-accent).
+   */
+  systemAccent?: string;
   children?: ReactNode;
 }
 
@@ -29,7 +34,9 @@ function AppShellRoot({
   mobileDrawerOpen,
   defaultMobileDrawerOpen = false,
   onMobileDrawerOpenChange,
+  systemAccent,
   className,
+  style,
   children,
   ...rest
 }: AppShellProps) {
@@ -49,6 +56,11 @@ function AppShellRoot({
     [open, isControlled, onMobileDrawerOpenChange, hasSidebar],
   );
 
+  const rootStyle =
+    systemAccent !== undefined
+      ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
+      : style;
+
   return (
     <AppShellContext.Provider value={value}>
       <div
@@ -58,6 +70,7 @@ function AppShellRoot({
           hasFooter && "app-shell-with-footer",
           className,
         )}
+        style={rootStyle}
         {...rest}
       >
         {children}

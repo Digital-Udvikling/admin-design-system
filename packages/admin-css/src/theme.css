@@ -217,6 +217,30 @@
   --color-primary-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
   --color-primary-content: light-dark(var(--color-paper), var(--color-black));
 
+  /* System accent — per-app brand signal. Drives the navbar's 2px bottom
+     stripe and the footer's matching top stripe (both always on), plus
+     `.brand-tile` backgrounds. Defaults to a neutral gray so an un-branded
+     shell reads as chrome rather than a brand mark; override at :root (or
+     via inline style on .app-shell) to brand-shift a whole app. The -hover,
+     -muted, and -content siblings derive from the base via `color-mix`,
+     so a single override propagates. Mixing toward `--color-text` and
+     `--color-surface` (themselves `light-dark()` pairs) keeps the
+     derivations in step with light/dark mode without nesting light-dark()
+     inside color-mix(). Bright accents (e.g. yellow) may want a manual
+     -content override for contrast. */
+  --color-system-accent: light-dark(var(--color-base-600), var(--color-base-400));
+  --color-system-accent-hover: color-mix(
+    in oklch,
+    var(--color-system-accent),
+    var(--color-text) 12%
+  );
+  --color-system-accent-muted: color-mix(
+    in oklch,
+    var(--color-system-accent) 12%,
+    var(--color-surface)
+  );
+  --color-system-accent-content: light-dark(var(--color-paper), var(--color-black));
+
   /* Danger — red */
   --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
   --color-danger-hover: light-dark(var(--color-red-700), var(--color-red-300));

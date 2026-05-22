@@ -23,4 +23,14 @@ describe("AppShell", () => {
     expect(root).toHaveClass("app-shell-with-sidebar");
     expect(root).toHaveClass("app-shell-with-footer");
   });
+
+  it("sets --color-system-accent from the systemAccent prop", () => {
+    const { container } = render(
+      <AppShell systemAccent="var(--color-purple-600)">
+        <AppShell.Main>x</AppShell.Main>
+      </AppShell>,
+    );
+    const root = container.querySelector<HTMLElement>(".app-shell");
+    expect(root?.style.getPropertyValue("--color-system-accent")).toBe("var(--color-purple-600)");
+  });
 });

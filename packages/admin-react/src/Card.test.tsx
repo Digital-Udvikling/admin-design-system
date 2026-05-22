@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Card } from "./Card";
+import { adminSelector } from "./test-setup";
 
 describe("Card", () => {
   it("Card.Container composes the bare card primitive", () => {
@@ -14,9 +15,9 @@ describe("Card", () => {
         </Card.Body>
       </Card.Container>,
     );
-    const root = screen.getByText("Title").closest(".card");
-    expect(root).toHaveClass("card-bordered", "card-compact");
-    expect(root?.querySelectorAll(".card-body")).toHaveLength(1);
+    const root = screen.getByText("Title").closest(adminSelector("card"));
+    expect(root).toHaveAdminClass("card-bordered", "card-compact");
+    expect(root?.querySelectorAll(adminSelector("card-body"))).toHaveLength(1);
     expect(screen.getByText("Description")).toBeInTheDocument();
     expect(screen.getByText("Body")).toBeInTheDocument();
     expect(screen.getByText("Actions")).toBeInTheDocument();
@@ -25,8 +26,8 @@ describe("Card", () => {
   it("Card always renders children inside a single card-body", () => {
     render(<Card>body content</Card>);
     const body = screen.getByText("body content");
-    expect(body).toHaveClass("card-body");
-    expect(body.parentElement).toHaveClass("card");
+    expect(body).toHaveAdminClass("card-body");
+    expect(body.parentElement).toHaveAdminClass("card");
   });
 
   it("renders title/description/actions props as the matching subparts", () => {
@@ -35,10 +36,10 @@ describe("Card", () => {
         body content
       </Card>,
     );
-    expect(screen.getByRole("heading", { level: 3, name: "Plan" })).toHaveClass("card-title");
-    expect(screen.getByText("Pro tier")).toHaveClass("card-description");
+    expect(screen.getByRole("heading", { level: 3, name: "Plan" })).toHaveAdminClass("card-title");
+    expect(screen.getByText("Pro tier")).toHaveAdminClass("card-description");
     expect(screen.getByText("body content")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Upgrade" }).parentElement).toHaveClass(
+    expect(screen.getByRole("button", { name: "Upgrade" }).parentElement).toHaveAdminClass(
       "card-actions",
     );
   });

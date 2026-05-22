@@ -1,6 +1,6 @@
-import { clsx } from "clsx";
 import { createContext, useContext, useMemo, useState } from "react";
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
+import { cn } from "./cn";
 
 interface AppShellContextValue {
   mobileDrawerOpen: boolean;
@@ -64,10 +64,12 @@ function AppShellRoot({
   return (
     <AppShellContext.Provider value={value}>
       <div
-        className={clsx(
-          "app-shell",
-          hasSidebar && "app-shell-with-sidebar",
-          hasFooter && "app-shell-with-footer",
+        className={cn(
+          [
+            "app-shell",
+            hasSidebar && "app-shell-with-sidebar",
+            hasFooter && "app-shell-with-footer",
+          ],
           className,
         )}
         style={rootStyle}
@@ -82,7 +84,7 @@ function AppShellRoot({
 export type AppShellMainProps = ComponentProps<"main">;
 
 function AppShellMain({ className, ...rest }: AppShellMainProps) {
-  return <main className={clsx("app-shell-main", className)} {...rest} />;
+  return <main className={cn("app-shell-main", className)} {...rest} />;
 }
 
 export const AppShell = Object.assign(AppShellRoot, {

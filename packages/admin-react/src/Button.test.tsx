@@ -40,22 +40,22 @@ describe("Button", () => {
 
     it("adds btn-square when there is an icon but no children", () => {
       render(<Button icon={Icon} aria-label="more" />);
-      expect(screen.getByRole("button")).toHaveClass("btn-square");
+      expect(screen.getByRole("button")).toHaveAdminClass("btn-square");
     });
 
     it("adds btn-square when there is a trailing icon but no children", () => {
       render(<Button iconTrailing={Icon} aria-label="more" />);
-      expect(screen.getByRole("button")).toHaveClass("btn-square");
+      expect(screen.getByRole("button")).toHaveAdminClass("btn-square");
     });
 
     it("does not add btn-square when children sit alongside the icon", () => {
       render(<Button icon={Icon}>Add</Button>);
-      expect(screen.getByRole("button")).not.toHaveClass("btn-square");
+      expect(screen.getByRole("button")).not.toHaveAdminClass("btn-square");
     });
 
     it("does not add btn-square when there is no icon", () => {
       render(<Button aria-label="empty" />);
-      expect(screen.getByRole("button")).not.toHaveClass("btn-square");
+      expect(screen.getByRole("button")).not.toHaveAdminClass("btn-square");
     });
   });
 
@@ -99,7 +99,7 @@ describe("Button", () => {
         </Button>,
       );
       const btn = screen.getByRole("button", { name: "Saving" });
-      expect(btn).toHaveClass("btn-loading");
+      expect(btn).toHaveAdminClass("btn-loading");
       expect(btn).toHaveAttribute("aria-busy", "true");
       expect(btn).toBeDisabled();
       await user.click(btn);

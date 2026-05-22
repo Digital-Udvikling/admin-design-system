@@ -9,7 +9,7 @@ describe("Progress", () => {
     expect(el.tagName).toBe("PROGRESS");
     expect(el).toHaveAttribute("value", "42");
     expect(el).toHaveAttribute("max", "100");
-    expect(el).toHaveClass("progress");
+    expect(el).toHaveAdminClass("progress");
   });
 
   it("renders as indeterminate when value is omitted", () => {
@@ -21,11 +21,11 @@ describe("Progress", () => {
   it("applies variant + size modifiers", () => {
     render(<Progress value={10} variant="danger" size="lg" aria-label="x" />);
     const el = screen.getByRole("progressbar", { name: "x" });
-    expect(el).toHaveClass("progress", "progress-danger", "progress-lg");
+    expect(el).toHaveAdminClass("progress", "progress-danger", "progress-lg");
   });
 
   it("omits the primary variant class", () => {
     render(<Progress value={0} aria-label="x" />);
-    expect(screen.getByRole("progressbar", { name: "x" })).not.toHaveClass("progress-primary");
+    expect(screen.getByRole("progressbar", { name: "x" })).not.toHaveAdminClass("progress-primary");
   });
 });

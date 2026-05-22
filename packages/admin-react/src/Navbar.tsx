@@ -1,25 +1,25 @@
-import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Menu } from "./Menu";
 
 export type NavbarProps = ComponentProps<"header">;
 
 function NavbarRoot({ className, ...rest }: NavbarProps) {
-  return <header className={clsx("navbar", className)} {...rest} />;
+  return <header className={cn("navbar", className)} {...rest} />;
 }
 
 export type NavbarBrandProps = ComponentProps<"div">;
 
 function NavbarBrand({ className, ...rest }: NavbarBrandProps) {
-  return <div className={clsx("navbar-brand", className)} {...rest} />;
+  return <div className={cn("navbar-brand", className)} {...rest} />;
 }
 
 export type NavbarItemsProps = ComponentProps<"nav">;
 
 function NavbarItems({ className, ...rest }: NavbarItemsProps) {
-  return <nav className={clsx("navbar-items", className)} {...rest} />;
+  return <nav className={cn("navbar-items", className)} {...rest} />;
 }
 
 export interface NavbarItemProps extends ComponentProps<"a"> {
@@ -31,7 +31,7 @@ export interface NavbarItemProps extends ComponentProps<"a"> {
 function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemProps) {
   return (
     <a
-      className={clsx("navbar-item", className)}
+      className={cn("navbar-item", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
@@ -49,7 +49,7 @@ export interface NavbarDropdownProps extends Omit<ComponentProps<"details">, "ti
 function NavbarDropdown({ label, className, children, ...rest }: NavbarDropdownProps) {
   return (
     <Menu className={className} {...rest}>
-      <Menu.Trigger className="navbar-item">{label}</Menu.Trigger>
+      <Menu.Trigger className={cn("navbar-item", undefined)}>{label}</Menu.Trigger>
       <Menu.Popup>{children}</Menu.Popup>
     </Menu>
   );
@@ -58,7 +58,7 @@ function NavbarDropdown({ label, className, children, ...rest }: NavbarDropdownP
 export type NavbarActionsProps = ComponentProps<"div">;
 
 function NavbarActions({ className, ...rest }: NavbarActionsProps) {
-  return <div className={clsx("navbar-actions", className)} {...rest} />;
+  return <div className={cn("navbar-actions", className)} {...rest} />;
 }
 
 export interface NavbarMobileToggleProps extends Omit<
@@ -84,7 +84,7 @@ function NavbarMobileToggle({
       aria-label={label}
       aria-expanded={open}
       onClick={() => shell?.setMobileDrawerOpen(!open)}
-      className={clsx("navbar-mobile-toggle", className)}
+      className={cn("navbar-mobile-toggle", className)}
       {...rest}
     />
   );

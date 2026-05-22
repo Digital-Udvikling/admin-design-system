@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
+import { adminSelector } from "./test-setup";
 
 describe("AppShell", () => {
   it("renders children inside a grid root", () => {
@@ -10,7 +11,7 @@ describe("AppShell", () => {
       </AppShell>,
     );
     expect(screen.getByRole("main")).toHaveTextContent("main content");
-    expect(screen.getByRole("main").parentElement).toHaveClass("app-shell");
+    expect(screen.getByRole("main").parentElement).toHaveAdminClass("app-shell");
   });
 
   it("applies layout modifier classes for sidebar and footer", () => {
@@ -19,9 +20,9 @@ describe("AppShell", () => {
         <AppShell.Main>x</AppShell.Main>
       </AppShell>,
     );
-    const root = container.querySelector(".app-shell");
-    expect(root).toHaveClass("app-shell-with-sidebar");
-    expect(root).toHaveClass("app-shell-with-footer");
+    const root = container.querySelector(adminSelector("app-shell"));
+    expect(root).toHaveAdminClass("app-shell-with-sidebar");
+    expect(root).toHaveAdminClass("app-shell-with-footer");
   });
 
   it("sets --color-system-accent from the systemAccent prop", () => {
@@ -30,7 +31,7 @@ describe("AppShell", () => {
         <AppShell.Main>x</AppShell.Main>
       </AppShell>,
     );
-    const root = container.querySelector<HTMLElement>(".app-shell");
+    const root = container.querySelector<HTMLElement>(adminSelector("app-shell"));
     expect(root?.style.getPropertyValue("--color-system-accent")).toBe("var(--color-purple-600)");
   });
 });

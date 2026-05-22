@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type TableAlign = "left" | "right" | "center";
 
@@ -16,12 +16,14 @@ export interface TableProps extends ComponentProps<"table"> {
 function TableRoot({ striped, bordered, relaxed, sticky, className, ...rest }: TableProps) {
   return (
     <table
-      className={clsx(
-        "table",
-        striped && "table-striped",
-        bordered && "table-bordered",
-        relaxed && "table-relaxed",
-        sticky && "table-sticky",
+      className={cn(
+        [
+          "table",
+          striped && "table-striped",
+          bordered && "table-bordered",
+          relaxed && "table-relaxed",
+          sticky && "table-sticky",
+        ],
         className,
       )}
       {...rest}
@@ -31,17 +33,17 @@ function TableRoot({ striped, bordered, relaxed, sticky, className, ...rest }: T
 
 export type TableHeadProps = ComponentProps<"thead">;
 function TableHead({ className, ...rest }: TableHeadProps) {
-  return <thead className={clsx(className)} {...rest} />;
+  return <thead className={className} {...rest} />;
 }
 
 export type TableBodyProps = ComponentProps<"tbody">;
 function TableBody({ className, ...rest }: TableBodyProps) {
-  return <tbody className={clsx(className)} {...rest} />;
+  return <tbody className={className} {...rest} />;
 }
 
 export type TableFootProps = ComponentProps<"tfoot">;
 function TableFoot({ className, ...rest }: TableFootProps) {
-  return <tfoot className={clsx(className)} {...rest} />;
+  return <tfoot className={className} {...rest} />;
 }
 
 export interface TableRowProps extends ComponentProps<"tr"> {
@@ -57,7 +59,7 @@ export interface TableRowProps extends ComponentProps<"tr"> {
 function TableRow({ selected, asLink, className, ...rest }: TableRowProps) {
   return (
     <tr
-      className={clsx(asLink && "table-row-link", className)}
+      className={cn(asLink && "table-row-link", className)}
       data-selected={selected || undefined}
       {...rest}
     />
@@ -74,7 +76,7 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<"th">, "align"
 function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHeaderCellProps) {
   return (
     <th
-      className={clsx("table-header-cell", gutter && "table-cell-gutter", className)}
+      className={cn(["table-header-cell", gutter && "table-cell-gutter"], className)}
       data-align={align && align !== "left" ? align : undefined}
       scope={scope ?? "col"}
       {...rest}
@@ -92,10 +94,8 @@ export interface TableCellProps extends Omit<ComponentProps<"td">, "align"> {
 function TableCell({ align, gutter, numeric, className, ...rest }: TableCellProps) {
   return (
     <td
-      className={clsx(
-        "table-cell",
-        gutter && "table-cell-gutter",
-        numeric && "table-cell-numeric",
+      className={cn(
+        ["table-cell", gutter && "table-cell-gutter", numeric && "table-cell-numeric"],
         className,
       )}
       data-align={align && align !== "left" ? align : undefined}

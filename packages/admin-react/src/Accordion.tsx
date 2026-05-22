@@ -1,28 +1,28 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type AccordionProps = ComponentProps<"div">;
 
 function AccordionRoot({ className, ...rest }: AccordionProps) {
-  return <div className={clsx("accordion", className)} {...rest} />;
+  return <div className={cn("accordion", className)} {...rest} />;
 }
 
 export type AccordionItemProps = ComponentProps<"details">;
 
 function AccordionItem({ className, ...rest }: AccordionItemProps) {
-  return <details className={clsx("accordion-item", className)} {...rest} />;
+  return <details className={cn("accordion-item", className)} {...rest} />;
 }
 
 export type AccordionSummaryProps = ComponentProps<"summary">;
 
 function AccordionSummary({ className, ...rest }: AccordionSummaryProps) {
-  return <summary className={clsx("accordion-summary", className)} {...rest} />;
+  return <summary className={cn("accordion-summary", className)} {...rest} />;
 }
 
 export type AccordionContentProps = ComponentProps<"div">;
 
 function AccordionContent({ className, ...rest }: AccordionContentProps) {
-  return <div className={clsx("accordion-content", className)} {...rest} />;
+  return <div className={cn("accordion-content", className)} {...rest} />;
 }
 
 export const Accordion = Object.assign(AccordionRoot, {

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Wrap the built admin CSS in `@scope (.admin-root) { ... }` so consumers can
- * embed admin components inside non-admin host pages without polluting the
- * global namespace.
+ * Wrap the built admin CSS in `@scope (._ao-admin-root) { ... }` and prefix
+ * every admin class selector with `_ao-` so the bundle can drop into a
+ * non-admin host page without colliding on common class names.
  *
  * - Globals stay at top level: @property registrations, @font-face,
  *   @keyframes, @charset, @import, statement-form @layer declarations
@@ -13,20 +13,22 @@
  * - Inside the scope, `:root`, `html`, and `body` selectors are rewritten
  *   to `:scope` so tokens and resets land on the wrapper, not the document.
  *   `:host` selectors are preserved (harmless when no shadow root exists).
- * - A `:scope, :scope * { all: revert-layer }` rule is prepended inside the
- *   scope so unlayered host-page rules (e.g. Bootstrap's `.btn`, `body`
- *   defaults) revert in favour of admin's layered cascade. `revert-layer`
- *   (not `revert`) is critical: it rolls back only the current — unlayered —
- *   layer, leaving admin's own `@layer base/components/utilities` rules to
- *   apply. Plain `revert` would clobber admin too.
+ * - Every class selector inside the scope is prefixed: `.btn` becomes
+ *   `._ao-btn`, `.card-body` becomes `._ao-card-body`, and so on. Admin's
+ *   classes can no longer collide with the host page's classes, so the
+ *   bundle does not need a defensive `all: revert-layer` reset.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import postcss from "postcss";
+import selectorParser from "postcss-selector-parser";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(HERE, "../dist");
+
+const PREFIX = "_ao-";
+const SCOPE_ROOT = `.${PREFIX}admin-root`;
 
 const HOIST_ATRULES = new Set([
   "property",
@@ -59,9 +61,22 @@ function rewriteSelector(selector) {
   return deduped.join(", ");
 }
 
+// Use a real selector parser so we only touch `class` nodes — attribute
+// values (`[href*=".com"]`), escaped class names (`.md\:flex`, `.\32 xl\:flex`)
+// and pseudo-classes are all handled correctly without regex acrobatics.
+const prefixClassesProcessor = selectorParser((root) => {
+  root.walkClasses((node) => {
+    node.value = `${PREFIX}${node.value}`;
+  });
+});
+
+function prefixClassesInSelector(selector) {
+  return prefixClassesProcessor.processSync(selector);
+}
+
 function rewriteSelectorsDeep(container) {
   container.walkRules((rule) => {
-    rule.selector = rewriteSelector(rule.selector);
+    rule.selector = prefixClassesInSelector(rewriteSelector(rule.selector));
   });
 }
 
@@ -97,7 +112,7 @@ async function wrapFile(inputPath, outputPath) {
     }
   }
 
-  const scope = postcss.atRule({ name: "scope", params: "(.admin-root)" });
+  const scope = postcss.atRule({ name: "scope", params: `(${SCOPE_ROOT})` });
   scope.raws.before = "\n\n";
   scope.raws.between = " ";
   scope.raws.afterName = " ";
@@ -108,19 +123,13 @@ async function wrapFile(inputPath, outputPath) {
   });
   rewriteSelectorsDeep(scope);
 
-  const isoReset = postcss.rule({ selector: ":scope, :scope *" });
-  isoReset.append(postcss.decl({ prop: "all", value: "revert-layer" }));
-  isoReset.raws.before = "\n  ";
-  isoReset.raws.between = " ";
-  scope.prepend(isoReset);
-
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";
     root.append(node);
   });
   root.append(scope);
 
-  const banner = "/*! @aortl/admin-css scoped variant — wrapped in @scope (.admin-root). */\n";
+  const banner = `/*! @aortl/admin-css scoped variant — @scope (${SCOPE_ROOT}); admin classes prefixed with ${PREFIX}. */\n`;
   const output = banner + root.toString();
   await writeFile(outputPath, output);
 }

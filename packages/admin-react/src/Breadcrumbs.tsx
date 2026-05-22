@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import { Children, Fragment, isValidElement, type ComponentProps, type ReactNode } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export interface BreadcrumbsProps extends ComponentProps<"nav"> {
@@ -18,7 +18,7 @@ function BreadcrumbsRoot({
 }: BreadcrumbsProps) {
   const items = Children.toArray(children).filter(isValidElement);
   return (
-    <nav aria-label={ariaLabel} className={clsx("breadcrumbs", className)} {...rest}>
+    <nav aria-label={ariaLabel} className={cn("breadcrumbs", className)} {...rest}>
       <ol>
         {items.map((child, i) => (
           <Fragment key={child.key ?? i}>
@@ -50,7 +50,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
     return (
       <li>
         <a
-          className={clsx("breadcrumb-item", className)}
+          className={cn("breadcrumb-item", className)}
           aria-current={current ? "page" : undefined}
           {...rest}
         >
@@ -64,7 +64,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
   return (
     <li>
       <span
-        className={clsx("breadcrumb-item", className)}
+        className={cn("breadcrumb-item", className)}
         aria-current={current ? "page" : undefined}
         {...rest}
       >
@@ -79,7 +79,7 @@ export type BreadcrumbSeparatorProps = ComponentProps<"span">;
 
 function BreadcrumbSeparator({ className, children, ...rest }: BreadcrumbSeparatorProps) {
   return (
-    <span aria-hidden="true" className={clsx("breadcrumb-separator", className)} {...rest}>
+    <span aria-hidden="true" className={cn("breadcrumb-separator", className)} {...rest}>
       {children}
     </span>
   );

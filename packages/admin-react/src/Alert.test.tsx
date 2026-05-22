@@ -24,8 +24,8 @@ describe("Alert", () => {
         description="Retrying in 30s."
       />,
     );
-    expect(screen.getByText("Connection failed")).toHaveClass("alert-title");
-    expect(screen.getByText("Retrying in 30s.")).toHaveClass("alert-description");
+    expect(screen.getByText("Connection failed")).toHaveAdminClass("alert-title");
+    expect(screen.getByText("Retrying in 30s.")).toHaveAdminClass("alert-description");
     const alert = screen.getByRole("alert");
     expect(alert.firstElementChild).toBe(screen.getByTestId("icon"));
   });

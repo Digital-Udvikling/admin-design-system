@@ -1,14 +1,21 @@
 ---
 title: React
-description: Thin React wrappers that emit the same class names as the vanilla CSS.
+description: Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 sidebar:
   order: 2
 ---
 
-Thin React wrappers that emit the same class names as the vanilla CSS.
+Thin React wrappers around Base UI primitives. Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Set `--color-system-accent` on `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+:::
+
+:::caution[Upgrading from 0.3]
+
+- `<AdminRoot>` is now **required**. Components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root` — wrap your app (or each embedded admin surface) once.
+- `@aortl/admin-react/styles.css` is the preferred subpath import. The 0.3-era `@aortl/admin-react/styles.scoped.css` is still aliased to the same bundle, so existing imports keep working.
+
 :::
 
 ## Install
@@ -21,28 +28,30 @@ Package page: [`@aortl/admin-react` on npm](https://www.npmjs.com/package/@aortl
 
 ## Import styles + components
 
-If you're embedding admin components inside a non-admin app, import [`@aortl/admin-react/styles.scoped.css`](../scoped/) and wrap with `<AdminRoot>` instead.
-
 ```tsx
 import "@aortl/admin-react/styles.css";
-import { Button, Card, Input } from "@aortl/admin-react";
+import { AdminRoot, Button, Card, Input } from "@aortl/admin-react";
 
 export function SignIn() {
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Sign in</Card.Title>
-        <Input placeholder="Email" />
-        <Input type="password" placeholder="Password" />
-        <Card.Actions>
-          <Button variant="primary">Sign in</Button>
-          <Button variant="ghost">Cancel</Button>
-        </Card.Actions>
-      </Card.Body>
-    </Card>
+    <AdminRoot>
+      <Card>
+        <Card.Body>
+          <Card.Title>Sign in</Card.Title>
+          <Input placeholder="Email" />
+          <Input type="password" placeholder="Password" />
+          <Card.Actions>
+            <Button variant="primary">Sign in</Button>
+            <Button variant="ghost">Cancel</Button>
+          </Card.Actions>
+        </Card.Body>
+      </Card>
+    </AdminRoot>
   );
 }
 ```
+
+`<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface (a settings panel, an internal toolbar) inside a host app.
 
 ## Add icons (optional)
 

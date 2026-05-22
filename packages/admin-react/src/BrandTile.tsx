@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export interface BrandTileProps extends ComponentProps<"span"> {
@@ -11,7 +11,7 @@ export interface BrandTileProps extends ComponentProps<"span"> {
 
 export function BrandTile({ monogram, icon, className, children, ...rest }: BrandTileProps) {
   return (
-    <span className={clsx("brand-tile", className)} aria-hidden {...rest}>
+    <span className={cn("brand-tile", className)} aria-hidden {...rest}>
       {icon ? renderIcon(icon, 14) : (children ?? monogram)}
     </span>
   );

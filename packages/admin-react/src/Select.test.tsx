@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Select } from "./Select";
+import { adminSelector } from "./test-setup";
 
 describe("Select", () => {
   it("renders trigger and subparts", () => {
@@ -47,12 +48,12 @@ describe("Select", () => {
         </Select>,
       );
       const trigger = screen.getByRole("combobox", { name: "fruit" });
-      expect(document.body.querySelector(".select-popup")).toBeNull();
+      expect(document.body.querySelector(adminSelector("select-popup"))).toBeNull();
       await user.click(trigger);
-      const popup = document.body.querySelector(".select-popup") as HTMLElement;
+      const popup = document.body.querySelector(adminSelector("select-popup")) as HTMLElement;
       expect(popup).not.toBeNull();
       await user.click(within(popup).getByText("Pear"));
-      const closedPopup = document.body.querySelector(".select-popup");
+      const closedPopup = document.body.querySelector(adminSelector("select-popup"));
       expect(closedPopup === null || closedPopup.hasAttribute("data-closed")).toBe(true);
       expect(trigger).toHaveTextContent("pear");
       expect(onValueChange).toHaveBeenCalledTimes(1);
@@ -93,11 +94,11 @@ describe("Select", () => {
       const trigger = screen.getByRole("combobox", { name: "fruit" });
       expect(trigger).toHaveTextContent("Pick");
       await user.click(trigger);
-      const popup = document.body.querySelector(".select-popup") as HTMLElement;
+      const popup = document.body.querySelector(adminSelector("select-popup")) as HTMLElement;
       await user.click(within(popup).getByText("Apple"));
       expect(trigger).toHaveTextContent("apple");
       await user.click(trigger);
-      const popup2 = document.body.querySelector(".select-popup") as HTMLElement;
+      const popup2 = document.body.querySelector(adminSelector("select-popup")) as HTMLElement;
       await user.click(within(popup2).getByText("Pear"));
       expect(trigger).toHaveTextContent("pear");
       expect(onValueChange.mock.calls.map((c) => c[0])).toEqual(["apple", "pear"]);

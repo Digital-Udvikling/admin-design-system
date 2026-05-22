@@ -1,8 +1,8 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
-import { clsx } from "clsx";
 import { createContext, useContext, useState } from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 interface SidebarContextValue {
@@ -37,15 +37,15 @@ function SidebarRoot({
 
   return (
     <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
-      <aside className={clsx("sidebar", className)} {...rest}>
+      <aside className={cn("sidebar", className)} {...rest}>
         {drawerOpen ? null : children}
       </aside>
       {shell ? (
         <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
           <BaseDialog.Portal>
-            <BaseDialog.Backdrop className="sidebar-drawer-backdrop" />
+            <BaseDialog.Backdrop className={cn("sidebar-drawer-backdrop", undefined)} />
             <BaseDialog.Popup
-              className="sidebar-drawer"
+              className={cn("sidebar-drawer", undefined)}
               aria-label={drawerLabel}
               onClick={(event) => {
                 const target = event.target as HTMLElement;
@@ -66,25 +66,25 @@ function SidebarRoot({
 export type SidebarHeaderProps = ComponentProps<"div">;
 
 function SidebarHeader({ className, ...rest }: SidebarHeaderProps) {
-  return <div className={clsx("sidebar-header", className)} {...rest} />;
+  return <div className={cn("sidebar-header", className)} {...rest} />;
 }
 
 export type SidebarNavProps = ComponentProps<"nav">;
 
 function SidebarNav({ className, ...rest }: SidebarNavProps) {
-  return <nav className={clsx("sidebar-nav", className)} {...rest} />;
+  return <nav className={cn("sidebar-nav", className)} {...rest} />;
 }
 
 export type SidebarGroupProps = ComponentProps<"div">;
 
 function SidebarGroup({ className, ...rest }: SidebarGroupProps) {
-  return <div className={clsx("sidebar-group", className)} {...rest} />;
+  return <div className={cn("sidebar-group", className)} {...rest} />;
 }
 
 export type SidebarGroupLabelProps = ComponentProps<"div">;
 
 function SidebarGroupLabel({ className, ...rest }: SidebarGroupLabelProps) {
-  return <div className={clsx("sidebar-group-label", className)} {...rest} />;
+  return <div className={cn("sidebar-group-label", className)} {...rest} />;
 }
 
 export interface SidebarItemProps extends ComponentProps<"a"> {
@@ -98,7 +98,7 @@ export interface SidebarItemProps extends ComponentProps<"a"> {
 function SidebarItem({ active, icon, badge, className, children, ...rest }: SidebarItemProps) {
   return (
     <a
-      className={clsx("sidebar-item", className)}
+      className={cn("sidebar-item", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
@@ -112,19 +112,19 @@ function SidebarItem({ active, icon, badge, className, children, ...rest }: Side
 export type SidebarIconProps = ComponentProps<"span">;
 
 function SidebarIcon({ className, ...rest }: SidebarIconProps) {
-  return <span aria-hidden className={clsx("sidebar-icon", className)} {...rest} />;
+  return <span aria-hidden className={cn("sidebar-icon", className)} {...rest} />;
 }
 
 export type SidebarLabelProps = ComponentProps<"span">;
 
 function SidebarLabel({ className, ...rest }: SidebarLabelProps) {
-  return <span className={clsx("sidebar-label", className)} {...rest} />;
+  return <span className={cn("sidebar-label", className)} {...rest} />;
 }
 
 export type SidebarBadgeProps = ComponentProps<"span">;
 
 function SidebarBadge({ className, ...rest }: SidebarBadgeProps) {
-  return <span className={clsx("sidebar-badge", className)} {...rest} />;
+  return <span className={cn("sidebar-badge", className)} {...rest} />;
 }
 
 export interface SidebarCollapsibleProps extends Omit<
@@ -169,7 +169,7 @@ function SidebarCollapsible({
 
   return (
     <details
-      className={clsx("sidebar-collapsible", className)}
+      className={cn("sidebar-collapsible", className)}
       open={isOpen}
       onToggle={(event) => {
         const next = (event.currentTarget as HTMLDetailsElement).open;
@@ -178,8 +178,8 @@ function SidebarCollapsible({
       }}
       {...rest}
     >
-      <summary className="sidebar-collapsible-trigger">{triggerContent}</summary>
-      <div className="sidebar-collapsible-panel">{children}</div>
+      <summary className={cn("sidebar-collapsible-trigger", undefined)}>{triggerContent}</summary>
+      <div className={cn("sidebar-collapsible-panel", undefined)}>{children}</div>
     </details>
   );
 }
@@ -201,7 +201,7 @@ function SidebarSubItem({
 }: SidebarSubItemProps) {
   return (
     <a
-      className={clsx("sidebar-subitem", className)}
+      className={cn("sidebar-subitem", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
@@ -215,7 +215,7 @@ function SidebarSubItem({
 export type SidebarFooterProps = ComponentProps<"div">;
 
 function SidebarFooter({ className, ...rest }: SidebarFooterProps) {
-  return <div className={clsx("sidebar-footer", className)} {...rest} />;
+  return <div className={cn("sidebar-footer", className)} {...rest} />;
 }
 
 export interface SidebarCollapseToggleProps extends Omit<ComponentProps<"label">, "htmlFor"> {
@@ -234,17 +234,17 @@ function SidebarCollapseToggle({
   const isControlled = controlledChecked !== undefined;
 
   return (
-    <label className={clsx("sidebar-collapse-toggle", className)} {...rest}>
+    <label className={cn("sidebar-collapse-toggle", className)} {...rest}>
       <input
         type="checkbox"
-        className="sidebar-toggle"
+        className={cn("sidebar-toggle", undefined)}
         aria-label={label}
         {...(isControlled
           ? { checked: controlledChecked }
           : { defaultChecked: ctx?.defaultCollapsed })}
         onChange={(event) => ctx?.onCollapsedChange?.(event.currentTarget.checked)}
       />
-      <span className="sr-only">{label}</span>
+      <span className={cn("sr-only", undefined)}>{label}</span>
       {children}
     </label>
   );

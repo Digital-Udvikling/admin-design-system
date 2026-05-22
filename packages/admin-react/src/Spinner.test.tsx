@@ -7,18 +7,18 @@ describe("Spinner", () => {
     render(<Spinner />);
     const el = screen.getByRole("status");
     expect(el).toHaveAttribute("aria-label", "Loading");
-    expect(el).toHaveClass("spinner");
+    expect(el).toHaveAdminClass("spinner");
   });
 
   it("accepts a custom label and size modifier", () => {
     render(<Spinner size="lg" label="Saving" />);
     const el = screen.getByRole("status");
     expect(el).toHaveAttribute("aria-label", "Saving");
-    expect(el).toHaveClass("spinner-lg");
+    expect(el).toHaveAdminClass("spinner-lg");
   });
 
   it("omits the size class when size is md", () => {
     render(<Spinner />);
-    expect(screen.getByRole("status")).not.toHaveClass("spinner-md");
+    expect(screen.getByRole("status")).not.toHaveAdminClass("spinner-md");
   });
 });

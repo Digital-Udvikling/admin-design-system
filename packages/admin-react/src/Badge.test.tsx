@@ -7,7 +7,7 @@ describe("Badge", () => {
     render(<Badge>Beta</Badge>);
     const el = screen.getByText("Beta");
     expect(el).toBeInTheDocument();
-    expect(el).toHaveClass("badge", "badge-neutral");
+    expect(el).toHaveAdminClass("badge", "badge-neutral");
   });
 
   it("applies variant and size modifiers", () => {
@@ -17,12 +17,12 @@ describe("Badge", () => {
       </Badge>,
     );
     const el = screen.getByText("OK");
-    expect(el).toHaveClass("badge", "badge-success", "badge-lg");
+    expect(el).toHaveAdminClass("badge", "badge-success", "badge-lg");
   });
 
   it("omits the size class when size is md", () => {
     render(<Badge variant="danger">Err</Badge>);
     const el = screen.getByText("Err");
-    expect(el).not.toHaveClass("badge-md");
+    expect(el).not.toHaveAdminClass("badge-md");
   });
 });

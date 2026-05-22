@@ -1,6 +1,6 @@
 {
   "name": "@aortl/admin-react",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "React component library for the admin design system. Pairs with @aortl/admin-css.",
   "keywords": [
     "components",
@@ -32,7 +32,7 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./styles.css": "./dist/admin.css",
+    "./styles.css": "./dist/admin.scoped.css",
     "./styles.scoped.css": "./dist/admin.scoped.css"
   },
   "publishConfig": {
@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "vite build && pnpm copy:css",
-    "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css && cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css",
+    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",

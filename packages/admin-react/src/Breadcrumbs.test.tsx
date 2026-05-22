@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { adminSelector } from "./test-setup";
 
 describe("Breadcrumbs", () => {
   it("renders a labelled nav landmark with items and separators between them", () => {
@@ -16,7 +17,7 @@ describe("Breadcrumbs", () => {
     expect(screen.getByText("Home").tagName).toBe("A");
     expect(screen.getByText("Detail")).toHaveAttribute("aria-current", "page");
     // Two separators between three items.
-    expect(nav.querySelectorAll(".breadcrumb-separator")).toHaveLength(2);
+    expect(nav.querySelectorAll(adminSelector("breadcrumb-separator"))).toHaveLength(2);
   });
 
   it("renders without an href as a non-link span", () => {

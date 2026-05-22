@@ -13,6 +13,12 @@
  * - Inside the scope, `:root`, `html`, and `body` selectors are rewritten
  *   to `:scope` so tokens and resets land on the wrapper, not the document.
  *   `:host` selectors are preserved (harmless when no shadow root exists).
+ * - A `:scope, :scope * { all: revert-layer }` rule is prepended inside the
+ *   scope so unlayered host-page rules (e.g. Bootstrap's `.btn`, `body`
+ *   defaults) revert in favour of admin's layered cascade. `revert-layer`
+ *   (not `revert`) is critical: it rolls back only the current — unlayered —
+ *   layer, leaving admin's own `@layer base/components/utilities` rules to
+ *   apply. Plain `revert` would clobber admin too.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -101,6 +107,12 @@ async function wrapFile(inputPath, outputPath) {
     scope.append(node);
   });
   rewriteSelectorsDeep(scope);
+
+  const isoReset = postcss.rule({ selector: ":scope, :scope *" });
+  isoReset.append(postcss.decl({ prop: "all", value: "revert-layer" }));
+  isoReset.raws.before = "\n  ";
+  isoReset.raws.between = " ";
+  scope.prepend(isoReset);
 
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";

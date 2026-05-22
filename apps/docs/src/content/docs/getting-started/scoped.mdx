@@ -54,6 +54,17 @@ export function ProductPageAdminMenu() {
 
 The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../../basics/dark-mode/) for the full picture.
 
+## Host-page style isolation
+
+The scoped bundle prepends `:scope, :scope * { all: revert-layer; }` inside the `@scope`. Unlayered host rules (e.g. a Bootstrap `.btn` or `body { font-family: ... }` rule on the host page) revert at the `.admin-root` boundary, falling through to admin's own layered cascade.
+
+`revert-layer` — not `revert` — is deliberate: admin's preflight and component rules live in `@layer base/components/utilities`, so reverting only the unlayered layer neutralizes host styles while keeping admin intact.
+
+Limits:
+
+- The reset rule has the specificity of `:scope` (one pseudo-class). A host rule with higher specificity (e.g. `body .btn { ... }` or `.theme-foo .btn { ... }`) still wins. For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;` with admin imported into `layer(admin)`) or a shadow root.
+- The reset matches elements, not pseudo-elements. Host rules targeting `.foo::before` are not reverted.
+
 ## Caveats
 
 - Tailwind utility classes in the scoped bundle only match inside `.admin-root`. If you want to author with admin's tokens or utilities directly across the host app, use the default unscoped bundle instead.

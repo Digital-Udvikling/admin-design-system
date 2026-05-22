@@ -16,6 +16,16 @@ export default defineConfig({
     starlight({
       title: "admin design system",
       customCss: ["./src/styles/global.css"],
+      editLink: {
+        baseUrl: "https://github.com/Digital-Udvikling/admin-design-system/edit/main/apps/docs/",
+      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/Digital-Udvikling/admin-design-system",
+        },
+      ],
       sidebar: [
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
         { label: "Basics", items: [{ autogenerate: { directory: "basics/" } }] },

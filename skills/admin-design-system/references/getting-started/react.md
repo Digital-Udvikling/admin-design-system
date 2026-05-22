@@ -14,6 +14,8 @@ Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripe
 npm install @aortl/admin-react react react-dom
 ```
 
+Package page: [`@aortl/admin-react` on npm](https://www.npmjs.com/package/@aortl/admin-react).
+
 ## Import styles + components
 
 If you're embedding admin components inside a non-admin app, import [`@aortl/admin-react/styles.scoped.css`](../scoped/) and wrap with `<AdminRoot>` instead.

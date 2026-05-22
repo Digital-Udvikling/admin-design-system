@@ -2,6 +2,8 @@
 
 Pre-built CSS for the admin design system. No Tailwind setup required to consume.
 
+[View on npm](https://www.npmjs.com/package/@aortl/admin-css) · [Docs](https://digital-udvikling.github.io/admin-design-system/)
+
 ## Install
 
 ```fish

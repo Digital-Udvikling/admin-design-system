@@ -1,6 +1,8 @@
 # @aortl/admin-react
 
-React component library for the admin design system. Renders the same class names as `@aortl/admin-css`, so vanilla HTML and React look identical.
+React component library for the admin design system. Renders the same class names as [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css), so vanilla HTML and React look identical.
+
+[View on npm](https://www.npmjs.com/package/@aortl/admin-react) · [Docs](https://digital-udvikling.github.io/admin-design-system/)
 
 ## Install
 

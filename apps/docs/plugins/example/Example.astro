@@ -128,6 +128,13 @@ storage key, sync attribute, and tab selectors below intentionally track
     border-bottom: 1px solid var(--sl-color-hairline);
     background: var(--color-surface);
   }
+  /* Vanilla `.tooltip-wrap` tooltips render inside the trigger's stacking
+  context, so the frame's `overflow: hidden` (needed for rounded corners)
+  clips them. Give the preview enough padding to contain a top/bottom/side
+  tooltip without changing the frame's overflow behavior. */
+  .example-preview:has(.tooltip-wrap) {
+    padding: 3rem;
+  }
   /* Variants are layout-transparent so children flex directly in the
   preview. The explicit [hidden] rule outranks display: contents. */
   .example-preview .preview-variant {

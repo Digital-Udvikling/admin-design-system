@@ -133,6 +133,15 @@ export {
   type TabsIndicatorProps,
 } from "./Tabs";
 export {
+  Tooltip,
+  type TooltipProps,
+  type TooltipProviderProps,
+  type TooltipRootProps,
+  type TooltipTriggerProps,
+  type TooltipPopupProps,
+  type TooltipSize,
+} from "./Tooltip";
+export {
   Table,
   type TableProps,
   type TableAlign,

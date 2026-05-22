@@ -140,6 +140,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Tables](references/components/tables.md) — Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.
+- [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.
 
 ### Modules
 

@@ -1,0 +1,115 @@
+@layer components {
+  /*
+   * Two paths, one class.
+   *
+   * React: Base UI portals the popup to <body> and anchors it with floating-ui;
+   * the `.tooltip` class only carries paint + per-side enter/exit transitions
+   * driven by Base UI's `data-side` / `data-starting-style` / `data-ending-style`
+   * attributes.
+   *
+   * Vanilla: `.tooltip-wrap` is a `position: relative` parent that reveals a
+   * nested `.tooltip` on `:hover` / `:focus-within`. No portal, no JS — works in
+   * every modern browser today. The platform-native future is `interesttarget` +
+   * `popover="hint"`, but cross-browser support is still rolling out.
+   */
+  .tooltip {
+    @apply inline-block max-w-xs px-2 py-1
+           rounded-md
+           text-xs leading-snug font-medium
+           bg-text text-surface
+           shadow-md
+           pointer-events-none;
+    text-wrap: balance;
+  }
+
+  /* Sizes */
+  .tooltip-sm {
+    @apply px-1.5 py-0.5;
+  }
+
+  /* React (portalled) enter/exit — Base UI sets these data attrs on Popup.
+     150ms ease, matching Dialog. */
+  .tooltip {
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+  }
+  .tooltip[data-starting-style],
+  .tooltip[data-ending-style] {
+    opacity: 0;
+  }
+  .tooltip[data-side="top"][data-starting-style],
+  .tooltip[data-side="top"][data-ending-style] {
+    transform: translateY(0.25rem);
+  }
+  .tooltip[data-side="bottom"][data-starting-style],
+  .tooltip[data-side="bottom"][data-ending-style] {
+    transform: translateY(-0.25rem);
+  }
+  .tooltip[data-side="left"][data-starting-style],
+  .tooltip[data-side="left"][data-ending-style] {
+    transform: translateX(0.25rem);
+  }
+  .tooltip[data-side="right"][data-starting-style],
+  .tooltip[data-side="right"][data-ending-style] {
+    transform: translateX(-0.25rem);
+  }
+
+  /* Vanilla CSS-only path. */
+  .tooltip-wrap {
+    @apply relative inline-flex items-center;
+  }
+
+  /* Default position: top, centered. Equivalent to .tooltip-wrap-top. */
+  .tooltip-wrap > .tooltip {
+    @apply absolute opacity-0 invisible;
+    left: 50%;
+    bottom: 100%;
+    margin-bottom: calc(var(--spacing) * 1.5);
+    transform: translateX(-50%);
+    transition:
+      opacity 150ms ease-out 0ms,
+      visibility 0s linear 150ms;
+  }
+  .tooltip-wrap-bottom > .tooltip {
+    top: 100%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    margin-top: calc(var(--spacing) * 1.5);
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    transform: translateX(-50%);
+  }
+  .tooltip-wrap-left > .tooltip {
+    top: 50%;
+    right: 100%;
+    bottom: auto;
+    left: auto;
+    margin-top: 0;
+    margin-right: calc(var(--spacing) * 1.5);
+    margin-bottom: 0;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+  .tooltip-wrap-right > .tooltip {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 100%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: calc(var(--spacing) * 1.5);
+    transform: translateY(-50%);
+  }
+
+  .tooltip-wrap:hover > .tooltip,
+  .tooltip-wrap:focus-within > .tooltip {
+    @apply opacity-100 visible;
+    transition:
+      opacity 150ms ease-out 200ms,
+      visibility 0s linear 200ms;
+  }
+}

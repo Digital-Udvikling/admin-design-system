@@ -40,10 +40,10 @@
   },
   "scripts": {
     "build": "pnpm build:dev && pnpm build:min && pnpm build:scoped",
-    "build:dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css",
-    "build:min": "tailwindcss -i ./src/index.css -o ./dist/admin.min.css --minify",
+    "build:dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css",
+    "build:min": "tailwindcss -i ./src/admin.css -o ./dist/admin.min.css --minify",
     "build:scoped": "node ./scripts/wrap-scoped.mjs",
-    "dev": "tailwindcss -i ./src/index.css -o ./dist/admin.css --watch",
+    "dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {

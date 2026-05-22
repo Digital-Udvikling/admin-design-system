@@ -3,3 +3,18 @@ set -e
 pnpm lint
 pnpm format:check
 pnpm check-types
+
+# Skill bundle is generated from apps/docs/src/content/docs/**/*.mdx.
+# If the commit touches any source that feeds the generator, regenerate
+# and fail loudly when the result doesn't match what's staged — same
+# check CI runs, surfaced before the push.
+if git diff --cached --name-only \
+  | grep -qE '^(apps/docs/src/content/docs/|apps/docs/scripts/generate-skill\.mjs$|apps/docs/scripts/skill-header\.md$|skills/)'; then
+  pnpm generate-skill
+  if ! git diff --quiet -- skills; then
+    echo
+    echo "skills/ is out of sync with apps/docs/src/content/docs/."
+    echo "The bundle has been regenerated — review, 'git add skills', and re-commit."
+    exit 1
+  fi
+fi

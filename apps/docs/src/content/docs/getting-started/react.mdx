@@ -1,11 +1,11 @@
 ---
 title: React
-description: Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
+description: Thin React wrappers around Base UI primitives, mounted under <AdminRoot>.
 sidebar:
   order: 2
 ---
 
-Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
+Every component emits bare class names (`.btn`, `.card`, `.input`) and looks them up under `<AdminRoot>`. Mount AdminRoot once and the subtree picks up admin's tokens, typography, and color scheme.
 
 :::tip[Branding multiple apps]
 Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
@@ -44,22 +44,49 @@ export function SignIn() {
 }
 ```
 
-`<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface (a settings panel, an internal toolbar) inside a host app.
+`<AdminRoot>` renders a `<div class="admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface (a settings panel, an internal toolbar) inside a host app.
 
 ### Props
 
-Beyond the standard `<div>` attributes, two typed shortcuts:
+Beyond the standard `<div>` attributes:
 
-| Prop           | Type                 | Effect                                                                                                                                                    |
-| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../../basics/dark-mode/) on this subtree. Omit to follow the OS.                                              |
-| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../../basics/customize/#system-accent). |
+| Prop           | Type                 | Effect                                                                                                                                                                                                                       |
+| -------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../../basics/dark-mode/) on this subtree. Omit to follow the OS.                                                                                                                 |
+| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../../basics/customize/#system-accent).                                                                    |
+| `isolated`     | `boolean`            | Mount inside an open shadow root for hard isolation from the host page's CSS. Client-only (the admin region is briefly empty before hydration). Use when embedding admin into an app whose CSS you don't control. See below. |
 
 ```tsx
 <AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
   {/* ... */}
 </AdminRoot>
 ```
+
+### Isolation (`isolated`)
+
+By default `<AdminRoot>` mounts in the light DOM and the consumer imports admin's CSS into their own document. That's the right shape when admin owns the page (a full-page admin app, a dedicated route in a multi-app shell).
+
+For an embedded panel inside an app you don't control — and whose CSS may collide with admin's — opt into shadow-DOM isolation:
+
+```tsx
+import { AdminRoot, Button } from "@aortl/admin-react";
+
+export function ProductPageAdminMenu() {
+  return (
+    <AdminRoot isolated>
+      <Button variant="primary">Save</Button>
+    </AdminRoot>
+  );
+}
+```
+
+No stylesheet import is needed in isolated mode — admin's CSS is bundled into the JS and adopted into the shadow root automatically.
+
+Costs to know:
+
+- Renders nothing on the server. The shadow root attaches client-side, so the AdminRoot region is briefly empty before hydration.
+- Native portals (`<Tooltip>`, `<Select>`, `<Sidebar>` drawer) are retargeted into the shadow root via an internal context; this is automatic for admin's own components. If you write a third-party component that uses a Base UI portal inside admin, read the portal-host element from the `usePortalContainer()` hook and pass it as `container` to your portal.
+- Scrollbars and form controls _on the shadow host element itself_ follow the parent document's `color-scheme`, not admin's. If you see a mismatch around an isolated mount, set `color-scheme` on the host element via your own CSS.
 
 ## Add icons (optional)
 
@@ -79,7 +106,8 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 
 `<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component and the wrapper sizes it and adds `aria-hidden`.
 
-## Upgrading from 0.3
+## Upgrading from 0.5
 
-- `<AdminRoot>` is now **required**. Components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root` — wrap your app (or each embedded admin surface) once.
-- `@aortl/admin-react/styles.css` is the preferred subpath import. The 0.3-era `@aortl/admin-react/styles.scoped.css` is still aliased to the same bundle, so existing imports keep working.
+- The `_ao-` class prefix is gone. Components emit bare class names (`.btn`, `.card`, `.input`) again. Any custom CSS that targeted `._ao-btn` / `._ao-card` / etc. needs the prefix removed.
+- The scoped CSS bundle (`@aortl/admin-css/admin.scoped.css`, `@aortl/admin-react/styles.scoped.css`) is gone. Embedded mounts that relied on the scoped bundle for host-CSS isolation should switch to `<AdminRoot isolated>` — it provides strictly stronger isolation (a real shadow boundary, not specificity arithmetic) at the cost of a brief empty-region flash before hydration.
+- `<AdminRoot>` is still required for React components. Drop it once near the top of your admin tree.

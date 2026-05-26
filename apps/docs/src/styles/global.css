@@ -32,22 +32,15 @@
 @import "@aortl/admin-css/src/components/index.css";
 
 /*
- * Scoped + prefixed bundle for React previews. Components imported from
- * `@aortl/admin-react` emit `_ao-`-prefixed class names and require an
- * ancestor `._ao-admin-root` element; the example plugin wraps every React
- * preview in `<AdminRoot>` so this stylesheet matches their DOM. Loaded as
- * the built artifact (not source) so it survives the wrap-scoped transform.
+ * AdminRoot in production owns its surface and forks its own color-scheme —
+ * that's the whole point. In the docs it wraps React previews that need to
+ * sit flush inside `.example-preview`: the wrapper would otherwise break the
+ * flex layout, paint over Starlight's chrome, and ignore the theme toggle.
+ * Neutralize it just for previews. (Previews always use AdminRoot in
+ * light-DOM mode — isolated/shadow-DOM previews aren't possible here without
+ * losing source CSS hot-reload through Tailwind's single-pass compile.)
  */
-@import "@aortl/admin-css/admin.scoped.css";
-
-/*
- * AdminRoot in production owns its surface and forks its own color-scheme
- * (that's the point — admin styles can't bleed in or out). In the docs it's
- * wrapping React previews that need to sit flush inside `.example-preview`:
- * the wrapper would otherwise break the flex layout, paint over Starlight's
- * chrome, and ignore the theme toggle. Neutralize it just for previews.
- */
-.example-preview ._ao-admin-root {
+.example-preview .admin-root {
   display: contents;
   color-scheme: inherit;
   background: transparent;

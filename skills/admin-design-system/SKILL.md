@@ -1,16 +1,18 @@
 ---
 name: admin-design-system
-description: Build UI for internal admin tooling in Digital-Udvikling projects. Use when working in a Digital-Udvikling repo on admin pages, internal tools, or operator-facing screens; when files import @aortl/admin-react or link @aortl/admin-css; or when seeing class names like .btn, .input, .card, .field, .alert, .table, .sidebar (or their `_ao-` prefixed forms in scoped contexts).
+description: Build UI for internal admin tooling in Digital-Udvikling projects. Use when working in a Digital-Udvikling repo on admin pages, internal tools, or operator-facing screens; when files import @aortl/admin-react or link @aortl/admin-css; or when seeing class names like .btn, .input, .card, .field, .alert, .table, .sidebar.
 ---
 
 # aortl admin design system
 
 A small, opinionated design system for internal admin tooling. Ships as two packages from one source of truth:
 
-- `@aortl/admin-css` — pre-built CSS. The default bundle uses bare class names (`.btn`, `.input`, `.card`, `.field`) for full-page admin apps that own the document. A parallel scoped bundle (`@aortl/admin-css/admin.scoped.css`) wraps everything in `@scope (._ao-admin-root)` and prefixes every class with `_ao-`, for embedding inside non-admin pages.
-- `@aortl/admin-react` — React components wrapping Base UI primitives. Always emits `_ao-`-prefixed class names and requires `<AdminRoot>` (which renders `class="_ao-admin-root"`) somewhere up the tree. `@aortl/admin-react/styles.css` resolves to the scoped+prefixed bundle.
+- `@aortl/admin-css` — pre-built CSS with bare class names (`.btn`, `.input`, `.card`, `.field`). For full-page admin apps that own the document.
+- `@aortl/admin-react` — React components wrapping Base UI primitives. Emits the same bare class names and requires `<AdminRoot>` somewhere up the tree. Mounting modes:
+  - Default: light-DOM mount; consumer imports `@aortl/admin-react/styles.css` into their document.
+  - `<AdminRoot isolated>`: shadow-DOM mount for embedding admin in a host whose CSS you don't control. Admin's CSS is adopted into the shadow root automatically — no separate stylesheet import. Client-only (the region is briefly empty until hydration).
 
-Vanilla HTML and React render at the same DOM positions and behave identically — the only difference is whether the class names carry the `_ao-` prefix.
+Vanilla HTML and React render at the same DOM positions, with the same class names, and behave identically.
 
 ## When to use this skill
 
@@ -24,7 +26,7 @@ This system is for **internal admin tooling**, not customer-facing marketing sur
 
 ### Class names are the contract
 
-Both packages share base names. The unscoped vanilla bundle renders `<Button variant="primary" size="sm">`-equivalent HTML as `<button class="btn btn-primary btn-sm">`. The scoped bundle (and `<Button>` from `@aortl/admin-react`) renders it as `<button class="_ao-btn _ao-btn-primary _ao-btn-sm">` inside an `._ao-admin-root` wrapper. The two are identical apart from the prefix.
+Both packages share base names. `<Button variant="primary" size="sm">` and the vanilla bundle render `<button class="btn btn-primary btn-sm">` — same class names either way. Custom CSS targeting admin classes uses the bare names.
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
@@ -40,7 +42,7 @@ import { IconPlus } from "@tabler/icons-react";
 
 Pass JSX (`icon={<IconPlus size={20} />}`) to override the default 16px size. Components currently exposing this prop: `Button`, `Menu.Item`, `Card` / `Card.Title`, `Navbar.Item`, `Alert`, `Sidebar.Item` / `SubItem` / `Collapsible`.
 
-Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
+Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>`.
 
 ### Tokens (two layers)
 
@@ -100,8 +102,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 ### Getting started
 
 - [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill so Claude (or any compatible agent) knows the class names, component API, and conventions.
-- [React](references/getting-started/react.md) — Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
-- [Scoped bundle](references/getting-started/scoped.md) — Drop admin styles into a non-admin app without colliding on class names.
+- [React](references/getting-started/react.md) — Thin React wrappers around Base UI primitives, mounted under <AdminRoot>.
 - [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4 project.
 - [Vanilla CSS](references/getting-started/vanilla.md) — A single pre-built stylesheet. No build tooling required on your end.
 

@@ -56,12 +56,13 @@ CI runs `lint`, `format:check`, `build`, `check-types`, `test` — replicate loc
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
 
-Two output forms ship from one source:
+One CSS bundle ships: `@aortl/admin-css/admin.css` — bare class names (`.btn`, `.card`, `.input`). `@aortl/admin-react/styles.css` re-exports the same file. Hand-written HTML uses these names directly; React components emit the same names via `cn()` in `packages/admin-react/src/cn.ts`. `<AdminRoot>` is required for React and renders a `<div class="admin-root">`.
 
-- **Unscoped, unprefixed** (`@aortl/admin-css/admin.css`) — class names are bare (`.btn`, `.card`). For full-page admin apps that own the document. Hand-written HTML uses these names directly.
-- **Scoped, prefixed** (`@aortl/admin-css/admin.scoped.css`, also re-exported as `@aortl/admin-react/styles.css`) — every selector is wrapped in `@scope (._ao-admin-root)` and every class is prefixed `_ao-` (`._ao-btn`, `._ao-card`). The build script `packages/admin-css/scripts/wrap-scoped.mjs` derives this from the unscoped bundle. **`admin-react` always uses this variant** — components emit `_ao-`-prefixed classes via the `cn` helper in `packages/admin-react/src/cn.ts`, and `<AdminRoot>` (which renders `class="_ao-admin-root"`) is required.
+Isolation from a host page's CSS is the job of `<AdminRoot isolated>` — it attaches an open shadow root and adopts admin's CSS into it via a constructable stylesheet (see `packages/admin-react/src/adminStyleSheet.ts`). The CSS is inlined into the JS bundle via Vite's `?inline` import so shadow-DOM consumers don't need a separate stylesheet import. The mode is opt-in: light DOM (default) for full-page admin apps that own the document; shadow DOM when embedded in a host whose CSS you don't control. Shadow mode is client-only — `useLayoutEffect` attaches the shadow root after hydration, so the admin region is briefly empty on first paint.
 
-In React source you still write the bare name (`cn("btn", className)`); `cn` adds the prefix at render time. The consumer-supplied `className` prop is passed through verbatim — only admin's own classes carry the prefix. Tests assert on the prefixed form (`expect(el).toHaveClass("_ao-btn")`).
+`cn()` still has a prefix hook (`PREFIX` constant in `cn.ts`) wired through `prefixTokens`. It's currently empty — admin ships bare names — but flipping it back on is a one-line change if a future deployment shape requires it. Tests assert on bare names (`expect(el).toHaveClass("btn")`) via the `toHaveAdminClass` matcher in `src/test-setup.ts`, which hides the prefix from individual assertions so a future flip doesn't ripple through every test.
+
+Portals: components that wrap Base UI's `*.Portal` (Tooltip, Select, Sidebar's mobile drawer) consume `usePortalContainer()` from `src/PortalContainerContext.tsx` and pass `container={ref ?? undefined}`. AdminRoot provides a portal-host `<div>` as a child in both modes — in shadow mode, that div lives inside the shadow root, so popups stay in the isolation boundary. The context value is `null` outside any AdminRoot, falling back to Base UI's default (document.body).
 
 React components wrap Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) for a11y wiring, focus, validation. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
 

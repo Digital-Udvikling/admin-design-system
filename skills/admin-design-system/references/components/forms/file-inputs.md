@@ -1,8 +1,6 @@
 # File inputs
 
-> Styled native file picker.
-
-The `.file-input` class uses `::file-selector-button` to style the "Choose file" button. `FileInput` does the same in React.
+> File picker styled to match other inputs.
 
 ## Examples
 
@@ -39,8 +37,6 @@ The `.file-input` class uses `::file-selector-button` to style the "Choose file"
 ```
 
 ### Restricting file types
-
-Native `accept` and `multiple` flow through unchanged.
 
 **Example**
 

@@ -1,6 +1,6 @@
 # Textareas
 
-> Base class .textarea + a variant + an optional size.
+> Multi-line text input.
 
 ## Examples
 
@@ -50,7 +50,7 @@
 
 ### Inside a Field
 
-Same Base UI wiring as `Input` — label, description, validation, invalid border tint.
+See [Fields](../fields/) for label, description, and validation.
 
 **Example**
 

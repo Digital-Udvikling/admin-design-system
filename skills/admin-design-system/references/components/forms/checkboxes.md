@@ -1,8 +1,6 @@
 # Checkboxes
 
-> Base class .checkbox with an inner .checkbox-indicator.
-
-React wraps Base UI's `Checkbox.Root` (a `<button role="checkbox">`); vanilla styles a native `<input type="checkbox">` with the same classes.
+> Independent on/off toggles.
 
 ## Examples
 

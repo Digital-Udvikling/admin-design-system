@@ -1,8 +1,8 @@
 # Switches
 
-> Base class .switch with an inner .switch-thumb.
+> Immediate on/off setting.
 
-Use when the change applies immediately. For form submissions, prefer a [checkbox](../checkboxes/).
+For form submissions, prefer a [checkbox](../checkboxes/).
 
 ## Examples
 

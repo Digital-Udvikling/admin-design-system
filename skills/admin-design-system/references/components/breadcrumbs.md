@@ -32,7 +32,7 @@ A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link cu
 
 ### With a chevron separator
 
-Drop an icon inside `.breadcrumb-separator` — the `:empty::before` default steps aside.
+Drop an icon inside `.breadcrumb-separator` to override the default slash.
 
 **Example**
 

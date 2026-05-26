@@ -1,6 +1,6 @@
 # Buttons
 
-> Base class .btn + a variant + an optional size.
+> Buttons with variants, sizes, icons, and loading state.
 
 IconPlus,
   IconTrash,
@@ -95,7 +95,7 @@ If you pass both `icon` and `loading`, the leading icon is suppressed. A trailin
 
 ### As a link
 
-The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="…" />}` and `nativeButton={false}` so Base UI's keyboard and ARIA wiring adjust.
+The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="…" />}` and `nativeButton={false}` to render an anchor.
 
 **Example**
 
@@ -140,7 +140,7 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
 
 ### Icon-only
 
-Drop the label and pass `aria-label` for a square button — table row controls, toolbar icons, dismiss. The React wrapper adds `.btn-square` automatically when a button has an icon but no children; vanilla callers add the class themselves.
+Drop the label and pass `aria-label` for a square button — table row controls, toolbar icons, dismiss. React adds `.btn-square` automatically when a button has an icon but no children; vanilla callers add the class themselves.
 
 **Example**
 

@@ -5,9 +5,7 @@ description: Section a view into named panels.
 
 import { Tabs } from "@aortl/admin-react";
 
-The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interactive without JavaScript. React wraps Base UI Tabs for ARIA semantics, arrow-key navigation, and controlled state.
-
-Vanilla tabs cap at 6 panels — the panel-toggling selectors are hand-enumerated. Use React for more.
+Vanilla tabs are radio-input driven, so panel switching works without JavaScript — but the panel-toggling selectors are hand-enumerated and cap at 6 panels. React handles ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
 
 ## Examples
 

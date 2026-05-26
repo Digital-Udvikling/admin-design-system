@@ -1,6 +1,6 @@
 # Menus
 
-> Dropdown menu built on native <details> + <summary>.
+> Dropdown action menu.
 
 IconPencil,
   IconCopy,
@@ -10,9 +10,7 @@ IconPencil,
   IconLifebuoy,
 } from "@tabler/icons-react";
 
-A `<details>` with a `<summary>` trigger and a positioned popup. The browser handles open/close; the chevron tracks `[open]` via CSS. There is no light dismiss — click the trigger again or move focus to close.
-
-`.menu-trigger` carries only behaviour, so adding `.btn` overrides its appearance — drop the trigger into a `<ButtonGroup>` to build a split button.
+Built on `<details>` + `<summary>`. The browser handles open/close. There is no light dismiss — click the trigger again or move focus to close.
 
 ## Examples
 
@@ -161,4 +159,4 @@ A primary action on the left, related actions on the right via a `<details>` ins
 </ButtonGroup>
 ```
 
-The summary is empty — the chevron from `.menu-trigger::after` is the only visible glyph, so add `aria-label` for screen readers.
+The summary is empty (only the chevron is visible), so add `aria-label` for screen readers.

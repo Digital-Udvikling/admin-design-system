@@ -1,6 +1,6 @@
 ---
 title: Inputs
-description: Base class .input + a variant + an optional size.
+description: Single-line text input.
 ---
 
 import { Input } from "@aortl/admin-react";
@@ -59,8 +59,6 @@ import { Input } from "@aortl/admin-react";
 
 ### Types
 
-`Input` forwards the native `type` attribute.
-
 :::example
 
 ```html
@@ -89,7 +87,7 @@ import { Input } from "@aortl/admin-react";
 
 ### Date and time
 
-The browser renders the native picker. The calendar glyph is toned via `::-webkit-calendar-picker-indicator`; dark mode is handled by `color-scheme`.
+Native browser pickers; dark mode tracks the document's `color-scheme`.
 
 :::example
 
@@ -113,4 +111,4 @@ The browser renders the native picker. The calendar glyph is toned via `::-webki
 
 ### File
 
-Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button. Plain `<input type="file" class="input">` leaves it browser-default.
+Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button.

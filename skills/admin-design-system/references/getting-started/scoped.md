@@ -53,14 +53,11 @@ The scope owns its own `color-scheme`, so the host's `:root` color scheme does n
 
 ## Host-page style isolation
 
-The prefix is the isolation strategy. Every admin class is namespaced (`_ao-btn`, `_ao-card`, …), so a host page's `.btn { background: red }` and `.card { padding: 0 }` can't reach admin elements regardless of specificity or layer order. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root` rather than the document.
+The `_ao-` prefix is the primary isolation strategy: every admin class is namespaced, so a host page's `.btn` or `.card` rules can't reach admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
 
-For element-tag selectors (`h3`, `button`, `input`, …), the build prepends `:scope` to every classless rule inside the scope — so admin's `h3` resets are emitted as `:scope h3` and outrank a host page's bare `h3 { … }` on specificity, regardless of source order. `@scope` itself doesn't add specificity, so without this step the host's element rules would tie and source order would usually decide in the host's favor. The bump applies wherever admin actively sets a property — base text styles, form-control resets, headings, list-style, table borders — but a host rule targeting a property admin doesn't set (say `button { padding: 16px }`) still reaches admin descendants. Inherited properties from the host's `html`/`body` (color, font-family) are pre-empted by admin's `:scope` declarations and reinherit from there.
-
-For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;` with admin imported into `layer(admin)`) or a shadow root.
+A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants. The build sidesteps the common cases by bumping admin's own element-tag resets to outrank an untouched host stylesheet — but for hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;`) or a shadow root.
 
 ## Caveats
 
-- Admin classes are only matched inside `._ao-admin-root`. If you want admin's tokens or utilities to apply across the whole host app, use the default unscoped bundle.
+- Admin classes only match inside `._ao-admin-root`. If you want admin's tokens or utilities to apply across the whole host app, use the default unscoped bundle.
 - `@scope` is Baseline-modern (Chrome, Firefox, Safari). There is no legacy fallback.
-- Custom property registrations (`@property`), `@font-face`, and the cascade-layer order declaration stay at the document root — they're document-wide by spec. Everything else is scoped.

@@ -1,6 +1,6 @@
 # Inputs
 
-> Base class .input + a variant + an optional size.
+> Single-line text input.
 
 ## Examples
 
@@ -50,8 +50,6 @@
 
 ### Types
 
-`Input` forwards the native `type` attribute.
-
 **Example**
 
 ```html
@@ -78,7 +76,7 @@
 
 ### Date and time
 
-The browser renders the native picker. The calendar glyph is toned via `::-webkit-calendar-picker-indicator`; dark mode is handled by `color-scheme`.
+Native browser pickers; dark mode tracks the document's `color-scheme`.
 
 **Example**
 
@@ -100,4 +98,4 @@ The browser renders the native picker. The calendar glyph is toned via `::-webki
 
 ### File
 
-Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button. Plain `<input type="file" class="input">` leaves it browser-default.
+Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button.

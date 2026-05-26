@@ -2,7 +2,7 @@
 
 > Compound Select with Trigger + Popup + Item.
 
-React's `Select` is a Base UI compound primitive (`Select.Trigger`, `Select.Popup`, `Select.Item`) with a custom popup. Vanilla falls back to a native `<select>` styled with `.select` — the popup chrome itself can only be customized in React.
+React's `Select` is a compound (`Select.Trigger`, `Select.Popup`, `Select.Item`) with a custom popup. Vanilla uses a native `<select>` with the `.select` class — the browser owns its dropdown UI.
 
 ## Examples
 

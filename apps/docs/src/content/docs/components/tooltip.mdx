@@ -6,7 +6,7 @@ description: Transient hints anchored to a trigger.
 import { Button, Tooltip } from "@aortl/admin-react";
 import { IconDeviceFloppy, IconPencil, IconCopy, IconTrash } from "@tabler/icons-react";
 
-The React tooltip wraps [Base UI's tooltip](https://base-ui.com/react/components/tooltip) — hover/focus delay, ARIA description wiring, dismiss, and portal positioning all come from the primitive. The vanilla equivalent is a CSS-only `.tooltip-wrap` parent that reveals a nested `.tooltip` on `:hover` / `:focus-within`.
+React's `<Tooltip>` handles delay, focus, dismiss, and portal positioning. Vanilla uses a CSS-only `.tooltip-wrap` parent that reveals a nested `.tooltip` on `:hover` / `:focus-within`.
 
 ## Examples
 
@@ -35,7 +35,7 @@ Hover or tab to the trigger.
 
 ### Sides
 
-Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on the wrapper (bare `.tooltip-wrap` defaults to top). The React popup uses `side="top|right|bottom|left"` and the floating-UI positioner avoids collisions automatically.
+Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on the wrapper (bare `.tooltip-wrap` defaults to top). React uses `side="top|right|bottom|left"` and auto-flips on collisions.
 
 :::example
 
@@ -144,4 +144,4 @@ The popup body accepts any inline content — e.g. a keyboard shortcut hint. For
 
 ## Vanilla path notes
 
-The vanilla `.tooltip-wrap` pattern is CSS-only, so the tooltip lives inside the trigger's stacking context and can be clipped by an ancestor with `overflow: hidden`. For portal-style placement, the platform-native future is [`interesttarget`](https://open-ui.org/components/interest-invokers.explainer/) + `<div popover="hint">` — currently Chromium-only behind a flag, so this system ships the CSS-only pattern today and will revisit when cross-browser support lands.
+Vanilla `.tooltip-wrap` is CSS-only and shares the trigger's stacking context — an ancestor with `overflow: hidden` can clip it. Use the React popup if you need portal positioning.

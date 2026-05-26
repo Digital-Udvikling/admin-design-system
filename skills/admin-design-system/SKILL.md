@@ -121,20 +121,20 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Badges](references/components/badges.md) — Compact status indicator for tags, counts, and chips.
 - [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square, used to brand the navbar per system.
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
-- [Buttons](references/components/buttons.md) — Base class .btn + a variant + an optional size.
+- [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
-- [Forms: Checkboxes](references/components/forms/checkboxes.md) — Base class .checkbox with an inner .checkbox-indicator.
+- [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.
 - [Forms: Fields](references/components/forms/fields.md) — Accessibility wiring (label, description, validation) around inputs.
-- [Forms: File inputs](references/components/forms/file-inputs.md) — Styled native file picker.
+- [Forms: File inputs](references/components/forms/file-inputs.md) — File picker styled to match other inputs.
 - [Forms: Input groups](references/components/forms/input-groups.md) — Combine inputs, addons, and buttons into a flush row.
-- [Forms: Inputs](references/components/forms/inputs.md) — Base class .input + a variant + an optional size.
-- [Forms: Radios](references/components/forms/radios.md) — Radio + RadioGroup.
+- [Forms: Inputs](references/components/forms/inputs.md) — Single-line text input.
+- [Forms: Radios](references/components/forms/radios.md) — Mutually exclusive choice within a group.
 - [Forms: Selects](references/components/forms/selects.md) — Compound Select with Trigger + Popup + Item.
-- [Forms: Switches](references/components/forms/switches.md) — Base class .switch with an inner .switch-thumb.
-- [Forms: Textareas](references/components/forms/textareas.md) — Base class .textarea + a variant + an optional size.
-- [Menus](references/components/menus.md) — Dropdown menu built on native <details> + <summary>.
+- [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
+- [Forms: Textareas](references/components/forms/textareas.md) — Multi-line text input.
+- [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.

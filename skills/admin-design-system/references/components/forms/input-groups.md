@@ -2,7 +2,7 @@
 
 > Combine inputs, addons, and buttons into a flush row.
 
-Attach a prefix, suffix, or action button to an input. The group collapses the shared border between adjacent children and keeps the outer corners rounded.
+Attach a prefix, suffix, or action button to an input.
 
 ## Examples
 

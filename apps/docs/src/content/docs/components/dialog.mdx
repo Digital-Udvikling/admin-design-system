@@ -6,9 +6,9 @@ description: Modal dialogs built on the native <dialog> element.
 import { Button, Dialog, Field, Input } from "@aortl/admin-react";
 import { IconAlertTriangle } from "@tabler/icons-react";
 
-A thin wrapper around `<dialog>` + `showModal()`. The browser handles the focus trap, scroll lock, Esc dismissal, and `::backdrop` — the wrapper just bridges React's `open` prop to the imperative API and exposes a Card-style shorthand surface.
+Built on `<dialog>` + `showModal()`. The browser handles the focus trap, scroll lock, Esc dismissal, and `::backdrop`. `<Dialog>` provides shorthand props (`title`, `description`, `actions`); `<Dialog.Container>` is the bare primitive for custom layouts.
 
-The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. No JavaScript glue, no React state. The wrapper still accepts a controlled `open` / `onOpenChange` pair for state-driven flows — see [Controlled state](#controlled-state).
+The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. No JavaScript glue, no React state. For state-driven flows, pair `open` with `onOpenChange` — see [Controlled state](#controlled-state).
 
 ## Examples
 

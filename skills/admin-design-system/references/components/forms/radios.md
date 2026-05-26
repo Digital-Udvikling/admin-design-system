@@ -1,8 +1,8 @@
 # Radios
 
-> Radio + RadioGroup.
+> Mutually exclusive choice within a group.
 
-`RadioGroup` owns the selection state. React wraps Base UI's `Radio.Root`; vanilla styles a native `<input type="radio">`. A `<label>` wrapping a `.radio` lays out inline automatically.
+`RadioGroup` owns the selection state. A `<label>` wrapping a `.radio` lays out inline automatically. Default orientation is horizontal.
 
 ## Examples
 

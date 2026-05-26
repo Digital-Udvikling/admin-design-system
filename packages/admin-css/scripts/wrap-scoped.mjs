@@ -188,8 +188,21 @@ function bumpClasslessSpecificity(selectorList) {
   return out.join(", ");
 }
 
+// `from` / `to` / `0%` etc. inside `@keyframes` aren't selectors and must not
+// be rewritten — `:scope to { ... }` is invalid CSS and breaks downstream
+// parsers (sass-loader, lightningcss). Tailwind keeps `@keyframes` nested
+// inside `@layer components { ... }`, so the top-level hoist pass doesn't
+// catch them; skip rule-walking inside any keyframes ancestor instead.
+function isInsideKeyframes(rule) {
+  for (let p = rule.parent; p; p = p.parent) {
+    if (p.type === "atrule" && /(?:^|-)keyframes$/.test(p.name)) return true;
+  }
+  return false;
+}
+
 function rewriteSelectorsDeep(container) {
   container.walkRules((rule) => {
+    if (isInsideKeyframes(rule)) return;
     rule.selector = bumpClasslessSpecificity(
       prefixClassesInSelector(rewriteSelector(rule.selector)),
     );

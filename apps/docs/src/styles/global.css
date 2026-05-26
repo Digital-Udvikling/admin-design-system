@@ -41,6 +41,20 @@
 @import "@aortl/admin-css/admin.scoped.css";
 
 /*
+ * AdminRoot in production owns its surface and forks its own color-scheme
+ * (that's the point — admin styles can't bleed in or out). In the docs it's
+ * wrapping React previews that need to sit flush inside `.example-preview`:
+ * the wrapper would otherwise break the flex layout, paint over Starlight's
+ * chrome, and ignore the theme toggle. Neutralize it just for previews.
+ */
+.example-preview ._ao-admin-root {
+  display: contents;
+  color-scheme: inherit;
+  background: transparent;
+  color: inherit;
+}
+
+/*
  * Map Starlight chrome tokens onto the Flexoki palette. Starlight defaults
  * `:root` to dark and overrides `:root[data-theme='light']` for light, so we
  * mirror that structure. These rules sit outside `@layer starlight.base`, so

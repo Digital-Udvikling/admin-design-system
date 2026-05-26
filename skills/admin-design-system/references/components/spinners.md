@@ -13,9 +13,9 @@ For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — 
 **Example**
 
 ```html
-<span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
-<span class="spinner" role="status" aria-label="Loading"></span>
-<span class="spinner spinner-lg" role="status" aria-label="Loading"></span>
+<output class="spinner spinner-sm" aria-label="Loading"></output>
+<output class="spinner" aria-label="Loading"></output>
+<output class="spinner spinner-lg" aria-label="Loading"></output>
 ```
 
 ```tsx
@@ -30,7 +30,7 @@ For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — 
 
 ```html
 <span style="color: var(--color-danger)">
-  <span class="spinner spinner-sm" role="status" aria-label="Loading"></span>
+  <output class="spinner spinner-sm" aria-label="Loading"></output>
   Retrying connection
 </span>
 ```
@@ -39,4 +39,18 @@ For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — 
 <span style={{ color: "var(--color-danger)" }}>
   <Spinner size="sm" /> Retrying connection
 </span>
+```
+
+### Accessible label
+
+The React component sets `aria-label="Loading"` by default. Override via the `label` prop; in vanilla, set `aria-label` directly.
+
+**Example**
+
+```html
+<output class="spinner" aria-label="Indlæser"></output>
+```
+
+```tsx
+<Spinner label="Indlæser" />
 ```

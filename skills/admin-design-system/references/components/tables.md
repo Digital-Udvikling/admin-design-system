@@ -273,7 +273,7 @@ A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>`. The Rea
 
 ### Cell alignment
 
-Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. Header and body should agree. The `numeric` modifier also turns on `tabular-nums` so currency digits don't shimmy.
+Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. For currency or totals, prefer `numeric` on body cells (right-aligns and adds `tabular-nums` so digits don't shimmy) and `align="right"` on the matching header.
 
 **Example**
 

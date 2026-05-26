@@ -48,6 +48,22 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 <Pagination page={10} total={50} onPageChange={() => {}} />
 ```
 
+### Custom prev/next icons
+
+Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`. Defaults to built-in chevrons.
+
+**Example**
+
+```tsx
+<Pagination
+  page={2}
+  total={5}
+  onPageChange={() => {}}
+  previousIcon={IconArrowLeft}
+  nextIcon={IconArrowRight}
+/>
+```
+
 ### Custom renderer (routing libraries)
 
 `renderItem` is called once per item (`"page"`, `"previous"`, `"next"`, `"ellipsis"`) — use it to render router `<Link>` components so prev/next/numbers are real anchors.

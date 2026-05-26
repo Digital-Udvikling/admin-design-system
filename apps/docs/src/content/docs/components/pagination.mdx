@@ -4,6 +4,7 @@ description: Numbered page navigation with prev/next controls.
 ---
 
 import { Pagination } from "@aortl/admin-react";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
 The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange` — always controlled.
 
@@ -51,6 +52,24 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 
 ```tsx
 <Pagination page={10} total={50} onPageChange={() => {}} />
+```
+
+:::
+
+### Custom prev/next icons
+
+Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`. Defaults to built-in chevrons.
+
+:::example
+
+```tsx
+<Pagination
+  page={2}
+  total={5}
+  onPageChange={() => {}}
+  previousIcon={IconArrowLeft}
+  nextIcon={IconArrowRight}
+/>
 ```
 
 :::

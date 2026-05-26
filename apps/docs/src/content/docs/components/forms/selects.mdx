@@ -11,6 +11,8 @@ React's `Select` is a Base UI compound primitive (`Select.Trigger`, `Select.Popu
 
 ### Default
 
+Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the selected label in the trigger.
+
 :::example
 
 ```html
@@ -30,17 +32,65 @@ React's `Select` is a Base UI compound primitive (`Select.Trigger`, `Select.Popu
   </Select.Trigger>
   <Select.Popup>
     <Select.Item value="open">
-      Open
+      <Select.ItemText>Open</Select.ItemText>
       <Select.ItemIndicator />
     </Select.Item>
     <Select.Item value="in-progress">
-      In progress
+      <Select.ItemText>In progress</Select.ItemText>
       <Select.ItemIndicator />
     </Select.Item>
     <Select.Item value="closed">
-      Closed
+      <Select.ItemText>Closed</Select.ItemText>
       <Select.ItemIndicator />
     </Select.Item>
+  </Select.Popup>
+</Select>
+```
+
+:::
+
+### Variants
+
+:::example
+
+```html
+<select class="select select-bordered">
+  <option>Bordered</option>
+</select>
+<select class="select select-ghost">
+  <option>Ghost</option>
+</select>
+<select class="select select-danger">
+  <option>Danger</option>
+</select>
+```
+
+```tsx
+<Select defaultValue="x">
+  <Select.Trigger>
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="x">Bordered</Select.Item>
+  </Select.Popup>
+</Select>
+<Select defaultValue="x">
+  <Select.Trigger variant="ghost">
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="x">Ghost</Select.Item>
+  </Select.Popup>
+</Select>
+<Select defaultValue="x">
+  <Select.Trigger variant="danger">
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="x">Danger</Select.Item>
   </Select.Popup>
 </Select>
 ```
@@ -64,15 +114,31 @@ React's `Select` is a Base UI compound primitive (`Select.Trigger`, `Select.Popu
 ```
 
 ```tsx
-<Select defaultValue="sm">
+<Select defaultValue="x">
   <Select.Trigger triggerSize="sm">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
   <Select.Popup>
-    <Select.Item value="sm">Small</Select.Item>
-    <Select.Item value="md">Medium</Select.Item>
-    <Select.Item value="lg">Large</Select.Item>
+    <Select.Item value="x">Small</Select.Item>
+  </Select.Popup>
+</Select>
+<Select defaultValue="x">
+  <Select.Trigger>
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="x">Medium</Select.Item>
+  </Select.Popup>
+</Select>
+<Select defaultValue="x">
+  <Select.Trigger triggerSize="lg">
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="x">Large</Select.Item>
   </Select.Popup>
 </Select>
 ```

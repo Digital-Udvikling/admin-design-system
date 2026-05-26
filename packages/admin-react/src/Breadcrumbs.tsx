@@ -75,13 +75,20 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
   );
 }
 
-export type BreadcrumbSeparatorProps = ComponentProps<"span">;
+export type BreadcrumbSeparatorProps = ComponentProps<"li">;
 
+// `role="presentation"` so the separator doesn't get announced as a list item;
+// `<li>` so the markup is valid inside `<ol>`.
 function BreadcrumbSeparator({ className, children, ...rest }: BreadcrumbSeparatorProps) {
   return (
-    <span aria-hidden="true" className={cn("breadcrumb-separator", className)} {...rest}>
+    <li
+      role="presentation"
+      aria-hidden="true"
+      className={cn("breadcrumb-separator", className)}
+      {...rest}
+    >
       {children}
-    </span>
+    </li>
   );
 }
 

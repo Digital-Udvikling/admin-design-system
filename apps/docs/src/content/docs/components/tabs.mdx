@@ -7,6 +7,8 @@ import { Tabs } from "@aortl/admin-react";
 
 The CSS uses radio inputs + `:has(input:checked)` so vanilla HTML stays interactive without JavaScript. React wraps Base UI Tabs for ARIA semantics, arrow-key navigation, and controlled state.
 
+Vanilla tabs cap at 6 panels — the panel-toggling selectors are hand-enumerated. Use React for more.
+
 ## Examples
 
 ### Basic (bordered)
@@ -137,6 +139,28 @@ Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its r
   <Tabs.Panel value="account">Account settings.</Tabs.Panel>
   <Tabs.Panel value="billing">Billing details.</Tabs.Panel>
   <Tabs.Panel value="api">Personal access tokens.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
+### Animated indicator
+
+`<Tabs.Indicator>` (React-only) renders an animated bar that slides between active tabs. Drop it inside `<Tabs.List>`; style it via `.tab-indicator`.
+
+:::example
+
+```tsx
+<Tabs defaultValue="overview">
+  <Tabs.List>
+    <Tabs.Tab value="overview">Overview</Tabs.Tab>
+    <Tabs.Tab value="activity">Activity</Tabs.Tab>
+    <Tabs.Tab value="settings">Settings</Tabs.Tab>
+    <Tabs.Indicator />
+  </Tabs.List>
+  <Tabs.Panel value="overview">Overview content.</Tabs.Panel>
+  <Tabs.Panel value="activity">Activity content.</Tabs.Panel>
+  <Tabs.Panel value="settings">Settings content.</Tabs.Panel>
 </Tabs>
 ```
 

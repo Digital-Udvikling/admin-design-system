@@ -14,9 +14,9 @@ A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link cu
 <nav class="breadcrumbs" aria-label="Breadcrumb">
   <ol>
     <li><a class="breadcrumb-item" href="/">Home</a></li>
-    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
     <li><a class="breadcrumb-item" href="/users">Users</a></li>
-    <span class="breadcrumb-separator" aria-hidden="true"></span>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
     <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
   </ol>
 </nav>
@@ -45,13 +45,13 @@ Drop an icon inside `.breadcrumb-separator` — the `:empty::before` default ste
         Home
       </a>
     </li>
-    <span class="breadcrumb-separator" aria-hidden="true">
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true">
       <i class="ti ti-chevron-right" aria-hidden="true"></i>
-    </span>
+    </li>
     <li><a class="breadcrumb-item" href="/users">Users</a></li>
-    <span class="breadcrumb-separator" aria-hidden="true">
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true">
       <i class="ti ti-chevron-right" aria-hidden="true"></i>
-    </span>
+    </li>
     <li><span class="breadcrumb-item" aria-current="page">Detail</span></li>
   </ol>
 </nav>

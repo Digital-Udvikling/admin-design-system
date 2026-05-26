@@ -12,7 +12,7 @@ IconHome,
   IconHeadset,
 } from "@tabler/icons-react";
 
-A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context for the mobile drawer. The composed pieces (navbar, sidebar, footer) also work standalone. The shell doesn't assume it owns the viewport.
+A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context that wires `<Navbar.MobileToggle>` to the sidebar drawer. The composed pieces (navbar, sidebar, footer) also work standalone. The shell doesn't assume it owns the viewport.
 
 ## Anatomy
 
@@ -95,7 +95,7 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 
 ## Navbar
 
-48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `active` on an item sets `aria-current="page"`.
+48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `active` on an item sets `aria-current="page"`. Items accept a leading `icon` prop.
 
 **Example**
 
@@ -106,8 +106,14 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
     Acme
   </div>
   <nav class="navbar-items">
-    <a class="navbar-item" href="#" aria-current="page">Dashboard</a>
-    <a class="navbar-item" href="#">Orders</a>
+    <a class="navbar-item" href="#" aria-current="page">
+      <i class="ti ti-home" aria-hidden="true"></i>
+      Dashboard
+    </a>
+    <a class="navbar-item" href="#">
+      <i class="ti ti-receipt" aria-hidden="true"></i>
+      Orders
+    </a>
     <a class="navbar-item" href="#">Customers</a>
   </nav>
   <div class="navbar-actions">
@@ -123,10 +129,12 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
     Acme
   </Navbar.Brand>
   <Navbar.Items>
-    <Navbar.Item href="#" active>
+    <Navbar.Item href="#" active icon={IconHome}>
       Dashboard
     </Navbar.Item>
-    <Navbar.Item href="#">Orders</Navbar.Item>
+    <Navbar.Item href="#" icon={IconReceipt}>
+      Orders
+    </Navbar.Item>
     <Navbar.Item href="#">Customers</Navbar.Item>
   </Navbar.Items>
   <Navbar.Actions>
@@ -247,10 +255,16 @@ Right-aligned slot for shop switcher, user menu, sign-out, etc. The vanilla exam
 
 ### Mobile toggle
 
-`<Navbar.MobileToggle>` is hidden above the `md` breakpoint and flips `AppShell`'s mobile drawer state.
+`<Navbar.MobileToggle>` is hidden at ≥ 48rem (Tailwind `md`) and flips `<AppShell>`'s mobile drawer state — it's a no-op outside `<AppShell>`. The default `aria-label` is `"Open menu"`; override via `label`.
+
+**Example**
 
 ```html
 <button class="navbar-mobile-toggle" type="button" aria-label="Open menu"></button>
+```
+
+```tsx
+<Navbar.MobileToggle />
 ```
 
 See [mobile drawer](#mobile-drawer) below.
@@ -261,7 +275,7 @@ Flat items, tree groups, and click-to-collapse — all driven by native HTML.
 
 ### Items and groups
 
-`<Sidebar.Item>` is a leaf link; `active` marks the current route. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>` that hides when collapsed.
+`<Sidebar.Item>` is a leaf link; `active` marks the current route, `icon` shows a leading glyph, `badge` adds a trailing count or pill. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>` that hides when collapsed. `<Sidebar.Header>` is the slot for an app logo or product switcher above the nav.
 
 **Example**
 
@@ -273,7 +287,7 @@ Flat items, tree groups, and click-to-collapse — all driven by native HTML.
       <Sidebar.Item href="#" active icon={IconHome}>
         Dashboard
       </Sidebar.Item>
-      <Sidebar.Item href="#" icon={IconReceipt}>
+      <Sidebar.Item href="#" icon={IconReceipt} badge="12">
         Orders
       </Sidebar.Item>
     </Sidebar.Group>
@@ -292,7 +306,7 @@ Flat items, tree groups, and click-to-collapse — all driven by native HTML.
 
 ### Tree navigation
 
-`<Sidebar.Collapsible>` is a `<details>` revealing `<Sidebar.SubItem>` rows. Pass `defaultOpen` to start expanded.
+`<Sidebar.Collapsible>` is a `<details>` revealing `<Sidebar.SubItem>` rows. Pass `defaultOpen` to start expanded, or `open` + `onOpenChange` for controlled state. Override the trigger entirely with `trigger`.
 
 **Example**
 
@@ -395,7 +409,9 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
 
 ### Mobile drawer
 
-Inside `<AppShell>`, the sidebar registers a `Dialog` drawer. Below `md`, the desktop column hides and `<Navbar.MobileToggle>` opens the drawer. Esc, backdrop click, and link clicks all close it; focus is trapped while open.
+Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a drawer. Esc, backdrop click, and link clicks all dismiss; focus is trapped while open. Override the drawer's accessible label via `<Sidebar drawerLabel="...">`.
+
+`<AppShell>` accepts `mobileDrawerOpen` / `defaultMobileDrawerOpen` / `onMobileDrawerOpenChange` for controlled drawer state — useful when an external trigger (a route guard, a tutorial step) needs to open it.
 
 **Example**
 

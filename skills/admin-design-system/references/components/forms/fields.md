@@ -58,22 +58,22 @@ Pass `required` to `Field.Label` (React) or `data-required` to the label (vanill
 
 ### With validation
 
+In vanilla, render a `<p class="field-error">` after the input — typically populated server-side. In React, `<Field.Error match="…">` ties messages to specific `ValidityState` keys. `validationMode="onChange"` validates as the user types; default is `onBlur`.
+
 **Example**
 
 ```html
-<form>
-  <div class="field">
-    <label class="field-label" for="username">Username</label>
-    <input
-      id="username"
-      class="input input-bordered"
-      required
-      minlength="3"
-      placeholder="At least 3 characters"
-    />
-    <!-- Vanilla relies on the browser's built-in :invalid + ValidityState. -->
-  </div>
-</form>
+<div class="field">
+  <label class="field-label" for="username">Username</label>
+  <input
+    id="username"
+    class="input input-bordered"
+    required
+    minlength="3"
+    placeholder="At least 3 characters"
+  />
+  <p class="field-error">Must be at least 3 characters.</p>
+</div>
 ```
 
 ```tsx
@@ -82,5 +82,28 @@ Pass `required` to `Field.Label` (React) or `data-required` to the label (vanill
   <Input required minLength={3} placeholder="At least 3 characters" />
   <Field.Error match="valueMissing">Username is required.</Field.Error>
   <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
+</Field>
+```
+
+### Inline label (`.field-row`)
+
+For a control that belongs beside its label rather than above it — switches, single checkboxes — add `.field-row` (or pass `className="field-row"` in React).
+
+**Example**
+
+```html
+<div class="field field-row">
+  <label class="switch">
+    <input type="checkbox" class="switch-input" />
+    <span class="switch-thumb"></span>
+  </label>
+  <label class="field-label" for="notify">Email me about new orders</label>
+</div>
+```
+
+```tsx
+<Field className="field-row">
+  <Switch />
+  <Field.Label>Email me about new orders</Field.Label>
 </Field>
 ```

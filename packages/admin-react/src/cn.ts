@@ -1,12 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 
 /**
- * Every admin class name is prefixed so the bundle can coexist with a host
- * page's CSS without colliding on common names like `.btn` or `.card`. The
- * matching CSS lives in `@aortl/admin-css/admin.scoped.css` (built by
- * `wrap-scoped.mjs`), which carries the same prefix on every selector.
+ * Class-name prefix hook. Currently empty — admin ships one CSS bundle with
+ * bare class names (`.btn`, `.card`), and isolation from host CSS is the job
+ * of `<AdminRoot isolated>` (shadow DOM), not selector-level namespacing.
+ * The prefix mechanism is left in place so flipping it back on is a one-line
+ * change if a future deployment shape requires it.
  */
-const PREFIX = "_ao-";
+const PREFIX = "";
 
 function prefixTokens(value: string): string {
   if (!value) return "";
@@ -24,9 +25,10 @@ function join(...parts: Array<string | undefined>): string {
 /**
  * className merger that preserves Base UI's render-prop className form.
  *
- * `base` carries admin's own classes (e.g. `["btn", "btn-primary"]`) and is
- * always prefixed with `_ao-`. `className` is the consumer-supplied prop and
- * passes through verbatim — it lives in the caller's namespace.
+ * `base` carries admin's own classes (e.g. `["btn", "btn-primary"]`) and goes
+ * through the prefix hook above (currently a no-op). `className` is the
+ * consumer-supplied prop and passes through verbatim — it lives in the
+ * caller's namespace either way.
  *
  * Base UI components accept `className: string | ((state) => string | undefined)`.
  * The function form has to be deferred until Base UI invokes it with the

@@ -6,6 +6,7 @@ export {
   type AccordionContentProps,
 } from "./Accordion";
 export { AdminRoot, type AdminRootProps } from "./AdminRoot";
+export { PortalContainerContext, usePortalContainer } from "./PortalContainerContext";
 export {
   Alert,
   type AlertProps,

@@ -32,8 +32,7 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./styles.css": "./dist/admin.scoped.css",
-    "./styles.scoped.css": "./dist/admin.scoped.css"
+    "./styles.css": "./dist/admin.css"
   },
   "publishConfig": {
     "access": "public",
@@ -41,7 +40,7 @@
   },
   "scripts": {
     "build": "vite build && pnpm copy:css",
-    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css",
+    "copy:css": "cp ../admin-css/dist/admin.css ./dist/admin.css",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",

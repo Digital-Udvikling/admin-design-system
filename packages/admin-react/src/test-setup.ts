@@ -9,7 +9,10 @@ afterEach(() => {
 // Matcher that hides the admin class prefix from individual tests, so a future
 // rename of the prefix (or the namespacing strategy itself) doesn't ripple
 // through every assertion. Pair with `adminSelector` for querySelector sites.
-const ADMIN_PREFIX = "_ao-";
+// Currently empty — admin ships bare class names (`.btn`, not `._ao-btn`) and
+// isolation is the job of `<AdminRoot isolated>`. Kept as a hook in case a
+// future namespace strategy needs to flip it back on.
+const ADMIN_PREFIX = "";
 
 export const adminSelector = (name: string): string => `.${ADMIN_PREFIX}${name}`;
 

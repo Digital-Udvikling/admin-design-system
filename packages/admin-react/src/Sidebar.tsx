@@ -4,6 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { usePortalContainer } from "./PortalContainerContext";
 
 interface SidebarContextValue {
   collapsed?: boolean;
@@ -34,6 +35,7 @@ function SidebarRoot({
 }: SidebarProps) {
   const shell = useAppShell();
   const drawerOpen = shell?.mobileDrawerOpen ?? false;
+  const container = usePortalContainer();
 
   return (
     <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
@@ -42,7 +44,7 @@ function SidebarRoot({
       </aside>
       {shell ? (
         <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
-          <BaseDialog.Portal>
+          <BaseDialog.Portal container={container ?? undefined}>
             <BaseDialog.Backdrop className={cn("sidebar-drawer-backdrop", undefined)} />
             <BaseDialog.Popup
               className={cn("sidebar-drawer", undefined)}

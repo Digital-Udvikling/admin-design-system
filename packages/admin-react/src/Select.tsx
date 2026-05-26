@@ -1,6 +1,7 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
+import { usePortalContainer } from "./PortalContainerContext";
 
 export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
 
@@ -56,8 +57,9 @@ export interface SelectPopupProps extends ComponentProps<typeof BaseSelect.Popup
 }
 
 function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPopupProps) {
+  const container = usePortalContainer();
   return (
-    <BaseSelect.Portal>
+    <BaseSelect.Portal container={container ?? undefined}>
       <BaseSelect.Positioner sideOffset={sideOffset}>
         <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
           {children}

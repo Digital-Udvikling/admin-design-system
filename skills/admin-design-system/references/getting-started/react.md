@@ -5,7 +5,7 @@
 Thin React wrappers around Base UI primitives. Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` on `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
 :::
 
 :::caution[Upgrading from 0.3]
@@ -49,6 +49,21 @@ export function SignIn() {
 ```
 
 `<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface (a settings panel, an internal toolbar) inside a host app.
+
+### Props
+
+Beyond the standard `<div>` attributes, two typed shortcuts:
+
+| Prop           | Type                 | Effect                                                                                                                                                    |
+| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../../basics/dark-mode/) on this subtree. Omit to follow the OS.                                              |
+| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../../basics/customize/#system-accent). |
+
+```tsx
+<AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
+  {/* ... */}
+</AdminRoot>
+```
 
 ## Add icons (optional)
 

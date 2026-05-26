@@ -42,6 +42,12 @@ The selector isn't scoped to `:root`, so any element can flip its own subtree â€
 </section>
 ```
 
+In React, `<AdminRoot>` accepts a typed `theme` prop that sets `data-theme` for you:
+
+```tsx
+<AdminRoot theme="dark">{/* ... */}</AdminRoot>
+```
+
 ## Tailwind `dark:` variant
 
 The `dark:` variant fires under `prefers-color-scheme: dark` or inside `[data-theme="dark"]`, and is suppressed inside `[data-theme="light"]`:

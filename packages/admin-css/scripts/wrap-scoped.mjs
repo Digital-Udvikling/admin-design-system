@@ -17,22 +17,34 @@
  *   `._ao-btn`, `.card-body` becomes `._ao-card-body`, and so on. Admin's
  *   classes can no longer collide with the host page's classes, so the
  *   bundle does not need a defensive `all: revert-layer` reset.
- * - Bare element/attribute/pseudo selectors (no class, no id) get their
- *   specificity bumped by prepending `:scope`. `@scope` itself doesn't
- *   contribute specificity, so without this a host page rule like
- *   `h3 { font-size: 2rem }` would tie admin's `h3 { font-size: inherit }`
- *   (both 0,0,1) and source order would decide — usually in the host's
- *   favor. Bumping `h3` to `:scope h3` (0,1,1) lets admin's element-tag
- *   resets and base styles win.
+ * - Inside the scope, `@layer NAME { ... }` wrappers are stripped and
+ *   their contents are re-emitted in declared layer order. Layered author
+ *   rules always lose to unlayered author rules in the same origin —
+ *   regardless of specificity — so admin's `@layer base { h3 { … } }`
+ *   would lose to a host page's unlayered `h3 { font-size: 26px }` no
+ *   matter what specificity tricks we apply. Re-emitting admin's rules
+ *   unlayered lets specificity decide. The unscoped bundle still keeps
+ *   Tailwind's layers; only the scoped variant is flattened.
+ * - Every selector inside the scope gets its specificity bumped by
+ *   prepending `:scope`. `@scope` itself doesn't contribute specificity,
+ *   so without this a host page rule like `h3 { font-size: 2rem }` would
+ *   beat admin's now-unlayered `h3 { font-size: inherit }` (both 0,0,1)
+ *   on source order. The bump also preserves the within-admin ordering
+ *   Tailwind's layers used to provide: `:scope ._ao-card-title` (0,2,0)
+ *   beats `:scope h3` (0,1,1) on `<h3 class="_ao-card-title">`, so the
+ *   component class wins over the element reset, like it did when
+ *   `components` beat `base` via layer ordering.
  *
  *   - Tag/pseudo-element first compounds get the descendant form only
  *     (`h3` → `:scope h3`; `::placeholder` → `:scope ::placeholder`). The
  *     scope root is a div, so it can't match these directly.
- *   - Attribute, pseudo-class, and universal first compounds emit both a
- *     compound form (which can match the scope root) and a descendant
- *     form: `[data-theme="dark"]` → `:scope[data-theme="dark"],
- *     :scope [data-theme="dark"]`. This keeps `<AdminRoot data-theme="…">`
- *     working as the dark-mode toggle.
+ *   - Class, id, attribute, pseudo-class, and universal first compounds
+ *     emit both a compound form (which can match the scope root) and a
+ *     descendant form: `[data-theme="dark"]` →
+ *     `:scope[data-theme="dark"], :scope [data-theme="dark"]`,
+ *     `._ao-grid` → `:scope._ao-grid, :scope ._ao-grid`. This keeps
+ *     `<AdminRoot data-theme="…" className="grid">` matching admin's
+ *     theme + utility rules.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -90,19 +102,17 @@ function prefixClassesInSelector(selector) {
   return prefixClassesProcessor.processSync(selector);
 }
 
-// Selectors with a class, id, or nesting reference (`&`) don't need the
-// bump: classes/ids already carry enough specificity, and `&` defers to
-// the parent rule's selector — whose own bump (if any) propagates to the
-// expanded form. Bumping a nested `&:hover` would emit `:scope &:hover`,
-// which expands to `:scope <parent>:hover` and stacks `:scope` redundantly
-// (or, when the parent was bumped, becomes `:scope :scope <parent>:hover`
-// — the inner `:scope` matches nothing, breaking the rule).
-function selectorIsAnchored(selector) {
+// Selectors that reference `&` defer to the parent rule's selector — its
+// own bump propagates through expansion. Bumping a nested `&:hover` would
+// emit `:scope &:hover`, which expands to `:scope <parent>:hover` and stacks
+// `:scope` redundantly (or, when the parent was bumped, becomes
+// `:scope :scope <parent>:hover` — the inner `:scope` matches nothing,
+// breaking the rule). Tailwind's output rarely has nesting by this stage
+// but we guard anyway.
+function selectorHasNesting(selector) {
   let found = false;
   selector.walk((node) => {
-    if (node.type === "class" || node.type === "id" || node.type === "nesting") {
-      found = true;
-    }
+    if (node.type === "nesting") found = true;
   });
   return found;
 }
@@ -121,27 +131,38 @@ function classifyFirstNode(selector) {
   if (first.type === "tag") return "tag";
   if (first.type === "universal") return "universal";
   if (first.type === "attribute") return "attribute";
+  if (first.type === "class") return "class";
+  if (first.type === "id") return "id";
   if (first.type === "pseudo") {
     return first.value.startsWith("::") ? "pseudo-element" : "pseudo-class";
   }
   return null;
 }
 
-// For each comma-separated selector with no class/id anchor, bump its
-// specificity by prepending `:scope`. Selectors that already reference
-// `:scope` (rewritten `:root`/`html`/`body`, or `:scope > .foo` patterns)
-// are left alone. First compounds that could match the scope root itself
-// — bare attributes, pseudo-classes, pseudo-elements, the universal `*` —
-// emit both a compound form and a descendant form so the root stays
-// matched.
-function bumpClasslessSpecificity(selectorList) {
+// Bump every selector's specificity by prepending `:scope`. Once layer
+// wrappers are flattened, the scoped bundle competes with host page rules
+// purely on specificity, so an unbumped admin `._ao-card-title` (0,1,0)
+// would lose its `font-size` to admin's own bumped base reset
+// `:scope h3` (0,1,1) when applied to `<h3 class="_ao-card-title">`. Bumping
+// every admin selector preserves the within-admin ordering Tailwind's
+// layers used to provide (components beat base, utilities beat components
+// by source order) and keeps admin ahead of unlayered host rules of the
+// same shape.
+//
+// Selectors already referencing `:scope` (Tailwind reset rules, our
+// `:root`/`html`/`body` rewrites) are left alone, as are `&`-nested
+// selectors. First compounds that could match the scope root — classes,
+// attributes, pseudo-classes, pseudo-elements, the universal `*` — emit
+// both a compound form and a descendant form so a user's
+// `<AdminRoot className="grid">` still picks up `._ao-grid`.
+function bumpSpecificity(selectorList) {
   const root = selectorParser().astSync(selectorList);
   const out = [];
 
   for (const sel of root.nodes) {
     const original = sel.toString().trim();
 
-    if (selectorIsAnchored(sel) || selectorReferencesScope(sel)) {
+    if (selectorReferencesScope(sel) || selectorHasNesting(sel)) {
       out.push(original);
       continue;
     }
@@ -174,6 +195,8 @@ function bumpClasslessSpecificity(selectorList) {
         out.push(`:scope ${original}`);
         break;
       }
+      case "class":
+      case "id":
       case "pseudo-element":
       case "pseudo-class":
       case "attribute":
@@ -203,9 +226,7 @@ function isInsideKeyframes(rule) {
 function rewriteSelectorsDeep(container) {
   container.walkRules((rule) => {
     if (isInsideKeyframes(rule)) return;
-    rule.selector = bumpClasslessSpecificity(
-      prefixClassesInSelector(rewriteSelector(rule.selector)),
-    );
+    rule.selector = bumpSpecificity(prefixClassesInSelector(rewriteSelector(rule.selector)));
   });
 }
 
@@ -215,6 +236,53 @@ function isLayerStatement(node) {
     node.name === "layer" &&
     (node.nodes === undefined || node.nodes === null)
   );
+}
+
+function collectDeclaredLayerOrder(hoisted) {
+  const order = [];
+  const seen = new Set();
+  for (const node of hoisted) {
+    if (!isLayerStatement(node)) continue;
+    for (const name of node.params
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)) {
+      if (seen.has(name)) continue;
+      seen.add(name);
+      order.push(name);
+    }
+  }
+  return order;
+}
+
+function flattenLayersInScope(scope, layerOrder) {
+  const buckets = new Map(layerOrder.map((name) => [name, []]));
+  const unknown = [];
+
+  for (const child of scope.nodes.slice()) {
+    if (child.type !== "atrule" || child.name !== "layer" || !child.nodes) continue;
+    const name = child.params.trim();
+    const target = buckets.get(name) ?? unknown;
+    target.push(...child.nodes);
+    child.remove();
+  }
+
+  const emit = (node, isFirst) => {
+    node.raws.before = isFirst ? "\n" : "\n";
+    scope.append(node);
+  };
+
+  let first = true;
+  for (const name of layerOrder) {
+    for (const node of buckets.get(name) ?? []) {
+      emit(node, first);
+      first = false;
+    }
+  }
+  for (const node of unknown) {
+    emit(node, first);
+    first = false;
+  }
 }
 
 function shouldHoist(node) {
@@ -251,6 +319,7 @@ async function wrapFile(inputPath, outputPath) {
     scope.append(node);
   });
   rewriteSelectorsDeep(scope);
+  flattenLayersInScope(scope, collectDeclaredLayerOrder(hoisted));
 
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";

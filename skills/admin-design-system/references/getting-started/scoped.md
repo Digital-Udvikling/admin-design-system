@@ -55,7 +55,7 @@ The scope owns its own `color-scheme`, so the host's `:root` color scheme does n
 
 The `_ao-` prefix is the primary isolation strategy: every admin class is namespaced, so a host page's `.btn` or `.card` rules can't reach admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
 
-A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants. The build sidesteps the common cases by bumping admin's own element-tag resets to outrank an untouched host stylesheet — but for hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;`) or a shadow root.
+A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants. The build sidesteps the common cases by emitting admin's CSS unlayered (Tailwind's `@layer` wrappers are stripped from the scoped bundle, since layered author rules lose to unlayered ones regardless of specificity) and bumping admin's element-tag resets with `:scope` so they outrank an untouched host stylesheet on specificity. For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;`) or a shadow root.
 
 ## Caveats
 

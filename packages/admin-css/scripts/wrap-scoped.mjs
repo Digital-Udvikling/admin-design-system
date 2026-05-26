@@ -45,6 +45,22 @@
  *     `._ao-grid` → `:scope._ao-grid, :scope ._ao-grid`. This keeps
  *     `<AdminRoot data-theme="…" className="grid">` matching admin's
  *     theme + utility rules.
+ *
+ * - A "host-rules floor" is emitted as the first rule inside the scope:
+ *   `:scope :where(*) { all: revert }`. `revert` discards author-origin
+ *   declarations and falls back to the user/UA cascade, so a host page's
+ *   `h3 { font-family: BrandFont }` is wiped before admin's own rules run.
+ *   This closes the gap left by specificity alone — admin can only out-
+ *   compete properties it explicitly sets, but Tailwind's preflight doesn't
+ *   touch `font-family` (or `color`, `letter-spacing`, etc.) on bare
+ *   elements like `h3`. The floor reclaims those properties wholesale, and
+ *   they then resolve via inheritance from `:scope` (which sets admin's
+ *   font, color, line-height). The floor's specificity is (0,1,0) — same
+ *   as `:scope`, less than admin's bumped element rules (`:scope h3` is
+ *   (0,1,1)) and class rules (`:scope ._ao-btn` is (0,2,0)), so it always
+ *   loses to admin's own rules on every property admin actually sets.
+ *   Custom properties are explicitly excluded from `all` per the spec,
+ *   so admin's token cascade is not disturbed.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -285,6 +301,21 @@ function flattenLayersInScope(scope, layerOrder) {
   }
 }
 
+// Inject `:scope :where(*) { all: revert }` as the first rule inside the
+// scope. See the file-level comment for the rationale; in short, it lets
+// admin reclaim every property on every descendant — including ones admin
+// itself never explicitly sets — so the host page's bare-element rules
+// can't bleed in.
+function prependHostRulesFloor(scope) {
+  const floor = postcss.rule({ selector: ":scope :where(*)" });
+  floor.append({ prop: "all", value: "revert" });
+  floor.raws.before = "\n";
+  floor.raws.between = " ";
+  floor.raws.semicolon = true;
+  floor.raws.after = "\n";
+  scope.prepend(floor);
+}
+
 function shouldHoist(node) {
   if (node.type === "comment") return true;
   if (node.type !== "atrule") return false;
@@ -320,6 +351,7 @@ async function wrapFile(inputPath, outputPath) {
   });
   rewriteSelectorsDeep(scope);
   flattenLayersInScope(scope, collectDeclaredLayerOrder(hoisted));
+  prependHostRulesFloor(scope);
 
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";

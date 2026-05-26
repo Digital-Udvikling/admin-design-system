@@ -1,31 +1,31 @@
 # Scoped bundle
 
-> Drop admin components into a non-admin app without leaking styles.
+> Drop admin styles into a non-admin app without colliding on class names.
 
-A parallel bundle that wraps every rule in `@scope (.admin-root)`. Use it when you're embedding admin pieces — a settings menu, an internal toolbar — inside an app that owns its own design system. The wrapper element opts a subtree into admin styles; everything outside is left alone.
+A parallel CSS bundle that wraps every rule in `@scope (._ao-admin-root)` and prefixes every admin class with `_ao-`. Use it when you're embedding admin pieces — a settings menu, an internal toolbar — inside an app that owns its own design system. The wrapper element opts a subtree into admin styles; everything outside is left alone, and admin's class names can't collide with the host's.
+
+The React library always ships this variant. The default `@aortl/admin-css` bundle is unchanged and stays unprefixed — use it for full-page admin apps that own the document.
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` on `.admin-root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Set `--color-system-accent` on `._ao-admin-root` to brand-shift the navbar + footer stripes and `._ao-brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
 :::
-
-The default bundle still ships unchanged. The scoped variant lives at separate subpaths so you load one or the other.
 
 ## Vanilla CSS
 
 ```html
 <link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.scoped.min.css" />
 
-<div class="admin-root">
-  <button class="btn btn-primary">Save</button>
+<div class="_ao-admin-root">
+  <button class="_ao-btn _ao-btn-primary">Save</button>
 </div>
 ```
 
-Via npm: import `@aortl/admin-css/admin.scoped.css` (or `.min.css`) from your bundler entry, then wrap admin markup in any element with `class="admin-root"`.
+Via npm: import `@aortl/admin-css/admin.scoped.css` (or `.min.css`) from your bundler entry, then wrap admin markup in any element with `class="_ao-admin-root"`. Every admin class — `_ao-btn`, `_ao-card`, `_ao-input` — must carry the prefix.
 
 ## React
 
 ```tsx
-import "@aortl/admin-react/styles.scoped.css";
+import "@aortl/admin-react/styles.css";
 import { AdminRoot, Button } from "@aortl/admin-react";
 
 export function ProductPageAdminMenu() {
@@ -37,14 +37,14 @@ export function ProductPageAdminMenu() {
 }
 ```
 
-`<AdminRoot>` is a thin `<div>` that emits `class="admin-root"` and forwards every prop, including `data-theme`, `style`, and `ref`. Use a plain `<div className="admin-root">` if you'd rather skip the wrapper component.
+`@aortl/admin-react/styles.css` is the scoped+prefixed bundle — there is no unscoped variant. `<AdminRoot>` is required: it's a thin `<div>` that emits `class="_ao-admin-root"` and forwards every prop, including `data-theme`, `style`, and `ref`. A plain `<div className="_ao-admin-root">` works too, but you have to write the prefix yourself.
 
 ## Dark mode
 
 `data-theme` works on the wrapper, not just on `<html>`:
 
 ```html
-<div class="admin-root" data-theme="dark">
+<div class="_ao-admin-root" data-theme="dark">
   <!-- always dark, regardless of the host page -->
 </div>
 ```
@@ -53,17 +53,12 @@ The scope owns its own `color-scheme`, so the host's `:root` color scheme does n
 
 ## Host-page style isolation
 
-The scoped bundle prepends `:scope, :scope * { all: revert-layer; }` inside the `@scope`. Unlayered host rules (e.g. a Bootstrap `.btn` or `body { font-family: ... }` rule on the host page) revert at the `.admin-root` boundary, falling through to admin's own layered cascade.
+The prefix is the isolation strategy. Every admin class is namespaced (`_ao-btn`, `_ao-card`, …), so a host page's `.btn { background: red }` and `.card { padding: 0 }` can't reach admin elements regardless of specificity or layer order. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root` rather than the document.
 
-`revert-layer` — not `revert` — is deliberate: admin's preflight and component rules live in `@layer base/components/utilities`, so reverting only the unlayered layer neutralizes host styles while keeping admin intact.
-
-Limits:
-
-- The reset rule has the specificity of `:scope` (one pseudo-class). A host rule with higher specificity (e.g. `body .btn { ... }` or `.theme-foo .btn { ... }`) still wins. For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;` with admin imported into `layer(admin)`) or a shadow root.
-- The reset matches elements, not pseudo-elements. Host rules targeting `.foo::before` are not reverted.
+Element-selector and inherited-property rules from the host still reach in — a host `button { color: red }` or a `body { font-family: ... }` will affect admin descendants because they don't collide on class names at all. The prefix only prevents class-level collisions. For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;` with admin imported into `layer(admin)`) or a shadow root.
 
 ## Caveats
 
-- Tailwind utility classes in the scoped bundle only match inside `.admin-root`. If you want to author with admin's tokens or utilities directly across the host app, use the default unscoped bundle instead.
+- Admin classes are only matched inside `._ao-admin-root`. If you want admin's tokens or utilities to apply across the whole host app, use the default unscoped bundle.
 - `@scope` is Baseline-modern (Chrome, Firefox, Safari). There is no legacy fallback.
 - Custom property registrations (`@property`), `@font-face`, and the cascade-layer order declaration stay at the document root — they're document-wide by spec. Everything else is scoped.

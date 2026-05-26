@@ -32,6 +32,15 @@
 @import "@aortl/admin-css/src/components/index.css";
 
 /*
+ * Scoped + prefixed bundle for React previews. Components imported from
+ * `@aortl/admin-react` emit `_ao-`-prefixed class names and require an
+ * ancestor `._ao-admin-root` element; the example plugin wraps every React
+ * preview in `<AdminRoot>` so this stylesheet matches their DOM. Loaded as
+ * the built artifact (not source) so it survives the wrap-scoped transform.
+ */
+@import "@aortl/admin-css/admin.scoped.css";
+
+/*
  * Map Starlight chrome tokens onto the Flexoki palette. Starlight defaults
  * `:root` to dark and overrides `:root[data-theme='light']` for light, so we
  * mirror that structure. These rules sit outside `@layer starlight.base`, so

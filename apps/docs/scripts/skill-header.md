@@ -1,16 +1,16 @@
 ---
 name: admin-design-system
-description: Build UI for internal admin tooling in Digital-Udvikling projects. Use when working in a Digital-Udvikling repo on admin pages, internal tools, or operator-facing screens; when files import @aortl/admin-react or link @aortl/admin-css; or when seeing class names like .btn, .input, .card, .field, .alert, .table, .sidebar.
+description: Build UI for internal admin tooling in Digital-Udvikling projects. Use when working in a Digital-Udvikling repo on admin pages, internal tools, or operator-facing screens; when files import @aortl/admin-react or link @aortl/admin-css; or when seeing class names like .btn, .input, .card, .field, .alert, .table, .sidebar (or their `_ao-` prefixed forms in scoped contexts).
 ---
 
 # aortl admin design system
 
 A small, opinionated design system for internal admin tooling. Ships as two packages from one source of truth:
 
-- `@aortl/admin-css` — pre-built CSS with semantic class names (`.btn`, `.input`, `.card`, `.field`).
-- `@aortl/admin-react` — React components wrapping Base UI primitives, emitting the same class names.
+- `@aortl/admin-css` — pre-built CSS. The default bundle uses bare class names (`.btn`, `.input`, `.card`, `.field`) for full-page admin apps that own the document. A parallel scoped bundle (`@aortl/admin-css/admin.scoped.css`) wraps everything in `@scope (._ao-admin-root)` and prefixes every class with `_ao-`, for embedding inside non-admin pages.
+- `@aortl/admin-react` — React components wrapping Base UI primitives. Always emits `_ao-`-prefixed class names and requires `<AdminRoot>` (which renders `class="_ao-admin-root"`) somewhere up the tree. `@aortl/admin-react/styles.css` resolves to the scoped+prefixed bundle.
 
-Vanilla HTML and React render identically — pick whichever fits the host application.
+Vanilla HTML and React render at the same DOM positions and behave identically — the only difference is whether the class names carry the `_ao-` prefix.
 
 ## When to use this skill
 
@@ -24,7 +24,7 @@ This system is for **internal admin tooling**, not customer-facing marketing sur
 
 ### Class names are the contract
 
-Both packages emit the same class names. `<Button variant="primary" size="sm">` renders as `<button class="btn btn-primary btn-sm">`. Vanilla HTML and React are interchangeable at the DOM level.
+Both packages share base names. The unscoped vanilla bundle renders `<Button variant="primary" size="sm">`-equivalent HTML as `<button class="btn btn-primary btn-sm">`. The scoped bundle (and `<Button>` from `@aortl/admin-react`) renders it as `<button class="_ao-btn _ao-btn-primary _ao-btn-sm">` inside an `._ao-admin-root` wrapper. The two are identical apart from the prefix.
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
@@ -40,7 +40,7 @@ import { IconPlus } from "@tabler/icons-react";
 
 Pass JSX (`icon={<IconPlus size={20} />}`) to override the default 16px size. Components currently exposing this prop: `Button`, `Menu.Item`, `Card` / `Card.Title`, `Navbar.Item`, `Alert`, `Sidebar.Item` / `SubItem` / `Collapsible`.
 
-Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>`.
+Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
 
 ### Tokens (two layers)
 

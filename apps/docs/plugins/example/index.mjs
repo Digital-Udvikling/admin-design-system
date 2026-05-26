@@ -171,11 +171,12 @@ function collectMdxImports(tree) {
  */
 function buildPreviewSource(importsBlock, reactSource) {
   const header = importsBlock.length > 0 ? `${importsBlock}\n\n` : "";
-  return `${header}export default function ExamplePreview() {
+  const adminRootImport = `import { AdminRoot as __ExampleAdminRoot } from "@aortl/admin-react";`;
+  return `${adminRootImport}\n${header}export default function ExamplePreview() {
   return (
-    <>
+    <__ExampleAdminRoot>
 ${indent(reactSource, 6)}
-    </>
+    </__ExampleAdminRoot>
   );
 }
 `;

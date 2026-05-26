@@ -22,7 +22,7 @@ npm install @aortl/admin-css
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry. Package page: [`@aortl/admin-css` on npm](https://www.npmjs.com/package/@aortl/admin-css).
 
-Embedding admin markup inside a non-admin page? See [Scoped bundle](../scoped/) for a variant that contains all styles inside a wrapper element.
+Embedding admin markup inside a non-admin page? See [Scoped bundle](../scoped/) for a variant that wraps every rule in `@scope (._ao-admin-root)` and prefixes class names with `_ao-` so they can't collide with the host's CSS.
 
 ## Add icons (optional)
 

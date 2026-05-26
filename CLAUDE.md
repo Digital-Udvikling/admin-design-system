@@ -52,9 +52,16 @@ CI runs `lint`, `format:check`, `build`, `check-types`, `test` — replicate loc
 
 ### Class names are the contract
 
-Both packages ship the same class names. `admin-react` components are thin wrappers — each emits e.g. `class="btn btn-primary btn-sm"` via `clsx`. Vanilla CSS in `packages/admin-css/src/components/*.css` defines those classes with Tailwind `@apply`. **Both must change together** — a new CSS modifier needs a React prop, a new React prop needs a class.
+`admin-css` and `admin-react` share the same base class names — `btn`, `card`, `input`, etc. — defined in `packages/admin-css/src/components/*.css` via Tailwind `@apply`. **Both must change together** — a new CSS modifier needs a React prop, a new React prop needs a class.
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
+
+Two output forms ship from one source:
+
+- **Unscoped, unprefixed** (`@aortl/admin-css/admin.css`) — class names are bare (`.btn`, `.card`). For full-page admin apps that own the document. Hand-written HTML uses these names directly.
+- **Scoped, prefixed** (`@aortl/admin-css/admin.scoped.css`, also re-exported as `@aortl/admin-react/styles.css`) — every selector is wrapped in `@scope (._ao-admin-root)` and every class is prefixed `_ao-` (`._ao-btn`, `._ao-card`). The build script `packages/admin-css/scripts/wrap-scoped.mjs` derives this from the unscoped bundle. **`admin-react` always uses this variant** — components emit `_ao-`-prefixed classes via the `cn` helper in `packages/admin-react/src/cn.ts`, and `<AdminRoot>` (which renders `class="_ao-admin-root"`) is required.
+
+In React source you still write the bare name (`cn("btn", className)`); `cn` adds the prefix at render time. The consumer-supplied `className` prop is passed through verbatim — only admin's own classes carry the prefix. Tests assert on the prefixed form (`expect(el).toHaveClass("_ao-btn")`).
 
 React components wrap Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) for a11y wiring, focus, validation. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
 

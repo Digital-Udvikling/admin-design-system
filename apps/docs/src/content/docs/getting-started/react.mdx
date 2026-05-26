@@ -5,17 +5,10 @@ sidebar:
   order: 2
 ---
 
-Thin React wrappers around Base UI primitives. Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
+Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
 
 :::tip[Branding multiple apps]
 Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
-:::
-
-:::caution[Upgrading from 0.3]
-
-- `<AdminRoot>` is now **required**. Components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root` — wrap your app (or each embedded admin surface) once.
-- `@aortl/admin-react/styles.css` is the preferred subpath import. The 0.3-era `@aortl/admin-react/styles.scoped.css` is still aliased to the same bundle, so existing imports keep working.
-
 :::
 
 ## Install
@@ -85,3 +78,8 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 ```
 
 `<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component and the wrapper sizes it and adds `aria-hidden`.
+
+## Upgrading from 0.3
+
+- `<AdminRoot>` is now **required**. Components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root` — wrap your app (or each embedded admin surface) once.
+- `@aortl/admin-react/styles.css` is the preferred subpath import. The 0.3-era `@aortl/admin-react/styles.scoped.css` is still aliased to the same bundle, so existing imports keep working.

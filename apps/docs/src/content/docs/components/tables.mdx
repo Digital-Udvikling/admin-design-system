@@ -425,7 +425,7 @@ A narrow leading cell for row-level status glyphs. `.table-cell-gutter` (or `gut
 
 ### Row selection
 
-Put a [Checkbox](/admin-design-system/components/forms/checkboxes/) in the first cell — row tint is driven by `:has(input:checked)`, no state mirror needed. Wire the select-all header checkbox yourself.
+Put a [Checkbox](../forms/checkboxes/) in the first cell — the row tint reacts to native `:checked`, Base UI's `[data-checked]`, or the `data-selected` hook (see below). Wire the select-all header checkbox yourself.
 
 :::example
 

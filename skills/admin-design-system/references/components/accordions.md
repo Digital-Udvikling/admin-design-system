@@ -1,8 +1,8 @@
 # Accordions
 
-> Native <details> + <summary>, smoothed by interpolate-size and ::details-content.
+> Disclosure rows built on <details>.
 
-`.accordion-*` styles native `<details>`/`<summary>`. `interpolate-size: allow-keywords` plus `::details-content` give the open/close a smooth animation in modern browsers; older browsers degrade to instant toggle.
+Modern browsers animate the open/close via `interpolate-size: allow-keywords` + `::details-content`; older browsers degrade to instant toggle.
 
 ## Examples
 
@@ -30,7 +30,7 @@
 
 ### Grouped items
 
-Adjacent items collapse their shared border; the chevron stays on the right. See [Icons](/admin-design-system/basics/icons/).
+Adjacent items share their border; the chevron stays on the right. See [Icons](../../basics/icons/).
 
 **Example**
 

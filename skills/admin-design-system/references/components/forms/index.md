@@ -1,11 +1,13 @@
-# Usage
+# Forms
 
 > Input controls and composition primitives.
 
-- **[Inputs](./inputs/)** — single-line text, email, password, number, date, file, …
+- **[Inputs](./inputs/)** — single-line text, email, password, number, date, …
 - **[Textareas](./textareas/)** — multi-line text.
 - **[Selects](./selects/)** — single-choice dropdown with a custom popup.
 - **[Checkboxes](./checkboxes/)** — independent on/off toggles.
 - **[Radios](./radios/)** — mutually exclusive choice within a `RadioGroup`.
 - **[Switches](./switches/)** — immediate on/off settings (for form submissions, prefer a checkbox).
+- **[File inputs](./file-inputs/)** — file picker styled to match other controls.
+- **[Input groups](./input-groups/)** — prefix, suffix, or action button attached to an input.
 - **[Fields](./fields/)** — labels, descriptions, and validation messaging.

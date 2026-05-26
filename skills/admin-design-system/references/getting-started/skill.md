@@ -2,9 +2,7 @@
 
 > Install the design system as an Agent Skill so Claude (or any compatible agent) knows the class names, component API, and conventions.
 
-The repo ships an [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) bundle at [`skills/admin-design-system/`](https://github.com/Digital-Udvikling/admin-design-system/tree/main/skills/admin-design-system). It's a self-contained set of markdown files that teach an AI coding agent the class-name contract, the React component API, the icon and token conventions, and the project's "prefer the platform" philosophy — plus one reference file per component with paired vanilla HTML and React examples.
-
-Once installed, an agent working in a project that uses `@aortl/admin-css` or `@aortl/admin-react` will pull the skill in automatically and produce output that matches the system's idioms.
+The repo ships an [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) bundle at [`skills/admin-design-system/`](https://github.com/Digital-Udvikling/admin-design-system/tree/main/skills/admin-design-system) — one reference file per component, with paired vanilla HTML and React examples. Once installed, a compatible agent working in a project that uses `@aortl/admin-css` or `@aortl/admin-react` pulls it in automatically.
 
 ## Install with `npx skills` (recommended)
 
@@ -43,4 +41,4 @@ See [the Claude Code plugins docs](https://docs.claude.com/en/docs/claude-code/p
 
 ## Keeping the skill current
 
-The bundle is generated from the `.mdx` files in this docs site by [`apps/docs/scripts/generate-skill.mjs`](https://github.com/Digital-Udvikling/admin-design-system/blob/main/apps/docs/scripts/generate-skill.mjs) and committed to the repo. CI fails if the committed bundle drifts from the source, so what you install is always in sync with the latest docs.
+The bundle is regenerated from this site on every release, so what you install is always in sync with these docs.

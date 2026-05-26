@@ -18,8 +18,6 @@ IconHome,
 
 The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React.
 
-Tabler ships in two flavours: a **webfont** for plain HTML (`<i class="ti ti-home"></i>`) and **React components** (`@tabler/icons-react`).
-
 ## Install
 
 - **Vanilla CSS** — see [Getting Started › Vanilla CSS](../../getting-started/vanilla/#add-icons-optional).

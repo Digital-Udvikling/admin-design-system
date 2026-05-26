@@ -4,7 +4,7 @@
 
 A pure-CSS rotating arc. The visible edge uses `currentColor`, so it inherits the surrounding text colour.
 
-For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — see [Buttons → Loading](/admin-design-system/components/buttons/#loading).
+For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — see [Buttons → Loading](../buttons/#loading).
 
 ## Examples
 

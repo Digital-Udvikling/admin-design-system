@@ -2,9 +2,9 @@
 
 > Drop admin styles into a non-admin app without colliding on class names.
 
-A parallel CSS bundle that wraps every rule in `@scope (._ao-admin-root)` and prefixes every admin class with `_ao-`. Use it when you're embedding admin pieces — a settings menu, an internal toolbar — inside an app that owns its own design system. The wrapper element opts a subtree into admin styles; everything outside is left alone, and admin's class names can't collide with the host's.
+A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. Use it when admin markup lives inside a host app that owns its own design system.
 
-The React library always ships this variant. The default `@aortl/admin-css` bundle is unchanged and stays unprefixed — use it for full-page admin apps that own the document.
+The React library always ships this variant. The default `@aortl/admin-css` bundle stays unprefixed — use it for full-page admin apps that own the document.
 
 :::tip[Branding multiple apps]
 Set `--color-system-accent` on `._ao-admin-root` to brand-shift the navbar + footer stripes and `._ao-brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).

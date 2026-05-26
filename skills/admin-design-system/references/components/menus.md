@@ -18,7 +18,7 @@ A `<details>` with a `<summary>` trigger and a positioned popup. The browser han
 
 ### Basic
 
-See [Icons](/admin-design-system/basics/icons/) for the recommended library.
+See [Icons](../../basics/icons/).
 
 **Example**
 

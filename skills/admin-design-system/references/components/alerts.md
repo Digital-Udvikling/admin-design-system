@@ -8,7 +8,7 @@ IconInfoCircle,
   IconAlertOctagon,
 } from "@tabler/icons-react";
 
-For single-field validation, use [Fields](/admin-design-system/components/forms/fields/) instead.
+For single-field validation, use [Fields](../forms/fields/) instead.
 
 ## Examples
 
@@ -53,7 +53,7 @@ For single-field validation, use [Fields](/admin-design-system/components/forms/
 
 ### With a leading icon
 
-Pass `icon` — the CSS switches the alert to a two-column grid; the icon spans all rows and inherits the variant colour. See [Icons](/admin-design-system/basics/icons/).
+Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../../basics/icons/).
 
 **Example**
 

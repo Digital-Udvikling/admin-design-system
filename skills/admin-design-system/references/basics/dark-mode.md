@@ -2,7 +2,7 @@
 
 > Follows the OS by default, with manual override per page or subtree.
 
-Semantic tokens are declared once via `light-dark()` and dark mode flips them to Flexoki's [inverted ramp](https://stephango.com/flexoki) — `paper ↔ black`, `base-50 ↔ base-950`, accent `-600 ↔ -400`.
+In React, [`<AdminRoot theme="dark">`](../../getting-started/react/) sets the same `data-theme` for you.
 
 ## How it switches
 

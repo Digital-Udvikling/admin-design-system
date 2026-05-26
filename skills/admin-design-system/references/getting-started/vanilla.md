@@ -2,8 +2,6 @@
 
 > A single pre-built stylesheet. No build tooling required on your end.
 
-A single pre-built stylesheet. No build tooling required on your end.
-
 :::tip[Branding multiple apps]
 Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
 :::

@@ -2,7 +2,7 @@
 
 > Styled native <progress> element.
 
-A styled native `<progress>` element — the browser handles ARIA semantics. Omit `value` for an indeterminate bar.
+The browser handles ARIA semantics.
 
 ## Examples
 

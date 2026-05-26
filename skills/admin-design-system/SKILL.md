@@ -116,7 +116,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 ### Components
 
-- [Accordions](references/components/accordions.md) — Native <details> + <summary>, smoothed by interpolate-size and ::details-content.
+- [Accordions](references/components/accordions.md) — Disclosure rows built on <details>.
 - [Alerts](references/components/alerts.md) — Inline notifications for errors, confirmations, and contextual feedback.
 - [Badges](references/components/badges.md) — Compact status indicator for tags, counts, and chips.
 - [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square, used to brand the navbar per system.

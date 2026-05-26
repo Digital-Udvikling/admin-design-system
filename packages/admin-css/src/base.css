@@ -1,13 +1,10 @@
 @layer base {
-  html {
+  .admin-root {
     color: var(--color-text);
     background-color: var(--color-surface);
-    -webkit-text-size-adjust: 100%;
-  }
-
-  body {
     @apply font-sans text-sm;
     line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
   }
 
   h1 {

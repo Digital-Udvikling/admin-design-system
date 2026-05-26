@@ -30,8 +30,6 @@
     ".": "./dist/admin.css",
     "./admin.css": "./dist/admin.css",
     "./admin.min.css": "./dist/admin.min.css",
-    "./admin.scoped.css": "./dist/admin.scoped.css",
-    "./admin.scoped.min.css": "./dist/admin.scoped.min.css",
     "./src/*": "./src/*"
   },
   "publishConfig": {
@@ -39,17 +37,14 @@
     "provenance": true
   },
   "scripts": {
-    "build": "pnpm build:dev && pnpm build:min && pnpm build:scoped",
+    "build": "pnpm build:dev && pnpm build:min",
     "build:dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css",
     "build:min": "tailwindcss -i ./src/admin.css -o ./dist/admin.min.css --minify",
-    "build:scoped": "node ./scripts/wrap-scoped.mjs",
     "dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.0",
-    "postcss": "8.5.15",
-    "postcss-selector-parser": "6.1.2",
     "tailwindcss": "4.3.0"
   }
 }

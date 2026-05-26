@@ -271,9 +271,12 @@
  * preference; the attribute overrides force a specific mode and also
  * flip native form controls, scrollbars, etc. The attribute selector
  * isn't scoped to :root so subtrees can opt into a different mode (e.g.
- * a dark hero section on an otherwise light page).
+ * a dark hero section on an otherwise light page). `:host` covers the
+ * shadow-root variant — `<AdminRoot isolated>` mounts inside a shadow
+ * root where `:root` doesn't match anything; `.admin-root` covers the
+ * inner div uniformly in both light- and shadow-DOM modes.
  */
-:root {
+:where(:host, :root, .admin-root) {
   color-scheme: light dark;
 }
 [data-theme="dark"] {

@@ -64,6 +64,33 @@ Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`.
 
 :::example
 
+```html
+<details class="menu">
+  <summary class="menu-trigger">Resources</summary>
+  <div class="menu-popup" role="menu">
+    <div class="menu-group">
+      <div class="menu-group-label">Internal</div>
+      <a class="menu-item" href="#docs">
+        <i class="ti ti-book" aria-hidden="true"></i>
+        Docs
+      </a>
+      <a class="menu-item" href="#changelog">
+        <i class="ti ti-history" aria-hidden="true"></i>
+        Changelog
+      </a>
+    </div>
+    <hr class="menu-separator" />
+    <div class="menu-group">
+      <div class="menu-group-label">External</div>
+      <a class="menu-item" href="#support">
+        <i class="ti ti-lifebuoy" aria-hidden="true"></i>
+        Support
+      </a>
+    </div>
+  </div>
+</details>
+```
+
 ```tsx
 <Menu>
   <Menu.Trigger>Resources</Menu.Trigger>

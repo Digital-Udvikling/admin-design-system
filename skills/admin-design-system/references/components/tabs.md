@@ -43,6 +43,22 @@ Vanilla tabs are radio-input driven, so panel switching works without JavaScript
 
 **Example**
 
+```html
+<div class="tabs tabs-boxed tabs-sm">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="boxed" id="boxed-1" value="1" />
+    <label class="tab" for="boxed-1">Day</label>
+    <input class="tab-input" type="radio" name="boxed" id="boxed-2" value="2" checked />
+    <label class="tab" for="boxed-2">Week</label>
+    <input class="tab-input" type="radio" name="boxed" id="boxed-3" value="3" />
+    <label class="tab" for="boxed-3">Month</label>
+  </div>
+  <div class="tab-panel" data-value="1">Daily breakdown.</div>
+  <div class="tab-panel" data-value="2">Weekly breakdown.</div>
+  <div class="tab-panel" data-value="3">Monthly breakdown.</div>
+</div>
+```
+
 ```tsx
 <Tabs defaultValue="week" variant="boxed" size="sm">
   <Tabs.List>

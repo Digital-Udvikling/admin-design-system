@@ -99,3 +99,25 @@ Native browser pickers; dark mode tracks the document's `color-scheme`.
 ### File
 
 Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button.
+
+### Inside a Field
+
+See [Fields](../fields/) for label, description, and validation.
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="email">Email</label>
+  <input id="email" type="email" class="input input-bordered" placeholder="you@example.com" />
+  <p class="field-description">We'll never share your email.</p>
+</div>
+```
+
+```tsx
+<Field name="email">
+  <Field.Label>Email</Field.Label>
+  <Input type="email" placeholder="you@example.com" />
+  <Field.Description>We'll never share your email.</Field.Description>
+</Field>
+```

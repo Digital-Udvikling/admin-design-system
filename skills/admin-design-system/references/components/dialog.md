@@ -289,7 +289,7 @@ For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no long
 
 ## Advanced: layout with `Dialog.Container`
 
-`<Dialog>` is opinionated — single header, single body, single footer. For layouts that don't fit (media block, multiple bodies, segmented content), drop down to `<Dialog.Container>`: it renders the bare `<dialog>` element with size + `closedby` props, and lets you compose subparts yourself.
+`<Dialog.Container>` renders the bare `<dialog>` element and lets you compose subparts directly.
 
 **Example**
 

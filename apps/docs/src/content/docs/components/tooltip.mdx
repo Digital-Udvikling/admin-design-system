@@ -83,6 +83,17 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 
 :::example
 
+```html
+<span class="tooltip-wrap">
+  <button type="button" class="btn btn-sm">sm</button>
+  <span class="tooltip tooltip-sm" role="tooltip">Small</span>
+</span>
+<span class="tooltip-wrap">
+  <button type="button" class="btn">md</button>
+  <span class="tooltip" role="tooltip">Medium</span>
+</span>
+```
+
 ```tsx
 <>
   <Tooltip content="Small" size="sm">

@@ -79,3 +79,33 @@
   </label>
 </RadioGroup>
 ```
+
+### Inside a Field
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label">Plan</label>
+  <div class="radio-group" role="radiogroup">
+    <label> <input type="radio" name="plan-field" value="free" class="radio" /> Free </label>
+    <label> <input type="radio" name="plan-field" value="pro" class="radio" /> Pro </label>
+  </div>
+  <p class="field-description">Upgrade any time.</p>
+</div>
+```
+
+```tsx
+<Field name="plan">
+  <Field.Label>Plan</Field.Label>
+  <RadioGroup>
+    <label>
+      <Radio value="free" /> Free
+    </label>
+    <label>
+      <Radio value="pro" /> Pro
+    </label>
+  </RadioGroup>
+  <Field.Description>Upgrade any time.</Field.Description>
+</Field>
+```

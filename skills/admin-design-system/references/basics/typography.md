@@ -15,7 +15,7 @@ Body text is **14px**, headings step up modestly, and the UI typeface is IBM Ple
   monospace;
 ```
 
-Fonts are loaded from `fonts.gstatic.com` (latin + latin-ext subsets) with `font-display: optional` — the system fallback paints on first load if the font isn't ready in ~100ms, and Plex takes over on subsequent visits.
+Fonts are loaded with `font-display: optional` — the fallback paints on first load if Plex isn't cached, and Plex takes over on subsequent visits.
 
 To opt out, override `--font-sans` / `--font-mono`:
 

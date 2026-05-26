@@ -32,6 +32,18 @@ Pass a [Tabler icon](../../basics/icons/) instead. In React, the `icon` prop ren
 
 **Example**
 
+```html
+<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-green-600)">
+  <i class="ti ti-shopping-cart" style="font-size: 14px"></i>
+</span>
+<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-orange-600)">
+  <i class="ti ti-chart-bar" style="font-size: 14px"></i>
+</span>
+<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-cyan-600)">
+  <i class="ti ti-package" style="font-size: 14px"></i>
+</span>
+```
+
 ```tsx
 <BrandTile icon={IconShoppingCart} style={{ "--color-system-accent": "var(--color-green-600)" }} />
 <BrandTile icon={IconChartBar} style={{ "--color-system-accent": "var(--color-orange-600)" }} />

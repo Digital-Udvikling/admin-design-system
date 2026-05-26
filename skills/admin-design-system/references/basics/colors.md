@@ -4,10 +4,7 @@
 
 <ColorCopy />
 
-The palette is [Flexoki](https://stephango.com/flexoki). Colors live in two layers, both registered with Tailwind's `@theme`:
-
-1. **Palette** — Flexoki's ramps (`--color-blue-600`, `--color-base-50`, ...) replace Tailwind's defaults. Generates utilities like `bg-blue-600`, `text-base-700`.
-2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, ...) point at palette tones. Components only ever reference these.
+The palette is [Flexoki](https://stephango.com/flexoki). The system layers it as palette tones (`--color-blue-600`, `--color-base-50`, …) and semantic aliases that point at them (`--color-primary`, `--color-surface`, …) — see [Principles › Two-layer tokens](../principles/#two-layer-tokens).
 
 Override either layer to reskin the system — see [Customize](../customize/). Click any swatch to copy its hex, Tailwind class, or CSS variable.
 

@@ -1,0 +1,39 @@
+name: Preview release
+
+# Publishes per-commit prereleases of every public package under `packages/*`
+# to pkg.pr.new (https://pkg.pr.new). The pkg.pr.new GitHub App must be
+# installed on the org with access to this repo — once installed, the bot
+# comments on each PR with install URLs of the form
+#   pnpm add https://pkg.pr.new/@aortl/admin-react@<sha>
+# Install: https://github.com/apps/pkg-pr-new
+#
+# Main-branch pushes also publish under the commit SHA so the latest
+# unreleased state can be tried via the same URL scheme.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - run: pnpx pkg-pr-new publish --pnpm './packages/admin-css' './packages/admin-react'

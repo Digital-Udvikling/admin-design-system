@@ -26,4 +26,14 @@ describe("AdminRoot", () => {
     render(<AdminRoot data-testid="root" data-theme="dark" />);
     expect(screen.getByTestId("root")).toHaveAttribute("data-theme", "dark");
   });
+
+  it("sets data-theme from the theme prop", () => {
+    render(<AdminRoot data-testid="root" theme="dark" />);
+    expect(screen.getByTestId("root")).toHaveAttribute("data-theme", "dark");
+  });
+
+  it("prefers theme over an explicit data-theme", () => {
+    render(<AdminRoot data-testid="root" theme="dark" data-theme="light" />);
+    expect(screen.getByTestId("root")).toHaveAttribute("data-theme", "dark");
+  });
 });

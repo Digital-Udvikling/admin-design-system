@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type ProgressVariant = "primary" | "success" | "warning" | "danger";
 export type ProgressSize = "sm" | "md" | "lg";
@@ -24,10 +24,12 @@ export function Progress({
     <progress
       value={value}
       max={max}
-      className={clsx(
-        "progress",
-        variant !== "primary" && `progress-${variant}`,
-        size !== "md" && `progress-${size}`,
+      className={cn(
+        [
+          "progress",
+          variant !== "primary" && `progress-${variant}`,
+          size !== "md" && `progress-${size}`,
+        ],
         className,
       )}
       {...rest}

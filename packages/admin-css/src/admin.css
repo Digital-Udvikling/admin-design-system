@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../../admin-react/src/**/*.{ts,tsx}";
+
 @import "./fonts.css";
 @import "./theme.css";
 @import "./base.css";

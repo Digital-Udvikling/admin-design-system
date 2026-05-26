@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type TextareaVariant = "bordered" | "ghost" | "danger";
 export type TextareaSize = "sm" | "md" | "lg";
@@ -17,10 +17,8 @@ export function Textarea({
 }: TextareaProps) {
   return (
     <textarea
-      className={clsx(
-        "textarea",
-        `textarea-${variant}`,
-        textareaSize !== "md" && `textarea-${textareaSize}`,
+      className={cn(
+        ["textarea", `textarea-${variant}`, textareaSize !== "md" && `textarea-${textareaSize}`],
         className,
       )}
       {...rest}

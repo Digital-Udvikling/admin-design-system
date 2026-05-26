@@ -23,7 +23,7 @@ describe("Table", () => {
       </Table>,
     );
     const table = screen.getByRole("table");
-    expect(table).toHaveClass("table");
+    expect(table).toHaveAdminClass("table");
     expect(screen.getByRole("columnheader", { name: "Name" })).toHaveAttribute("scope", "col");
     expect(screen.getByRole("cell", { name: "ada@example.com" })).toBeInTheDocument();
   });
@@ -38,7 +38,7 @@ describe("Table", () => {
         </Table.Body>
       </Table>,
     );
-    expect(screen.getByTestId("t")).toHaveClass(
+    expect(screen.getByTestId("t")).toHaveAdminClass(
       "table",
       "table-striped",
       "table-bordered",
@@ -65,8 +65,8 @@ describe("Table", () => {
         </Table.Body>
       </Table>,
     );
-    expect(screen.getByTestId("gutter")).toHaveClass("table-cell", "table-cell-gutter");
-    expect(screen.getByTestId("numeric")).toHaveClass("table-cell", "table-cell-numeric");
+    expect(screen.getByTestId("gutter")).toHaveAdminClass("table-cell", "table-cell-gutter");
+    expect(screen.getByTestId("numeric")).toHaveAdminClass("table-cell", "table-cell-numeric");
     expect(screen.getByTestId("numeric")).toHaveAttribute("data-align", "right");
     expect(screen.getByTestId("center")).toHaveAttribute("data-align", "center");
   });
@@ -87,7 +87,7 @@ describe("Table", () => {
       </Table>,
     );
     expect(screen.getByTestId("r-selected")).toHaveAttribute("data-selected", "true");
-    expect(screen.getByTestId("r-link")).toHaveClass("table-row-link");
+    expect(screen.getByTestId("r-link")).toHaveAdminClass("table-row-link");
   });
 
   it("row selection visual is driven by the checkbox check state (via :has in CSS, asserted here by data-checked)", async () => {

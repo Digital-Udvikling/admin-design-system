@@ -43,10 +43,12 @@ describe("Dialog", () => {
       </Dialog.Container>,
     );
     const el = getDialog();
-    expect(el).toHaveClass("dialog");
-    expect(screen.getByRole("heading", { level: 2, name: "Settings" })).toHaveClass("dialog-title");
-    expect(screen.getByText("Body content")).toHaveClass("dialog-body");
-    expect(screen.getByText("Footer content")).toHaveClass("dialog-footer");
+    expect(el).toHaveAdminClass("dialog");
+    expect(screen.getByRole("heading", { level: 2, name: "Settings" })).toHaveAdminClass(
+      "dialog-title",
+    );
+    expect(screen.getByText("Body content")).toHaveAdminClass("dialog-body");
+    expect(screen.getByText("Footer content")).toHaveAdminClass("dialog-footer");
   });
 
   it("renders title/description/actions shorthand props", () => {
@@ -60,12 +62,12 @@ describe("Dialog", () => {
         Body
       </Dialog>,
     );
-    expect(screen.getByRole("heading", { level: 2, name: "Delete project?" })).toHaveClass(
+    expect(screen.getByRole("heading", { level: 2, name: "Delete project?" })).toHaveAdminClass(
       "dialog-title",
     );
-    expect(screen.getByText("This cannot be undone.")).toHaveClass("dialog-description");
-    expect(screen.getByText("Body")).toHaveClass("dialog-body");
-    expect(screen.getByRole("button", { name: "Delete" }).parentElement).toHaveClass(
+    expect(screen.getByText("This cannot be undone.")).toHaveAdminClass("dialog-description");
+    expect(screen.getByText("Body")).toHaveAdminClass("dialog-body");
+    expect(screen.getByRole("button", { name: "Delete" }).parentElement).toHaveAdminClass(
       "dialog-footer",
     );
   });
@@ -110,13 +112,13 @@ describe("Dialog", () => {
 
     it("applies size modifier classes", () => {
       const { rerender } = render(<Dialog size="sm" title="x" />);
-      expect(getDialog()).toHaveClass("dialog-sm");
+      expect(getDialog()).toHaveAdminClass("dialog-sm");
       rerender(<Dialog size="lg" title="x" />);
-      expect(getDialog()).toHaveClass("dialog-lg");
+      expect(getDialog()).toHaveAdminClass("dialog-lg");
       rerender(<Dialog size="md" title="x" />);
       const el = getDialog();
-      expect(el).not.toHaveClass("dialog-sm");
-      expect(el).not.toHaveClass("dialog-lg");
+      expect(el).not.toHaveAdminClass("dialog-sm");
+      expect(el).not.toHaveAdminClass("dialog-lg");
     });
 
     it("dismissible={false} omits the close button", () => {

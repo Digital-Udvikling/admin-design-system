@@ -1,8 +1,8 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export interface AdminRootProps extends ComponentProps<"div"> {}
 
 export function AdminRoot({ className, ...rest }: AdminRootProps) {
-  return <div className={clsx("admin-root", className)} {...rest} />;
+  return <div className={cn("admin-root", className)} {...rest} />;
 }

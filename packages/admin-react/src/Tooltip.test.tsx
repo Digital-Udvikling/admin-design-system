@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Tooltip } from "./Tooltip";
+import { adminSelector } from "./test-setup";
 
 // Base UI's TooltipTrigger defaults `delay` to 600ms. Pass `delay={0}` /
 // `closeDelay={0}` per-trigger in interaction tests to drive hover/focus
@@ -17,8 +18,9 @@ describe("Tooltip", () => {
       </Tooltip.Root>,
     );
     expect(screen.getByRole("button", { name: "Hover me" })).toBeInTheDocument();
-    const popup = document.body.querySelector(".tooltip") as HTMLElement | null;
+    const popup = document.body.querySelector(adminSelector("tooltip")) as HTMLElement | null;
     expect(popup).not.toBeNull();
+    expect(popup).toHaveAdminClass("tooltip");
     expect(popup).toHaveTextContent("Save");
   });
 
@@ -44,13 +46,13 @@ describe("Tooltip", () => {
         </Tooltip.Root>,
       );
       const trigger = screen.getByRole("button", { name: "target" });
-      expect(document.body.querySelector(".tooltip")).toBeNull();
+      expect(document.body.querySelector(adminSelector("tooltip"))).toBeNull();
       await user.hover(trigger);
       const popup = await screen.findByRole("tooltip");
       expect(popup).toHaveTextContent("Hint");
       await user.unhover(trigger);
       // Either fully unmounted, or marked closed via data-ending-style.
-      const after = document.body.querySelector(".tooltip");
+      const after = document.body.querySelector(adminSelector("tooltip"));
       expect(after === null || after.hasAttribute("data-ending-style")).toBe(true);
     });
 
@@ -67,7 +69,7 @@ describe("Tooltip", () => {
           </Tooltip.Root>
         </>,
       );
-      expect(document.body.querySelector(".tooltip")).toBeNull();
+      expect(document.body.querySelector(adminSelector("tooltip"))).toBeNull();
       await user.tab(); // before
       await user.tab(); // target
       expect(await screen.findByRole("tooltip")).toHaveTextContent("Hint");
@@ -86,7 +88,7 @@ describe("Tooltip", () => {
       await user.tab();
       await screen.findByRole("tooltip");
       await user.keyboard("{Escape}");
-      const after = document.body.querySelector(".tooltip");
+      const after = document.body.querySelector(adminSelector("tooltip"));
       expect(after === null || after.hasAttribute("data-ending-style")).toBe(true);
     });
 
@@ -126,16 +128,16 @@ describe("Tooltip", () => {
           <Tooltip.Popup size="sm">Hint</Tooltip.Popup>
         </Tooltip.Root>,
       );
-      expect(document.body.querySelector(".tooltip")).toHaveClass("tooltip-sm");
+      expect(document.body.querySelector(adminSelector("tooltip"))).toHaveAdminClass("tooltip-sm");
       rerender(
         <Tooltip.Root defaultOpen>
           <Tooltip.Trigger>x</Tooltip.Trigger>
           <Tooltip.Popup>Hint</Tooltip.Popup>
         </Tooltip.Root>,
       );
-      const popup = document.body.querySelector(".tooltip") as HTMLElement;
-      expect(popup).toHaveClass("tooltip");
-      expect(popup).not.toHaveClass("tooltip-sm");
+      const popup = document.body.querySelector(adminSelector("tooltip")) as HTMLElement;
+      expect(popup).toHaveAdminClass("tooltip");
+      expect(popup).not.toHaveAdminClass("tooltip-sm");
     });
   });
 });

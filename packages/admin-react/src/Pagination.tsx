@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type PaginationItem =
@@ -131,10 +131,10 @@ export function Pagination({
   const prev = previousIcon !== undefined ? renderIcon(previousIcon, 16) : <ChevronLeftIcon />;
   const next = nextIcon !== undefined ? renderIcon(nextIcon, 16) : <ChevronRightIcon />;
   return (
-    <nav aria-label={ariaLabel} className={clsx("pagination", className)} {...rest}>
+    <nav aria-label={ariaLabel} className={cn("pagination", className)} {...rest}>
       <ul>
         {items.map((item, i) => (
-          <li key={paginationItemKey(item, i)} className="page-item">
+          <li key={paginationItemKey(item, i)} className={cn("page-item", undefined)}>
             {renderItem ? renderItem(item) : defaultRender(item, onPageChange, prev, next)}
           </li>
         ))}
@@ -205,7 +205,7 @@ function defaultRender(
       return (
         <button
           type="button"
-          className="page-link"
+          className={cn("page-link", undefined)}
           aria-label="Previous page"
           aria-disabled={item.disabled || undefined}
           disabled={item.disabled}
@@ -218,7 +218,7 @@ function defaultRender(
       return (
         <button
           type="button"
-          className="page-link"
+          className={cn("page-link", undefined)}
           aria-label="Next page"
           aria-disabled={item.disabled || undefined}
           disabled={item.disabled}
@@ -229,7 +229,7 @@ function defaultRender(
       );
     case "ellipsis":
       return (
-        <span className="page-ellipsis" aria-hidden="true">
+        <span className={cn("page-ellipsis", undefined)} aria-hidden="true">
           …
         </span>
       );
@@ -237,7 +237,7 @@ function defaultRender(
       return (
         <button
           type="button"
-          className={clsx("page-link", item.selected && "active")}
+          className={cn(["page-link", item.selected && "active"], undefined)}
           aria-current={item.selected ? "page" : undefined}
           aria-label={`Page ${item.page}`}
           onClick={() => onPageChange(item.page)}

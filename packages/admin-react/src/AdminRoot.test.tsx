@@ -11,14 +11,15 @@ describe("AdminRoot", () => {
     );
     const el = screen.getByTestId("root");
     expect(el.tagName).toBe("DIV");
-    expect(el).toHaveClass("admin-root");
+    expect(el).toHaveAdminClass("admin-root");
     expect(screen.getByText("inside")).toBeInTheDocument();
   });
 
   it("merges a caller className without dropping admin-root", () => {
     render(<AdminRoot data-testid="root" className="custom" />);
     const el = screen.getByTestId("root");
-    expect(el).toHaveClass("admin-root", "custom");
+    expect(el).toHaveAdminClass("admin-root");
+    expect(el).toHaveClass("custom");
   });
 
   it("forwards arbitrary props like data-theme", () => {

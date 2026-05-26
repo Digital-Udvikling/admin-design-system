@@ -6,7 +6,7 @@ describe("BrandTile", () => {
   it("renders a monogram", () => {
     render(<BrandTile monogram="OR" data-testid="tile" />);
     const el = screen.getByTestId("tile");
-    expect(el).toHaveClass("brand-tile");
+    expect(el).toHaveAdminClass("brand-tile");
     expect(el).toHaveTextContent("OR");
   });
 

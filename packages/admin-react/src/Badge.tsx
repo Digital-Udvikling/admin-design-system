@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type BadgeVariant = "neutral" | "info" | "success" | "warning" | "danger" | "primary";
@@ -22,7 +22,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={clsx("badge", `badge-${variant}`, size !== "md" && `badge-${size}`, className)}
+      className={cn(["badge", `badge-${variant}`, size !== "md" && `badge-${size}`], className)}
       {...rest}
     >
       {renderIcon(icon, size === "sm" ? 10 : 12)}

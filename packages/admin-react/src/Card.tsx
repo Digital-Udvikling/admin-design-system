@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export interface CardContainerProps extends ComponentProps<"div"> {
@@ -14,7 +14,7 @@ export interface CardContainerProps extends ComponentProps<"div"> {
 function CardContainer({ bordered, compact, className, ...rest }: CardContainerProps) {
   return (
     <div
-      className={clsx("card", bordered && "card-bordered", compact && "card-compact", className)}
+      className={cn(["card", bordered && "card-bordered", compact && "card-compact"], className)}
       {...rest}
     />
   );
@@ -64,7 +64,7 @@ function CardRoot({
 
 export type CardBodyProps = ComponentProps<"div">;
 function CardBody({ className, ...rest }: CardBodyProps) {
-  return <div className={clsx("card-body", className)} {...rest} />;
+  return <div className={cn("card-body", className)} {...rest} />;
 }
 
 export interface CardTitleProps extends ComponentProps<"h3"> {
@@ -73,7 +73,7 @@ export interface CardTitleProps extends ComponentProps<"h3"> {
 }
 function CardTitle({ icon, className, children, ...rest }: CardTitleProps) {
   return (
-    <h3 className={clsx("card-title", className)} {...rest}>
+    <h3 className={cn("card-title", className)} {...rest}>
       {renderIcon(icon)}
       {children}
     </h3>
@@ -82,12 +82,12 @@ function CardTitle({ icon, className, children, ...rest }: CardTitleProps) {
 
 export type CardDescriptionProps = ComponentProps<"p">;
 function CardDescription({ className, ...rest }: CardDescriptionProps) {
-  return <p className={clsx("card-description", className)} {...rest} />;
+  return <p className={cn("card-description", className)} {...rest} />;
 }
 
 export type CardActionsProps = ComponentProps<"div">;
 function CardActions({ className, ...rest }: CardActionsProps) {
-  return <div className={clsx("card-actions", className)} {...rest} />;
+  return <div className={cn("card-actions", className)} {...rest} />;
 }
 
 export const Card = Object.assign(CardRoot, {

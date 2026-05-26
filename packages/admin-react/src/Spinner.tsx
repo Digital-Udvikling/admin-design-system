@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type SpinnerSize = "sm" | "md" | "lg";
 
@@ -15,7 +15,7 @@ export function Spinner({ size = "md", label = "Loading", className, ...rest }: 
   return (
     <output
       aria-label={label}
-      className={clsx("spinner", size !== "md" && `spinner-${size}`, className)}
+      className={cn(["spinner", size !== "md" && `spinner-${size}`], className)}
       {...rest}
     />
   );

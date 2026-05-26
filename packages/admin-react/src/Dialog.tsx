@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import {
   createContext,
   useContext,
@@ -7,6 +6,7 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type DialogSize = "sm" | "md" | "lg";
@@ -92,7 +92,7 @@ function DialogContainer({
     <DialogContext.Provider value={ctx}>
       <dialog
         ref={ref}
-        className={clsx("dialog", size !== "md" && `dialog-${size}`, className)}
+        className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
         closedby={closedby}
         {...rest}
       >
@@ -105,7 +105,7 @@ function DialogContainer({
 export type DialogHeaderProps = ComponentProps<"div">;
 
 function DialogHeader({ className, ...rest }: DialogHeaderProps) {
-  return <div className={clsx("dialog-header", className)} {...rest} />;
+  return <div className={cn("dialog-header", className)} {...rest} />;
 }
 
 export interface DialogTitleProps extends ComponentProps<"h2"> {
@@ -115,7 +115,7 @@ export interface DialogTitleProps extends ComponentProps<"h2"> {
 
 function DialogTitle({ icon, className, children, ...rest }: DialogTitleProps) {
   return (
-    <h2 className={clsx("dialog-title", className)} {...rest}>
+    <h2 className={cn("dialog-title", className)} {...rest}>
       {renderIcon(icon)}
       {children}
     </h2>
@@ -125,19 +125,19 @@ function DialogTitle({ icon, className, children, ...rest }: DialogTitleProps) {
 export type DialogDescriptionProps = ComponentProps<"p">;
 
 function DialogDescription({ className, ...rest }: DialogDescriptionProps) {
-  return <p className={clsx("dialog-description", className)} {...rest} />;
+  return <p className={cn("dialog-description", className)} {...rest} />;
 }
 
 export type DialogBodyProps = ComponentProps<"div">;
 
 function DialogBody({ className, ...rest }: DialogBodyProps) {
-  return <div className={clsx("dialog-body", className)} {...rest} />;
+  return <div className={cn("dialog-body", className)} {...rest} />;
 }
 
 export type DialogFooterProps = ComponentProps<"div">;
 
 function DialogFooter({ className, ...rest }: DialogFooterProps) {
-  return <div className={clsx("dialog-footer", className)} {...rest} />;
+  return <div className={cn("dialog-footer", className)} {...rest} />;
 }
 
 export interface DialogCloseButtonProps extends ComponentProps<"button"> {
@@ -158,7 +158,7 @@ function DialogCloseButton({
   return (
     <button
       type={type}
-      className={clsx("dialog-close", className)}
+      className={cn("dialog-close", className)}
       aria-label={ariaLabel}
       onClick={(event) => {
         onClick?.(event);
@@ -208,7 +208,11 @@ function DialogRoot({
     <DialogContainer {...containerProps}>
       {showHeader ? (
         <DialogHeader>
-          {hasTitle ? <DialogTitle icon={icon}>{title}</DialogTitle> : <span className="flex-1" />}
+          {hasTitle ? (
+            <DialogTitle icon={icon}>{title}</DialogTitle>
+          ) : (
+            <span className={cn("flex-1", undefined)} />
+          )}
           {dismissible ? <DialogCloseButton aria-label={closeLabel} /> : null}
         </DialogHeader>
       ) : null}

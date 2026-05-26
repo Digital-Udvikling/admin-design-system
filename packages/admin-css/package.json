@@ -1,6 +1,6 @@
 {
   "name": "@aortl/admin-css",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Pre-built CSS design system. Drop in via <link> and use semantic class names.",
   "keywords": [
     "components",
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@tailwindcss/cli": "4.3.0",
     "postcss": "8.5.15",
+    "postcss-selector-parser": "6.1.2",
     "tailwindcss": "4.3.0"
   }
 }

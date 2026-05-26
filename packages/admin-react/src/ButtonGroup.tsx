@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { cn } from "./cn";
 
 export type ButtonGroupOrientation = "horizontal" | "vertical";
 
@@ -16,7 +16,7 @@ export function ButtonGroup({
   return (
     <div
       role={role}
-      className={clsx("btn-group", orientation === "vertical" && "btn-group-vertical", className)}
+      className={cn(["btn-group", orientation === "vertical" && "btn-group-vertical"], className)}
       {...rest}
     />
   );

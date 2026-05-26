@@ -1,5 +1,5 @@
-import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type AlertVariant = "info" | "success" | "warning" | "danger";
@@ -28,7 +28,7 @@ function AlertRoot({
   return (
     <div
       role={role ?? defaultRole}
-      className={clsx("alert", `alert-${variant}`, className)}
+      className={cn(["alert", `alert-${variant}`], className)}
       {...rest}
     >
       {renderIcon(icon)}
@@ -41,12 +41,12 @@ function AlertRoot({
 
 export type AlertTitleProps = ComponentProps<"strong">;
 function AlertTitle({ className, ...rest }: AlertTitleProps) {
-  return <strong className={clsx("alert-title", className)} {...rest} />;
+  return <strong className={cn("alert-title", className)} {...rest} />;
 }
 
 export type AlertDescriptionProps = ComponentProps<"p">;
 function AlertDescription({ className, ...rest }: AlertDescriptionProps) {
-  return <p className={clsx("alert-description", className)} {...rest} />;
+  return <p className={cn("alert-description", className)} {...rest} />;
 }
 
 export const Alert = Object.assign(AlertRoot, {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AppShell } from "./AppShell";
 import { Sidebar } from "./Sidebar";
+import { adminSelector } from "./test-setup";
 
 describe("Sidebar", () => {
   it("renders header, nav, items, and footer", () => {
@@ -37,9 +38,11 @@ describe("Sidebar", () => {
       </Sidebar>,
     );
     const link = screen.getByRole("link", { name: /Orders/ });
-    expect(link.querySelector(".sidebar-icon")).toContainElement(screen.getByTestId("icon"));
-    expect(link.querySelector(".sidebar-label")).toHaveTextContent("Orders");
-    expect(link.querySelector(".sidebar-badge")).toHaveTextContent("12");
+    expect(link.querySelector(adminSelector("sidebar-icon"))).toContainElement(
+      screen.getByTestId("icon"),
+    );
+    expect(link.querySelector(adminSelector("sidebar-label"))).toHaveTextContent("Orders");
+    expect(link.querySelector(adminSelector("sidebar-badge"))).toHaveTextContent("12");
   });
 
   it("does not render children twice when the mobile drawer is closed", () => {

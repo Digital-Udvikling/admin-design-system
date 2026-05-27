@@ -30,6 +30,31 @@ describe("Card", () => {
     expect(body.parentElement).toHaveAdminClass("card");
   });
 
+  it("wraps title and toolbar in a header when toolbar is set", () => {
+    render(
+      <Card
+        title="Settings"
+        toolbar={
+          <>
+            <button type="button">Edit</button>
+            <button type="button" aria-label="Close">
+              ×
+            </button>
+          </>
+        }
+      >
+        body content
+      </Card>,
+    );
+    const title = screen.getByRole("heading", { level: 3, name: "Settings" });
+    const header = title.closest(adminSelector("card-header"));
+    expect(header).toHaveAdminClass("card-header");
+    const toolbar = screen.getByRole("button", { name: "Edit" }).parentElement;
+    expect(toolbar).toHaveAdminClass("card-toolbar");
+    expect(toolbar?.parentElement).toBe(header);
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
+  });
+
   it("renders title/description/actions props as the matching subparts", () => {
     render(
       <Card title="Plan" description="Pro tier" actions={<button type="button">Upgrade</button>}>

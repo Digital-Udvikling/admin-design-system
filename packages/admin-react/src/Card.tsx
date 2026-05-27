@@ -29,6 +29,8 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
   title?: ReactNode;
   /** Renders as `<Card.Description>`. */
   description?: ReactNode;
+  /** Trailing header controls (close, edit, …). Renders as `<Card.Toolbar>`. */
+  toolbar?: ReactNode;
   /** Renders as `<Card.Actions>`. */
   actions?: ReactNode;
 }
@@ -44,16 +46,25 @@ function CardRoot({
   icon,
   title,
   description,
+  toolbar,
   actions,
   className,
   children,
   ...rest
 }: CardProps) {
   const hasTitle = icon !== undefined || title !== undefined;
+  const titleEl = hasTitle ? <CardTitle icon={icon}>{title}</CardTitle> : null;
   return (
     <CardContainer bordered={bordered} compact={compact} className={className} {...rest}>
       <CardBody>
-        {hasTitle ? <CardTitle icon={icon}>{title}</CardTitle> : null}
+        {toolbar !== undefined ? (
+          <CardHeader>
+            {titleEl}
+            <CardToolbar>{toolbar}</CardToolbar>
+          </CardHeader>
+        ) : (
+          titleEl
+        )}
         {description !== undefined ? <CardDescription>{description}</CardDescription> : null}
         {children}
         {actions !== undefined ? <CardActions>{actions}</CardActions> : null}
@@ -65,6 +76,16 @@ function CardRoot({
 export type CardBodyProps = ComponentProps<"div">;
 function CardBody({ className, ...rest }: CardBodyProps) {
   return <div className={cn("card-body", className)} {...rest} />;
+}
+
+export type CardHeaderProps = ComponentProps<"div">;
+function CardHeader({ className, ...rest }: CardHeaderProps) {
+  return <div className={cn("card-header", className)} {...rest} />;
+}
+
+export type CardToolbarProps = ComponentProps<"div">;
+function CardToolbar({ className, ...rest }: CardToolbarProps) {
+  return <div className={cn("card-toolbar", className)} {...rest} />;
 }
 
 export interface CardTitleProps extends ComponentProps<"h3"> {
@@ -93,6 +114,8 @@ function CardActions({ className, ...rest }: CardActionsProps) {
 export const Card = Object.assign(CardRoot, {
   Container: CardContainer,
   Body: CardBody,
+  Header: CardHeader,
+  Toolbar: CardToolbar,
   Title: CardTitle,
   Description: CardDescription,
   Actions: CardActions,

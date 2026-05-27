@@ -4,7 +4,7 @@ description: A container with optional title, description, and actions.
 ---
 
 import { Button, Card, Input } from "@aortl/admin-react";
-import { IconShoppingBag, IconArrowRight } from "@tabler/icons-react";
+import { IconShoppingBag, IconArrowRight, IconPencil, IconX } from "@tabler/icons-react";
 
 ## Examples
 
@@ -145,6 +145,47 @@ Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).
 
 :::
 
+### Header toolbar
+
+Pass `toolbar` for trailing header controls — edit, dismiss, anything. It sits at the end of the title row; add as many buttons as you need. These are usually [square icon buttons](../buttons/#icon-only) with an `aria-label`.
+
+:::example
+
+```html
+<div class="card card-bordered">
+  <div class="card-body">
+    <div class="card-header">
+      <h3 class="card-title">Webhook</h3>
+      <div class="card-toolbar">
+        <button class="btn btn-ghost btn-square btn-sm" type="button" aria-label="Edit">
+          <i class="ti ti-pencil" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-ghost btn-square btn-sm" type="button" aria-label="Dismiss">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    <p class="card-description">Fires on every order status change.</p>
+  </div>
+</div>
+```
+
+```tsx
+<Card
+  bordered
+  title="Webhook"
+  description="Fires on every order status change."
+  toolbar={
+    <>
+      <Button variant="ghost" size="sm" icon={IconPencil} aria-label="Edit" />
+      <Button variant="ghost" size="sm" icon={IconX} aria-label="Dismiss" />
+    </>
+  }
+/>
+```
+
+:::
+
 ## Advanced: layout with `Card.Container`
 
 `<Card.Container>` renders the bare `.card` and lets you compose sub-parts directly.
@@ -187,4 +228,4 @@ Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).
 
 :::
 
-`<Card.Title>` still accepts the `icon` prop in the advanced path.
+`<Card.Title>` still accepts the `icon` prop in the advanced path, and `<Card.Header>` + `<Card.Toolbar>` are available for composing a header row by hand.

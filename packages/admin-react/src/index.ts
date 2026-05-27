@@ -71,6 +71,8 @@ export {
   type CardProps,
   type CardContainerProps,
   type CardBodyProps,
+  type CardHeaderProps,
+  type CardToolbarProps,
   type CardTitleProps,
   type CardDescriptionProps,
   type CardActionsProps,

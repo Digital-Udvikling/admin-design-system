@@ -16,6 +16,19 @@
     @apply flex items-center gap-2 text-lg font-semibold leading-tight;
   }
 
+  /* Header row: title on the left, toolbar pushed to the trailing edge. */
+  .card-header {
+    @apply flex items-center gap-2;
+  }
+
+  /* Trailing cluster of header controls (close, edit, …). The title's bold,
+     descender-less type sits visually high in its line box, so geometric
+     centering reads slightly low — nudge the controls up to the optical centre.
+     `card-title` is always `text-lg`, so this offset is constant. */
+  .card-toolbar {
+    @apply flex items-center gap-1 ml-auto -mt-0.5;
+  }
+
   .card-description {
     @apply text-sm text-text-muted;
   }

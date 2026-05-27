@@ -80,7 +80,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 
@@ -399,8 +399,7 @@ function shouldHoist(node) {
   return false;
 }
 
-async function wrapFile(inputPath, outputPath) {
-  const css = await readFile(inputPath, "utf8");
+export function wrap(css) {
   const root = postcss.parse(css);
 
   const hoisted = [];
@@ -435,16 +434,23 @@ async function wrapFile(inputPath, outputPath) {
   root.append(scope);
 
   const banner = `/*! @aortl/admin-css scoped variant — @scope (${SCOPE_ROOT}); admin classes prefixed with ${PREFIX}. */\n`;
-  const output = banner + root.toString();
-  await writeFile(outputPath, output);
+  return banner + root.toString();
 }
 
-const targets = [
-  ["admin.css", "admin.scoped.css"],
-  ["admin.min.css", "admin.scoped.min.css"],
-];
+async function wrapFile(inputPath, outputPath) {
+  const css = await readFile(inputPath, "utf8");
+  await writeFile(outputPath, wrap(css));
+}
 
-for (const [input, output] of targets) {
-  await wrapFile(resolve(DIST, input), resolve(DIST, output));
-  console.log(`wrap-scoped: dist/${input} → dist/${output}`);
+const isCLI = import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isCLI) {
+  const targets = [
+    ["admin.css", "admin.scoped.css"],
+    ["admin.min.css", "admin.scoped.min.css"],
+  ];
+
+  for (const [input, output] of targets) {
+    await wrapFile(resolve(DIST, input), resolve(DIST, output));
+    console.log(`wrap-scoped: dist/${input} → dist/${output}`);
+  }
 }

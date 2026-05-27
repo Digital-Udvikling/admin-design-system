@@ -24,13 +24,14 @@ describe("PropertyList", () => {
 
   it("emits modifier classes on the root", () => {
     render(
-      <PropertyList striped copyable hideIfAllEmpty data-testid="root">
+      <PropertyList striped compact copyable hideIfAllEmpty data-testid="root">
         <PropertyList.Item label="X" value="Y" />
       </PropertyList>,
     );
     expect(screen.getByTestId("root")).toHaveAdminClass(
       "property-list",
       "property-list-striped",
+      "property-list-compact",
       "property-list-copyable",
       "property-list-hide-if-empty",
     );

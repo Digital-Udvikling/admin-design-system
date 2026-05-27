@@ -171,6 +171,36 @@ Pass JSX to the shorthand `value` prop for badges, links, or inline icons.
 </PropertyList>
 ```
 
+### Compact density
+
+`compact` tightens rows for sidebar info blocks or panels with many short attributes.
+
+**Example**
+
+```html
+<section class="property-list property-list-compact">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Lifecyklus</dt>
+    <dd class="property-list-value">A</dd>
+    <dt class="property-list-label">Status</dt>
+    <dd class="property-list-value">20</dd>
+    <dt class="property-list-label">Auto-oprettet</dt>
+    <dd class="property-list-value">Nej</dd>
+    <dt class="property-list-label">Vareansvarlig</dt>
+    <dd class="property-list-value">LUI</dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList compact>
+  <PropertyList.Item label="Lifecyklus" value="A" />
+  <PropertyList.Item label="Status" value="20" />
+  <PropertyList.Item label="Auto-oprettet" value="Nej" />
+  <PropertyList.Item label="Vareansvarlig" value="LUI" />
+</PropertyList>
+```
+
 ### Subpart escape hatch
 
 When you need full control over a row — e.g. a label with a tooltip, a value cell with a custom layout — drop the shorthand props and compose `<PropertyList.Label>` and `<PropertyList.Value>` directly.

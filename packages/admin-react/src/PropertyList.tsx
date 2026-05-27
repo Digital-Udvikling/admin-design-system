@@ -47,6 +47,8 @@ function CheckGlyph({ className }: { className: string }) {
 
 export interface PropertyListProps extends Omit<ComponentProps<"section">, "title"> {
   striped?: boolean;
+  /** Tightens row height and padding for very dense panels. */
+  compact?: boolean;
   /** Reveals a copy button on every item's value cell. Per-item `copyable`
    *  on `<PropertyList.Item>` opts in for individual rows. */
   copyable?: boolean;
@@ -60,6 +62,7 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
 
 function PropertyListRoot({
   striped,
+  compact,
   copyable,
   hideIfAllEmpty,
   title,
@@ -73,6 +76,7 @@ function PropertyListRoot({
         [
           "property-list",
           striped && "property-list-striped",
+          compact && "property-list-compact",
           copyable && "property-list-copyable",
           hideIfAllEmpty && "property-list-hide-if-empty",
         ],

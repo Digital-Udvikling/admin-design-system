@@ -33,6 +33,14 @@
     min-width: 0;
   }
 
+  /* Compact density — tighter rows for sidebar info blocks or very many
+     short attributes. */
+  .property-list-compact .property-list-label,
+  .property-list-compact .property-list-value {
+    padding: 0.125rem 0.5rem;
+    min-height: 1.5rem;
+  }
+
   /* Numeric — right-align + tabular-nums on the value. */
   .property-list-value-numeric {
     justify-content: flex-end;

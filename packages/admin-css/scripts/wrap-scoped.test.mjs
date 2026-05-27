@@ -1,7 +1,6 @@
-import { strict as assert } from "node:assert";
-import { test } from "node:test";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
+import { expect, test } from "vitest";
 import { wrap } from "./wrap-scoped.mjs";
 
 // Parse the wrapped output and return the @scope at-rule node. Every test
@@ -9,7 +8,7 @@ import { wrap } from "./wrap-scoped.mjs";
 function getScope(output) {
   const root = postcss.parse(output);
   const scope = root.nodes.find((n) => n.type === "atrule" && n.name === "scope");
-  assert.ok(scope, "wrap() output must contain an @scope at-rule");
+  expect(scope, "wrap() output must contain an @scope at-rule").toBeTruthy();
   return scope;
 }
 
@@ -33,10 +32,7 @@ test("every rule inside @scope has a selector starting with :scope", () => {
   const scope = getScope(wrap(input));
   scope.walkRules((rule) => {
     for (const part of topLevelSelectors(rule.selector)) {
-      assert.ok(
-        part.startsWith(":scope"),
-        `selector "${part}" inside @scope should start with :scope`,
-      );
+      expect(part, `selector "${part}" inside @scope should start with :scope`).toMatch(/^:scope/);
     }
   });
 });
@@ -45,12 +41,12 @@ test("the first rule inside @scope is the bare-element reset", () => {
   const input = `@layer components { .btn { color: red; } }`;
   const scope = getScope(wrap(input));
   const first = scope.nodes.find((n) => n.type === "rule");
-  assert.ok(first, "scope must contain at least one rule");
-  assert.match(first.selector, /^:scope :where\(/);
-  assert.match(first.selector, /\bh3\b/);
+  expect(first).toBeTruthy();
+  expect(first.selector).toMatch(/^:scope :where\(/);
+  expect(first.selector).toMatch(/\bh3\b/);
   const props = first.nodes.filter((n) => n.type === "decl").map((d) => d.prop);
-  assert.ok(props.includes("font-family"), "reset should set font-family");
-  assert.ok(props.includes("color"), "reset should set color");
+  expect(props).toContain("font-family");
+  expect(props).toContain("color");
 });
 
 test("every class selector inside @scope is prefixed _ao-", () => {
@@ -61,7 +57,7 @@ test("every class selector inside @scope is prefixed _ao-", () => {
     if (rule.selector.includes(":where(")) return;
     const classMatches = rule.selector.match(/\.[\w-]+/g) ?? [];
     for (const cls of classMatches) {
-      assert.ok(cls.startsWith("._ao-"), `class "${cls}" inside @scope should be prefixed _ao-`);
+      expect(cls, `class "${cls}" inside @scope should be prefixed _ao-`).toMatch(/^\._ao-/);
     }
   });
 });
@@ -75,7 +71,7 @@ test(":root rules are rewritten to :scope", () => {
       foundRootRewrite = true;
     }
   });
-  assert.ok(foundRootRewrite, ":root should become :scope inside @scope");
+  expect(foundRootRewrite, ":root should become :scope inside @scope").toBe(true);
 });
 
 test("admin-root class emits dual compound+descendant form", () => {
@@ -94,7 +90,9 @@ test("admin-root class emits dual compound+descendant form", () => {
       found = true;
     }
   });
-  assert.ok(found, "._ao-admin-root should be emitted in both compound and descendant form");
+  expect(found, "._ao-admin-root should be emitted in both compound and descendant form").toBe(
+    true,
+  );
 });
 
 test("no @layer statements or blocks appear anywhere in the output", () => {
@@ -114,7 +112,7 @@ test("no @layer statements or blocks appear anywhere in the output", () => {
   root.walkAtRules("layer", () => {
     found = true;
   });
-  assert.ok(!found, "@layer must not appear in the wrapped output");
+  expect(found, "@layer must not appear in the wrapped output").toBe(false);
 });
 
 test("@keyframes selectors are not rewritten", () => {
@@ -129,6 +127,6 @@ test("@keyframes selectors are not rewritten", () => {
     }
   `;
   const output = wrap(input);
-  assert.ok(!output.includes(":scope from"), "@keyframes `from` must not be rewritten");
-  assert.ok(!output.includes(":scope to"), "@keyframes `to` must not be rewritten");
+  expect(output).not.toContain(":scope from");
+  expect(output).not.toContain(":scope to");
 });

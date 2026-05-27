@@ -77,27 +77,15 @@ Opt in with `striped` for zebra banding when scanning many rows.
 
 ### Copyable <StarlightBadge text="React only" variant="caution" />
 
-`copyable` on the root reveals a copy button on every row. Per-item `copyable` opts in for individual rows. Hover or focus to reveal; click copies and confirms with a check for ~1.2s. Text selection on the value still works.
-
-:::example
-
-```tsx
-<PropertyList copyable>
-  <PropertyList.Item label="Varenummer" value="745325250" />
-  <PropertyList.Item label="EAN-nummer" value="4005176923197" />
-</PropertyList>
-```
-
-:::
-
-For a single copyable row inside an otherwise non-copyable list, use `copyable` on the item:
+`copyable` on an item reveals a copy button on its value cell. Hover or focus to reveal; click copies and confirms with a check for ~1.2s. Text selection on the value still works. Opt in row-by-row so unrelated identifiers don't crowd the panel with copy affordances.
 
 :::example
 
 ```tsx
 <PropertyList>
-  <PropertyList.Item label="Lifecyklus" value="A" />
+  <PropertyList.Item label="Varenummer" value="745325250" copyable />
   <PropertyList.Item label="EAN-nummer" value="4005176923197" copyable />
+  <PropertyList.Item label="Leverandørnummer" value="SUP-00123" copyable />
 </PropertyList>
 ```
 

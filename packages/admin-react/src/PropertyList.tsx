@@ -49,9 +49,6 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
   striped?: boolean;
   /** Tightens row height and padding for very dense panels. */
   compact?: boolean;
-  /** Reveals a copy button on every item's value cell. Per-item `copyable`
-   *  on `<PropertyList.Item>` opts in for individual rows. */
-  copyable?: boolean;
   /** Collapses the whole section when every item rendered the auto em-dash
    *  fallback for an empty value. */
   hideIfAllEmpty?: boolean;
@@ -63,7 +60,6 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
 function PropertyListRoot({
   striped,
   compact,
-  copyable,
   hideIfAllEmpty,
   title,
   className,
@@ -77,7 +73,6 @@ function PropertyListRoot({
           "property-list",
           striped && "property-list-striped",
           compact && "property-list-compact",
-          copyable && "property-list-copyable",
           hideIfAllEmpty && "property-list-hide-if-empty",
         ],
         className,

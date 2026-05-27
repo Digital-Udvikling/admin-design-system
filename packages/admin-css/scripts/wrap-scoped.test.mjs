@@ -97,18 +97,24 @@ test("admin-root class emits dual compound+descendant form", () => {
   assert.ok(found, "._ao-admin-root should be emitted in both compound and descendant form");
 });
 
-test("@layer NAME { ... } blocks inside @scope are flattened away", () => {
+test("no @layer statements or blocks appear anywhere in the output", () => {
+  // Statements (`@layer theme, base;`) are document-wide by spec, so leaving
+  // them in the scoped bundle would silently declare layer order in the
+  // consumer's document. Blocks (`@layer base { ... }`) get flattened away
+  // and re-emitted unlayered so admin's rules can compete with host rules
+  // on specificity instead of always losing to unlayered host rules.
   const input = `
     @layer theme, base, components;
     @layer base { h3 { font-size: inherit; } }
     @layer components { .btn { color: red; } }
   `;
-  const scope = getScope(wrap(input));
-  let foundLayerBlock = false;
-  scope.walk((node) => {
-    if (node.type === "atrule" && node.name === "layer") foundLayerBlock = true;
+  const output = wrap(input);
+  const root = postcss.parse(output);
+  let found = false;
+  root.walkAtRules("layer", () => {
+    found = true;
   });
-  assert.ok(!foundLayerBlock, "@layer blocks must not appear inside @scope");
+  assert.ok(!found, "@layer must not appear in the wrapped output");
 });
 
 test("@keyframes selectors are not rewritten", () => {

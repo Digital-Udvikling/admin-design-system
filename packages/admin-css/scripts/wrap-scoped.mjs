@@ -270,12 +270,12 @@ function isLayerStatement(node) {
   );
 }
 
-function collectDeclaredLayerOrder(hoisted) {
+function collectDeclaredLayerOrder(container) {
   const order = [];
   const seen = new Set();
-  for (const node of hoisted) {
-    if (!isLayerStatement(node)) continue;
-    for (const name of node.params
+  container.walkAtRules("layer", (rule) => {
+    if (!isLayerStatement(rule)) return;
+    for (const name of rule.params
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean)) {
@@ -283,7 +283,7 @@ function collectDeclaredLayerOrder(hoisted) {
       seen.add(name);
       order.push(name);
     }
-  }
+  });
   return order;
 }
 
@@ -395,18 +395,27 @@ function shouldHoist(node) {
   if (node.type === "comment") return true;
   if (node.type !== "atrule") return false;
   if (HOIST_ATRULES.has(node.name)) return true;
-  if (isLayerStatement(node)) return true;
   return false;
 }
 
 export function wrap(css) {
   const root = postcss.parse(css);
 
+  // Collect layer order from the original input before we strip the
+  // statements — `flattenLayersInScope` needs it to re-emit layered blocks
+  // in declared order, but the statements themselves are dropped from the
+  // output. Layered rules always lose to unlayered host rules of any
+  // specificity, so we flatten the bundle to unlayered; the statements
+  // would otherwise leak Tailwind's layer order into the consumer's
+  // document, which is document-wide by spec.
+  const layerOrder = collectDeclaredLayerOrder(root);
+
   const hoisted = [];
   const wrapped = [];
   while (root.first) {
     const node = root.first;
     node.remove();
+    if (isLayerStatement(node)) continue;
     if (shouldHoist(node)) {
       hoisted.push(node);
     } else {
@@ -424,7 +433,7 @@ export function wrap(css) {
     scope.append(node);
   });
   rewriteSelectorsDeep(scope);
-  flattenLayersInScope(scope, collectDeclaredLayerOrder(hoisted));
+  flattenLayersInScope(scope, layerOrder);
   prependBareElementReset(scope);
 
   hoisted.forEach((node, i) => {

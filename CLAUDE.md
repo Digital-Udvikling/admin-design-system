@@ -134,6 +134,16 @@ Authoring syntax (either fence may be omitted):
 :::
 ````
 
+**React-only features** (clipboard access, `useState`/`setTimeout`-driven UI — anything the vanilla bundle can't replicate without consumer-written JS): drop the `html` fence so the example shows only the React preview, and flag the heading with Starlight's `<Badge>` aliased to avoid colliding with the admin `<Badge>`:
+
+```mdx
+import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+
+### Copyable <StarlightBadge text="React only" variant="caution" />
+```
+
+Keep the underlying CSS classes shipping in both bundles — consumers wiring their own vanilla JS still rely on the styling.
+
 URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.env.BASE_URL}components/buttons/` ``) — the site is served from `/admin-design-system/` on GitHub Pages. In `.mdx` body prose, prefer relative Markdown links (`../../basics/icons/`) over hardcoded `/admin-design-system/...`.
 
 ### Docs writing style

@@ -1,6 +1,6 @@
 {
   "name": "@aortl/admin-css",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Pre-built CSS design system. Drop in via <link> and use semantic class names.",
   "keywords": [
     "components",

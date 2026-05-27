@@ -44,12 +44,15 @@
     "build:min": "tailwindcss -i ./src/admin.css -o ./dist/admin.min.css --minify",
     "build:scoped": "node ./scripts/wrap-scoped.mjs",
     "dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.0",
     "postcss": "8.5.15",
     "postcss-selector-parser": "6.1.2",
-    "tailwindcss": "4.3.0"
+    "tailwindcss": "4.3.0",
+    "vitest": "4.1.6"
   }
 }

@@ -1,54 +1,30 @@
 #!/usr/bin/env node
 /**
- * Wrap the built admin CSS in `@scope (._ao-admin-root) { ... }` and prefix
- * every admin class selector with `_ao-` so the bundle can drop into a
- * non-admin host page without colliding on common class names.
+ * Build the scoped variant of admin.css.
  *
- * - Globals stay at top level: @property registrations, @font-face,
- *   @keyframes, @charset, @import, statement-form @layer declarations
- *   (e.g. `@layer theme, base, components, utilities;`). These are
- *   document-wide by spec and can't be meaningfully scoped.
- * - Everything else (layer blocks, raw rules, :root token defs, [data-theme]
- *   matchers, Tailwind's reset `*` block) is wrapped in a single @scope.
- * - Inside the scope, `:root`, `html`, and `body` selectors are rewritten
- *   to `:scope` so tokens and resets land on the wrapper, not the document.
- *   `:host` selectors are preserved (harmless when no shadow root exists).
- * - Every class selector inside the scope is prefixed: `.btn` becomes
- *   `._ao-btn`, `.card-body` becomes `._ao-card-body`, and so on. Admin's
- *   classes can no longer collide with the host page's classes, so the
- *   bundle does not need a defensive `all: revert-layer` reset.
- * - Inside the scope, `@layer NAME { ... }` wrappers are stripped and
- *   their contents are re-emitted in declared layer order. Layered author
- *   rules always lose to unlayered author rules in the same origin —
- *   regardless of specificity — so admin's `@layer base { h3 { … } }`
- *   would lose to a host page's unlayered `h3 { font-size: 26px }` no
- *   matter what specificity tricks we apply. Re-emitting admin's rules
- *   unlayered lets specificity decide. The unscoped bundle still keeps
- *   Tailwind's layers; only the scoped variant is flattened.
- * - Every selector inside the scope gets its specificity bumped by
- *   prepending `:scope`. `@scope` itself doesn't contribute specificity,
- *   so without this a host page rule like `h3 { font-size: 2rem }` would
- *   beat admin's now-unlayered `h3 { font-size: inherit }` (both 0,0,1)
- *   on source order. The bump also preserves the within-admin ordering
- *   Tailwind's layers used to provide: `:scope ._ao-card-title` (0,2,0)
- *   beats `:scope h3` (0,1,1) on `<h3 class="_ao-card-title">`, so the
- *   component class wins over the element reset, like it did when
- *   `components` beat `base` via layer ordering.
+ * Input: the same CSS the unscoped bundle ships, with Tailwind's normal
+ * @layer structure. Output: every rule wrapped in `@scope (._ao-admin-root)`,
+ * with admin class names prefixed `_ao-` so they can't collide with host
+ * classes. Globals that can't be meaningfully scoped (`@property`,
+ * `@font-face`, `@keyframes`, `@charset`, `@import`) are hoisted above
+ * the scope; `@layer` statements are dropped (the bundle ships unlayered).
  *
- *   - Tag/pseudo-element first compounds get the descendant form only
- *     (`h3` → `:scope h3`; `::placeholder` → `:scope ::placeholder`). The
- *     scope root is a div, so it can't match these directly.
- *   - Class, id, attribute, pseudo-class, and universal first compounds
- *     emit both a compound form (which can match the scope root) and a
- *     descendant form: `[data-theme="dark"]` →
- *     `:scope[data-theme="dark"], :scope [data-theme="dark"]`,
- *     `._ao-grid` → `:scope._ao-grid, :scope ._ao-grid`. This keeps
- *     `<AdminRoot data-theme="…" className="grid">` matching admin's
- *     theme + utility rules.
+ * Within the scope:
+ * - `:root` / `html` / `body` are rewritten to `:scope` — `rewriteSelector`.
+ * - Class selectors are prefixed `_ao-` — `prefixClassesProcessor`.
+ * - `@layer NAME { ... }` blocks are flattened in declared order —
+ *   `flattenLayersInScope`. (Layered rules always lose to unlayered host
+ *   rules of any specificity, which is why we flatten.)
+ * - Every selector's specificity is bumped by prepending `:scope` —
+ *   `bumpSpecificity` for the cascade math.
+ * - A curated typography reset is prepended as the first rule —
+ *   `prependBareElementReset` for the cascade math.
+ *
+ * Cascade invariants are locked in by `wrap-scoped.test.mjs`.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 
@@ -238,12 +214,12 @@ function isLayerStatement(node) {
   );
 }
 
-function collectDeclaredLayerOrder(hoisted) {
+function collectDeclaredLayerOrder(container) {
   const order = [];
   const seen = new Set();
-  for (const node of hoisted) {
-    if (!isLayerStatement(node)) continue;
-    for (const name of node.params
+  container.walkAtRules("layer", (rule) => {
+    if (!isLayerStatement(rule)) return;
+    for (const name of rule.params
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean)) {
@@ -251,7 +227,7 @@ function collectDeclaredLayerOrder(hoisted) {
       seen.add(name);
       order.push(name);
     }
-  }
+  });
   return order;
 }
 
@@ -285,23 +261,72 @@ function flattenLayersInScope(scope, layerOrder) {
   }
 }
 
+// A single rule prepended as the first child of the scope. It reclaims a
+// small set of typography properties on the bare element selectors a host
+// stylesheet most commonly styles directly (headings, p, a, list parts,
+// form controls, table parts).
+//
+// The selector list is wrapped in `:where()` so the rule's specificity
+// stays at (0,1,0) regardless of how many tags we add. That lets admin's
+// bumped class rules (`:scope ._ao-card-title`, (0,2,0)) and a consumer's
+// CSS-module class on the same element (also (0,1,0), but loaded after
+// admin.css) both still win; a bare host rule like `h3 { font-family }`
+// (0,0,1) loses. Host rules with class/id ancestors (`.page h3`, (0,1,1))
+// will beat the reset — intentional escape hatch.
+//
+// `inherit` is the right value for inherited properties; their cascade
+// resolves from `:scope`, which carries admin's typography. `normal` and
+// `none` are the initial values for the two non-inherited properties.
+const BARE_ELEMENT_RESET = `
+:scope :where(
+  h1, h2, h3, h4, h5, h6,
+  p, a,
+  ul, ol, li, dl, dt, dd,
+  blockquote, pre, code,
+  button, input, textarea, select, label, fieldset, legend,
+  table, thead, tbody, tfoot, tr, th, td
+) {
+  font-family: inherit;
+  font-style: inherit;
+  font-variant: normal;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  text-decoration: inherit;
+  line-height: inherit;
+}
+`;
+
+function prependBareElementReset(scope) {
+  scope.prepend(postcss.parse(BARE_ELEMENT_RESET));
+}
+
 function shouldHoist(node) {
   if (node.type === "comment") return true;
   if (node.type !== "atrule") return false;
   if (HOIST_ATRULES.has(node.name)) return true;
-  if (isLayerStatement(node)) return true;
   return false;
 }
 
-async function wrapFile(inputPath, outputPath) {
-  const css = await readFile(inputPath, "utf8");
+export function wrap(css) {
   const root = postcss.parse(css);
+
+  // Collect layer order from the original input before we strip the
+  // statements — `flattenLayersInScope` needs it to re-emit layered blocks
+  // in declared order, but the statements themselves are dropped from the
+  // output. Layered rules always lose to unlayered host rules of any
+  // specificity, so we flatten the bundle to unlayered; the statements
+  // would otherwise leak Tailwind's layer order into the consumer's
+  // document, which is document-wide by spec.
+  const layerOrder = collectDeclaredLayerOrder(root);
 
   const hoisted = [];
   const wrapped = [];
   while (root.first) {
     const node = root.first;
     node.remove();
+    if (isLayerStatement(node)) continue;
     if (shouldHoist(node)) {
       hoisted.push(node);
     } else {
@@ -319,7 +344,8 @@ async function wrapFile(inputPath, outputPath) {
     scope.append(node);
   });
   rewriteSelectorsDeep(scope);
-  flattenLayersInScope(scope, collectDeclaredLayerOrder(hoisted));
+  flattenLayersInScope(scope, layerOrder);
+  prependBareElementReset(scope);
 
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";
@@ -328,16 +354,23 @@ async function wrapFile(inputPath, outputPath) {
   root.append(scope);
 
   const banner = `/*! @aortl/admin-css scoped variant — @scope (${SCOPE_ROOT}); admin classes prefixed with ${PREFIX}. */\n`;
-  const output = banner + root.toString();
-  await writeFile(outputPath, output);
+  return banner + root.toString();
 }
 
-const targets = [
-  ["admin.css", "admin.scoped.css"],
-  ["admin.min.css", "admin.scoped.min.css"],
-];
+async function wrapFile(inputPath, outputPath) {
+  const css = await readFile(inputPath, "utf8");
+  await writeFile(outputPath, wrap(css));
+}
 
-for (const [input, output] of targets) {
-  await wrapFile(resolve(DIST, input), resolve(DIST, output));
-  console.log(`wrap-scoped: dist/${input} → dist/${output}`);
+const isCLI = import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isCLI) {
+  const targets = [
+    ["admin.css", "admin.scoped.css"],
+    ["admin.min.css", "admin.scoped.min.css"],
+  ];
+
+  for (const [input, output] of targets) {
+    await wrapFile(resolve(DIST, input), resolve(DIST, output));
+    console.log(`wrap-scoped: dist/${input} → dist/${output}`);
+  }
 }

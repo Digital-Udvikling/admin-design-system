@@ -1,5 +1,9 @@
 # @aortl/admin design system
 
+[![CI](https://github.com/Digital-Udvikling/admin-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Digital-Udvikling/admin-design-system/actions/workflows/ci.yml)
+[![npm @aortl/admin-css](https://img.shields.io/npm/v/@aortl/admin-css?label=%40aortl%2Fadmin-css)](https://www.npmjs.com/package/@aortl/admin-css)
+[![npm @aortl/admin-react](https://img.shields.io/npm/v/@aortl/admin-react?label=%40aortl%2Fadmin-react)](https://www.npmjs.com/package/@aortl/admin-react)
+
 ### 📖 **[View the live docs →](https://digital-udvikling.github.io/admin-design-system/)**
 
 A small, opinionated design system shipped in two flavors from a single source of truth. Built for internal admin tooling — dashboards, CRMs, ops consoles — where information density and operator UX matter more than marketing polish.

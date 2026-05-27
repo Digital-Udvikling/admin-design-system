@@ -1,82 +1,26 @@
 #!/usr/bin/env node
 /**
- * Wrap the built admin CSS in `@scope (._ao-admin-root) { ... }` and prefix
- * every admin class selector with `_ao-` so the bundle can drop into a
- * non-admin host page without colliding on common class names.
+ * Build the scoped variant of admin.css.
  *
- * - Globals stay at top level: @property registrations, @font-face,
- *   @keyframes, @charset, @import, statement-form @layer declarations
- *   (e.g. `@layer theme, base, components, utilities;`). These are
- *   document-wide by spec and can't be meaningfully scoped.
- * - Everything else (layer blocks, raw rules, :root token defs, [data-theme]
- *   matchers, Tailwind's reset `*` block) is wrapped in a single @scope.
- * - Inside the scope, `:root`, `html`, and `body` selectors are rewritten
- *   to `:scope` so tokens and resets land on the wrapper, not the document.
- *   `:host` selectors are preserved (harmless when no shadow root exists).
- * - Every class selector inside the scope is prefixed: `.btn` becomes
- *   `._ao-btn`, `.card-body` becomes `._ao-card-body`, and so on. Admin's
- *   classes can no longer collide with the host page's classes, so the
- *   bundle does not need a defensive `all: revert-layer` reset.
- * - Inside the scope, `@layer NAME { ... }` wrappers are stripped and
- *   their contents are re-emitted in declared layer order. Layered author
- *   rules always lose to unlayered author rules in the same origin —
- *   regardless of specificity — so admin's `@layer base { h3 { … } }`
- *   would lose to a host page's unlayered `h3 { font-size: 26px }` no
- *   matter what specificity tricks we apply. Re-emitting admin's rules
- *   unlayered lets specificity decide. The unscoped bundle still keeps
- *   Tailwind's layers; only the scoped variant is flattened.
- * - Every selector inside the scope gets its specificity bumped by
- *   prepending `:scope`. `@scope` itself doesn't contribute specificity,
- *   so without this a host page rule like `h3 { font-size: 2rem }` would
- *   beat admin's now-unlayered `h3 { font-size: inherit }` (both 0,0,1)
- *   on source order. The bump also preserves the within-admin ordering
- *   Tailwind's layers used to provide: `:scope ._ao-card-title` (0,2,0)
- *   beats `:scope h3` (0,1,1) on `<h3 class="_ao-card-title">`, so the
- *   component class wins over the element reset, like it did when
- *   `components` beat `base` via layer ordering.
+ * Input: the same CSS the unscoped bundle ships, with Tailwind's normal
+ * @layer structure. Output: every rule wrapped in `@scope (._ao-admin-root)`,
+ * with admin class names prefixed `_ao-` so they can't collide with host
+ * classes. Globals that can't be meaningfully scoped (`@property`,
+ * `@font-face`, `@keyframes`, `@charset`, `@import`) are hoisted above
+ * the scope; `@layer` statements are dropped (the bundle ships unlayered).
  *
- *   - Tag/pseudo-element first compounds get the descendant form only
- *     (`h3` → `:scope h3`; `::placeholder` → `:scope ::placeholder`). The
- *     scope root is a div, so it can't match these directly.
- *   - Class, id, attribute, pseudo-class, and universal first compounds
- *     emit both a compound form (which can match the scope root) and a
- *     descendant form: `[data-theme="dark"]` →
- *     `:scope[data-theme="dark"], :scope [data-theme="dark"]`,
- *     `._ao-grid` → `:scope._ao-grid, :scope ._ao-grid`. This keeps
- *     `<AdminRoot data-theme="…" className="grid">` matching admin's
- *     theme + utility rules.
+ * Within the scope:
+ * - `:root` / `html` / `body` are rewritten to `:scope` — `rewriteSelector`.
+ * - Class selectors are prefixed `_ao-` — `prefixClassesProcessor`.
+ * - `@layer NAME { ... }` blocks are flattened in declared order —
+ *   `flattenLayersInScope`. (Layered rules always lose to unlayered host
+ *   rules of any specificity, which is why we flatten.)
+ * - Every selector's specificity is bumped by prepending `:scope` —
+ *   `bumpSpecificity` for the cascade math.
+ * - A curated typography reset is prepended as the first rule —
+ *   `prependBareElementReset` for the cascade math.
  *
- * - A curated "bare-element reset" is emitted as the first rule inside the
- *   scope. It targets the tag selectors a host stylesheet most commonly
- *   styles directly (`h1`–`h6`, `p`, `a`, list/table parts, form controls)
- *   and forces a small set of inherited typography properties back to the
- *   inheriting value, e.g. `font-family: inherit`. This closes the gap left
- *   by specificity alone — Tailwind's preflight resets `font-size` /
- *   `font-weight` on headings but doesn't touch `font-family`, `color`,
- *   `letter-spacing`, `line-height`, etc., so a host page's
- *   `h3 { font-family: BrandFont }` would otherwise leak into
- *   `<h3 class="_ao-card-title">`. The reclaimed properties then resolve
- *   via inheritance from `:scope`, which sets admin's font, color, and
- *   line height.
- *
- *   The selector list is wrapped in `:where()` so the reset's specificity
- *   stays at (0,1,0) — identical to a single class. That lets:
- *     - admin's own bumped class rules (`:scope ._ao-card-title`, (0,2,0))
- *       win when the consumer renders `<h3 className="card-title">`;
- *     - a consumer's CSS-module class on the same element (also (0,1,0))
- *       win on source order — admin.css is imported once, ahead of any
- *       per-component stylesheet — so `<Card.Title className={s.brand}>`
- *       in vvsshop still gets `s.brand` honored;
- *     - a bare host rule like `h3 { font-family: BrandFont }` (0,0,1)
- *       lose to the reset.
- *
- *   Host rules with class/id ancestors (`.page h3`, (0,1,1)) will still
- *   beat the reset; that's an intentional escape hatch — if a host really
- *   wants to override typography on admin elements, it can opt in.
- *
- *   Unlike a blanket `:where(*) { all: revert }`, this reset can't wipe
- *   properties a consumer explicitly sets on classed children: it only
- *   touches the listed tag selectors, and only the listed declarations.
+ * Cascade invariants are locked in by `wrap-scoped.test.mjs`.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";

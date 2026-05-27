@@ -317,78 +317,45 @@ function flattenLayersInScope(scope, layerOrder) {
   }
 }
 
-// Tag selectors the reset targets. Pick the elements a host stylesheet most
-// commonly styles directly. Tag/pseudo-element first compounds can't match
-// the scope root (a div), so the descendant form is correct here.
-const RESET_TARGETS = [
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "p",
-  "a",
-  "ul",
-  "ol",
-  "li",
-  "dl",
-  "dt",
-  "dd",
-  "blockquote",
-  "pre",
-  "code",
-  "button",
-  "input",
-  "textarea",
-  "select",
-  "label",
-  "fieldset",
-  "legend",
-  "table",
-  "thead",
-  "tbody",
-  "tfoot",
-  "tr",
-  "th",
-  "td",
-];
+// A single rule prepended as the first child of the scope. It reclaims a
+// small set of typography properties on the bare element selectors a host
+// stylesheet most commonly styles directly (headings, p, a, list parts,
+// form controls, table parts).
+//
+// The selector list is wrapped in `:where()` so the rule's specificity
+// stays at (0,1,0) regardless of how many tags we add. That lets admin's
+// bumped class rules (`:scope ._ao-card-title`, (0,2,0)) and a consumer's
+// CSS-module class on the same element (also (0,1,0), but loaded after
+// admin.css) both still win; a bare host rule like `h3 { font-family }`
+// (0,0,1) loses. Host rules with class/id ancestors (`.page h3`, (0,1,1))
+// will beat the reset — intentional escape hatch.
+//
+// `inherit` is the right value for inherited properties; their cascade
+// resolves from `:scope`, which carries admin's typography. `normal` and
+// `none` are the initial values for the two non-inherited properties.
+const BARE_ELEMENT_RESET = `
+:scope :where(
+  h1, h2, h3, h4, h5, h6,
+  p, a,
+  ul, ol, li, dl, dt, dd,
+  blockquote, pre, code,
+  button, input, textarea, select, label, fieldset, legend,
+  table, thead, tbody, tfoot, tr, th, td
+) {
+  font-family: inherit;
+  font-style: inherit;
+  font-variant: normal;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  text-decoration: inherit;
+  line-height: inherit;
+}
+`;
 
-// Properties Tailwind's preflight leaves alone on bare elements and that a
-// host stylesheet routinely sets. `inherit` is right for inherited
-// properties (the value cascades from `:scope`, which carries admin's
-// typography). `normal` / `none` are the initial values for the two
-// non-inherited properties in the list.
-const RESET_DECLARATIONS = [
-  ["font-family", "inherit"],
-  ["font-style", "inherit"],
-  ["font-variant", "normal"],
-  ["font-weight", "inherit"],
-  ["color", "inherit"],
-  ["letter-spacing", "normal"],
-  ["text-transform", "none"],
-  ["text-decoration", "inherit"],
-  ["line-height", "inherit"],
-];
-
-// Inject a single rule as the first child of the scope that reclaims a
-// small set of typography properties on the listed bare elements. See the
-// file-level comment for the cascade reasoning; in short, the rule sits at
-// (0,1,0) so admin's bumped class rules and the consumer's CSS-module
-// classes both still win, while bare host rules like `h3 { font-family }`
-// lose. The selector list is wrapped in `:where()` to keep specificity flat
-// regardless of how many tags we add.
 function prependBareElementReset(scope) {
-  const selector = `:scope :where(${RESET_TARGETS.join(", ")})`;
-  const rule = postcss.rule({ selector });
-  for (const [prop, value] of RESET_DECLARATIONS) {
-    rule.append({ prop, value });
-  }
-  rule.raws.before = "\n";
-  rule.raws.between = " ";
-  rule.raws.semicolon = true;
-  rule.raws.after = "\n";
-  scope.prepend(rule);
+  scope.prepend(postcss.parse(BARE_ELEMENT_RESET));
 }
 
 function shouldHoist(node) {

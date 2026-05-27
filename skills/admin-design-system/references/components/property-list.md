@@ -1,0 +1,200 @@
+# Property list
+
+> Label-and-value rows for one-entity-N-attributes panels.
+
+A `<dl>` with a label column that aligns across every row. Reach for it when you need the "one entity, N attributes" pattern — summary panels, identifier strips, metadata blocks — rather than re-deriving it on top of a [`Table`](../tables/) or a [`Card`](../cards/).
+
+## Examples
+
+### Basic
+
+Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
+
+**Example**
+
+```html
+<section class="property-list">
+  <h3 class="property-list-title">Status & ansvar</h3>
+  <dl class="property-list-items">
+    <dt class="property-list-label">Lifecyklus</dt>
+    <dd class="property-list-value">A</dd>
+    <dt class="property-list-label">Status</dt>
+    <dd class="property-list-value">20</dd>
+    <dt class="property-list-label">Auto-oprettet</dt>
+    <dd class="property-list-value">Nej</dd>
+    <dt class="property-list-label">Vareansvarlig</dt>
+    <dd class="property-list-value">LUI</dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList title="Status & ansvar">
+  <PropertyList.Item label="Lifecyklus" value="A" />
+  <PropertyList.Item label="Status" value="20" />
+  <PropertyList.Item label="Auto-oprettet" value="Nej" />
+  <PropertyList.Item label="Vareansvarlig" value="LUI" />
+</PropertyList>
+```
+
+### Striped
+
+Opt in with `striped` for zebra banding when scanning many rows.
+
+**Example**
+
+```html
+<section class="property-list property-list-striped">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Varenummer</dt>
+    <dd class="property-list-value">745325250</dd>
+    <dt class="property-list-label">EAN-nummer</dt>
+    <dd class="property-list-value">4005176923197</dd>
+    <dt class="property-list-label">Leverandørnummer</dt>
+    <dd class="property-list-value">SUP-00123</dd>
+    <dt class="property-list-label">Lager (CL)</dt>
+    <dd class="property-list-value">248</dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList striped>
+  <PropertyList.Item label="Varenummer" value="745325250" />
+  <PropertyList.Item label="EAN-nummer" value="4005176923197" />
+  <PropertyList.Item label="Leverandørnummer" value="SUP-00123" />
+  <PropertyList.Item label="Lager (CL)" value="248" />
+</PropertyList>
+```
+
+### Copyable <StarlightBadge text="React only" variant="caution" />
+
+`copyable` on the root reveals a copy button on every row. Per-item `copyable` opts in for individual rows. Hover or focus to reveal; click copies and confirms with a check for ~1.2s. Text selection on the value still works.
+
+**Example**
+
+```tsx
+<PropertyList copyable>
+  <PropertyList.Item label="Varenummer" value="745325250" />
+  <PropertyList.Item label="EAN-nummer" value="4005176923197" />
+</PropertyList>
+```
+
+For a single copyable row inside an otherwise non-copyable list, use `copyable` on the item:
+
+**Example**
+
+```tsx
+<PropertyList>
+  <PropertyList.Item label="Lifecyklus" value="A" />
+  <PropertyList.Item label="EAN-nummer" value="4005176923197" copyable />
+</PropertyList>
+```
+
+### Numeric column
+
+`numeric` right-aligns the value and keeps digits aligned. Same convention as `<Table.Cell numeric>`.
+
+**Example**
+
+```html
+<section class="property-list">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Lager (CL)</dt>
+    <dd class="property-list-value">248</dd>
+    <dt class="property-list-label">Indkøbspris</dt>
+    <dd class="property-list-value property-list-value-numeric">42,50 kr</dd>
+    <dt class="property-list-label">Vejl. udsalgspris</dt>
+    <dd class="property-list-value property-list-value-numeric">129,00 kr</dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList>
+  <PropertyList.Item label="Lager (CL)" value="248" />
+  <PropertyList.Item label="Indkøbspris" value="42,50 kr" numeric />
+  <PropertyList.Item label="Vejl. udsalgspris" value="129,00 kr" numeric />
+</PropertyList>
+```
+
+### Empty values
+
+Null, undefined, or empty `value` renders an em-dash. Rows never auto-hide. To collapse a section whose every value is missing, pass `hideIfAllEmpty` on the list.
+
+**Example**
+
+```html
+<section class="property-list">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Leverandørnummer</dt>
+    <dd class="property-list-value">SUP-00123</dd>
+    <dt class="property-list-label">Reol</dt>
+    <dd class="property-list-value property-list-value-empty">—</dd>
+    <dt class="property-list-label">Hyldemeter</dt>
+    <dd class="property-list-value property-list-value-empty">—</dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList>
+  <PropertyList.Item label="Leverandørnummer" value="SUP-00123" />
+  <PropertyList.Item label="Reol" value={null} />
+  <PropertyList.Item label="Hyldemeter" value="" />
+</PropertyList>
+```
+
+### Rich value
+
+Pass JSX to the shorthand `value` prop for badges, links, or inline icons.
+
+**Example**
+
+```html
+<section class="property-list">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Status</dt>
+    <dd class="property-list-value">
+      <span class="badge badge-success">A — Active</span>
+    </dd>
+    <dt class="property-list-label">Leverandør</dt>
+    <dd class="property-list-value"><a href="#">Acme A/S</a></dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList>
+  <PropertyList.Item label="Status" value={<Badge variant="success">A — Active</Badge>} />
+  <PropertyList.Item label="Leverandør" value={<a href="#">Acme A/S</a>} />
+</PropertyList>
+```
+
+### Subpart escape hatch
+
+When you need full control over a row — e.g. a label with a tooltip, a value cell with a custom layout — drop the shorthand props and compose `<PropertyList.Label>` and `<PropertyList.Value>` directly.
+
+**Example**
+
+```html
+<section class="property-list">
+  <dl class="property-list-items">
+    <dt class="property-list-label">EAN <small>(GTIN-13)</small></dt>
+    <dd class="property-list-value"><code>4005176923197</code></dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList>
+  <PropertyList.Item>
+    <PropertyList.Label>
+      EAN <small>(GTIN-13)</small>
+    </PropertyList.Label>
+    <PropertyList.Value>
+      <code>4005176923197</code>
+    </PropertyList.Value>
+  </PropertyList.Item>
+</PropertyList>
+```

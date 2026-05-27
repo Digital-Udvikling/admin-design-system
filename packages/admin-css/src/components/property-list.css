@@ -1,0 +1,103 @@
+@layer components {
+  /* Outer section — owns striped, copyable, hide-if-empty modifiers. Title
+     (optional) and the items grid stack vertically. */
+  .property-list {
+    @apply flex flex-col text-sm text-text;
+  }
+
+  .property-list-title {
+    @apply text-sm font-bold text-text mb-2;
+  }
+
+  /* The <dl> itself is the two-track grid; <dt> auto-flows into column 1
+     and <dd> into column 2. */
+  .property-list-items {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+  }
+
+  .property-list-label,
+  .property-list-value {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    min-height: 2rem;
+  }
+
+  .property-list-label {
+    @apply text-text-muted;
+  }
+
+  .property-list-value {
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  /* Numeric — right-align + tabular-nums on the value. */
+  .property-list-value-numeric {
+    justify-content: flex-end;
+    @apply tabular-nums;
+  }
+
+  /* Striped — band every second row (matching <dt> + <dd> pair). */
+  .property-list-striped dt:nth-of-type(2n + 2),
+  .property-list-striped dd:nth-of-type(2n + 2) {
+    @apply bg-surface-muted;
+  }
+
+  /* Collapse the section when every value rendered the auto em-dash. */
+  .property-list-hide-if-empty:not(:has(.property-list-value:not(.property-list-value-empty))) {
+    display: none;
+  }
+
+  /* Copy button — always emitted by the Value but kept out of layout entirely
+     unless copyable is active on the list or on this specific value. */
+  .property-list-copy {
+    @apply inline-flex items-center justify-center
+           ml-auto rounded
+           cursor-pointer border-0 bg-transparent
+           text-text-muted hover:text-text
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+    display: none;
+    flex-shrink: 0;
+    padding: 0.125rem;
+    transition:
+      opacity 100ms ease,
+      color 100ms ease;
+  }
+
+  .property-list-copyable .property-list-copy,
+  .property-list-value-copyable .property-list-copy {
+    display: inline-flex;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Reveal on hover of either the label or the value of a copyable row, on
+     button focus, or while feedback is active. */
+  .property-list-copyable .property-list-label:hover + .property-list-value .property-list-copy,
+  .property-list-copyable .property-list-value:hover .property-list-copy,
+  .property-list-label:has(+ .property-list-value-copyable):hover
+    + .property-list-value
+    .property-list-copy,
+  .property-list-value-copyable:hover .property-list-copy,
+  .property-list-copy:focus-visible,
+  .property-list-copy[data-copied] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Icon swap: copy → check while data-copied is set. */
+  .property-list-copy .property-list-copy-icon-copied {
+    display: none;
+  }
+  .property-list-copy[data-copied] .property-list-copy-icon {
+    display: none;
+  }
+  .property-list-copy[data-copied] .property-list-copy-icon-copied {
+    display: inline-flex;
+  }
+  .property-list-copy[data-copied] {
+    @apply text-success;
+  }
+}

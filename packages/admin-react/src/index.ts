@@ -144,6 +144,13 @@ export {
   type TooltipSize,
 } from "./Tooltip";
 export {
+  PropertyList,
+  type PropertyListProps,
+  type PropertyListItemProps,
+  type PropertyListLabelProps,
+  type PropertyListValueProps,
+} from "./PropertyList";
+export {
   Table,
   type TableProps,
   type TableAlign,

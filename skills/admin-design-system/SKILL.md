@@ -137,6 +137,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.
+- [Property list](references/components/property-list.md) — Label-and-value rows for one-entity-N-attributes panels.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Tables](references/components/tables.md) — Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.

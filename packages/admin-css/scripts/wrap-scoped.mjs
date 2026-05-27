@@ -46,21 +46,37 @@
  *     `<AdminRoot data-theme="…" className="grid">` matching admin's
  *     theme + utility rules.
  *
- * - A "host-rules floor" is emitted as the first rule inside the scope:
- *   `:scope :where(*) { all: revert }`. `revert` discards author-origin
- *   declarations and falls back to the user/UA cascade, so a host page's
- *   `h3 { font-family: BrandFont }` is wiped before admin's own rules run.
- *   This closes the gap left by specificity alone — admin can only out-
- *   compete properties it explicitly sets, but Tailwind's preflight doesn't
- *   touch `font-family` (or `color`, `letter-spacing`, etc.) on bare
- *   elements like `h3`. The floor reclaims those properties wholesale, and
- *   they then resolve via inheritance from `:scope` (which sets admin's
- *   font, color, line-height). The floor's specificity is (0,1,0) — same
- *   as `:scope`, less than admin's bumped element rules (`:scope h3` is
- *   (0,1,1)) and class rules (`:scope ._ao-btn` is (0,2,0)), so it always
- *   loses to admin's own rules on every property admin actually sets.
- *   Custom properties are explicitly excluded from `all` per the spec,
- *   so admin's token cascade is not disturbed.
+ * - A curated "bare-element reset" is emitted as the first rule inside the
+ *   scope. It targets the tag selectors a host stylesheet most commonly
+ *   styles directly (`h1`–`h6`, `p`, `a`, list/table parts, form controls)
+ *   and forces a small set of inherited typography properties back to the
+ *   inheriting value, e.g. `font-family: inherit`. This closes the gap left
+ *   by specificity alone — Tailwind's preflight resets `font-size` /
+ *   `font-weight` on headings but doesn't touch `font-family`, `color`,
+ *   `letter-spacing`, `line-height`, etc., so a host page's
+ *   `h3 { font-family: BrandFont }` would otherwise leak into
+ *   `<h3 class="_ao-card-title">`. The reclaimed properties then resolve
+ *   via inheritance from `:scope`, which sets admin's font, color, and
+ *   line height.
+ *
+ *   The selector list is wrapped in `:where()` so the reset's specificity
+ *   stays at (0,1,0) — identical to a single class. That lets:
+ *     - admin's own bumped class rules (`:scope ._ao-card-title`, (0,2,0))
+ *       win when the consumer renders `<h3 className="card-title">`;
+ *     - a consumer's CSS-module class on the same element (also (0,1,0))
+ *       win on source order — admin.css is imported once, ahead of any
+ *       per-component stylesheet — so `<Card.Title className={s.brand}>`
+ *       in vvsshop still gets `s.brand` honored;
+ *     - a bare host rule like `h3 { font-family: BrandFont }` (0,0,1)
+ *       lose to the reset.
+ *
+ *   Host rules with class/id ancestors (`.page h3`, (0,1,1)) will still
+ *   beat the reset; that's an intentional escape hatch — if a host really
+ *   wants to override typography on admin elements, it can opt in.
+ *
+ *   Unlike a blanket `:where(*) { all: revert }`, this reset can't wipe
+ *   properties a consumer explicitly sets on classed children: it only
+ *   touches the listed tag selectors, and only the listed declarations.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -301,19 +317,78 @@ function flattenLayersInScope(scope, layerOrder) {
   }
 }
 
-// Inject `:scope :where(*) { all: revert }` as the first rule inside the
-// scope. See the file-level comment for the rationale; in short, it lets
-// admin reclaim every property on every descendant — including ones admin
-// itself never explicitly sets — so the host page's bare-element rules
-// can't bleed in.
-function prependHostRulesFloor(scope) {
-  const floor = postcss.rule({ selector: ":scope :where(*)" });
-  floor.append({ prop: "all", value: "revert" });
-  floor.raws.before = "\n";
-  floor.raws.between = " ";
-  floor.raws.semicolon = true;
-  floor.raws.after = "\n";
-  scope.prepend(floor);
+// Tag selectors the reset targets. Pick the elements a host stylesheet most
+// commonly styles directly. Tag/pseudo-element first compounds can't match
+// the scope root (a div), so the descendant form is correct here.
+const RESET_TARGETS = [
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "p",
+  "a",
+  "ul",
+  "ol",
+  "li",
+  "dl",
+  "dt",
+  "dd",
+  "blockquote",
+  "pre",
+  "code",
+  "button",
+  "input",
+  "textarea",
+  "select",
+  "label",
+  "fieldset",
+  "legend",
+  "table",
+  "thead",
+  "tbody",
+  "tfoot",
+  "tr",
+  "th",
+  "td",
+];
+
+// Properties Tailwind's preflight leaves alone on bare elements and that a
+// host stylesheet routinely sets. `inherit` is right for inherited
+// properties (the value cascades from `:scope`, which carries admin's
+// typography). `normal` / `none` are the initial values for the two
+// non-inherited properties in the list.
+const RESET_DECLARATIONS = [
+  ["font-family", "inherit"],
+  ["font-style", "inherit"],
+  ["font-variant", "normal"],
+  ["font-weight", "inherit"],
+  ["color", "inherit"],
+  ["letter-spacing", "normal"],
+  ["text-transform", "none"],
+  ["text-decoration", "inherit"],
+  ["line-height", "inherit"],
+];
+
+// Inject a single rule as the first child of the scope that reclaims a
+// small set of typography properties on the listed bare elements. See the
+// file-level comment for the cascade reasoning; in short, the rule sits at
+// (0,1,0) so admin's bumped class rules and the consumer's CSS-module
+// classes both still win, while bare host rules like `h3 { font-family }`
+// lose. The selector list is wrapped in `:where()` to keep specificity flat
+// regardless of how many tags we add.
+function prependBareElementReset(scope) {
+  const selector = `:scope :where(${RESET_TARGETS.join(", ")})`;
+  const rule = postcss.rule({ selector });
+  for (const [prop, value] of RESET_DECLARATIONS) {
+    rule.append({ prop, value });
+  }
+  rule.raws.before = "\n";
+  rule.raws.between = " ";
+  rule.raws.semicolon = true;
+  rule.raws.after = "\n";
+  scope.prepend(rule);
 }
 
 function shouldHoist(node) {
@@ -351,7 +426,7 @@ async function wrapFile(inputPath, outputPath) {
   });
   rewriteSelectorsDeep(scope);
   flattenLayersInScope(scope, collectDeclaredLayerOrder(hoisted));
-  prependHostRulesFloor(scope);
+  prependBareElementReset(scope);
 
   hoisted.forEach((node, i) => {
     node.raws.before = i === 0 ? "" : "\n";

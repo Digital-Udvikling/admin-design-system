@@ -1,7 +1,7 @@
 @layer components {
   .card {
     @apply flex flex-col
-           bg-surface-strong text-text
+           bg-surface-muted text-text
            border border-border
            rounded-xl
            shadow-xs

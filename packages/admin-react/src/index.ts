@@ -33,6 +33,13 @@ export {
 } from "./FileInput";
 export { InputGroup, type InputGroupProps, type InputGroupAddonProps } from "./InputGroup";
 export {
+  Indicator,
+  type IndicatorProps,
+  type IndicatorPlacement,
+  type IndicatorVertical,
+  type IndicatorHorizontal,
+} from "./Indicator";
+export {
   Pagination,
   getPaginationItems,
   type PaginationProps,

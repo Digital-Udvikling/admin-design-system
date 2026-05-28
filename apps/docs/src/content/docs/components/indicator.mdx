@@ -1,0 +1,181 @@
+---
+title: Indicator
+description: Place a badge, count, or dot on the corner of another element.
+---
+
+import { Indicator, Button, Card } from "@aortl/admin-react";
+import { IconInbox, IconUser } from "@tabler/icons-react";
+
+Notification counts on icon buttons, status dots on avatars, "new" markers on tiles. The wrapper is `position: relative`; the floating child is placed by a vertical (`top`/`middle`/`bottom`) and horizontal (`start`/`center`/`end`) modifier. Default is `top end`, with the item half-overflowing the corner.
+
+## Examples
+
+### Count on a button
+
+`.indicator` auto-detects common rounded anchors (`.btn`, `.input`, `.card`) via `:has()` and pulls the badge inward so it aligns with the visual corner. Override with `offset` (or `--indicator-offset`) for custom anchors — e.g. a circular avatar.
+
+:::example
+
+```html
+<div class="indicator">
+  <span class="indicator-item badge badge-danger badge-sm">3</span>
+  <button class="btn btn-primary">
+    <i class="ti ti-inbox" aria-hidden="true"></i>
+    Inbox
+  </button>
+</div>
+```
+
+```tsx
+<Indicator label="3" variant="danger">
+  <Button icon={IconInbox}>Inbox</Button>
+</Indicator>
+```
+
+:::
+
+### Status dot
+
+Omit `label` for a label-less status dot. The React component renders a small `.indicator-dot` instead of a `.badge`; in vanilla, swap `.badge` for `.indicator-dot` and add a `.indicator-dot-{variant}` color class. Use `aria-label` to keep it accessible.
+
+:::example
+
+```html
+<div class="indicator">
+  <span
+    class="indicator-item indicator-dot indicator-dot-success"
+    role="status"
+    aria-label="Online"
+  ></span>
+  <button class="btn btn-primary">
+    <i class="ti ti-user" aria-hidden="true"></i>
+    Account
+  </button>
+</div>
+```
+
+```tsx
+<Indicator variant="success" aria-label="Online">
+  <Button icon={IconUser}>Account</Button>
+</Indicator>
+```
+
+:::
+
+### Placements
+
+Any vertical × horizontal pair composes — pass the combined value as `placement`. `top-end` is the default.
+
+:::example
+
+```html
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+  <div class="indicator">
+    <span class="indicator-item indicator-top indicator-start badge badge-primary badge-sm"
+      >TS</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-top indicator-center badge badge-primary badge-sm"
+      >TC</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item badge badge-primary badge-sm">TE</span>
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-middle indicator-start badge badge-primary badge-sm"
+      >MS</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-middle indicator-center badge badge-primary badge-sm"
+      >MC</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-middle indicator-end badge badge-primary badge-sm"
+      >ME</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-bottom indicator-start badge badge-primary badge-sm"
+      >BS</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-bottom indicator-center badge badge-primary badge-sm"
+      >BC</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+  <div class="indicator">
+    <span class="indicator-item indicator-bottom indicator-end badge badge-primary badge-sm"
+      >BE</span
+    >
+    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+  </div>
+</div>
+```
+
+```tsx
+<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+  {(
+    [
+      "top-start",
+      "top-center",
+      "top-end",
+      "middle-start",
+      "middle-center",
+      "middle-end",
+      "bottom-start",
+      "bottom-center",
+      "bottom-end",
+    ] as const
+  ).map((placement) => (
+    <Indicator
+      key={placement}
+      placement={placement}
+      variant="primary"
+      label={placement
+        .split("-")
+        .map((part) => part[0]!.toUpperCase())
+        .join("")}
+    >
+      <Card.Container bordered style={{ width: "6rem", height: "4rem" }} />
+    </Indicator>
+  ))}
+</div>
+```
+
+:::
+
+### Multiple items
+
+`<Indicator>` carries a single `content`. For two or more floating items on the same anchor, compose the CSS directly — each `.indicator-item` takes its own placement modifiers.
+
+:::example
+
+```html
+<div class="indicator">
+  <span class="indicator-item badge badge-danger badge-sm">12</span>
+  <span
+    class="indicator-item indicator-bottom indicator-end indicator-dot indicator-dot-success"
+    role="status"
+    aria-label="Online"
+  ></span>
+  <button class="btn btn-primary">
+    <i class="ti ti-inbox" aria-hidden="true"></i>
+    Inbox
+  </button>
+</div>
+```
+
+:::

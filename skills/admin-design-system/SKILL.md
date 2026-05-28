@@ -134,6 +134,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Forms: Selects](references/components/forms/selects.md) — Compound Select with Trigger + Popup + Item.
 - [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
 - [Forms: Textareas](references/components/forms/textareas.md) — Multi-line text input.
+- [Indicator](references/components/indicator.md) — Place a badge, count, or dot on the corner of another element.
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.

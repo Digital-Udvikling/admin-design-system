@@ -1,0 +1,84 @@
+import type { CSSProperties, ReactNode } from "react";
+import { Badge, type BadgeSize, type BadgeVariant } from "./Badge";
+import { cn } from "./cn";
+import type { IconProp } from "./icon";
+
+export type IndicatorVertical = "top" | "middle" | "bottom";
+export type IndicatorHorizontal = "start" | "center" | "end";
+export type IndicatorPlacement = `${IndicatorVertical}-${IndicatorHorizontal}`;
+
+export interface IndicatorProps {
+  /** Badge content (count, "!", text). Omit for a label-less status dot. */
+  label?: ReactNode;
+  /** Variant for both the badge and the dot. Defaults to `"neutral"`. */
+  variant?: BadgeVariant;
+  /** Badge size. Ignored when rendering a dot. Defaults to `"sm"`. */
+  size?: BadgeSize;
+  /** Leading icon for the badge. Implies the badge form (no dot fallback). */
+  icon?: IconProp;
+  /** Where the indicator sits relative to children. Default `"top-end"`. */
+  placement?: IndicatorPlacement;
+  /**
+   * Pulls the indicator toward the anchor's center along the placement direction.
+   * Useful for rounded anchors so the indicator aligns with the visual corner —
+   * e.g. `offset={4}` for a `rounded-md` button. Pixels.
+   */
+  offset?: number;
+  /** className on the outer `.indicator` wrapper. */
+  className?: string;
+  /** Accessible label for the indicator — required when rendering a dot. */
+  "aria-label"?: string;
+  /** The anchor element the indicator floats on. */
+  children?: ReactNode;
+}
+
+export function Indicator({
+  label,
+  variant = "neutral",
+  size = "sm",
+  icon,
+  placement = "top-end",
+  offset,
+  className,
+  "aria-label": ariaLabel,
+  children,
+}: IndicatorProps) {
+  const [vertical, horizontal] = placement.split("-") as [IndicatorVertical, IndicatorHorizontal];
+  const placementClasses = [
+    "indicator-item",
+    vertical !== "top" && `indicator-${vertical}`,
+    horizontal !== "end" && `indicator-${horizontal}`,
+  ];
+  const hasContent = label !== undefined || icon !== undefined;
+  const style =
+    offset !== undefined ? ({ "--indicator-offset": `${offset}px` } as CSSProperties) : undefined;
+  return (
+    <div className={cn("indicator", className)} style={style}>
+      {hasContent ? (
+        <Badge
+          className={cn(placementClasses, undefined)}
+          variant={variant}
+          size={size}
+          icon={icon}
+          aria-label={ariaLabel}
+        >
+          {label}
+        </Badge>
+      ) : (
+        <span
+          className={cn(
+            [
+              ...placementClasses,
+              "indicator-dot",
+              variant !== "neutral" && `indicator-dot-${variant}`,
+            ],
+            undefined,
+          )}
+          role={ariaLabel !== undefined ? "status" : undefined}
+          aria-label={ariaLabel}
+        />
+      )}
+      {children}
+    </div>
+  );
+}

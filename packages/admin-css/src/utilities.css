@@ -77,6 +77,12 @@
 /* Aspect ratio — responsive */
 @source inline("{,sm:,md:,lg:,xl:,2xl:}aspect-{auto,square,video}");
 
+/* Object fit + position (avatars, thumbnails, logos) — responsive */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}object-{contain,cover,fill,none,scale-down}");
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}object-{top,bottom,left,right,center,left-top,left-bottom,right-top,right-bottom}"
+);
+
 /* Translate (x/y only — full transforms intentionally skipped) — responsive */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}translate-{x,y}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32,1/2,full}"
@@ -85,9 +91,18 @@
 /* Typography (non-size) — no variants */
 @source inline("font-{thin,extralight,light,normal,medium,semibold,bold,extrabold,black}");
 @source inline("font-{sans,mono,serif}");
+@source inline("{italic,not-italic}");
+@source inline("{uppercase,lowercase,capitalize,normal-case}");
+@source inline(
+  "{normal-nums,ordinal,slashed-zero,lining-nums,oldstyle-nums,proportional-nums,tabular-nums}"
+);
 @source inline("leading-{none,tight,snug,normal,relaxed,loose,3,4,5,6,7,8,9,10}");
 @source inline("tracking-{tighter,tight,normal,wide,wider,widest}");
 @source inline("text-{wrap,nowrap,balance,pretty}");
+@source inline("whitespace-{normal,nowrap,pre,pre-line,pre-wrap,break-spaces}");
+@source inline("break-{normal,words,all,keep}");
+@source inline("align-{baseline,top,middle,bottom,text-top,text-bottom,sub,super}");
+@source inline("list-{disc,decimal,none,inside,outside}");
 @source inline("{underline,overline,line-through,no-underline,truncate}");
 
 /* Borders + rounded — interactive */
@@ -132,6 +147,10 @@
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}opacity-{0,5,10,15,20,25,30,40,50,60,70,75,80,90,95,100}"
 );
+
+/* Interaction primitives (select-all an ID cell, disable a layer) — no variants */
+@source inline("pointer-events-{none,auto}");
+@source inline("select-{none,text,all,auto}");
 
 /* Z-index — no variants */
 @source inline("z-{0,10,20,30,40,50,auto}");

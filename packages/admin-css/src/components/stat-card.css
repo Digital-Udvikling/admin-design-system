@@ -9,7 +9,7 @@
   }
 
   .stat-card-label {
-    @apply flex items-center gap-2 text-xs text-text-muted font-medium;
+    @apply flex items-center gap-2 text-sm text-text-muted font-medium;
   }
 
   .stat-card-value {
@@ -17,7 +17,7 @@
   }
 
   .stat-card-detail {
-    @apply text-xs text-text-muted;
+    @apply text-sm text-text-muted;
   }
 
   /* Modifiers — mirror `.card`. */

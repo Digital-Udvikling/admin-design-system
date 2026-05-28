@@ -55,6 +55,25 @@
 }
 
 /*
+ * Restore markdown list styling. Tailwind's Preflight resets
+ * `ul, ol { list-style: none; margin: 0; padding: 0 }` in `@layer base`, and
+ * Starlight's markdown CSS only handles list *spacing* — it leans on the
+ * user-agent defaults for markers and indentation, which the reset wipes out.
+ * These rules are unlayered, so they win over Preflight regardless of
+ * specificity. Scoped to `.sl-markdown-content` and skipping `.not-content`
+ * subtrees so embedded component examples keep their own list styling.
+ */
+.sl-markdown-content :is(ul, ol):not(:where(.not-content *)) {
+  padding-inline-start: 1.25rem;
+}
+.sl-markdown-content ul:not(:where(.not-content *)) {
+  list-style: disc;
+}
+.sl-markdown-content ol:not(:where(.not-content *)) {
+  list-style: decimal;
+}
+
+/*
  * Map Starlight chrome tokens onto the Flexoki palette. Starlight defaults
  * `:root` to dark and overrides `:root[data-theme='light']` for light, so we
  * mirror that structure. These rules sit outside `@layer starlight.base`, so

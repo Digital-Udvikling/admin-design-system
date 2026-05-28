@@ -28,7 +28,11 @@ function SelectTrigger({
   return (
     <BaseSelect.Trigger
       className={cn(
-        ["select", `select-${variant}`, triggerSize !== "md" && `select-${triggerSize}`],
+        [
+          "select",
+          variant !== "bordered" && `select-${variant}`,
+          triggerSize !== "md" && `select-${triggerSize}`,
+        ],
         className,
       )}
       {...rest}

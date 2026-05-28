@@ -7,7 +7,8 @@ describe("Badge", () => {
     render(<Badge>Beta</Badge>);
     const el = screen.getByText("Beta");
     expect(el).toBeInTheDocument();
-    expect(el).toHaveAdminClass("badge", "badge-neutral");
+    expect(el).toHaveAdminClass("badge");
+    expect(el).not.toHaveAdminClass("badge-neutral");
   });
 
   it("applies variant and size modifiers", () => {

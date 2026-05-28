@@ -5,7 +5,7 @@ import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
 import { useHotkey } from "./useHotkey";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "default" | "primary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends ComponentProps<typeof BaseButton> {
@@ -30,7 +30,7 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
 }
 
 export function Button({
-  variant = "primary",
+  variant = "default",
   size = "md",
   fullWidth,
   loading,
@@ -63,7 +63,7 @@ export function Button({
       className={cn(
         [
           "btn",
-          `btn-${variant}`,
+          variant !== "default" && `btn-${variant}`,
           size !== "md" && `btn-${size}`,
           fullWidth && "btn-full-width",
           loading && "btn-loading",

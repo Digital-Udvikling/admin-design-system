@@ -26,6 +26,8 @@ Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (op
 
 Wrap rules in `@layer components` so they sit at the right cascade level next to Tailwind's utilities. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code.
 
+Fold the **default** variant's look into the base class rather than a separate modifier — the bare `.badge` carries the neutral styling itself. The base class is then styled on its own, so vanilla `class="badge"` and React `<Badge>` match without anyone naming a default variant.
+
 ```css
 /* packages/admin-css/src/components/badge.css */
 @layer components {
@@ -33,12 +35,10 @@ Wrap rules in `@layer components` so they sit at the right cascade level next to
     @apply inline-flex items-center justify-center gap-1
            px-2 h-5 rounded-full
            text-xs font-medium leading-none whitespace-nowrap
-           border border-transparent;
+           border border-transparent
+           bg-surface-strong text-text;
   }
 
-  .badge-neutral {
-    @apply bg-surface-strong text-text;
-  }
   .badge-info {
     @apply bg-info-muted text-info border-info-muted;
   }
@@ -109,7 +109,12 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={clsx("badge", `badge-${variant}`, size !== "md" && `badge-${size}`, className)}
+      className={clsx(
+        "badge",
+        variant !== "neutral" && `badge-${variant}`,
+        size !== "md" && `badge-${size}`,
+        className,
+      )}
       {...rest}
     >
       {renderIcon(icon, size === "sm" ? 10 : 12)}
@@ -125,9 +130,9 @@ Export the component and every public type from `packages/admin-react/src/index.
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 ```
 
-### Default-omit the default size
+### Default-omit the default variant and size
 
-`size !== "md" && "badge-md"` — skip the class when the size is the default. Keeps the rendered DOM minimal and means `<Badge>` and `<Badge size="md">` produce identical output.
+`variant !== "neutral" && ...` and `size !== "md" && "badge-md"` — skip the class when the value is the default. The default look lives in the base class, so the modifier would be redundant. Keeps the rendered DOM minimal and means `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all produce identical output — and, crucially, that `<Badge>` matches the bare `.badge` vanilla markup.
 
 ### Compound components: `Object.assign` dot-notation
 
@@ -246,13 +251,13 @@ import { Badge } from "@aortl/admin-react";
 
 ## Reference
 
-**Variants** — `variant` prop. Default `neutral`.
+**Variants** — `variant` prop. Default `neutral` (no class — folded into the base `.badge`).
 
-| Name      | Class            |
-| --------- | ---------------- |
-| `neutral` | `.badge-neutral` |
-| `info`    | `.badge-info`    |
-| `danger`  | `.badge-danger`  |
+| Name      | Class           |
+| --------- | --------------- |
+| `neutral` | — (base)        |
+| `info`    | `.badge-info`   |
+| `danger`  | `.badge-danger` |
 
 **Sizes** — `size` prop. Default `md`.
 

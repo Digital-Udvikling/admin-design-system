@@ -3,7 +3,7 @@
     @apply inline-flex items-center justify-between gap-2 w-full px-3 py-2
            rounded-lg text-sm leading-none text-left
            bg-surface text-text
-           border border-transparent
+           border border-border hover:border-border-strong
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
@@ -18,16 +18,12 @@
     @apply text-text-muted;
   }
 
-  .select-bordered {
-    @apply border-border hover:border-border-strong;
-  }
-
   .select-ghost {
-    @apply bg-transparent hover:bg-surface-muted;
+    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
   }
 
   .select-danger {
-    @apply border-danger focus-visible:outline-danger;
+    @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
   /* Sizes */

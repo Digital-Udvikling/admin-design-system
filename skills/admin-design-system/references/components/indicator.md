@@ -24,7 +24,9 @@ Notification counts on icon buttons, status dots on avatars, "new" markers on ti
 
 ```tsx
 <Indicator label="3" variant="danger">
-  <Button icon={IconInbox}>Inbox</Button>
+  <Button variant="primary" icon={IconInbox}>
+    Inbox
+  </Button>
 </Indicator>
 ```
 
@@ -50,7 +52,9 @@ Omit `label` for a label-less status dot. The React component renders a small `.
 
 ```tsx
 <Indicator variant="success" aria-label="Online">
-  <Button icon={IconUser}>Account</Button>
+  <Button variant="primary" icon={IconUser}>
+    Account
+  </Button>
 </Indicator>
 ```
 

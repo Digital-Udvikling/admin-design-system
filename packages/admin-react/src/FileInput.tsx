@@ -22,7 +22,11 @@ export function FileInput({
     <BaseInput
       type="file"
       className={cn(
-        ["file-input", `file-input-${variant}`, inputSize !== "md" && `file-input-${inputSize}`],
+        [
+          "file-input",
+          variant !== "bordered" && `file-input-${variant}`,
+          inputSize !== "md" && `file-input-${inputSize}`,
+        ],
         className,
       )}
       {...rest}

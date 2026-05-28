@@ -23,7 +23,7 @@ function TabsRoot({
       className={cn(
         [
           "tabs",
-          `tabs-${variant}`,
+          variant !== "bordered" && `tabs-${variant}`,
           size !== "md" && `tabs-${size}`,
           fullWidth && "tabs-full-width",
         ],

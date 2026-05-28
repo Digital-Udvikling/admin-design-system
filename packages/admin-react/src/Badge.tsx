@@ -22,7 +22,10 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={cn(["badge", `badge-${variant}`, size !== "md" && `badge-${size}`], className)}
+      className={cn(
+        ["badge", variant !== "neutral" && `badge-${variant}`, size !== "md" && `badge-${size}`],
+        className,
+      )}
       {...rest}
     >
       {renderIcon(icon, size === "sm" ? 10 : 12)}

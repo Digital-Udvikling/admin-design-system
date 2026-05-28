@@ -60,7 +60,7 @@ Open with a button, close via Esc, backdrop click, or the X. `closedby="any"` is
 ```
 
 ```tsx
-<Button commandfor="dialog-basic-r" command="show-modal">
+<Button variant="primary" commandfor="dialog-basic-r" command="show-modal">
   Open dialog
 </Button>
 <Dialog
@@ -72,7 +72,7 @@ Open with a button, close via Esc, backdrop click, or the X. `closedby="any"` is
       <Button variant="ghost" commandfor="dialog-basic-r" command="close">
         Cancel
       </Button>
-      <Button commandfor="dialog-basic-r" command="close">
+      <Button variant="primary" commandfor="dialog-basic-r" command="close">
         Send invite
       </Button>
     </>
@@ -197,7 +197,7 @@ Wrap the body in `<form method="dialog">` — submitting any button inside close
     <div class="dialog-body">
       <div class="field">
         <label class="field-label" for="dialog-form-name">Name</label>
-        <input id="dialog-form-name" class="input input-bordered" name="name" required />
+        <input id="dialog-form-name" class="input" name="name" required />
       </div>
     </div>
     <div class="dialog-footer">
@@ -209,7 +209,7 @@ Wrap the body in `<form method="dialog">` — submitting any button inside close
 ```
 
 ```tsx
-<Button commandfor="dialog-form-r" command="show-modal">
+<Button variant="primary" commandfor="dialog-form-r" command="show-modal">
   Rename project
 </Button>
 <Dialog.Container id="dialog-form-r">
@@ -228,7 +228,7 @@ Wrap the body in `<form method="dialog">` — submitting any button inside close
       <Button type="submit" variant="ghost" value="cancel" formNoValidate>
         Cancel
       </Button>
-      <Button type="submit" value="save">
+      <Button variant="primary" type="submit" value="save">
         Save
       </Button>
     </Dialog.Footer>

@@ -9,7 +9,7 @@
 **Example**
 
 ```html
-<input class="input input-bordered" placeholder="Bordered (default)" />
+<input class="input" placeholder="Bordered (default)" />
 <input class="input input-ghost" placeholder="Ghost" />
 <input class="input input-danger" placeholder="Danger" value="invalid" />
 ```
@@ -25,9 +25,9 @@
 **Example**
 
 ```html
-<input class="input input-bordered input-sm" placeholder="Small" />
-<input class="input input-bordered" placeholder="Medium" />
-<input class="input input-bordered input-lg" placeholder="Large" />
+<input class="input input-sm" placeholder="Small" />
+<input class="input" placeholder="Medium" />
+<input class="input input-lg" placeholder="Large" />
 ```
 
 ```tsx
@@ -41,7 +41,7 @@
 **Example**
 
 ```html
-<input class="input input-bordered" disabled value="Disabled" />
+<input class="input" disabled value="Disabled" />
 ```
 
 ```tsx
@@ -53,14 +53,14 @@
 **Example**
 
 ```html
-<input class="input input-bordered" type="email" placeholder="you@example.com" />
-<input class="input input-bordered" type="password" placeholder="Password" />
-<input class="input input-bordered" type="number" placeholder="42" />
-<input class="input input-bordered" type="date" />
-<input class="input input-bordered" type="time" />
-<input class="input input-bordered" type="search" placeholder="Search" />
-<input class="input input-bordered" type="url" placeholder="https://example.com" />
-<input class="input input-bordered" type="tel" placeholder="+45 12 34 56 78" />
+<input class="input" type="email" placeholder="you@example.com" />
+<input class="input" type="password" placeholder="Password" />
+<input class="input" type="number" placeholder="42" />
+<input class="input" type="date" />
+<input class="input" type="time" />
+<input class="input" type="search" placeholder="Search" />
+<input class="input" type="url" placeholder="https://example.com" />
+<input class="input" type="tel" placeholder="+45 12 34 56 78" />
 ```
 
 ```tsx
@@ -81,11 +81,11 @@ Native browser pickers; dark mode tracks the document's `color-scheme`.
 **Example**
 
 ```html
-<input class="input input-bordered" type="date" />
-<input class="input input-bordered" type="time" />
-<input class="input input-bordered" type="datetime-local" />
-<input class="input input-bordered" type="month" />
-<input class="input input-bordered" type="week" />
+<input class="input" type="date" />
+<input class="input" type="time" />
+<input class="input" type="datetime-local" />
+<input class="input" type="month" />
+<input class="input" type="week" />
 ```
 
 ```tsx
@@ -109,7 +109,7 @@ See [Fields](../fields/) for label, description, and validation.
 ```html
 <div class="field">
   <label class="field-label" for="email">Email</label>
-  <input id="email" type="email" class="input input-bordered" placeholder="you@example.com" />
+  <input id="email" type="email" class="input" placeholder="you@example.com" />
   <p class="field-description">We'll never share your email.</p>
 </div>
 ```

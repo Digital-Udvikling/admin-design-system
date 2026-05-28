@@ -33,7 +33,9 @@ import { IconShoppingBag, IconArrowRight, IconPencil, IconX } from "@tabler/icon
   description="A short description sits here."
   actions={
     <>
-      <Button size="sm">Get started</Button>
+      <Button variant="primary" size="sm">
+        Get started
+      </Button>
       <Button variant="ghost" size="sm">
         Maybe later
       </Button>
@@ -54,8 +56,8 @@ Free-form content goes as children, between the title and the actions.
 <div class="card">
   <div class="card-body">
     <h3 class="card-title">Sign in</h3>
-    <input class="input input-bordered" placeholder="Email" />
-    <input class="input input-bordered" type="password" placeholder="Password" />
+    <input class="input" placeholder="Email" />
+    <input class="input" type="password" placeholder="Password" />
     <div class="card-actions">
       <button class="btn btn-primary">Sign in</button>
       <button class="btn btn-ghost">Cancel</button>
@@ -69,7 +71,7 @@ Free-form content goes as children, between the title and the actions.
   title="Sign in"
   actions={
     <>
-      <Button>Sign in</Button>
+      <Button variant="primary">Sign in</Button>
       <Button variant="ghost">Cancel</Button>
     </>
   }
@@ -136,7 +138,7 @@ Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).
   title="Today's orders"
   description="128 placed, 14 awaiting fulfilment."
   actions={
-    <Button size="sm" iconTrailing={IconArrowRight}>
+    <Button variant="primary" size="sm" iconTrailing={IconArrowRight}>
       Open queue
     </Button>
   }

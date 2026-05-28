@@ -2,28 +2,27 @@
   .btn {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2
            rounded-lg font-medium text-sm leading-none
-           border border-transparent
+           border border-border
+           bg-surface-muted text-text hover:bg-surface-strong
            transition-colors duration-150
            cursor-pointer select-none
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
            disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
   }
 
-  /* Variants */
+  /* Variants — the bare `.btn` (no modifier) is the low-emphasis default, so
+     most admin buttons need no variant class. The colored variants reset the
+     border to transparent since the base now carries a visible one. */
   .btn-primary {
-    @apply bg-primary text-primary-content hover:bg-primary-hover;
-  }
-
-  .btn-secondary {
-    @apply bg-surface-muted text-text border-border hover:bg-surface-strong;
+    @apply bg-primary text-primary-content border-transparent hover:bg-primary-hover;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-text hover:bg-surface-muted;
+    @apply bg-transparent text-text border-transparent hover:bg-surface-muted;
   }
 
   .btn-danger {
-    @apply bg-danger text-danger-content hover:opacity-90;
+    @apply bg-danger text-danger-content border-transparent hover:opacity-90;
   }
 
   /* Sizes (md is the default; modifiers override) */

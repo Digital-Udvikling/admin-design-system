@@ -2,7 +2,7 @@
   .file-input {
     @apply inline-flex items-center w-full pr-3 text-sm leading-none
            bg-surface text-text
-           border border-transparent rounded-lg overflow-hidden
+           border border-border hover:border-border-strong rounded-lg overflow-hidden
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
            disabled:opacity-50 disabled:cursor-not-allowed
@@ -13,16 +13,12 @@
            file:cursor-pointer;
   }
 
-  .file-input-bordered {
-    @apply border-border hover:border-border-strong;
-  }
-
   .file-input-ghost {
-    @apply bg-transparent hover:bg-surface-muted;
+    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
   }
 
   .file-input-danger {
-    @apply border-danger focus-visible:outline-danger;
+    @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
   /* Sizes */

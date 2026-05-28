@@ -13,7 +13,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 **Example**
 
 ```html
-<select class="select select-bordered">
+<select class="select">
   <option value="">Select a status…</option>
   <option value="open">Open</option>
   <option value="in-progress">In progress</option>
@@ -49,7 +49,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 **Example**
 
 ```html
-<select class="select select-bordered">
+<select class="select">
   <option>Bordered</option>
 </select>
 <select class="select select-ghost">
@@ -95,13 +95,13 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 **Example**
 
 ```html
-<select class="select select-bordered select-sm">
+<select class="select select-sm">
   <option>Small</option>
 </select>
-<select class="select select-bordered">
+<select class="select">
   <option>Medium</option>
 </select>
-<select class="select select-bordered select-lg">
+<select class="select select-lg">
   <option>Large</option>
 </select>
 ```
@@ -141,7 +141,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 **Example**
 
 ```html
-<select class="select select-bordered">
+<select class="select">
   <optgroup label="Fruit">
     <option>Apple</option>
     <option>Banana</option>
@@ -191,7 +191,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 **Example**
 
 ```html
-<select class="select select-bordered" disabled>
+<select class="select" disabled>
   <option>Disabled</option>
 </select>
 ```
@@ -215,7 +215,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```html
 <div class="field">
   <label class="field-label" for="role">Role</label>
-  <select id="role" class="select select-bordered" required>
+  <select id="role" class="select" required>
     <option value="">Pick a role…</option>
     <option value="admin">Admin</option>
     <option value="member">Member</option>

@@ -22,7 +22,7 @@ Or grab it from a CDN — no install needed:
 <button class="btn btn-primary">Save</button>
 <button class="btn btn-ghost btn-sm">Cancel</button>
 
-<input class="input input-bordered" placeholder="Name" />
+<input class="input" placeholder="Name" />
 
 <div class="card">
   <div class="card-body">

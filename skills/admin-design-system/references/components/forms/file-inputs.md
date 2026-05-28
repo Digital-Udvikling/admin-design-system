@@ -9,7 +9,7 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-bordered" />
+<input type="file" class="file-input" />
 <input type="file" class="file-input file-input-ghost" />
 <input type="file" class="file-input file-input-danger" />
 ```
@@ -25,9 +25,9 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-bordered file-input-sm" />
-<input type="file" class="file-input file-input-bordered" />
-<input type="file" class="file-input file-input-bordered file-input-lg" />
+<input type="file" class="file-input file-input-sm" />
+<input type="file" class="file-input" />
+<input type="file" class="file-input file-input-lg" />
 ```
 
 ```tsx
@@ -41,7 +41,7 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-bordered" accept="image/*" multiple />
+<input type="file" class="file-input" accept="image/*" multiple />
 ```
 
 ```tsx
@@ -53,7 +53,7 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-bordered" disabled />
+<input type="file" class="file-input" disabled />
 ```
 
 ```tsx
@@ -67,7 +67,7 @@
 ```html
 <div class="field">
   <label class="field-label" for="avatar">Avatar</label>
-  <input id="avatar" type="file" class="file-input file-input-bordered" accept="image/*" />
+  <input id="avatar" type="file" class="file-input" accept="image/*" />
   <p class="field-description">PNG or JPEG, up to 2 MB.</p>
 </div>
 ```

@@ -52,14 +52,13 @@
     @apply outline-2 outline-offset-2 outline-primary;
   }
 
-  /* Bordered (default) — underline marker on the active tab. The pseudo sits
-     below the .tab, overlapping the .tab-list bottom border. */
-  .tabs-bordered .tab,
+  /* Default — underline marker on the active tab. The pseudo sits below the
+     .tab, overlapping the .tab-list bottom border. Applies to any tabs root
+     that isn't .tabs-boxed, so the bare `.tabs` default gets it for free. */
   .tabs:not(.tabs-boxed) .tab {
     position: relative;
   }
 
-  .tabs-bordered .tab::after,
   .tabs:not(.tabs-boxed) .tab::after {
     content: "";
     position: absolute;
@@ -71,9 +70,6 @@
     transition: transform 150ms ease;
   }
 
-  .tabs-bordered .tab[data-selected]::after,
-  .tabs-bordered .tab[aria-selected="true"]::after,
-  .tabs-bordered .tab-input:checked + .tab::after,
   .tabs:not(.tabs-boxed) .tab[data-selected]::after,
   .tabs:not(.tabs-boxed) .tab[aria-selected="true"]::after,
   .tabs:not(.tabs-boxed) .tab-input:checked + .tab::after {
@@ -153,7 +149,6 @@
     @apply w-full justify-start;
   }
 
-  .tabs[data-orientation="vertical"].tabs-bordered .tab::after,
   .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab::after {
     inset-inline: auto;
     inset-inline-end: -1px;
@@ -163,8 +158,6 @@
     transform: scaleY(0);
   }
 
-  .tabs[data-orientation="vertical"].tabs-bordered .tab[data-selected]::after,
-  .tabs[data-orientation="vertical"].tabs-bordered .tab[aria-selected="true"]::after,
   .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[data-selected]::after,
   .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[aria-selected="true"]::after {
     transform: scaleY(1);

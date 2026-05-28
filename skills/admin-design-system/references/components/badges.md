@@ -11,7 +11,7 @@ Status columns, counts on tabs, category chips. Inline-flex pills at `text-xs` b
 **Example**
 
 ```html
-<span class="badge badge-neutral">Draft</span>
+<span class="badge">Draft</span>
 <span class="badge badge-info">Info</span>
 <span class="badge badge-success">Active</span>
 <span class="badge badge-warning">Review</span>
@@ -20,7 +20,7 @@ Status columns, counts on tabs, category chips. Inline-flex pills at `text-xs` b
 ```
 
 ```tsx
-<Badge variant="neutral">Draft</Badge>
+<Badge>Draft</Badge>
 <Badge variant="info">Info</Badge>
 <Badge variant="success">Active</Badge>
 <Badge variant="warning">Review</Badge>
@@ -71,11 +71,10 @@ Pass `icon` or drop an `<i>`/`<svg>` as the first child.
 **Example**
 
 ```html
-<span class="badge badge-primary badge-sm">12</span>
-<span class="badge badge-neutral badge-sm">99+</span>
+<span class="badge badge-primary badge-sm">12</span> <span class="badge badge-sm">99+</span>
 ```
 
 ```tsx
 <Badge variant="primary" size="sm">12</Badge>
-<Badge variant="neutral" size="sm">99+</Badge>
+<Badge size="sm">99+</Badge>
 ```

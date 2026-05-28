@@ -3,23 +3,19 @@
     @apply inline-flex items-center w-full px-3 py-2
            rounded-lg text-sm leading-none
            bg-surface text-text
-           border border-transparent
+           border border-border hover:border-border-strong
            transition-colors duration-150
            placeholder:text-text-muted
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .input-bordered {
-    @apply border-border hover:border-border-strong;
-  }
-
   .input-ghost {
-    @apply bg-transparent hover:bg-surface-muted;
+    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
   }
 
   .input-danger {
-    @apply border-danger focus-visible:outline-danger;
+    @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
   /* Sizes */

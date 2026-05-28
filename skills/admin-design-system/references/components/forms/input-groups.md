@@ -13,7 +13,7 @@ Attach a prefix, suffix, or action button to an input.
 ```html
 <div class="input-group">
   <span class="input-group-addon">$</span>
-  <input class="input input-bordered" type="number" placeholder="0.00" />
+  <input class="input" type="number" placeholder="0.00" />
 </div>
 ```
 
@@ -30,7 +30,7 @@ Attach a prefix, suffix, or action button to an input.
 
 ```html
 <div class="input-group">
-  <input class="input input-bordered" type="text" placeholder="subdomain" />
+  <input class="input" type="text" placeholder="subdomain" />
   <span class="input-group-addon">.example.com</span>
 </div>
 ```
@@ -49,7 +49,7 @@ Attach a prefix, suffix, or action button to an input.
 ```html
 <div class="input-group">
   <span class="input-group-addon">$</span>
-  <input class="input input-bordered" type="number" placeholder="0.00" />
+  <input class="input" type="number" placeholder="0.00" />
   <span class="input-group-addon">USD</span>
 </div>
 ```
@@ -68,7 +68,7 @@ Attach a prefix, suffix, or action button to an input.
 
 ```html
 <div class="input-group">
-  <input class="input input-bordered" type="search" placeholder="Search orders…" />
+  <input class="input" type="search" placeholder="Search orders…" />
   <button class="btn btn-primary" type="submit">Search</button>
 </div>
 ```
@@ -76,7 +76,9 @@ Attach a prefix, suffix, or action button to an input.
 ```tsx
 <InputGroup>
   <Input type="search" placeholder="Search orders…" />
-  <Button type="submit">Search</Button>
+  <Button variant="primary" type="submit">
+    Search
+  </Button>
 </InputGroup>
 ```
 
@@ -89,14 +91,14 @@ Attach a prefix, suffix, or action button to an input.
 ```html
 <div class="input-group">
   <span class="input-group-addon" aria-hidden="true"><i class="ti ti-search"></i></span>
-  <input class="input input-bordered" type="search" placeholder="Search products…" />
+  <input class="input" type="search" placeholder="Search products…" />
 </div>
 <div class="input-group">
   <span class="input-group-addon" aria-hidden="true"><i class="ti ti-at"></i></span>
-  <input class="input input-bordered" type="email" placeholder="you@example.com" />
+  <input class="input" type="email" placeholder="you@example.com" />
 </div>
 <div class="input-group">
-  <input class="input input-bordered" type="text" placeholder="Enter command" />
+  <input class="input" type="text" placeholder="Enter command" />
   <button class="btn btn-primary" type="submit" aria-label="Run">
     <i class="ti ti-arrow-right" aria-hidden="true"></i>
   </button>
@@ -118,7 +120,7 @@ Attach a prefix, suffix, or action button to an input.
 </InputGroup>
 <InputGroup>
   <Input placeholder="Enter command" />
-  <Button type="submit" aria-label="Run">
+  <Button variant="primary" type="submit" aria-label="Run">
     <IconArrowRight size={16} aria-hidden />
   </Button>
 </InputGroup>

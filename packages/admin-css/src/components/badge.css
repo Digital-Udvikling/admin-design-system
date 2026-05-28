@@ -3,15 +3,13 @@
     @apply inline-flex items-center justify-center gap-1
            px-2 h-5 rounded-full
            text-xs font-medium leading-none whitespace-nowrap
-           border border-transparent;
+           border border-transparent
+           bg-surface-strong text-text;
   }
 
   /* Variants — match the alert palette so danger/success/etc. stay coherent
-     across status indicators and chips in tables. */
-  .badge-neutral {
-    @apply bg-surface-strong text-text;
-  }
-
+     across status indicators and chips in tables. The bare `.badge` (no
+     modifier) renders the neutral look, now folded into the base. */
   .badge-info {
     @apply bg-info-muted text-info border-info-muted;
   }

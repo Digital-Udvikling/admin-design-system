@@ -16,18 +16,20 @@ IconPlus,
 
 ### Variants
 
+The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a dense admin screen aren't primary. Reach for `primary` for the single main action, `danger` for destructive ones.
+
 **Example**
 
 ```html
+<button class="btn">Default</button>
 <button class="btn btn-primary">Primary</button>
-<button class="btn btn-secondary">Secondary</button>
 <button class="btn btn-ghost">Ghost</button>
 <button class="btn btn-danger">Danger</button>
 ```
 
 ```tsx
+<Button>Default</Button>
 <Button variant="primary">Primary</Button>
-<Button variant="secondary">Secondary</Button>
 <Button variant="ghost">Ghost</Button>
 <Button variant="danger">Danger</Button>
 ```
@@ -43,9 +45,9 @@ IconPlus,
 ```
 
 ```tsx
-<Button size="sm">Small</Button>
-<Button>Medium</Button>
-<Button size="lg">Large</Button>
+<Button variant="primary" size="sm">Small</Button>
+<Button variant="primary">Medium</Button>
+<Button variant="primary" size="lg">Large</Button>
 ```
 
 ### Disabled
@@ -54,12 +56,12 @@ IconPlus,
 
 ```html
 <button class="btn btn-primary" disabled>Disabled</button>
-<button class="btn btn-secondary" disabled>Disabled</button>
+<button class="btn" disabled>Disabled</button>
 ```
 
 ```tsx
+<Button variant="primary" disabled>Disabled</Button>
 <Button disabled>Disabled</Button>
-<Button variant="secondary" disabled>Disabled</Button>
 ```
 
 ### Loading
@@ -70,14 +72,12 @@ IconPlus,
 
 ```html
 <button class="btn btn-primary btn-loading" type="button" disabled aria-busy="true">Saving</button>
-<button class="btn btn-secondary btn-loading" type="button" disabled aria-busy="true">
-  Loading
-</button>
+<button class="btn btn-loading" type="button" disabled aria-busy="true">Loading</button>
 ```
 
 ```tsx
-<Button loading>Saving</Button>
-<Button variant="secondary" loading>Loading</Button>
+<Button variant="primary" loading>Saving</Button>
+<Button loading>Loading</Button>
 ```
 
 If you pass both `icon` and `loading`, the leading icon is suppressed. A trailing icon stays visible.
@@ -91,7 +91,9 @@ If you pass both `icon` and `loading`, the leading icon is suppressed. A trailin
 ```
 
 ```tsx
-<Button fullWidth>Continue</Button>
+<Button variant="primary" fullWidth>
+  Continue
+</Button>
 ```
 
 ### As a link
@@ -102,12 +104,12 @@ The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a hre
 
 ```html
 <a href="/orders/new" class="btn btn-primary">New order</a>
-<a href="/reports" class="btn btn-secondary">View reports</a>
+<a href="/reports" class="btn">View reports</a>
 ```
 
 ```tsx
-<Button render={<a href="/orders/new" />} nativeButton={false}>New order</Button>
-<Button variant="secondary" render={<a href="/reports" />} nativeButton={false}>View reports</Button>
+<Button variant="primary" render={<a href="/orders/new" />} nativeButton={false}>New order</Button>
+<Button render={<a href="/reports" />} nativeButton={false}>View reports</Button>
 ```
 
 `disabled` doesn't apply to anchors — omit the link (or render plain text) instead of styling a non-interactive link as disabled.
@@ -123,7 +125,7 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
   <i class="ti ti-plus" aria-hidden="true"></i>
   New order
 </button>
-<button class="btn btn-secondary">
+<button class="btn">
   Export
   <i class="ti ti-download" aria-hidden="true"></i>
 </button>
@@ -135,7 +137,7 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
 
 ```tsx
 <Button variant="primary" icon={IconPlus}>New order</Button>
-<Button variant="secondary" iconTrailing={IconDownload}>Export</Button>
+<Button iconTrailing={IconDownload}>Export</Button>
 <Button variant="danger" icon={IconTrash}>Delete</Button>
 ```
 
@@ -149,7 +151,7 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <button class="btn btn-ghost btn-square" type="button" aria-label="More actions">
   <i class="ti ti-dots-vertical" aria-hidden="true"></i>
 </button>
-<button class="btn btn-secondary btn-square btn-sm" type="button" aria-label="Edit">
+<button class="btn btn-square btn-sm" type="button" aria-label="Edit">
   <i class="ti ti-pencil" aria-hidden="true"></i>
 </button>
 <button class="btn btn-danger btn-square btn-lg" type="button" aria-label="Delete">
@@ -159,7 +161,7 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 
 ```tsx
 <Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
-<Button variant="secondary" size="sm" icon={IconPencil} aria-label="Edit" />
+<Button size="sm" icon={IconPencil} aria-label="Edit" />
 <Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
 ```
 
@@ -193,17 +195,17 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 
 ```html
 <div class="btn-group">
-  <button class="btn btn-secondary">Day</button>
-  <button class="btn btn-secondary">Week</button>
-  <button class="btn btn-secondary">Month</button>
+  <button class="btn">Day</button>
+  <button class="btn">Week</button>
+  <button class="btn">Month</button>
 </div>
 ```
 
 ```tsx
 <ButtonGroup>
-  <Button variant="secondary">Day</Button>
-  <Button variant="secondary">Week</Button>
-  <Button variant="secondary">Month</Button>
+  <Button>Day</Button>
+  <Button>Week</Button>
+  <Button>Month</Button>
 </ButtonGroup>
 ```
 
@@ -213,17 +215,17 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 
 ```html
 <div class="btn-group btn-group-vertical">
-  <button class="btn btn-secondary">Up</button>
-  <button class="btn btn-secondary">Center</button>
-  <button class="btn btn-secondary">Down</button>
+  <button class="btn">Up</button>
+  <button class="btn">Center</button>
+  <button class="btn">Down</button>
 </div>
 ```
 
 ```tsx
 <ButtonGroup orientation="vertical">
-  <Button variant="secondary">Up</Button>
-  <Button variant="secondary">Center</Button>
-  <Button variant="secondary">Down</Button>
+  <Button>Up</Button>
+  <Button>Center</Button>
+  <Button>Down</Button>
 </ButtonGroup>
 ```
 
@@ -239,11 +241,11 @@ A row-action menu stacked into a sidebar — mixed variants, leading icons, prim
     <i class="ti ti-pencil" aria-hidden="true"></i>
     Edit
   </button>
-  <button class="btn btn-secondary">
+  <button class="btn">
     <i class="ti ti-copy" aria-hidden="true"></i>
     Duplicate
   </button>
-  <button class="btn btn-secondary">
+  <button class="btn">
     <i class="ti ti-archive" aria-hidden="true"></i>
     Archive
   </button>
@@ -256,13 +258,11 @@ A row-action menu stacked into a sidebar — mixed variants, leading icons, prim
 
 ```tsx
 <ButtonGroup orientation="vertical">
-  <Button icon={IconPencil}>Edit</Button>
-  <Button variant="secondary" icon={IconCopy}>
-    Duplicate
+  <Button variant="primary" icon={IconPencil}>
+    Edit
   </Button>
-  <Button variant="secondary" icon={IconArchive}>
-    Archive
-  </Button>
+  <Button icon={IconCopy}>Duplicate</Button>
+  <Button icon={IconArchive}>Archive</Button>
   <Button variant="danger" icon={IconTrash}>
     Delete
   </Button>

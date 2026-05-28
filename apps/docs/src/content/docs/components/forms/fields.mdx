@@ -19,7 +19,7 @@ Vanilla: wire `<label for>` and `aria-describedby` yourself. React: `<Field>` ac
   <input
     id="email"
     type="email"
-    class="input input-bordered"
+    class="input"
     placeholder="you@example.com"
     aria-describedby="email-desc"
   />
@@ -44,11 +44,11 @@ Pass `required` to add a red asterisk after the label. Vanilla can also use `<sp
 ```html
 <div class="field">
   <label class="field-label" for="email-required" data-required>Email</label>
-  <input id="email-required" type="email" class="input input-bordered" required />
+  <input id="email-required" type="email" class="input" required />
 </div>
 <div class="field">
   <label class="field-label" for="email-asterisk">Email <span class="asteriskField">*</span></label>
-  <input id="email-asterisk" type="email" class="input input-bordered" required />
+  <input id="email-asterisk" type="email" class="input" required />
 </div>
 ```
 
@@ -69,13 +69,7 @@ Pass `error` for a single message that shows whenever the control is invalid. In
 ```html
 <div class="field">
   <label class="field-label" for="username">Username</label>
-  <input
-    id="username"
-    class="input input-bordered"
-    required
-    minlength="3"
-    placeholder="At least 3 characters"
-  />
+  <input id="username" class="input" required minlength="3" placeholder="At least 3 characters" />
   <p class="field-error">Must be at least 3 characters.</p>
 </div>
 ```
@@ -130,7 +124,7 @@ Pass `inline` to place the control beside its label rather than above — suited
   <label class="field-label" for="username-multi">Username</label>
   <input
     id="username-multi"
-    class="input input-bordered"
+    class="input"
     required
     minlength="3"
     placeholder="At least 3 characters"

@@ -23,7 +23,11 @@ export function Input({
     <BaseInput
       type={type}
       className={cn(
-        ["input", `input-${variant}`, inputSize !== "md" && `input-${inputSize}`],
+        [
+          "input",
+          variant !== "bordered" && `input-${variant}`,
+          inputSize !== "md" && `input-${inputSize}`,
+        ],
         className,
       )}
       {...rest}

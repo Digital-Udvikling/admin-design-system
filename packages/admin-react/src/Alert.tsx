@@ -5,7 +5,7 @@ import { renderIcon, type IconProp } from "./icon";
 export type AlertVariant = "info" | "success" | "warning" | "danger";
 
 export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
-  variant?: AlertVariant;
+  variant: AlertVariant;
   /** Leading icon. Rendered as the first child so the CSS grid kicks in. */
   icon?: IconProp;
   /** Renders as `<Alert.Title>`. */
@@ -15,7 +15,7 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
 }
 
 function AlertRoot({
-  variant = "info",
+  variant,
   icon,
   title,
   description,

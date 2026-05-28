@@ -18,7 +18,11 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        ["textarea", `textarea-${variant}`, textareaSize !== "md" && `textarea-${textareaSize}`],
+        [
+          "textarea",
+          variant !== "bordered" && `textarea-${variant}`,
+          textareaSize !== "md" && `textarea-${textareaSize}`,
+        ],
         className,
       )}
       {...rest}

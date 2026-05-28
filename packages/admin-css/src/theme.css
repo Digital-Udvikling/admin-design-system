@@ -211,6 +211,13 @@
   --color-border: light-dark(var(--color-base-150), var(--color-base-850));
   --color-border-strong: light-dark(var(--color-base-300), var(--color-base-700));
 
+  /* Code — neutral surface for <pre>-style output blocks (logs, JSON, LLM
+     output). One step darker than `surface-strong` in light mode so the
+     block visually carves out from regular chrome; matches `surface-muted`
+     depth in dark mode. */
+  --color-code-surface: light-dark(var(--color-base-150), var(--color-base-950));
+  --color-code-text: light-dark(var(--color-base-800), var(--color-base-200));
+
   /* Primary — Flexoki blue */
   --color-primary: light-dark(var(--color-blue-600), var(--color-blue-400));
   --color-primary-hover: light-dark(var(--color-blue-700), var(--color-blue-300));

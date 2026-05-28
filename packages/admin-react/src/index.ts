@@ -144,6 +144,7 @@ export {
   type TabsIndicatorProps,
 } from "./Tabs";
 export { Kbd, type KbdProps } from "./Kbd";
+export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { useHotkey, type HotkeyOptions } from "./useHotkey";
 export {
   Tooltip,

@@ -128,6 +128,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
+- [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.

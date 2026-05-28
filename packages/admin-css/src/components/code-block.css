@@ -1,0 +1,20 @@
+@layer components {
+  .code-block {
+    @apply bg-code-surface text-code-text
+           font-mono text-sm
+           rounded-lg
+           p-3;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: auto;
+  }
+
+  /* Opt out of wrapping for log-style content where long lines should
+     scroll horizontally instead of breaking. Pair with an inline
+     `max-height` to clamp vertical growth — `overflow: auto` above
+     turns into a scrollbar automatically. */
+  .code-block-nowrap {
+    white-space: pre;
+    word-wrap: normal;
+  }
+}

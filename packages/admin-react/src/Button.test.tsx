@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { forwardRef } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "./Button";
+import { __resetRegistry } from "./hotkey-registry";
 
 describe("Button", () => {
   it("renders", () => {
@@ -120,6 +121,101 @@ describe("Button", () => {
       );
       expect(screen.queryByTestId("lead")).not.toBeInTheDocument();
       expect(screen.getByTestId("trail")).toBeInTheDocument();
+    });
+  });
+
+  describe("hotkey prop", () => {
+    beforeEach(() => __resetRegistry());
+    afterEach(() => __resetRegistry());
+
+    function pressCtrlS() {
+      act(() => {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "s",
+            ctrlKey: true,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      });
+    }
+
+    it("renders a Kbd chip showing the chord", () => {
+      render(<Button hotkey="mod+s">Save</Button>);
+      const btn = screen.getByRole("button", { name: /Save/ });
+      const chips = btn.querySelectorAll("kbd");
+      expect(chips).toHaveLength(2);
+      expect(chips[0]).toHaveTextContent("Ctrl");
+      expect(chips[1]).toHaveTextContent("S");
+    });
+
+    it("sets aria-keyshortcuts in ARIA format", () => {
+      render(<Button hotkey="mod+s">Save</Button>);
+      const btn = screen.getByRole("button", { name: /Save/ });
+      expect(btn).toHaveAttribute("aria-keyshortcuts", "Control+S");
+    });
+
+    it("synthesizes a click when the chord fires", () => {
+      const onClick = vi.fn();
+      render(
+        <Button hotkey="mod+s" onClick={onClick}>
+          Save
+        </Button>,
+      );
+      pressCtrlS();
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not click when disabled", () => {
+      const onClick = vi.fn();
+      render(
+        <Button hotkey="mod+s" disabled onClick={onClick}>
+          Save
+        </Button>,
+      );
+      pressCtrlS();
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it("does not click when loading", () => {
+      const onClick = vi.fn();
+      render(
+        <Button hotkey="mod+s" loading onClick={onClick}>
+          Save
+        </Button>,
+      );
+      pressCtrlS();
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it("renders only the first alternative as the visual chip", () => {
+      render(<Button hotkey={["mod+s", "mod+enter"]}>Save</Button>);
+      const btn = screen.getByRole("button", { name: /Save/ });
+      const chips = btn.querySelectorAll("kbd");
+      expect(chips).toHaveLength(2);
+      expect(chips[1]).toHaveTextContent("S");
+    });
+
+    it("fires for either alternative", () => {
+      const onClick = vi.fn();
+      render(
+        <Button hotkey={["mod+s", "mod+enter"]} onClick={onClick}>
+          Save
+        </Button>,
+      );
+      pressCtrlS();
+      act(() => {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Enter",
+            ctrlKey: true,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      });
+      expect(onClick).toHaveBeenCalledTimes(2);
     });
   });
 });

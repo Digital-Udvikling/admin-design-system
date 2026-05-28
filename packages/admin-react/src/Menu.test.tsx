@@ -1,6 +1,7 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { __resetRegistry } from "./hotkey-registry";
 import { Menu } from "./Menu";
 
 describe("Menu", () => {
@@ -71,6 +72,68 @@ describe("Menu", () => {
       expect(details).toHaveAttribute("open");
       await user.click(screen.getByText("Open"));
       expect(details).not.toHaveAttribute("open");
+    });
+  });
+
+  describe("hotkey prop", () => {
+    beforeEach(() => __resetRegistry());
+    afterEach(() => __resetRegistry());
+
+    it("renders Kbd chips and aria-keyshortcuts on the button item", () => {
+      render(
+        <Menu>
+          <Menu.Trigger>Actions</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item hotkey="n">New</Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      const item = screen.getByRole("menuitem", { name: /New/ });
+      expect(item).toHaveAttribute("aria-keyshortcuts", "N");
+      const chips = item.querySelectorAll("kbd");
+      expect(chips).toHaveLength(1);
+      expect(chips[0]).toHaveTextContent("N");
+    });
+
+    it("fires onClick on the item when the chord is pressed", () => {
+      const onSelect = vi.fn();
+      render(
+        <Menu open>
+          <Menu.Trigger>Actions</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item hotkey="mod+n" onClick={onSelect}>
+              New
+            </Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      act(() => {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "n",
+            ctrlKey: true,
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      });
+      expect(onSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it("sets aria-keyshortcuts on anchor items too", () => {
+      render(
+        <Menu>
+          <Menu.Trigger>Resources</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item href="#docs" hotkey="mod+d">
+              Docs
+            </Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      const item = screen.getByRole("menuitem", { name: /Docs/ });
+      expect(item.tagName).toBe("A");
+      expect(item).toHaveAttribute("aria-keyshortcuts", "Control+D");
     });
   });
 });

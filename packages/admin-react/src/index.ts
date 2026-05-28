@@ -141,6 +141,8 @@ export {
   type TabsPanelProps,
   type TabsIndicatorProps,
 } from "./Tabs";
+export { Kbd, type KbdProps } from "./Kbd";
+export { useHotkey, type HotkeyOptions } from "./useHotkey";
 export {
   Tooltip,
   type TooltipProps,

@@ -64,6 +64,10 @@ If the host application uses Tailwind v4 — check `package.json` for `tailwindc
 
 For projects without Tailwind, use the host project's own layout classes or inline styles — the component classes (`.btn`, `.card`, …) don't require Tailwind to render correctly.
 
+### Keyboard shortcuts
+
+`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` is an alias for `Ctrl` on every platform.
+
 ### Prefer the platform
 
 Admin users run current browsers — there is no legacy budget. Reach for modern HTML and CSS before reaching for JavaScript.

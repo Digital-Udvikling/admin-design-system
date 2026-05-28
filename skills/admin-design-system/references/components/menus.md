@@ -8,6 +8,9 @@ IconPencil,
   IconBook,
   IconHistory,
   IconLifebuoy,
+  IconPlus,
+  IconDeviceFloppy,
+  IconSearch,
 } from "@tabler/icons-react";
 
 Built on `<details>` + `<summary>`. The browser handles open/close. There is no light dismiss — click the trigger again or move focus to close.
@@ -49,6 +52,30 @@ See [Icons](../../basics/icons/).
     <Menu.Item icon={IconCopy}>Duplicate</Menu.Item>
     <Menu.Separator />
     <Menu.Item icon={IconTrash}>Delete</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+### Hotkey <StarlightBadge text="React only" variant="caution" />
+
+The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edge of the row. Works on both the button and anchor (`href`) branches.
+
+**Example**
+
+```tsx
+<Menu>
+  <Menu.Trigger>Actions</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item icon={IconPlus} hotkey="mod+n">
+      New
+    </Menu.Item>
+    <Menu.Item icon={IconDeviceFloppy} hotkey="mod+s">
+      Save
+    </Menu.Item>
+    <Menu.Separator />
+    <Menu.Item icon={IconSearch} hotkey="/">
+      Search
+    </Menu.Item>
   </Menu.Popup>
 </Menu>
 ```

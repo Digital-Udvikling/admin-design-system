@@ -17,12 +17,12 @@ Hover or tab to the trigger.
   <button type="button" class="btn btn-square" aria-label="Save">
     <i class="ti ti-device-floppy" aria-hidden="true"></i>
   </button>
-  <span class="tooltip" role="tooltip">Save (⌘S)</span>
+  <span class="tooltip" role="tooltip">Save</span>
 </span>
 ```
 
 ```tsx
-<Tooltip content="Save (⌘S)">
+<Tooltip content="Save">
   <Button aria-label="Save" icon={IconDeviceFloppy} />
 </Tooltip>
 ```
@@ -119,24 +119,33 @@ Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones 
 
 ### Rich content
 
-The popup body accepts any inline content — e.g. a keyboard shortcut hint. For React, drop down to subparts when the shorthand's `content` prop isn't enough.
+The popup body accepts any inline content — e.g. a keyboard shortcut hint via [`<Kbd>`](../kbd/). React's `<Tooltip>` accepts JSX in `content`; drop down to subparts when the shorthand's `content` prop isn't enough.
 
 **Example**
 
 ```html
 <span class="tooltip-wrap">
   <button type="button" class="btn">Save</button>
-  <span class="tooltip" role="tooltip">Save changes <kbd>⌘S</kbd></span>
+  <span class="tooltip" role="tooltip">
+    Save changes
+    <span class="kbd-group">
+      <kbd class="kbd">Ctrl</kbd>
+      <kbd class="kbd">S</kbd>
+    </span>
+  </span>
 </span>
 ```
 
 ```tsx
-<Tooltip.Root>
-  <Tooltip.Trigger render={<Button>Save</Button>} />
-  <Tooltip.Popup>
-    Save changes <kbd>⌘S</kbd>
-  </Tooltip.Popup>
-</Tooltip.Root>
+<Tooltip
+  content={
+    <>
+      Save changes <Kbd keys="mod+s" />
+    </>
+  }
+>
+  <Button>Save</Button>
+</Tooltip>
 ```
 
 ## Vanilla path notes

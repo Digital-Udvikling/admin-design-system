@@ -9,6 +9,7 @@ IconPlus,
   IconPencil,
   IconCopy,
   IconArchive,
+  IconDeviceFloppy,
 } from "@tabler/icons-react";
 
 ## Examples
@@ -160,6 +161,26 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <Button variant="ghost" icon={IconDotsVertical} aria-label="More actions" />
 <Button variant="secondary" size="sm" icon={IconPencil} aria-label="Edit" />
 <Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
+```
+
+### Hotkey <StarlightBadge text="React only" variant="caution" />
+
+Bind a chord to the button — pressing it invokes `onClick` and renders a trailing chip. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../../basics/hotkeys/) for page-level bindings.
+
+**Example**
+
+```tsx
+<Button hotkey="mod+s" icon={IconDeviceFloppy} onClick={() => console.log("save")}>
+  Save
+</Button>
+```
+
+**Example**
+
+```tsx
+<Button hotkey={["mod+s", "mod+enter"]} onClick={() => console.log("save")}>
+  Save
+</Button>
 ```
 
 ## Groups

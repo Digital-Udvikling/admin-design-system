@@ -64,6 +64,10 @@ If the host application uses Tailwind v4 — check `package.json` for `tailwindc
 
 For projects without Tailwind, use the host project's own layout classes or inline styles — the component classes (`.btn`, `.card`, …) don't require Tailwind to render correctly.
 
+### Keyboard shortcuts
+
+`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` is an alias for `Ctrl` on every platform.
+
 ### Prefer the platform
 
 Admin users run current browsers — there is no legacy budget. Reach for modern HTML and CSS before reaching for JavaScript.
@@ -110,6 +114,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Colors](references/basics/colors.md) — Color tokens — brand, surfaces, borders, text, and state.
 - [Customize](references/basics/customize.md) — Brand-shift the design system with one variable, or override individual tokens.
 - [Dark mode](references/basics/dark-mode.md) — Follows the OS by default, with manual override per page or subtree.
+- [Hotkeys](references/basics/hotkeys.md) — Bind keyboard shortcuts to page-level actions.
 - [Icons](references/basics/icons.md) — Tabler Icons — webfont for vanilla, typed components for React.
 - [Principles](references/basics/principles.md) — What this system optimizes for, and how it's built.
 - [Typography](references/basics/typography.md) — Type scale, weights, and font stack.
@@ -135,6 +140,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
 - [Forms: Textareas](references/components/forms/textareas.md) — Multi-line text input.
 - [Indicator](references/components/indicator.md) — Place a badge, count, or dot on the corner of another element.
+- [Kbd](references/components/kbd.md) — Keyboard shortcut chips for help text, tooltips, and bindings.
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.

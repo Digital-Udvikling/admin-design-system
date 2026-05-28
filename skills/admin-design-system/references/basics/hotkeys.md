@@ -1,0 +1,20 @@
+# Hotkeys
+
+> Bind keyboard shortcuts to page-level actions.
+
+For shortcuts tied to a visible control, use the `hotkey` prop on [Buttons](../../components/buttons/) and [Menu.Item](../../components/menus/). For everything else — opening a help dialog, focusing search, navigation — reach for `useHotkey()`.
+
+`mod` is an alias for `Ctrl` on every platform.
+
+## Page-level shortcut <StarlightBadge text="React only" variant="caution" />
+
+```tsx
+import { useHotkey } from "@aortl/admin-react";
+
+function HelpShortcut({ onOpen }: { onOpen: () => void }) {
+  useHotkey("?", onOpen);
+  return null;
+}
+```
+
+Pass `{ enabled: false }` to pause registration without unmounting.

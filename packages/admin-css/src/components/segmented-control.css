@@ -1,0 +1,80 @@
+@layer components {
+  /* Outer <fieldset>. Resets the browser fieldset chrome (border, padding,
+     margin, min-width) and stacks the legend above the track. */
+  .segmented-control {
+    @apply inline-flex flex-col items-start gap-1.5 border-0 p-0 m-0 min-w-0;
+  }
+
+  .segmented-control > legend {
+    @apply text-sm font-medium text-text leading-none p-0;
+  }
+
+  /* The sunken pill that holds the segments. Lives inside the fieldset so the
+     track background doesn't bleed behind the legend. Sizing matches
+     `.tabs-boxed .tab-list` so segmented controls and boxed tabs are visually
+     identical — they're the same UI pattern in different roles. */
+  .segmented-control-track {
+    @apply inline-flex gap-0 p-0.5 rounded-md bg-surface-muted border border-border;
+  }
+
+  /* Each <label> wraps a visually-hidden <input> + visible content. The label
+     is the clickable, hoverable, styleable surface; the input keeps native
+     keyboard, focus, and form-submission behaviour. Heights and radii match
+     `.tabs-boxed .tab`. */
+  .segmented-control-item {
+    @apply inline-flex items-center justify-center gap-1.5
+           px-3 h-9 rounded
+           text-sm font-medium text-text-muted leading-none
+           cursor-pointer select-none
+           transition-colors duration-150;
+  }
+
+  /* Visually hide the native input but keep it focusable and form-submittable. */
+  .segmented-control-item > input {
+    @apply sr-only;
+  }
+
+  /* Hover on an unselected, enabled segment lifts text into full strength. */
+  .segmented-control-item:hover:not(:has(input:checked)):not(:has(input:disabled)) {
+    @apply text-text;
+  }
+
+  /* Selected segment — the elevated tile. */
+  .segmented-control-item:has(input:checked) {
+    @apply bg-surface text-text shadow-sm;
+  }
+
+  /* Focus ring travels onto the label when the inner input is focus-visible.
+     The outline utilities have no pseudo-class prefix because they apply
+     unconditionally inside the :has() selector. */
+  .segmented-control-item:has(input:focus-visible) {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* A disabled native input bubbles up to dim the label and cut interaction.
+     Covers both the per-item case (input disabled) and the whole-group case
+     (fieldset disabled, which the browser propagates to every input). */
+  .segmented-control-item:has(input:disabled) {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* Sizes — md is the default, sm overrides padding/height/typography to
+     match `.tabs-sm .tab`. */
+  .segmented-control-sm .segmented-control-item {
+    @apply px-2 h-7 text-xs gap-1;
+  }
+
+  /* Full-width: stretch the track to fill its container and give each segment
+     an equal share. */
+  .segmented-control-full-width {
+    @apply flex;
+  }
+
+  .segmented-control-full-width > .segmented-control-track {
+    @apply flex w-full;
+  }
+
+  .segmented-control-full-width .segmented-control-item {
+    @apply flex-1;
+  }
+}

@@ -56,6 +56,15 @@ export {
   type RadioGroupOrientation,
 } from "./Radio";
 export { Progress, type ProgressProps, type ProgressVariant, type ProgressSize } from "./Progress";
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedControlItemProps,
+  type SegmentedControlSize,
+  type SegmentedControlType,
+  type SingleSegmentedControlProps,
+  type MultipleSegmentedControlProps,
+} from "./SegmentedControl";
 export { Spinner, type SpinnerProps, type SpinnerSize } from "./Spinner";
 export { Switch, type SwitchProps, type SwitchThumbProps } from "./Switch";
 export {

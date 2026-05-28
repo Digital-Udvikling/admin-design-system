@@ -137,6 +137,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Forms: Input groups](references/components/forms/input-groups.md) — Combine inputs, addons, and buttons into a flush row.
 - [Forms: Inputs](references/components/forms/inputs.md) — Single-line text input.
 - [Forms: Radios](references/components/forms/radios.md) — Mutually exclusive choice within a group.
+- [Forms: Segmented control](references/components/forms/segmented-control.md) — A row of mutually exclusive (or multi-select) options styled as joined segments.
 - [Forms: Selects](references/components/forms/selects.md) — Compound Select with Trigger + Popup + Item.
 - [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
 - [Forms: Textareas](references/components/forms/textareas.md) — Multi-line text input.

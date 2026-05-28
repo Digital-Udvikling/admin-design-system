@@ -77,6 +77,7 @@ export { Container, type ContainerProps, type ContainerSize } from "./Container"
 export {
   Card,
   type CardProps,
+  type CardVariant,
   type CardContainerProps,
   type CardBodyProps,
   type CardHeaderProps,

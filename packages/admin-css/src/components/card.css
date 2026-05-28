@@ -1,7 +1,7 @@
 @layer components {
   .card {
     @apply flex flex-col
-           bg-surface text-text
+           bg-surface-strong text-text
            border border-border
            rounded-xl
            shadow-xs
@@ -45,4 +45,55 @@
   .card-bordered {
     @apply shadow-none border-border-strong;
   }
+
+  /* Neutral variant — sits flush with the page (`--color-surface`, the same
+     fill as `html`/`.app-shell`) instead of the raised `surface-strong` of a
+     default card. For de-emphasised or grouped panels that shouldn't pop off
+     the background. No accent, no status meaning. */
+  .card-muted {
+    @apply bg-surface;
+  }
+
+  /* Color variants — tinted surface + matching border, mirroring Alert. The
+     title (and any leading icon, via `currentColor`) picks up the accent for
+     fast scanning. */
+  .card-primary {
+    @apply bg-primary-muted border-primary-muted;
+  }
+
+  .card-info {
+    @apply bg-info-muted border-info-muted;
+  }
+
+  .card-success {
+    @apply bg-success-muted border-success-muted;
+  }
+
+  .card-warning {
+    @apply bg-warning-muted border-warning-muted;
+  }
+
+  .card-danger {
+    @apply bg-danger-muted border-danger-muted;
+  }
+
+  .card-primary .card-title {
+    @apply text-primary;
+  }
+
+  .card-info .card-title {
+    @apply text-info;
+  }
+
+  .card-success .card-title {
+    @apply text-success;
+  }
+
+  .card-danger .card-title {
+    @apply text-danger;
+  }
+
+  /* `card-warning` keeps its title at `text-text`: the warning accent is
+     yellow-400 in both modes and fails AA contrast on the muted yellow
+     surface. The tinted bg still carries the warning signal. */
 }

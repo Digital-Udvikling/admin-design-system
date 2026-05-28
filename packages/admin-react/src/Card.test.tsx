@@ -55,6 +55,14 @@ describe("Card", () => {
     expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
   });
 
+  it("applies the variant class on the card root", () => {
+    render(<Card variant="danger" title="Danger zone" />);
+    const root = screen
+      .getByRole("heading", { level: 3, name: "Danger zone" })
+      .closest(adminSelector("card"));
+    expect(root).toHaveAdminClass("card-danger");
+  });
+
   it("renders title/description/actions props as the matching subparts", () => {
     render(
       <Card title="Plan" description="Pro tier" actions={<button type="button">Upgrade</button>}>

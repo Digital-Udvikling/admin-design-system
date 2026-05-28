@@ -107,6 +107,66 @@ Free-form content goes as children, between the title and the actions.
 
 :::
 
+### Color variants
+
+A tinted surface signals status — a healthy service, a destructive zone, a heads-up. The title (and any leading icon) picks up the matching accent. Use sparingly; a busy screen of colored cards reads as noise.
+
+A default card sits one step above the page (`surface-strong`) so it reads as a distinct panel. `card-muted` is the exception — it fills with the page background (`surface`) so it sits flush instead of popping out. No accent, no status meaning; reach for it to de-emphasise or visually group panels.
+
+:::example
+
+```html
+<div class="card card-muted">
+  <div class="card-body">
+    <h3 class="card-title">Muted</h3>
+    <p class="card-description">Sits flush with the page background.</p>
+  </div>
+</div>
+<div class="card card-primary">
+  <div class="card-body">
+    <h3 class="card-title">Primary</h3>
+    <p class="card-description">A highlighted, featured card.</p>
+  </div>
+</div>
+<div class="card card-info">
+  <div class="card-body">
+    <h3 class="card-title">Info</h3>
+    <p class="card-description">Neutral, informational context.</p>
+  </div>
+</div>
+<div class="card card-success">
+  <div class="card-body">
+    <h3 class="card-title">Success</h3>
+    <p class="card-description">All systems operational.</p>
+  </div>
+</div>
+<div class="card card-warning">
+  <div class="card-body">
+    <h3 class="card-title">Warning</h3>
+    <p class="card-description">Approaching the rate limit.</p>
+  </div>
+</div>
+<div class="card card-danger">
+  <div class="card-body">
+    <h3 class="card-title">Danger</h3>
+    <p class="card-description">Deleting this is irreversible.</p>
+  </div>
+</div>
+```
+
+```tsx
+<>
+  <Card variant="muted" title="Muted" description="Sits flush with the page background." />
+  <Card variant="primary" title="Primary" description="A highlighted, featured card." />
+  <Card variant="info" title="Info" description="Neutral, informational context." />
+  <Card variant="success" title="Success" description="All systems operational." />
+  <Card variant="warning" title="Warning" description="Approaching the rate limit." />
+  <Card variant="danger" title="Danger" description="Deleting this is irreversible." />
+</>
+```
+
+:::
+
 ### With icon
 
 Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).

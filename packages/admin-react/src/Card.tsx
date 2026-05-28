@@ -2,7 +2,18 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
+export type CardVariant =
+  | "default"
+  | "muted"
+  | "primary"
+  | "info"
+  | "success"
+  | "warning"
+  | "danger";
+
 export interface CardContainerProps extends ComponentProps<"div"> {
+  /** Tinted surface + matching border. Defaults to the neutral surface. */
+  variant?: CardVariant;
   bordered?: boolean;
   compact?: boolean;
 }
@@ -11,16 +22,32 @@ export interface CardContainerProps extends ComponentProps<"div"> {
  * The bare `.card` container — no body, no title. Use this when you need to
  * compose the internals yourself (e.g. a media block above the body).
  */
-function CardContainer({ bordered, compact, className, ...rest }: CardContainerProps) {
+function CardContainer({
+  variant = "default",
+  bordered,
+  compact,
+  className,
+  ...rest
+}: CardContainerProps) {
   return (
     <div
-      className={cn(["card", bordered && "card-bordered", compact && "card-compact"], className)}
+      className={cn(
+        [
+          "card",
+          variant !== "default" && `card-${variant}`,
+          bordered && "card-bordered",
+          compact && "card-compact",
+        ],
+        className,
+      )}
       {...rest}
     />
   );
 }
 
 export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
+  /** Tinted surface + matching border. Defaults to the neutral surface. */
+  variant?: CardVariant;
   bordered?: boolean;
   compact?: boolean;
   /** Leading icon for the title row. */
@@ -41,6 +68,7 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
  * anything outside that shape, use `<Card.Container>` and compose by hand.
  */
 function CardRoot({
+  variant,
   bordered,
   compact,
   icon,
@@ -55,7 +83,13 @@ function CardRoot({
   const hasTitle = icon !== undefined || title !== undefined;
   const titleEl = hasTitle ? <CardTitle icon={icon}>{title}</CardTitle> : null;
   return (
-    <CardContainer bordered={bordered} compact={compact} className={className} {...rest}>
+    <CardContainer
+      variant={variant}
+      bordered={bordered}
+      compact={compact}
+      className={className}
+      {...rest}
+    >
       <CardBody>
         {toolbar !== undefined ? (
           <CardHeader>

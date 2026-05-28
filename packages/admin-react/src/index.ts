@@ -100,6 +100,7 @@ export {
 export {
   Field,
   type FieldProps,
+  type FieldContainerProps,
   type FieldLabelProps,
   type FieldDescriptionProps,
   type FieldErrorProps,

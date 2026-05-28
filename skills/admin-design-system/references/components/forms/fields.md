@@ -2,7 +2,7 @@
 
 > Accessibility wiring (label, description, validation) around inputs.
 
-Vanilla: wire `<label for>` and `aria-describedby` yourself. React: wrap an `Input` in `Field` + `Field.Label` and Base UI handles the wiring.
+Vanilla: wire `<label for>` and `aria-describedby` yourself. React: `<Field>` accepts `label`, `description`, `error`, and `required` props; children render as the control inside an auto-wired layout. For per-`ValidityState` errors or other irregular layouts, drop to [`<Field.Container>`](#advanced-composition-with-fieldcontainer).
 
 ## Examples
 
@@ -25,16 +25,14 @@ Vanilla: wire `<label for>` and `aria-describedby` yourself. React: wrap an `Inp
 ```
 
 ```tsx
-<Field name="email">
-  <Field.Label>Email</Field.Label>
+<Field name="email" label="Email" description="We'll never share your email.">
   <Input type="email" placeholder="you@example.com" />
-  <Field.Description>We'll never share your email.</Field.Description>
 </Field>
 ```
 
 ### Required
 
-Pass `required` to `Field.Label` (React) or `data-required` to the label (vanilla) for a red asterisk. The `.asteriskField` class also works, for template generators that emit `<span class="asteriskField">*</span>` (e.g. django-crispy-forms).
+Pass `required` to add a red asterisk after the label. Vanilla can also use `<span class="asteriskField">*</span>` inside the label, which template generators (e.g. django-crispy-forms) often emit. Setting `required` on `<Field>` does not propagate to the control — set it on the control too.
 
 **Example**
 
@@ -50,15 +48,14 @@ Pass `required` to `Field.Label` (React) or `data-required` to the label (vanill
 ```
 
 ```tsx
-<Field name="email">
-  <Field.Label required>Email</Field.Label>
+<Field name="email" label="Email" required>
   <Input type="email" required />
 </Field>
 ```
 
 ### With validation
 
-In vanilla, render a `<p class="field-error">` after the input — typically populated server-side. In React, `<Field.Error match="…">` ties messages to specific `ValidityState` keys. `validationMode="onChange"` validates as the user types; default is `onBlur`.
+Pass `error` for a single message that shows whenever the control is invalid. In vanilla, render a `<p class="field-error">` after the input — typically populated server-side.
 
 **Example**
 
@@ -77,17 +74,21 @@ In vanilla, render a `<p class="field-error">` after the input — typically pop
 ```
 
 ```tsx
-<Field name="username" validationMode="onChange">
-  <Field.Label>Username</Field.Label>
+<Field
+  name="username"
+  label="Username"
+  error="Must be at least 3 characters."
+  validationMode="onChange"
+>
   <Input required minLength={3} placeholder="At least 3 characters" />
-  <Field.Error match="valueMissing">Username is required.</Field.Error>
-  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
 </Field>
 ```
 
-### Inline label (`.field-row`)
+For separate messages per `ValidityState` key, use `<Field.Container>` — see [below](#advanced-composition-with-fieldcontainer).
 
-For a control that belongs beside its label rather than above it — switches, single checkboxes — add `.field-row` (or pass `className="field-row"` in React).
+### Inline label
+
+Pass `inline` to place the control beside its label rather than above — suited to switches and single checkboxes. In vanilla, add `.field-row`.
 
 **Example**
 
@@ -102,8 +103,37 @@ For a control that belongs beside its label rather than above it — switches, s
 ```
 
 ```tsx
-<Field className="field-row">
+<Field inline label="Email me about new orders">
   <Switch />
-  <Field.Label>Email me about new orders</Field.Label>
 </Field>
+```
+
+## Advanced: composition with `Field.Container`
+
+`<Field.Container>` renders the bare `.field` and lets you compose the sub-parts yourself — useful when `<Field.Error match="…">` needs to tie individual messages to specific `ValidityState` keys.
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="username-multi">Username</label>
+  <input
+    id="username-multi"
+    class="input input-bordered"
+    required
+    minlength="3"
+    placeholder="At least 3 characters"
+  />
+  <p class="field-error">Username is required.</p>
+  <p class="field-error">Must be at least 3 characters.</p>
+</div>
+```
+
+```tsx
+<Field.Container name="username" validationMode="onChange">
+  <Field.Label>Username</Field.Label>
+  <Input required minLength={3} placeholder="At least 3 characters" />
+  <Field.Error match="valueMissing">Username is required.</Field.Error>
+  <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
+</Field.Container>
 ```

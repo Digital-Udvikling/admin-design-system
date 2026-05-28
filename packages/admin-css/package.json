@@ -32,6 +32,8 @@
     "./admin.min.css": "./dist/admin.min.css",
     "./admin.scoped.css": "./dist/admin.scoped.css",
     "./admin.scoped.min.css": "./dist/admin.scoped.min.css",
+    "./admin.utilities.css": "./dist/admin.utilities.css",
+    "./admin.utilities.min.css": "./dist/admin.utilities.min.css",
     "./src/*": "./src/*"
   },
   "publishConfig": {
@@ -39,9 +41,11 @@
     "provenance": true
   },
   "scripts": {
-    "build": "pnpm build:dev && pnpm build:min && pnpm build:scoped",
+    "build": "pnpm build:dev && pnpm build:min && pnpm build:utilities && pnpm build:utilities:min && pnpm build:scoped",
     "build:dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css",
     "build:min": "tailwindcss -i ./src/admin.css -o ./dist/admin.min.css --minify",
+    "build:utilities": "tailwindcss -i ./src/utilities.css -o ./dist/admin.utilities.css",
+    "build:utilities:min": "tailwindcss -i ./src/utilities.css -o ./dist/admin.utilities.min.css --minify",
     "build:scoped": "node ./scripts/wrap-scoped.mjs",
     "dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
     "prepublishOnly": "pnpm build",

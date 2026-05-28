@@ -62,7 +62,7 @@ No JS toggle needed.
 
 If the host application uses Tailwind v4 — check `package.json` for `tailwindcss` or look for `@import "tailwindcss"` in a CSS entry — reach for utility classes for spacing, flex/grid, and one-off layout: `flex items-center gap-2`, `grid grid-cols-3`, `mt-4`. The design system's semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) are wired through Tailwind, so utilities and component classes compose freely on the same element.
 
-For projects without Tailwind, use the host project's own layout classes or inline styles — the component classes (`.btn`, `.card`, …) don't require Tailwind to render correctly.
+For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package ships a second pre-built bundle, `@aortl/admin-css/admin.utilities.css`, containing a curated subset of Tailwind-grammar utilities (layout, flex/grid, spacing, sizing, typography, borders, semantic colors). Drop it in alongside `admin.css`. Semantic colors only (`bg-primary`, `text-danger`) — no raw Flexoki tones in utility form. The React package does not consume this bundle; in `@aortl/admin-react` contexts, prefer component props (`<Card>`, `<Button>`) and component composition over utility classes.
 
 ### Keyboard shortcuts
 

@@ -22,6 +22,49 @@ Then import `@aortl/admin-css/admin.min.css` from your bundler entry. Package pa
 
 Embedding admin markup inside a non-admin page? See [Scoped bundle](../scoped/) for a variant that wraps every rule in `@scope (._ao-admin-root)` and prefixes class names with `_ao-` so they can't collide with the host's CSS.
 
+## Utilities (optional)
+
+A second pre-built file ships Tailwind-grammar utilities (`flex`, `grid-cols-3`, `p-4`, `bg-primary`, …) for laying out pages from Jinja, Go templates, or plain HTML without setting up Tailwind. Opt-in — drop a second `<link>` next to `admin.min.css`:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.utilities.min.css" />
+```
+
+### What's included
+
+- **Layout / flex / grid** — `block`, `flex`, `grid`, `hidden`, `relative`, `sticky`, `overflow-*`, `flex-{row,col,wrap}`, `items-*`, `justify-*`, `gap-*`, `grid-cols-{1-12}`, `col-span-*`, `order-*`.
+- **Spacing** — `p`/`m` per side on a curated 14-step scale: `0, 0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32`. Anything above `32` is outside admin density.
+- **Sizing** — `w`/`h`/`min-w`/`max-w`/`min-h`/`max-h` on the same scale plus `px`, fractions (`1/2`, `1/3`, `2/3`, `1/4`, `2/4`, `3/4`), and keywords (`auto`, `full`, `screen`, `fit`, `min`, `max`). `max-w-*` additionally accepts the container-width tokens (`xs`..`7xl`, `prose`, `none`).
+- **Typography** — `text-{xs,sm,base,lg,xl,2xl}`, `font-{thin..black}`, `font-{sans,mono,serif}`, `leading-*`, `tracking-*`, `text-{left,center,right}`, `text-{wrap,balance}`, `underline`, `truncate`. No `text-3xl` and above.
+- **Borders / effects** — `border`, `border-{0,2,4,8}`, `rounded-*` per side, `shadow-{xs..2xl,inner}`, `ring-*`, `outline-*`, `opacity-*`, `cursor-*`, `z-*`, `aspect-{square,video}`, `sr-only`.
+- **Colors** — semantic tokens only: `bg-primary`, `text-text-muted`, `border-danger`, `ring-info`, `shadow-success`. Override `--color-primary` and every utility follows. No raw Flexoki ramps (`bg-blue-600`) — see [Theme](../../basics/theme/).
+- **Translate** — `translate-x-*`, `translate-y-*` on the spacing scale plus `1/2` and `full` (the one transform that survives the cut).
+- **Variants** — `sm:`, `md:`, `lg:`, `xl:`, `2xl:` on layout-shifting utilities; `hover:`, `focus:`, `focus-visible:`, `active:` on stateful ones.
+
+### What's not included
+
+Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-blend, SVG fill/stroke, and transforms beyond `translate-x/y`. Dark mode is driven by [tokens via `light-dark()`](../../basics/dark-mode/), not a `dark:` variant. If a family you need is missing, the design-system component CSS (`.btn`, `.card`, `.alert`, `.field`) most likely already covers it.
+
+### Compose with components
+
+```html
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Orders</h3>
+      <p class="text-text-muted text-sm">128 placed</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Errors</h3>
+      <p class="text-danger text-sm">3 in last hour</p>
+    </div>
+  </div>
+</div>
+```
+
 ## Add icons (optional)
 
 The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage. The webfont drops in without a bundler:

@@ -1,0 +1,137 @@
+@layer theme, base, components, utilities;
+
+@reference "tailwindcss";
+@reference "./theme.css";
+
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * Pre-built utility safelist for the no-build `admin.utilities.css` bundle.
+ *
+ * Curated to keep wire size tight — admin density rarely needs spacing
+ * above 32, text sizes above 2xl, or interactive variants on layout
+ * primitives. Each `@source inline(...)` is a brace-expanded class set;
+ * Tailwind expands the same way bash does (empty branches `{,foo}`
+ * include both the no-prefix and prefixed forms).
+ *
+ * Variant policy per family:
+ *   - Layout (display, spacing, sizing, grid, ...) → responsive only
+ *   - Visual (colors, borders, shadow, outline)    → interactive only
+ *   - Typography (weight, leading, ...)            → neither
+ *
+ * Adding a utility: extend the matching line. Adding a new semantic
+ * color: update theme.css AND the color lines below.
+ */
+
+/* Display, position, visibility — responsive */
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,table,inline-table,table-row,table-cell,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}overflow{,-x,-y}-{auto,hidden,visible,scroll,clip}");
+
+/* Flex / grid — responsive */
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}flex-{row,row-reverse,col,col-reverse,wrap,wrap-reverse,nowrap,1,auto,initial,none}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{grow,grow-0,shrink,shrink-0}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}items-{start,end,center,baseline,stretch}");
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}justify-{start,end,center,between,around,evenly,stretch}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}justify-items-{start,end,center,stretch}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}justify-self-{auto,start,end,center,stretch,baseline}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}self-{auto,start,end,center,stretch,baseline}");
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}place-{items,content,self}-{start,end,center,stretch,between,around,evenly}"
+);
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}content-{start,end,center,between,around,evenly,stretch,normal}"
+);
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{grid-cols,grid-rows}-{1,2,3,4,5,6,7,8,9,10,11,12,none,subgrid}"
+);
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{col-span,row-span}-{1,2,3,4,5,6,7,8,9,10,11,12,full,auto}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}grid-flow-{row,col,dense,row-dense,col-dense}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{auto-cols,auto-rows}-{auto,min,max,fr}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}order-{1,2,3,4,5,6,7,8,9,10,11,12,first,last,none}");
+
+/* Spacing (padding, margin, gap) — responsive */
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{p,px,py,pt,pr,pb,pl,ps,pe,m,mx,my,mt,mr,mb,ml,ms,me,gap,gap-x,gap-y}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{m,mx,my,mt,mr,mb,ml,ms,me}-auto");
+
+/* Sizing (w, h, min-w, max-w, min-h, max-h) — responsive */
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{w,h,min-w,max-w,min-h,max-h}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32,px,auto,full,screen,fit,min,max}"
+);
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{w,h}-{1/2,1/3,2/3,1/4,2/4,3/4}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,prose,none}");
+
+/* Text size + align — responsive */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}text-{xs,sm,base,lg,xl,2xl}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}text-{left,center,right,justify,start,end}");
+
+/* Aspect ratio — responsive */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}aspect-{auto,square,video}");
+
+/* Translate (x/y only — full transforms intentionally skipped) — responsive */
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}translate-{x,y}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32,1/2,full}"
+);
+
+/* Typography (non-size) — no variants */
+@source inline("font-{thin,extralight,light,normal,medium,semibold,bold,extrabold,black}");
+@source inline("font-{sans,mono,serif}");
+@source inline("leading-{none,tight,snug,normal,relaxed,loose,3,4,5,6,7,8,9,10}");
+@source inline("tracking-{tighter,tight,normal,wide,wider,widest}");
+@source inline("text-{wrap,nowrap,balance,pretty}");
+@source inline("{underline,overline,line-through,no-underline,truncate}");
+
+/* Borders + rounded — interactive */
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}border{,-x,-y,-t,-r,-b,-l}{,-0,-2,-4,-8}"
+);
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}border-{solid,dashed,dotted,double,hidden,none}"
+);
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}rounded{,-t,-r,-b,-l,-tl,-tr,-br,-bl}{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}"
+);
+
+/* Outline + ring — interactive */
+@source inline("{,hover:,focus:,focus-visible:,active:}outline{,-0,-1,-2,-4,-8}");
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}outline-{none,dashed,dotted,double,hidden}"
+);
+@source inline("{,hover:,focus:,focus-visible:,active:}outline-offset-{0,1,2,4,8}");
+@source inline("{,hover:,focus:,focus-visible:,active:}ring{,-0,-1,-2,-4,-8}");
+@source inline("{,hover:,focus:,focus-visible:,active:}ring-inset");
+
+/* Shadow — interactive */
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}shadow{,-2xs,-xs,-sm,-md,-lg,-xl,-2xl,-inner,-none}"
+);
+
+/* Foundation semantic colors — interactive (kept in sync with theme.css) */
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,text,text-muted,border,border-strong}"
+);
+
+/* Accent semantic colors — each has base + -hover + -muted + -content (kept in sync with theme.css) */
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{primary,system-accent,danger,success,warning,info}{,-hover,-muted,-content}"
+);
+
+/* Cursor + opacity — interactive */
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}cursor-{auto,default,pointer,wait,text,move,help,not-allowed,none,progress,grab,grabbing,col-resize,row-resize,zoom-in,zoom-out}"
+);
+@source inline(
+  "{,hover:,focus:,focus-visible:,active:}opacity-{0,5,10,15,20,25,30,40,50,60,70,75,80,90,95,100}"
+);
+
+/* Z-index — no variants */
+@source inline("z-{0,10,20,30,40,50,auto}");

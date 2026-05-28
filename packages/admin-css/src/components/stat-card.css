@@ -1,11 +1,13 @@
 @layer components {
+  /* A KPI tile is a `.card` shell with no inner `.card-body` — label / value /
+     detail stack directly on the card. Pair `.stat-card` with `.card` in the
+     markup so it inherits the surface, border, radius, and shadow, plus every
+     card modifier: `.card-bordered`, `.card-compact`, and the color variants
+     (`.card-primary`, `.card-muted`, …). `.stat-card` only adds the flat inner
+     padding/gap and the inverted hierarchy (the value dominates, the label is a
+     small annotation). */
   .stat-card {
-    @apply flex flex-col gap-1
-           p-4
-           bg-surface text-text
-           border border-border
-           rounded-xl
-           shadow-xs;
+    @apply gap-1 p-4;
   }
 
   .stat-card-label {
@@ -20,12 +22,31 @@
     @apply text-sm text-text-muted;
   }
 
-  /* Modifiers — mirror `.card`. */
-  .stat-card-compact {
+  /* `.card-compact` tightens `.card-body`, but a stat card has no body — apply
+     the same padding step to the stat-card root, with a tighter gap to match. */
+  .card-compact.stat-card {
     @apply p-3 gap-0.5;
   }
 
-  .stat-card-bordered {
-    @apply shadow-none border-border-strong;
+  /* Color variants (`.card-primary`, `.card-success`, …) supply the tinted
+     surface + border via `.card`. Here we tint the value to the matching accent
+     — the headline metric is a stat card's analog of `.card-title`, so a status
+     KPI reads its colour at a glance. `warning` is skipped for the same reason
+     `.card-warning` skips its title: yellow-400 fails AA on the muted yellow
+     surface. The tinted surface still carries the warning signal. */
+  .card-primary .stat-card-value {
+    @apply text-primary;
+  }
+
+  .card-info .stat-card-value {
+    @apply text-info;
+  }
+
+  .card-success .stat-card-value {
+    @apply text-success;
+  }
+
+  .card-danger .stat-card-value {
+    @apply text-danger;
   }
 }

@@ -21,10 +21,16 @@ describe("StatCard", () => {
     expect(detail).toHaveAdminClass("stat-card-detail");
   });
 
-  it("applies compact and bordered modifiers", () => {
+  it("renders a card shell and maps modifiers to the shared card classes", () => {
     const { container } = render(<StatCard compact bordered value="0" />);
     const root = container.querySelector(adminSelector("stat-card"));
-    expect(root).toHaveAdminClass("stat-card", "stat-card-compact", "stat-card-bordered");
+    expect(root).toHaveAdminClass("card", "stat-card", "card-compact", "card-bordered");
+  });
+
+  it("applies the shared card variant class on the root", () => {
+    const { container } = render(<StatCard variant="success" value="0" />);
+    const root = container.querySelector(adminSelector("stat-card"));
+    expect(root).toHaveAdminClass("card-success");
   });
 
   it("renders a leading icon inside the label row", () => {

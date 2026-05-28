@@ -2,7 +2,7 @@
 
 > Compact KPI tile with label, value, and detail.
 
-Headline metrics for dashboards. The value dominates; label and detail are small annotations. For free-form tiles, use [Cards](../cards/); for label/value tables, use [Property list](../property-list/).
+Headline metrics for dashboards. The value dominates; label and detail are small annotations. A stat card is a [`card`](../cards/) shell — pair `stat-card` with `card` so it shares the surface, border, radius, shadow, and every card modifier. For free-form tiles, use [Cards](../cards/); for label/value tables, use [Property list](../property-list/).
 
 ## Examples
 
@@ -11,7 +11,7 @@ Headline metrics for dashboards. The value dominates; label and detail are small
 **Example**
 
 ```html
-<div class="stat-card">
+<div class="card stat-card">
   <p class="stat-card-label">Total Generations</p>
   <p class="stat-card-value">1,234</p>
   <p class="stat-card-detail">42 completed / 12 pending</p>
@@ -29,7 +29,7 @@ Pass `icon` — it lands in the label row. See [Icons](../../basics/icons/).
 **Example**
 
 ```html
-<div class="stat-card">
+<div class="card stat-card">
   <p class="stat-card-label">
     <i class="ti ti-shopping-bag" aria-hidden="true"></i>
     Orders today
@@ -45,12 +45,12 @@ Pass `icon` — it lands in the label row. See [Icons](../../basics/icons/).
 
 ### Compact + bordered
 
-Same modifiers as [`<Card>`](../cards/#compact--bordered): `compact` tightens padding, `bordered` drops the shadow.
+The same [`card-compact` / `card-bordered`](../cards/#compact--bordered) modifiers a card uses: `compact` tightens padding, `bordered` drops the shadow.
 
 **Example**
 
 ```html
-<div class="stat-card stat-card-compact stat-card-bordered">
+<div class="card stat-card card-compact card-bordered">
   <p class="stat-card-label">Active sessions</p>
   <p class="stat-card-value">3,402</p>
   <p class="stat-card-detail">+12% vs last hour</p>
@@ -61,6 +61,46 @@ Same modifiers as [`<Card>`](../cards/#compact--bordered): `compact` tightens pa
 <StatCard compact bordered label="Active sessions" value="3,402" detail="+12% vs last hour" />
 ```
 
+### Color variants
+
+The same [variants as `<Card>`](../cards/#color-variants) — a tinted surface signals status, and the value picks up the matching accent for fast scanning. `muted` sits flush with the page; `warning` keeps its value at the default colour (yellow fails contrast on the tinted surface). Use sparingly.
+
+**Example**
+
+```html
+<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+  <div class="card stat-card card-success">
+    <p class="stat-card-label">Uptime</p>
+    <p class="stat-card-value">99.98%</p>
+    <p class="stat-card-detail">last 30 days</p>
+  </div>
+  <div class="card stat-card card-danger">
+    <p class="stat-card-label">Failed jobs</p>
+    <p class="stat-card-value">37</p>
+    <p class="stat-card-detail">+29 vs yesterday</p>
+  </div>
+  <div class="card stat-card card-warning">
+    <p class="stat-card-label">Queue depth</p>
+    <p class="stat-card-value">1,204</p>
+    <p class="stat-card-detail">approaching limit</p>
+  </div>
+  <div class="card stat-card card-muted">
+    <p class="stat-card-label">Archived</p>
+    <p class="stat-card-value">8,510</p>
+    <p class="stat-card-detail">read-only</p>
+  </div>
+</div>
+```
+
+```tsx
+<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+  <StatCard variant="success" label="Uptime" value="99.98%" detail="last 30 days" />
+  <StatCard variant="danger" label="Failed jobs" value="37" detail="+29 vs yesterday" />
+  <StatCard variant="warning" label="Queue depth" value="1,204" detail="approaching limit" />
+  <StatCard variant="muted" label="Archived" value="8,510" detail="read-only" />
+</div>
+```
+
 ### Dashboard grid
 
 Grid layout is the consumer's call. Compose with utility classes; the tile doesn't bake in a wrapper.
@@ -69,7 +109,7 @@ Grid layout is the consumer's call. Compose with utility classes; the tile doesn
 
 ```html
 <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-  <div class="stat-card">
+  <div class="card stat-card">
     <p class="stat-card-label">
       <i class="ti ti-users" aria-hidden="true"></i>
       Users
@@ -77,7 +117,7 @@ Grid layout is the consumer's call. Compose with utility classes; the tile doesn
     <p class="stat-card-value">12,408</p>
     <p class="stat-card-detail">+1,204 this week</p>
   </div>
-  <div class="stat-card">
+  <div class="card stat-card">
     <p class="stat-card-label">
       <i class="ti ti-activity" aria-hidden="true"></i>
       Active now
@@ -85,7 +125,7 @@ Grid layout is the consumer's call. Compose with utility classes; the tile doesn
     <p class="stat-card-value">342</p>
     <p class="stat-card-detail">peak 412</p>
   </div>
-  <div class="stat-card">
+  <div class="card stat-card">
     <p class="stat-card-label">
       <i class="ti ti-shopping-bag" aria-hidden="true"></i>
       Orders
@@ -93,7 +133,7 @@ Grid layout is the consumer's call. Compose with utility classes; the tile doesn
     <p class="stat-card-value">128</p>
     <p class="stat-card-detail">14 pending</p>
   </div>
-  <div class="stat-card">
+  <div class="card stat-card">
     <p class="stat-card-label">
       <i class="ti ti-cash" aria-hidden="true"></i>
       Revenue
@@ -120,7 +160,7 @@ For trend chips, sparklines, or anything else, drop it in as children — it ren
 **Example**
 
 ```html
-<div class="stat-card">
+<div class="card stat-card">
   <p class="stat-card-label">Error rate</p>
   <p class="stat-card-value">0.42%</p>
   <p class="stat-card-detail">last 24 hours</p>

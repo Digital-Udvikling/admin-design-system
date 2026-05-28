@@ -1,8 +1,11 @@
 import type { ComponentProps, ReactNode } from "react";
+import type { CardVariant } from "./Card";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export interface StatCardProps extends Omit<ComponentProps<"div">, "label"> {
+  /** Tinted surface + matching border, shared with `<Card>`. The value picks up the accent (except `warning`). Defaults to the neutral surface. */
+  variant?: CardVariant;
   /** Small annotation above the value (e.g. "Total Generations"). */
   label?: ReactNode;
   /** The headline metric. Rendered with `tabular-nums` so digits don't shift between values. */
@@ -16,12 +19,15 @@ export interface StatCardProps extends Omit<ComponentProps<"div">, "label"> {
 }
 
 /**
- * Compact KPI tile — `label / value / detail`. Outer chrome matches `<Card>`
- * (border, radius, shadow) but the inner shape inverts the visual hierarchy:
- * value dominates, label is the small annotation. For free-form tiles, use
- * `<Card>`; for label/value tables, use `<PropertyList>`.
+ * Compact KPI tile — `label / value / detail`. Renders a `.card` shell (so it
+ * shares the surface, border, radius, shadow, and every card modifier) with an
+ * inverted inner hierarchy: the value dominates, the label is a small
+ * annotation. `compact`/`bordered` map to the shared `.card-compact`/
+ * `.card-bordered` modifiers. For free-form tiles, use `<Card>`; for
+ * label/value tables, use `<PropertyList>`.
  */
 export function StatCard({
+  variant = "default",
   label,
   value,
   detail,
@@ -36,7 +42,13 @@ export function StatCard({
   return (
     <div
       className={cn(
-        ["stat-card", compact && "stat-card-compact", bordered && "stat-card-bordered"],
+        [
+          "card",
+          "stat-card",
+          variant !== "default" && `card-${variant}`,
+          compact && "card-compact",
+          bordered && "card-bordered",
+        ],
         className,
       )}
       {...rest}

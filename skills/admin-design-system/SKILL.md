@@ -141,12 +141,14 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Forms: Selects](references/components/forms/selects.md) — Compound Select with Trigger + Popup + Item.
 - [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
 - [Forms: Textareas](references/components/forms/textareas.md) — Multi-line text input.
+- [Grid](references/components/grid.md) — Two-dimensional layouts with grid utilities.
 - [Indicator](references/components/indicator.md) — Place a badge, count, or dot on the corner of another element.
 - [Kbd](references/components/kbd.md) — Keyboard shortcut chips for help text, tooltips, and bindings.
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.
 - [Property list](references/components/property-list.md) — Label-and-value rows for one-entity-N-attributes panels.
+- [Row](references/components/row.md) — One-dimensional layouts with flex utilities.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
 - [Tables](references/components/tables.md) — Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.

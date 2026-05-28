@@ -1,0 +1,214 @@
+# Grid
+
+> Two-dimensional layouts with grid utilities.
+
+There's no `.grid` component — for two-dimensional layouts, use Tailwind's grid utilities directly. Vanilla projects get them from the [utilities bundle](../../getting-started/vanilla/#utilities-optional); React projects should [add Tailwind](../../getting-started/tailwind/) so the bare class names resolve. Everything below is those utilities. For laying items out in a single line, see [Row](../row/).
+
+## Examples
+
+### Columns
+
+`gap` spaces cells on both axes.
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-3 gap-4">
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">1</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">2</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">3</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">4</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">5</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">6</div>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-3 gap-4">
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">1</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">2</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">3</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">4</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">5</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">6</div>
+</div>
+```
+
+### Responsive columns
+
+Change the column count per breakpoint.
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="rounded border border-border p-4">
+    <p class="text-text-muted text-xs">Users</p>
+    <p class="text-2xl font-semibold">12,408</p>
+  </div>
+  <div class="rounded border border-border p-4">
+    <p class="text-text-muted text-xs">Active now</p>
+    <p class="text-2xl font-semibold">342</p>
+  </div>
+  <div class="rounded border border-border p-4">
+    <p class="text-text-muted text-xs">Orders</p>
+    <p class="text-2xl font-semibold">128</p>
+  </div>
+  <div class="rounded border border-border p-4">
+    <p class="text-text-muted text-xs">Revenue</p>
+    <p class="text-2xl font-semibold">$8.4k</p>
+  </div>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div className="rounded border border-border p-4">
+    <p className="text-text-muted text-xs">Users</p>
+    <p className="text-2xl font-semibold">12,408</p>
+  </div>
+  <div className="rounded border border-border p-4">
+    <p className="text-text-muted text-xs">Active now</p>
+    <p className="text-2xl font-semibold">342</p>
+  </div>
+  <div className="rounded border border-border p-4">
+    <p className="text-text-muted text-xs">Orders</p>
+    <p className="text-2xl font-semibold">128</p>
+  </div>
+  <div className="rounded border border-border p-4">
+    <p className="text-text-muted text-xs">Revenue</p>
+    <p className="text-2xl font-semibold">$8.4k</p>
+  </div>
+</div>
+```
+
+### Auto-fit
+
+A track list can't be a utility, so set it inline. `repeat(auto-fill, minmax(12rem, 1fr))` fits as many 12rem columns as the width allows and stretches them to fill — reflowing on resize with no media queries. Swap `auto-fill` for `auto-fit` to collapse empty tracks when there are few items.
+
+**Example**
+
+```html
+<div class="grid w-full gap-4" style="grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr))">
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">Reflows</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">by available</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">width</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">no</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">breakpoints</div>
+</div>
+```
+
+```tsx
+<div
+  className="grid w-full gap-4"
+  style={{ gridTemplateColumns: "repeat(auto-fill, minmax(12rem, 1fr))" }}
+>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">Reflows</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">by available</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">width</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">no</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">breakpoints</div>
+</div>
+```
+
+### Spanning
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-3 gap-4">
+  <div class="rounded bg-surface-muted p-4 text-center text-sm col-span-2">col-span-2</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm row-span-2">row-span-2</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">C</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm">D</div>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-3 gap-4">
+  <div className="rounded bg-surface-muted p-4 text-center text-sm col-span-2">col-span-2</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm row-span-2">row-span-2</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">C</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm">D</div>
+</div>
+```
+
+### Placement
+
+For explicit positioning, `col-start` / `col-end` (and the row pair) pin a cell to specific grid lines. Lines run `1…n+1`, so a 3-column grid has lines 1–4.
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-3 gap-4">
+  <div class="rounded bg-surface-muted p-4 text-center text-sm col-start-1">col-start-1</div>
+  <div class="rounded bg-surface-muted p-4 text-center text-sm col-start-2 col-end-4">
+    col-start-2 col-end-4
+  </div>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-3 gap-4">
+  <div className="rounded bg-surface-muted p-4 text-center text-sm col-start-1">col-start-1</div>
+  <div className="rounded bg-surface-muted p-4 text-center text-sm col-start-2 col-end-4">
+    col-start-2 col-end-4
+  </div>
+</div>
+```
+
+### Cell alignment
+
+Cells stretch to fill their track by default. `justify-items-*` aligns them on the inline axis, `items-*` on the block axis, and `place-items-*` both at once.
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-3 gap-4 justify-items-center">
+  <div class="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">1</div>
+  <div class="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">2</div>
+  <div class="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">3</div>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-3 gap-4 justify-items-center">
+  <div className="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">1</div>
+  <div className="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">2</div>
+  <div className="rounded bg-surface-muted w-16 h-16 grid place-items-center text-sm">3</div>
+</div>
+```
+
+### Two-pane layout
+
+Grids nest. A four-column shell holds a fixed sidebar and a content pane that runs its own responsive grid — all utilities, no inline track list.
+
+**Example**
+
+```html
+<div class="grid w-full grid-cols-4 gap-4">
+  <aside class="card col-span-4 sm:col-span-1">
+    <div class="card-body"><h3 class="card-title">Filters</h3></div>
+  </aside>
+  <section class="col-span-4 grid gap-4 sm:col-span-3 sm:grid-cols-2">
+    <div class="card">
+      <div class="card-body"><h3 class="card-title">Revenue</h3></div>
+    </div>
+    <div class="card">
+      <div class="card-body"><h3 class="card-title">Orders</h3></div>
+    </div>
+  </section>
+</div>
+```
+
+```tsx
+<div className="grid w-full grid-cols-4 gap-4">
+  <Card title="Filters" className="col-span-4 sm:col-span-1" />
+  <section className="col-span-4 grid gap-4 sm:col-span-3 sm:grid-cols-2">
+    <Card title="Revenue" />
+    <Card title="Orders" />
+  </section>
+</div>
+```
+
+Grid also offers `grid-flow-dense` to pack items into earlier gaps and `grid-cols-subgrid` for a nested grid that inherits its parent's tracks — see [Utilities](../../getting-started/vanilla/#utilities-optional).

@@ -33,11 +33,11 @@ A second pre-built file ships Tailwind-grammar utilities (`flex`, `grid-cols-3`,
 
 ### What's included
 
-- **Layout / flex / grid** — `block`, `flex`, `grid`, `hidden`, `relative`, `sticky`, `overflow-*`, `flex-{row,col,wrap}`, `items-*`, `justify-*`, `gap-*`, `grid-cols-{1-12}`, `col-span-*`, `order-*`.
+- **Layout / flex / grid** — `block`, `flex`, `grid`, `hidden`, `relative`, `sticky`, `overflow-*`, `flex-{row,col,wrap}`, `items-*`, `justify-*`, `gap-*`, `grid-cols-{1-12}`, `col-span-*`, `col-start/end-*`, `row-start/end-*`, `order-*`. See [Row](../../components/row/) and [Grid](../../components/grid/) for patterns.
 - **Spacing** — `p`/`m` per side on a curated 14-step scale: `0, 0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32`. Anything above `32` is outside admin density.
 - **Sizing** — `w`/`h`/`min-w`/`max-w`/`min-h`/`max-h` on the same scale plus `px`, fractions (`1/2`, `1/3`, `2/3`, `1/4`, `2/4`, `3/4`), and keywords (`auto`, `full`, `screen`, `fit`, `min`, `max`). `max-w-*` additionally accepts the container-width tokens (`xs`..`7xl`, `prose`, `none`).
 - **Typography** — `text-{xs,sm,base,lg,xl,2xl}`, `font-{thin..black}`, `font-{sans,mono,serif}`, `italic`, `uppercase`/`lowercase`/`capitalize`, `tabular-nums` (+ other `*-nums` variants), `leading-*`, `tracking-*`, `text-{left,center,right}`, `text-{wrap,balance}`, `whitespace-{nowrap,pre,…}`, `break-{words,all,keep}`, `align-*` (vertical-align), `list-{disc,decimal,none}`, `underline`, `truncate`. No `text-3xl` and above.
-- **Borders / effects** — `border`, `border-{0,2,4,8}`, `rounded-*` per side, `shadow-{xs..2xl,inner}`, `ring-*`, `outline-*`, `opacity-*`, `cursor-*`, `pointer-events-*`, `select-*`, `z-*`, `aspect-{square,video}`, `object-{cover,contain,fill,none,scale-down}`, `sr-only`.
+- **Borders / effects** — `border`, `border-{0,2,4,8}`, `divide-{x,y}` (hairlines between children), `rounded-*` per side, `shadow-{xs..2xl,inner}`, `ring-*`, `outline-*`, `opacity-*`, `cursor-*`, `pointer-events-*`, `select-*`, `z-*`, `aspect-{square,video}`, `object-{cover,contain,fill,none,scale-down}`, `sr-only`.
 - **Colors** — semantic tokens only: `bg-primary`, `text-text-muted`, `border-danger`, `ring-info`, `shadow-success`. Override `--color-primary` and every utility follows. No raw Flexoki ramps (`bg-blue-600`) — see [Theme](../../basics/theme/).
 - **Translate** — `translate-x-*`, `translate-y-*` on the spacing scale plus `1/2` and `full` (the one transform that survives the cut).
 - **Variants** — `sm:`, `md:`, `lg:`, `xl:`, `2xl:` on layout-shifting utilities; `hover:`, `focus:`, `focus-visible:`, `active:` on stateful ones.

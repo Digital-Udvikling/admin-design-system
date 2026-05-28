@@ -53,6 +53,9 @@
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}{col-span,row-span}-{1,2,3,4,5,6,7,8,9,10,11,12,full,auto}"
 );
+@source inline(
+  "{,sm:,md:,lg:,xl:,2xl:}{col-start,col-end,row-start,row-end}-{1,2,3,4,5,6,7,8,9,10,11,12,13,auto}"
+);
 @source inline("{,sm:,md:,lg:,xl:,2xl:}grid-flow-{row,col,dense,row-dense,col-dense}");
 @source inline("{,sm:,md:,lg:,xl:,2xl:}{auto-cols,auto-rows}-{auto,min,max,fr}");
 @source inline("{,sm:,md:,lg:,xl:,2xl:}order-{1,2,3,4,5,6,7,8,9,10,11,12,first,last,none}");
@@ -115,6 +118,14 @@
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}rounded{,-t,-r,-b,-l,-tl,-tr,-br,-bl}{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}"
 );
+
+/* Divide — borders between flex/grid children. Structural separators, so no
+   variants (a divider rarely changes on hover or at a breakpoint). Colors are
+   the two foundation borders only. */
+@source inline("divide-{x,y}{,-0,-2,-4,-8}");
+@source inline("divide-{x,y}-reverse");
+@source inline("divide-{solid,dashed,dotted,double,none}");
+@source inline("divide-{border,border-strong}");
 
 /* Outline + ring — interactive */
 @source inline("{,hover:,focus:,focus-visible:,active:}outline{,-0,-1,-2,-4,-8}");

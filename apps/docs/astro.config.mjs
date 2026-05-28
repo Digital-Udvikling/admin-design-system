@@ -11,6 +11,9 @@ import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
 export default defineConfig({
   site: "https://digital-udvikling.github.io",
   base: "/admin-design-system/",
+  markdown: {
+    remarkPlugins: [remarkDirective, remarkExample],
+  },
   integrations: [
     react(),
     starlight({
@@ -34,7 +37,7 @@ export default defineConfig({
         { label: "Contributing", items: [{ autogenerate: { directory: "contributing/" } }] },
       ],
     }),
-    mdx({ remarkPlugins: [remarkDirective, remarkExample] }),
+    mdx(),
   ],
   vite: {
     plugins: [tailwindcss(), virtualPreviewsPlugin()],

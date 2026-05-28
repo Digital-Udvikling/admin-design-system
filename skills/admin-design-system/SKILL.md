@@ -129,6 +129,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
+- [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.

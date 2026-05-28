@@ -1,0 +1,35 @@
+@layer components {
+  /* Page content region — a centered, max-width column that also owns the
+     vertical rhythm between stacked page sections. Drop it inside the bare
+     `.app-shell-main` (which has no padding of its own). Width presets just
+     set `--container-max`; override the var per-instance to deviate. */
+  .container {
+    @apply flex flex-col gap-6 w-full mx-auto px-6 py-6;
+    max-width: var(--container-max, 90rem);
+  }
+
+  .container-sm {
+    --container-max: 60rem;
+  }
+
+  .container-lg {
+    --container-max: 115rem;
+  }
+
+  /* Full-bleed: edge-to-edge within `main`, padding retained. */
+  .container-fluid {
+    --container-max: none;
+  }
+
+  /* Denser vertical rhythm + tighter block padding for packed screens. */
+  .container-compact {
+    @apply gap-4 py-4;
+  }
+
+  /* Less horizontal padding on small viewports — reuses the shell breakpoint. */
+  @media (max-width: 48rem) {
+    .container {
+      @apply px-4;
+    }
+  }
+}

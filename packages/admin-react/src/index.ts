@@ -73,6 +73,7 @@ export {
   type SelectGroupProps,
   type SelectGroupLabelProps,
 } from "./Select";
+export { Container, type ContainerProps, type ContainerSize } from "./Container";
 export {
   Card,
   type CardProps,

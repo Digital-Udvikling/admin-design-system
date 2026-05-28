@@ -59,6 +59,10 @@
     @apply inline-flex flex-col;
   }
 
+  .btn-group-vertical > .btn {
+    @apply justify-start;
+  }
+
   .btn-group-vertical > .btn:not(:first-child) {
     @apply -mt-px ml-0;
   }

@@ -20,8 +20,12 @@
     @apply bg-success-muted text-success border-success-muted;
   }
 
+  /* Warning text uses `text-text` rather than `text-warning`: the warning
+     accent is yellow-400 in both modes, which fails AA contrast against the
+     muted yellow background in light mode. The muted bg + border still carry
+     the warning signal. */
   .badge-warning {
-    @apply bg-warning-muted text-warning border-warning-muted;
+    @apply bg-warning-muted text-text border-warning-muted;
   }
 
   .badge-danger {

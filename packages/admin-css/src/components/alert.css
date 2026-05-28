@@ -67,9 +67,13 @@
     @apply text-success;
   }
 
+  /* Warning title/icon use `text-text` rather than `text-warning`: the warning
+     accent is yellow-400 in both modes, which fails AA contrast against the
+     muted yellow background in light mode. The muted bg + border still carry
+     the warning signal. */
   .alert-warning .alert-title,
   .alert-warning > :is(i, svg):first-child {
-    @apply text-warning;
+    @apply text-text;
   }
 
   .alert-danger .alert-title,

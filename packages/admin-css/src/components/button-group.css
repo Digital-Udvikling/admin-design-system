@@ -7,18 +7,6 @@
     @apply rounded-none relative focus-visible:z-10;
   }
 
-  .btn-group > .btn:not(:first-child) {
-    @apply -ml-px;
-  }
-
-  .btn-group > .btn:first-child {
-    @apply rounded-l-lg;
-  }
-
-  .btn-group > .btn:last-child {
-    @apply rounded-r-lg;
-  }
-
   /* Split-button support: a <details class="menu"> child sits in the strip
      alongside .btn children, with its .menu-trigger getting the same edge
      treatment as the buttons around it. inline-flex on the details makes
@@ -29,19 +17,26 @@
     display: inline-flex;
   }
 
-  .btn-group > .menu:not(:first-child) {
-    @apply -ml-px;
-  }
-
   .btn-group > .menu > .menu-trigger {
     @apply rounded-none;
   }
 
-  .btn-group > .menu:first-child > .menu-trigger {
+  /* Horizontal-only: overlap left edges, round outer left/right corners,
+     and paint the seam between adjacent items as a left-side divider.
+     Scoped with :not(.btn-group-vertical) so vertical groups (which share
+     the .btn-group class) don't inherit horizontal edge treatment. */
+  .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
+  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) {
+    @apply -ml-px;
+  }
+
+  .btn-group:not(.btn-group-vertical) > .btn:first-child,
+  .btn-group:not(.btn-group-vertical) > .menu:first-child > .menu-trigger {
     @apply rounded-l-lg;
   }
 
-  .btn-group > .menu:last-child > .menu-trigger {
+  .btn-group:not(.btn-group-vertical) > .btn:last-child,
+  .btn-group:not(.btn-group-vertical) > .menu:last-child > .menu-trigger {
     @apply rounded-r-lg;
   }
 
@@ -50,8 +45,8 @@
      means the divider works across every .btn variant — light on
      coloured buttons, dark on ghost/secondary — without per-variant
      rules. */
-  .btn-group > .btn:not(:first-child),
-  .btn-group > .menu:not(:first-child) > .menu-trigger {
+  .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
+  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger {
     border-left-color: color-mix(in srgb, currentColor 25%, transparent);
   }
 
@@ -63,15 +58,23 @@
     @apply justify-start;
   }
 
-  .btn-group-vertical > .btn:not(:first-child) {
-    @apply -mt-px ml-0;
+  .btn-group-vertical > .btn:not(:first-child),
+  .btn-group-vertical > .menu:not(:first-child) {
+    @apply -mt-px;
   }
 
-  .btn-group-vertical > .btn:first-child {
-    @apply rounded-t-lg rounded-bl-none;
+  .btn-group-vertical > .btn:first-child,
+  .btn-group-vertical > .menu:first-child > .menu-trigger {
+    @apply rounded-t-lg;
   }
 
-  .btn-group-vertical > .btn:last-child {
-    @apply rounded-b-lg rounded-tr-none;
+  .btn-group-vertical > .btn:last-child,
+  .btn-group-vertical > .menu:last-child > .menu-trigger {
+    @apply rounded-b-lg;
+  }
+
+  .btn-group-vertical > .btn:not(:first-child),
+  .btn-group-vertical > .menu:not(:first-child) > .menu-trigger {
+    border-top-color: color-mix(in srgb, currentColor 25%, transparent);
   }
 }

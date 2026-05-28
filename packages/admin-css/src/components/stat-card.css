@@ -1,0 +1,31 @@
+@layer components {
+  .stat-card {
+    @apply flex flex-col gap-1
+           p-4
+           bg-surface text-text
+           border border-border
+           rounded-xl
+           shadow-xs;
+  }
+
+  .stat-card-label {
+    @apply flex items-center gap-2 text-xs text-text-muted font-medium;
+  }
+
+  .stat-card-value {
+    @apply text-2xl font-bold tabular-nums leading-tight;
+  }
+
+  .stat-card-detail {
+    @apply text-xs text-text-muted;
+  }
+
+  /* Modifiers — mirror `.card`. */
+  .stat-card-compact {
+    @apply p-3 gap-0.5;
+  }
+
+  .stat-card-bordered {
+    @apply shadow-none border-border-strong;
+  }
+}

@@ -146,6 +146,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Progress](references/components/progress.md) — Styled native <progress> element.
 - [Property list](references/components/property-list.md) — Label-and-value rows for one-entity-N-attributes panels.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
+- [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
 - [Tables](references/components/tables.md) — Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.
 - [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.

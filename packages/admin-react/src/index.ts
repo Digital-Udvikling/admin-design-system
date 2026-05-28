@@ -84,6 +84,7 @@ export {
   type CardDescriptionProps,
   type CardActionsProps,
 } from "./Card";
+export { StatCard, type StatCardProps } from "./StatCard";
 export {
   Dialog,
   type DialogProps,

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Dialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 import { adminSelector } from "./test-setup";
 
@@ -119,6 +120,25 @@ describe("Tooltip", () => {
       await user.hover(trigger);
       await screen.findByRole("tooltip");
       expect(onOpenChange).toHaveBeenCalledWith(true, expect.anything());
+    });
+
+    it("portals the popup into an ancestor <Dialog> instead of document.body", () => {
+      // Regression guard: same top-layer constraint as `<Select>` — popups
+      // portaled to `document.body` paint behind a modal `<dialog>`. The
+      // wrapper consumes `PortalContainerContext` so the popup renders
+      // inside the ancestor dialog.
+      render(
+        <Dialog.Container open>
+          <Tooltip.Root defaultOpen>
+            <Tooltip.Trigger>target</Tooltip.Trigger>
+            <Tooltip.Popup>Hint</Tooltip.Popup>
+          </Tooltip.Root>
+        </Dialog.Container>,
+      );
+      const dialog = document.querySelector("dialog") as HTMLDialogElement;
+      const popup = document.querySelector(adminSelector("tooltip")) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(dialog.contains(popup)).toBe(true);
     });
 
     it("applies size modifier class", () => {

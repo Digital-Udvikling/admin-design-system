@@ -5,7 +5,6 @@
            border border-border
            rounded-xl
            shadow-lg
-           overflow-hidden
            flex-col;
     width: calc(100% - 2rem);
     max-width: 32rem;
@@ -76,6 +75,11 @@
            px-5 py-3
            border-t border-border
            bg-surface-muted;
+    /* Inherits the dialog's bottom-corner radius so the muted background
+       doesn't square off past the parent's rounded corners — previously
+       handled by `overflow: hidden` on `.dialog`, which clipped popups. */
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
   }
 
   .dialog-close {

@@ -59,6 +59,38 @@
            border border-border rounded-lg shadow-md;
   }
 
+  /* CSS anchor positioning makes the popup `position: fixed` so it escapes
+     ancestor `overflow: hidden`/`overflow: auto` clipping — necessary when
+     the menu lives inside a `<dialog>` (top-layer + overflow: hidden) or a
+     scroll-clipped surface like a card body. `anchor-scope` keeps each
+     menu's anchor lookups isolated so multiple menus on the page don't
+     cross-target, and `position-try-fallbacks` flips the popup above the
+     trigger when there isn't room below. Browsers without anchor
+     positioning (Firefox, as of early 2026) fall back to the absolute
+     rules above and clip as before. */
+  @supports (anchor-name: --x) {
+    .menu {
+      anchor-scope: --menu-trigger;
+    }
+    .menu-trigger {
+      anchor-name: --menu-trigger;
+    }
+    .menu-popup {
+      position: fixed;
+      position-anchor: --menu-trigger;
+      top: anchor(bottom);
+      left: anchor(left);
+      position-try-fallbacks: --menu-popup-flip-up;
+    }
+  }
+
+  @position-try --menu-popup-flip-up {
+    top: auto;
+    bottom: anchor(top);
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+  }
+
   .menu-item {
     @apply flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
            text-text bg-transparent

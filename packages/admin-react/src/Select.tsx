@@ -1,6 +1,7 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import type { ComponentProps } from "react";
+import { useContext, type ComponentProps } from "react";
 import { cn } from "./cn";
+import { PortalContainerContext } from "./portal-context";
 
 export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
 
@@ -56,9 +57,18 @@ export interface SelectPopupProps extends ComponentProps<typeof BaseSelect.Popup
 }
 
 function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPopupProps) {
+  const portalContainer = useContext(PortalContainerContext);
   return (
-    <BaseSelect.Portal>
-      <BaseSelect.Positioner sideOffset={sideOffset}>
+    <BaseSelect.Portal container={portalContainer ?? undefined}>
+      {/*
+       * `alignItemWithTrigger={false}` opts out of Base UI's macOS-style
+       * alignment (selected item overlaid on the trigger, popup expanding
+       * both directions). Standard web dropdown placement — below the
+       * trigger — is what readers expect on admin surfaces, and the macOS
+       * mode collapses the parent dialog's flex layout when used inside
+       * `<Dialog>`.
+       */}
+      <BaseSelect.Positioner sideOffset={sideOffset} alignItemWithTrigger={false}>
         <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
           {children}
         </BaseSelect.Popup>

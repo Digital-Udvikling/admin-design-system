@@ -1,6 +1,7 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
-import type { ComponentProps, ReactElement, ReactNode } from "react";
+import { useContext, type ComponentProps, type ReactElement, type ReactNode } from "react";
 import { cn } from "./cn";
+import { PortalContainerContext } from "./portal-context";
 
 export type TooltipProviderProps = ComponentProps<typeof BaseTooltip.Provider>;
 
@@ -41,8 +42,9 @@ function TooltipPopup({
   children,
   ...rest
 }: TooltipPopupProps) {
+  const portalContainer = useContext(PortalContainerContext);
   return (
-    <BaseTooltip.Portal>
+    <BaseTooltip.Portal container={portalContainer ?? undefined}>
       <BaseTooltip.Positioner sideOffset={sideOffset} side={side} align={align}>
         <BaseTooltip.Popup
           role={role}

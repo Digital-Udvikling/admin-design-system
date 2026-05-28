@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Dialog } from "./Dialog";
 import { Select } from "./Select";
 import { adminSelector } from "./test-setup";
 
@@ -58,6 +59,35 @@ describe("Select", () => {
       expect(trigger).toHaveTextContent("pear");
       expect(onValueChange).toHaveBeenCalledTimes(1);
       expect(onValueChange).toHaveBeenCalledWith("pear", expect.anything());
+    });
+
+    it("portals the popup into an ancestor <Dialog> instead of document.body", async () => {
+      // Regression guard: a `<dialog>` opened with showModal() lives in the
+      // browser's top layer. Popups portaled to `document.body` (the Base UI
+      // default) paint behind the dialog regardless of z-index. Our wrapper
+      // consumes the Dialog's `PortalContainerContext` ref so the popup
+      // renders inside the dialog and inherits the top-layer paint context.
+      const user = userEvent.setup();
+      render(
+        <Dialog.Container open>
+          <Select>
+            <Select.Trigger aria-label="fruit">
+              <Select.Value placeholder="Pick" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Popup>
+              <Select.Item value="apple">
+                <Select.ItemText>Apple</Select.ItemText>
+              </Select.Item>
+            </Select.Popup>
+          </Select>
+        </Dialog.Container>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const dialog = document.querySelector("dialog") as HTMLDialogElement;
+      const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(dialog.contains(popup)).toBe(true);
     });
 
     it("controlled: value prop drives the trigger via onValueChange round-trip", async () => {

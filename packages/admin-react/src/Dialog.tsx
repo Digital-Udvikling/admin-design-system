@@ -8,6 +8,7 @@ import {
 } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { PortalContainerContext } from "./portal-context";
 
 export type DialogSize = "sm" | "md" | "lg";
 export type DialogClosedBy = "any" | "closerequest" | "none";
@@ -90,14 +91,16 @@ function DialogContainer({
 
   return (
     <DialogContext.Provider value={ctx}>
-      <dialog
-        ref={ref}
-        className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
-        closedby={closedby}
-        {...rest}
-      >
-        {children}
-      </dialog>
+      <PortalContainerContext.Provider value={ref}>
+        <dialog
+          ref={ref}
+          className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
+          closedby={closedby}
+          {...rest}
+        >
+          {children}
+        </dialog>
+      </PortalContainerContext.Provider>
     </DialogContext.Provider>
   );
 }

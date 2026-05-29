@@ -84,7 +84,7 @@ Attach a prefix, suffix, or action button to an input.
 
 ### With icon addons
 
-`.input-group-addon` accepts any content. See [Icons](../../../basics/icons/).
+`.input-group-addon` accepts any content. See [Icons](../../basics/icons.md).
 
 **Example**
 

@@ -119,7 +119,7 @@ Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones 
 
 ### Rich content
 
-The popup body accepts any inline content — e.g. a keyboard shortcut hint via [`<Kbd>`](../kbd/). React's `<Tooltip>` accepts JSX in `content`; drop down to subparts when the shorthand's `content` prop isn't enough.
+The popup body accepts any inline content — e.g. a keyboard shortcut hint via [`<Kbd>`](kbd.md). React's `<Tooltip>` accepts JSX in `content`; drop down to subparts when the shorthand's `content` prop isn't enough.
 
 **Example**
 

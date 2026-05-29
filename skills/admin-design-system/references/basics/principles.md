@@ -50,4 +50,4 @@ Colors live in two layers, both registered with Tailwind's `@theme`:
 
 Components only ever reference semantic tokens. That's what makes reskinning work — override `--color-primary` and every component follows. Spacing, radii, and shadows use Tailwind's built-in scales (`p-4`, `rounded-lg`, `shadow-xs`).
 
-See [Colors](../colors/) for the full token catalog and [Customize](../customize/) for override patterns.
+See [Colors](colors.md) for the full token catalog and [Customize](customize.md) for override patterns.

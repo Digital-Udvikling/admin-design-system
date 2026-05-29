@@ -4,7 +4,7 @@
 
 The page body you drop inside `<AppShell.Main>` (which has no padding of its own). It centers content at an admin-wide max-width and puts a consistent gap between stacked sections, so pages don't each re-invent their spacing.
 
-Not to be confused with the `.Container` escape hatch on compound components like [`Card.Container`](../cards/#advanced-layout-with-cardcontainer) — `<Container>` is a standalone page region, not a bare-primitive sub-part.
+Not to be confused with the `.Container` escape hatch on compound components like [`Card.Container`](cards.md#advanced-layout-with-cardcontainer) — `<Container>` is a standalone page region, not a bare-primitive sub-part.
 
 ## Examples
 
@@ -130,7 +130,7 @@ Every preset just sets `--container-max`. Override it inline for a one-off width
 
 ### In an app shell
 
-Place a `<Container>` inside `<AppShell.Main>`. See [App shell](../../modules/app-shell/).
+Place a `<Container>` inside `<AppShell.Main>`. See [App shell](../modules/app-shell.md).
 
 **Example**
 

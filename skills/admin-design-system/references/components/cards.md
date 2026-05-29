@@ -157,7 +157,7 @@ A default card sits one step above the page (`surface-strong`) so it reads as a 
 
 ### With icon
 
-Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).
+Pass `icon` — it lands in the title row. See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -195,7 +195,7 @@ Pass `icon` — it lands in the title row. See [Icons](../../basics/icons/).
 
 ### Header toolbar
 
-Pass `toolbar` for trailing header controls — edit, dismiss, anything. It sits at the end of the title row; add as many buttons as you need. These are usually [square icon buttons](../buttons/#icon-only) with an `aria-label`.
+Pass `toolbar` for trailing header controls — edit, dismiss, anything. It sits at the end of the title row; add as many buttons as you need. These are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`.
 
 **Example**
 

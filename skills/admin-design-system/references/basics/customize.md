@@ -2,7 +2,7 @@
 
 > Brand-shift the design system with one variable, or override individual tokens.
 
-The fastest way to brand an app is the **system accent** — one CSS variable that drives the navbar stripe, footer stripe, and [`<BrandTile>`](../../components/brand-tile/) at once. Everything else (palette tones, semantic roles, fonts) is still overridable; see [Advanced](#advanced).
+The fastest way to brand an app is the **system accent** — one CSS variable that drives the navbar stripe, footer stripe, and [`<BrandTile>`](../components/brand-tile.md) at once. Everything else (palette tones, semantic roles, fonts) is still overridable; see [Advanced](#advanced).
 
 ## System accent
 
@@ -32,11 +32,11 @@ Bright accents like `--color-yellow-400` need a manual `-content` override so th
 }
 ```
 
-See [Brand tile](../../components/brand-tile/) and [App shell › Branding](../../modules/app-shell/#branding-multiple-systems) for full usage.
+See [Brand tile](../components/brand-tile.md) and [App shell › Branding](../modules/app-shell.md#branding-multiple-systems) for full usage.
 
 ## Advanced
 
-For everything beyond the system accent, the token layers are documented on the [Colors](../colors/) page. Three escape hatches:
+For everything beyond the system accent, the token layers are documented on the [Colors](colors.md) page. Three escape hatches:
 
 ### Override a semantic token
 

@@ -2,7 +2,7 @@
 
 > Follows the OS by default, with manual override per page or subtree.
 
-In React, [`<AdminRoot theme="dark">`](../../getting-started/react/) sets the same `data-theme` for you.
+In React, [`<AdminRoot theme="dark">`](../getting-started/react.md) sets the same `data-theme` for you.
 
 ## How it switches
 

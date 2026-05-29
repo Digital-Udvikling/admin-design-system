@@ -19,7 +19,7 @@ Built on `<details>` + `<summary>`. The browser handles open/close. There is no 
 
 ### Basic
 
-See [Icons](../../basics/icons/).
+See [Icons](../basics/icons.md).
 
 **Example**
 

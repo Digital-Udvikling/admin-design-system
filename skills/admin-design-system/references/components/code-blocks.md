@@ -4,7 +4,7 @@
 
 A styled `<pre>` with a neutral, theme-following surface. For logs, JSON dumps, terminal output, and raw model output — anything that should read as machine output rather than prose. No syntax highlighting; layer Shiki or Prism on a nested `<code>` if needed.
 
-For inline keyboard chips, use [Kbd](../kbd/) instead.
+For inline keyboard chips, use [Kbd](kbd.md) instead.
 
 ## Examples
 

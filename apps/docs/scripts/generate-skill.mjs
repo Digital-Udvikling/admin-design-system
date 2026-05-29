@@ -4,7 +4,7 @@
 // Output is committed and verified in CI via `git diff --exit-code -- skills`.
 
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { dirname, join, posix, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
@@ -134,12 +134,46 @@ function stripMdxNoiseInProse(prose) {
   return prose;
 }
 
-function stripMdxNoise(body) {
-  const stripped = transformProseOnly(body, stripMdxNoiseInProse);
+function stripMdxNoise(body, info, pageMap) {
+  const stripped = transformProseOnly(body, (prose) =>
+    rewriteRelativeLinksInProse(stripMdxNoiseInProse(prose), info, pageMap),
+  );
   // Collapse 3+ consecutive blank lines into 2 (safe across the whole body —
   // doesn't change code-block contents because fences don't have blank-line
   // runs unless the author put them there, and even then collapsing is fine).
   return stripped.replace(/\n{3,}/g, "\n\n");
+}
+
+// The page URL Starlight serves a doc from — directory-style with a trailing
+// slash (`components/forms/textareas.mdx` → `/components/forms/textareas/`,
+// `components/forms/index.mdx` → `/components/forms/`). Relative prose links
+// resolve against this, the same way they do in the rendered site.
+function pageUrlFor(rel) {
+  const slug = rel.replace(/\.mdx$/, "").replace(/\/index$/, "");
+  return `/${slug}/`;
+}
+
+// Rewrite intra-docs relative Markdown links (`[Kbd](../kbd/)`) so they point
+// at the flat per-page skill files instead of Starlight's directory routes —
+// otherwise an agent following `../kbd/` from references/components/ lands on a
+// directory that doesn't exist. Resolve the link against the page's URL, map
+// the target back to its skill file, and emit a path relative to this page's
+// own skill file (fragments preserved). Links to unknown targets are left as-is.
+function rewriteRelativeLinksInProse(prose, info, pageMap) {
+  const pageUrl = pageUrlFor(info.rel);
+  return prose.replace(/\]\((\.\.?\/[^)\s]*)\)/g, (whole, href) => {
+    const rewritten = resolveDocLink(href, pageUrl, info.outRel, pageMap);
+    return rewritten ? `](${rewritten})` : whole;
+  });
+}
+
+function resolveDocLink(href, pageUrl, currentOutRel, pageMap) {
+  const url = new URL(href, `https://docs${pageUrl}`);
+  const targetSlug = url.pathname.replace(/^\/+|\/+$/g, "");
+  const targetOutRel = pageMap.get(targetSlug);
+  if (!targetOutRel) return null;
+  const rel = posix.relative(posix.dirname(currentOutRel), targetOutRel);
+  return `${rel}${url.hash}`;
 }
 
 function rewriteExamples(body) {
@@ -156,9 +190,9 @@ function rewriteExamples(body) {
   });
 }
 
-function transformPage(src) {
+function transformPage(src, info, pageMap) {
   const { fm, body } = parseFrontmatter(src);
-  const cleaned = rewriteExamples(stripMdxNoise(body)).trim();
+  const cleaned = rewriteExamples(stripMdxNoise(body, info, pageMap)).trim();
   const header =
     `# ${fm.title || "Untitled"}\n` + (fm.description ? `\n> ${fm.description}\n` : "");
   return `${header}\n${cleaned}\n`;
@@ -224,20 +258,29 @@ function main() {
   mkdirSync(REF_DIR, { recursive: true });
 
   const mdxFiles = listMdx(DOCS_DIR);
+
+  const included = mdxFiles
+    .map((abs) => ({ abs, info: describePage(abs) }))
+    // Skip the root index.mdx (its content is the project splash; the SKILL.md
+    // header covers the overview) and groups not surfaced in the skill index
+    // (e.g. `contributing/`).
+    .filter(({ info }) => info.rel !== "index.mdx" && TOP_LEVEL_ORDER.includes(info.group));
+
+  // Map each page's URL slug (`components/forms/inputs`) to its skill file
+  // (`components/forms/inputs.md`) so relative cross-links can be rewritten.
+  const pageMap = new Map(
+    included.map(({ info }) => [
+      info.rel.replace(/\.mdx$/, "").replace(/\/index$/, ""),
+      info.outRel,
+    ]),
+  );
+
   const pages = [];
 
-  for (const abs of mdxFiles) {
-    const info = describePage(abs);
-    // Skip the root index.mdx — its content is the project splash; the
-    // SKILL.md header already covers the overview.
-    if (info.rel === "index.mdx") continue;
-    // Skip top-level groups that aren't surfaced in the skill index (e.g.
-    // `contributing/` — for repo contributors, not for consuming agents).
-    if (!TOP_LEVEL_ORDER.includes(info.group)) continue;
-
+  for (const { abs, info } of included) {
     const src = readFileSync(abs, "utf8");
     const { fm } = parseFrontmatter(src);
-    const out = transformPage(src);
+    const out = transformPage(src, info, pageMap);
 
     const outPath = join(REF_DIR, info.outRel);
     mkdirSync(dirname(outPath), { recursive: true });

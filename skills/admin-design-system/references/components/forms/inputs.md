@@ -98,11 +98,11 @@ Native browser pickers; dark mode tracks the document's `color-scheme`.
 
 ### File
 
-Use [FileInput](../file-inputs/) (`.file-input` class) to style the picker button.
+Use [FileInput](file-inputs.md) (`.file-input` class) to style the picker button.
 
 ### Inside a Field
 
-See [Fields](../fields/) for label, description, and validation.
+See [Fields](fields.md) for label, description, and validation.
 
 **Example**
 

@@ -50,7 +50,7 @@
 
 ### Inside a Field
 
-See [Fields](../fields/) for label, description, and validation.
+See [Fields](fields.md) for label, description, and validation.
 
 **Example**
 

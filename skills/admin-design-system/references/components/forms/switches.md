@@ -2,7 +2,7 @@
 
 > Immediate on/off setting.
 
-For form submissions, prefer a [checkbox](../checkboxes/).
+For form submissions, prefer a [checkbox](checkboxes.md).
 
 ## Examples
 

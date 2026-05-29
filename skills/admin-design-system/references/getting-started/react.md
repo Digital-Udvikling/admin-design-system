@@ -2,10 +2,10 @@
 
 > Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 
-Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](../scoped/) for how the prefix + scope work.
+Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](scoped.md) for how the prefix + scope work.
 
 :::tip[Branding multiple apps]
-Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../basics/customize.md#system-accent).
 :::
 
 ## Install
@@ -49,8 +49,8 @@ Beyond the standard `<div>` attributes, two typed shortcuts:
 
 | Prop           | Type                 | Effect                                                                                                                                                    |
 | -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../../basics/dark-mode/) on this subtree. Omit to follow the OS.                                              |
-| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../../basics/customize/#system-accent). |
+| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../basics/dark-mode.md) on this subtree. Omit to follow the OS.                                              |
+| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../basics/customize.md#system-accent). |
 
 ```tsx
 <AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
@@ -60,7 +60,7 @@ Beyond the standard `<div>` attributes, two typed shortcuts:
 
 ## Add icons (optional)
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage.
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md) for sizing and usage.
 
 ```bash
 npm install @tabler/icons-react

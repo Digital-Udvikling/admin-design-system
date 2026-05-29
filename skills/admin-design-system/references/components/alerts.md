@@ -8,7 +8,7 @@ IconInfoCircle,
   IconAlertOctagon,
 } from "@tabler/icons-react";
 
-For single-field validation, use [Fields](../forms/fields/) instead.
+For single-field validation, use [Fields](forms/fields.md) instead.
 
 ## Examples
 
@@ -53,7 +53,7 @@ For single-field validation, use [Fields](../forms/fields/) instead.
 
 ### With a leading icon
 
-Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../../basics/icons/).
+Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../basics/icons.md).
 
 **Example**
 

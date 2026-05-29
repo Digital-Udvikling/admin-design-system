@@ -409,7 +409,7 @@ A narrow leading cell for row-level status glyphs. `.table-cell-gutter` (or `gut
 
 ### Row selection
 
-Put a [Checkbox](../forms/checkboxes/) in the first cell — the row tint reacts to native `:checked`, Base UI's `[data-checked]`, or the `data-selected` hook (see below). Wire the select-all header checkbox yourself.
+Put a [Checkbox](forms/checkboxes.md) in the first cell — the row tint reacts to native `:checked`, Base UI's `[data-checked]`, or the `data-selected` hook (see below). Wire the select-all header checkbox yourself.
 
 **Example**
 

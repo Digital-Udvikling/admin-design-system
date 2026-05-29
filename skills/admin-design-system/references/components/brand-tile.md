@@ -2,7 +2,7 @@
 
 > A 24px monogram or icon square, used to brand the navbar per system.
 
-Sits in `<Navbar.Brand>`. Color follows `--color-system-accent` — see [Customize](../../basics/customize/#system-accent).
+Sits in `<Navbar.Brand>`. Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
 
 ## Monogram
 
@@ -28,7 +28,7 @@ Keep monograms to 1–2 characters; the 24px box won't fit more.
 
 ## Icon
 
-Pass a [Tabler icon](../../basics/icons/) instead. In React, the `icon` prop renders at 14px; for vanilla, drop a sized `<i>`/`<svg>` inside `.brand-tile`. `icon` wins over `monogram`.
+Pass a [Tabler icon](../basics/icons.md) instead. In React, the `icon` prop renders at 14px; for vanilla, drop a sized `<i>`/`<svg>` inside `.brand-tile`. `icon` wins over `monogram`.
 
 **Example**
 

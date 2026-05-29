@@ -147,7 +147,7 @@ Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar.
+`<Navbar.Dropdown>` is a [`<Menu>`](../components/menus.md) styled to fit the navbar.
 
 **Example**
 
@@ -625,7 +625,7 @@ Two CSS variables on `.app-shell` set the rail width:
 
 ## Branding multiple systems
 
-The navbar always renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Drop a [`<BrandTile>`](../../components/brand-tile/) into `<Navbar.Brand>` and override the variable to tag a system — either app-wide at `:root`, or per-shell via `<AppShell systemAccent>`:
+The navbar always renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Drop a [`<BrandTile>`](../components/brand-tile.md) into `<Navbar.Brand>` and override the variable to tag a system — either app-wide at `:root`, or per-shell via `<AppShell systemAccent>`:
 
 ```css
 :root {
@@ -655,4 +655,4 @@ The default is a neutral gray, so un-branded apps read as chrome.
 </Navbar>
 ```
 
-For derived tokens (`-hover`, `-muted`, `-content`) and the yellow-accent contrast caveat, see [Customize › System accent](../../basics/customize/#system-accent).
+For derived tokens (`-hover`, `-muted`, `-content`) and the yellow-accent contrast caveat, see [Customize › System accent](../basics/customize.md#system-accent).

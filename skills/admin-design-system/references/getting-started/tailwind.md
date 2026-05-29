@@ -5,7 +5,7 @@
 Built on Tailwind v4. Importing the source CSS gives utilities like `bg-primary` the same tokens that power `.btn`, `.card`, and `.input`. Radii and shadows use Tailwind's built-in scale (`rounded-lg`, `shadow-xs`, …).
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../basics/customize.md#system-accent).
 :::
 
 ## Install
@@ -40,4 +40,4 @@ Skip either import if you only want one half.
 </div>
 ```
 
-Override tokens the same way as with vanilla CSS — see [Customize](../../basics/customize/).
+Override tokens the same way as with vanilla CSS — see [Customize](../basics/customize.md).

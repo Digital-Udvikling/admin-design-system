@@ -2,7 +2,7 @@
 
 > Two-dimensional layouts with grid utilities.
 
-There's no `.grid` component — for two-dimensional layouts, use Tailwind's grid utilities directly. Vanilla projects get them from the [utilities bundle](../../getting-started/vanilla/#utilities-optional); React projects should [add Tailwind](../../getting-started/tailwind/) so the bare class names resolve. Everything below is those utilities. For laying items out in a single line, see [Row](../row/).
+There's no `.grid` component — for two-dimensional layouts, use Tailwind's grid utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For laying items out in a single line, see [Row](row.md).
 
 ## Examples
 
@@ -211,4 +211,4 @@ Grids nest. A four-column shell holds a fixed sidebar and a content pane that ru
 </div>
 ```
 
-Grid also offers `grid-flow-dense` to pack items into earlier gaps and `grid-cols-subgrid` for a nested grid that inherits its parent's tracks — see [Utilities](../../getting-started/vanilla/#utilities-optional).
+Grid also offers `grid-flow-dense` to pack items into earlier gaps and `grid-cols-subgrid` for a nested grid that inherits its parent's tracks — see [Utilities](../getting-started/vanilla.md#utilities-optional).

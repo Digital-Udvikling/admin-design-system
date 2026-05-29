@@ -7,7 +7,7 @@ A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`.
 The React library always ships this variant. The default `@aortl/admin-css` bundle stays unprefixed — use it for full-page admin apps that own the document.
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` on `._ao-admin-root` to brand-shift the navbar + footer stripes and `._ao-brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Set `--color-system-accent` on `._ao-admin-root` to brand-shift the navbar + footer stripes and `._ao-brand-tile` for one system. See [Customize › System accent](../basics/customize.md#system-accent).
 :::
 
 ## Vanilla CSS
@@ -49,7 +49,7 @@ export function ProductPageAdminMenu() {
 </div>
 ```
 
-The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../../basics/dark-mode/) for the full picture.
+The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../basics/dark-mode.md) for the full picture.
 
 ## Host-page style isolation
 

@@ -2,7 +2,7 @@
 
 > Label-and-value rows for one-entity-N-attributes panels.
 
-A `<dl>` with a label column that aligns across every row. Reach for it when you need the "one entity, N attributes" pattern — summary panels, identifier strips, metadata blocks — rather than re-deriving it on top of a [`Table`](../tables/) or a [`Card`](../cards/).
+A `<dl>` with a label column that aligns across every row. Reach for it when you need the "one entity, N attributes" pattern — summary panels, identifier strips, metadata blocks — rather than re-deriving it on top of a [`Table`](tables.md) or a [`Card`](cards.md).
 
 ## Examples
 

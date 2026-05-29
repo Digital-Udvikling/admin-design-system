@@ -2,7 +2,7 @@
 
 > Keyboard shortcut chips for help text, tooltips, and bindings.
 
-A chip for rendering a single key or a chord. Paired with the `hotkey` prop on [Buttons](../buttons/) / [Menu.Item](../menus/), or used standalone in tooltips and help dialogs.
+A chip for rendering a single key or a chord. Paired with the `hotkey` prop on [Buttons](buttons.md) / [Menu.Item](menus.md), or used standalone in tooltips and help dialogs.
 
 ## Examples
 

@@ -2,7 +2,7 @@
 
 > One-dimensional layouts with flex utilities.
 
-There's no `.row` component — for one-dimensional layouts, use Tailwind's flex utilities directly. Vanilla projects get them from the [utilities bundle](../../getting-started/vanilla/#utilities-optional); React projects should [add Tailwind](../../getting-started/tailwind/) so the bare class names resolve. Everything below is those utilities. For 2D layouts, see [Grid](../grid/); for spacing between stacked page sections, [Container](../container/).
+There's no `.row` component — for one-dimensional layouts, use Tailwind's flex utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For 2D layouts, see [Grid](grid.md); for spacing between stacked page sections, [Container](container.md).
 
 ## Examples
 
@@ -220,4 +220,4 @@ Everything together. `flex-wrap` keeps a packed toolbar from overflowing on narr
 </div>
 ```
 
-Flex also offers `order-*` to reorder children and `content-*` to align wrapped lines on the cross axis — see [Utilities](../../getting-started/vanilla/#utilities-optional).
+Flex also offers `order-*` to reorder children and `content-*` to align wrapped lines on the cross axis — see [Utilities](../getting-started/vanilla.md#utilities-optional).

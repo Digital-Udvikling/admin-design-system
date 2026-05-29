@@ -20,8 +20,8 @@ The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each ic
 
 ## Install
 
-- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../../getting-started/vanilla/#add-icons-optional).
-- **React** — see [Getting Started › React](../../getting-started/react/#add-icons-optional).
+- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../getting-started/vanilla.md#add-icons-optional).
+- **React** — see [Getting Started › React](../getting-started/react.md#add-icons-optional).
 
 ## Vanilla usage
 

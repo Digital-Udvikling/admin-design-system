@@ -3,7 +3,7 @@
 > A single pre-built stylesheet. No build tooling required on your end.
 
 :::tip[Branding multiple apps]
-Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
+Set `--color-system-accent` at `:root` to brand-shift the navbar + footer stripes and `.brand-tile` for one system. See [Customize › System accent](../basics/customize.md#system-accent).
 :::
 
 ## Install via CDN
@@ -20,7 +20,7 @@ npm install @aortl/admin-css
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry. Package page: [`@aortl/admin-css` on npm](https://www.npmjs.com/package/@aortl/admin-css).
 
-Embedding admin markup inside a non-admin page? See [Scoped bundle](../scoped/) for a variant that wraps every rule in `@scope (._ao-admin-root)` and prefixes class names with `_ao-` so they can't collide with the host's CSS.
+Embedding admin markup inside a non-admin page? See [Scoped bundle](scoped.md) for a variant that wraps every rule in `@scope (._ao-admin-root)` and prefixes class names with `_ao-` so they can't collide with the host's CSS.
 
 ## Utilities (optional)
 
@@ -33,7 +33,7 @@ A second pre-built file ships Tailwind-grammar utilities (`flex`, `grid-cols-3`,
 
 ### What's included
 
-- **Layout / flex / grid** — `block`, `flex`, `grid`, `hidden`, `relative`, `sticky`, `overflow-*`, `flex-{row,col,wrap}`, `items-*`, `justify-*`, `gap-*`, `grid-cols-{1-12}`, `col-span-*`, `col-start/end-*`, `row-start/end-*`, `order-*`. See [Row](../../components/row/) and [Grid](../../components/grid/) for patterns.
+- **Layout / flex / grid** — `block`, `flex`, `grid`, `hidden`, `relative`, `sticky`, `overflow-*`, `flex-{row,col,wrap}`, `items-*`, `justify-*`, `gap-*`, `grid-cols-{1-12}`, `col-span-*`, `col-start/end-*`, `row-start/end-*`, `order-*`. See [Row](../components/row.md) and [Grid](../components/grid.md) for patterns.
 - **Spacing** — `p`/`m` per side on a curated 14-step scale: `0, 0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32`. Anything above `32` is outside admin density.
 - **Sizing** — `w`/`h`/`min-w`/`max-w`/`min-h`/`max-h` on the same scale plus `px`, fractions (`1/2`, `1/3`, `2/3`, `1/4`, `2/4`, `3/4`), and keywords (`auto`, `full`, `screen`, `fit`, `min`, `max`). `max-w-*` additionally accepts the container-width tokens (`xs`..`7xl`, `prose`, `none`).
 - **Typography** — `text-{xs,sm,base,lg,xl,2xl}`, `font-{thin..black}`, `font-{sans,mono,serif}`, `italic`, `uppercase`/`lowercase`/`capitalize`, `tabular-nums` (+ other `*-nums` variants), `leading-*`, `tracking-*`, `text-{left,center,right}`, `text-{wrap,balance}`, `whitespace-{nowrap,pre,…}`, `break-{words,all,keep}`, `align-*` (vertical-align), `list-{disc,decimal,none}`, `underline`, `truncate`. No `text-3xl` and above.
@@ -44,7 +44,7 @@ A second pre-built file ships Tailwind-grammar utilities (`flex`, `grid-cols-3`,
 
 ### What's not included
 
-Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-blend, SVG fill/stroke, and transforms beyond `translate-x/y`. Dark mode is driven by [tokens via `light-dark()`](../../basics/dark-mode/), not a `dark:` variant. If a family you need is missing, the design-system component CSS (`.btn`, `.card`, `.alert`, `.field`) most likely already covers it.
+Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-blend, SVG fill/stroke, and transforms beyond `translate-x/y`. Dark mode is driven by [tokens via `light-dark()`](../basics/dark-mode.md), not a `dark:` variant. If a family you need is missing, the design-system component CSS (`.btn`, `.card`, `.alert`, `.field`) most likely already covers it.
 
 ### Compose with components
 
@@ -67,7 +67,7 @@ Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-bl
 
 ## Add icons (optional)
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../../basics/icons/) for sizing and usage. The webfont drops in without a bundler:
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md) for sizing and usage. The webfont drops in without a bundler:
 
 ```html
 <link

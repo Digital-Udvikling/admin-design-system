@@ -1,14 +1,16 @@
 /*
  * IBM Plex Sans + Mono — the default UI typeface for this design system.
  *
- * Hosted on Google's CDN (fonts.gstatic.com), latin + latin-ext subsets
- * only. Plex Sans is served as a variable font (one file covers weights
- * 400–600 via the wght axis); Plex Mono ships as discrete weight files.
+ * Hosted on Google's CDN (fonts.gstatic.com), latin + latin-ext subsets only.
+ * Plex Sans is served as a variable font (one file covers weights 400–600 via
+ * the wght axis); Plex Mono ships as discrete weight files.
  *
- * `font-display: optional` — the browser uses the fallback stack from
- * `--font-sans` / `--font-mono` if Plex isn't ready in ~100ms, then
- * caches it for the next page load. No FOUT, no layout shift, and on
- * fast networks the typeface still wins on first paint.
+ * `font-display: swap` paints text immediately. Layout shift on swap is
+ * neutralised by the metric-matched fallback faces below ("IBM Plex Sans
+ * Fallback" / "IBM Plex Mono Fallback"): they alias a local system font but
+ * override its metrics to occupy Plex's exact box, so the swap changes glyph
+ * shapes without moving anything. The fallback families are wired into
+ * `--font-sans` / `--font-mono` in theme.css, ahead of the generic stack.
  *
  * Opt out by overriding `--font-sans` / `--font-mono`, or by importing
  * admin-css's source files individually and skipping this one.
@@ -19,7 +21,7 @@
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400 600;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxQKYbABA.woff2)
     format("woff2");
   unicode-range:
@@ -31,7 +33,7 @@
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400 600;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2)
     format("woff2");
   unicode-range:
@@ -44,7 +46,7 @@
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1iEq129k.woff2)
     format("woff2");
   unicode-range:
@@ -56,7 +58,7 @@
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2)
     format("woff2");
   unicode-range:
@@ -67,7 +69,7 @@
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-weight: 500;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwl5FgtIU.woff2)
     format("woff2");
   unicode-range:
@@ -79,10 +81,37 @@
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-weight: 500;
-  font-display: optional;
+  font-display: swap;
   src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2)
     format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/*
+ * Metric-matched fallbacks — a local system font rewritten to Plex's box so
+ * the swap above causes no layout shift. The override numbers were computed
+ * once from font metrics with @capsizecss/core (`createFontStack`); the project
+ * doesn't depend on capsize, so if the primary font ever changes, recompute
+ * them with capsize rather than hand-editing. size-adjust holds in every
+ * engine; the ascent/descent overrides are ignored by Safari/WebKit, but
+ * line-gap is 0 so the residual vertical shift there is negligible.
+ */
+/* IBM Plex Sans -> Arial */
+@font-face {
+  font-family: "IBM Plex Sans Fallback";
+  src: local("Arial"), local("ArialMT");
+  ascent-override: 101.3184%;
+  descent-override: 27.183%;
+  line-gap-override: 0%;
+  size-adjust: 101.1663%;
+}
+/* IBM Plex Mono -> Courier New */
+@font-face {
+  font-family: "IBM Plex Mono Fallback";
+  src: local("Courier New"), local("CourierNewPSMT");
+  ascent-override: 102.5167%;
+  descent-override: 27.5045%;
+  size-adjust: 99.9837%;
 }

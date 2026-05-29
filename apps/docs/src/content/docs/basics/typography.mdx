@@ -30,6 +30,52 @@ To opt out, override `--font-sans` / `--font-mono`:
 
 To skip the Plex network requests entirely, import admin-css's source files individually and leave out `fonts.css`. The default `dist/admin.css` bundle includes Plex.
 
+## Specimen
+
+IBM Plex Sans — the UI typeface. Open, slightly mechanical, with unambiguous letterforms that hold up at small sizes.
+
+:::example
+
+```html
+<div class="font-sans">
+  <p class="text-2xl">The quick brown fox jumps over the lazy dog</p>
+  <p class="text-text-muted">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz</p>
+  <p class="text-text-muted">0123456789 &amp; @ # % ( ) { } [ ] / \ — – … ! ? « »</p>
+</div>
+```
+
+```tsx
+<div className="font-sans">
+  <p className="text-2xl">The quick brown fox jumps over the lazy dog</p>
+  <p className="text-text-muted">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz</p>
+  <p className="text-text-muted">0123456789 &amp; @ # % ( ) {"{ }"} [ ] / \ — – … ! ? « »</p>
+</div>
+```
+
+:::
+
+IBM Plex Mono — fixed-width, for IDs, hashes, and figures that need to line up.
+
+:::example
+
+```html
+<div class="font-mono">
+  <p class="text-2xl">The quick brown fox jumps over the lazy dog</p>
+  <p class="text-text-muted">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz</p>
+  <p class="text-text-muted">0123456789 il1 O0 |/\ {} [] () &lt;&gt; -- == =&gt;</p>
+</div>
+```
+
+```tsx
+<div className="font-mono">
+  <p className="text-2xl">The quick brown fox jumps over the lazy dog</p>
+  <p className="text-text-muted">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz</p>
+  <p className="text-text-muted">0123456789 il1 O0 |/\ {"{} [] ()"} &lt;&gt; -- == =&gt;</p>
+</div>
+```
+
+:::
+
 ## Scale
 
 | Selector | Size            | Weight    | Line-height     | Use                            |

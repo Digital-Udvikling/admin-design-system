@@ -209,6 +209,28 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 </ButtonGroup>
 ```
 
+### Full width
+
+`fullWidth` stretches the group across its container; the buttons split the row evenly, so every one is the same width regardless of label length.
+
+**Example**
+
+```html
+<div class="btn-group btn-group-full-width">
+  <button class="btn">Day</button>
+  <button class="btn">Week</button>
+  <button class="btn">Month</button>
+</div>
+```
+
+```tsx
+<ButtonGroup fullWidth>
+  <Button>Day</Button>
+  <Button>Week</Button>
+  <Button>Month</Button>
+</ButtonGroup>
+```
+
 ### Vertical
 
 **Example**

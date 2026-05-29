@@ -77,4 +77,22 @@
   .btn-group-vertical > .menu:not(:first-child) > .menu-trigger {
     border-top-color: color-mix(in srgb, currentColor 25%, transparent);
   }
+
+  /* Full width — the group stretches across its container instead of
+     shrinking to its content. Horizontal groups split the row evenly so
+     every item is the same width regardless of label length; vertical
+     groups already stretch their items to the group's width, so widening
+     the group is enough. Mirrors the `fullWidth` treatment on tabs. */
+  .btn-group-full-width:not(.btn-group-vertical) {
+    @apply flex w-full;
+  }
+
+  .btn-group-full-width:not(.btn-group-vertical) > .btn,
+  .btn-group-full-width:not(.btn-group-vertical) > .menu {
+    @apply flex-1;
+  }
+
+  .btn-group-full-width.btn-group-vertical {
+    @apply w-full;
+  }
 }

@@ -11,6 +11,11 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "go" })).toBeInTheDocument();
   });
 
+  it("maps variant to the matching class", () => {
+    render(<Button variant="muted">go</Button>);
+    expect(screen.getByRole("button", { name: "go" })).toHaveAdminClass("btn-muted");
+  });
+
   it("renders icon and iconTrailing component refs around children", () => {
     function IconLead(props: {
       size?: number | string;

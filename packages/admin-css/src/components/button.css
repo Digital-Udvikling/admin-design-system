@@ -21,6 +21,15 @@
     @apply bg-transparent text-text border-transparent hover:bg-surface-muted;
   }
 
+  /* Muted — fills with the page background (`surface`) so it sits flush
+     instead of reading as a raised control, mirroring `card-muted`. The
+     default `.btn` is one step up (`surface-muted`); hover lifts the muted
+     button to that resting fill. For de-emphasised actions that should
+     recede into the page. */
+  .btn-muted {
+    @apply bg-surface hover:bg-surface-muted;
+  }
+
   .btn-danger {
     @apply bg-danger text-danger-content border-transparent hover:opacity-90;
   }

@@ -16,7 +16,7 @@ IconPlus,
 
 ### Variants
 
-The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a dense admin screen aren't primary. Reach for `primary` for the single main action, `danger` for destructive ones.
+The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a dense admin screen aren't primary. Reach for `primary` for the single main action, `danger` for destructive ones. `ghost` drops the border and fill; `muted` fills with the page background so it sits flush, mirroring `card-muted`.
 
 **Example**
 
@@ -24,6 +24,7 @@ The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a d
 <button class="btn">Default</button>
 <button class="btn btn-primary">Primary</button>
 <button class="btn btn-ghost">Ghost</button>
+<button class="btn btn-muted">Muted</button>
 <button class="btn btn-danger">Danger</button>
 ```
 
@@ -31,6 +32,7 @@ The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a d
 <Button>Default</Button>
 <Button variant="primary">Primary</Button>
 <Button variant="ghost">Ghost</Button>
+<Button variant="muted">Muted</Button>
 <Button variant="danger">Danger</Button>
 ```
 

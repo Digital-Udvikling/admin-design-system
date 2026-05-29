@@ -101,6 +101,24 @@ describe("useHotkey", () => {
     expect(fire).toHaveBeenCalledTimes(2);
   });
 
+  it("fires a bare shifted symbol binding (Shift folded into the key)", () => {
+    // `?` requires Shift on most layouts, so the event arrives as
+    // `{ key: "?", shiftKey: true }`. Binding `"?"` must still match.
+    const fire = vi.fn();
+    render(<Bind keys="?" onFire={fire} />);
+    press({ key: "?", shiftKey: true });
+    expect(fire).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps Shift explicit for letters (shift+a is distinct from a)", () => {
+    const fire = vi.fn();
+    render(<Bind keys="shift+a" onFire={fire} />);
+    press({ key: "a" });
+    expect(fire).not.toHaveBeenCalled();
+    press({ key: "A", shiftKey: true });
+    expect(fire).toHaveBeenCalledTimes(1);
+  });
+
   describe("input suppression", () => {
     function withInput(child: React.ReactNode) {
       return (

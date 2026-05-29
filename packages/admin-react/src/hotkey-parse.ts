@@ -1,13 +1,14 @@
 /**
  * Pure helpers for the hotkey system. Chord syntax: `<mod>+<mod>+…+<key>`
  *
- * Examples: `mod+s`, `shift+?`, `escape`, `mod+shift+k`, `arrowup`.
+ * Examples: `mod+s`, `?`, `escape`, `mod+shift+k`, `arrowup`.
  *
  * Modifiers are case-insensitive. `mod` is an alias for `ctrl` on every
  * platform — display and binding both render as `Ctrl`. The key is whatever
- * `KeyboardEvent.key` produces, lowercased. So pressing `shift+/` (which
- * yields `event.key === "?"`) is canonically `shift+?` — match it by
- * binding either `"shift+?"`.
+ * `KeyboardEvent.key` produces, lowercased. A shifted printable symbol already
+ * encodes Shift in the character it produces, so bind `"?"` (not `"shift+?"`)
+ * to catch `shift+/`; `shift` stays explicit for letters and named keys, so
+ * `shift+a` and `shift+tab` remain distinct chords.
  */
 
 export type Modifier = "ctrl" | "shift" | "alt" | "meta";
@@ -92,10 +93,20 @@ export function normalizeEvent(e: KeyboardEvent): string | null {
   }
   const mods = new Set<Modifier>();
   if (e.ctrlKey) mods.add("ctrl");
-  if (e.shiftKey) mods.add("shift");
+  // A shifted printable symbol (`?`, `:`, `+`, `~`, …) already encodes Shift in
+  // the character it produces, so a bare `useHotkey("?")` should match without
+  // the caller also writing `shift+?`. Fold Shift into single non-alphanumeric
+  // keys; letters and named keys (arrows, `tab`) keep it, so `shift+a` and
+  // `shift+tab` stay distinct chords.
+  if (e.shiftKey && !isShiftedSymbol(key)) mods.add("shift");
   if (e.altKey) mods.add("alt");
   if (e.metaKey) mods.add("meta");
   return canonicalize({ mods, key });
+}
+
+/** A single printable symbol (`?`, `+`, `:`, …) — not a letter, digit, or named key. */
+function isShiftedSymbol(key: string): boolean {
+  return key.length === 1 && !/[a-z0-9]/.test(key);
 }
 
 const SPECIAL_KEY_LABELS: Record<string, string> = {

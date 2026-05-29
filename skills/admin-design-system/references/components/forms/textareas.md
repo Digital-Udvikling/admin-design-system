@@ -36,6 +36,20 @@
 <Textarea textareaSize="lg" placeholder="Large" />
 ```
 
+### Auto-resize
+
+Height tracks content via CSS `field-sizing` — no JavaScript. `rows` (or `min-height`) is the floor; cap growth with `max-height`. Chromium-only today; other browsers fall back to a fixed, resizable box.
+
+**Example**
+
+```html
+<textarea class="textarea textarea-autosize" rows="2" placeholder="Grows as you type"></textarea>
+```
+
+```tsx
+<Textarea autoResize rows={2} placeholder="Grows as you type" />
+```
+
 ### Disabled
 
 **Example**

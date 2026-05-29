@@ -18,6 +18,15 @@
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
+  /* Grow with content (Chromium 123+; degrades to a fixed resizable box
+     elsewhere). `min-h-*` / the `rows` attribute stays the floor; cap growth
+     with a consumer `max-height`. Manual drag-resize is off — height is
+     content-driven. */
+  .textarea-autosize {
+    field-sizing: content;
+    resize: none;
+  }
+
   /* Sizes */
   .textarea-sm {
     @apply text-xs px-2.5 py-1.5 min-h-16;

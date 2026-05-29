@@ -11,6 +11,13 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
+  it("applies the autosize class only when autoResize is set", () => {
+    const { rerender } = render(<Textarea aria-label="x" />);
+    expect(screen.getByLabelText("x")).not.toHaveAdminClass("textarea-autosize");
+    rerender(<Textarea aria-label="x" autoResize />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-autosize");
+  });
+
   describe("interactions", () => {
     it("uncontrolled: typing updates value and fires onChange per keystroke", async () => {
       const user = userEvent.setup();

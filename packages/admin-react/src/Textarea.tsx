@@ -8,6 +8,12 @@ export type TextareaSize = "sm" | "md" | "lg";
 export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> {
   variant?: TextareaVariant;
   textareaSize?: TextareaSize;
+  /**
+   * Height tracks content via CSS `field-sizing` (Chromium-only today; other
+   * browsers keep a fixed, resizable box). `rows`/min-height is the floor —
+   * set `max-height` via `className`/`style` for a ceiling.
+   */
+  autoResize?: boolean;
 }
 
 /**
@@ -20,6 +26,7 @@ export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> 
 export function Textarea({
   variant = "bordered",
   textareaSize = "md",
+  autoResize,
   className,
   ...rest
 }: TextareaProps) {
@@ -34,6 +41,7 @@ export function Textarea({
           "textarea",
           variant !== "bordered" && `textarea-${variant}`,
           textareaSize !== "md" && `textarea-${textareaSize}`,
+          autoResize && "textarea-autosize",
         ],
         className,
       )}

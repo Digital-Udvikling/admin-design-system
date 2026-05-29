@@ -18,6 +18,20 @@
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
+  /* Status variants — border + focus outline only; text stays `text-text`, so
+     warning's yellow accent (which fails AA as text) is fine here. */
+  .input-info {
+    @apply border-info hover:border-info focus-visible:outline-info;
+  }
+
+  .input-success {
+    @apply border-success hover:border-success focus-visible:outline-success;
+  }
+
+  .input-warning {
+    @apply border-warning hover:border-warning focus-visible:outline-warning;
+  }
+
   /* Sizes */
   .input-sm {
     @apply text-xs px-2.5 py-1.5;

@@ -10,6 +10,11 @@ describe("Input", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
+  it("applies the status variant class", () => {
+    render(<Input aria-label="x" variant="warning" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-warning");
+  });
+
   describe("interactions", () => {
     it("uncontrolled: typing updates value and fires onChange per keystroke", async () => {
       const user = userEvent.setup();

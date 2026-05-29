@@ -25,6 +25,26 @@ import { Field, Textarea } from "@aortl/admin-react";
 
 :::
 
+### Status variants
+
+`info`, `success`, and `warning` carry the signal through the border and focus ring — text stays readable.
+
+:::example
+
+```html
+<textarea class="textarea textarea-info">Info</textarea>
+<textarea class="textarea textarea-success">Success</textarea>
+<textarea class="textarea textarea-warning">Warning</textarea>
+```
+
+```tsx
+<Textarea variant="info" defaultValue="Info" />
+<Textarea variant="success" defaultValue="Success" />
+<Textarea variant="warning" defaultValue="Warning" />
+```
+
+:::
+
 ### Sizes
 
 :::example

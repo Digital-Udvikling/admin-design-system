@@ -11,6 +11,11 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
+  it("applies the status variant class", () => {
+    render(<Textarea aria-label="x" variant="success" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-success");
+  });
+
   it("applies the autosize class only when autoResize is set", () => {
     const { rerender } = render(<Textarea aria-label="x" />);
     expect(screen.getByLabelText("x")).not.toHaveAdminClass("textarea-autosize");

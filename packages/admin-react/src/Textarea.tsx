@@ -2,7 +2,7 @@ import { Field as BaseField } from "@base-ui/react/field";
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
 
-export type TextareaVariant = "bordered" | "ghost" | "danger";
+export type TextareaVariant = "bordered" | "ghost" | "danger" | "info" | "success" | "warning";
 export type TextareaSize = "sm" | "md" | "lg";
 
 export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> {

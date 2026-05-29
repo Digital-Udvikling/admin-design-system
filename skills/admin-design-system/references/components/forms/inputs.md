@@ -20,6 +20,24 @@
 <Input variant="danger" defaultValue="invalid" />
 ```
 
+### Status variants
+
+`info`, `success`, and `warning` carry the signal through the border and focus ring — text stays readable.
+
+**Example**
+
+```html
+<input class="input input-info" value="Info" />
+<input class="input input-success" value="Success" />
+<input class="input input-warning" value="Warning" />
+```
+
+```tsx
+<Input variant="info" defaultValue="Info" />
+<Input variant="success" defaultValue="Success" />
+<Input variant="warning" defaultValue="Warning" />
+```
+
 ### Sizes
 
 **Example**

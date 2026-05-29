@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { AdminRoot } from "./AdminRoot";
 import { Dialog } from "./Dialog";
 import { Select } from "./Select";
 import { adminSelector } from "./test-setup";
@@ -88,6 +89,34 @@ describe("Select", () => {
       const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
       expect(popup).not.toBeNull();
       expect(dialog.contains(popup)).toBe(true);
+    });
+
+    it("portals the popup into an ancestor <AdminRoot> when there's no Dialog", async () => {
+      // The scoped bundle admin-react ships wraps every rule in
+      // @scope (._ao-admin-root). A popup portaled to document.body (the Base
+      // UI default) falls outside that scope and renders unstyled; AdminRoot
+      // publishes itself as the PortalContainerContext so popups stay in-scope.
+      const user = userEvent.setup();
+      render(
+        <AdminRoot data-testid="root">
+          <Select>
+            <Select.Trigger aria-label="fruit">
+              <Select.Value placeholder="Pick" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Popup>
+              <Select.Item value="apple">
+                <Select.ItemText>Apple</Select.ItemText>
+              </Select.Item>
+            </Select.Popup>
+          </Select>
+        </AdminRoot>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const root = screen.getByTestId("root");
+      const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(root.contains(popup)).toBe(true);
     });
 
     it("controlled: value prop drives the trigger via onValueChange round-trip", async () => {

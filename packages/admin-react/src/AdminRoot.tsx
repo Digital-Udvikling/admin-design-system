@@ -1,5 +1,6 @@
-import type { CSSProperties, ComponentProps } from "react";
+import { useCallback, useRef, type CSSProperties, type ComponentProps } from "react";
 import { cn } from "./cn";
+import { PortalContainerContext } from "./portal-context";
 
 export interface AdminRootProps extends ComponentProps<"div"> {
   /**
@@ -15,18 +16,36 @@ export interface AdminRootProps extends ComponentProps<"div"> {
   systemAccent?: string;
 }
 
-export function AdminRoot({ className, theme, systemAccent, style, ...rest }: AdminRootProps) {
+export function AdminRoot({ className, theme, systemAccent, style, ref, ...rest }: AdminRootProps) {
   const rootStyle =
     systemAccent !== undefined
       ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
       : style;
 
+  // Publish this element as the portal container so Base UI popups (Select,
+  // Tooltip, …) render inside the scoped subtree and match admin's
+  // `@scope (._ao-admin-root)` rules. Without this they portal to
+  // `document.body` — outside the scope — and render unstyled. A `<Dialog>`
+  // ancestor overrides this with its own top-layer `<dialog>`.
+  const portalRef = useRef<HTMLElement | null>(null);
+  const setRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      portalRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
+
   return (
-    <div
-      className={cn("admin-root", className)}
-      style={rootStyle}
-      {...rest}
-      {...(theme !== undefined && { "data-theme": theme })}
-    />
+    <PortalContainerContext.Provider value={portalRef}>
+      <div
+        ref={setRef}
+        className={cn("admin-root", className)}
+        style={rootStyle}
+        {...rest}
+        {...(theme !== undefined && { "data-theme": theme })}
+      />
+    </PortalContainerContext.Provider>
   );
 }

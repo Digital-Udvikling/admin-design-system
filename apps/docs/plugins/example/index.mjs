@@ -88,8 +88,8 @@ export default function remarkExample() {
         }
 
         const [html, react] = await Promise.all([
-          fences.html !== undefined ? formatHtml(fences.html) : undefined,
-          fences.tsx !== undefined ? formatReact(fences.tsx) : undefined,
+          fences.html !== undefined ? formatHtml(fences.html, file, node) : undefined,
+          fences.tsx !== undefined ? formatReact(fences.tsx, file, node) : undefined,
         ]);
 
         const attributes = [];
@@ -261,25 +261,58 @@ function dedent(s) {
     .replace(/^\n+|\n+$/g, "");
 }
 
-/** @param {string} code */
-async function formatHtml(code) {
+/**
+ * @param {string} code
+ * @param {import("vfile").VFile} file
+ * @param {any} node
+ */
+async function formatHtml(code, file, node) {
   const wrapped = `<div>\n${code}\n</div>`;
-  const out = (
-    await format("snippet.html", wrapped, { ...PRETTIER_OPTS, parser: "html" })
-  ).code.trim();
+  const result = await format("snippet.html", wrapped, { ...PRETTIER_OPTS, parser: "html" });
+  failOnFormatErrors(result, file, node, "html");
+  const out = result.code.trim();
   const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
   return dedent(inner);
 }
 
-/** @param {string} code */
-async function formatReact(code) {
+/**
+ * @param {string} code
+ * @param {import("vfile").VFile} file
+ * @param {any} node
+ */
+async function formatReact(code, file, node) {
   const wrapped = `<>\n${code}\n</>;\n`;
-  const out = (
-    await format("snippet.tsx", wrapped, {
-      ...PRETTIER_OPTS,
-      parser: "babel-ts",
-    })
-  ).code.trim();
+  const result = await format("snippet.tsx", wrapped, {
+    ...PRETTIER_OPTS,
+    parser: "babel-ts",
+  });
+  failOnFormatErrors(result, file, node, "tsx");
+  const out = result.code.trim();
   const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
   return dedent(inner);
+}
+
+/**
+ * oxfmt returns malformed input *unchanged* with the parse errors in `errors`
+ * rather than throwing. Left unchecked, an invalid fence flows through —
+ * rendering broken HTML, or compiling to an invalid `virtual:example-preview`
+ * module that crashes far from its source with no MDX line. Fail the build at
+ * the directive node instead, surfacing oxfmt's codeframe.
+ *
+ * @param {{ errors?: Array<{ severity?: string, message?: string, codeframe?: string }> }} result
+ * @param {import("vfile").VFile} file
+ * @param {any} node
+ * @param {string} lang
+ */
+function failOnFormatErrors(result, file, node, lang) {
+  const errors = (result.errors ?? []).filter(
+    (e) => String(e.severity ?? "error").toLowerCase() === "error",
+  );
+  if (errors.length === 0) return;
+  const first = errors[0];
+  const detail = first.codeframe ? `\n${first.codeframe}` : "";
+  file.fail(
+    `malformed \`${lang}\` fence in \`:::example\`: ${first.message ?? "syntax error"}${detail}`,
+    node,
+  );
 }

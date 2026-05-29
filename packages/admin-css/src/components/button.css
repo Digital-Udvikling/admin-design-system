@@ -10,6 +10,13 @@
            disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
   }
 
+  /* Keep leading/trailing icons at their intrinsic size — a flex item defaults
+     to `flex-shrink: 1`, so a narrow flex container would otherwise squish the
+     glyph horizontally before wrapping or truncating the label. */
+  .btn > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   /* Variants — the bare `.btn` (no modifier) is the low-emphasis default, so
      most admin buttons need no variant class. The colored variants reset the
      border to transparent since the base now carries a visible one. */

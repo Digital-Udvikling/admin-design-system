@@ -34,6 +34,12 @@
     display: none;
   }
 
+  /* Keep a leading icon at its intrinsic size; the chevron is the `::after`
+     below, which is already `flex-shrink: 0`. */
+  .accordion-summary > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   /* Chevron — pushed to the end with margin-left: auto so any number of
      leading items (label, optional icon) sit together on the start side. */
   .accordion-summary::after {

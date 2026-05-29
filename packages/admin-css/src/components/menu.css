@@ -106,6 +106,12 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
+  /* Don't let a constrained menu width squish a leading/trailing icon. */
+  .menu-trigger > :is(i, svg),
+  .menu-item > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   .menu-separator {
     @apply h-px my-1 bg-border border-0;
   }

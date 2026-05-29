@@ -35,4 +35,12 @@
     width: 0.875rem;
     height: 0.875rem;
   }
+
+  /* Setting a width on a flex item doesn't stop it from shrinking, so pin the
+     shrink factor too — keeps crumb and separator icons from squishing when a
+     long label tightens the row. */
+  .breadcrumb-item > :is(i, svg),
+  .breadcrumb-separator > :is(i, svg) {
+    flex-shrink: 0;
+  }
 }

@@ -14,6 +14,11 @@
     @apply flex items-center gap-2 text-sm text-text-muted font-medium;
   }
 
+  /* Keep the label's leading icon at its intrinsic size. */
+  .stat-card-label > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   .stat-card-value {
     @apply text-2xl font-bold tabular-nums leading-tight;
   }

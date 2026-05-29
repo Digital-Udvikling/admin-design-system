@@ -7,6 +7,12 @@
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
   }
 
+  /* Keep a leading icon from squishing when the link text wraps. The trailing
+     external arrow is already `flex: none` below. */
+  .link > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   /* External affordance: a trailing ↗ rendered from CSS so it ships identically
      in both bundles — no JS, no icon-font dependency. The arrow is a masked box
      tinted with `currentColor`, so it tracks the link's color (incl. hover). */

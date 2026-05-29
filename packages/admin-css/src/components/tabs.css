@@ -30,6 +30,11 @@
     @apply text-text;
   }
 
+  /* Keep a tab's leading icon at its intrinsic size when the label is long. */
+  .tabs .tab > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   /* Vanilla radio-input pattern: hide the inputs visually, treat the following
      <label class="tab"> as the selected tab when the radio is :checked.
      Pairs with `:has(input:checked)` below to show the right panel. */

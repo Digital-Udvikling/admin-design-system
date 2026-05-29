@@ -7,6 +7,11 @@
            bg-surface-strong text-text;
   }
 
+  /* Keep a status dot or leading glyph round when the label is long. */
+  .badge > :is(i, svg) {
+    flex-shrink: 0;
+  }
+
   /* Variants — match the alert palette so danger/success/etc. stay coherent
      across status indicators and chips in tables. The bare `.badge` (no
      modifier) renders the neutral look, now folded into the base. */

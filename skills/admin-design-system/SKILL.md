@@ -144,6 +144,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Grid](references/components/grid.md) — Two-dimensional layouts with grid utilities.
 - [Indicator](references/components/indicator.md) — Place a badge, count, or dot on the corner of another element.
 - [Kbd](references/components/kbd.md) — Keyboard shortcut chips for help text, tooltips, and bindings.
+- [Links](references/components/links.md) — Styled text links with an optional external affordance.
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.

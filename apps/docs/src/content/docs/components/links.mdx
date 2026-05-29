@@ -1,0 +1,63 @@
+---
+title: Links
+description: Styled text links with an optional external affordance.
+---
+
+import { Link } from "@aortl/admin-react";
+import { IconHome } from "@tabler/icons-react";
+
+A plain `<a>` with the design system's link styling — primary color, hover shift, underline, and a focus-visible ring.
+
+## Examples
+
+### Basic
+
+:::example
+
+```html
+<a class="link" href="#">View order</a>
+```
+
+```tsx
+<Link href="#">View order</Link>
+```
+
+:::
+
+### With icon
+
+Pass `icon` for a leading icon. See [Icons](../../basics/icons/).
+
+:::example
+
+```html
+<a class="link" href="#"><i class="ti ti-home" aria-hidden="true"></i>Dashboard</a>
+```
+
+```tsx
+<Link href="#" icon={IconHome}>
+  Dashboard
+</Link>
+```
+
+:::
+
+### External
+
+`external` renders a trailing ↗ (CSS-driven, so it ships in both bundles) and defaults `target="_blank"` + `rel="noopener noreferrer"`.
+
+:::example
+
+```html
+<a class="link link-external" href="https://example.com" target="_blank" rel="noopener noreferrer"
+  >Open in inRiver</a
+>
+```
+
+```tsx
+<Link href="https://example.com" external>
+  Open in inRiver
+</Link>
+```
+
+:::

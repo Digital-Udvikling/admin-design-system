@@ -1,5 +1,5 @@
 import { Button as BaseButton } from "@base-ui/react/button";
-import type { ComponentProps } from "react";
+import { useCallback, useRef, type ComponentProps } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
@@ -20,11 +20,12 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
   /** Trailing icon. Pass a component (`iconTrailing={IconArrowRight}`) or an element. */
   iconTrailing?: IconProp;
   /**
-   * Keyboard shortcut bound to this button. Pressing the chord invokes the
-   * button's `onClick` handler — not a real DOM click, so `type="submit"`
-   * form submission and other native side effects only happen if `onClick`
-   * triggers them itself. Same syntax as `useHotkey`. Pass an array for
-   * alternatives — only the first is rendered as a visual chip.
+   * Keyboard shortcut bound to this button. Pressing the chord dispatches a
+   * native click on the underlying element, so `onClick` fires, `type="submit"`
+   * submits the form, and an anchor-rendered button (`render={<a href>}`)
+   * navigates — all the native side effects of a real click. Same syntax as
+   * `useHotkey`. Pass an array for alternatives — only the first is rendered as
+   * a visual chip.
    */
   hotkey?: string | readonly string[];
 }
@@ -42,19 +43,31 @@ export function Button({
   disabled,
   children,
   onClick,
+  ref,
   ...rest
 }: ButtonProps) {
-  type OnClickEvent = Parameters<NonNullable<typeof onClick>>[0];
-  const { ariaKeyShortcuts, primaryChord } = useHotkey(
-    hotkey,
-    (e) => onClick?.(e as unknown as OnClickEvent),
-    { enabled: !disabled && !loading },
+  // Latch the rendered element so the hotkey can dispatch a real `.click()` on
+  // it (native side effects: form submit, anchor navigation). Merge with any
+  // consumer-supplied `ref` so passing one still works.
+  const elementRef = useRef<HTMLElement | null>(null);
+  const setRef = useCallback(
+    (node: HTMLElement | null) => {
+      elementRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
   );
+
+  const { ariaKeyShortcuts, primaryChord } = useHotkey(hotkey, () => elementRef.current?.click(), {
+    enabled: !disabled && !loading,
+  });
 
   const iconOnly = children == null && (icon != null || iconTrailing != null);
 
   return (
     <BaseButton
+      ref={setRef}
       onClick={onClick}
       type={type}
       disabled={disabled || loading}

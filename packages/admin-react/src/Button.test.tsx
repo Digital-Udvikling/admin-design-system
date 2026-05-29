@@ -156,7 +156,7 @@ describe("Button", () => {
       expect(btn).toHaveAttribute("aria-keyshortcuts", "Control+S");
     });
 
-    it("synthesizes a click when the chord fires", () => {
+    it("dispatches a native click on the element when the chord fires", () => {
       const onClick = vi.fn();
       render(
         <Button hotkey="mod+s" onClick={onClick}>
@@ -164,7 +164,38 @@ describe("Button", () => {
         </Button>,
       );
       pressCtrlS();
+      // A real `.click()` means React's onClick fires, and the event is a
+      // genuine MouseEvent (isTrusted is false in jsdom, but it is a click).
       expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onClick.mock.calls[0]?.[0].type).toBe("click");
+    });
+
+    it("clicks the underlying anchor when rendered as a link", () => {
+      let clickedTag: string | undefined;
+      const onClick = vi.fn((e) => {
+        // Capture synchronously — React clears `currentTarget` after dispatch.
+        clickedTag = (e.currentTarget as HTMLElement).tagName;
+        e.preventDefault();
+      });
+      render(
+        <Button
+          hotkey="mod+s"
+          nativeButton={false}
+          render={(props) => (
+            <a {...props} href="#target">
+              {props.children}
+            </a>
+          )}
+          onClick={onClick}
+        >
+          Open
+        </Button>,
+      );
+      // The chord lands on the rendered <a>, not a synthetic call on the
+      // component — so anchor-rendered buttons can stay anchors and navigate.
+      pressCtrlS();
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(clickedTag).toBe("A");
     });
 
     it("does not click when disabled", () => {

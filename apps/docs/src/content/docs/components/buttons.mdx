@@ -187,7 +187,7 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 
 ### Hotkey <StarlightBadge text="React only" variant="caution" />
 
-Bind a chord to the button — pressing it invokes `onClick` and renders a trailing chip. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../../basics/hotkeys/) for page-level bindings.
+Bind a chord to the button — pressing it dispatches a native click and renders a trailing chip. Because it's a real click, `onClick` fires, `type="submit"` submits the form, and an anchor-rendered button (`render={<a href>}`) navigates. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../../basics/hotkeys/) for page-level bindings.
 
 :::example
 

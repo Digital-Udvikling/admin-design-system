@@ -47,7 +47,9 @@
     "build:utilities": "tailwindcss -i ./src/utilities.css -o ./dist/admin.utilities.css",
     "build:utilities:min": "tailwindcss -i ./src/utilities.css -o ./dist/admin.utilities.min.css --minify",
     "build:scoped": "node ./scripts/wrap-scoped.mjs",
-    "dev": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
+    "dev": "pnpm run \"/^dev:/\"",
+    "dev:css": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
+    "dev:scoped": "node --watch-path=./dist/admin.css ./scripts/wrap-scoped.mjs",
     "prepublishOnly": "pnpm build",
     "test": "vitest run",
     "test:watch": "vitest"

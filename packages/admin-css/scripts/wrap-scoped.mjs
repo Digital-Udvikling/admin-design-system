@@ -51,18 +51,21 @@ const SELECTOR_REWRITES = new Map([
 ]);
 
 function rewriteSelector(selector) {
-  const parts = selector.split(",").map((p) => {
-    const trimmed = p.trim();
-    return SELECTOR_REWRITES.get(trimmed) ?? trimmed;
-  });
+  // Split the selector list on top-level commas via the AST — a naive
+  // `selector.split(",")` also splits commas inside quoted attribute values
+  // (`[data-x="1,2"]`) and functional pseudo-classes (`:is(.a, .b)`), then
+  // rejoins with `", "`, corrupting the literal. Parsing keeps them intact.
+  const root = selectorParser().astSync(selector);
   const seen = new Set();
-  const deduped = [];
-  for (const part of parts) {
-    if (seen.has(part)) continue;
-    seen.add(part);
-    deduped.push(part);
+  const out = [];
+  for (const sel of root.nodes) {
+    const trimmed = sel.toString().trim();
+    const rewritten = SELECTOR_REWRITES.get(trimmed) ?? trimmed;
+    if (seen.has(rewritten)) continue;
+    seen.add(rewritten);
+    out.push(rewritten);
   }
-  return deduped.join(", ");
+  return out.join(", ");
 }
 
 // Use a real selector parser so we only touch `class` nodes — attribute

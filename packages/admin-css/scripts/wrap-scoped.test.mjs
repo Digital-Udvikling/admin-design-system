@@ -115,6 +115,16 @@ test("no @layer statements or blocks appear anywhere in the output", () => {
   expect(found, "@layer must not appear in the wrapped output").toBe(false);
 });
 
+test("commas inside quoted attribute values are not mangled", () => {
+  // The :root/html/body rewrite must split selector lists on top-level commas
+  // only — a naive split corrupts `[data-x="1,2"]` into `[data-x="1, 2"]`,
+  // which no longer matches an element with `data-x="1,2"`.
+  const input = `@layer components { .a[data-x="1,2"] { color: red; } }`;
+  const output = wrap(input);
+  expect(output).toContain('[data-x="1,2"]');
+  expect(output).not.toContain('[data-x="1, 2"]');
+});
+
 test("@keyframes selectors are not rewritten", () => {
   // `from` and `to` inside @keyframes are step selectors, not element selectors.
   // Rewriting them to `:scope from { ... }` would emit invalid CSS.

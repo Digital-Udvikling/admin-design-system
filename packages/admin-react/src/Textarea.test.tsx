@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Field } from "./Field";
 import { Textarea, type TextareaProps } from "./Textarea";
 
 describe("Textarea", () => {
@@ -46,6 +47,19 @@ describe("Textarea", () => {
       expect(el).toHaveValue("ab");
       expect(onChange).toHaveBeenNthCalledWith(1, "a");
       expect(onChange).toHaveBeenNthCalledWith(2, "ab");
+    });
+  });
+
+  describe("Field integration", () => {
+    it("associates with a Field label: clicking the label focuses the Textarea", async () => {
+      const user = userEvent.setup();
+      render(
+        <Field label="Notes">
+          <Textarea />
+        </Field>,
+      );
+      await user.click(screen.getByText("Notes"));
+      expect(screen.getByRole("textbox")).toHaveFocus();
     });
   });
 });

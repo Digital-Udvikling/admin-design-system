@@ -3,8 +3,10 @@
  *
  * Examples: `mod+s`, `?`, `escape`, `mod+shift+k`, `arrowup`.
  *
- * Modifiers are case-insensitive. `mod` is an alias for `ctrl` on every
- * platform — display and binding both render as `Ctrl`. The key is whatever
+ * Modifiers are case-insensitive. `mod` resolves to the platform's primary
+ * command modifier — ⌘ (`meta`) on Apple platforms, `Ctrl` elsewhere — so
+ * `mod+s` fires on the OS-native gesture (Cmd+S on macOS, Ctrl+S otherwise)
+ * and the `<Kbd>` chip follows suit. The key is whatever
  * `KeyboardEvent.key` produces, lowercased. A shifted printable symbol already
  * encodes Shift in the character it produces, so bind `"?"` (not `"shift+?"`)
  * to catch `shift+/`; `shift` stays explicit for letters and named keys, so
@@ -20,9 +22,26 @@ export interface ParsedChord {
 
 const MOD_ORDER: readonly Modifier[] = ["ctrl", "shift", "alt", "meta"];
 
+/**
+ * Resolve the modifier `mod` aliases to. Apple platforms use ⌘ (`meta`) as the
+ * primary command modifier; everywhere else it's Ctrl. Detected once at module
+ * load (SSR-safe — the registry never dispatches server-side) and shared by the
+ * parse and display layers so the binding and its `<Kbd>` chip always agree.
+ */
+function detectApplePlatform(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData;
+  const platform = uaData?.platform || navigator.platform || "";
+  return /^(mac|iphone|ipad|ipod)/i.test(platform);
+}
+
+const IS_APPLE = detectApplePlatform();
+const MOD_TARGET: Modifier = IS_APPLE ? "meta" : "ctrl";
+
 function tokenToMod(token: string): Modifier | null {
   switch (token) {
     case "mod":
+      return MOD_TARGET;
     case "ctrl":
     case "control":
       return "ctrl";
@@ -125,12 +144,10 @@ const SPECIAL_KEY_LABELS: Record<string, string> = {
   delete: "Del",
 };
 
-const MOD_LABELS: Record<Modifier, string> = {
-  ctrl: "Ctrl",
-  shift: "Shift",
-  alt: "Alt",
-  meta: "Meta",
-};
+// Apple renders chords as glyphs (⌃⇧⌥⌘); other platforms spell them out.
+const MOD_LABELS: Record<Modifier, string> = IS_APPLE
+  ? { ctrl: "⌃", shift: "⇧", alt: "⌥", meta: "⌘" }
+  : { ctrl: "Ctrl", shift: "Shift", alt: "Alt", meta: "Meta" };
 
 /** Visual chips for a chord — one entry per modifier and the final key. */
 export function formatChord(chord: ParsedChord): string[] {

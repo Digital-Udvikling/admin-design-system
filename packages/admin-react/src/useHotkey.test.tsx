@@ -71,6 +71,15 @@ describe("useHotkey", () => {
     expect(fire).not.toHaveBeenCalled();
   });
 
+  it("ignores OS autorepeat so a held chord fires once", () => {
+    const fire = vi.fn();
+    render(<Bind keys="mod+s" onFire={fire} />);
+    press({ key: "s", ctrlKey: true });
+    press({ key: "s", ctrlKey: true, repeat: true });
+    press({ key: "s", ctrlKey: true, repeat: true });
+    expect(fire).toHaveBeenCalledTimes(1);
+  });
+
   it("unregisters on unmount", () => {
     const fire = vi.fn();
     const { unmount } = render(<Bind keys="mod+s" onFire={fire} />);

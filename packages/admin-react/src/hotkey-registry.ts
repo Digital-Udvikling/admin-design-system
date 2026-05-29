@@ -6,11 +6,12 @@ import { normalizeEvent } from "./hotkey-parse";
  * attached on first registration and detached when the registry empties.
  *
  * On keydown:
- *   1. Normalize the event to a canonical chord string.
- *   2. Look up the bucket. Skip if empty.
- *   3. Apply input suppression — bare-key chords are skipped while focus is
+ *   1. Ignore OS autorepeat (`e.repeat`) so a held chord fires once, not per tick.
+ *   2. Normalize the event to a canonical chord string.
+ *   3. Look up the bucket. Skip if empty.
+ *   4. Apply input suppression — bare-key chords are skipped while focus is
  *      in an editable element, except for `escape`.
- *   4. `preventDefault()`, then invoke every surviving handler (bag semantics).
+ *   5. `preventDefault()`, then invoke every surviving handler (bag semantics).
  */
 
 export type HotkeyHandler = (e: KeyboardEvent) => void;
@@ -43,6 +44,9 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 function dispatch(e: KeyboardEvent): void {
+  // Edge-triggered: a held chord autorepeats keydown, but the bound action
+  // (save, open a dialog, navigate) should fire once per press.
+  if (e.repeat) return;
   const chord = normalizeEvent(e);
   if (chord === null) return;
   const bucket = registry.get(chord);

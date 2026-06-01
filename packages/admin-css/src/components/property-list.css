@@ -35,6 +35,10 @@
 
   /* Compact density — tighter rows for sidebar info blocks or very many
      short attributes. */
+  .property-list-compact .property-list-title {
+    @apply mb-1;
+  }
+
   .property-list-compact .property-list-label,
   .property-list-compact .property-list-value {
     padding: 0.125rem 0.5rem;

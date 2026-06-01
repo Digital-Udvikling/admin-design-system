@@ -29,6 +29,14 @@
     @apply flex items-center gap-1 ml-auto -mt-0.5;
   }
 
+  /* Toolbar buttons run small (usually `btn-sm`, whose icons inherit `text-xs`);
+     bump the glyph to 1rem so the controls stay easy to scan and hit. Both
+     bundles size icons off `font-size` — the Tabler webfont (`<i>`) and React's
+     `size="1em"` SVG — so this single rule enlarges both identically. */
+  .card-toolbar :is(i, svg) {
+    font-size: 1.25rem;
+  }
+
   .card-description {
     @apply text-sm text-text-muted;
   }

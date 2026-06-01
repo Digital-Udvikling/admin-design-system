@@ -81,6 +81,18 @@ Admin users run current browsers — there is no legacy budget. Reach for modern
 
 Don't pull in `framer-motion`, manual portals, or `requestAnimationFrame` loops. Base UI handles the cases where JS is genuinely needed.
 
+### Charts
+
+Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (vanilla `.chart-bars` / `.chart-stack` / `.chart-donut`, all under the shared `.chart` base). No axes, ticks, or gridlines; they serve dense inline micro-viz and compact dashboard cards. Data is driven by inline custom properties, never `data-*` (CSS can't read an attribute as a number for `calc()` cross-browser):
+
+- **Bars** — container `style="--chart-max: <n>"` (default 100), each bar `style="--value: <n>"`; the fill sizes to `calc(var(--value) / var(--chart-max) * 100%)`. Horizontal by default (label gutter + aligned value column); add `.chart-bars-vertical` for columns. Single-series only.
+- **Proportion bar** — `.chart-stack` flex row; each `.chart-segment` takes `style="--value: <n>"` and is sized by its flex ratio (no max).
+- **Donut/pie** — one cumulative `conic-gradient` stop string in `style="--donut-segments: …"`; the hole is a radial-gradient mask sized by `--donut-thickness` (`.chart-donut-pie` for a solid pie). The centre label is a sibling overlay in `.chart-donut-figure`, never a child of the masked ring.
+
+Colour: single-series follows `currentColor` (`--color-primary`, plus `.chart-success` / `-warning` / `-danger` / `-info`). Multi-series colours are set inline per element (`--bar-color` / `--segment-color` / legend `--legend-color`) — there is no chart token layer. React cycles a `SERIES` constant of existing Flexoki palette tokens (`var(--color-blue-500)`, `var(--color-orange-400)`, …) by index, overridable per datum via `color`; vanilla copies the same sequence so both bundles match.
+
+In React the primary API is the `data` prop (`data={[{ label?, value, color? }]}`), which computes the max, builds the donut string, and generates an overridable `aria-label`. Each component also exposes a `.Container` (or `.Track` / `.Figure`) plus part subcomponents for hand-composed layouts, mirroring the `Card` / `Card.Container` split. Roots carry `role="img"`; bars and stack segments carry a native `title` (the donut's per-slice read-out lives on the legend rows). Bars and segments transition over 200ms on value change; `prefers-reduced-motion` removes it.
+
 ## Contributing back
 
 When building a non-trivial component or module that's likely to recur across admin tools — a richer table layout, a specific form pattern, a custom navbar variant — pause and consider whether it belongs upstream in [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system) rather than duplicated locally.
@@ -128,6 +140,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
+- [Charts](references/components/charts.md) — Pure-CSS bar, proportion, and donut primitives.
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.

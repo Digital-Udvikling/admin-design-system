@@ -89,6 +89,23 @@ export {
 } from "./Card";
 export { StatCard, type StatCardProps } from "./StatCard";
 export {
+  BarChart,
+  type BarChartProps,
+  type BarChartContainerProps,
+  type BarProps,
+  type BarChartVariant,
+  type BarChartOrientation,
+} from "./BarChart";
+export { Donut, type DonutProps, type DonutFigureProps, type DonutRingProps } from "./Donut";
+export {
+  StackedBar,
+  type StackedBarProps,
+  type StackedBarTrackProps,
+  type SegmentProps,
+} from "./StackedBar";
+export { ChartLegend, type ChartLegendProps } from "./ChartLegend";
+export { SERIES, type ChartDatum, type ChartSize, type ChartType } from "./chart-internal";
+export {
   Dialog,
   type DialogProps,
   type DialogContainerProps,

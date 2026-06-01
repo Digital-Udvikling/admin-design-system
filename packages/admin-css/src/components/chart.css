@@ -1,0 +1,311 @@
+@layer components {
+  /*
+   * Charts — three pure-CSS primitives driven entirely by inline custom
+   * properties (never data-* attributes: CSS can't read an attribute as a
+   * number for calc() cross-browser yet). No JS, no axes/ticks/gridlines.
+   * They serve two altitudes: dense inline micro-viz (a swatch in a table
+   * cell) and compact dashboard cards.
+   *
+   * Data contract:
+   *   - bars:  container `--chart-max` (default 100), each bar `--value`;
+   *            the fill sizes to `var(--value) / var(--chart-max) * 100%`.
+   *   - stack: each segment `--value`, sized by `flex` (no max — the ratios
+   *            are intrinsic to the flex grow factors).
+   *   - donut: one pre-built cumulative conic-gradient stop string in
+   *            `--donut-segments` (CSS can't sum a variable-length sibling
+   *            list, so the string arrives whole).
+   *
+   * Colour: single-series follows `currentColor` (default `--color-primary`,
+   * recoloured by the `.chart-success`/etc. variants like `.progress`).
+   * Multi-series colours are set inline per bar/segment (`--bar-color` /
+   * `--segment-color` / legend `--legend-color`); there is no chart token
+   * layer. role="img" + aria-label carries the semantics; a native `title`
+   * on each bar/segment gives a hover read-out.
+   */
+
+  /* Shared base — sizing knobs + the single-series fill colour. Any chart
+     type reads these; size modifiers below just remap them. */
+  .chart {
+    --chart-max: 100;
+    --chart-height: 8rem; /* bar track cross-axis size (md) */
+    --chart-size: 8rem; /* donut diameter (md) */
+    --chart-gap: 0.25rem;
+    color: var(--color-primary);
+  }
+
+  /* Single-series semantic variants — recolour currentColor, like progress. */
+  .chart-success {
+    color: var(--color-success);
+  }
+  .chart-warning {
+    color: var(--color-warning);
+  }
+  .chart-danger {
+    color: var(--color-danger);
+  }
+  .chart-info {
+    color: var(--color-info);
+  }
+
+  /* --------------------------------------------------------------------- *
+   * BAR CHART — horizontal (default)                                      *
+   * --------------------------------------------------------------------- *
+   * Three-column grid: [label | track (1fr) | value]. Each `.chart-bar` is
+   * a `subgrid` spanning all three, so the label gutter and the value column
+   * stay aligned across every row. The fill lives in the `1fr` track — a
+   * definite width once the grid resolves, which is exactly what lets its
+   * `inline-size: %` transition (see the transition note). Values sit in the
+   * trailing column, so a short bar never clips its number and a full bar
+   * never overflows. */
+  .chart-bars {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    row-gap: var(--chart-gap);
+    align-items: center;
+    inline-size: 100%;
+  }
+
+  .chart-bar {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    align-items: center;
+  }
+
+  /* Category label — only emitted when the datum carries one. The empty
+     `auto` column collapses to 0 when no bar has a label. */
+  .chart-bar-label {
+    @apply text-xs text-text-muted;
+    grid-column: 1;
+    text-align: end;
+    padding-inline-end: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .chart-bar-track {
+    grid-column: 2;
+    min-inline-size: 0;
+  }
+
+  .chart-bar-fill {
+    block-size: 0.75rem;
+    inline-size: calc(var(--value) / var(--chart-max) * 100%);
+    background: var(--bar-color, currentColor);
+    border-radius: 2px;
+    /* Transition the resolved length (NOT --value, which isn't registered):
+       a percentage length transitions because the track has a definite size.
+       Both axes are listed so the vertical fill animates too. */
+    transition:
+      inline-size 200ms ease,
+      block-size 200ms ease;
+  }
+
+  /* Value label — trailing aligned column. Opt-in via `.chart-values`. */
+  .chart-bar-value {
+    @apply text-xs text-text-muted tabular-nums;
+    grid-column: 3;
+    text-align: end;
+    padding-inline-start: 0.5rem;
+    white-space: nowrap;
+  }
+  .chart:not(.chart-values) .chart-bar-value {
+    display: none;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * BAR CHART — vertical modifier                                         *
+   * --------------------------------------------------------------------- *
+   * Flex row of equal columns inside a fixed-height box. Each column is a
+   * flex column [value | track | label]; the track (`flex: 1`) gets a
+   * definite block-size so the fill's `block-size: %` resolves and animates.
+   * Bars grow up from the floor (`justify-content: end`). */
+  .chart-bars-vertical {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--chart-gap);
+    block-size: var(--chart-height);
+    inline-size: 100%;
+  }
+
+  .chart-bars-vertical .chart-bar {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-inline-size: 0;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+
+  .chart-bars-vertical .chart-bar-value {
+    order: 0;
+    grid-column: auto;
+    text-align: center;
+    padding: 0;
+  }
+
+  .chart-bars-vertical .chart-bar-track {
+    order: 1;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+
+  .chart-bars-vertical .chart-bar-fill {
+    inline-size: 100%;
+    block-size: calc(var(--value) / var(--chart-max) * 100%);
+  }
+
+  .chart-bars-vertical .chart-bar-label {
+    order: 2;
+    text-align: center;
+    padding: 0;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * STACKED / PROPORTION BAR                                              *
+   * --------------------------------------------------------------------- *
+   * A single rounded track partitioned by `flex: var(--value)`. No max
+   * needed — proportions are the flex-grow ratios. A hairline in the
+   * surface colour separates adjacent segments. */
+  .chart-stack {
+    display: flex;
+    flex-direction: row;
+    inline-size: 100%;
+    block-size: 0.75rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: var(--color-surface-strong);
+  }
+
+  .chart-segment {
+    flex: var(--value) 1 0;
+    min-inline-size: 0;
+    background: var(--segment-color, currentColor);
+    transition: flex-grow 200ms ease;
+  }
+  .chart-segment + .chart-segment {
+    box-shadow: -1px 0 0 0 var(--color-surface);
+  }
+
+  /* --------------------------------------------------------------------- *
+   * DONUT / PIE                                                           *
+   * --------------------------------------------------------------------- *
+   * A conic-gradient circle with the centre punched out by a radial-gradient
+   * mask. `--donut-thickness` is the ring width as a % of the diameter; the
+   * hole's inner radius is `50% - thickness`, so thickness=50% leaves no hole
+   * (a solid pie). The same stop position twice gives a crisp ring edge.
+   *
+   * The centre label must NOT be a child of the ring — `mask` clips the whole
+   * subtree, so a child sitting in the hole would be invisible. It's a sibling
+   * overlay: the figure is an inline-grid and both the ring and the label
+   * occupy the same cell. */
+  .chart-donut-figure {
+    position: relative;
+    inline-size: var(--chart-size);
+    aspect-ratio: 1;
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .chart-donut {
+    --donut-thickness: 33%;
+    inline-size: var(--chart-size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(var(--donut-segments, currentColor 0 100%));
+    -webkit-mask: radial-gradient(
+      circle at center,
+      transparent calc(50% - var(--donut-thickness)),
+      #000 calc(50% - var(--donut-thickness))
+    );
+    mask: radial-gradient(
+      circle at center,
+      transparent calc(50% - var(--donut-thickness)),
+      #000 calc(50% - var(--donut-thickness))
+    );
+  }
+
+  .chart-donut-figure > .chart-donut {
+    grid-area: 1 / 1;
+    inline-size: 100%;
+  }
+
+  /* Solid pie — no hole. */
+  .chart-donut-pie {
+    --donut-thickness: 50%;
+  }
+
+  .chart-donut-center {
+    @apply text-center text-sm font-semibold tabular-nums leading-tight;
+    grid-area: 1 / 1;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * LEGEND (donut + stack)                                                *
+   * --------------------------------------------------------------------- */
+  .chart-legend {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-text-muted;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .chart-legend-item {
+    @apply inline-flex items-center gap-1.5;
+  }
+  .chart-legend-item::before {
+    content: "";
+    inline-size: 0.625rem;
+    block-size: 0.625rem;
+    border-radius: 2px;
+    background: var(--legend-color, currentColor);
+    flex-shrink: 0;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * SIZES — remap the cross-axis / diameter knobs                         *
+   * --------------------------------------------------------------------- */
+  .chart-sm {
+    --chart-height: 4rem;
+    --chart-size: 4rem;
+  }
+  .chart-lg {
+    --chart-height: 12rem;
+    --chart-size: 12rem;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * INLINE — micro-viz that sits in running text / a table cell           *
+   * --------------------------------------------------------------------- *
+   * Inline-flex, baseline-nudged, and em-relative so the swatch tracks the
+   * surrounding font size. */
+  .chart-inline {
+    display: inline-flex;
+    vertical-align: middle;
+    --chart-height: 1em;
+    --chart-size: 1.25em;
+  }
+  .chart-inline .chart-stack {
+    inline-size: 6em;
+    block-size: 0.5em;
+  }
+  .chart-inline .chart-bars,
+  .chart-inline.chart-bars {
+    inline-size: 6em;
+  }
+
+  /* --------------------------------------------------------------------- *
+   * REDUCED MOTION                                                        *
+   * --------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .chart-bar-fill,
+    .chart-segment {
+      transition: none;
+    }
+  }
+}

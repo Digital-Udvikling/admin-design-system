@@ -1,0 +1,148 @@
+import type { ComponentProps } from "react";
+import { cn } from "./cn";
+import {
+  type ChartDatum,
+  type ChartSize,
+  buildAriaLabel,
+  computeMax,
+  datumTitle,
+  mergeStyle,
+} from "./chart-internal";
+
+export type BarChartVariant = "primary" | "success" | "warning" | "danger" | "info";
+export type BarChartOrientation = "horizontal" | "vertical";
+
+export interface BarChartContainerProps extends ComponentProps<"div"> {
+  orientation?: BarChartOrientation;
+  size?: ChartSize;
+  /** Show per-bar value labels (`.chart-values`). */
+  showValues?: boolean;
+  /** Inline-flex, em-sized micro-viz for table cells. */
+  inline?: boolean;
+  /** Single-series fill colour. Per-bar `color` still overrides individual bars. */
+  variant?: BarChartVariant;
+}
+
+/**
+ * The bare bar-chart grid — no bars. Compose `<BarChart.Bar>` children by hand
+ * (e.g. to interleave a reference line). Sets `role="img"`; pass `aria-label`.
+ */
+function BarChartContainer({
+  orientation = "horizontal",
+  size = "md",
+  showValues,
+  inline,
+  variant = "primary",
+  className,
+  ...rest
+}: BarChartContainerProps) {
+  return (
+    <div
+      // A chart is a single composite image, so role="img" + aria-label is the
+      // correct ARIA pattern — there is no <img> tag to prefer here.
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
+      role="img"
+      className={cn(
+        [
+          "chart",
+          "chart-bars",
+          orientation === "vertical" && "chart-bars-vertical",
+          size !== "md" && `chart-${size}`,
+          showValues && "chart-values",
+          inline && "chart-inline",
+          variant !== "primary" && `chart-${variant}`,
+        ],
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
+  /** Auto-fills label / value / title / colour from a datum. */
+  datum?: ChartDatum;
+  /** Raw value when composing without a datum. */
+  value?: number;
+  /** Category label when composing without a datum. */
+  label?: string;
+  /** Explicit bar colour (`--bar-color`). Overrides the single-series fill. */
+  color?: string;
+}
+
+/**
+ * One bar. Renders a label (only when present), the fill (with a native
+ * `title`), and an always-present value cell (hidden by CSS unless the chart
+ * carries `.chart-values`). Stays `currentColor` unless an explicit colour is
+ * given — single-series bars never cycle the SERIES palette.
+ */
+function Bar({ datum, value, label, color, className, style, ...rest }: BarProps) {
+  const v = datum?.value ?? value ?? 0;
+  const lab = datum?.label ?? label;
+  const barColor = datum?.color ?? color;
+  const vars: Record<string, string | number> = { "--value": v };
+  if (barColor !== undefined) vars["--bar-color"] = barColor;
+  const title = datum !== undefined ? datumTitle(datum) : undefined;
+  return (
+    <div className={cn("chart-bar", className)} style={mergeStyle(vars, style)} {...rest}>
+      {lab !== undefined ? <span className={cn("chart-bar-label", undefined)}>{lab}</span> : null}
+      <div className={cn("chart-bar-track", undefined)}>
+        <div className={cn("chart-bar-fill", undefined)} title={title} />
+      </div>
+      <span className={cn("chart-bar-value", undefined)}>{v}</span>
+    </div>
+  );
+}
+
+export interface BarChartProps extends ComponentProps<"div"> {
+  data: ChartDatum[];
+  /** Override the computed max (the 100% reference). Defaults to the largest value. */
+  max?: number;
+  orientation?: BarChartOrientation;
+  size?: ChartSize;
+  showValues?: boolean;
+  inline?: boolean;
+  variant?: BarChartVariant;
+}
+
+/**
+ * Single-series bar chart. Computes the max, sets `--chart-max` on the
+ * container (bars inherit it), and generates an overridable `aria-label`.
+ * Horizontal by default; pass `orientation="vertical"` for columns. For
+ * hand-composed layouts use `<BarChart.Container>` + `<BarChart.Bar>`.
+ */
+function BarChartRoot({
+  data,
+  max,
+  orientation = "horizontal",
+  size = "md",
+  showValues,
+  inline,
+  variant = "primary",
+  style,
+  "aria-label": ariaLabel,
+  ...rest
+}: BarChartProps) {
+  const resolvedMax = computeMax(data, max);
+  return (
+    <BarChartContainer
+      orientation={orientation}
+      size={size}
+      showValues={showValues}
+      inline={inline}
+      variant={variant}
+      style={mergeStyle({ "--chart-max": resolvedMax }, style)}
+      aria-label={ariaLabel ?? buildAriaLabel("bar", data)}
+      {...rest}
+    >
+      {data.map((d, i) => (
+        <Bar key={d.label ?? i} datum={d} />
+      ))}
+    </BarChartContainer>
+  );
+}
+
+export const BarChart = Object.assign(BarChartRoot, {
+  Container: BarChartContainer,
+  Bar,
+});

@@ -28,9 +28,13 @@
     @apply text-text-muted;
   }
 
+  /* `min-width: 0` lets the value's grid track shrink below its content; pair
+     it with `overflow-wrap` so long unbreakable values (IDs, hashes, emails,
+     URLs, file paths) break instead of overflowing the column. */
   .property-list-value {
     gap: 0.5rem;
     min-width: 0;
+    overflow-wrap: break-word;
   }
 
   /* Compact density — tighter rows for sidebar info blocks or very many

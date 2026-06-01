@@ -41,6 +41,34 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss(), virtualPreviewsPlugin()],
+    // The `:::example` React previews are emitted as virtual modules during the
+    // MDX transform (see plugins/example/), so Vite's cold dep scanner never
+    // sees their imports. Left to lazy discovery, the first preview-bearing page
+    // makes Vite re-optimize mid-load and bump the optimize `browserHash`, which
+    // invalidates the already-loaded `react/jsx-dev-runtime?v=<hash>` the previews
+    // were hydrating against — surfacing as "jsxDEV is not a function" on every
+    // React example. Pinning the previews' full dependency surface here keeps the
+    // hash stable from startup. @astrojs/react already pre-includes react /
+    // react-dom; this list covers everything the previews reach through
+    // `@aortl/admin-react` (Base UI + clsx) and the example import blocks.
+    optimizeDeps: {
+      include: [
+        "@base-ui/react/button",
+        "@base-ui/react/checkbox",
+        "@base-ui/react/dialog",
+        "@base-ui/react/field",
+        "@base-ui/react/input",
+        "@base-ui/react/radio",
+        "@base-ui/react/radio-group",
+        "@base-ui/react/select",
+        "@base-ui/react/switch",
+        "@base-ui/react/tabs",
+        "@base-ui/react/tooltip",
+        "@tabler/icons-react",
+        "@astrojs/starlight/components",
+        "clsx",
+      ],
+    },
     resolve: {
       alias: {
         "@aortl/admin-react": fileURLToPath(

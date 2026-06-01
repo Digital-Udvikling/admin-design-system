@@ -5,7 +5,7 @@
            border border-border
            rounded-xl
            shadow-xs
-           overflow-hidden;
+           overflow-auto;
   }
 
   .card-body {

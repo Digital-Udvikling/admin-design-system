@@ -66,8 +66,18 @@
     @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
   }
 
+  /* `flex-1 min-h-0` lets the body fill the remaining height and shrink below
+     its content (a flex item's default `min-height: auto` would refuse to), so
+     tall content scrolls here while the header/footer stay pinned. */
   .dialog-body {
-    @apply px-5 py-3 overflow-y-auto flex flex-col gap-3;
+    @apply flex-1 min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
+  }
+
+  /* When the body is wrapped in a `<form>` (the form-dialog pattern), the form
+     becomes the dialog's sole flex child — make it the flex column so the body's
+     `flex-1 min-h-0` still resolves and scrolls. */
+  .dialog > form {
+    @apply flex flex-col min-h-0 flex-1;
   }
 
   .dialog-footer {

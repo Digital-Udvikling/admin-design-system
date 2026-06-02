@@ -46,51 +46,33 @@
     min-width: 0;
   }
 
+  /* Solid status fill — the variant color carries the signal, and the title,
+     leading icon, and body all sit on top in the matching `-content` color
+     (white on the colored accents, black on bright yellow). Title/icon inherit
+     that content color from the root, so no per-variant text rule is needed.
+     The description drops to 85% opacity to read as secondary text without
+     introducing a second hue. */
   .alert-info {
-    @apply bg-info-muted border-info-muted;
+    @apply bg-info border-info text-info-content;
   }
 
   .alert-success {
-    @apply bg-success-muted border-success-muted;
+    @apply bg-success border-success text-success-content;
   }
 
   .alert-warning {
-    @apply bg-warning-muted border-warning-muted;
+    @apply bg-warning border-warning text-warning-content;
   }
 
   .alert-danger {
-    @apply bg-danger-muted border-danger-muted;
+    @apply bg-danger border-danger text-danger-content;
   }
 
   .alert-title {
     @apply font-medium;
   }
 
-  .alert-info .alert-title,
-  .alert-info > :is(i, svg):first-child {
-    @apply text-info;
-  }
-
-  .alert-success .alert-title,
-  .alert-success > :is(i, svg):first-child {
-    @apply text-success;
-  }
-
-  /* Warning title/icon use `text-text` rather than `text-warning`: the warning
-     accent is yellow-400 in both modes, which fails AA contrast against the
-     muted yellow background in light mode. The muted bg + border still carry
-     the warning signal. */
-  .alert-warning .alert-title,
-  .alert-warning > :is(i, svg):first-child {
-    @apply text-text;
-  }
-
-  .alert-danger .alert-title,
-  .alert-danger > :is(i, svg):first-child {
-    @apply text-danger;
-  }
-
   .alert-description {
-    @apply text-text-muted;
+    opacity: 0.85;
   }
 }

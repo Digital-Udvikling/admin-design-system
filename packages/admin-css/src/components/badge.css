@@ -12,30 +12,28 @@
     flex-shrink: 0;
   }
 
-  /* Variants — match the alert palette so danger/success/etc. stay coherent
-     across status indicators and chips in tables. The bare `.badge` (no
-     modifier) renders the neutral look, now folded into the base. */
+  /* Variants — solid status fills, matching the alert palette so danger/
+     success/etc. stay coherent across status indicators and chips in tables.
+     Each sits on the full-strength status color with the matching `-content`
+     text (white on the colored accents, black on bright yellow). The bare
+     `.badge` (no modifier) renders the neutral look, folded into the base. */
   .badge-info {
-    @apply bg-info-muted text-info border-info-muted;
+    @apply bg-info text-info-content border-info;
   }
 
   .badge-success {
-    @apply bg-success-muted text-success border-success-muted;
+    @apply bg-success text-success-content border-success;
   }
 
-  /* Warning text uses `text-text` rather than `text-warning`: the warning
-     accent is yellow-400 in both modes, which fails AA contrast against the
-     muted yellow background in light mode. The muted bg + border still carry
-     the warning signal. */
   .badge-warning {
-    @apply bg-warning-muted text-text border-warning-muted;
+    @apply bg-warning text-warning-content border-warning;
   }
 
   .badge-danger {
-    @apply bg-danger-muted text-danger border-danger-muted;
+    @apply bg-danger text-danger-content border-danger;
   }
 
-  /* Solid variants — for stronger visual weight (counts on tabs, etc.) */
+  /* Solid neutral — high-contrast ink fill (counts on tabs, etc.) */
   .badge-primary {
     @apply bg-primary text-primary-content;
   }

@@ -78,7 +78,7 @@ Only use this split when there's real layout variation. Leaf components (`Button
 
 Recommended: **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. Neither package depends on Tabler directly; `apps/docs` has both as devDeps so `:::example` previews render in both tabs.
 
-React components take an `icon` prop (and `iconTrailing` where applicable) that accepts a component reference: `<Button icon={IconPlus}>Add</Button>`. The shared `renderIcon()` helper in `src/icon.ts` renders at `size={16}` with `aria-hidden`, and also accepts pre-instantiated elements (`icon={<IconPlus size={20} />}`) when callers need to override size. Prefer this prop over passing icon JSX as children — the two render to identical DOM but the prop ensures consistent defaults.
+React components take an `icon` prop (and `iconTrailing` where applicable) that accepts a component reference: `<Button icon={IconPlus}>Add</Button>`. The shared `renderIcon()` helper in `src/icon.ts` renders at `size="1em"` with `aria-hidden` (so SVG icons inherit the host `font-size`, matching the Tabler webfont in the vanilla bundle), and also accepts pre-instantiated elements (`icon={<IconPlus size={20} />}`) when callers need to override size. Prefer this prop over passing icon JSX as children — the two render to identical DOM but the prop ensures consistent defaults.
 
 CSS-side, components accommodate an icon as a direct child of the root (`flex items-center gap-2`, or `:has()` to switch layout when a leading `<i>`/`<svg>` is present). No wrapper class unless structurally required — `.sidebar-icon` is the exception (must stay visible in the collapsed rail).
 

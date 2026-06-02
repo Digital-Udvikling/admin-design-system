@@ -118,7 +118,7 @@ The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a hre
 
 ### With icons
 
-Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size={16}` with `aria-hidden`. See [Icons](../basics/icons.md).
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size="1em"` (inherits the host font-size) with `aria-hidden`. See [Icons](../basics/icons.md).
 
 **Example**
 

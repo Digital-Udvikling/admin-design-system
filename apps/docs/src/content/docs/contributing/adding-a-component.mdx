@@ -79,13 +79,13 @@ That's everything for vanilla. The docs site imports `admin-css` **source**, so 
 Skip if the component is just CSS — `Spinner`, `Footer`, and the rail-only `Sidebar` parts are all-vanilla in places where Base UI adds nothing. Otherwise:
 
 - Wrap a Base UI primitive (`@base-ui/react/button`, `/input`, `/field`) when the component is interactive or needs a11y wiring.
-- Compose class names with `clsx` (or the local `cn` helper).
+- Compose class names with the local `cn` helper (`src/cn.ts`) — it prefixes admin's own classes with `_ao-` (the scoped contract) while passing the consumer's `className` through verbatim. Don't use bare `clsx`; an unprefixed `badge` won't match the scoped `._ao-badge` rule.
 - Spread the rest of the props so callers can pass `id`, `aria-*`, event handlers, `ref`, etc.
 - Take an `icon` (and `iconTrailing` if structural) prop instead of letting callers pass icon JSX as children — see [Icons](#icons) below.
 
 ```tsx
 // packages/admin-react/src/Badge.tsx
-import { clsx } from "clsx";
+import { cn } from "./cn";
 import type { ComponentProps } from "react";
 import { renderIcon, type IconProp } from "./icon";
 
@@ -109,10 +109,8 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={clsx(
-        "badge",
-        variant !== "neutral" && `badge-${variant}`,
-        size !== "md" && `badge-${size}`,
+      className={cn(
+        ["badge", variant !== "neutral" && `badge-${variant}`, size !== "md" && `badge-${size}`],
         className,
       )}
       {...rest}
@@ -167,7 +165,7 @@ Components that can host an icon take an `icon` prop (and `iconTrailing` where a
 <Button icon={IconPlus}>Add</Button>
 ```
 
-Use `renderIcon` from `src/icon.ts`. It renders at `size={16}` with `aria-hidden` by default and also accepts a pre-instantiated element (`icon={<IconPlus size={20} />}`) when callers need a different size.
+Use `renderIcon` from `src/icon.ts`. It renders at `size="1em"` with `aria-hidden` by default — so SVG icons inherit the host `font-size` and match the Tabler webfont in the vanilla bundle — and also accepts a pre-instantiated element (`icon={<IconPlus size={20} />}`) when callers need a fixed size.
 
 ```tsx
 import { renderIcon, type IconProp } from "./icon";

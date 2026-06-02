@@ -41,18 +41,40 @@ function MenuItem(props: MenuItemProps) {
   const ref = useRef<HTMLElement | null>(null);
   const hotkey = props.hotkey;
 
+  // An item is inert when it carries the native `disabled` (button branch) or
+  // an `aria-disabled` (anchor branch — links have no `disabled` attribute).
+  // `aria-disabled` may arrive as the boolean `true` or the string `"true"`.
+  const ariaDisabled = props["aria-disabled"];
+  const isDisabled =
+    ("disabled" in props && props.disabled === true) ||
+    ariaDisabled === true ||
+    ariaDisabled === "true";
+
   const { ariaKeyShortcuts, primaryChord } = useHotkey(hotkey, () => ref.current?.click(), {
-    enabled: !("disabled" in props && props.disabled),
+    enabled: !isDisabled,
   });
 
   if (props.href !== undefined) {
-    const { className, role = "menuitem", icon, children, hotkey: _hk, ...rest } = props;
+    const { className, role = "menuitem", icon, children, hotkey: _hk, onClick, ...rest } = props;
     return (
+      // An <a href> with role="menuitem" is natively keyboard-activable (Enter);
+      // this onClick only intercepts clicks on a disabled item, so the static-
+      // element / key-events a11y rules are false positives here.
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <a
         ref={ref as Ref<HTMLAnchorElement>}
         role={role}
         aria-keyshortcuts={ariaKeyShortcuts}
         className={cn("menu-item", className)}
+        onClick={(event) => {
+          // Anchors ignore `aria-disabled` natively, so a real click (or a
+          // hotkey-synthesized one) would still navigate and fire onClick.
+          if (isDisabled) {
+            event.preventDefault();
+            return;
+          }
+          onClick?.(event);
+        }}
         {...rest}
       >
         {renderIcon(icon)}

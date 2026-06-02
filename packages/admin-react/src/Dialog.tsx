@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -64,11 +65,25 @@ function DialogContainer({
   closedby = "any",
   className,
   children,
+  ref: consumerRef,
   ...rest
 }: DialogContainerProps) {
   const ref = useRef<HTMLDialogElement | null>(null);
   const onOpenChangeRef = useRef(onOpenChange);
   onOpenChangeRef.current = onOpenChange;
+
+  // Merge the consumer's ref with the internal one (which drives showModal/close,
+  // the native close listener, and the portal container). Without this, a
+  // consumer-supplied `ref` would flow through `...rest` and override `ref={ref}`,
+  // detaching the internal ref and silently breaking open/close. Mirrors Button.
+  const setRef = useCallback(
+    (node: HTMLDialogElement | null) => {
+      ref.current = node;
+      if (typeof consumerRef === "function") consumerRef(node);
+      else if (consumerRef) consumerRef.current = node;
+    },
+    [consumerRef],
+  );
 
   useEffect(() => {
     const el = ref.current;
@@ -93,7 +108,7 @@ function DialogContainer({
     <DialogContext.Provider value={ctx}>
       <PortalContainerContext.Provider value={ref}>
         <dialog
-          ref={ref}
+          ref={setRef}
           className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
           closedby={closedby}
           {...rest}

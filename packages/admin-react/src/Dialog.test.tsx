@@ -139,5 +139,17 @@ describe("Dialog", () => {
       expect(showModal).not.toHaveBeenCalled();
       expect(getDialog()).not.toHaveAttribute("open");
     });
+
+    it("merges a consumer ref without breaking open/close", () => {
+      const showModal = vi.spyOn(HTMLDialogElement.prototype, "showModal");
+      const consumerRef = { current: null as HTMLDialogElement | null };
+      const { rerender } = render(<Dialog.Container ref={consumerRef} open={false} />);
+      // Consumer ref receives the element...
+      expect(consumerRef.current?.tagName).toBe("DIALOG");
+      // ...and the internal ref still drives showModal when open flips true.
+      rerender(<Dialog.Container ref={consumerRef} open={true} />);
+      expect(showModal).toHaveBeenCalledTimes(1);
+      expect(getDialog()).toHaveAttribute("open");
+    });
   });
 });

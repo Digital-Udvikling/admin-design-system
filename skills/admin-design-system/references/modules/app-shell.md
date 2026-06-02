@@ -59,17 +59,12 @@ Navbar above, `main` below.
 </AppShell>
 ```
 
-Add `hasSidebar` for a two-column grid, `hasFooter` for a bottom row.
+Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row automatically.
 
 **Example**
 
 ```tsx
-<AppShell
-  hasSidebar
-  hasFooter
-  systemAccent="var(--color-purple-600)"
-  style={{ minHeight: "20rem" }}
->
+<AppShell hasSidebar systemAccent="var(--color-purple-600)" style={{ minHeight: "20rem" }}>
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
@@ -479,7 +474,7 @@ Sidebar-first with a shop selector in the navbar, tree navigation, and a collaps
 **Example**
 
 ```tsx
-<AppShell hasSidebar hasFooter systemAccent="var(--color-green-600)" style={{ minHeight: "32rem" }}>
+<AppShell hasSidebar systemAccent="var(--color-green-600)" style={{ minHeight: "32rem" }}>
   <Navbar>
     <Navbar.MobileToggle />
     <Navbar.Brand>
@@ -565,7 +560,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. Good fo
 **Example**
 
 ```tsx
-<AppShell hasFooter systemAccent="var(--color-orange-600)" style={{ minHeight: "28rem" }}>
+<AppShell systemAccent="var(--color-orange-600)" style={{ minHeight: "28rem" }}>
   <Navbar>
     <Navbar.Brand>
       <BrandTile icon={IconChartBar} />

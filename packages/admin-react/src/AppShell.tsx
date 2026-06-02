@@ -16,7 +16,6 @@ export function useAppShell(): AppShellContextValue | null {
 
 export interface AppShellProps extends ComponentProps<"div"> {
   hasSidebar?: boolean;
-  hasFooter?: boolean;
   mobileDrawerOpen?: boolean;
   defaultMobileDrawerOpen?: boolean;
   onMobileDrawerOpenChange?: (open: boolean) => void;
@@ -30,7 +29,6 @@ export interface AppShellProps extends ComponentProps<"div"> {
 
 function AppShellRoot({
   hasSidebar = false,
-  hasFooter = false,
   mobileDrawerOpen,
   defaultMobileDrawerOpen = false,
   onMobileDrawerOpenChange,
@@ -64,14 +62,7 @@ function AppShellRoot({
   return (
     <AppShellContext.Provider value={value}>
       <div
-        className={cn(
-          [
-            "app-shell",
-            hasSidebar && "app-shell-with-sidebar",
-            hasFooter && "app-shell-with-footer",
-          ],
-          className,
-        )}
+        className={cn(["app-shell", hasSidebar && "app-shell-with-sidebar"], className)}
         style={rootStyle}
         {...rest}
       >

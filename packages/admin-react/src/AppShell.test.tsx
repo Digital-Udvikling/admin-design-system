@@ -14,15 +14,14 @@ describe("AppShell", () => {
     expect(screen.getByRole("main").parentElement).toHaveAdminClass("app-shell");
   });
 
-  it("applies layout modifier classes for sidebar and footer", () => {
+  it("applies the sidebar layout modifier class", () => {
     const { container } = render(
-      <AppShell hasSidebar hasFooter>
+      <AppShell hasSidebar>
         <AppShell.Main>x</AppShell.Main>
       </AppShell>,
     );
     const root = container.querySelector(adminSelector("app-shell"));
     expect(root).toHaveAdminClass("app-shell-with-sidebar");
-    expect(root).toHaveAdminClass("app-shell-with-footer");
   });
 
   it("sets --color-system-accent from the systemAccent prop", () => {

@@ -54,6 +54,40 @@ Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`.
 
 **Example**
 
+```html
+<nav class="pagination" aria-label="Pagination">
+  <ul>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Previous page">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i>
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 1">1</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link active" type="button" aria-current="page" aria-label="Page 2">
+        2
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 3">3</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 4">4</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Page 5">5</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" type="button" aria-label="Next page">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </li>
+  </ul>
+</nav>
+```
+
 ```tsx
 <Pagination
   page={2}
@@ -76,7 +110,12 @@ Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`.
   renderItem={(item) => {
     if (item.type === "page") {
       return (
-        <a className={item.selected ? "page-link active" : "page-link"} href={`?p=${item.page}`}>
+        <a
+          className={item.selected ? "page-link active" : "page-link"}
+          aria-current={item.selected ? "page" : undefined}
+          aria-label={`Page ${item.page}`}
+          href={`?p=${item.page}`}
+        >
           {item.page}
         </a>
       );
@@ -92,6 +131,7 @@ Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`.
     return (
       <a
         className="page-link"
+        aria-label={item.type === "previous" ? "Previous page" : "Next page"}
         aria-disabled={item.disabled || undefined}
         href={item.disabled ? undefined : `?p=${item.page}`}
       >

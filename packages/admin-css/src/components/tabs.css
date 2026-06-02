@@ -198,7 +198,7 @@
     @apply pt-3 outline-none;
   }
 
-  /* Vanilla radio-input pattern: only the panel whose data-for matches the
+  /* Vanilla radio-input pattern: only the panel whose data-value matches the
      checked input is shown. Each .tabs root scopes its own selectors. */
   .tabs .tab-panel {
     display: none;

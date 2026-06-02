@@ -21,10 +21,8 @@ Mode is resolved from CSS `color-scheme` at `:root`:
 Set `data-theme` on `<html>` to override the OS preference:
 
 ```html
+<!-- swap to data-theme="light" to force light -->
 <html data-theme="dark">
-  ...
-</html>
-<html data-theme="light">
   ...
 </html>
 ```

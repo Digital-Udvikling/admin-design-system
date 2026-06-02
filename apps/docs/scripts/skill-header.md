@@ -66,7 +66,7 @@ For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package sh
 
 ### Keyboard shortcuts
 
-`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` is an alias for `Ctrl` on every platform.
+`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` resolves to `Cmd` on macOS and `Ctrl` on every other platform.
 
 ### Prefer the platform
 

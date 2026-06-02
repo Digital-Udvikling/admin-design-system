@@ -54,7 +54,7 @@
   }
 
   /* Neutral variant — sits flush with the page (`--color-surface`, the same
-     fill as `html`/`.app-shell`) instead of the raised `surface-strong` of a
+     fill as `html`/`.app-shell`) instead of the raised `surface-muted` of a
      default card. For de-emphasised or grouped panels that shouldn't pop off
      the background. No accent, no status meaning. */
   .card-muted {

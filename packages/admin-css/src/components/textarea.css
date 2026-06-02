@@ -33,9 +33,9 @@
   }
 
   /* Grow with content (Chromium 123+; degrades to a fixed resizable box
-     elsewhere). `min-h-*` / the `rows` attribute stays the floor; cap growth
-     with a consumer `max-height`. Manual drag-resize is off — height is
-     content-driven. */
+     elsewhere). The floor is the larger of the base `min-h-*` and the `rows`
+     attribute; cap growth with a consumer `max-height`. Manual drag-resize is
+     off — height is content-driven. */
   .textarea-autosize {
     field-sizing: content;
     resize: none;

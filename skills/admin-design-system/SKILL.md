@@ -66,7 +66,7 @@ For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package sh
 
 ### Keyboard shortcuts
 
-`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` is an alias for `Ctrl` on every platform.
+`<Button>` and `<Menu.Item>` accept a `hotkey` prop (`<Button hotkey="mod+s">Save</Button>`) that fires `onClick` on the matching chord and renders a trailing `<Kbd>` chip. For shortcuts not tied to a visible control, use `useHotkey("?", openHelp)` from `@aortl/admin-react`. `<Kbd keys="mod+s" />` renders the matching visual for tooltips and help dialogs. `mod` resolves to `Cmd` on macOS and `Ctrl` on every other platform.
 
 ### Prefer the platform
 
@@ -115,7 +115,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 ### Getting started
 
-- [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill so Claude (or any compatible agent) knows the class names, component API, and conventions.
+- [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill for any compatible agent.
 - [React](references/getting-started/react.md) — Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 - [Scoped bundle](references/getting-started/scoped.md) — Drop admin styles into a non-admin app without colliding on class names.
 - [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4 project.
@@ -136,7 +136,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Accordions](references/components/accordions.md) — Disclosure rows built on <details>.
 - [Alerts](references/components/alerts.md) — Inline notifications for errors, confirmations, and contextual feedback.
 - [Badges](references/components/badges.md) — Compact status indicator for tags, counts, and chips.
-- [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square, used to brand the navbar per system.
+- [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square for the navbar.
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
@@ -165,7 +165,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Row](references/components/row.md) — One-dimensional layouts with flex utilities.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
-- [Tables](references/components/tables.md) — Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
+- [Tables](references/components/tables.md) — Native table with row selection, sticky headers, and row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.
 - [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.
 

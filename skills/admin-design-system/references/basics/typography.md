@@ -15,7 +15,7 @@ Body text is **14px**, headings step up modestly, and the UI typeface is IBM Ple
   monospace;
 ```
 
-Fonts are loaded with `font-display: optional` — the fallback paints on first load if Plex isn't cached, and Plex takes over on subsequent visits.
+Fonts are loaded with `font-display: swap` — text paints immediately in a metric-matched fallback, and Plex swaps in once it loads. The fallback faces override their metrics to occupy Plex's exact box, so the swap changes glyph shapes without shifting layout.
 
 To opt out, override `--font-sans` / `--font-mono`:
 

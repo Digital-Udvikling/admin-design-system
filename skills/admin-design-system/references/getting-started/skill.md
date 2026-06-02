@@ -1,6 +1,6 @@
 # Agent skill
 
-> Install the design system as an Agent Skill so Claude (or any compatible agent) knows the class names, component API, and conventions.
+> Install the design system as an Agent Skill for any compatible agent.
 
 The repo ships an [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) bundle at [`skills/admin-design-system/`](https://github.com/Digital-Udvikling/admin-design-system/tree/main/skills/admin-design-system) — one reference file per component, with paired vanilla HTML and React examples. Once installed, a compatible agent working in a project that uses `@aortl/admin-css` or `@aortl/admin-react` pulls it in automatically.
 

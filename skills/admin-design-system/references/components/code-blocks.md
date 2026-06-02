@@ -10,7 +10,7 @@ For inline keyboard chips, use [Kbd](kbd.md) instead.
 
 ### Basic
 
-Wraps long lines by default — fine for narrative output where horizontal scrolling would hurt scanning.
+Wraps long lines by default — fine for narrative output where horizontal scrolling would hurt scanning. Surface and text tones follow the page's `color-scheme`, so the block flips for dark mode automatically with no per-component overrides.
 
 **Example**
 
@@ -66,13 +66,9 @@ For log viewers and anything with long, fixed-format lines: `nowrap` lets long l
 </CodeBlock>
 ```
 
-### Dark mode
-
-Surface and text tones follow the page's `color-scheme`. Toggle the doc theme to see the same block flip from light gray on near-paper to base-200 on near-black — no per-component overrides.
-
 ### With syntax highlighting
 
-Layer Shiki, Prism, or similar on a nested `<code>` — the `.code-block` styles the outer surface and don't fight the highlighter's token colors.
+Layer Shiki, Prism, or similar on a nested `<code>` — the `.code-block` styles the outer surface and doesn't fight the highlighter's token colors.
 
 ```html
 <pre class="code-block"><code class="language-json">{ "highlighted": true }</code></pre>

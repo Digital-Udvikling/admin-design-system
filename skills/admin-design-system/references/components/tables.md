@@ -1,8 +1,8 @@
 # Tables
 
-> Native <table> with optional row selection, sticky headers, status gutter, and whole-row links.
+> Native table with row selection, sticky headers, and row links.
 
-Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `relaxed`, `sticky`) compose freely. Default row height is ~32px; use `relaxed` for lighter layouts.
+Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `relaxed`, `sticky`) compose freely. Default row height is ~32px; use `relaxed` for roomier, less-dense layouts.
 
 ## Examples
 

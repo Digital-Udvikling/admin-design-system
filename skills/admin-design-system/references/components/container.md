@@ -123,7 +123,7 @@ Every preset just sets `--container-max`. Override it inline for a one-off width
 ```
 
 ```tsx
-<Container style={{ "--container-max": "40rem" } as React.CSSProperties}>
+<Container style={{ "--container-max": "40rem" }}>
   <Card title="Release notes" description="Capped at 40rem and centered in the available space." />
 </Container>
 ```

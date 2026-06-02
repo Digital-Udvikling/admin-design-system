@@ -97,7 +97,7 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 </>
 ```
 
-### Group delay
+### Group delay <StarlightBadge text="React only" variant="caution" />
 
 Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones open instantly until the user pauses for `timeout` ms.
 

@@ -4,7 +4,7 @@ description: Styled text links with an optional external affordance.
 ---
 
 import { Link } from "@aortl/admin-react";
-import { IconHome } from "@tabler/icons-react";
+import { IconHome, IconDownload } from "@tabler/icons-react";
 
 A plain `<a>` with the design system's link styling — link color, hover shift, underline, and a focus-visible ring.
 
@@ -26,17 +26,21 @@ A plain `<a>` with the design system's link styling — link color, hover shift,
 
 ### With icon
 
-Pass `icon` for a leading icon. See [Icons](../../basics/icons/).
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one. See [Icons](../../basics/icons/).
 
 :::example
 
 ```html
 <a class="link" href="#"><i class="ti ti-home" aria-hidden="true"></i>Dashboard</a>
+<a class="link" href="#">Export<i class="ti ti-download" aria-hidden="true"></i></a>
 ```
 
 ```tsx
 <Link href="#" icon={IconHome}>
   Dashboard
+</Link>
+<Link href="#" iconTrailing={IconDownload}>
+  Export
 </Link>
 ```
 

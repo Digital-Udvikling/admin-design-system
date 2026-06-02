@@ -1,5 +1,5 @@
 @layer components {
-  /* Outer section — owns striped, copyable, hide-if-empty modifiers. Title
+  /* Outer section — owns striped, hide-if-empty modifiers. Title
      (optional) and the items grid stack vertically. */
   .property-list {
     @apply flex flex-col text-sm text-text;

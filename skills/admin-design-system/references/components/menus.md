@@ -56,6 +56,47 @@ See [Icons](../basics/icons.md).
 </Menu>
 ```
 
+### Disabled
+
+A `<button>` item disables with the native `disabled` attribute. An anchor item (`href`) has no `disabled`, so use `aria-disabled="true"` — both render dimmed and `not-allowed`, and neither activates (hotkeys included).
+
+**Example**
+
+```html
+<details class="menu">
+  <summary class="menu-trigger">Actions</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button">
+      <i class="ti ti-pencil" aria-hidden="true"></i>
+      Edit
+    </button>
+    <button class="menu-item" type="button" disabled>
+      <i class="ti ti-copy" aria-hidden="true"></i>
+      Duplicate
+    </button>
+    <a class="menu-item" href="#changelog" aria-disabled="true">
+      <i class="ti ti-history" aria-hidden="true"></i>
+      Changelog
+    </a>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger>Actions</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item icon={IconPencil}>Edit</Menu.Item>
+    <Menu.Item icon={IconCopy} disabled>
+      Duplicate
+    </Menu.Item>
+    <Menu.Item href="#changelog" icon={IconHistory} aria-disabled="true">
+      Changelog
+    </Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
 ### Hotkey <StarlightBadge text="React only" variant="caution" />
 
 The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edge of the row. Works on both the button and anchor (`href`) branches.
@@ -180,8 +221,7 @@ A primary action on the left, related actions on the right via a `<details>` ins
   <button class="btn btn-primary" type="button">Save</button>
   <details class="menu">
     <summary
-      class="menu-trigger btn btn-primary"
-      style="padding-left: 0.75rem; padding-right: 0.75rem"
+      class="menu-trigger btn btn-primary btn-square"
       aria-label="More save options"
     ></summary>
     <div class="menu-popup" role="menu">
@@ -198,11 +238,7 @@ A primary action on the left, related actions on the right via a `<details>` ins
 <ButtonGroup>
   <Button variant="primary">Save</Button>
   <Menu>
-    <Menu.Trigger
-      className="btn btn-primary"
-      style={{ paddingLeft: "0.75rem", paddingRight: "0.75rem" }}
-      aria-label="More save options"
-    />
+    <Menu.Trigger className="btn btn-primary btn-square" aria-label="More save options" />
     <Menu.Popup>
       <Menu.Item>Save as draft</Menu.Item>
       <Menu.Item>Save and publish</Menu.Item>

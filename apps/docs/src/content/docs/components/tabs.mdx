@@ -122,6 +122,22 @@ Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its r
 
 :::example
 
+```html
+<div class="tabs tabs-boxed tabs-full-width">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="boxed-full" id="boxed-full-1" value="1" />
+    <label class="tab" for="boxed-full-1">Day</label>
+    <input class="tab-input" type="radio" name="boxed-full" id="boxed-full-2" value="2" checked />
+    <label class="tab" for="boxed-full-2">Week</label>
+    <input class="tab-input" type="radio" name="boxed-full" id="boxed-full-3" value="3" />
+    <label class="tab" for="boxed-full-3">Month</label>
+  </div>
+  <div class="tab-panel" data-value="1">Daily breakdown.</div>
+  <div class="tab-panel" data-value="2">Weekly breakdown.</div>
+  <div class="tab-panel" data-value="3">Monthly breakdown.</div>
+</div>
+```
+
 ```tsx
 <Tabs defaultValue="week" variant="boxed" fullWidth>
   <Tabs.List>
@@ -142,6 +158,25 @@ Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its r
 `orientation="vertical"` puts the tab strip on the left, panels on the right.
 
 :::example
+
+```html
+<div class="tabs" data-orientation="vertical">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="vertical" id="vertical-1" value="1" checked />
+    <label class="tab" for="vertical-1">Profile</label>
+    <input class="tab-input" type="radio" name="vertical" id="vertical-2" value="2" />
+    <label class="tab" for="vertical-2">Account</label>
+    <input class="tab-input" type="radio" name="vertical" id="vertical-3" value="3" />
+    <label class="tab" for="vertical-3">Billing</label>
+    <input class="tab-input" type="radio" name="vertical" id="vertical-4" value="4" />
+    <label class="tab" for="vertical-4">API keys</label>
+  </div>
+  <div class="tab-panel" data-value="1">Profile settings.</div>
+  <div class="tab-panel" data-value="2">Account settings.</div>
+  <div class="tab-panel" data-value="3">Billing details.</div>
+  <div class="tab-panel" data-value="4">Personal access tokens.</div>
+</div>
+```
 
 ```tsx
 <Tabs defaultValue="profile" orientation="vertical">

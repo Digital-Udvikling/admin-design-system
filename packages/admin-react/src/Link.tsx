@@ -11,7 +11,10 @@ export interface LinkProps extends ComponentProps<"a"> {
   external?: boolean;
   /** Leading icon. Pass a component (`icon={IconHome}`) or an element. */
   icon?: IconProp;
-  /** Trailing icon. Independent of `external`'s ↗ affordance. */
+  /**
+   * Trailing icon. Independent of `external`'s ↗ affordance — combining both
+   * stacks two trailing affordances (the new-tab ↗ marker plus this icon).
+   */
   iconTrailing?: IconProp;
 }
 

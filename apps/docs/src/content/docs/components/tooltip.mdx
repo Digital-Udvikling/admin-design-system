@@ -3,6 +3,7 @@ title: Tooltips
 description: Transient hints anchored to a trigger.
 ---
 
+import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 import { Button, Kbd, Tooltip } from "@aortl/admin-react";
 import { IconDeviceFloppy, IconPencil, IconCopy, IconTrash } from "@tabler/icons-react";
 
@@ -107,7 +108,7 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 
 :::
 
-### Group delay
+### Group delay <StarlightBadge text="React only" variant="caution" />
 
 Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones open instantly until the user pauses for `timeout` ms.
 

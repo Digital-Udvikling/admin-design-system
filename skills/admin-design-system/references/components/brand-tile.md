@@ -1,6 +1,6 @@
 # Brand tile
 
-> A 24px monogram or icon square, used to brand the navbar per system.
+> A 24px monogram or icon square for the navbar.
 
 Sits in `<Navbar.Brand>`. Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
 

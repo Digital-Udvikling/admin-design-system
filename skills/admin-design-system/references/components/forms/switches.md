@@ -48,8 +48,7 @@ For form submissions, prefer a [checkbox](checkboxes.md).
 ```
 
 ```tsx
-<Field name="notify" className="field-row">
+<Field inline label="Email notifications">
   <Switch defaultChecked />
-  <Field.Label>Email notifications</Field.Label>
 </Field>
 ```

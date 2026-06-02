@@ -10,8 +10,9 @@ export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> 
   textareaSize?: TextareaSize;
   /**
    * Height tracks content via CSS `field-sizing` (Chromium-only today; other
-   * browsers keep a fixed, resizable box). `rows`/min-height is the floor —
-   * set `max-height` via `className`/`style` for a ceiling.
+   * browsers keep a fixed, resizable box). The floor is the larger of the base
+   * min-height and `rows` — set `max-height` via `className`/`style` for a
+   * ceiling.
    */
   autoResize?: boolean;
 }

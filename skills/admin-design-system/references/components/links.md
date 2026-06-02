@@ -20,17 +20,21 @@ A plain `<a>` with the design system's link styling — link color, hover shift,
 
 ### With icon
 
-Pass `icon` for a leading icon. See [Icons](../basics/icons.md).
+Pass `icon` for a leading icon or `iconTrailing` for a trailing one. See [Icons](../basics/icons.md).
 
 **Example**
 
 ```html
 <a class="link" href="#"><i class="ti ti-home" aria-hidden="true"></i>Dashboard</a>
+<a class="link" href="#">Export<i class="ti ti-download" aria-hidden="true"></i></a>
 ```
 
 ```tsx
 <Link href="#" icon={IconHome}>
   Dashboard
+</Link>
+<Link href="#" iconTrailing={IconDownload}>
+  Export
 </Link>
 ```
 

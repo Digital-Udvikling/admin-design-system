@@ -2,7 +2,7 @@
 
 > Pure-CSS bar, proportion, and donut primitives.
 
-Three JS-free primitives for dashboards and inline micro-viz. No axes, ticks, or gridlines — for analytical charts reach for a dedicated library. Data is driven by inline custom properties (never `data-*`): a bar's `--value` over the container's `--chart-max`, a segment's `flex: var(--value)`, a donut's cumulative `conic-gradient` string. In React the `data` prop fills them in.
+Values drive each chart through inline custom properties (never `data-*`): a bar's `--value` over the container's `--chart-max`, a segment's `flex: var(--value)`, a donut's cumulative `conic-gradient` string. In React the `data` prop fills them in. No axes, ticks, or gridlines — for analytical charts reach for a dedicated library.
 
 ## Bar chart
 
@@ -97,7 +97,7 @@ Horizontal by default — category labels sit in a left gutter, values in an ali
 
 ### Variants
 
-A single-series chart follows `currentColor`. `variant` recolours every bar — `success`, `warning`, `danger`, `info`.
+A single-series chart defaults to `info` (the base colour, `currentColor`, emitted with no class). `variant` recolours every bar to a status tone — `success`, `warning`, or `danger`.
 
 **Example**
 

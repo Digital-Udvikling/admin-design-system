@@ -81,6 +81,24 @@ Long paths wrap onto a second line on narrow viewports instead of overflowing.
 
 :::example
 
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a class="breadcrumb-item" href="/">Home</a></li>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
+    <li><a class="breadcrumb-item" href="/orgs">Organisations</a></li>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
+    <li><a class="breadcrumb-item" href="/orgs/acme">Acme Inc.</a></li>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
+    <li><a class="breadcrumb-item" href="/orgs/acme/projects">Projects</a></li>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
+    <li><a class="breadcrumb-item" href="/orgs/acme/projects/123">Q3 launch</a></li>
+    <li class="breadcrumb-separator" role="presentation" aria-hidden="true"></li>
+    <li><span class="breadcrumb-item" aria-current="page">Settings</span></li>
+  </ol>
+</nav>
+```
+
 ```tsx
 <Breadcrumbs>
   <Breadcrumbs.Item href="/">Home</Breadcrumbs.Item>

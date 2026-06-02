@@ -4,7 +4,7 @@
 
 For shortcuts tied to a visible control, use the `hotkey` prop on [Buttons](../components/buttons.md) and [Menu.Item](../components/menus.md). For everything else — opening a help dialog, focusing search, navigation — reach for `useHotkey()`.
 
-`mod` is an alias for `Ctrl` on every platform.
+`mod` resolves to `Cmd` on macOS and `Ctrl` on every other platform.
 
 ## Page-level shortcut <StarlightBadge text="React only" variant="caution" />
 

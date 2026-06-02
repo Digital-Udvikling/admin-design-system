@@ -92,7 +92,7 @@ export interface PropertyListItemProps extends Omit<ComponentProps<"dd">, "title
   value?: ReactNode;
   /** Right-aligns the value cell + applies `tabular-nums`. Mirrors `Table.Cell.numeric`. */
   numeric?: boolean;
-  /** Opts this row into the copy affordance regardless of list-level `copyable`. */
+  /** Opts this row into the copy affordance. */
   copyable?: boolean;
   /** Overrides the text the copy button writes to the clipboard. */
   copyValue?: string;

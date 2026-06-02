@@ -2,7 +2,7 @@
 
 > Styled native <progress> element.
 
-The browser handles ARIA semantics.
+`<progress>` exposes its value to assistive tech but has no implicit accessible name — label it with an associated `<label>`, `aria-label`, or `aria-labelledby` so screen readers announce what it tracks.
 
 ## Examples
 

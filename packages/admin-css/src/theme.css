@@ -219,11 +219,24 @@
   --color-code-surface: light-dark(var(--color-base-150), var(--color-base-950));
   --color-code-text: light-dark(var(--color-base-800), var(--color-base-200));
 
-  /* Primary — Flexoki blue */
-  --color-primary: light-dark(var(--color-blue-600), var(--color-blue-400));
-  --color-primary-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
-  --color-primary-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
+  /* Primary — high-contrast neutral (ink). Inverts with the mode: near-black
+     on light surfaces, near-white on dark ones, so a solid `btn-primary` fill
+     always reads against the surface. Unlike the colored accents, `-hover`
+     moves *toward* the surface (you can't darken past ink), and `-muted` is a
+     neutral gray wash — `bg-primary-muted` selected/active states read as a
+     quiet fill rather than a colored highlight. The interactive blue that used
+     to live here now drives `--color-link` / `--color-focus` and `info`. */
+  --color-primary: light-dark(var(--color-black), var(--color-paper));
+  --color-primary-hover: light-dark(var(--color-base-800), var(--color-base-200));
+  --color-primary-muted: light-dark(var(--color-base-150), var(--color-base-800));
   --color-primary-content: light-dark(var(--color-paper), var(--color-black));
+
+  /* Link / focus — the interactive blue (Flexoki blue, formerly `primary`).
+     Split into two tokens so link text and focus rings can be retinted
+     independently of the `info` status color, even though both start blue. */
+  --color-link: light-dark(var(--color-blue-600), var(--color-blue-400));
+  --color-link-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
+  --color-focus: light-dark(var(--color-blue-600), var(--color-blue-400));
 
   /* System accent — per-app brand signal. Drives the navbar's 2px bottom
      stripe and the footer's matching top stripe (both always on), plus
@@ -267,10 +280,10 @@
   --color-warning-muted: light-dark(var(--color-yellow-50), var(--color-yellow-950));
   --color-warning-content: var(--color-black);
 
-  /* Info — cyan */
-  --color-info: light-dark(var(--color-cyan-600), var(--color-cyan-400));
-  --color-info-hover: light-dark(var(--color-cyan-700), var(--color-cyan-300));
-  --color-info-muted: light-dark(var(--color-cyan-50), var(--color-cyan-950));
+  /* Info — Flexoki blue (the calm "FYI" status color) */
+  --color-info: light-dark(var(--color-blue-600), var(--color-blue-400));
+  --color-info-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
+  --color-info-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
   --color-info-content: light-dark(var(--color-paper), var(--color-black));
 }
 

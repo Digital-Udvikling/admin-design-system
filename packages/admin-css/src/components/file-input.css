@@ -4,7 +4,7 @@
            bg-surface text-text
            border border-border hover:border-border-strong rounded-lg overflow-hidden
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed
            file:px-3 file:py-2 file:mr-3
            file:text-sm file:font-medium file:leading-none

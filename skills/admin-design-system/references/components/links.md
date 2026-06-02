@@ -2,7 +2,7 @@
 
 > Styled text links with an optional external affordance.
 
-A plain `<a>` with the design system's link styling — primary color, hover shift, underline, and a focus-visible ring.
+A plain `<a>` with the design system's link styling — link color, hover shift, underline, and a focus-visible ring.
 
 ## Examples
 

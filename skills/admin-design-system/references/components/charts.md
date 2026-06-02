@@ -362,7 +362,7 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 ## Colors
 
-There is no chart token layer. A single-series bar chart follows `currentColor` (`--color-primary`, recoloured by `variant`). Multi-series charts (donut, stacked bar, or per-bar colours) take colours inline. React cycles this `SERIES` sequence of existing palette tokens; copy it verbatim in vanilla so both render identically:
+There is no chart token layer. A single-series bar chart follows `currentColor` (`--color-info`, recoloured by `variant`). Multi-series charts (donut, stacked bar, or per-bar colours) take colours inline. React cycles this `SERIES` sequence of existing palette tokens; copy it verbatim in vanilla so both render identically:
 
 ```css
 var(--color-blue-500)

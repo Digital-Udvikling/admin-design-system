@@ -23,7 +23,7 @@
            hover:bg-surface-strong
            cursor-pointer select-none
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
   .navbar-item[aria-current="page"],
@@ -49,7 +49,7 @@
            rounded-md text-text bg-transparent
            hover:bg-surface-strong
            cursor-pointer
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
   .navbar-mobile-toggle::before {

@@ -151,6 +151,11 @@
   "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{primary,system-accent,danger,success,warning,info}{,-hover,-muted,-content}"
 );
 
+/* Link / focus — interactive blue. Narrower shapes than the accents above:
+   focus rings only need `outline-focus`, links only `text-link{,-hover}`. */
+@source inline("{,focus-visible:}outline-focus");
+@source inline("{,hover:,focus-visible:}text-link{,-hover}");
+
 /* Cursor + opacity — interactive */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}cursor-{auto,default,pointer,wait,text,move,help,not-allowed,none,progress,grab,grabbing,col-resize,row-resize,zoom-in,zoom-out}"

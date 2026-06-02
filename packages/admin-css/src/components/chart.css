@@ -15,7 +15,7 @@
    *            `--donut-segments` (CSS can't sum a variable-length sibling
    *            list, so the string arrives whole).
    *
-   * Colour: single-series follows `currentColor` (default `--color-primary`,
+   * Colour: single-series follows `currentColor` (default `--color-info`,
    * recoloured by the `.chart-success`/etc. variants like `.progress`).
    * Multi-series colours are set inline per bar/segment (`--bar-color` /
    * `--segment-color` / legend `--legend-color`); there is no chart token
@@ -30,7 +30,7 @@
     --chart-height: 8rem; /* bar track cross-axis size (md) */
     --chart-size: 8rem; /* donut diameter (md) */
     --chart-gap: 0.25rem;
-    color: var(--color-primary);
+    color: var(--color-info);
   }
 
   /* Single-series semantic variants — recolour currentColor, like progress. */

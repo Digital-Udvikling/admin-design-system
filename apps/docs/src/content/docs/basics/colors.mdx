@@ -17,17 +17,32 @@ Override either layer to reskin the system — see [Customize](../customize/). C
 
 ## Semantic tokens
 
-Brand and state families (primary, danger, success, warning, info) share a four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base). Text, Surface, and Border use lighter scales.
+Primary and the state families (danger, success, warning, info) share a four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base). Text, Surface, Border, Link, and Focus use lighter scales.
 
 <ColorFamily
   family="Primary"
-  description="Brand accent. Drives primary buttons, links, focus rings."
+  description="High-contrast neutral (ink). Drives solid primary buttons, badges, and selected states. Inverts with the mode — near-black on light, near-white on dark."
   variants={[
     { label: "Base", variable: "--color-primary" },
     { label: "Hover", variable: "--color-primary-hover" },
     { label: "Muted", variable: "--color-primary-muted" },
     { label: "Content", variable: "--color-primary-content" },
   ]}
+/>
+
+<ColorFamily
+  family="Link"
+  description="Text-link color. Separate from Info so links can be retinted independently."
+  variants={[
+    { label: "Base", variable: "--color-link" },
+    { label: "Hover", variable: "--color-link-hover" },
+  ]}
+/>
+
+<ColorFamily
+  family="Focus"
+  description="Focus-ring color for every interactive component."
+  variants={[{ label: "Base", variable: "--color-focus" }]}
 />
 
 <ColorFamily

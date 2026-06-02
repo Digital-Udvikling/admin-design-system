@@ -66,7 +66,7 @@
            bg-transparent hover:bg-surface-strong
            cursor-pointer select-none no-underline
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
   .sidebar-item[aria-current="page"],
@@ -105,7 +105,7 @@
            bg-transparent hover:bg-surface-strong
            cursor-pointer select-none
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
     list-style: none;
   }
 
@@ -160,7 +160,7 @@
            bg-transparent hover:bg-surface-strong
            cursor-pointer select-none no-underline
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
   .sidebar-subitem[aria-current="page"],
@@ -182,7 +182,7 @@
   }
 
   .sidebar-collapse-toggle:has(.sidebar-toggle:focus-visible) {
-    @apply outline-2 outline-offset-2 outline-primary;
+    @apply outline-2 outline-offset-2 outline-focus;
   }
 
   /* Chevron-left when expanded; flips to chevron-right when collapsed. */

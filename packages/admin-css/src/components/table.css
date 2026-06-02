@@ -119,6 +119,6 @@
     @apply absolute inset-0;
   }
   .table-row-link:focus-within {
-    @apply outline-2 -outline-offset-2 outline-primary;
+    @apply outline-2 -outline-offset-2 outline-focus;
   }
 }

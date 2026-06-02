@@ -12,7 +12,7 @@
     border-radius: 9999px;
     overflow: hidden;
     background-color: var(--color-surface-strong);
-    color: var(--color-primary);
+    color: var(--color-info);
   }
 
   .progress::-webkit-progress-bar {

@@ -24,8 +24,10 @@ describe("Progress", () => {
     expect(el).toHaveAdminClass("progress", "progress-danger", "progress-lg");
   });
 
-  it("omits the primary variant class", () => {
+  it("omits a class for the default info variant", () => {
     render(<Progress value={0} aria-label="x" />);
-    expect(screen.getByRole("progressbar", { name: "x" })).not.toHaveAdminClass("progress-primary");
+    const el = screen.getByRole("progressbar", { name: "x" });
+    expect(el).not.toHaveAdminClass("progress-info");
+    expect(el).not.toHaveAdminClass("progress-primary");
   });
 });

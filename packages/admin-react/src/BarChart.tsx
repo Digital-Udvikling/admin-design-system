@@ -9,7 +9,7 @@ import {
   mergeStyle,
 } from "./chart-internal";
 
-export type BarChartVariant = "primary" | "success" | "warning" | "danger" | "info";
+export type BarChartVariant = "info" | "success" | "warning" | "danger";
 export type BarChartOrientation = "horizontal" | "vertical";
 
 export interface BarChartContainerProps extends ComponentProps<"div"> {
@@ -32,7 +32,7 @@ function BarChartContainer({
   size = "md",
   showValues,
   inline,
-  variant = "primary",
+  variant = "info",
   className,
   ...rest
 }: BarChartContainerProps) {
@@ -50,7 +50,7 @@ function BarChartContainer({
           size !== "md" && `chart-${size}`,
           showValues && "chart-values",
           inline && "chart-inline",
-          variant !== "primary" && `chart-${variant}`,
+          variant !== "info" && `chart-${variant}`,
         ],
         className,
       )}
@@ -118,7 +118,7 @@ function BarChartRoot({
   size = "md",
   showValues,
   inline,
-  variant = "primary",
+  variant = "info",
   style,
   "aria-label": ariaLabel,
   ...rest

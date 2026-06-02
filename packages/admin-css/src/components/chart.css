@@ -33,7 +33,9 @@
     color: var(--color-info);
   }
 
-  /* Single-series semantic variants — recolour currentColor, like progress. */
+  /* Single-series semantic variants — recolour currentColor, like progress.
+     `info` is the base colour (`.chart` above), so it needs no class — the
+     default `variant="info"` simply emits no modifier. */
   .chart-success {
     color: var(--color-success);
   }
@@ -42,9 +44,6 @@
   }
   .chart-danger {
     color: var(--color-danger);
-  }
-  .chart-info {
-    color: var(--color-info);
   }
 
   /* --------------------------------------------------------------------- *

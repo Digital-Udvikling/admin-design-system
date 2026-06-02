@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
 
-export type ProgressVariant = "primary" | "success" | "warning" | "danger";
+export type ProgressVariant = "info" | "success" | "warning" | "danger";
 export type ProgressSize = "sm" | "md" | "lg";
 
 export interface ProgressProps extends Omit<ComponentProps<"progress">, "value"> {
@@ -15,7 +15,7 @@ export interface ProgressProps extends Omit<ComponentProps<"progress">, "value">
 export function Progress({
   value,
   max = 100,
-  variant = "primary",
+  variant = "info",
   size = "md",
   className,
   ...rest
@@ -27,7 +27,7 @@ export function Progress({
       className={cn(
         [
           "progress",
-          variant !== "primary" && `progress-${variant}`,
+          variant !== "info" && `progress-${variant}`,
           size !== "md" && `progress-${size}`,
         ],
         className,

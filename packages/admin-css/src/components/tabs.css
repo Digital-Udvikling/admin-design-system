@@ -9,7 +9,7 @@
      page (e.g. Starlight's own <Tabs> component) doesn't pick them up. */
   .tabs .tab-list {
     @apply inline-flex items-center gap-1 border-b border-border;
-    /* Anchor for the optional .tab-indicator */
+    /* Containing block for the sliding ::before marker (see @supports below) */
     position: relative;
   }
 
@@ -86,14 +86,93 @@
     @apply gap-0 p-0.5 border border-border rounded-md bg-surface-muted;
   }
 
+  /* Sit above the sliding thumb (the anchored ::before below) so labels stay
+     legible while it passes behind them. */
   .tabs-boxed .tab {
-    @apply rounded;
+    @apply rounded relative z-[1];
   }
 
   .tabs-boxed .tab[data-selected],
   .tabs-boxed .tab[aria-selected="true"],
   .tabs-boxed .tab-input:checked + .tab {
     @apply bg-surface text-text shadow-sm;
+  }
+
+  /* Sliding active marker — the default, with zero extra DOM. The selected tab
+     becomes a CSS anchor; a single pseudo on the .tab-list tracks it via
+     anchor() insets, and the browser interpolates those insets as the anchor
+     moves between tabs — so vanilla `:checked` markup and React both slide.
+     `anchor-scope` confines the name to each list so multiple tab sets on a
+     page don't cross-anchor; gating the whole block on its support keeps the
+     effect off where it'd misbehave, leaving the per-tab marker above as the
+     fallback. */
+  @supports (anchor-scope: --x) {
+    .tabs .tab-list {
+      anchor-scope: --tab-thumb;
+    }
+
+    .tabs .tab[data-selected],
+    .tabs .tab[aria-selected="true"],
+    .tabs .tab-input:checked + .tab {
+      anchor-name: --tab-thumb;
+    }
+
+    .tabs .tab-list::before {
+      content: "";
+      position: absolute;
+      position-anchor: --tab-thumb;
+    }
+
+    /* Bordered: a 2px bar sliding along the list's bottom edge — replaces the
+       per-tab ::after grow. */
+    .tabs:not(.tabs-boxed) .tab::after {
+      display: none;
+    }
+
+    .tabs:not(.tabs-boxed) .tab-list::before {
+      @apply bg-primary;
+      left: anchor(left);
+      right: anchor(right);
+      inset-block-end: -1px;
+      block-size: 2px;
+      transition:
+        left 180ms ease,
+        right 180ms ease;
+    }
+
+    /* Vertical bordered: bar on the trailing edge, sliding vertically. */
+    .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab-list::before {
+      inset-inline: auto;
+      inset-inline-end: -1px;
+      inline-size: 2px;
+      top: anchor(top);
+      bottom: anchor(bottom);
+      block-size: auto;
+      transition:
+        top 180ms ease,
+        bottom 180ms ease;
+    }
+
+    /* Boxed: a full-size thumb sliding behind the active label. */
+    .tabs-boxed .tab[data-selected],
+    .tabs-boxed .tab[aria-selected="true"],
+    .tabs-boxed .tab-input:checked + .tab {
+      @apply bg-transparent shadow-none;
+    }
+
+    .tabs-boxed .tab-list::before {
+      top: anchor(top);
+      right: anchor(right);
+      bottom: anchor(bottom);
+      left: anchor(left);
+      z-index: 0;
+      @apply rounded bg-surface shadow-sm;
+      transition:
+        top 180ms ease,
+        right 180ms ease,
+        bottom 180ms ease,
+        left 180ms ease;
+    }
   }
 
   /* Full width — list stretches across the container, tabs share space evenly. */
@@ -166,5 +245,12 @@
   .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[data-selected]::after,
   .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab[aria-selected="true"]::after {
     transform: scaleY(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tabs .tab-list::before,
+    .tabs:not(.tabs-boxed) .tab::after {
+      transition: none;
+    }
   }
 }

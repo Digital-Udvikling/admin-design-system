@@ -52,15 +52,8 @@ function TabsPanel({ className, ...rest }: TabsPanelProps) {
   return <BaseTabs.Panel className={cn("tab-panel", className)} {...rest} />;
 }
 
-export type TabsIndicatorProps = ComponentProps<typeof BaseTabs.Indicator>;
-
-function TabsIndicator({ className, ...rest }: TabsIndicatorProps) {
-  return <BaseTabs.Indicator className={cn("tab-indicator", className)} {...rest} />;
-}
-
 export const Tabs = Object.assign(TabsRoot, {
   List: TabsList,
   Tab: TabsTab,
   Panel: TabsPanel,
-  Indicator: TabsIndicator,
 });

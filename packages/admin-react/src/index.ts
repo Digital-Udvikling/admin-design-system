@@ -161,7 +161,6 @@ export {
   type TabsListProps,
   type TabsTabProps,
   type TabsPanelProps,
-  type TabsIndicatorProps,
 } from "./Tabs";
 export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";

@@ -41,6 +41,8 @@ Vanilla tabs are radio-input driven, so panel switching works without JavaScript
 
 ### Boxed (segmented control)
 
+The active option slides between tabs — a single thumb anchored to the selected tab via [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning), no extra markup in either bundle. Browsers without anchor positioning crossfade the highlight between tabs instead.
+
 **Example**
 
 ```html
@@ -142,25 +144,5 @@ Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its r
   <Tabs.Panel value="account">Account settings.</Tabs.Panel>
   <Tabs.Panel value="billing">Billing details.</Tabs.Panel>
   <Tabs.Panel value="api">Personal access tokens.</Tabs.Panel>
-</Tabs>
-```
-
-### Animated indicator
-
-`<Tabs.Indicator>` (React-only) renders an animated bar that slides between active tabs. Drop it inside `<Tabs.List>`; style it via `.tab-indicator`.
-
-**Example**
-
-```tsx
-<Tabs defaultValue="overview">
-  <Tabs.List>
-    <Tabs.Tab value="overview">Overview</Tabs.Tab>
-    <Tabs.Tab value="activity">Activity</Tabs.Tab>
-    <Tabs.Tab value="settings">Settings</Tabs.Tab>
-    <Tabs.Indicator />
-  </Tabs.List>
-  <Tabs.Panel value="overview">Overview content.</Tabs.Panel>
-  <Tabs.Panel value="activity">Activity content.</Tabs.Panel>
-  <Tabs.Panel value="settings">Settings content.</Tabs.Panel>
 </Tabs>
 ```

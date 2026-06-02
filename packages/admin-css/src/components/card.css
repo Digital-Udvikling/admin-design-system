@@ -4,8 +4,7 @@
            bg-surface-muted text-text
            border border-border
            rounded-xl
-           shadow-xs
-           overflow-auto;
+           shadow-xs;
   }
 
   .card-body {

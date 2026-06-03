@@ -8,7 +8,7 @@ React's `Select` is a compound (`Select.Trigger`, `Select.Popup`, `Select.Item`)
 
 ### Default
 
-Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the selected label in the trigger.
+Pass an `items` map (value → label) to `<Select>` so `<Select.Value>` can show the selected label in the trigger; without it, the trigger falls back to the raw value.
 
 **Example**
 
@@ -22,22 +22,22 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```
 
 ```tsx
-<Select name="status">
+<Select name="status" items={{ open: "Open", "in-progress": "In progress", closed: "Closed" }}>
   <Select.Trigger>
     <Select.Value placeholder="Select a status…" />
     <Select.Icon />
   </Select.Trigger>
   <Select.Popup>
     <Select.Item value="open">
-      <Select.ItemText>Open</Select.ItemText>
+      Open
       <Select.ItemIndicator />
     </Select.Item>
     <Select.Item value="in-progress">
-      <Select.ItemText>In progress</Select.ItemText>
+      In progress
       <Select.ItemIndicator />
     </Select.Item>
     <Select.Item value="closed">
-      <Select.ItemText>Closed</Select.ItemText>
+      Closed
       <Select.ItemIndicator />
     </Select.Item>
   </Select.Popup>
@@ -61,7 +61,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```
 
 ```tsx
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Bordered" }}>
   <Select.Trigger>
     <Select.Value />
     <Select.Icon />
@@ -70,7 +70,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
     <Select.Item value="x">Bordered</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Ghost" }}>
   <Select.Trigger variant="ghost">
     <Select.Value />
     <Select.Icon />
@@ -79,7 +79,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
     <Select.Item value="x">Ghost</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Danger" }}>
   <Select.Trigger variant="danger">
     <Select.Value />
     <Select.Icon />
@@ -107,7 +107,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```
 
 ```tsx
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Small" }}>
   <Select.Trigger triggerSize="sm">
     <Select.Value />
     <Select.Icon />
@@ -116,7 +116,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
     <Select.Item value="x">Small</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Medium" }}>
   <Select.Trigger>
     <Select.Value />
     <Select.Icon />
@@ -125,7 +125,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
     <Select.Item value="x">Medium</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x">
+<Select defaultValue="x" items={{ x: "Large" }}>
   <Select.Trigger triggerSize="lg">
     <Select.Value />
     <Select.Icon />
@@ -154,7 +154,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```
 
 ```tsx
-<Select>
+<Select items={{ apple: "Apple", banana: "Banana", carrot: "Carrot", daikon: "Daikon" }}>
   <Select.Trigger>
     <Select.Value placeholder="Pick one…" />
     <Select.Icon />
@@ -197,7 +197,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```
 
 ```tsx
-<Select disabled defaultValue="x">
+<Select disabled defaultValue="x" items={{ x: "Disabled" }}>
   <Select.Trigger>
     <Select.Value />
     <Select.Icon />
@@ -226,7 +226,7 @@ Wrap each item's label in `<Select.ItemText>` so `<Select.Value>` can render the
 ```tsx
 <Field name="role">
   <Field.Label>Role</Field.Label>
-  <Select required>
+  <Select required items={{ admin: "Admin", member: "Member" }}>
     <Select.Trigger>
       <Select.Value placeholder="Pick a role…" />
       <Select.Icon />

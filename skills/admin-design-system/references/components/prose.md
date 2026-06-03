@@ -1,0 +1,106 @@
+# Prose
+
+> Styling for rendered markdown and other HTML you don't control.
+
+The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral. That leaves backend-rendered HTML — markdown output, CMS bodies, model output — unstyled. Wrap it in `.prose` (vanilla) or `<Prose>` (React) to re-establish typographic styling for that region only, from the same semantic tokens, so it follows dark mode.
+
+When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md). `.prose` is for HTML you can't annotate.
+
+## Examples
+
+### Rendered markdown
+
+One wrapper styles every descendant — headings, paragraphs, lists, links, inline code, blockquotes, and tables.
+
+**Example**
+
+```html
+<div class="prose">
+  <h2>Refund policy</h2>
+  <p>
+    Refunds return to the original payment method within
+    <strong>5–7 business days</strong>. Partial refunds are prorated against the unused term.
+  </p>
+  <h3>Eligibility</h3>
+  <ul>
+    <li>Annual plans, within 30 days of renewal</li>
+    <li>Monthly plans, within 48 hours of the charge</li>
+  </ul>
+  <p>
+    See the full <a href="#">billing terms</a> or run
+    <code>aortl billing refund &lt;invoice-id&gt;</code>.
+  </p>
+  <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
+  <table>
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Refund window</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Annual</td>
+        <td>30 days</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>48 hours</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+```tsx
+<Prose>
+  <h2>Refund policy</h2>
+  <p>
+    Refunds return to the original payment method within <strong>5–7 business days</strong>. Partial
+    refunds are prorated against the unused term.
+  </p>
+  <h3>Eligibility</h3>
+  <ul>
+    <li>Annual plans, within 30 days of renewal</li>
+    <li>Monthly plans, within 48 hours of the charge</li>
+  </ul>
+  <p>
+    See the full <a href="#">billing terms</a> or run{" "}
+    <code>aortl billing refund &lt;invoice-id&gt;</code>.
+  </p>
+  <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
+  <table>
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Refund window</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Annual</td>
+        <td>30 days</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>48 hours</td>
+      </tr>
+    </tbody>
+  </table>
+</Prose>
+```
+
+## Rendering backend HTML
+
+The common case is an HTML string from a markdown renderer. Inject it into the wrapper — the descendant styles do the rest, no per-element classes.
+
+```html
+<!-- server renders markdown → html, then: -->
+<div class="prose">{{ renderedHtml }}</div>
+```
+
+```tsx
+<Prose dangerouslySetInnerHTML={{ __html: renderedHtml }} />
+```
+
+Sanitize untrusted HTML before injecting it. In a React app `<Prose>` emits `_ao-prose` and must render inside `<AdminRoot>` like every other component — see [React](../getting-started/react.md).

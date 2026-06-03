@@ -1,0 +1,115 @@
+@layer components {
+  /*
+   * Long-form rendered HTML — markdown output, CMS bodies, anything you can't
+   * annotate with the system's semantic class names. The global reset strips
+   * margins, list markers, and link styling from bare elements (so admin chrome
+   * stays neutral); `.prose` re-establishes them for its descendants only, using
+   * the semantic tokens so it follows dark mode and `--color-*` overrides.
+   *
+   * Descendant rules use `:where()` to stay at specificity 0 — a consumer's own
+   * `.prose a { … }` wins without `!important`.
+   */
+  .prose {
+    @apply text-sm leading-normal text-text;
+  }
+
+  /* Vertical rhythm — space between flow blocks, none at the container edges. */
+  .prose :where(p, ul, ol, blockquote, pre, table, figure) {
+    @apply my-3;
+  }
+  .prose > :first-child {
+    margin-top: 0;
+  }
+  .prose > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Headings — base.css already sizes h1–h3; here we add h4–h6 and the
+     sectioning rhythm. The edge reset above zeroes a leading heading's margin. */
+  .prose :where(h1, h2, h3, h4, h5, h6) {
+    @apply mt-6 mb-2 font-semibold leading-tight;
+  }
+  .prose :where(h4) {
+    @apply text-sm;
+  }
+  .prose :where(h5, h6) {
+    @apply text-xs uppercase tracking-wide text-text-muted;
+  }
+
+  /* Lists — restore the markers the reset removes. */
+  .prose :where(ul) {
+    @apply list-disc ps-5;
+  }
+  .prose :where(ol) {
+    @apply list-decimal ps-5;
+  }
+  .prose :where(li) {
+    @apply my-1;
+  }
+  /* Loose lists wrap each item's text in <p> — tighten those back down. */
+  .prose :where(li) :where(p) {
+    @apply my-1;
+  }
+  /* Nested lists hug their parent item rather than taking full block spacing. */
+  .prose :where(li > ul, li > ol) {
+    @apply my-1;
+  }
+
+  /* Links — the .link treatment without needing the class on every anchor. */
+  .prose :where(a) {
+    @apply rounded-sm text-link underline underline-offset-2
+           hover:text-link-hover
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+
+  /* Inline code — a tinted chip. */
+  .prose :where(code) {
+    @apply rounded border border-border bg-code-surface px-1 py-0.5
+           font-mono text-code-text;
+    font-size: 0.85em;
+  }
+
+  /* Code blocks — the .code-block surface; strip the inline chip off nested
+     <code> so a highlighter's own tokens show through. */
+  .prose :where(pre) {
+    @apply rounded-lg bg-code-surface p-3 font-mono text-sm text-code-text;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .prose :where(pre) code {
+    @apply rounded-none border-0 bg-transparent p-0;
+    font-size: inherit;
+  }
+
+  /* Blockquote — a quiet inline-start rule. */
+  .prose :where(blockquote) {
+    @apply border-s-2 border-border-strong ps-3 text-text-muted;
+  }
+
+  /* Thematic break. */
+  .prose :where(hr) {
+    @apply my-6 border-0 border-t border-border;
+  }
+
+  /* Tables — adopt the .table look for markdown's simple grids. */
+  .prose :where(table) {
+    @apply w-full border-collapse text-sm;
+  }
+  .prose :where(th, td) {
+    @apply border-b border-border px-3 py-2 text-start align-top;
+  }
+  .prose :where(thead th) {
+    @apply font-semibold text-text-muted;
+  }
+
+  /* Media + emphasis. */
+  .prose :where(img) {
+    @apply h-auto max-w-full rounded-md;
+  }
+  .prose :where(figcaption) {
+    @apply mt-1 text-xs text-text-muted;
+  }
+  .prose :where(strong) {
+    @apply font-semibold;
+  }
+}

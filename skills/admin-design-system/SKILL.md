@@ -162,6 +162,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.
 - [Property list](references/components/property-list.md) — Label-and-value rows for one-entity-N-attributes panels.
+- [Prose](references/components/prose.md) — Styling for rendered markdown and other HTML you don't control.
 - [Row](references/components/row.md) — One-dimensional layouts with flex utilities.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.

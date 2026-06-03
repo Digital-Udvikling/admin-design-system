@@ -67,6 +67,8 @@ Examples carry the page; prose orients and steps out of the way.
 - **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
 - **Subsection intros are optional.** `### Variants`, `### Sizes`, `### Disabled` usually need no prose. Add a sentence only when the example would surprise (a constraint, a gotcha, an invariant).
 - **No marketing voice, no rationale for third-party choices.** Name the library, link it, move on. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
+- **Voice is flat and factual.** No rhetorical color. Cut antithesis ("X rather than Y"), rule-of-three flavor triads, anthropomorphism ("digits don't shimmy"), marketing intensifiers ("the fastest way", "the simplest path"), empty reassurance ("text stays readable", "visible at a glance"), and soft hedges ("most likely"). Keep an em-dash only for a list or aside that adds information. Delete `###` intros that only narrate the next example.
+- **Consumer pages carry the contract, not the plumbing.** Document the `_ao-` scope, class-name parity, version pinning, and props; leave the remark pipeline, virtual modules, and `@layer` ordering to the contributing pages.
 - **Cross-references are tight.** `See [Icons](../../basics/icons/).` not "for the recommended library, sizing convention, and usage patterns."
 
 Keep: code examples, a11y hooks, version-pinning, override / escape-hatch APIs, non-obvious constraints. Cut: cheerleading, restated descriptions, explanations of what the next code block plainly demonstrates.

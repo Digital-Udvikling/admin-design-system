@@ -50,7 +50,7 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 
 ### Custom prev/next icons
 
-Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`. Defaults to built-in chevrons.
+Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`. Defaults to built-in chevrons. See [Icons](../basics/icons.md).
 
 **Example**
 

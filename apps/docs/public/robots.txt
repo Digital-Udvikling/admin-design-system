@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://digital-udvikling.github.io/admin-design-system/sitemap-index.xml

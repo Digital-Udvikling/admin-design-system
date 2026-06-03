@@ -2,7 +2,7 @@
 
 > Section a view into named panels.
 
-Vanilla tabs are radio-input driven, so panel switching works without JavaScript — but the panel-toggling selectors are hand-enumerated and cap at 6 panels. React handles ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
+Vanilla tabs are radio-input driven, so switching works without JavaScript, but they cap at 6 panels. React adds ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
 
 ## Examples
 

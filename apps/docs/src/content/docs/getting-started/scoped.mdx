@@ -9,10 +9,6 @@ A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`.
 
 The React library always ships this variant. The default `@aortl/admin-css` bundle stays unprefixed — use it for full-page admin apps that own the document.
 
-:::tip[Branding multiple apps]
-Set `--color-system-accent` on `._ao-admin-root` to brand-shift the navbar + footer stripes and `._ao-brand-tile` for one system. See [Customize › System accent](../../basics/customize/#system-accent).
-:::
-
 ## Vanilla CSS
 
 ```html
@@ -58,7 +54,7 @@ The scope owns its own `color-scheme`, so the host's `:root` color scheme does n
 
 The `_ao-` prefix is the primary isolation strategy: every admin class is namespaced, so a host page's `.btn` or `.card` rules can't reach admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
 
-A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants. The build sidesteps the common cases by emitting admin's CSS unlayered (Tailwind's `@layer` wrappers are stripped from the scoped bundle, since layered author rules lose to unlayered ones regardless of specificity) and bumping admin's element-tag resets with `:scope` so they outrank an untouched host stylesheet on specificity. For hard isolation against arbitrary host CSS, use cascade layers in the host (`@layer host, admin;`) or a shadow root.
+A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants; the prefix only namespaces classes, not tag selectors. The scoped bundle ships unlayered CSS so admin's resets outrank an untouched host stylesheet. For hard isolation against arbitrary host CSS, put admin in a cascade layer the host can order (`@layer host, admin;`) or a shadow root.
 
 ## Caveats
 

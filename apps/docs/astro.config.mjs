@@ -17,7 +17,7 @@ export default defineConfig({
   integrations: [
     react(),
     starlight({
-      title: "admin design system",
+      title: "Admin design system",
       customCss: ["./src/styles/global.css"],
       editLink: {
         baseUrl: "https://github.com/Digital-Udvikling/admin-design-system/edit/main/apps/docs/",

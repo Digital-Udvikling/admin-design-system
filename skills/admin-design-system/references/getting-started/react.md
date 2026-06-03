@@ -4,10 +4,6 @@
 
 Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](scoped.md) for how the prefix + scope work.
 
-:::tip[Branding multiple apps]
-Pass `systemAccent` to `<AdminRoot>` to brand-shift the navbar + footer stripes and `<BrandTile>` for one system. See [Customize › System accent](../basics/customize.md#system-accent).
-:::
-
 ## Install
 
 ```bash

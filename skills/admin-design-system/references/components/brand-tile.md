@@ -2,7 +2,7 @@
 
 > A 24px monogram or icon square for the navbar.
 
-Sits in `<Navbar.Brand>`. Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
+Sits in [`<Navbar.Brand>`](../modules/app-shell.md#navbar). Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
 
 ## Monogram
 

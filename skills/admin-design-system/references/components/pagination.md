@@ -2,7 +2,7 @@
 
 > Numbered page navigation with prev/next controls.
 
-The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange` — always controlled.
+The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange`. It is always controlled.
 
 ## Examples
 
@@ -50,7 +50,7 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 
 ### Custom prev/next icons
 
-Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon`. Defaults to built-in chevrons. See [Icons](../basics/icons.md).
+Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon` (default: built-in chevrons). See [Icons](../basics/icons.md).
 
 **Example**
 

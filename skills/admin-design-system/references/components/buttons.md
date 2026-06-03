@@ -16,7 +16,7 @@ IconPlus,
 
 ### Variants
 
-The bare `.btn` / `<Button>` is the low-emphasis default — most buttons on a dense admin screen aren't primary. Reach for `primary` for the single main action, `danger` for destructive ones. `ghost` drops the border and fill; `muted` fills with the page background so it sits flush, mirroring `card-muted`.
+The bare `.btn` / `<Button>` is the low-emphasis default. Use `primary` for the single main action and `danger` for destructive actions. `ghost` drops the border and fill; `muted` fills with the page background.
 
 **Example**
 
@@ -100,7 +100,7 @@ If you pass both `icon` and `loading`, the leading icon is suppressed. A trailin
 
 ### As a link
 
-The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="…" />}` and `nativeButton={false}` to render an anchor.
+The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="/path" />}` and `nativeButton={false}` to render an anchor.
 
 **Example**
 
@@ -189,7 +189,7 @@ Bind a chord to the button — pressing it dispatches a native click and renders
 
 ## Groups
 
-Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit: shared borders, rounded outer corners, square inner corners. Presentational only — each child is an independently focusable button. For single-select toggles, reach for a dedicated segmented control.
+Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit. Presentational only — each child is an independently focusable button. For single-select toggles, use a dedicated segmented control.
 
 ### Horizontal
 
@@ -213,7 +213,7 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 
 ### Full width
 
-`fullWidth` stretches the group across its container; the buttons split the row evenly, so every one is the same width regardless of label length.
+`fullWidth` stretches the group across its container and splits the row evenly.
 
 **Example**
 
@@ -254,8 +254,6 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 ```
 
 ### With variants and icons
-
-A row-action menu stacked into a sidebar — mixed variants, leading icons, primary on top, destructive at the bottom.
 
 **Example**
 

@@ -50,8 +50,6 @@ Set imperatively in vanilla via `node.indeterminate = true`; React takes an `ind
 
 ### Inside a Field
 
-A `<label>` wrapping a `.checkbox` lays out inline automatically.
-
 **Example**
 
 ```html

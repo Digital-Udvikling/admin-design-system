@@ -22,7 +22,7 @@
 
 ### Status variants
 
-`info`, `success`, and `warning` carry the signal through the border and focus ring — text stays readable.
+`info`, `success`, and `warning` set the border and focus ring color.
 
 **Example**
 
@@ -74,8 +74,6 @@
 <input class="input" type="email" placeholder="you@example.com" />
 <input class="input" type="password" placeholder="Password" />
 <input class="input" type="number" placeholder="42" />
-<input class="input" type="date" />
-<input class="input" type="time" />
 <input class="input" type="search" placeholder="Search" />
 <input class="input" type="url" placeholder="https://example.com" />
 <input class="input" type="tel" placeholder="+45 12 34 56 78" />
@@ -85,8 +83,6 @@
 <Input type="email" placeholder="you@example.com" />
 <Input type="password" placeholder="Password" />
 <Input type="number" placeholder="42" />
-<Input type="date" />
-<Input type="time" />
 <Input type="search" placeholder="Search" />
 <Input type="url" placeholder="https://example.com" />
 <Input type="tel" placeholder="+45 12 34 56 78" />

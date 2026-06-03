@@ -2,7 +2,7 @@
 
 > Trail of links to ancestor pages, ending in the current page.
 
-A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link current entry (marked `aria-current="page"`). Separators are CSS-driven — supply a child element in `.breadcrumb-separator` to override the default slash.
+A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link current entry (marked `aria-current="page"`). Separators are CSS-driven.
 
 ## Examples
 
@@ -69,7 +69,7 @@ Drop an icon inside `.breadcrumb-separator` to override the default slash.
 
 ### Deep paths
 
-Long paths wrap onto a second line on narrow viewports instead of overflowing.
+Long paths wrap onto a second line on narrow viewports.
 
 **Example**
 

@@ -1,15 +1,15 @@
 ---
 title: Agent skill
-description: Install the design system as an Agent Skill for any compatible agent.
+description: Install the design system as an Agent Skill.
 sidebar:
   order: 5
 ---
 
 The repo ships an [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) bundle at [`skills/admin-design-system/`](https://github.com/Digital-Udvikling/admin-design-system/tree/main/skills/admin-design-system) — one reference file per component, with paired vanilla HTML and React examples. Once installed, a compatible agent working in a project that uses `@aortl/admin-css` or `@aortl/admin-react` pulls it in automatically.
 
-## Install with `npx skills` (recommended)
+## Install with `npx skills`
 
-[`vercel-labs/skills`](https://github.com/vercel-labs/skills) is a small CLI that fetches a skills repo and wires it into whichever agents you have installed. It's the simplest path and works with Claude Code, OpenCode, Codex, Cursor, and others.
+[`vercel-labs/skills`](https://github.com/vercel-labs/skills) is a small CLI that fetches a skills repo and wires it into whichever agents you have installed. Works with Claude Code, OpenCode, Codex, Cursor, and others.
 
 ```bash
 npx skills add Digital-Udvikling/admin-design-system
@@ -44,4 +44,4 @@ See [the Claude Code plugins docs](https://docs.claude.com/en/docs/claude-code/p
 
 ## Keeping the skill current
 
-The bundle is regenerated from this site on every release, so what you install is always in sync with these docs.
+The bundle is regenerated from this site on every release.

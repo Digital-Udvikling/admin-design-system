@@ -4,8 +4,6 @@
 
 There's no `.row` component — for one-dimensional layouts, use Tailwind's flex utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For 2D layouts, see [Grid](grid.md); for spacing between stacked page sections, [Container](container.md).
 
-## Examples
-
 ### Basic
 
 **Example**
@@ -122,7 +120,7 @@ There's no `.row` component — for one-dimensional layouts, use Tailwind's flex
 
 ### Direction
 
-The default is a row. `flex-col` stacks vertically; pair it with a responsive prefix to switch axes at a breakpoint — stacked on narrow screens, a row from `sm` up.
+The default is a row. `flex-col` stacks vertically; pair it with a responsive prefix (`sm:flex-row`) to switch axes at a breakpoint.
 
 **Example**
 
@@ -146,7 +144,7 @@ The default is a row. `flex-col` stacks vertically; pair it with a responsive pr
 
 ### Dividers
 
-`divide-x` draws a hairline between children — no border class on each item. Pair it with horizontal padding so the segments breathe.
+`divide-x` draws a hairline between children; no border class on each item. Add horizontal padding (`px-*`) on each child.
 
 **Example**
 
@@ -186,7 +184,7 @@ The default is a row. `flex-col` stacks vertically; pair it with a responsive pr
 
 ### Toolbar
 
-Everything together. `flex-wrap` keeps a packed toolbar from overflowing on narrow screens; `flex-1` on the search field pushes the action cluster to the right edge.
+`flex-1` on the search field pushes the action cluster to the right edge; `flex-wrap` lets it stack on narrow screens.
 
 **Example**
 

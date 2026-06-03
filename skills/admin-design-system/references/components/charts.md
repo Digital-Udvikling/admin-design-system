@@ -2,7 +2,7 @@
 
 > Pure-CSS bar, proportion, and donut primitives.
 
-Values drive each chart through inline custom properties (never `data-*`): a bar's `--value` over the container's `--chart-max`, a segment's `flex: var(--value)`, a donut's cumulative `conic-gradient` string. In React the `data` prop fills them in. No axes, ticks, or gridlines — for analytical charts reach for a dedicated library.
+Values drive each chart through inline custom properties: a bar's `--value` against the container's `--chart-max`, a segment's `flex: var(--value)`, a donut's cumulative `conic-gradient` string. In React the `data` prop fills them in. No axes, ticks, or gridlines; use a dedicated library for analytical charts.
 
 ## Bar chart
 
@@ -48,7 +48,7 @@ Horizontal by default — category labels sit in a left gutter, values in an ali
 
 ### Vertical
 
-`orientation="vertical"` (`.chart-bars-vertical`) draws columns growing from the floor — the value sits above, the label below. Use it for trend-shaped data.
+`orientation="vertical"` (`.chart-bars-vertical`) draws columns: value above, label below.
 
 **Example**
 
@@ -97,7 +97,7 @@ Horizontal by default — category labels sit in a left gutter, values in an ali
 
 ### Variants
 
-A single-series chart defaults to `info` (the base colour, `currentColor`, emitted with no class). `variant` recolours every bar to a status tone — `success`, `warning`, or `danger`.
+A single-series chart defaults to `info` (`currentColor`, no class). `variant` recolours every bar: `success`, `warning`, or `danger`.
 
 **Example**
 
@@ -169,7 +169,7 @@ A single-series chart defaults to `info` (the base colour, `currentColor`, emitt
 
 ## Proportion bar
 
-A single track split by flex ratios — the "60% / 30% / 10%" breakdown. Multi-series by default: segments take colours from the [palette sequence](#colors). `legend` renders the key.
+A single track split by flex ratios. Multi-series by default: segments take colours from the [palette sequence](#colors). `legend` renders the key.
 
 **Example**
 
@@ -223,7 +223,7 @@ A single track split by flex ratios — the "60% / 30% / 10%" breakdown. Multi-s
 
 ## Donut
 
-A `conic-gradient` ring with the centre masked out. React builds the cumulative stop string from `data`; a vanilla author writes it (degrees accumulate, `var(--color-*)` from the [sequence](#colors)). `centerLabel` overlays a total, `legend` renders the key. Per-slice read-outs live on the legend rows — a gradient slice has no element to carry a `title`.
+A `conic-gradient` ring with the centre masked out. React builds the cumulative stop string from `data`; a vanilla author writes it. `centerLabel` overlays a total, `legend` renders the key. Per-slice read-outs live on the legend rows — a gradient slice has no element to carry a `title`.
 
 **Example**
 
@@ -262,7 +262,7 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 ### Pie
 
-`pie` (`.chart-donut-pie`) fills the hole for a solid pie.
+`pie` (`.chart-donut-pie`) fills the centre hole.
 
 **Example**
 
@@ -329,7 +329,7 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 ## Inline
 
-`inline` (`.chart-inline`) sizes the chart in `em` and aligns it to the text baseline — drop it into a table cell or a sentence next to a number.
+`inline` (`.chart-inline`) sizes the chart in `em` and aligns it to the text baseline.
 
 **Example**
 

@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-Docs live in `apps/docs/src/content/docs/**/*.mdx`. Each page mirrors a feature in the system, and most of the surface is generated through one custom remark directive.
+Docs live in `apps/docs/src/content/docs/**/*.mdx`. Each page mirrors a feature in the system.
 
 ## The `:::example` directive
 
@@ -36,7 +36,7 @@ Don't author `<Example>` JSX directly — always use the directive.
 
 ### React-only examples
 
-When a feature's behavior lives in the React component (clipboard access, focus traps, anything driven by `useState` + an effect / timer) and the vanilla bundle can't replicate it without consumer-written JS, drop the `html` fence so the example renders the React preview only. Mark the heading with Starlight's `<Badge>` so the divergence is visible at a glance:
+When a feature's behavior lives in the React component (clipboard access, focus traps, anything driven by `useState` + an effect / timer) and the vanilla bundle can't replicate it without consumer-written JS, drop the `html` fence so the example renders the React preview only. Mark the heading with Starlight's `<Badge>`:
 
 ````markdown
 import { Badge as StarlightBadge } from "@astrojs/starlight/components";
@@ -54,11 +54,11 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 :::
 ````
 
-Alias the Starlight badge to `StarlightBadge` when the page already imports the admin `<Badge>` (a `Badge` collision is the common case, since most MDX pages bring in admin components by name). Keep the supporting CSS classes shipping in both bundles — consumers wiring their own vanilla JS still need the styling.
+Alias to `StarlightBadge` when the page already imports the admin `<Badge>`. Keep the supporting CSS classes shipping in both bundles — consumers wiring their own vanilla JS still need the styling.
 
 ### Astro imports in MDX
 
-Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component, which is the right outcome.
+Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component.
 
 ## Prose style
 

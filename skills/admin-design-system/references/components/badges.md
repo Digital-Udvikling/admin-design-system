@@ -1,8 +1,8 @@
 # Badges
 
-> Compact status indicator for tags, counts, and chips.
+> Compact status indicator for tags and counts.
 
-Status columns, counts on tabs, category chips. Inline-flex pills at `text-xs` by default.
+Inline-flex pills at `text-xs` by default.
 
 ## Examples
 

@@ -17,7 +17,7 @@ Mode is resolved from CSS `color-scheme` at `:root`:
 | `[data-theme="light"]` | `light`        | forces light             |
 | `[data-theme="dark"]`  | `dark`         | forces dark              |
 
-`color-scheme` also flips native form controls, scrollbars, and the page background before paint, so there's no flash on load.
+`color-scheme` also flips native form controls, scrollbars, and the page background before paint, avoiding a flash on load.
 
 ## Force a mode
 
@@ -32,7 +32,7 @@ Set `data-theme` on `<html>` to override the OS preference:
 
 ## Scope to a subtree
 
-The selector isn't scoped to `:root`, so any element can flip its own subtree — useful for a dark hero on an otherwise light page:
+The selector isn't scoped to `:root`, so any element can flip its own subtree:
 
 ```html
 <section data-theme="dark">

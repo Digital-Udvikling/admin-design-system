@@ -86,7 +86,7 @@ Components forward standard SVG props plus:
 | -------- | -------------- | ---------------------------------- |
 | `size`   | `24`           | Width and height in pixels.        |
 | `stroke` | `2`            | Stroke width (try `1.5` for thin). |
-| `color`  | `currentColor` | Stroke colour.                     |
+| `color`  | `currentColor` | Stroke color.                      |
 
 **Example**
 
@@ -98,7 +98,7 @@ Components forward standard SVG props plus:
 
 ## Sizing
 
-Tabler's natural size is `24`, but admin chrome looks better smaller:
+Tabler's natural size is `24`; admin chrome uses smaller sizes:
 
 | Context                                      | Size |
 | -------------------------------------------- | ---- |
@@ -210,4 +210,4 @@ When an icon is the only content, give the surrounding element an accessible nam
 
 ## Substituting your own set
 
-Nothing in the design system is hard-wired to Tabler. Icon slots accept any element — use Phosphor, Heroicons, or your own SVG sprite the same way.
+Icon slots accept any element. Use another set (Phosphor, Heroicons) or your own SVG the same way.

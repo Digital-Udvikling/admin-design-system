@@ -2,7 +2,7 @@
 
 > Mutually exclusive choice within a group.
 
-`RadioGroup` owns the selection state. A `<label>` wrapping a `.radio` lays out inline automatically. Default orientation is horizontal.
+`RadioGroup` owns the selection state. A `<label>` wrapping a `.radio` lays out inline. Default orientation is horizontal.
 
 ## Examples
 

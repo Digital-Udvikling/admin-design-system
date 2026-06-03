@@ -115,11 +115,11 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 ### Getting started
 
-- [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill for any compatible agent.
+- [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill.
 - [React](references/getting-started/react.md) — Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 - [Scoped bundle](references/getting-started/scoped.md) — Drop admin styles into a non-admin app without colliding on class names.
 - [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4 project.
-- [Vanilla CSS](references/getting-started/vanilla.md) — A single pre-built stylesheet. No build tooling required on your end.
+- [Vanilla CSS](references/getting-started/vanilla.md) — One pre-built stylesheet, no build tooling required.
 
 ### Basics
 
@@ -128,14 +128,14 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Dark mode](references/basics/dark-mode.md) — Follows the OS by default, with manual override per page or subtree.
 - [Hotkeys](references/basics/hotkeys.md) — Bind keyboard shortcuts to page-level actions.
 - [Icons](references/basics/icons.md) — Tabler Icons — webfont for vanilla, typed components for React.
-- [Principles](references/basics/principles.md) — What this system optimizes for, and how it's built.
+- [Principles](references/basics/principles.md) — What this system optimizes for.
 - [Typography](references/basics/typography.md) — Type scale, weights, and font stack.
 
 ### Components
 
 - [Accordions](references/components/accordions.md) — Disclosure rows built on <details>.
 - [Alerts](references/components/alerts.md) — Inline notifications for errors, confirmations, and contextual feedback.
-- [Badges](references/components/badges.md) — Compact status indicator for tags, counts, and chips.
+- [Badges](references/components/badges.md) — Compact status indicator for tags and counts.
 - [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square for the navbar.
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
@@ -143,7 +143,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Charts](references/components/charts.md) — Pure-CSS bar, proportion, and donut primitives.
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
-- [Dialogs](references/components/dialog.md) — Modal dialogs built on the native <dialog> element.
+- [Dialogs](references/components/dialog.md) — Modal dialogs built on the native dialog element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.
 - [Forms: Fields](references/components/forms/fields.md) — Accessibility wiring (label, description, validation) around inputs.

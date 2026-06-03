@@ -2,7 +2,7 @@
 
 > Compact KPI tile with label, value, and detail.
 
-Headline metrics for dashboards. The value dominates; label and detail are small annotations. A stat card is a [`card`](cards.md) shell — pair `stat-card` with `card` so it shares the surface, border, radius, shadow, and every card modifier. For free-form tiles, use [Cards](cards.md); for label/value tables, use [Property list](property-list.md).
+Pair `stat-card` with [`card`](cards.md) so it inherits every card surface and modifier. For free-form tiles, use [Cards](cards.md); for label/value tables, use [Property list](property-list.md).
 
 ## Examples
 
@@ -45,7 +45,7 @@ Pass `icon` — it lands in the label row. See [Icons](../basics/icons.md).
 
 ### Compact + bordered
 
-The same [`card-compact` / `card-bordered`](cards.md#compact--bordered) modifiers a card uses: `compact` tightens padding, `bordered` drops the shadow.
+`compact` tightens padding; `bordered` drops the shadow. Same [`card-compact` / `card-bordered`](cards.md#compact--bordered) modifiers as a card.
 
 **Example**
 
@@ -63,7 +63,7 @@ The same [`card-compact` / `card-bordered`](cards.md#compact--bordered) modifier
 
 ### Color variants
 
-The same [variants as `<Card>`](cards.md#color-variants) — a tinted surface signals status, and the value picks up the matching accent for fast scanning. `muted` sits flush with the page; `warning` keeps its value at the default colour (yellow fails contrast on the tinted surface). Use sparingly.
+The same [variants as `<Card>`](cards.md#color-variants); the value picks up the matching accent. `warning` keeps its value at the default colour — yellow fails contrast on the tinted surface. Use sparingly.
 
 **Example**
 
@@ -103,7 +103,7 @@ The same [variants as `<Card>`](cards.md#color-variants) — a tinted surface si
 
 ### Dashboard grid
 
-Grid layout is the consumer's call. Compose with utility classes; the tile doesn't bake in a wrapper.
+Grid layout is the consumer's call — the tile bakes in no wrapper.
 
 **Example**
 

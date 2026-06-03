@@ -2,7 +2,7 @@
 
 > Brand-shift the design system with one variable, or override individual tokens.
 
-The fastest way to brand an app is the **system accent** — one CSS variable that drives the navbar stripe, footer stripe, and [`<BrandTile>`](../components/brand-tile.md) at once. Everything else (palette tones, semantic roles, fonts) is still overridable; see [Advanced](#advanced).
+The **system accent** is one CSS variable that drives the navbar stripe, footer stripe, and [`<BrandTile>`](../components/brand-tile.md). Palette tones, semantic roles, and fonts are overridable separately; see [Advanced](#advanced).
 
 ## System accent
 
@@ -14,16 +14,16 @@ Set `--color-system-accent` at `:root` and your app picks up matching 2px stripe
 }
 ```
 
-That's the contract. Defaults to a neutral gray; three siblings track the base via `color-mix`, so a single override propagates:
+Defaults to a neutral gray. Three derived tokens track it via `color-mix`:
 
-| Token                           | What it controls                         | Derivation                             |
-| ------------------------------- | ---------------------------------------- | -------------------------------------- |
-| `--color-system-accent`         | Navbar + footer stripe, `.brand-tile` bg | The value you set                      |
-| `--color-system-accent-hover`   | Reserved for hover states                | 12% mix toward `--color-text`          |
-| `--color-system-accent-muted`   | Reserved for subtle backgrounds          | 12% accent over `--color-surface`      |
-| `--color-system-accent-content` | Tile / icon foreground                   | `light-dark(paper, black)` — heuristic |
+| Token                           | What it controls                         | Derivation                        |
+| ------------------------------- | ---------------------------------------- | --------------------------------- |
+| `--color-system-accent`         | Navbar + footer stripe, `.brand-tile` bg | The value you set                 |
+| `--color-system-accent-hover`   | Reserved for hover states                | 12% mix toward `--color-text`     |
+| `--color-system-accent-muted`   | Reserved for subtle backgrounds          | 12% accent over `--color-surface` |
+| `--color-system-accent-content` | Tile / icon foreground                   | `light-dark(paper, black)`        |
 
-Bright accents like `--color-yellow-400` need a manual `-content` override so the tile stays legible:
+Bright accents like `--color-yellow-400` need a manual `-content` override:
 
 ```css
 :root {
@@ -40,7 +40,7 @@ For everything beyond the system accent, the token layers are documented on the 
 
 ### Override a semantic token
 
-Remap a role to a different palette tone — or to any color. Components follow automatically.
+Remap a role to any color. Components follow.
 
 ```css
 :root {
@@ -60,4 +60,4 @@ Replace a Flexoki tone everywhere it's used:
 
 ### Swap the whole palette
 
-Both blocks are stacked on `:root` — redefine the palette in your own stylesheet to ship a different brand while keeping every semantic role intact.
+Both blocks are stacked on `:root` — redefine the palette in your own stylesheet to ship a different brand.

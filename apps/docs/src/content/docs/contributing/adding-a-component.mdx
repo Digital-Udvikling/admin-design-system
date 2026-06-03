@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-A component is three or four files that ship together. Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as the base class.
+A component is three or four files. Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as the base class.
 
 1. `packages/admin-css/src/components/<name>.css` — base class, variants, sizes, modifiers.
 2. `packages/admin-css/src/components/index.css` — add `@import "./<name>.css";`.
@@ -24,9 +24,9 @@ Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (op
 
 ## 1. CSS
 
-Wrap rules in `@layer components` so they sit at the right cascade level next to Tailwind's utilities. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code.
+Wrap rules in `@layer components` so they land in Tailwind's `components` layer. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code.
 
-Fold the **default** variant's look into the base class rather than a separate modifier — the bare `.badge` carries the neutral styling itself. The base class is then styled on its own, so vanilla `class="badge"` and React `<Badge>` match without anyone naming a default variant.
+Fold the **default** variant's look into the base class instead of a separate modifier, so vanilla `class="badge"` and React `<Badge>` match with no default-variant class.
 
 ```css
 /* packages/admin-css/src/components/badge.css */
@@ -130,7 +130,7 @@ export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Bad
 
 ### Default-omit the default variant and size
 
-`variant !== "neutral" && ...` and `size !== "md" && "badge-md"` — skip the class when the value is the default. The default look lives in the base class, so the modifier would be redundant. Keeps the rendered DOM minimal and means `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all produce identical output — and, crucially, that `<Badge>` matches the bare `.badge` vanilla markup.
+Skip the class when the value is the default — the default look already lives in the base class. So `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all render the same DOM as the bare `.badge` vanilla markup.
 
 ### Compound components: `Object.assign` dot-notation
 
@@ -215,7 +215,7 @@ describe("Badge", () => {
 
 `src/test-setup.ts` wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup hooks vitest at module-load time, before `afterEach` is exposed. Without this the DOM leaks across tests in the same file.
 
-Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` keeps visual checks where they belong — in the docs.
+Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` — visual checks belong in the docs.
 
 ## 4. Docs page
 

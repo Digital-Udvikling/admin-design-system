@@ -6,7 +6,7 @@ description: Compact KPI tile with label, value, and detail.
 import { Badge, StatCard } from "@aortl/admin-react";
 import { IconShoppingBag, IconUsers, IconActivity, IconCash } from "@tabler/icons-react";
 
-Headline metrics for dashboards. The value dominates; label and detail are small annotations. A stat card is a [`card`](../cards/) shell — pair `stat-card` with `card` so it shares the surface, border, radius, shadow, and every card modifier. For free-form tiles, use [Cards](../cards/); for label/value tables, use [Property list](../property-list/).
+Pair `stat-card` with [`card`](../cards/) so it inherits every card surface and modifier. For free-form tiles, use [Cards](../cards/); for label/value tables, use [Property list](../property-list/).
 
 ## Examples
 
@@ -53,7 +53,7 @@ Pass `icon` — it lands in the label row. See [Icons](../../basics/icons/).
 
 ### Compact + bordered
 
-The same [`card-compact` / `card-bordered`](../cards/#compact--bordered) modifiers a card uses: `compact` tightens padding, `bordered` drops the shadow.
+`compact` tightens padding; `bordered` drops the shadow. Same [`card-compact` / `card-bordered`](../cards/#compact--bordered) modifiers as a card.
 
 :::example
 
@@ -73,7 +73,7 @@ The same [`card-compact` / `card-bordered`](../cards/#compact--bordered) modifie
 
 ### Color variants
 
-The same [variants as `<Card>`](../cards/#color-variants) — a tinted surface signals status, and the value picks up the matching accent for fast scanning. `muted` sits flush with the page; `warning` keeps its value at the default colour (yellow fails contrast on the tinted surface). Use sparingly.
+The same [variants as `<Card>`](../cards/#color-variants); the value picks up the matching accent. `warning` keeps its value at the default colour — yellow fails contrast on the tinted surface. Use sparingly.
 
 :::example
 
@@ -115,7 +115,7 @@ The same [variants as `<Card>`](../cards/#color-variants) — a tinted surface s
 
 ### Dashboard grid
 
-Grid layout is the consumer's call. Compose with utility classes; the tile doesn't bake in a wrapper.
+Grid layout is the consumer's call — the tile bakes in no wrapper.
 
 :::example
 

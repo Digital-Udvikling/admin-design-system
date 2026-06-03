@@ -2,8 +2,6 @@
 
 > Combine inputs, addons, and buttons into a flush row.
 
-Attach a prefix, suffix, or action button to an input.
-
 ## Examples
 
 ### Prepended addon

@@ -41,7 +41,7 @@ export function ProductPageAdminMenu() {
 
 ```html
 <div class="_ao-admin-root" data-theme="dark">
-  <!-- always dark, regardless of the host page -->
+  <!-- dark regardless of host page -->
 </div>
 ```
 
@@ -49,7 +49,7 @@ The scope owns its own `color-scheme`, so the host's `:root` color scheme does n
 
 ## Host-page style isolation
 
-The `_ao-` prefix is the primary isolation strategy: every admin class is namespaced, so a host page's `.btn` or `.card` rules can't reach admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
+The `_ao-` prefix namespaces every admin class, so a host page's `.btn` or `.card` rules can't match admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
 
 A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants; the prefix only namespaces classes, not tag selectors. The scoped bundle ships unlayered CSS so admin's resets outrank an untouched host stylesheet. For hard isolation against arbitrary host CSS, put admin in a cascade layer the host can order (`@layer host, admin;`) or a shadow root.
 

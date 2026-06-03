@@ -2,7 +2,7 @@
 
 > Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 
-Every component emits `_ao-`-prefixed class names that resolve against the scoped CSS shipped with the package, and `<AdminRoot>` is required to opt the subtree into those styles. See [Scoped bundle](scoped.md) for how the prefix + scope work.
+Every component emits `_ao-`-prefixed class names; `<AdminRoot>` is required to scope the subtree into the bundled CSS. See [Scoped bundle](scoped.md).
 
 ## Install
 
@@ -37,7 +37,7 @@ export function SignIn() {
 }
 ```
 
-`<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface (a settings panel, an internal toolbar) inside a host app.
+`<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface inside a host app.
 
 ### Props
 

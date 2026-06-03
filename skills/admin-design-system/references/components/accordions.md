@@ -30,7 +30,7 @@ Modern browsers animate the open/close via `interpolate-size: allow-keywords` + 
 
 ### Grouped items
 
-Adjacent items share their border; the chevron stays on the right. See [Icons](../basics/icons.md).
+See [Icons](../basics/icons.md).
 
 **Example**
 

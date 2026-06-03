@@ -2,7 +2,7 @@
 
 > Label-and-value rows for one-entity-N-attributes panels.
 
-A `<dl>` with a label column that aligns across every row. Reach for it when you need the "one entity, N attributes" pattern — summary panels, identifier strips, metadata blocks — rather than re-deriving it on top of a [`Table`](tables.md) or a [`Card`](cards.md).
+A `<dl>` with a label column that aligns across every row. Use it for the "one entity, N attributes" pattern: summary panels, identifier strips, metadata blocks. See [Table](tables.md) for tabular/multi-row data.
 
 ## Examples
 
@@ -39,7 +39,7 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 
 ### Striped
 
-Opt in with `striped` for zebra banding when scanning many rows.
+Opt in with `striped` for zebra banding.
 
 **Example**
 
@@ -69,7 +69,7 @@ Opt in with `striped` for zebra banding when scanning many rows.
 
 ### Copyable <StarlightBadge text="React only" variant="caution" />
 
-`copyable` on an item reveals a copy button on its value cell. Hover or focus to reveal; click copies and confirms with a check for ~1.2s. Text selection on the value still works. Opt in row-by-row so unrelated identifiers don't crowd the panel with copy affordances.
+`copyable` on an item reveals a copy button on its value cell on hover or focus; click copies and confirms with a check for ~1.2s. Text selection on the value still works. Opt in row-by-row.
 
 **Example**
 
@@ -83,7 +83,7 @@ Opt in with `striped` for zebra banding when scanning many rows.
 
 ### Numeric column
 
-`numeric` right-aligns the value and keeps digits aligned. Same convention as `<Table.Cell numeric>`.
+`numeric` right-aligns the value. Same convention as `<Table.Cell numeric>`.
 
 **Example**
 

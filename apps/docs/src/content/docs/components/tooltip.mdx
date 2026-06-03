@@ -7,13 +7,11 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 import { Button, Kbd, Tooltip } from "@aortl/admin-react";
 import { IconDeviceFloppy, IconPencil, IconCopy, IconTrash } from "@tabler/icons-react";
 
-React's `<Tooltip>` handles delay, focus, dismiss, and portal positioning. Vanilla uses a CSS-only `.tooltip-wrap` parent that reveals a nested `.tooltip` on `:hover` / `:focus-within`.
+React's `<Tooltip>` adds delay, focus, dismiss, and portal positioning. The vanilla `.tooltip-wrap` parent shows a nested `.tooltip` on `:hover` / `:focus-within`.
 
 ## Examples
 
 ### Basic
-
-Hover or tab to the trigger.
 
 :::example
 
@@ -80,8 +78,6 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 
 ### Sizes
 
-`size="sm"` for dense toolbars; `"md"` (default) otherwise.
-
 :::example
 
 ```html
@@ -132,7 +128,7 @@ Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones 
 
 ### Rich content
 
-The popup body accepts any inline content — e.g. a keyboard shortcut hint via [`<Kbd>`](../kbd/). React's `<Tooltip>` accepts JSX in `content`; drop down to subparts when the shorthand's `content` prop isn't enough.
+The popup body accepts inline content such as a shortcut hint via [`<Kbd>`](../kbd/). `<Tooltip>` takes JSX in `content`; use subparts when `content` isn't enough.
 
 :::example
 
@@ -165,4 +161,4 @@ The popup body accepts any inline content — e.g. a keyboard shortcut hint via 
 
 ## Vanilla path notes
 
-Vanilla `.tooltip-wrap` is CSS-only and shares the trigger's stacking context — an ancestor with `overflow: hidden` can clip it. Use the React popup if you need portal positioning.
+Vanilla `.tooltip-wrap` is CSS-only and lives in the trigger's stacking context, so an ancestor `overflow: hidden` can clip it. Use the React popup if you need portal positioning.

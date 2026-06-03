@@ -14,7 +14,7 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 
 <ColorFamily
   family="Primary"
-  description="High-contrast neutral (ink). Drives solid primary buttons, badges, and selected states. Inverts with the mode — near-black on light, near-white on dark."
+  description="High-contrast neutral (ink). Used by solid primary buttons, badges, and selected states. Inverts with the mode — near-black on light, near-white on dark."
   variants={[
     { label: "Base", variable: "--color-primary" },
     { label: "Hover", variable: "--color-primary-hover" },
@@ -121,7 +121,7 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 
 ## Palette
 
-Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp is bookended by `paper` and `black`.
+Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp adds `paper` at the light end and `black` at the dark end.
 
 <ColorRamp
   family="Base"

@@ -8,8 +8,6 @@ There's no `.grid` component — for two-dimensional layouts, use Tailwind's gri
 
 ### Columns
 
-`gap` spaces cells on both axes.
-
 **Example**
 
 ```html
@@ -35,8 +33,6 @@ There's no `.grid` component — for two-dimensional layouts, use Tailwind's gri
 ```
 
 ### Responsive columns
-
-Change the column count per breakpoint.
 
 **Example**
 
@@ -84,7 +80,7 @@ Change the column count per breakpoint.
 
 ### Auto-fit
 
-A track list can't be a utility, so set it inline. `repeat(auto-fill, minmax(12rem, 1fr))` fits as many 12rem columns as the width allows and stretches them to fill — reflowing on resize with no media queries. Swap `auto-fill` for `auto-fit` to collapse empty tracks when there are few items.
+A track list can't be a utility, so set it inline. `repeat(auto-fill, minmax(12rem, 1fr))` fits as many 12rem columns as the width allows. Swap `auto-fill` for `auto-fit` to collapse empty tracks when there are few items.
 
 **Example**
 
@@ -181,7 +177,7 @@ Cells stretch to fill their track by default. `justify-items-*` aligns them on t
 
 ### Two-pane layout
 
-Grids nest. A four-column shell holds a fixed sidebar and a content pane that runs its own responsive grid — all utilities, no inline track list.
+Grids nest: a content pane can run its own responsive grid inside an outer column. All utilities, no inline track list.
 
 **Example**
 

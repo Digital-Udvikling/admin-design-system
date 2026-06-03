@@ -2,7 +2,7 @@
 
 > Type scale, weights, and font stack.
 
-Body text is **14px**, headings step up modestly, and the UI typeface is IBM Plex.
+Body text is **14px**; the UI typeface is IBM Plex.
 
 ## Font stack
 
@@ -15,7 +15,7 @@ Body text is **14px**, headings step up modestly, and the UI typeface is IBM Ple
   monospace;
 ```
 
-Fonts are loaded with `font-display: swap` — text paints immediately in a metric-matched fallback, and Plex swaps in once it loads. The fallback faces override their metrics to occupy Plex's exact box, so the swap changes glyph shapes without shifting layout.
+Fonts load with `font-display: swap`. The fallback faces are metric-overridden to match Plex's box, so the swap changes glyph shapes without shifting layout.
 
 To opt out, override `--font-sans` / `--font-mono`:
 
@@ -29,7 +29,7 @@ To skip the Plex network requests entirely, import admin-css's source files indi
 
 ## Specimen
 
-IBM Plex Sans — the UI typeface. Open, slightly mechanical, with unambiguous letterforms that hold up at small sizes.
+IBM Plex Sans — the UI typeface.
 
 **Example**
 
@@ -49,7 +49,7 @@ IBM Plex Sans — the UI typeface. Open, slightly mechanical, with unambiguous l
 </div>
 ```
 
-IBM Plex Mono — fixed-width, for IDs, hashes, and figures that need to line up.
+IBM Plex Mono — fixed-width, for IDs, hashes, and figures.
 
 **Example**
 
@@ -121,7 +121,7 @@ Regular (400), medium (500), and semibold (600).
 
 ## Monospace
 
-Use `font-mono` for IDs, hashes, currency amounts, and anywhere fixed-width digits aid scanning.
+Use `font-mono` for IDs, hashes, currency amounts, and figures that must align.
 
 **Example**
 

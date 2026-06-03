@@ -22,8 +22,6 @@
 
 ### Status variants
 
-`info`, `success`, and `warning` carry the signal through the border and focus ring — text stays readable.
-
 **Example**
 
 ```html

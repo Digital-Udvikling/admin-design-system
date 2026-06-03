@@ -2,7 +2,7 @@
 
 > Styled <pre> for logs, JSON, and terminal output.
 
-A styled `<pre>` with a neutral, theme-following surface. For logs, JSON dumps, terminal output, and raw model output — anything that should read as machine output rather than prose. No syntax highlighting; layer Shiki or Prism on a nested `<code>` if needed.
+A styled `<pre>` with a neutral, theme-following surface for logs, JSON, terminal, and raw model output. No syntax highlighting; layer Shiki or Prism on a nested `<code>` if needed.
 
 For inline keyboard chips, use [Kbd](kbd.md) instead.
 
@@ -10,7 +10,7 @@ For inline keyboard chips, use [Kbd](kbd.md) instead.
 
 ### Basic
 
-Wraps long lines by default — fine for narrative output where horizontal scrolling would hurt scanning. Surface and text tones follow the page's `color-scheme`, so the block flips for dark mode automatically with no per-component overrides.
+Wraps long lines by default. Surface and text tones follow the page's `color-scheme` for dark mode.
 
 **Example**
 

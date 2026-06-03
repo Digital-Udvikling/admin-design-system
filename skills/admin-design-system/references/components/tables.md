@@ -2,13 +2,13 @@
 
 > Native table with row selection, sticky headers, and row links.
 
-Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `relaxed`, `sticky`) compose freely. Default row height is ~32px; use `relaxed` for roomier, less-dense layouts.
+Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `relaxed`, `sticky`) compose. Default row height is ~32px; use `relaxed` for roomier layouts.
 
 ## Examples
 
 ### Basic
 
-A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>`. The React API mirrors the HTML via dot-notation subparts.
+The React API mirrors the HTML via dot-notation subparts.
 
 **Example**
 
@@ -273,7 +273,7 @@ A bare `.table` styles `<thead>`, `<tbody>`, `<tr>`, `<th>`, and `<td>`. The Rea
 
 ### Cell alignment
 
-Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. For currency or totals, prefer `numeric` on body cells (right-aligns and adds `tabular-nums` so digits don't shimmy) and `align="right"` on the matching header.
+Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. For currency or totals, prefer `numeric` on body cells (right-aligns, adds `tabular-nums`) and `align="right"` on the matching header.
 
 **Example**
 

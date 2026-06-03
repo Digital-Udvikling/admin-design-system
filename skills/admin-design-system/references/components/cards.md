@@ -2,8 +2,6 @@
 
 > A container with optional title, description, and actions.
 
-## Examples
-
 ### Basic
 
 `<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (media above the body, multiple bodies, custom header), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
@@ -99,9 +97,9 @@ Free-form content goes as children, between the title and the actions.
 
 ### Color variants
 
-A tinted surface signals status — a healthy service, a destructive zone, a heads-up. The title (and any leading icon) picks up the matching accent. Use sparingly; a busy screen of colored cards reads as noise.
+A tinted surface signals status; the title and any leading icon pick up the matching accent. Use sparingly.
 
-A default card sits one step above the page (`surface-muted`) so it reads as a distinct panel. `card-muted` is the exception — it fills with the page background (`surface`) so it sits flush instead of popping out. No accent, no status meaning; reach for it to de-emphasise or visually group panels.
+A default card uses `surface-muted`, one step above the page. `card-muted` fills with the page background (`surface`) so it sits flush. It carries no accent or status meaning; use it to de-emphasise or group panels.
 
 **Example**
 

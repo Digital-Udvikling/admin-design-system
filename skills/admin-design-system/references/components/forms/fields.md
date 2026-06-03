@@ -2,7 +2,7 @@
 
 > Accessibility wiring (label, description, validation) around inputs.
 
-Vanilla: wire `<label for>` and `aria-describedby` yourself. React: `<Field>` accepts `label`, `description`, `error`, and `required` props; children render as the control inside an auto-wired layout. For per-`ValidityState` errors or other irregular layouts, drop to [`<Field.Container>`](#advanced-composition-with-fieldcontainer).
+Vanilla: wire `<label for>` and `aria-describedby` yourself. `<Field>` takes `label`, `description`, `error`, and `required`, and wraps its child control with the matching markup. For per-`ValidityState` errors or irregular layouts, use [`<Field.Container>`](#advanced-composition-with-fieldcontainer).
 
 ## Examples
 

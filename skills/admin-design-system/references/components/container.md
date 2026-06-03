@@ -2,7 +2,7 @@
 
 > A centered, max-width page region that spaces its sections.
 
-The page body you drop inside `<AppShell.Main>` (which has no padding of its own). It centers content at an admin-wide max-width and puts a consistent gap between stacked sections, so pages don't each re-invent their spacing.
+The page body you drop inside `<AppShell.Main>` (which has no padding of its own). It centers content at an admin-wide max-width and puts a consistent gap between stacked sections.
 
 Not to be confused with the `.Container` escape hatch on compound components like [`Card.Container`](cards.md#advanced-layout-with-cardcontainer) — `<Container>` is a standalone page region, not a bare-primitive sub-part.
 
@@ -10,7 +10,7 @@ Not to be confused with the `.Container` escape hatch on compound components lik
 
 ### Basic
 
-Children stack with the container's `gap` — the space between cards below is the container's, not the cards'.
+Children stack with the container's `gap`; the spacing between cards comes from the container, not the cards.
 
 **Example**
 

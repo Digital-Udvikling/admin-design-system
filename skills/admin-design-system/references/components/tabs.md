@@ -41,7 +41,7 @@ Vanilla tabs are radio-input driven, so switching works without JavaScript, but 
 
 ### Boxed (segmented control)
 
-The active option slides between tabs — a single thumb anchored to the selected tab via [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning), no extra markup in either bundle. Browsers without anchor positioning crossfade the highlight between tabs instead.
+The active thumb is anchored to the selected tab via [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning). Browsers without anchor positioning crossfade the highlight instead.
 
 **Example**
 
@@ -109,7 +109,7 @@ The active option slides between tabs — a single thumb anchored to the selecte
 </Tabs>
 ```
 
-Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its row.
+Pair `fullWidth` with `variant="boxed"` for a full-width segmented control.
 
 **Example**
 
@@ -143,8 +143,6 @@ Pair `fullWidth` with `variant="boxed"` for a segmented control that fills its r
 ```
 
 ### Vertical orientation
-
-`orientation="vertical"` puts the tab strip on the left, panels on the right.
 
 **Example**
 

@@ -1,16 +1,16 @@
 # Dialogs
 
-> Modal dialogs built on the native <dialog> element.
+> Modal dialogs built on the native dialog element.
 
-`showModal()` gives you the focus trap, scroll lock, Esc dismissal, and `::backdrop` for free — the browser owns the modal state. `<Dialog>` provides shorthand props (`title`, `description`, `actions`); `<Dialog.Container>` is the bare primitive for custom layouts.
+`showModal()` provides the focus trap, scroll lock, Esc dismissal, and `::backdrop`. `<Dialog>` provides shorthand props (`title`, `description`, `actions`); `<Dialog.Container>` is the bare primitive for custom layouts.
 
-The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. No JavaScript glue, no React state. For state-driven flows, pair `open` with `onOpenChange` — see [Controlled state](#controlled-state).
+The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. Requires no JavaScript. For state-driven flows, pair `open` with `onOpenChange` — see [Controlled state](#controlled-state).
 
 ## Examples
 
 ### Basic
 
-Open with a button, close via Esc, backdrop click, or the X. `closedby="any"` is the default.
+`closedby="any"` is the default — Esc, backdrop click, and the X all dismiss.
 
 **Example**
 
@@ -238,7 +238,7 @@ Wrap the body in `<form method="dialog">` — submitting any button inside close
 
 ### Destructive: no light dismiss
 
-For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no longer dismiss — the user has to make an explicit choice.
+For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no longer dismiss.
 
 **Example**
 

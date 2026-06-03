@@ -2,7 +2,7 @@
 
 > Place a badge, count, or dot on the corner of another element.
 
-Notification counts on icon buttons, status dots on avatars, "new" markers on tiles. The wrapper is `position: relative`; the floating child is placed by a vertical (`top`/`middle`/`bottom`) and horizontal (`start`/`center`/`end`) modifier. Default is `top end`, with the item half-overflowing the corner.
+The wrapper is `position: relative`; the floating child is placed by a vertical (`top`/`middle`/`bottom`) and horizontal (`start`/`center`/`end`) modifier. Default is `top end`, with the item half-overflowing the corner.
 
 ## Examples
 

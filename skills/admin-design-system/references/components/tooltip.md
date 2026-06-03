@@ -2,13 +2,11 @@
 
 > Transient hints anchored to a trigger.
 
-React's `<Tooltip>` handles delay, focus, dismiss, and portal positioning. Vanilla uses a CSS-only `.tooltip-wrap` parent that reveals a nested `.tooltip` on `:hover` / `:focus-within`.
+React's `<Tooltip>` adds delay, focus, dismiss, and portal positioning. The vanilla `.tooltip-wrap` parent shows a nested `.tooltip` on `:hover` / `:focus-within`.
 
 ## Examples
 
 ### Basic
-
-Hover or tab to the trigger.
 
 **Example**
 
@@ -71,8 +69,6 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 
 ### Sizes
 
-`size="sm"` for dense toolbars; `"md"` (default) otherwise.
-
 **Example**
 
 ```html
@@ -119,7 +115,7 @@ Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones 
 
 ### Rich content
 
-The popup body accepts any inline content — e.g. a keyboard shortcut hint via [`<Kbd>`](kbd.md). React's `<Tooltip>` accepts JSX in `content`; drop down to subparts when the shorthand's `content` prop isn't enough.
+The popup body accepts inline content such as a shortcut hint via [`<Kbd>`](kbd.md). `<Tooltip>` takes JSX in `content`; use subparts when `content` isn't enough.
 
 **Example**
 
@@ -150,4 +146,4 @@ The popup body accepts any inline content — e.g. a keyboard shortcut hint via 
 
 ## Vanilla path notes
 
-Vanilla `.tooltip-wrap` is CSS-only and shares the trigger's stacking context — an ancestor with `overflow: hidden` can clip it. Use the React popup if you need portal positioning.
+Vanilla `.tooltip-wrap` is CSS-only and lives in the trigger's stacking context, so an ancestor `overflow: hidden` can clip it. Use the React popup if you need portal positioning.

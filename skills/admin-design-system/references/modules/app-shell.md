@@ -12,7 +12,7 @@ IconHome,
   IconHeadset,
 } from "@tabler/icons-react";
 
-A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context that wires `<Navbar.MobileToggle>` to the sidebar drawer. The composed pieces (navbar, sidebar, footer) also work standalone. The shell doesn't assume it owns the viewport.
+A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context that wires `<Navbar.MobileToggle>` to the sidebar drawer. The composed pieces (navbar, sidebar, footer) also work standalone.
 
 ## Anatomy
 
@@ -266,7 +266,7 @@ See [mobile drawer](#mobile-drawer) below.
 
 ## Sidebar
 
-Flat items, tree groups, and click-to-collapse — all driven by native HTML.
+Flat items, tree groups, and click-to-collapse, driven by native HTML.
 
 ### Items and groups
 
@@ -465,8 +465,6 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 
 ## Examples
 
-Full compositions to copy and adapt.
-
 ### Classic admin
 
 Sidebar-first with a shop selector in the navbar, tree navigation, and a collapse toggle.
@@ -555,7 +553,7 @@ Sidebar-first with a shop selector in the navbar, tree navigation, and a collaps
 
 ### Top-nav heavy
 
-No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. Good for tools with few top-level destinations and per-destination tabs in `main`.
+No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For tools with few top-level destinations and per-destination tabs in `main`.
 
 **Example**
 
@@ -628,7 +626,7 @@ The navbar always renders a 2px bottom stripe driven by `--color-system-accent`;
 }
 ```
 
-The default is a neutral gray, so un-branded apps read as chrome.
+The default is a neutral gray.
 
 **Example**
 

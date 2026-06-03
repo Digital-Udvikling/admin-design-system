@@ -5,6 +5,10 @@
            rounded-sm transition-colors duration-150
            hover:text-link-hover
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+    /* Links are often the URL itself — let the long token break across lines
+       instead of overflowing a narrow row, sidebar, or table cell. The leading
+       icon stays `flex-shrink: 0` below. */
+    overflow-wrap: break-word;
   }
 
   /* Keep a leading icon from squishing when the link text wraps. The trailing

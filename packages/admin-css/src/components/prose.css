@@ -11,6 +11,10 @@
    */
   .prose {
     @apply text-sm leading-normal text-text;
+    /* Long URLs/tokens in flow text break instead of overflowing a narrow
+       column. Inherited by p/li/a/td/blockquote; the deliberately-scrolling
+       `<pre>` keeps its own `white-space: pre` + `overflow-x: auto`. */
+    overflow-wrap: break-word;
   }
 
   /* Vertical rhythm — space between flow blocks, none at the container edges. */

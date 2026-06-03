@@ -53,6 +53,10 @@
      Covers both the vanilla input.checkbox and Base UI's button.checkbox. */
   label:has(> .checkbox) {
     @apply inline-flex items-center gap-2 cursor-pointer;
+    /* Let a long label break and shrink beside the `shrink-0` box instead of
+       overflowing a narrow form column. The box stays put; the text wraps. */
+    overflow-wrap: break-word;
+    min-width: 0;
   }
 
   label:has(> .checkbox:disabled),

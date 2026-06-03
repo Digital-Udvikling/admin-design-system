@@ -28,6 +28,10 @@
            hover:bg-surface-muted
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
     list-style: none;
+    /* Let a long label break and shrink rather than forcing the row wider than
+       the item (the chevron sits at `margin-left: auto`). */
+    overflow-wrap: break-word;
+    min-width: 0;
   }
 
   .accordion-summary::-webkit-details-marker {
@@ -60,6 +64,8 @@
 
   .accordion-content {
     @apply px-4 py-3 text-sm text-text border-t border-border;
+    /* Arbitrary body text — break long tokens instead of overflowing. */
+    overflow-wrap: break-word;
   }
 
   /* Smooth open/close via ::details-content. With interpolate-size enabled

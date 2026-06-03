@@ -9,6 +9,10 @@
     width: calc(100% - 2rem);
     max-width: 32rem;
     max-height: calc(100dvh - 2rem);
+    /* Long titles/descriptions (filenames, IDs) break instead of pushing past
+       the fixed max-width. Inherited by title + description; `.dialog-title`
+       additionally needs `min-width: 0` below since it's a flex item. */
+    overflow-wrap: break-word;
     opacity: 1;
     transform: translateY(0) scale(1);
     transition:
@@ -60,6 +64,9 @@
 
   .dialog-title {
     @apply flex-1 flex items-center gap-2 text-lg font-semibold leading-tight m-0;
+    /* `flex-1` flex item — let it shrink so a long title wraps rather than
+       blowing the header past the dialog's max-width. */
+    min-width: 0;
   }
 
   .dialog-description {

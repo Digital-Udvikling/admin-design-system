@@ -53,6 +53,10 @@
      Switches are wider than checkboxes/radios so the gap is a touch larger. */
   label:has(> .switch) {
     @apply inline-flex items-center gap-3 cursor-pointer;
+    /* Let a long setting label break and shrink beside the `shrink-0` track
+       instead of overflowing a narrow settings panel. */
+    overflow-wrap: break-word;
+    min-width: 0;
   }
 
   label:has(> .switch:disabled),

@@ -1,6 +1,10 @@
 @layer components {
   .field {
     @apply flex flex-col gap-1.5;
+    /* Label/description/error are often operator- or validation-supplied — let
+       long tokens break instead of overflowing a narrow form column. Inherited
+       by all three. Mirrors `.alert`. */
+    overflow-wrap: break-word;
   }
 
   /* Horizontal layout — pairs a control (typically a switch) with its label

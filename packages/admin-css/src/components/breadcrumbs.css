@@ -1,6 +1,10 @@
 @layer components {
   .breadcrumbs {
     @apply text-sm text-text-muted;
+    /* Crumb labels are often free-form entity names/slugs — let a long one
+       break rather than overflow the (flex-wrap) row. Inherited by every item;
+       crumb/separator icons stay `flex-shrink: 0` below. */
+    overflow-wrap: break-word;
   }
 
   .breadcrumbs > ol {

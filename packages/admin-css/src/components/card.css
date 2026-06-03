@@ -5,6 +5,12 @@
            border border-border
            rounded-xl
            shadow-xs;
+    /* Let long unbreakable tokens (IDs, URLs, file paths) break instead of
+       overflowing the body, and let the card shrink inside a flex/grid track
+       rather than forcing it wide. Inherited by title/description/body.
+       Mirrors `.alert`. */
+    overflow-wrap: break-word;
+    min-width: 0;
   }
 
   .card-body {
@@ -13,6 +19,9 @@
 
   .card-title {
     @apply flex items-center gap-2 text-lg font-semibold leading-tight;
+    /* Flex item — let it shrink so a long title wraps rather than widening the
+       card. `overflow-wrap` is inherited from `.card`. */
+    min-width: 0;
   }
 
   /* Header row: title on the left, toolbar pushed to the trailing edge. */

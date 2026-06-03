@@ -20,6 +20,15 @@
     @apply font-medium text-text-muted bg-surface-muted border-b-border-strong whitespace-nowrap;
   }
 
+  /* Body cells only — let a long unbreakable value (ID, hash, email, URL, file
+     path) break inside the cell instead of widening the column and forcing the
+     whole table into horizontal overflow. Header cells stay `whitespace-nowrap`
+     above. */
+  .table :where(td),
+  .table-cell {
+    overflow-wrap: break-word;
+  }
+
   /* Drop the divider on the very last row, whether it lives in tbody (no
      tfoot present) or in tfoot — so the table doesn't double-border against
      a surrounding container. `.table > :last-child` resolves to the final

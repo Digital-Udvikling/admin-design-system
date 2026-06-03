@@ -53,6 +53,10 @@
      Covers both the vanilla input.radio and Base UI's span.radio. */
   label:has(> .radio) {
     @apply inline-flex items-center gap-2 cursor-pointer;
+    /* Let a long label break and shrink beside the `shrink-0` control instead
+       of overflowing a narrow form column. */
+    overflow-wrap: break-word;
+    min-width: 0;
   }
 
   label:has(> .radio:disabled),

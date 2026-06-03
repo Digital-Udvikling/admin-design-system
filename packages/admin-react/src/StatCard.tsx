@@ -3,7 +3,7 @@ import type { CardVariant } from "./Card";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
-export interface StatCardProps extends Omit<ComponentProps<"div">, "label"> {
+export interface StatCardProps extends ComponentProps<"div"> {
   /** Tinted surface + matching border, shared with `<Card>`. The value picks up the accent (except `warning`). Defaults to the neutral surface. */
   variant?: CardVariant;
   /** Small annotation above the value (e.g. "Total Generations"). */
@@ -38,7 +38,9 @@ export function StatCard({
   children,
   ...rest
 }: StatCardProps) {
-  const hasLabel = icon !== undefined || label !== undefined;
+  // Match the vanilla bundle: the label row exists only when there's label
+  // text. An icon alone never emits a label-less row.
+  const hasLabel = label !== undefined;
   return (
     <div
       className={cn(

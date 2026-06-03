@@ -202,7 +202,7 @@
 
   /* Mobile drawer surface (rendered inside a Base UI Dialog) */
   .sidebar-drawer-backdrop {
-    @apply fixed inset-0 z-40 bg-black/40
+    @apply fixed inset-0 z-40 bg-scrim
            transition-opacity duration-150;
   }
 

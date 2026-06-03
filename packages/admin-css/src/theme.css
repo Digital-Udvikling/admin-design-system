@@ -219,6 +219,11 @@
   --color-code-surface: light-dark(var(--color-base-150), var(--color-base-950));
   --color-code-text: light-dark(var(--color-base-800), var(--color-base-200));
 
+  /* Modal scrim — the dimming layer behind a `<dialog>` and the mobile
+     sidebar drawer. One tint from black so both overlays match and stay
+     retintable from a single token. */
+  --color-scrim: color-mix(in oklab, var(--color-black) 40%, transparent);
+
   /* Primary — high-contrast neutral (ink). Inverts with the mode: near-black
      on light surfaces, near-white on dark ones, so a solid `btn-primary` fill
      always reads against the surface. Unlike the colored accents, `-hover`

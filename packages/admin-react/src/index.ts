@@ -164,7 +164,7 @@ export {
 } from "./Tabs";
 export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
-export { useHotkey, type HotkeyOptions } from "./useHotkey";
+export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
 export {
   Tooltip,
   type TooltipProps,

@@ -4,7 +4,7 @@ import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
 import { useHotkey } from "./useHotkey";
 
-export interface MenuProps extends ComponentProps<"details"> {}
+export type MenuProps = ComponentProps<"details">;
 
 function MenuRoot({ className, ...rest }: MenuProps) {
   return <details className={cn("menu", className)} {...rest} />;

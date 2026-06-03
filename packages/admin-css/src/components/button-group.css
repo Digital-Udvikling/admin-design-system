@@ -47,7 +47,7 @@
      rules. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
   .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger {
-    border-left-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-left-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
   .btn-group-vertical {
@@ -75,7 +75,7 @@
 
   .btn-group-vertical > .btn:not(:first-child),
   .btn-group-vertical > .menu:not(:first-child) > .menu-trigger {
-    border-top-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-top-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
   /* Full width — the group stretches across its container instead of

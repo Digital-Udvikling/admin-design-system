@@ -28,7 +28,7 @@ export function Badge({
       )}
       {...rest}
     >
-      {renderIcon(icon, size === "sm" ? 10 : 12)}
+      {renderIcon(icon)}
       {children}
     </span>
   );

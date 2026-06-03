@@ -7,8 +7,7 @@
            rounded border border-border
            bg-surface-strong text-text-muted
            text-[0.75em] font-mono leading-none align-middle
-           whitespace-nowrap;
-    font-variant-numeric: tabular-nums;
+           whitespace-nowrap tabular-nums;
   }
 
   /* Cluster of `.kbd` chips. Always emitted by the React `<Kbd>` component so

@@ -65,6 +65,15 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 />
 
 <ColorFamily
+  family="Code"
+  description="Neutral surface and text for <pre>-style output blocks — logs, JSON, LLM output."
+  variants={[
+    { label: "Base", variable: "--color-code-surface" },
+    { label: "Content", variable: "--color-code-text" },
+  ]}
+/>
+
+<ColorFamily
   family="Danger"
   description="Destructive actions and error states."
   variants={[
@@ -88,7 +97,7 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 
 <ColorFamily
   family="Warning"
-  description="Caution and non-blocking issues."
+  description="Caution and non-blocking issues. Base and Content stay fixed — bright yellow with dark text in both modes; only Hover and Muted invert. That's why tinted card/stat-card surfaces skip the warning variant."
   variants={[
     { label: "Base", variable: "--color-warning" },
     { label: "Hover", variable: "--color-warning-hover" },

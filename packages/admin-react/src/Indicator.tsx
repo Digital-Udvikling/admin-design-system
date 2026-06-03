@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { Badge, type BadgeSize, type BadgeVariant } from "./Badge";
 import { cn } from "./cn";
 import type { IconProp } from "./icon";
@@ -7,7 +7,7 @@ export type IndicatorVertical = "top" | "middle" | "bottom";
 export type IndicatorHorizontal = "start" | "center" | "end";
 export type IndicatorPlacement = `${IndicatorVertical}-${IndicatorHorizontal}`;
 
-export interface IndicatorProps {
+export interface IndicatorProps extends ComponentProps<"div"> {
   /** Badge content (count, "!", text). Omit for a label-less status dot. */
   label?: ReactNode;
   /** Variant for both the badge and the dot. Defaults to `"neutral"`. */
@@ -24,12 +24,6 @@ export interface IndicatorProps {
    * e.g. `offset={4}` for a `rounded-md` button. Pixels.
    */
   offset?: number;
-  /** className on the outer `.indicator` wrapper. */
-  className?: string;
-  /** Accessible label for the indicator — required when rendering a dot. */
-  "aria-label"?: string;
-  /** The anchor element the indicator floats on. */
-  children?: ReactNode;
 }
 
 export function Indicator({
@@ -41,7 +35,9 @@ export function Indicator({
   offset,
   className,
   "aria-label": ariaLabel,
+  style: styleProp,
   children,
+  ...rest
 }: IndicatorProps) {
   const [vertical, horizontal] = placement.split("-") as [IndicatorVertical, IndicatorHorizontal];
   const placementClasses = [
@@ -51,9 +47,11 @@ export function Indicator({
   ];
   const hasContent = label !== undefined || icon !== undefined;
   const style =
-    offset !== undefined ? ({ "--indicator-offset": `${offset}px` } as CSSProperties) : undefined;
+    offset !== undefined
+      ? ({ ...styleProp, "--indicator-offset": `${offset}px` } as CSSProperties)
+      : styleProp;
   return (
-    <div className={cn("indicator", className)} style={style}>
+    <div className={cn("indicator", className)} style={style} {...rest}>
       {hasContent ? (
         <Badge
           className={cn(placementClasses, undefined)}

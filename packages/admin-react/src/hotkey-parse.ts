@@ -1,16 +1,9 @@
 /**
- * Pure helpers for the hotkey system. Chord syntax: `<mod>+<mod>+…+<key>`
- *
- * Examples: `mod+s`, `?`, `escape`, `mod+shift+k`, `arrowup`.
- *
- * Modifiers are case-insensitive. `mod` resolves to the platform's primary
- * command modifier — ⌘ (`meta`) on Apple platforms, `Ctrl` elsewhere — so
- * `mod+s` fires on the OS-native gesture (Cmd+S on macOS, Ctrl+S otherwise)
- * and the `<Kbd>` chip follows suit. The key is whatever
- * `KeyboardEvent.key` produces, lowercased. A shifted printable symbol already
- * encodes Shift in the character it produces, so bind `"?"` (not `"shift+?"`)
- * to catch `shift+/`; `shift` stays explicit for letters and named keys, so
- * `shift+a` and `shift+tab` remain distinct chords.
+ * Pure helpers for the hotkey system. Chord syntax: `<mod>+…+<key>`, e.g.
+ * `mod+s`, `?`, `mod+shift+k`. `mod` resolves to the platform's primary
+ * command modifier (⌘ on Apple, Ctrl elsewhere). The key is lowercased
+ * `KeyboardEvent.key`. Bind shifted printable symbols bare (`"?"`, not
+ * `"shift+?"`); `shift` stays explicit for letters and named keys.
  */
 
 export type Modifier = "ctrl" | "shift" | "alt" | "meta";
@@ -22,12 +15,8 @@ export interface ParsedChord {
 
 const MOD_ORDER: readonly Modifier[] = ["ctrl", "shift", "alt", "meta"];
 
-/**
- * Resolve the modifier `mod` aliases to. Apple platforms use ⌘ (`meta`) as the
- * primary command modifier; everywhere else it's Ctrl. Detected once at module
- * load (SSR-safe — the registry never dispatches server-side) and shared by the
- * parse and display layers so the binding and its `<Kbd>` chip always agree.
- */
+// Detected once at module load (SSR-safe — the registry never dispatches
+// server-side) and shared by parse and display so a binding and its `<Kbd>` chip agree.
 function detectApplePlatform(): boolean {
   if (typeof navigator === "undefined") return false;
   const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData;
@@ -100,11 +89,7 @@ export function canonicalize(chord: ParsedChord): string {
   return parts.join("+");
 }
 
-/**
- * Normalize a keyboard event to its canonical chord string. Returns `null`
- * if the event is a bare modifier press (`Shift` by itself, etc.) so callers
- * can short-circuit before a map lookup.
- */
+/** Canonical chord string for a keyboard event; `null` for a bare modifier press. */
 export function normalizeEvent(e: KeyboardEvent): string | null {
   const key = e.key.toLowerCase();
   if (key === "control" || key === "shift" || key === "alt" || key === "meta") {
@@ -112,18 +97,14 @@ export function normalizeEvent(e: KeyboardEvent): string | null {
   }
   const mods = new Set<Modifier>();
   if (e.ctrlKey) mods.add("ctrl");
-  // A shifted printable symbol (`?`, `:`, `+`, `~`, …) already encodes Shift in
-  // the character it produces, so a bare `useHotkey("?")` should match without
-  // the caller also writing `shift+?`. Fold Shift into single non-alphanumeric
-  // keys; letters and named keys (arrows, `tab`) keep it, so `shift+a` and
-  // `shift+tab` stay distinct chords.
+  // A shifted symbol (`?`, `:`) already encodes Shift in the character, so a bare
+  // `"?"` binding matches; letters and named keys keep Shift explicit.
   if (e.shiftKey && !isShiftedSymbol(key)) mods.add("shift");
   if (e.altKey) mods.add("alt");
   if (e.metaKey) mods.add("meta");
   return canonicalize({ mods, key });
 }
 
-/** A single printable symbol (`?`, `+`, `:`, …) — not a letter, digit, or named key. */
 function isShiftedSymbol(key: string): boolean {
   return key.length === 1 && !/[a-z0-9]/.test(key);
 }
@@ -144,7 +125,6 @@ const SPECIAL_KEY_LABELS: Record<string, string> = {
   delete: "Del",
 };
 
-// Apple renders chords as glyphs (⌃⇧⌥⌘); other platforms spell them out.
 const MOD_LABELS: Record<Modifier, string> = IS_APPLE
   ? { ctrl: "⌃", shift: "⇧", alt: "⌥", meta: "⌘" }
   : { ctrl: "Ctrl", shift: "Shift", alt: "Alt", meta: "Meta" };
@@ -182,10 +162,7 @@ function toAriaPart(chord: ParsedChord): string {
   return parts.join("+");
 }
 
-/**
- * Serialize one or more chords to the `aria-keyshortcuts` format
- * (space-separated alternatives, modifiers as `Control`/`Shift`/etc.).
- */
+/** Serialize chords to `aria-keyshortcuts` format (space-separated alternatives). */
 export function toAriaKeyShortcuts(chords: readonly ParsedChord[]): string {
   return chords.map(toAriaPart).join(" ");
 }

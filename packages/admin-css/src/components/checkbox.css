@@ -25,11 +25,8 @@
     @apply inline-flex items-center justify-center size-3 text-primary-content;
   }
 
-  /* Native input variant: state is driven by :checked / :indeterminate, the
-     glyph is masked onto ::after. Mirrors the Base UI button variant above so a
-     vanilla <input class="checkbox"> renders identically (indeterminate reads
-     the same as checked, matching the data-* rule). The mask is the same
-     checkmark polyline the React indicator draws. */
+  /* Native input variant — must render identically to the Base UI button rules
+     above (same checkmark polyline; indeterminate reads as checked). */
   input.checkbox {
     @apply appearance-none border-border-strong hover:border-text-muted;
     --checkbox-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
@@ -49,12 +46,9 @@
     mask: var(--checkbox-check) center / contain no-repeat;
   }
 
-  /* A <label> wrapping a checkbox + text lays out inline with a small gap.
-     Covers both the vanilla input.checkbox and Base UI's button.checkbox. */
   label:has(> .checkbox) {
     @apply inline-flex items-center gap-2 cursor-pointer;
-    /* Let a long label break and shrink beside the `shrink-0` box instead of
-       overflowing a narrow form column. The box stays put; the text wraps. */
+    /* Long labels wrap beside the shrink-0 box instead of overflowing. */
     overflow-wrap: break-word;
     min-width: 0;
   }

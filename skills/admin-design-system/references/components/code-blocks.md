@@ -2,8 +2,6 @@
 
 > Styled <pre> for logs, JSON, and terminal output.
 
-A styled `<pre>` with a neutral, theme-following surface for logs, JSON, terminal, and raw model output. No syntax highlighting; layer Shiki or Prism on a nested `<code>` if needed.
-
 For inline keyboard chips, use [Kbd](kbd.md) instead.
 
 ## Examples

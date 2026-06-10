@@ -28,8 +28,7 @@
            hover:bg-surface-muted
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
     list-style: none;
-    /* Let a long label break and shrink rather than forcing the row wider than
-       the item (the chevron sits at `margin-left: auto`). */
+    /* Let a long label break and shrink instead of widening the row. */
     overflow-wrap: break-word;
     min-width: 0;
   }
@@ -38,14 +37,11 @@
     display: none;
   }
 
-  /* Keep a leading icon at its intrinsic size; the chevron is the `::after`
-     below, which is already `flex-shrink: 0`. */
   .accordion-summary > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* Chevron — pushed to the end with margin-left: auto so any number of
-     leading items (label, optional icon) sit together on the start side. */
+  /* Chevron */
   .accordion-summary::after {
     content: "";
     width: 0.5rem;
@@ -64,16 +60,11 @@
 
   .accordion-content {
     @apply px-4 py-3 text-sm text-text border-t border-border;
-    /* Arbitrary body text — break long tokens instead of overflowing. */
     overflow-wrap: break-word;
   }
 
-  /* Smooth open/close via ::details-content. With interpolate-size enabled
-     on the parent, the height auto ↔ 0 transition animates instead of
-     snapping. content-visibility is pinned to visible so the closed content
-     still contributes to intrinsic width — without this, a shrink-to-fit
-     parent reflows narrower on close. Browsers without ::details-content
-     degrade to the native instant toggle. */
+  /* content-visibility stays visible so the closed content still contributes
+     intrinsic width — without it a shrink-to-fit parent reflows narrower on close. */
   .accordion-item::details-content {
     opacity: 0;
     height: 0;

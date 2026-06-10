@@ -19,9 +19,8 @@ export interface IndicatorProps extends ComponentProps<"div"> {
   /** Where the indicator sits relative to children. Default `"top-end"`. */
   placement?: IndicatorPlacement;
   /**
-   * Pulls the indicator toward the anchor's center along the placement direction.
-   * Useful for rounded anchors so the indicator aligns with the visual corner —
-   * e.g. `offset={4}` for a `rounded-md` button. Pixels.
+   * Pixels to pull the indicator toward the anchor's center — aligns it with
+   * the visual corner of rounded anchors (e.g. `4` for `rounded-md`).
    */
   offset?: number;
 }

@@ -141,7 +141,6 @@ export interface SidebarCollapsibleProps extends Omit<
   open?: boolean;
   /** Uncontrolled initial open state. */
   defaultOpen?: boolean;
-  /** Fires when the panel toggles open/closed. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -186,7 +185,6 @@ function SidebarCollapsible({
 
 export interface SidebarSubItemProps extends ComponentProps<"a"> {
   active?: boolean;
-  /** Leading icon. */
   icon?: IconProp;
   badge?: ReactNode;
 }

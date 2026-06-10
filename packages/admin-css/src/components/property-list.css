@@ -1,6 +1,4 @@
 @layer components {
-  /* Outer section — owns striped, hide-if-empty modifiers. Title
-     (optional) and the items grid stack vertically. */
   .property-list {
     @apply flex flex-col text-sm text-text;
   }
@@ -9,8 +7,7 @@
     @apply text-sm font-bold text-text mb-2;
   }
 
-  /* The <dl> itself is the two-track grid; <dt> auto-flows into column 1
-     and <dd> into column 2. */
+  /* The <dl> is the grid; <dt>/<dd> auto-flow into the two tracks. */
   .property-list-items {
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -25,15 +22,12 @@
     @apply text-text-muted;
   }
 
-  /* `min-w-0` lets the value's grid track shrink below its content; pair it
-     with `break-words` so long unbreakable values (IDs, hashes, emails, URLs,
-     file paths) break instead of overflowing the column. */
+  /* `min-w-0` lets the track shrink below its content so long unbreakable
+     values break instead of overflowing the column. */
   .property-list-value {
     @apply gap-2 min-w-0 break-words;
   }
 
-  /* Compact density — tighter rows for sidebar info blocks or very many
-     short attributes. */
   .property-list-compact .property-list-title {
     @apply mb-1;
   }
@@ -43,7 +37,6 @@
     @apply px-2 py-0.5 min-h-6;
   }
 
-  /* Numeric — right-align + tabular-nums on the value. */
   .property-list-value-numeric {
     justify-content: flex-end;
     @apply tabular-nums;
@@ -60,8 +53,7 @@
     display: none;
   }
 
-  /* Copy button — always emitted by the Value but kept out of layout entirely
-     unless this specific value opts in. */
+  /* Always emitted by the Value; kept out of layout unless the value opts in. */
   .property-list-copy {
     @apply inline-flex items-center justify-center
            ml-auto rounded
@@ -82,8 +74,7 @@
     pointer-events: none;
   }
 
-  /* Reveal on hover of either the label or the value of a copyable row, on
-     button focus, or while feedback is active. */
+  /* Reveal on hover of the row's label or value, on focus, or during feedback. */
   .property-list-label:has(+ .property-list-value-copyable):hover
     + .property-list-value
     .property-list-copy,

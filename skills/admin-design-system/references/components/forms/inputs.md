@@ -116,7 +116,7 @@ Use [FileInput](file-inputs.md) (`.file-input` class) to style the picker button
 
 ### Inside a Field
 
-See [Fields](fields.md) for label, description, and validation.
+See [Fields](fields.md).
 
 **Example**
 

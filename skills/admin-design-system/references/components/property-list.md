@@ -2,7 +2,7 @@
 
 > Label-and-value rows for one-entity-N-attributes panels.
 
-A `<dl>` with a label column that aligns across every row. Use it for the "one entity, N attributes" pattern: summary panels, identifier strips, metadata blocks. See [Table](tables.md) for tabular/multi-row data.
+A `<dl>` with a label column that aligns across every row. Use it for summary panels, identifier strips, metadata blocks. See [Table](tables.md) for tabular/multi-row data.
 
 ## Examples
 
@@ -38,8 +38,6 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 ```
 
 ### Striped
-
-Opt in with `striped` for zebra banding.
 
 **Example**
 

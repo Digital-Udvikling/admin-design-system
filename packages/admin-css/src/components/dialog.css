@@ -9,9 +9,8 @@
     width: calc(100% - 2rem);
     max-width: 32rem;
     max-height: calc(100dvh - 2rem);
-    /* Long titles/descriptions (filenames, IDs) break instead of pushing past
-       the fixed max-width. Inherited by title + description; `.dialog-title`
-       additionally needs `min-width: 0` below since it's a flex item. */
+    /* Long tokens (filenames, IDs) break instead of pushing past max-width;
+       inherited by title + description. */
     overflow-wrap: break-word;
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -22,9 +21,8 @@
       transform 150ms ease-out;
   }
 
-  /* `display: flex` only when open — without this gate, our flex rule would
-     override the UA `dialog:not([open]) { display: none }` and the dialog
-     would render in-flow before showModal() was ever called. */
+  /* Gate on [open] — an unconditional flex would override the UA's
+     `dialog:not([open]) { display: none }` and render the dialog in-flow. */
   .dialog[open] {
     display: flex;
   }
@@ -37,7 +35,6 @@
       background 150ms ease-out;
   }
 
-  /* Entry — animate from these values up to the open state. */
   @starting-style {
     .dialog[open] {
       opacity: 0;
@@ -64,8 +61,7 @@
 
   .dialog-title {
     @apply flex-1 flex items-center gap-2 text-lg font-semibold leading-tight m-0;
-    /* `flex-1` flex item — let it shrink so a long title wraps rather than
-       blowing the header past the dialog's max-width. */
+    /* Let a long title shrink and wrap rather than widen the header. */
     min-width: 0;
   }
 
@@ -73,16 +69,14 @@
     @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
   }
 
-  /* `flex-1 min-h-0` lets the body fill the remaining height and shrink below
-     its content (a flex item's default `min-height: auto` would refuse to), so
-     tall content scrolls here while the header/footer stay pinned. */
+  /* min-h-0 beats the flex default `min-height: auto` so tall content scrolls
+     here while the header/footer stay pinned. */
   .dialog-body {
     @apply flex-1 min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
   }
 
-  /* When the body is wrapped in a `<form>` (the form-dialog pattern), the form
-     becomes the dialog's sole flex child — make it the flex column so the body's
-     `flex-1 min-h-0` still resolves and scrolls. */
+  /* In the form-dialog pattern the form is the sole flex child; it must carry
+     the flex column so the body's `flex-1 min-h-0` still scrolls. */
   .dialog > form {
     @apply flex flex-col min-h-0 flex-1;
   }
@@ -92,9 +86,8 @@
            px-5 py-3
            border-t border-border
            bg-surface-muted;
-    /* Inherits the dialog's bottom-corner radius so the muted background
-       doesn't square off past the parent's rounded corners — previously
-       handled by `overflow: hidden` on `.dialog`, which clipped popups. */
+    /* Keep the muted background inside the parent's rounded corners — don't
+       use `overflow: hidden` on `.dialog` for this; it clips popups. */
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }

@@ -169,8 +169,7 @@ describe("Button", () => {
         </Button>,
       );
       pressCtrlS();
-      // A real `.click()` means React's onClick fires, and the event is a
-      // genuine MouseEvent (isTrusted is false in jsdom, but it is a click).
+      // isTrusted is false in jsdom, so assert the event type instead.
       expect(onClick).toHaveBeenCalledTimes(1);
       expect(onClick.mock.calls[0]?.[0].type).toBe("click");
     });
@@ -196,8 +195,6 @@ describe("Button", () => {
           Open
         </Button>,
       );
-      // The chord lands on the rendered <a>, not a synthetic call on the
-      // component — so anchor-rendered buttons can stay anchors and navigate.
       pressCtrlS();
       expect(onClick).toHaveBeenCalledTimes(1);
       expect(clickedTag).toBe("A");

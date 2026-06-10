@@ -3,10 +3,8 @@
     @apply flex flex-col;
   }
 
-  /* List + tab buttons. Same classes are produced by Base UI (React) and the
-     vanilla radio-input markup, so styling is shared. All selectors are
-     scoped under `.tabs` so generic `class="tab"` markup elsewhere on the
-     page (e.g. Starlight's own <Tabs> component) doesn't pick them up. */
+  /* All selectors are scoped under `.tabs` so generic `class="tab"` markup
+     elsewhere (e.g. Starlight's own <Tabs>) doesn't pick them up. */
   .tabs .tab-list {
     @apply inline-flex items-center gap-1 border-b border-border;
     /* Containing block for the sliding ::before marker (see @supports below) */
@@ -30,14 +28,11 @@
     @apply text-text;
   }
 
-  /* Keep a tab's leading icon at its intrinsic size when the label is long. */
   .tabs .tab > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* Vanilla radio-input pattern: hide the inputs visually, treat the following
-     <label class="tab"> as the selected tab when the radio is :checked.
-     Pairs with `:has(input:checked)` below to show the right panel. */
+  /* Vanilla radio pattern: hidden inputs; :checked styles the following label. */
   .tabs .tab-input {
     position: absolute;
     width: 1px;
@@ -57,9 +52,7 @@
     @apply outline-2 outline-offset-2 outline-focus;
   }
 
-  /* Default — underline marker on the active tab. The pseudo sits below the
-     .tab, overlapping the .tab-list bottom border. Applies to any tabs root
-     that isn't .tabs-boxed, so the bare `.tabs` default gets it for free. */
+  /* Default underline marker — the pseudo overlaps the .tab-list bottom border. */
   .tabs:not(.tabs-boxed) .tab {
     position: relative;
   }
@@ -81,13 +74,12 @@
     transform: scaleX(1);
   }
 
-  /* Boxed (segmented control) — adjacent tabs share borders. */
+  /* Boxed (segmented control). */
   .tabs-boxed .tab-list {
     @apply gap-0 p-0.5 border border-border rounded-md bg-surface-muted;
   }
 
-  /* Sit above the sliding thumb (the anchored ::before below) so labels stay
-     legible while it passes behind them. */
+  /* Sit above the sliding thumb (::before below) so labels stay legible. */
   .tabs-boxed .tab {
     @apply rounded relative z-[1];
   }
@@ -98,14 +90,11 @@
     @apply bg-surface text-text shadow-sm;
   }
 
-  /* Sliding active marker — the default, with zero extra DOM. The selected tab
-     becomes a CSS anchor; a single pseudo on the .tab-list tracks it via
-     anchor() insets, and the browser interpolates those insets as the anchor
-     moves between tabs — so vanilla `:checked` markup and React both slide.
-     `anchor-scope` confines the name to each list so multiple tab sets on a
-     page don't cross-anchor; gating the whole block on its support keeps the
-     effect off where it'd misbehave, leaving the per-tab marker above as the
-     fallback. */
+  /* Sliding active marker, zero extra DOM: the selected tab becomes a CSS
+     anchor and a single .tab-list pseudo tracks it via anchor() insets, which
+     the browser interpolates between tabs — vanilla `:checked` and React both
+     slide. `anchor-scope` confines the name per list so multiple tab sets
+     don't cross-anchor; the per-tab marker above remains the fallback. */
   @supports (anchor-scope: --x) {
     .tabs .tab-list {
       anchor-scope: --tab-thumb;
@@ -123,8 +112,7 @@
       position-anchor: --tab-thumb;
     }
 
-    /* Bordered: a 2px bar sliding along the list's bottom edge — replaces the
-       per-tab ::after grow. */
+    /* Bordered: a bar sliding along the bottom edge replaces the per-tab ::after grow. */
     .tabs:not(.tabs-boxed) .tab::after {
       display: none;
     }
@@ -175,7 +163,6 @@
     }
   }
 
-  /* Full width — list stretches across the container, tabs share space evenly. */
   .tabs-full-width:not([data-orientation="vertical"]) .tab-list {
     @apply flex w-full;
   }
@@ -184,7 +171,6 @@
     @apply flex-1 justify-center;
   }
 
-  /* Sizes — cascade to nested tabs. */
   .tabs-sm .tab {
     @apply px-2 h-7 text-xs;
   }
@@ -198,8 +184,7 @@
     @apply pt-3 outline-none;
   }
 
-  /* Vanilla radio-input pattern: only the panel whose data-value matches the
-     checked input is shown. Each .tabs root scopes its own selectors. */
+  /* Vanilla pattern: show only the panel whose data-value matches the checked input. */
   .tabs .tab-panel {
     display: none;
   }
@@ -213,14 +198,11 @@
     display: block;
   }
 
-  /* Base UI path: it renders the panel and applies `hidden`, so the rule
-     above is a no-op there. Reinstate display when the panel is shown by
-     Base UI. */
+  /* Base UI applies `hidden` itself — reinstate display for its panels. */
   .tabs .tab-panel:not([hidden]):not([data-value]) {
     display: block;
   }
 
-  /* Vertical orientation. */
   .tabs[data-orientation="vertical"] {
     @apply flex-row gap-3;
   }

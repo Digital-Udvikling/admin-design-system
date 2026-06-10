@@ -1,14 +1,11 @@
 @layer components {
   .field {
     @apply flex flex-col gap-1.5;
-    /* Label/description/error are often operator- or validation-supplied — let
-       long tokens break instead of overflowing a narrow form column. Inherited
-       by all three. Mirrors `.alert`. */
+    /* Long operator-/validation-supplied tokens break instead of overflowing;
+       inherited by label, description, and error. */
     overflow-wrap: break-word;
   }
 
-  /* Horizontal layout — pairs a control (typically a switch) with its label
-     on one row. Use when the label belongs beside the control, not above it. */
   .field-row {
     @apply flex-row items-center gap-3;
   }
@@ -34,8 +31,7 @@
     @apply text-xs text-danger leading-relaxed;
   }
 
-  /* When the field is in an invalid state, tint the contained control.
-     Base UI applies data-invalid on the Field root once validation fails. */
+  /* Base UI sets data-invalid on the Field root when validation fails. */
   .field[data-invalid] .input,
   .field[data-invalid] .textarea,
   .field[data-invalid] .select,

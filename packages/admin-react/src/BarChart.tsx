@@ -23,10 +23,7 @@ export interface BarChartContainerProps extends ComponentProps<"div"> {
   variant?: BarChartVariant;
 }
 
-/**
- * The bare bar-chart grid — no bars. Compose `<BarChart.Bar>` children by hand
- * (e.g. to interleave a reference line). Sets `role="img"`; pass `aria-label`.
- */
+/** Bare grid, no bars — compose `<BarChart.Bar>` by hand. Sets `role="img"`; pass `aria-label`. */
 function BarChartContainer({
   orientation = "horizontal",
   size = "md",
@@ -38,8 +35,7 @@ function BarChartContainer({
 }: BarChartContainerProps) {
   return (
     <div
-      // A chart is a single composite image, so role="img" + aria-label is the
-      // correct ARIA pattern — there is no <img> tag to prefer here.
+      // A chart is a single composite image — role="img" + aria-label, with no <img> to prefer.
       // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="img"
       className={cn(
@@ -71,10 +67,8 @@ export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
 }
 
 /**
- * One bar. Renders a label (only when present), the fill (with a native
- * `title`), and an always-present value cell (hidden by CSS unless the chart
- * carries `.chart-values`). Stays `currentColor` unless an explicit colour is
- * given — single-series bars never cycle the SERIES palette.
+ * One bar. The value cell always renders (CSS hides it without `.chart-values`);
+ * fill stays `currentColor` — single-series bars never cycle SERIES.
  */
 function Bar({ datum, value, label, color, className, style, ...rest }: BarProps) {
   const v = datum?.value ?? value ?? 0;
@@ -105,12 +99,7 @@ export interface BarChartProps extends ComponentProps<"div"> {
   variant?: BarChartVariant;
 }
 
-/**
- * Single-series bar chart. Computes the max, sets `--chart-max` on the
- * container (bars inherit it), and generates an overridable `aria-label`.
- * Horizontal by default; pass `orientation="vertical"` for columns. For
- * hand-composed layouts use `<BarChart.Container>` + `<BarChart.Bar>`.
- */
+/** Single-series bar chart. For hand-composed layouts use `<BarChart.Container>` + `<BarChart.Bar>`. */
 function BarChartRoot({
   data,
   max,

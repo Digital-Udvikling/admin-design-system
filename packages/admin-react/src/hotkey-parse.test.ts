@@ -1,8 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-// `mod` resolution and the chord display glyphs are decided once at module load
-// from `navigator.platform`, so each platform branch is exercised by stubbing
-// navigator and re-importing the module fresh.
+// Platform is detected once at module load, so each branch stubs navigator and re-imports fresh.
 describe("hotkey-parse mod resolution", () => {
   afterEach(() => {
     vi.unstubAllGlobals();

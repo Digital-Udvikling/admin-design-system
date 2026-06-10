@@ -1,6 +1,5 @@
 @layer components {
-  /* A single keyboard chip — one modifier or key. Stack inside a `.kbd-group`
-     for multi-key chords. */
+  /* One key per chip; stack inside `.kbd-group` for chords. */
   .kbd {
     @apply inline-flex items-center justify-center
            min-w-[1.25em] h-[1.4em] px-[0.35em]
@@ -10,15 +9,12 @@
            whitespace-nowrap tabular-nums;
   }
 
-  /* Cluster of `.kbd` chips. Always emitted by the React `<Kbd>` component so
-     selectors can target the whole binding as a unit. */
+  /* Always emitted by the React `<Kbd>` so selectors can target the whole binding. */
   .kbd-group {
     @apply inline-flex items-center gap-1 align-middle;
   }
 
-  /* Inside an action surface (button, menu item), the chip derives its
-     colour from the host so it stays legible on any variant without
-     fighting the surrounding chrome. */
+  /* Derive the chip colour from the host so it stays legible on any variant. */
   .btn .kbd,
   .menu-item .kbd {
     color: currentColor;
@@ -26,20 +22,18 @@
     border-color: color-mix(in srgb, currentColor 22%, transparent);
   }
 
-  /* Subtle dimming for the leading cluster on a button so the label keeps
-     visual priority. The cluster, not each chip, so a `Ctrl S` reads as
-     a single unit. */
+  /* Dim the cluster (not each chip, so the chord reads as one unit) to keep
+     the label's visual priority. */
   .btn > .kbd-group {
     opacity: 0.85;
   }
 
-  /* Right-pin the binding inside menu items — matches native menu convention. */
+  /* Matches native menu convention. */
   .menu-item > .kbd-group {
     margin-inline-start: auto;
   }
 
-  /* Right-pin inside vertical button groups only. Standalone buttons keep the
-     inline-trailing layout (chip sits next to the label). */
+  /* Vertical groups only — standalone buttons keep the chip beside the label. */
   .btn-group-vertical > .btn > .kbd-group {
     margin-inline-start: auto;
   }

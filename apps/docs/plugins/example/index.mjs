@@ -15,39 +15,19 @@ const PRETTIER_OPTS = {
   semi: true,
 };
 
-/**
- * Private identifiers we own and inject. The `__` prefix sidesteps name
- * collisions with whatever the author already imports.
- */
+/** Injected identifiers; the `__` prefix avoids collisions with author imports. */
 const RENDERER_NAME = "__ExampleRenderer";
 const PREVIEW_PREFIX = "__ExamplePreview";
 const RENDERER_IMPORT = `import ${RENDERER_NAME} from "@example/Example.astro";`;
 
 /**
- * Rewrites `:::example` directives into the existing Example renderer.
- * Authoring lives in plain markdown:
- *
- *     :::example
- *
- *     ```html
- *     <button class="btn btn-primary">Save</button>
- *     ```
- *
- *     ```tsx
- *     <Button variant="primary">Save</Button>
- *     ```
- *
- *     :::
- *
- * Either fence may be omitted. The tsx fence is compiled into a default-
- * exported React component, registered as a virtual module
- * (`virtual:example-preview/<hash>.tsx`), and hydrated as a client island
- * by Astro. Wrapping the whole preview in one component means Astro routes
- * the entire subtree through a single React SSR pass and hydrates the same
- * tree on the client — required for context-publishing primitives (`Field`,
- * `RadioGroup`, `Tabs.Root`, `Select.Root`) to reach their descendants, and
- * for Base UI's stateful components (Tabs, Checkbox, Radio, Switch, Select,
- * Menu) to be interactive at all.
+ * Rewrites `:::example` directives (with optional ```html / ```tsx fences) into
+ * the Example renderer. The tsx fence is compiled into a default-exported
+ * component, registered as a virtual module (`virtual:example-preview/<hash>.tsx`),
+ * and hydrated as one client island — a single React SSR pass + hydration tree
+ * is required for context-publishing primitives (`Field`, `RadioGroup`,
+ * `Select.Root`) to reach descendants and for Base UI's stateful components to
+ * be interactive at all.
  *
  * @returns {(tree: import("mdast").Root, file: import("vfile").VFile) => Promise<void>}
  */
@@ -68,10 +48,8 @@ export default function remarkExample() {
 
     if (jobs.length === 0) return;
 
-    // Capture the author's top-level ImportDeclarations BEFORE we inject our
-    // own. Each virtual preview module is built on top of these so that
-    // identifiers like `<Checkbox>` or `<Field>` resolve the same way they
-    // do in the surrounding MDX.
+    // Capture author imports before injecting our own; each preview module
+    // reuses them so identifiers resolve as they do in the surrounding MDX.
     const userImportsBlock = collectMdxImports(tree).join("\n");
 
     /** @type {string[]} */
@@ -152,8 +130,7 @@ function collectMdxImports(tree) {
     }
     for (const stmt of program.body) {
       if (stmt.type !== "ImportDeclaration") continue;
-      // Astro components (other docs-only helpers like <Reference>) can't live
-      // inside the React preview's virtual TSX module — skip them.
+      // Astro components can't live inside the React preview's TSX module.
       if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
       sources.push(generate(stmt).trim());
     }
@@ -162,9 +139,8 @@ function collectMdxImports(tree) {
 }
 
 /**
- * Build the TSX source for one preview's virtual module. The returned source
- * is hashed to derive the module id, so any change here invalidates the
- * cache across the workspace.
+ * TSX source for one preview's virtual module. The source is hashed into the
+ * module id, so any change here invalidates the cache.
  *
  * @param {string} importsBlock
  * @param {string} reactSource
@@ -205,9 +181,8 @@ function collectFences(children) {
 }
 
 /**
- * Multi-line strings are fine — @mdx-js/mdx compiles JSX attributes into JS
- * object properties (`_jsx(Example, { html: "..." })`), not JSX `attr="..."`
- * syntax, so newlines are just `\n` in the emitted string literal.
+ * Multi-line values are safe — @mdx-js/mdx compiles JSX attributes into JS
+ * object properties, not `attr="..."` syntax, so newlines stay literal.
  *
  * @param {string} name
  * @param {string} value
@@ -217,9 +192,6 @@ function stringAttr(name, value) {
 }
 
 /**
- * Inject a single `mdxjsEsm` node at the top of the document carrying the
- * renderer import and every preview-module import for this file.
- *
  * @param {import("mdast").Root} tree
  * @param {string} source
  */
@@ -293,11 +265,9 @@ async function formatReact(code, file, node) {
 }
 
 /**
- * oxfmt returns malformed input *unchanged* with the parse errors in `errors`
- * rather than throwing. Left unchecked, an invalid fence flows through —
- * rendering broken HTML, or compiling to an invalid `virtual:example-preview`
- * module that crashes far from its source with no MDX line. Fail the build at
- * the directive node instead, surfacing oxfmt's codeframe.
+ * oxfmt returns malformed input *unchanged* with parse errors in `errors`
+ * rather than throwing; unchecked, an invalid fence crashes far from its
+ * source with no MDX line. Fail at the directive node with oxfmt's codeframe.
  *
  * @param {{ errors?: Array<{ severity?: string, message?: string, codeframe?: string }> }} result
  * @param {import("vfile").VFile} file

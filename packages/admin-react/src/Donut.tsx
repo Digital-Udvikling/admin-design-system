@@ -31,7 +31,7 @@ export interface DonutRingProps extends Omit<ComponentProps<"div">, "color"> {
   thickness?: string;
 }
 
-/** The masked conic-gradient ring. Builds `--donut-segments` from the data. */
+/** The masked conic-gradient ring. */
 function Ring({ data, pie, thickness, className, style, ...rest }: DonutRingProps) {
   const vars: Record<string, string | number> = { "--donut-segments": buildDonutSegments(data) };
   if (thickness !== undefined && !pie) vars["--donut-thickness"] = thickness;
@@ -64,11 +64,9 @@ export interface DonutProps extends Omit<ComponentProps<"div">, "color"> {
 }
 
 /**
- * Donut (or `pie`) breakdown. Builds the cumulative conic-gradient string from
- * `data`, overlays an optional `centerLabel`, and generates an overridable
- * `aria-label`. Per-slice read-outs live on the optional `legend` rows — a
- * conic slice has no element to carry a `title`. Resize by overriding
- * `--chart-size` (it inherits to the figure) or via `size`.
+ * Donut (or `pie`) breakdown. Per-slice read-outs live on the `legend` rows —
+ * a conic slice has no element to carry a `title`. Resize via `size` or
+ * `--chart-size`.
  */
 function DonutRoot({
   data,
@@ -84,8 +82,7 @@ function DonutRoot({
 }: DonutProps) {
   return (
     <div
-      // A chart is a single composite image, so role="img" + aria-label is the
-      // correct ARIA pattern — there is no <img> tag to prefer here.
+      // A chart is a single composite image — role="img" + aria-label, with no <img> to prefer.
       // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="img"
       className={cn(["chart", inline && "chart-inline"], className)}

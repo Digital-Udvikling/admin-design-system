@@ -1,19 +1,13 @@
 @layer components {
   .alert {
     @apply flex flex-col gap-1 w-full px-3 py-2 rounded-md border text-sm text-text;
-    /* Inherited by the title, description, and any bare-text body so long
-       words/URLs break instead of overflowing the (often grid-tracked) body. */
     overflow-wrap: break-word;
   }
 
-  /* Leading icon as a direct child switches the layout to a two-column grid:
-     icon spans all rows on the left, title/description stack on the right.
-     No wrapper needed — works with `<i class="ti …">`, `@tabler/icons-react`,
-     or any other inline SVG. */
+  /* A leading icon switches the layout to a two-column grid: icon left, text right. */
   .alert:has(> :is(i, svg):first-child) {
     display: grid;
-    /* `minmax(0, 1fr)` (not the default `minmax(auto, 1fr)`) lets the text
-       column shrink below its longest word so the body wraps. */
+    /* `minmax(0, 1fr)` lets the text column shrink below its longest word. */
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: 0.5rem;
     row-gap: 0.25rem;
@@ -25,10 +19,7 @@
     line-height: 1.25;
   }
 
-  /* With a title/description, declare two explicit rows so the icon can span
-     them (`grid-row: 1 / -1` only resolves correctly against an explicit grid)
-     and force the text parts into column 2 so the description doesn't wrap
-     under the icon. */
+  /* Explicit rows — the icon's `grid-row: 1 / -1` only resolves against an explicit grid. */
   .alert:has(> :is(i, svg):first-child):has(> .alert-title) {
     grid-template-rows: auto auto;
     align-items: start;
@@ -38,20 +29,14 @@
     grid-row: 1 / -1;
   }
 
-  /* Grid items default to `min-width: auto` and won't shrink below their
-     longest word; `min-width: 0` lets the title/description wrap inside the
-     text column. */
+  /* Grid items default to `min-width: auto` and won't shrink below their longest word. */
   .alert > :is(.alert-title, .alert-description) {
     grid-column: 2;
     min-width: 0;
   }
 
-  /* Solid status fill — the variant color carries the signal, and the title,
-     leading icon, and body all sit on top in the matching `-content` color
-     (white on the colored accents, black on bright yellow). Title/icon inherit
-     that content color from the root, so no per-variant text rule is needed.
-     The description drops to 85% opacity to read as secondary text without
-     introducing a second hue. */
+  /* Solid status fills. Title and icon inherit the `-content` color from the
+     root, so no per-variant text rule is needed. */
   .alert-info {
     @apply bg-info border-info text-info-content;
   }

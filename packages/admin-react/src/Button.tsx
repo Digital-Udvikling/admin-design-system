@@ -20,12 +20,10 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
   /** Trailing icon. Pass a component (`iconTrailing={IconArrowRight}`) or an element. */
   iconTrailing?: IconProp;
   /**
-   * Keyboard shortcut bound to this button. Pressing the chord dispatches a
-   * native click on the underlying element, so `onClick` fires, `type="submit"`
-   * submits the form, and an anchor-rendered button (`render={<a href>}`)
-   * navigates — all the native side effects of a real click. Same syntax as
-   * `useHotkey`. Pass an array for alternatives — only the first is rendered as
-   * a visual chip.
+   * Keyboard shortcut that dispatches a native click on the rendered element —
+   * `onClick` fires, `type="submit"` submits, an anchor-rendered button
+   * (`render={<a href>}`) navigates. Same syntax as `useHotkey`. Pass an array
+   * for alternatives — only the first is rendered as a visual chip.
    */
   hotkey?: string | readonly string[];
 }
@@ -46,9 +44,8 @@ export function Button({
   ref,
   ...rest
 }: ButtonProps) {
-  // Latch the rendered element so the hotkey can dispatch a real `.click()` on
-  // it (native side effects: form submit, anchor navigation). Merge with any
-  // consumer-supplied `ref` so passing one still works.
+  // Latch the rendered element so the hotkey can dispatch a real `.click()`
+  // with its native side effects (form submit, anchor navigation).
   const elementRef = useRef<HTMLElement | null>(null);
   const setRef = useCallback(
     (node: HTMLElement | null) => {

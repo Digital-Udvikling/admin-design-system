@@ -13,7 +13,6 @@ export interface PaginationProps extends Omit<ComponentProps<"nav">, "onChange">
   page: number;
   /** Total number of pages. */
   total: number;
-  /** Called when a page number, prev, or next button is activated. */
   onPageChange: (page: number) => void;
   /** Pages shown either side of `page`. Default 1. */
   siblingCount?: number;
@@ -23,17 +22,11 @@ export interface PaginationProps extends Omit<ComponentProps<"nav">, "onChange">
   previousIcon?: IconProp;
   /** Icon for the next-page control. Defaults to a built-in chevron. */
   nextIcon?: IconProp;
-  /** Override the renderer for one item — useful for routing libraries that
-   *  expect their own Link component (Next.js, TanStack Router, etc.). */
+  /** Override the renderer for one item — for routing libraries that supply their own Link. */
   renderItem?: (item: PaginationItem) => ReactNode;
 }
 
-/**
- * Compute the items to render for a given `page` / `total`. Always returns:
- *   previous, ...numbers/ellipses, next
- * with `boundaryCount` items on each end and `siblingCount` items around `page`.
- * Pure: no React state, safe to call during render.
- */
+/** Pure (safe during render): previous, numbers/ellipses (`boundaryCount` at each end, `siblingCount` around `page`), next. */
 export function getPaginationItems({
   page,
   total,

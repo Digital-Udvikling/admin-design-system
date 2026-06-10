@@ -19,12 +19,9 @@ export interface StatCardProps extends ComponentProps<"div"> {
 }
 
 /**
- * Compact KPI tile — `label / value / detail`. Renders a `.card` shell (so it
- * shares the surface, border, radius, shadow, and every card modifier) with an
- * inverted inner hierarchy: the value dominates, the label is a small
- * annotation. `compact`/`bordered` map to the shared `.card-compact`/
- * `.card-bordered` modifiers. For free-form tiles, use `<Card>`; for
- * label/value tables, use `<PropertyList>`.
+ * Compact KPI tile (label / value / detail) on a `.card` shell, so it shares
+ * every card modifier — `compact`/`bordered` map to `.card-compact`/`.card-bordered`.
+ * Free-form tiles: `<Card>`; label/value tables: `<PropertyList>`.
  */
 export function StatCard({
   variant = "default",
@@ -38,8 +35,7 @@ export function StatCard({
   children,
   ...rest
 }: StatCardProps) {
-  // Match the vanilla bundle: the label row exists only when there's label
-  // text. An icon alone never emits a label-less row.
+  // Vanilla-bundle parity: an icon alone never emits a label-less row.
   const hasLabel = label !== undefined;
   return (
     <div

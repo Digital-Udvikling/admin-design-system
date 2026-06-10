@@ -3,12 +3,8 @@
     @apply w-full text-sm text-text border-collapse;
   }
 
-  /* Default cell padding/alignment/divider — applied via descendant selectors
-     for hand-written markup AND via explicit classes for cases where the
-     consumer renders a non-<td>/<th> element. :where() keeps specificity at 0
-     so authored utilities and modifiers can win without !important. Covers
-     thead/tbody/tfoot uniformly so a hand-written `<tfoot> <td>` lands on
-     the same padding as the React `.table-cell`. */
+  /* Descendant selectors cover hand-written markup; explicit classes cover
+     non-<td>/<th> renders. :where() keeps specificity 0 so authored utilities win. */
   .table :where(th, td),
   .table-cell,
   .table-header-cell {
@@ -20,27 +16,21 @@
     @apply font-medium text-text-muted bg-surface-muted border-b-border-strong whitespace-nowrap;
   }
 
-  /* Body cells only — let a long unbreakable value (ID, hash, email, URL, file
-     path) break inside the cell instead of widening the column and forcing the
-     whole table into horizontal overflow. Header cells stay `whitespace-nowrap`
-     above. */
+  /* Body cells only — break long unbreakable values (IDs, hashes, URLs) instead
+     of forcing the table into horizontal overflow. */
   .table :where(td),
   .table-cell {
     overflow-wrap: break-word;
   }
 
-  /* Drop the divider on the very last row, whether it lives in tbody (no
-     tfoot present) or in tfoot — so the table doesn't double-border against
-     a surrounding container. `.table > :last-child` resolves to the final
-     section element (browsers wrap a loose `<tr>` in an implicit <tbody>). */
+  /* No divider on the final row — `> :last-child` is the last section, tbody or
+     tfoot (browsers wrap a loose <tr> in an implicit tbody). */
   .table > :last-child > tr:last-child :where(td),
   .table > :last-child > tr:last-child .table-cell {
     @apply border-b-0;
   }
 
-  /* Alignment — `data-align` works equally for hand-written
-     `<td data-align="right">` and for React's `<Table.Cell align="right">`,
-     so consumers never need a Tailwind utility in their markup. */
+  /* `data-align` serves both hand-written markup and React's `align` prop. */
   .table :where(th, td)[data-align="right"] {
     @apply text-right;
   }
@@ -48,15 +38,12 @@
     @apply text-center;
   }
 
-  /* Right-aligned with tabular-nums so currency/totals columns don't shimmy. */
   .table-cell-numeric {
     @apply text-right tabular-nums;
   }
 
-  /* Narrow first-column gutter for row-level status icons. The inline icon
-     rule normalizes Tabler webfont (`<i class="ti …">`) against React's
-     `<IconCircleCheck size={16}>` SVG so both deliveries land at the same
-     16px box and the same vertical baseline. */
+  /* Status-icon gutter; the child rule normalizes Tabler webfont <i> and React
+     SVG icons to the same 16px box and baseline. */
   .table-cell-gutter {
     @apply w-6 px-0 text-center text-text-muted;
   }
@@ -82,10 +69,8 @@
     @apply px-4 py-3;
   }
 
-  /* Sticky header — requires a scrolling ancestor (e.g.
-     `<div class="overflow-auto" style="max-height: …">`). The wrapper isn't
-     added by the component; it would have no vanilla equivalent and would
-     break compositions like `<details><table>…`. */
+  /* Sticky header — requires a scrolling ancestor. The component adds no wrapper:
+     it'd have no vanilla equivalent and breaks compositions like <details><table>. */
   .table-sticky thead :where(th) {
     @apply sticky top-0 z-10 bg-surface-muted;
   }
@@ -98,9 +83,7 @@
     @apply bg-surface-muted;
   }
 
-  /* Selection — pure CSS via :has(). Fires for native checkboxes,
-     Base UI's checkbox via [data-checked], and the explicit
-     [data-selected] hook for programmatic selection without a checkbox. */
+  /* [data-selected] is the hook for programmatic selection without a checkbox. */
   .table tbody tr:has(input[type="checkbox"]:checked),
   .table tbody tr:has(.checkbox[data-checked]),
   .table tbody tr[data-selected] {
@@ -112,11 +95,9 @@
     @apply bg-primary-muted;
   }
 
-  /* Whole-row link — the first <a> in the row gets its hit-area expanded to
-     fill the row via ::after. Consumer still writes the actual anchor
-     (preserves <Link>, plain <a href>, etc.). Other in-row anchors/buttons
-     should sit above the spanning pseudo-element with `relative` + non-auto
-     z-index; `.btn` already qualifies. */
+  /* The row's first <a> gets its hit-area expanded over the row via ::after;
+     other in-row anchors/buttons need `relative` + non-auto z-index to stay
+     clickable (`.btn` already qualifies). */
   .table-row-link {
     @apply relative cursor-pointer;
   }

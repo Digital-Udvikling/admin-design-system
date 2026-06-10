@@ -1,9 +1,7 @@
 import { useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
 
-// Inline SVGs match Tabler's stroke conventions (24px viewBox, stroke-width 2,
-// round caps + joins, currentColor). admin-react stays icon-library-agnostic;
-// consumers don't need @tabler/icons-react or the Tabler webfont.
+// Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
 function CopyGlyph({ className }: { className: string }) {
   return (
     <svg
@@ -49,11 +47,9 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
   striped?: boolean;
   /** Tightens row height and padding for very dense panels. */
   compact?: boolean;
-  /** Collapses the whole section when every item rendered the auto em-dash
-   *  fallback for an empty value. */
+  /** Collapses the section when every value rendered the auto em-dash fallback. */
   hideIfAllEmpty?: boolean;
-  /** Optional section heading rendered as `<h3 class="property-list-title">`
-   *  above the items grid. */
+  /** Section heading rendered as `<h3 class="property-list-title">`. */
   title?: ReactNode;
 }
 
@@ -92,7 +88,6 @@ export interface PropertyListItemProps extends Omit<ComponentProps<"dd">, "title
   value?: ReactNode;
   /** Right-aligns the value cell + applies `tabular-nums`. Mirrors `Table.Cell.numeric`. */
   numeric?: boolean;
-  /** Opts this row into the copy affordance. */
   copyable?: boolean;
   /** Overrides the text the copy button writes to the clipboard. */
   copyValue?: string;
@@ -104,9 +99,7 @@ function isEmptyValue(value: ReactNode): boolean {
   return false;
 }
 
-// Item is a thin wrapper that emits a <dt>/<dd> pair as siblings (no host
-// element). In shorthand mode it generates the subparts; in children mode it
-// renders them verbatim. Either way, no extra DOM wrapper is introduced.
+// Emits a <dt>/<dd> sibling pair with no host element; children mode renders them verbatim.
 function PropertyListItem({
   label,
   value,
@@ -144,8 +137,7 @@ function PropertyListLabel({ className, ...rest }: PropertyListLabelProps) {
 export interface PropertyListValueProps extends ComponentProps<"dd"> {
   numeric?: boolean;
   copyable?: boolean;
-  /** Marks the cell as carrying an auto-rendered em-dash. The list-level
-   *  `hideIfAllEmpty` collapses the section when every value is empty. */
+  /** Marks an auto-rendered em-dash cell; drives the list-level `hideIfAllEmpty`. */
   empty?: boolean;
   /** Overrides the text the copy button writes to the clipboard. */
   copyValue?: string;

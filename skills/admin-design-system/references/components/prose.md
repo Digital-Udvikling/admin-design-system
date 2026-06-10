@@ -10,8 +10,6 @@ When you control the markup, reach for the dedicated components instead: [Link](
 
 ### Rendered markdown
 
-One wrapper styles every descendant — headings, paragraphs, lists, links, inline code, blockquotes, and tables.
-
 **Example**
 
 ```html

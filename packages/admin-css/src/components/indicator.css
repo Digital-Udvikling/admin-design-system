@@ -1,23 +1,13 @@
 @layer components {
-  /*
-   * Wrapper for placing a small floating element (badge, count, status dot)
-   * at a corner or edge of another element — notification badges on icon
-   * buttons, status dots on avatars, "new" markers on tiles.
-   *
-   * Composition is driven by CSS custom properties so a horizontal modifier
-   * (start/center/end) and a vertical modifier (top/middle/bottom) compose
-   * naturally without needing a 3×3 grid of explicit selectors.
-   */
+  /* Floats a small element (badge, dot) at a corner/edge of an anchor.
+     Placement is var-driven so a horizontal and a vertical modifier compose
+     without a 3×3 grid of selectors. */
   .indicator {
     @apply relative inline-flex w-max;
   }
 
-  /*
-   * Auto-offset for common rounded anchors so the indicator aligns with the
-   * visual corner instead of the geometric box corner. Roughly half the
-   * anchor's border-radius. Override per-instance by passing the `offset`
-   * prop or setting `--indicator-offset` inline.
-   */
+  /* Auto-offset (~half the anchor's border-radius) aligns with the visual
+     corner of rounded anchors; override `--indicator-offset` inline. */
   .indicator:has(> .btn),
   .indicator:has(> .input) {
     --indicator-offset: 2px;
@@ -32,14 +22,9 @@
     bottom: var(--indicator-bottom, auto);
     inset-inline-start: var(--indicator-start, auto);
     inset-inline-end: var(--indicator-end, 0);
-    /*
-     * Two composed translates: the first half-overlaps the corner; the second
-     * pulls the item back toward the anchor center by `--indicator-offset`
-     * (default 0). The pull direction is set per-modifier so it tracks the
-     * placement automatically — e.g. `top-end` pulls left-and-down. Useful
-     * for anchors with rounded corners: try `--indicator-offset: 4px` for a
-     * `rounded-md` button.
-     */
+    /* The first translate half-overlaps the corner; the second pulls back
+       toward the anchor centre by `--indicator-offset`, direction set
+       per-modifier. */
     transform: translate(var(--indicator-tx, 50%), var(--indicator-ty, -50%))
       translate(
         var(--indicator-offset-x, calc(-1 * var(--indicator-offset, 0px))),
@@ -87,11 +72,7 @@
     --indicator-offset-y: calc(-1 * var(--indicator-offset, 0px));
   }
 
-  /*
-   * Status dot — a small saturated circle for label-less presence/status.
-   * A `.badge` with no content is still a pill (fixed height, horizontal
-   * padding); a dot needs to actually be round.
-   */
+  /* Status dot — an empty `.badge` is still a pill; a dot must be round. */
   .indicator-dot {
     @apply inline-block w-2 h-2 rounded-full bg-text-muted;
   }

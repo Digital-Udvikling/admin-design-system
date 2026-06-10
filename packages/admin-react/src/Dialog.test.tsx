@@ -4,9 +4,8 @@ import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Dialog } from "./Dialog";
 
-// happy-dom's HTMLDialogElement only partially implements the modal API
-// (showModal / close / "close" event). Stub them so tests can assert call
-// sequences and observe the `[open]` attribute the way browsers do.
+// happy-dom's HTMLDialogElement lacks the modal API; stub showModal/close so
+// tests can observe `[open]` and the "close" event like a browser.
 beforeEach(() => {
   vi.spyOn(HTMLDialogElement.prototype, "showModal").mockImplementation(
     function (this: HTMLDialogElement) {
@@ -144,9 +143,7 @@ describe("Dialog", () => {
       const showModal = vi.spyOn(HTMLDialogElement.prototype, "showModal");
       const consumerRef = { current: null as HTMLDialogElement | null };
       const { rerender } = render(<Dialog.Container ref={consumerRef} open={false} />);
-      // Consumer ref receives the element...
       expect(consumerRef.current?.tagName).toBe("DIALOG");
-      // ...and the internal ref still drives showModal when open flips true.
       rerender(<Dialog.Container ref={consumerRef} open={true} />);
       expect(showModal).toHaveBeenCalledTimes(1);
       expect(getDialog()).toHaveAttribute("open");

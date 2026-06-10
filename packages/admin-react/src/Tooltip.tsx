@@ -59,7 +59,6 @@ function TooltipPopup({
 }
 
 export interface TooltipProps extends Omit<TooltipRootProps, "children"> {
-  /** Tooltip body — string or rich node. */
   content: ReactNode;
   side?: TooltipPopupProps["side"];
   align?: TooltipPopupProps["align"];

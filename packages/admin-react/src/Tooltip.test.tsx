@@ -6,9 +6,8 @@ import { Dialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 import { adminSelector } from "./test-setup";
 
-// Base UI's TooltipTrigger defaults `delay` to 600ms. Pass `delay={0}` /
-// `closeDelay={0}` per-trigger in interaction tests to drive hover/focus
-// transitions synchronously without juggling fake timers.
+// Base UI's trigger defaults `delay` to 600ms; `delay={0}` / `closeDelay={0}`
+// drives hover/focus transitions synchronously without fake timers.
 
 describe("Tooltip", () => {
   it("smoke: renders trigger; popup mounts when defaultOpen", () => {
@@ -52,7 +51,6 @@ describe("Tooltip", () => {
       const popup = await screen.findByRole("tooltip");
       expect(popup).toHaveTextContent("Hint");
       await user.unhover(trigger);
-      // Either fully unmounted, or marked closed via data-ending-style.
       const after = document.body.querySelector(adminSelector("tooltip"));
       expect(after === null || after.hasAttribute("data-ending-style")).toBe(true);
     });
@@ -71,8 +69,8 @@ describe("Tooltip", () => {
         </>,
       );
       expect(document.body.querySelector(adminSelector("tooltip"))).toBeNull();
-      await user.tab(); // before
-      await user.tab(); // target
+      await user.tab();
+      await user.tab();
       expect(await screen.findByRole("tooltip")).toHaveTextContent("Hint");
     });
 
@@ -123,10 +121,8 @@ describe("Tooltip", () => {
     });
 
     it("portals the popup into an ancestor <Dialog> instead of document.body", () => {
-      // Regression guard: same top-layer constraint as `<Select>` — popups
-      // portaled to `document.body` paint behind a modal `<dialog>`. The
-      // wrapper consumes `PortalContainerContext` so the popup renders
-      // inside the ancestor dialog.
+      // Same top-layer constraint as <Select>: popups portaled to document.body
+      // paint behind a modal <dialog>, so the wrapper portals into the dialog.
       render(
         <Dialog.Container open>
           <Tooltip.Root defaultOpen>

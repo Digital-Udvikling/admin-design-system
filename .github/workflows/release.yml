@@ -1,17 +1,11 @@
 name: Release
 
-# Path-triggered: bump a package's `version` in package.json on `main` and this
-# workflow builds, publishes, and tags each package whose version is ahead of
-# its `<name>@<version>` git tag.
+# Bump a package version on `main`; each package ahead of its `<name>@<version>`
+# git tag is built, published, and tagged.
 #
-# Auth: OIDC trusted publishing — no NPM_TOKEN secret required.
-# Configure the trusted publisher on each npm package page:
-#   Settings → Trusted Publishers → Add → GitHub Actions
-#     Repository owner:  Digital-Udvikling
-#     Repository:        admin-design-system
-#     Workflow filename: release.yml
-#     Environment:       (leave empty)
-# Must be done once per package (@aortl/admin-css, @aortl/admin-react).
+# Auth: OIDC trusted publishing (no NPM_TOKEN). Configure once per package on its
+# npm page: Settings → Trusted Publishers → Add → GitHub Actions, with owner
+# Digital-Udvikling, repo admin-design-system, workflow release.yml, no environment.
 
 on:
   push:
@@ -71,13 +65,10 @@ jobs:
         if: steps.plan.outputs.packages != ''
         run: pnpm install --frozen-lockfile
 
-      # Gate the irreversible publish + tag on the same checks CI runs. The
-      # release workflow fires on the version-bump push in parallel with ci.yml
-      # and has no dependency on it, so without this a commit that bumps a
-      # version while tests/lint/types are red would publish (with a provenance
-      # attestation) and tag a broken release — permanently, since the tag then
-      # makes the plan step skip re-publishing it. `build` runs first because
-      # the docs type-check (astro check) needs the built workspace types.
+      # This runs in parallel with ci.yml (no dependency on it), so gate the
+      # irreversible publish + tag here — a red version-bump commit would otherwise
+      # publish a broken release permanently, since its tag makes the plan step skip
+      # re-publishing. `build` first: the docs type-check needs built workspace types.
       - name: Validate before publishing
         if: steps.plan.outputs.packages != ''
         run: |
@@ -87,10 +78,8 @@ jobs:
           pnpm check-types
           pnpm test
 
-      # Publish via `pnpm pack` + `npm publish <tarball>` rather than
-      # `pnpm publish`: pnpm pack rewrites `workspace:*` deps to real
-      # versions in the tarball, and npm CLI 11.5+ has first-class support
-      # for OIDC trusted publishing and provenance — pnpm publish does not.
+      # `pnpm pack` rewrites `workspace:*` deps to real versions, and npm 11.5+
+      # supports OIDC trusted publishing + provenance — `pnpm publish` does neither.
       - name: Build, publish, and tag each package
         if: steps.plan.outputs.packages != ''
         run: |

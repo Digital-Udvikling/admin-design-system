@@ -1,7 +1,6 @@
 @layer components {
-  /* 2px bottom stripe is always rendered — defaults to a neutral gray via
-     `--color-system-accent` and brand-shifts when the consuming app overrides
-     that variable at :root (see also `.footer` and `.brand-tile`). */
+  /* The bottom stripe brand-shifts when the consuming app overrides
+     `--color-system-accent` at :root (see also `.footer` and `.brand-tile`). */
   .navbar {
     @apply flex items-center gap-3 px-4 h-12
            bg-surface-muted text-text
@@ -31,19 +30,16 @@
     @apply bg-primary-muted text-primary;
   }
 
-  /* Keep brand/item icons at their intrinsic size in a crowded bar. */
   .navbar-brand > :is(i, svg),
   .navbar-item > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* Right-aligned slot for actions: shop selector, user menu, etc. */
   .navbar-actions {
     @apply flex items-center gap-2 ml-auto;
   }
 
-  /* Hamburger; hidden above the md breakpoint. The three lines are drawn
-     with one element + two box-shadow strokes — no SVG needed. */
+  /* Hamburger — three lines from one element + two box-shadow strokes. */
   .navbar-mobile-toggle {
     @apply inline-flex items-center justify-center size-9 -ml-2
            rounded-md text-text bg-transparent

@@ -24,9 +24,8 @@
     @apply inline-flex size-1.5 rounded-full bg-primary-content;
   }
 
-  /* Native input variant: state is driven by :checked, the dot is ::after.
-     Mirrors the Base UI span variant above so a vanilla <input class="radio">
-     renders identically (the dot matches .radio-indicator's size + colour). */
+  /* Mirrors the Base UI span variant above — the ::after dot must match
+     .radio-indicator's size and colour. */
   input.radio {
     @apply appearance-none border-border-strong hover:border-text-muted;
   }
@@ -49,12 +48,9 @@
     @apply flex-col gap-2 items-start;
   }
 
-  /* A <label> wrapping a radio + text lays out inline with a small gap.
-     Covers both the vanilla input.radio and Base UI's span.radio. */
   label:has(> .radio) {
     @apply inline-flex items-center gap-2 cursor-pointer;
-    /* Let a long label break and shrink beside the `shrink-0` control instead
-       of overflowing a narrow form column. */
+    /* Long labels break beside the `shrink-0` control instead of overflowing. */
     overflow-wrap: break-word;
     min-width: 0;
   }

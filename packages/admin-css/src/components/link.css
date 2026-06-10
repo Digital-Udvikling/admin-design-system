@@ -5,21 +5,15 @@
            rounded-sm transition-colors duration-150
            hover:text-link-hover
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
-    /* Links are often the URL itself — let the long token break across lines
-       instead of overflowing a narrow row, sidebar, or table cell. The leading
-       icon stays `flex-shrink: 0` below. */
+    /* Links are often the URL itself — break instead of overflowing a narrow cell. */
     overflow-wrap: break-word;
   }
 
-  /* Keep a leading icon from squishing when the link text wraps. The trailing
-     external arrow is already `flex: none` below. */
   .link > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* External affordance: a trailing ↗ rendered from CSS so it ships identically
-     in both bundles — no JS, no icon-font dependency. The arrow is a masked box
-     tinted with `currentColor`, so it tracks the link's color (incl. hover). */
+  /* Trailing ↗ drawn in CSS — no JS or icon-font dependency in either bundle. */
   .link-external {
     --link-external-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 7 7 17'/%3E%3Cpath d='M8 7h9v9'/%3E%3C/svg%3E");
   }

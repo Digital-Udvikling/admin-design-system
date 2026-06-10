@@ -1,26 +1,13 @@
 #!/usr/bin/env node
 /**
- * Build the scoped variant of admin.css.
- *
- * Input: the same CSS the unscoped bundle ships, with Tailwind's normal
- * @layer structure. Output: every rule wrapped in `@scope (._ao-admin-root)`,
- * with admin class names prefixed `_ao-` so they can't collide with host
- * classes. Globals that can't be meaningfully scoped (`@property`,
- * `@font-face`, `@keyframes`, `@charset`, `@import`) are hoisted above
- * the scope; `@layer` statements are dropped (the bundle ships unlayered).
- *
- * Within the scope:
- * - `:root` / `html` / `body` are rewritten to `:scope` — `rewriteSelector`.
- * - Class selectors are prefixed `_ao-` — `prefixClassesProcessor`.
- * - `@layer NAME { ... }` blocks are flattened in declared order —
- *   `flattenLayersInScope`. (Layered rules always lose to unlayered host
- *   rules of any specificity, which is why we flatten.)
- * - Every selector's specificity is bumped by prepending `:scope` —
- *   `bumpSpecificity` for the cascade math.
- * - A curated typography reset is prepended as the first rule —
- *   `prependBareElementReset` for the cascade math.
- *
- * Cascade invariants are locked in by `wrap-scoped.test.mjs`.
+ * Build the scoped variant of admin.css: every rule wrapped in
+ * `@scope (._ao-admin-root)`, admin class names prefixed `_ao-` so they can't
+ * collide with host classes. Globals that can't be scoped (`@property`,
+ * `@font-face`, `@keyframes`, `@charset`, `@import`) are hoisted above the
+ * scope. `@layer` is dropped and blocks are flattened in declared order —
+ * layered rules always lose to unlayered host rules of any specificity, so
+ * the bundle ships unlayered. Cascade invariants are locked in by
+ * `wrap-scoped.test.mjs`.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -51,10 +38,8 @@ const SELECTOR_REWRITES = new Map([
 ]);
 
 function rewriteSelector(selector) {
-  // Split the selector list on top-level commas via the AST — a naive
-  // `selector.split(",")` also splits commas inside quoted attribute values
-  // (`[data-x="1,2"]`) and functional pseudo-classes (`:is(.a, .b)`), then
-  // rejoins with `", "`, corrupting the literal. Parsing keeps them intact.
+  // Split on top-level commas via the AST — a naive `split(",")` corrupts
+  // commas inside quoted attribute values (`[data-x="1,2"]`) and `:is(.a, .b)`.
   const root = selectorParser().astSync(selector);
   const seen = new Set();
   const out = [];
@@ -68,9 +53,8 @@ function rewriteSelector(selector) {
   return out.join(", ");
 }
 
-// Use a real selector parser so we only touch `class` nodes — attribute
-// values (`[href*=".com"]`), escaped class names (`.md\:flex`, `.\32 xl\:flex`)
-// and pseudo-classes are all handled correctly without regex acrobatics.
+// Only touch `class` nodes — attribute values, escaped class names
+// (`.md\:flex`, `.\32 xl\:flex`) and pseudo-classes stay intact.
 const prefixClassesProcessor = selectorParser((root) => {
   root.walkClasses((node) => {
     node.value = `${PREFIX}${node.value}`;
@@ -81,13 +65,9 @@ function prefixClassesInSelector(selector) {
   return prefixClassesProcessor.processSync(selector);
 }
 
-// Selectors that reference `&` defer to the parent rule's selector — its
-// own bump propagates through expansion. Bumping a nested `&:hover` would
-// emit `:scope &:hover`, which expands to `:scope <parent>:hover` and stacks
-// `:scope` redundantly (or, when the parent was bumped, becomes
-// `:scope :scope <parent>:hover` — the inner `:scope` matches nothing,
-// breaking the rule). Tailwind's output rarely has nesting by this stage
-// but we guard anyway.
+// `&` selectors inherit the parent's bump through expansion; bumping them
+// would stack `:scope` redundantly — or emit `:scope :scope <parent>:hover`,
+// which matches nothing.
 function selectorHasNesting(selector) {
   let found = false;
   selector.walk((node) => {
@@ -118,22 +98,15 @@ function classifyFirstNode(selector) {
   return null;
 }
 
-// Bump every selector's specificity by prepending `:scope`. Once layer
-// wrappers are flattened, the scoped bundle competes with host page rules
-// purely on specificity, so an unbumped admin `._ao-card-title` (0,1,0)
-// would lose its `font-size` to admin's own bumped base reset
-// `:scope h3` (0,1,1) when applied to `<h3 class="_ao-card-title">`. Bumping
-// every admin selector preserves the within-admin ordering Tailwind's
-// layers used to provide (components beat base, utilities beat components
-// by source order) and keeps admin ahead of unlayered host rules of the
-// same shape.
-//
-// Selectors already referencing `:scope` (Tailwind reset rules, our
-// `:root`/`html`/`body` rewrites) are left alone, as are `&`-nested
-// selectors. First compounds that could match the scope root — classes,
-// attributes, pseudo-classes, pseudo-elements, the universal `*` — emit
-// both a compound form and a descendant form so a user's
-// `<AdminRoot className="grid">` still picks up `._ao-grid`.
+// Prepend `:scope` to every selector. With layers flattened, the bundle
+// competes with host rules purely on specificity, and an unbumped
+// `._ao-card-title` (0,1,0) would lose its `font-size` to admin's own bumped
+// reset `:scope h3` (0,1,1). Bumping preserves the ordering Tailwind's layers
+// used to provide and keeps admin ahead of unlayered host rules of the same
+// shape. Selectors already referencing `:scope` and `&`-nested ones are left
+// alone. First compounds that could match the scope root emit both a compound
+// and a descendant form, so `<AdminRoot className="grid">` still picks up
+// `._ao-grid`.
 function bumpSpecificity(selectorList) {
   const root = selectorParser().astSync(selectorList);
   const out = [];
@@ -150,14 +123,11 @@ function bumpSpecificity(selectorList) {
 
     switch (cls) {
       case "tag":
-        // Scope root is a div; can't be a matched element type. Descendant
-        // form is sufficient.
+        // The scope root is a div, so a type selector can't match it.
         out.push(`:scope ${original}`);
         break;
       case "universal": {
-        // Drop the leading `*` to build the compound form (covers the
-        // scope root). Anything else in the first compound and any
-        // combinators that follow stay verbatim.
+        // Drop the leading `*` for the compound form; the rest stays verbatim.
         const firstCombinatorIdx = sel.nodes.findIndex((n) => n.type === "combinator");
         const firstCompoundEnd = firstCombinatorIdx === -1 ? sel.nodes.length : firstCombinatorIdx;
         const firstCompound = sel.nodes.slice(0, firstCompoundEnd);
@@ -190,11 +160,9 @@ function bumpSpecificity(selectorList) {
   return out.join(", ");
 }
 
-// `from` / `to` / `0%` etc. inside `@keyframes` aren't selectors and must not
-// be rewritten — `:scope to { ... }` is invalid CSS and breaks downstream
-// parsers (sass-loader, lightningcss). Tailwind keeps `@keyframes` nested
-// inside `@layer components { ... }`, so the top-level hoist pass doesn't
-// catch them; skip rule-walking inside any keyframes ancestor instead.
+// Keyframe steps (`from`/`to`/`0%`) aren't selectors — `:scope to` is invalid
+// CSS. Tailwind nests `@keyframes` inside `@layer components`, so the hoist
+// pass misses them; skip rule-walking under any keyframes ancestor instead.
 function isInsideKeyframes(rule) {
   for (let p = rule.parent; p; p = p.parent) {
     if (p.type === "atrule" && /(?:^|-)keyframes$/.test(p.name)) return true;
@@ -264,22 +232,14 @@ function flattenLayersInScope(scope, layerOrder) {
   }
 }
 
-// A single rule prepended as the first child of the scope. It reclaims a
-// small set of typography properties on the bare element selectors a host
-// stylesheet most commonly styles directly (headings, p, a, list parts,
-// form controls, table parts).
-//
-// The selector list is wrapped in `:where()` so the rule's specificity
-// stays at (0,1,0) regardless of how many tags we add. That lets admin's
-// bumped class rules (`:scope ._ao-card-title`, (0,2,0)) and a consumer's
-// CSS-module class on the same element (also (0,1,0), but loaded after
-// admin.css) both still win; a bare host rule like `h3 { font-family }`
-// (0,0,1) loses. Host rules with class/id ancestors (`.page h3`, (0,1,1))
-// will beat the reset — intentional escape hatch.
-//
-// `inherit` is the right value for inherited properties; their cascade
-// resolves from `:scope`, which carries admin's typography. `normal` and
-// `none` are the initial values for the two non-inherited properties.
+// Prepended as the scope's first rule: reclaims typography on the bare
+// element selectors hosts most commonly style. `:where()` pins specificity
+// at (0,1,0) however many tags are listed — admin's bumped class rules
+// (0,2,0) and a consumer's later-loaded class (0,1,0) still win, a bare host
+// `h3 { font-family }` (0,0,1) loses, and `.page h3` (0,1,1) beats the reset
+// as an intentional escape hatch. Inherited properties resolve from `:scope`,
+// which carries admin's typography; `normal`/`none` are the initial values
+// of the two non-inherited ones.
 const BARE_ELEMENT_RESET = `
 :scope :where(
   h1, h2, h3, h4, h5, h6,
@@ -315,13 +275,9 @@ function shouldHoist(node) {
 export function wrap(css) {
   const root = postcss.parse(css);
 
-  // Collect layer order from the original input before we strip the
-  // statements — `flattenLayersInScope` needs it to re-emit layered blocks
-  // in declared order, but the statements themselves are dropped from the
-  // output. Layered rules always lose to unlayered host rules of any
-  // specificity, so we flatten the bundle to unlayered; the statements
-  // would otherwise leak Tailwind's layer order into the consumer's
-  // document, which is document-wide by spec.
+  // Capture layer order before stripping the statements, which would
+  // otherwise declare Tailwind's layer order document-wide in the consumer's
+  // document.
   const layerOrder = collectDeclaredLayerOrder(root);
 
   const hoisted = [];

@@ -2,8 +2,6 @@
 
 > What this system optimizes for.
 
-A system for internal admin tooling.
-
 ## Built for admin tooling
 
 Operators sit in these screens all day. The defaults reflect that:

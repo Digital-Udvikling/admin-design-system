@@ -7,8 +7,7 @@
     transition: width 150ms ease;
   }
 
-  /* Hidden checkbox that drives the collapsed state via :has(). Lives inside
-     <Sidebar.CollapseToggle>, but :has() finds it from anywhere in .sidebar. */
+  /* Hidden checkbox; :has() reads the collapsed state from anywhere in .sidebar. */
   .sidebar-toggle {
     position: absolute;
     width: 1px;
@@ -24,7 +23,6 @@
     width: var(--app-shell-sidebar-w-collapsed, 56px);
   }
 
-  /* Hide labels, group headings, badges, and tree panels in collapsed mode. */
   .sidebar:has(.sidebar-toggle:checked) .sidebar-label,
   .sidebar:has(.sidebar-toggle:checked) .sidebar-group-label,
   .sidebar:has(.sidebar-toggle:checked) .sidebar-badge,
@@ -33,7 +31,6 @@
     display: none;
   }
 
-  /* Center the icon in collapsed mode. */
   .sidebar:has(.sidebar-toggle:checked) .sidebar-item,
   .sidebar:has(.sidebar-toggle:checked) .sidebar-subitem,
   .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible-trigger {
@@ -93,7 +90,6 @@
            bg-surface-strong text-text-muted;
   }
 
-  /* Native <details> for tree groups. */
   .sidebar-collapsible {
     @apply flex flex-col;
     interpolate-size: allow-keywords;
@@ -136,8 +132,7 @@
     overflow: hidden;
   }
 
-  /* Smooth panel expansion via ::details-content (modern browsers).
-     Older browsers degrade to the native instant toggle. */
+  /* Browsers without ::details-content degrade to the instant native toggle. */
   .sidebar-collapsible::details-content {
     opacity: 0;
     height: 0;

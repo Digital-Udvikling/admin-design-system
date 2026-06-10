@@ -1,38 +1,15 @@
-/**
- * Design tokens — based on Flexoki (https://stephango.com/flexoki).
- *
- * Two layers, both registered with @theme so Tailwind generates utilities
- * (bg-blue-600, bg-primary, ...) and emits them as CSS variables you can
- * reference or override at runtime.
- *
- *   1. Palette — the Flexoki ramps (paper, black, base, red, orange,
- *      yellow, green, cyan, blue, purple, magenta). Replaces Tailwind's
- *      default colors entirely. Tones are absolute and identical in
- *      light/dark mode — Flexoki's inverted ramp pairs (paper↔black,
- *      base-50↔base-950, blue-600↔blue-400, …) live in the semantic
- *      layer below.
- *
- *   2. Semantic — purpose-named aliases (primary, surface, danger, ...)
- *      pointing at palette tones via `light-dark()`. The active value
- *      tracks the cascaded `color-scheme` declared on :root: auto by
- *      default (system preference), forced via `[data-theme="dark"]` or
- *      `[data-theme="light"]`. Components only reference these aliases,
- *      so they pick up dark mode for free.
- *
- *      Reskin by remapping the alias:
- *
- *        :root { --color-primary: var(--color-green-600); }
- *
- *      or replacing the palette tone underneath:
- *
- *        :root { --color-blue-600: oklch(0.55 0.18 250); }
+/*
+ * Design tokens — Flexoki (https://stephango.com/flexoki), two @theme layers:
+ * palette ramps (absolute tones, identical in light and dark) and semantic
+ * aliases declared via light-dark(), which flip with the cascaded color-scheme.
+ * Components reference only the semantic aliases; reskin by remapping an alias
+ * (--color-primary) or the palette tone underneath it.
  */
 
 @theme static {
   /* Wipe Tailwind's default palette — Flexoki is the single source of truth. */
   --color-*: initial;
 
-  /* Base */
   --color-paper: #ffffff;
   --color-black: #0f0f0f;
   --color-base-50: #fafafa;
@@ -49,7 +26,6 @@
   --color-base-900: #272727;
   --color-base-950: #1b1b1b;
 
-  /* Red */
   --color-red-50: #ffe1d5;
   --color-red-100: #ffcabb;
   --color-red-150: #fdb2a2;
@@ -64,7 +40,6 @@
   --color-red-900: #3e1715;
   --color-red-950: #261312;
 
-  /* Orange */
   --color-orange-50: #ffe7ce;
   --color-orange-100: #fed3af;
   --color-orange-150: #fcc192;
@@ -79,7 +54,6 @@
   --color-orange-900: #40200d;
   --color-orange-950: #27180e;
 
-  /* Yellow */
   --color-yellow-50: #faeec6;
   --color-yellow-100: #f6e2a0;
   --color-yellow-150: #f1d67e;
@@ -94,7 +68,6 @@
   --color-yellow-900: #3a2d04;
   --color-yellow-950: #241e08;
 
-  /* Green */
   --color-green-50: #edeecf;
   --color-green-100: #dde2b2;
   --color-green-150: #cdd597;
@@ -109,7 +82,6 @@
   --color-green-900: #252d09;
   --color-green-950: #1a1e0c;
 
-  /* Cyan */
   --color-cyan-50: #ddf1e4;
   --color-cyan-100: #bfe8d9;
   --color-cyan-150: #a2dece;
@@ -124,7 +96,6 @@
   --color-cyan-900: #122f2c;
   --color-cyan-950: #101f1d;
 
-  /* Blue */
   --color-blue-50: #e1eceb;
   --color-blue-100: #c6dde8;
   --color-blue-150: #abcfe2;
@@ -139,7 +110,6 @@
   --color-blue-900: #12253b;
   --color-blue-950: #101a24;
 
-  /* Purple */
   --color-purple-50: #f0eaec;
   --color-purple-100: #e2d9e9;
   --color-purple-150: #d3cae6;
@@ -154,7 +124,6 @@
   --color-purple-900: #261c39;
   --color-purple-950: #1a1623;
 
-  /* Magenta */
   --color-magenta-50: #fee4e5;
   --color-magenta-100: #fccfda;
   --color-magenta-150: #f9b9cf;
@@ -171,13 +140,9 @@
 }
 
 @theme static {
-  /*
-   * Typography — only the font stack is tokenized. Sizes, weights, and
-   * line-heights compose from Tailwind's default scale at the call site
-   * (`text-sm`, `font-semibold`, `leading-tight`, …) — the system is
-   * dense and small enough that an extra semantic layer would just be
-   * indirection. Override `--font-sans` to swap the entire UI font.
-   */
+  /* Only the font stack is tokenized — sizes, weights, and line-heights
+     compose from Tailwind's default scale at the call site; a semantic
+     layer there would just be indirection. */
   --font-sans:
     "IBM Plex Sans", "IBM Plex Sans Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, sans-serif;
@@ -188,71 +153,50 @@
 
 @theme static {
   /*
-   * Semantic tokens — each declared once via `light-dark()`. The two
-   * branches are Flexoki's symmetric ramp pairs:
-   *   - paper ↔ black, base-50 ↔ base-950, base-150 ↔ base-850, …
-   *   - accent-600 ↔ accent-400, accent-50 ↔ accent-950
-   *
-   * On accent buttons in dark mode the base shifts to the lighter
-   * accent-400 tone, so `content` (text on top) flips to black for
-   * legibility — the same trade-off `warning` already makes in both
-   * modes against bright yellow.
+   * Light/dark branches are Flexoki's symmetric ramp pairs (paper↔black,
+   * base-50↔base-950, accent-600↔accent-400). Dark mode fills with the
+   * lighter accent-400, so `-content` text flips to black for legibility.
    */
 
-  /* Surfaces */
   --color-surface: light-dark(var(--color-paper), var(--color-black));
   --color-surface-muted: light-dark(var(--color-base-50), var(--color-base-950));
   --color-surface-strong: light-dark(var(--color-base-100), var(--color-base-900));
 
-  /* Text */
   --color-text: light-dark(var(--color-black), var(--color-base-200));
   --color-text-muted: light-dark(var(--color-base-600), var(--color-base-500));
 
-  /* Borders */
   --color-border: light-dark(var(--color-base-150), var(--color-base-850));
   --color-border-strong: light-dark(var(--color-base-300), var(--color-base-700));
 
-  /* Code — neutral surface for <pre>-style output blocks (logs, JSON, LLM
-     output). One step darker than `surface-strong` in light mode so the
-     block visually carves out from regular chrome; matches `surface-muted`
-     depth in dark mode. */
+  /* <pre>-style output blocks (logs, JSON). One step darker than
+     `surface-strong` in light mode so the block carves out from chrome. */
   --color-code-surface: light-dark(var(--color-base-150), var(--color-base-950));
   --color-code-text: light-dark(var(--color-base-800), var(--color-base-200));
 
-  /* Modal scrim — the dimming layer behind a `<dialog>` and the mobile
-     sidebar drawer. One tint from black so both overlays match and stay
-     retintable from a single token. */
+  /* Dimming layer behind `<dialog>` and the mobile sidebar drawer — one
+     token so both overlays match. */
   --color-scrim: color-mix(in oklab, var(--color-black) 40%, transparent);
 
-  /* Primary — high-contrast neutral (ink). Inverts with the mode: near-black
-     on light surfaces, near-white on dark ones, so a solid `btn-primary` fill
-     always reads against the surface. Unlike the colored accents, `-hover`
-     moves *toward* the surface (you can't darken past ink), and `-muted` is a
-     neutral gray wash — `bg-primary-muted` selected/active states read as a
-     quiet fill rather than a colored highlight. The interactive blue that used
-     to live here now drives `--color-link` / `--color-focus` and `info`. */
+  /* Primary is neutral ink, inverting with the mode. Unlike the colored
+     accents, `-hover` moves *toward* the surface (you can't darken past ink)
+     and `-muted` is a gray wash, so selected/active fills read quiet rather
+     than colored. */
   --color-primary: light-dark(var(--color-black), var(--color-paper));
   --color-primary-hover: light-dark(var(--color-base-800), var(--color-base-200));
   --color-primary-muted: light-dark(var(--color-base-150), var(--color-base-800));
   --color-primary-content: light-dark(var(--color-paper), var(--color-black));
 
-  /* Link / focus — the interactive blue (Flexoki blue, formerly `primary`).
-     Split into two tokens so link text and focus rings can be retinted
-     independently of the `info` status color, even though both start blue. */
+  /* Separate tokens so link text and focus rings can be retinted
+     independently of the `info` status color, even though all start blue. */
   --color-link: light-dark(var(--color-blue-600), var(--color-blue-400));
   --color-link-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
   --color-focus: light-dark(var(--color-blue-600), var(--color-blue-400));
 
-  /* System accent — per-app brand signal. Drives the navbar's 2px bottom
-     stripe and the footer's matching top stripe (both always on), plus
-     `.brand-tile` backgrounds. Defaults to a neutral gray so an un-branded
-     shell reads as chrome rather than a brand mark; override at :root (or
-     via inline style on .app-shell) to brand-shift a whole app. The -hover,
-     -muted, and -content siblings derive from the base via `color-mix`,
-     so a single override propagates. Mixing toward `--color-text` and
-     `--color-surface` (themselves `light-dark()` pairs) keeps the
-     derivations in step with light/dark mode without nesting light-dark()
-     inside color-mix(). Bright accents (e.g. yellow) may want a manual
+  /* Per-app brand signal. Defaults to neutral gray so an un-branded shell
+     reads as chrome; override at :root (or inline on .app-shell) to brand a
+     whole app. -hover/-muted derive via color-mix toward --color-text /
+     --color-surface (themselves light-dark() pairs), so one override
+     propagates and stays mode-aware. Bright accents may need a manual
      -content override for contrast. */
   --color-system-accent: light-dark(var(--color-base-600), var(--color-base-400));
   --color-system-accent-hover: color-mix(
@@ -267,38 +211,30 @@
   );
   --color-system-accent-content: light-dark(var(--color-paper), var(--color-black));
 
-  /* Danger — red */
   --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
   --color-danger-hover: light-dark(var(--color-red-700), var(--color-red-300));
   --color-danger-muted: light-dark(var(--color-red-50), var(--color-red-950));
   --color-danger-content: light-dark(var(--color-paper), var(--color-black));
 
-  /* Success — green */
   --color-success: light-dark(var(--color-green-600), var(--color-green-400));
   --color-success-hover: light-dark(var(--color-green-700), var(--color-green-300));
   --color-success-muted: light-dark(var(--color-green-50), var(--color-green-950));
   --color-success-content: light-dark(var(--color-paper), var(--color-black));
 
-  /* Warning — yellow (stays bright in both modes; dark text either way) */
+  /* Warning stays bright in both modes; content text is dark either way */
   --color-warning: var(--color-yellow-400);
   --color-warning-hover: light-dark(var(--color-yellow-500), var(--color-yellow-300));
   --color-warning-muted: light-dark(var(--color-yellow-50), var(--color-yellow-950));
   --color-warning-content: var(--color-black);
 
-  /* Info — Flexoki blue (the calm "FYI" status color) */
   --color-info: light-dark(var(--color-blue-600), var(--color-blue-400));
   --color-info-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
   --color-info-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
   --color-info-content: light-dark(var(--color-paper), var(--color-black));
 }
 
-/*
- * Activate `light-dark()` resolution. `light dark` follows the OS
- * preference; the attribute overrides force a specific mode and also
- * flip native form controls, scrollbars, etc. The attribute selector
- * isn't scoped to :root so subtrees can opt into a different mode (e.g.
- * a dark hero section on an otherwise light page).
- */
+/* `light dark` follows the OS; [data-theme] forces a mode. Deliberately not
+   scoped to :root so any subtree can opt into a different mode. */
 :root {
   color-scheme: light dark;
 }
@@ -309,12 +245,8 @@
   color-scheme: light;
 }
 
-/*
- * Align Tailwind's `dark:` variant with the same resolution rules so
- * authored utilities (`dark:shadow-lg`, …) match what the tokens do.
- * Default v4 uses prefers-color-scheme alone, which would ignore the
- * [data-theme] override.
- */
+/* Tailwind's default `dark:` is prefers-color-scheme only; realign it so
+   authored utilities follow [data-theme] like the tokens do. */
 @custom-variant dark {
   &:where([data-theme="dark"], [data-theme="dark"] *) {
     @slot;

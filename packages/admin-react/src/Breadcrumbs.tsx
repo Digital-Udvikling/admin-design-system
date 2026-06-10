@@ -5,7 +5,6 @@ import { renderIcon, type IconProp } from "./icon";
 export interface BreadcrumbsProps extends ComponentProps<"nav"> {
   /** Custom separator between items. Defaults to "/" from CSS. */
   separator?: ReactNode;
-  /** Accessible label for the nav landmark. */
   "aria-label"?: string;
 }
 
@@ -77,8 +76,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
 
 export type BreadcrumbSeparatorProps = ComponentProps<"li">;
 
-// `role="presentation"` so the separator doesn't get announced as a list item;
-// `<li>` so the markup is valid inside `<ol>`.
+// `role="presentation"` keeps it out of the list semantics; `<li>` keeps the `<ol>` valid.
 function BreadcrumbSeparator({ className, children, ...rest }: BreadcrumbSeparatorProps) {
   return (
     <li

@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
 
-/** A single data point. Only `value` is required. */
 export interface ChartDatum {
   /** Category name. When present, renders a label (and feeds the aria-label). */
   label?: string;
@@ -14,11 +13,8 @@ export type ChartSize = "sm" | "md" | "lg";
 export type ChartType = "bar" | "stack" | "donut" | "pie";
 
 /**
- * Multi-series palette — references EXISTING Flexoki palette tokens, NOT a new
- * token layer. Cycled by index (`SERIES[i % len]`); a datum's own `color`
- * overrides. Vanilla authors copy the same sequence (it's documented), so both
- * bundles render identical colours. Single-series charts ignore this entirely
- * and follow `currentColor`.
+ * Multi-series palette of existing Flexoki tokens, not a new token layer. The
+ * documented vanilla sequence copies this exactly — both bundles must match.
  */
 export const SERIES = [
   "var(--color-blue-500)",
@@ -31,7 +27,6 @@ export const SERIES = [
   "var(--color-red-400)",
 ] as const;
 
-/** Resolve a segment's colour: explicit `datum.color` wins, else cycle SERIES. */
 export function seriesColor(datum: ChartDatum, index: number): string {
   return datum.color ?? SERIES[index % SERIES.length]!;
 }
@@ -42,11 +37,7 @@ export function computeMax(data: ChartDatum[], explicit?: number): number {
   return Math.max(1, ...data.map((d) => d.value));
 }
 
-/**
- * Build the cumulative `conic-gradient` stop string for a donut/pie:
- * `<color> <from>deg <to>deg, …`. Degrees accumulate across segments. A
- * non-positive total yields a single neutral fill so the ring isn't blank.
- */
+/** Cumulative `conic-gradient` stops. A non-positive total yields a neutral fill so the ring isn't blank. */
 export function buildDonutSegments(data: ChartDatum[]): string {
   const total = data.reduce((sum, d) => sum + Math.max(0, d.value), 0);
   if (total <= 0) return "var(--color-surface-strong) 0 100%";
@@ -69,10 +60,7 @@ const TYPE_NOUN: Record<ChartType, string> = {
   pie: "Pie chart",
 };
 
-/**
- * Auto-generated summary for the chart root's `aria-label`. Callers that pass
- * their own `aria-label` skip this. Example: "Bar chart. Mon: 80, Tue: 52."
- */
+/** Chart-root `aria-label` summary, e.g. "Bar chart. Mon: 80, Tue: 52." */
 export function buildAriaLabel(type: ChartType, data: ChartDatum[]): string {
   const parts = data.map((d) => (d.label !== undefined ? `${d.label}: ${d.value}` : `${d.value}`));
   return `${TYPE_NOUN[type]}. ${parts.join(", ")}.`;

@@ -64,14 +64,9 @@ function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPop
   const portalContainer = useContext(PortalContainerContext);
   return (
     <BaseSelect.Portal container={portalContainer ?? undefined}>
-      {/*
-       * `alignItemWithTrigger={false}` opts out of Base UI's macOS-style
-       * alignment (selected item overlaid on the trigger, popup expanding
-       * both directions). Standard web dropdown placement — below the
-       * trigger — is what readers expect on admin surfaces, and the macOS
-       * mode collapses the parent dialog's flex layout when used inside
-       * `<Dialog>`.
-       */}
+      {/* Opt out of Base UI's macOS-style alignment (selected item overlaid on
+          the trigger): admin surfaces expect below-the-trigger placement, and
+          the macOS mode collapses the parent dialog's flex layout in <Dialog>. */}
       <BaseSelect.Positioner sideOffset={sideOffset} alignItemWithTrigger={false}>
         <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
           {children}

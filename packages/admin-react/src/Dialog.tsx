@@ -46,18 +46,11 @@ export interface DialogContainerProps extends Omit<ComponentProps<"dialog">, "op
   onOpenChange?: (open: boolean) => void;
   /** Width preset. Default: `"md"`. */
   size?: DialogSize;
-  /**
-   * Native `closedby` attribute. `"any"` allows Esc + backdrop click,
-   * `"closerequest"` only Esc, `"none"` neither. Default: `"any"`.
-   */
+  /** Native `closedby` attribute. Default: `"any"`. */
   closedby?: DialogClosedBy;
 }
 
-/**
- * The bare `<dialog>` primitive — no opinions about header, body, or footer.
- * Use this when the default `<Dialog>` layout doesn't fit (custom header,
- * media block, multi-step content).
- */
+/** The bare `<dialog>` primitive — for layouts the default `<Dialog>` doesn't fit. */
 function DialogContainer({
   open,
   onOpenChange,
@@ -72,10 +65,8 @@ function DialogContainer({
   const onOpenChangeRef = useRef(onOpenChange);
   onOpenChangeRef.current = onOpenChange;
 
-  // Merge the consumer's ref with the internal one (which drives showModal/close,
-  // the native close listener, and the portal container). Without this, a
-  // consumer-supplied `ref` would flow through `...rest` and override `ref={ref}`,
-  // detaching the internal ref and silently breaking open/close. Mirrors Button.
+  // Without this merge, a consumer `ref` would flow through `...rest`, override
+  // `ref={ref}`, and silently break open/close.
   const setRef = useCallback(
     (node: HTMLDialogElement | null) => {
       ref.current = node;
@@ -205,11 +196,7 @@ export interface DialogProps extends Omit<DialogContainerProps, "title" | "child
   children?: ReactNode;
 }
 
-/**
- * Standard modal: a `<dialog>` with an opinionated header / body / footer
- * layout driven by shorthand props. For anything outside that shape, use
- * `<Dialog.Container>` and compose by hand.
- */
+/** Standard modal with shorthand-driven header/body/footer. For other shapes, compose `<Dialog.Container>` by hand. */
 function DialogRoot({
   icon,
   title,

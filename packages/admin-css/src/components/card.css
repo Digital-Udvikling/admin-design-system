@@ -5,10 +5,7 @@
            border border-border
            rounded-xl
            shadow-xs;
-    /* Let long unbreakable tokens (IDs, URLs, file paths) break instead of
-       overflowing the body, and let the card shrink inside a flex/grid track
-       rather than forcing it wide. Inherited by title/description/body.
-       Mirrors `.alert`. */
+    /* min-width: 0 lets the card shrink inside a flex/grid track instead of forcing it wide. */
     overflow-wrap: break-word;
     min-width: 0;
   }
@@ -19,28 +16,22 @@
 
   .card-title {
     @apply flex items-center gap-2 text-lg font-semibold leading-tight;
-    /* Flex item — let it shrink so a long title wraps rather than widening the
-       card. `overflow-wrap` is inherited from `.card`. */
+    /* Let a long title wrap instead of widening the card. */
     min-width: 0;
   }
 
-  /* Header row: title on the left, toolbar pushed to the trailing edge. */
   .card-header {
     @apply flex items-center gap-2;
   }
 
-  /* Trailing cluster of header controls (close, edit, …). The title's bold,
-     descender-less type sits visually high in its line box, so geometric
-     centering reads slightly low — nudge the controls up to the optical centre.
-     `card-title` is always `text-lg`, so this offset is constant. */
+  /* -mt-0.5 nudges the controls up to the optical centre — the bold title type
+     sits high in its line box. */
   .card-toolbar {
     @apply flex items-center gap-1 ml-auto -mt-0.5;
   }
 
-  /* Toolbar buttons run small (usually `btn-sm`, whose icons inherit `text-xs`);
-     bump the glyph to 1rem so the controls stay easy to scan and hit. Both
-     bundles size icons off `font-size` — the Tabler webfont (`<i>`) and React's
-     `size="1em"` SVG — so this single rule enlarges both identically. */
+  /* font-size enlarges both icon flavours identically — the Tabler webfont and
+     React's `size="1em"` SVG. */
   .card-toolbar :is(i, svg) {
     font-size: 1.25rem;
   }
@@ -53,7 +44,6 @@
     @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
   }
 
-  /* Modifiers */
   .card-compact .card-body {
     @apply p-3 gap-2;
   }
@@ -62,17 +52,12 @@
     @apply shadow-none border-border-strong;
   }
 
-  /* Neutral variant — sits flush with the page (`--color-surface`, the same
-     fill as `html`/`.app-shell`) instead of the raised `surface-muted` of a
-     default card. For de-emphasised or grouped panels that shouldn't pop off
-     the background. No accent, no status meaning. */
+  /* Fills with the page background so the panel sits flush instead of raised. */
   .card-muted {
     @apply bg-surface;
   }
 
-  /* Color variants — tinted surface + matching border, mirroring Alert. The
-     title (and any leading icon, via `currentColor`) picks up the accent for
-     fast scanning. */
+  /* Color variants — tinted surface + accent title, mirroring Alert. */
   .card-primary {
     @apply bg-primary-muted border-primary-muted;
   }
@@ -109,7 +94,6 @@
     @apply text-danger;
   }
 
-  /* `card-warning` keeps its title at `text-text`: the warning accent is
-     yellow-400 in both modes and fails AA contrast on the muted yellow
-     surface. The tinted bg still carries the warning signal. */
+  /* No `.card-warning .card-title` rule — the yellow-400 accent fails AA on
+     the muted yellow surface. */
 }

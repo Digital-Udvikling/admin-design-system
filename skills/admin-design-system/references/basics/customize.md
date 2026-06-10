@@ -32,7 +32,7 @@ Bright accents like `--color-yellow-400` need a manual `-content` override:
 }
 ```
 
-See [Brand tile](../components/brand-tile.md) and [App shell › Branding](../modules/app-shell.md#branding-multiple-systems) for full usage.
+See [Brand tile](../components/brand-tile.md) and [App shell › Branding](../modules/app-shell.md#branding-multiple-systems).
 
 ## Advanced
 

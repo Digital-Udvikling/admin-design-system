@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // Generate skills/admin-design-system/ from apps/docs/src/content/docs/**/*.mdx.
-// Runs via `pnpm generate-skill` (workspace root) or `pnpm --filter docs generate-skill`.
-// Output is committed and verified in CI via `git diff --exit-code -- skills`.
+// Output is committed; CI verifies it via `git diff --exit-code -- skills`.
 
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, posix, relative } from "node:path";
@@ -51,15 +50,14 @@ function parseFrontmatter(src) {
   return { fm, body: src.slice(match[0].length) };
 }
 
-// Run `transform` over each chunk of `body` that is NOT inside a fenced code
-// block. The `:::example` container directive is treated like a fence — its
-// children (which include the html/tsx fences we want to preserve verbatim)
-// must not be touched by MDX-noise stripping; rewriteExamples handles them.
+// Run `transform` over each chunk of `body` outside fenced code blocks.
+// `:::example` containers count as fences — their html/tsx fences must stay
+// verbatim for rewriteExamples.
 function transformProseOnly(body, transform) {
   const lines = body.split("\n");
   const out = [];
   let buffer = [];
-  let fenceMarker = null; // backtick/tilde run that opened the current fence
+  let fenceMarker = null;
   let inExample = false;
 
   const flushProse = () => {
@@ -70,14 +68,12 @@ function transformProseOnly(body, transform) {
 
   for (const line of lines) {
     if (fenceMarker) {
-      // Inside a fenced code block — preserve verbatim until the closer.
       out.push(line);
       const closer = line.match(/^(`{3,}|~{3,})\s*$/);
       if (closer && line.startsWith(fenceMarker)) fenceMarker = null;
       continue;
     }
     if (inExample) {
-      // Inside a :::example container — preserve verbatim until the closer.
       out.push(line);
       if (/^:::\s*$/.test(line)) inExample = false;
       continue;
@@ -101,25 +97,19 @@ function transformProseOnly(body, transform) {
   return out.join("\n");
 }
 
-// Best-effort stripping of MDX-only constructs from prose segments. The
-// high-value content (component pages) doesn't use these wrappers — this is
-// mostly cleaning up the landing page and a few prose paragraphs that import
-// Starlight components at the top.
+// Best-effort stripping of MDX-only constructs from prose. Component pages
+// don't use these wrappers — this mostly cleans up the landing page.
 function stripMdxNoiseInProse(prose) {
-  // Bare `import ... from "...";` lines.
   prose = prose.replace(/^\s*import\s[^\n]*?;?\s*$/gm, "");
 
-  // <CardGrid> open/close tags on their own line — drop entirely.
   prose = prose.replace(/^\s*<\/?CardGrid>\s*$/gm, "");
 
-  // <Card title="X" ...> opening tag → replace with bold title.
   prose = prose.replace(/^\s*<Card\s[^>]*>\s*$/gm, (line) => {
     const title = line.match(/title="([^"]+)"/)?.[1];
     return title ? `**${title}**` : "";
   });
   prose = prose.replace(/^\s*<\/Card>\s*$/gm, "");
 
-  // Self-closing <LinkCard ... /> — flatten to a markdown list item.
   prose = prose.replace(/<LinkCard\b([\s\S]*?)\/>/g, (_, attrs) => {
     const title = attrs.match(/title="([^"]+)"/)?.[1];
     const tplHref = attrs.match(/href=\{`\$\{import\.meta\.env\.BASE_URL\}([^`}]+)`\}/)?.[1];
@@ -138,27 +128,20 @@ function stripMdxNoise(body, info, pageMap) {
   const stripped = transformProseOnly(body, (prose) =>
     rewriteRelativeLinksInProse(stripMdxNoiseInProse(prose), info, pageMap),
   );
-  // Collapse 3+ consecutive blank lines into 2 (safe across the whole body —
-  // doesn't change code-block contents because fences don't have blank-line
-  // runs unless the author put them there, and even then collapsing is fine).
+  // Collapsing blank-line runs is harmless inside code blocks too.
   return stripped.replace(/\n{3,}/g, "\n\n");
 }
 
-// The page URL Starlight serves a doc from — directory-style with a trailing
-// slash (`components/forms/textareas.mdx` → `/components/forms/textareas/`,
-// `components/forms/index.mdx` → `/components/forms/`). Relative prose links
-// resolve against this, the same way they do in the rendered site.
+// Starlight serves docs from directory-style URLs with a trailing slash
+// (`a/index.mdx` → `/a/`); relative prose links resolve against this.
 function pageUrlFor(rel) {
   const slug = rel.replace(/\.mdx$/, "").replace(/\/index$/, "");
   return `/${slug}/`;
 }
 
-// Rewrite intra-docs relative Markdown links (`[Kbd](../kbd/)`) so they point
-// at the flat per-page skill files instead of Starlight's directory routes —
-// otherwise an agent following `../kbd/` from references/components/ lands on a
-// directory that doesn't exist. Resolve the link against the page's URL, map
-// the target back to its skill file, and emit a path relative to this page's
-// own skill file (fragments preserved). Links to unknown targets are left as-is.
+// Point intra-docs relative links (`[Kbd](../kbd/)`) at the per-page skill
+// files — Starlight's directory routes don't exist in the skill tree. Unknown
+// targets are left as-is.
 function rewriteRelativeLinksInProse(prose, info, pageMap) {
   const pageUrl = pageUrlFor(info.rel);
   return prose.replace(/\]\((\.\.?\/[^)\s]*)\)/g, (whole, href) => {
@@ -198,29 +181,24 @@ function transformPage(src, info, pageMap) {
   return `${header}\n${cleaned}\n`;
 }
 
-// Resolve a source MDX path to its output details.
-// e.g. .../components/forms/inputs.mdx
-//   → { group: "components", outRel: "components/forms/inputs.md", refRel: "references/components/forms/inputs.md" }
 function describePage(absPath) {
   const rel = relative(DOCS_DIR, absPath).replaceAll("\\", "/");
-  const group = rel.split("/")[0]; // "components", "basics", ...
+  const group = rel.split("/")[0];
   const outRel = rel.replace(/\.mdx$/, ".md");
   return { rel, group, outRel, refRel: `references/${outRel}` };
 }
 
 function labelFor(rel, fm) {
-  // rel is "components/forms/inputs.mdx" or "components/buttons.mdx"
   const isIndex = rel.endsWith("/index.mdx");
   const slug = rel.replace(/\.mdx$/, "").replace(/\/index$/, "");
-  const parts = slug.split("/").slice(1); // drop the group dir
+  const parts = slug.split("/").slice(1);
   if (parts.length === 0) return fm.title || ""; // shouldn't happen — root index is skipped
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   if (parts.length === 1) {
-    // Section index (e.g. forms/index.mdx) → use the dir name ("Forms") rather
-    // than the frontmatter title ("Usage") so it sorts with its siblings.
+    // Section index: use the dir name ("Forms") over the frontmatter title
+    // ("Usage") so it sorts with its siblings.
     return isIndex ? capitalize(parts[0]) : fm.title || parts[0];
   }
-  // Nested: "Forms: Inputs"
   return `${capitalize(parts[0])}: ${fm.title || parts[parts.length - 1]}`;
 }
 
@@ -261,13 +239,11 @@ function main() {
 
   const included = mdxFiles
     .map((abs) => ({ abs, info: describePage(abs) }))
-    // Skip the root index.mdx (its content is the project splash; the SKILL.md
-    // header covers the overview) and groups not surfaced in the skill index
-    // (e.g. `contributing/`).
+    // Skip the root splash page (SKILL.md's header covers the overview) and
+    // groups not surfaced in the skill index (e.g. `contributing/`).
     .filter(({ info }) => info.rel !== "index.mdx" && TOP_LEVEL_ORDER.includes(info.group));
 
-  // Map each page's URL slug (`components/forms/inputs`) to its skill file
-  // (`components/forms/inputs.md`) so relative cross-links can be rewritten.
+  // URL slug → skill file, so relative cross-links can be rewritten.
   const pageMap = new Map(
     included.map(({ info }) => [
       info.rel.replace(/\.mdx$/, "").replace(/\/index$/, ""),

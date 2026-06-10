@@ -8,32 +8,17 @@ export interface HotkeyOptions {
 }
 
 export interface HotkeyInfo {
-  /**
-   * Pre-serialized `aria-keyshortcuts` attribute value (e.g. `"Control+S"`).
-   * Undefined when `keys` is nullish. Apply to the element that owns the
-   * binding so screen readers announce the shortcut alongside the name.
-   */
+  /** `aria-keyshortcuts` attribute value; undefined when `keys` is nullish. */
   ariaKeyShortcuts: string | undefined;
-  /**
-   * Canonical form of the first alternative — feed to `<Kbd keys={primaryChord} />`
-   * to render the matching visual chip. Undefined when `keys` is nullish.
-   */
+  /** Canonical first alternative, for `<Kbd keys={primaryChord} />`; undefined when `keys` is nullish. */
   primaryChord: string | undefined;
-  /** All canonical chord strings, used internally for registration. */
   canonicalChords: readonly string[];
 }
 
 /**
- * Register a keyboard shortcut. The handler is latched in a ref internally so
- * callers don't need to memoize it. Passing nullish `keys` is a no-op, so
- * the hook is safe to call unconditionally from components that may or may
- * not have a binding (e.g. the `hotkey` prop on `<Button>`).
- *
- * @example
- *   useHotkey("mod+s", save);
- *   useHotkey(["mod+s", "mod+enter"], save, { enabled: !isLoading });
- *
- * Returns derived strings for rendering — see {@link HotkeyInfo}.
+ * Register a keyboard shortcut, e.g. `useHotkey("mod+s", save)`. The handler
+ * is latched in a ref, so callers need not memoize it. Nullish `keys` is a
+ * no-op, so the hook is safe to call unconditionally.
  */
 export function useHotkey(
   keys: string | readonly string[] | null | undefined,
@@ -44,9 +29,7 @@ export function useHotkey(
   const handlerRef = useRef<HotkeyHandler>(handler);
   handlerRef.current = handler;
 
-  // Reduce `keys` to a stable string ID; downstream deps key off this so
-  // re-renders with the same logical bindings don't re-register. Nullish
-  // collapses to `""` which downstream treats as "no binding".
+  // Stable string ID so a fresh array with the same bindings doesn't re-register; nullish → "".
   const keyId = keys == null ? "" : Array.isArray(keys) ? keys.join("|") : (keys as string);
 
   const derived = useMemo<HotkeyInfo>(() => {

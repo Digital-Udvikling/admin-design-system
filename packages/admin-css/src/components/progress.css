@@ -1,7 +1,5 @@
 @layer components {
-  /* Native <progress> styled across engines. `appearance: none` strips the
-     platform default; the track is the element itself, the fill comes from
-     ::-webkit-progress-value / ::-moz-progress-bar. */
+  /* The track is the element itself; the fill is the engine-specific value pseudo. */
   .progress {
     appearance: none;
     -webkit-appearance: none;
@@ -32,7 +30,6 @@
     transition: inline-size 200ms ease;
   }
 
-  /* Sizes */
   .progress-sm {
     height: 0.25rem;
   }
@@ -54,9 +51,8 @@
     color: var(--color-danger);
   }
 
-  /* Indeterminate — no value attribute. WebKit hides the value pseudo, Firefox
-     draws it full-width; in both cases we paint an animated gradient on the
-     bar itself. */
+  /* When indeterminate, WebKit hides the value pseudo and Firefox draws it
+     full-width — blank both and animate a gradient on the bar itself. */
   .progress:indeterminate {
     background-image: linear-gradient(
       90deg,

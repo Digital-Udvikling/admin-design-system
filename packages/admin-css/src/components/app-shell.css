@@ -1,8 +1,6 @@
 @layer components {
-  /* Layout container — CSS grid with named areas. Sidebar/footer slots are
-     optional; modifier classes adjust the template. The sidebar column uses
-     `auto` so the .sidebar's own width drives it — collapse/peek modes change
-     the sidebar's intrinsic width instead of recomputing the grid here. */
+  /* The sidebar column is `auto` so the .sidebar's own width drives it —
+     collapse/peek modes change the sidebar's intrinsic width, not this grid. */
   .app-shell {
     --app-shell-sidebar-w: 240px;
     --app-shell-sidebar-w-collapsed: 56px;

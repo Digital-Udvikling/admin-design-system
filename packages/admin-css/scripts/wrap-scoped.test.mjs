@@ -3,8 +3,6 @@ import selectorParser from "postcss-selector-parser";
 import { expect, test } from "vitest";
 import { wrap } from "./wrap-scoped.mjs";
 
-// Parse the wrapped output and return the @scope at-rule node. Every test
-// inspects something about it, so it's worth one helper.
 function getScope(output) {
   const root = postcss.parse(output);
   const scope = root.nodes.find((n) => n.type === "atrule" && n.name === "scope");
@@ -12,9 +10,7 @@ function getScope(output) {
   return scope;
 }
 
-// Split a selector list on top-level commas only — commas inside `:where()`,
-// `:is()`, `[attr=","]`, etc. must not split. Naive `selector.split(",")`
-// gets this wrong.
+// Split on top-level commas only — naive split(",") breaks inside :is()/:where()/[attr=","].
 function topLevelSelectors(selectorList) {
   const root = selectorParser().astSync(selectorList);
   return root.nodes.map((s) => s.toString().trim());
@@ -75,10 +71,8 @@ test(":root rules are rewritten to :scope", () => {
 });
 
 test("admin-root class emits dual compound+descendant form", () => {
-  // `.admin-root` after prefix is `._ao-admin-root`. Both `:scope._ao-admin-root`
-  // (matches the scope element itself) and `:scope ._ao-admin-root` (matches
-  // nested instances) should be emitted, so styles like `data-theme` set on
-  // <AdminRoot> apply to the wrapper.
+  // Both the compound form (the scope element itself) and the descendant form
+  // must be emitted, so styles like `data-theme` set on <AdminRoot> apply.
   const input = `@layer base { .admin-root { color-scheme: light dark; } }`;
   const scope = getScope(wrap(input));
   let found = false;
@@ -96,11 +90,8 @@ test("admin-root class emits dual compound+descendant form", () => {
 });
 
 test("no @layer statements or blocks appear anywhere in the output", () => {
-  // Statements (`@layer theme, base;`) are document-wide by spec, so leaving
-  // them in the scoped bundle would silently declare layer order in the
-  // consumer's document. Blocks (`@layer base { ... }`) get flattened away
-  // and re-emitted unlayered so admin's rules can compete with host rules
-  // on specificity instead of always losing to unlayered host rules.
+  // @layer statements are document-wide by spec; leaked, they'd declare layer
+  // order in the consumer's document. Blocks must be re-emitted unlayered.
   const input = `
     @layer theme, base, components;
     @layer base { h3 { font-size: inherit; } }
@@ -116,9 +107,8 @@ test("no @layer statements or blocks appear anywhere in the output", () => {
 });
 
 test("commas inside quoted attribute values are not mangled", () => {
-  // The :root/html/body rewrite must split selector lists on top-level commas
-  // only — a naive split corrupts `[data-x="1,2"]` into `[data-x="1, 2"]`,
-  // which no longer matches an element with `data-x="1,2"`.
+  // Guards the rewrite's top-level comma split — a naive split would corrupt
+  // `[data-x="1,2"]` into `[data-x="1, 2"]`.
   const input = `@layer components { .a[data-x="1,2"] { color: red; } }`;
   const output = wrap(input);
   expect(output).toContain('[data-x="1,2"]');
@@ -126,8 +116,7 @@ test("commas inside quoted attribute values are not mangled", () => {
 });
 
 test("@keyframes selectors are not rewritten", () => {
-  // `from` and `to` inside @keyframes are step selectors, not element selectors.
-  // Rewriting them to `:scope from { ... }` would emit invalid CSS.
+  // Keyframe steps aren't element selectors; `:scope from` is invalid CSS.
   const input = `
     @layer components {
       @keyframes spin {

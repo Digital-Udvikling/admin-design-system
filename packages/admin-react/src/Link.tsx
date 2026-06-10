@@ -4,25 +4,17 @@ import { renderIcon, type IconProp } from "./icon";
 
 export interface LinkProps extends ComponentProps<"a"> {
   /**
-   * Marks the link as leaving the app: renders a trailing ↗ affordance and
-   * defaults `target="_blank"` + `rel="noopener noreferrer"`. Explicit
-   * `target`/`rel` props win, so you can keep the icon while overriding either.
+   * Renders a trailing ↗ and defaults `target="_blank"` +
+   * `rel="noopener noreferrer"`; explicit `target`/`rel` props win.
    */
   external?: boolean;
-  /** Leading icon. Pass a component (`icon={IconHome}`) or an element. */
+  /** Leading icon. */
   icon?: IconProp;
-  /**
-   * Trailing icon. Independent of `external`'s ↗ affordance — combining both
-   * stacks two trailing affordances (the new-tab ↗ marker plus this icon).
-   */
+  /** Trailing icon. Independent of `external`'s ↗ — combining both renders two trailing markers. */
   iconTrailing?: IconProp;
 }
 
-/**
- * A text link — a plain `<a>` with the design system's link styling: primary
- * color, hover shift, underline, and a focus-visible ring. Pass `external` for
- * the new-tab affordance.
- */
+/** A plain `<a>` with the design system's link styling. */
 export function Link({
   external,
   icon,

@@ -6,30 +6,17 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 /*
- * Pre-built utility safelist for the no-build `admin.utilities.css` bundle.
- *
- * Curated to keep wire size tight — admin density rarely needs spacing
- * above 32, text sizes above 2xl, or interactive variants on layout
- * primitives. Each `@source inline(...)` is a brace-expanded class set;
- * Tailwind expands the same way bash does (empty branches `{,foo}`
- * include both the no-prefix and prefixed forms).
- *
- * Variant policy per family:
- *   - Layout (display, spacing, sizing, grid, ...) → responsive only
- *   - Visual (colors, borders, shadow, outline)    → interactive only
- *   - Typography (weight, leading, ...)            → neither
- *
- * Adding a utility: extend the matching line. Adding a new semantic
- * color: update theme.css AND the color lines below.
+ * Pre-built utility safelist for the no-build `admin.utilities.css` bundle,
+ * curated for wire size. Variant policy: layout families get responsive
+ * variants only, visual families interactive only, typography neither.
+ * A new semantic color must be added to theme.css AND the color lines below.
  */
 
-/* Display, position, visibility — responsive */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,table,inline-table,table-row,table-cell,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
 );
 @source inline("{,sm:,md:,lg:,xl:,2xl:}overflow{,-x,-y}-{auto,hidden,visible,scroll,clip}");
 
-/* Flex / grid — responsive */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}flex-{row,row-reverse,col,col-reverse,wrap,wrap-reverse,nowrap,1,auto,initial,none}"
 );
@@ -60,38 +47,32 @@
 @source inline("{,sm:,md:,lg:,xl:,2xl:}{auto-cols,auto-rows}-{auto,min,max,fr}");
 @source inline("{,sm:,md:,lg:,xl:,2xl:}order-{1,2,3,4,5,6,7,8,9,10,11,12,first,last,none}");
 
-/* Spacing (padding, margin, gap) — responsive */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}{p,px,py,pt,pr,pb,pl,ps,pe,m,mx,my,mt,mr,mb,ml,ms,me,gap,gap-x,gap-y}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32}"
 );
 @source inline("{,sm:,md:,lg:,xl:,2xl:}{m,mx,my,mt,mr,mb,ml,ms,me}-auto");
 
-/* Sizing (w, h, min-w, max-w, min-h, max-h) — responsive */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}{w,h,min-w,max-w,min-h,max-h}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32,px,auto,full,screen,fit,min,max}"
 );
 @source inline("{,sm:,md:,lg:,xl:,2xl:}{w,h}-{1/2,1/3,2/3,1/4,2/4,3/4}");
 @source inline("{,sm:,md:,lg:,xl:,2xl:}max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,prose,none}");
 
-/* Text size + align — responsive */
 @source inline("{,sm:,md:,lg:,xl:,2xl:}text-{xs,sm,base,lg,xl,2xl}");
 @source inline("{,sm:,md:,lg:,xl:,2xl:}text-{left,center,right,justify,start,end}");
 
-/* Aspect ratio — responsive */
 @source inline("{,sm:,md:,lg:,xl:,2xl:}aspect-{auto,square,video}");
 
-/* Object fit + position (avatars, thumbnails, logos) — responsive */
 @source inline("{,sm:,md:,lg:,xl:,2xl:}object-{contain,cover,fill,none,scale-down}");
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}object-{top,bottom,left,right,center,left-top,left-bottom,right-top,right-bottom}"
 );
 
-/* Translate (x/y only — full transforms intentionally skipped) — responsive */
+/* Translate x/y only — full transforms intentionally skipped */
 @source inline(
   "{,sm:,md:,lg:,xl:,2xl:}translate-{x,y}-{0,0.5,1,1.5,2,3,4,6,8,12,16,20,24,32,1/2,full}"
 );
 
-/* Typography (non-size) — no variants */
 @source inline("font-{thin,extralight,light,normal,medium,semibold,bold,extrabold,black}");
 @source inline("font-{sans,mono,serif}");
 @source inline("{italic,not-italic}");
@@ -108,7 +89,6 @@
 @source inline("list-{disc,decimal,none,inside,outside}");
 @source inline("{underline,overline,line-through,no-underline,truncate}");
 
-/* Borders + rounded — interactive */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}border{,-x,-y,-t,-r,-b,-l}{,-0,-2,-4,-8}"
 );
@@ -119,15 +99,13 @@
   "{,hover:,focus:,focus-visible:,active:}rounded{,-t,-r,-b,-l,-tl,-tr,-br,-bl}{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}"
 );
 
-/* Divide — borders between flex/grid children. Structural separators, so no
-   variants (a divider rarely changes on hover or at a breakpoint). Colors are
-   the two foundation borders only. */
+/* Divide gets no variants — structural separators don't change on hover or
+   at a breakpoint */
 @source inline("divide-{x,y}{,-0,-2,-4,-8}");
 @source inline("divide-{x,y}-reverse");
 @source inline("divide-{solid,dashed,dotted,double,none}");
 @source inline("divide-{border,border-strong}");
 
-/* Outline + ring — interactive */
 @source inline("{,hover:,focus:,focus-visible:,active:}outline{,-0,-1,-2,-4,-8}");
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}outline-{none,dashed,dotted,double,hidden}"
@@ -136,27 +114,25 @@
 @source inline("{,hover:,focus:,focus-visible:,active:}ring{,-0,-1,-2,-4,-8}");
 @source inline("{,hover:,focus:,focus-visible:,active:}ring-inset");
 
-/* Shadow — interactive */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}shadow{,-2xs,-xs,-sm,-md,-lg,-xl,-2xl,-inner,-none}"
 );
 
-/* Foundation semantic colors — interactive (kept in sync with theme.css) */
+/* Foundation semantic colors — kept in sync with theme.css */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,text,text-muted,border,border-strong}"
 );
 
-/* Accent semantic colors — each has base + -hover + -muted + -content (kept in sync with theme.css) */
+/* Accent semantic colors — kept in sync with theme.css */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{primary,system-accent,danger,success,warning,info}{,-hover,-muted,-content}"
 );
 
-/* Link / focus — interactive blue. Narrower shapes than the accents above:
-   focus rings only need `outline-focus`, links only `text-link{,-hover}`. */
+/* Link / focus — deliberately narrower than the accents above: focus rings
+   only need `outline-focus`, links only `text-link{,-hover}` */
 @source inline("{,focus-visible:}outline-focus");
 @source inline("{,hover:,focus-visible:}text-link{,-hover}");
 
-/* Cursor + opacity — interactive */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}cursor-{auto,default,pointer,wait,text,move,help,not-allowed,none,progress,grab,grabbing,col-resize,row-resize,zoom-in,zoom-out}"
 );
@@ -164,9 +140,7 @@
   "{,hover:,focus:,focus-visible:,active:}opacity-{0,5,10,15,20,25,30,40,50,60,70,75,80,90,95,100}"
 );
 
-/* Interaction primitives (select-all an ID cell, disable a layer) — no variants */
 @source inline("pointer-events-{none,auto}");
 @source inline("select-{none,text,all,auto}");
 
-/* Z-index — no variants */
 @source inline("z-{0,10,20,30,40,50,auto}");

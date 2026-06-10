@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-A component is three or four files. Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as the base class.
+Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as the base class.
 
 1. `packages/admin-css/src/components/<name>.css` — base class, variants, sizes, modifiers.
 2. `packages/admin-css/src/components/index.css` — add `@import "./<name>.css";`.
@@ -188,7 +188,7 @@ export function Button({ icon, iconTrailing, children }: ButtonProps) {
 }
 ```
 
-Prefer this prop over passing icon JSX as children — the rendered DOM is identical, but the prop ensures consistent sizing and `aria-hidden`. See the [Icons](../../basics/icons/) basics page for the consumer-facing convention.
+Prefer this prop over passing icon JSX as children — the rendered DOM is identical, but the prop ensures consistent sizing and `aria-hidden`. See [Icons](../../basics/icons/).
 
 ## 3. Tests
 

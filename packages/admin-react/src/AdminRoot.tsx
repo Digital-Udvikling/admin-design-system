@@ -22,11 +22,9 @@ export function AdminRoot({ className, theme, systemAccent, style, ref, ...rest 
       ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
       : style;
 
-  // Publish this element as the portal container so Base UI popups (Select,
-  // Tooltip, …) render inside the scoped subtree and match admin's
-  // `@scope (._ao-admin-root)` rules. Without this they portal to
-  // `document.body` — outside the scope — and render unstyled. A `<Dialog>`
-  // ancestor overrides this with its own top-layer `<dialog>`.
+  // Publish this element as the portal container — Base UI popups otherwise
+  // portal to `document.body`, outside `@scope (._ao-admin-root)`, and render
+  // unstyled. A `<Dialog>` ancestor overrides this with its own `<dialog>`.
   const portalRef = useRef<HTMLElement | null>(null);
   const setRef = useCallback(
     (node: HTMLDivElement | null) => {

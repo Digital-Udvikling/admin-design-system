@@ -12,11 +12,7 @@
     flex-shrink: 0;
   }
 
-  /* Variants — solid status fills, matching the alert palette so danger/
-     success/etc. stay coherent across status indicators and chips in tables.
-     Each sits on the full-strength status color with the matching `-content`
-     text (white on the colored accents, black on bright yellow). The bare
-     `.badge` (no modifier) renders the neutral look, folded into the base. */
+  /* Variants — solid status fills matching the alert palette; bare `.badge` is the neutral look. */
   .badge-info {
     @apply bg-info text-info-content border-info;
   }

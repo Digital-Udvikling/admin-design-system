@@ -27,10 +27,7 @@ export interface SegmentProps extends Omit<ComponentProps<"div">, "color"> {
   color?: string;
 }
 
-/**
- * One proportion segment, sized by `flex: var(--value)`. Multi-series by
- * default: takes its colour from `seriesColor` (SERIES cycle or `datum.color`).
- */
+/** One proportion segment, sized by `flex: var(--value)`; SERIES-cycle colours by default. */
 function Segment({ datum, index = 0, value, color, className, style, ...rest }: SegmentProps) {
   const v = datum?.value ?? value ?? 0;
   const segColor = datum !== undefined ? seriesColor(datum, index) : color;
@@ -54,11 +51,7 @@ export interface StackedBarProps extends Omit<ComponentProps<"div">, "color"> {
   inline?: boolean;
 }
 
-/**
- * Single horizontal proportion bar — a "60% A / 30% B / 10% C" breakdown.
- * Segments are sized by their flex ratios (no max needed) and coloured from the
- * SERIES palette by default. Generates an overridable `aria-label`.
- */
+/** Single horizontal proportion bar. Segments size by flex ratio — no max needed. */
 function StackedBarRoot({
   data,
   legend,
@@ -69,8 +62,7 @@ function StackedBarRoot({
 }: StackedBarProps) {
   return (
     <div
-      // A chart is a single composite image, so role="img" + aria-label is the
-      // correct ARIA pattern — there is no <img> tag to prefer here.
+      // A chart is a single composite image — role="img" + aria-label, with no <img> to prefer.
       // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="img"
       className={cn(["chart", inline && "chart-inline"], className)}

@@ -1,10 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 
 /**
- * Every admin class name is prefixed so the bundle can coexist with a host
- * page's CSS without colliding on common names like `.btn` or `.card`. The
- * matching CSS lives in `@aortl/admin-css/admin.scoped.css` (built by
- * `wrap-scoped.mjs`), which carries the same prefix on every selector.
+ * Every admin class is prefixed so the bundle coexists with host-page CSS
+ * without colliding on common names like `.btn`. Must match the selector
+ * prefix `wrap-scoped.mjs` bakes into `@aortl/admin-css/admin.scoped.css`.
  */
 const PREFIX = "_ao-";
 
@@ -22,15 +21,12 @@ function join(...parts: Array<string | undefined>): string {
 }
 
 /**
- * className merger that preserves Base UI's render-prop className form.
+ * className merger that preserves Base UI's render-prop className form —
+ * a function `className` is deferred until Base UI invokes it with state.
  *
- * `base` carries admin's own classes (e.g. `["btn", "btn-primary"]`) and is
- * always prefixed with `_ao-`. `className` is the consumer-supplied prop and
- * passes through verbatim — it lives in the caller's namespace.
- *
- * Base UI components accept `className: string | ((state) => string | undefined)`.
- * The function form has to be deferred until Base UI invokes it with the
- * component state.
+ * `base` carries admin's own classes and is always prefixed with `_ao-`.
+ * `className` is the consumer-supplied prop and passes through verbatim —
+ * it lives in the caller's namespace.
  */
 export function cn(base: ClassValue, className: string | undefined): string;
 export function cn<TState>(

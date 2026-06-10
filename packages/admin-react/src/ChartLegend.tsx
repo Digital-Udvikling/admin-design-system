@@ -7,11 +7,8 @@ export interface ChartLegendProps extends ComponentProps<"ul"> {
 }
 
 /**
- * Shared legend for `<Donut>` and `<StackedBar>` — one swatch + label per
- * datum. Each row carries its own `title`, which is where the donut's
- * per-slice read-out lives (a conic-gradient slice has no element to hang a
- * `title` on). The swatch colour mirrors `seriesColor`, so legend and chart
- * stay in sync.
+ * Each row's `title` carries the donut's per-slice read-out — a conic-gradient
+ * slice has no element to hang a `title` on.
  */
 export function ChartLegend({ data, className, ...rest }: ChartLegendProps) {
   return (

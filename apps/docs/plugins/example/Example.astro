@@ -2,9 +2,9 @@
 import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
 
 interface Props {
-  /** Pre-formatted HTML source. Drives the vanilla preview and the HTML tab. */
+  /** Pre-formatted HTML source. */
   html?: string;
-  /** Pre-formatted React source. Drives the React tab. */
+  /** Pre-formatted React source. */
   react?: string;
 }
 
@@ -54,8 +54,7 @@ const hasBoth = !!html && hasReact;
   </div>
 </section>
 
-{/* Hoisted module so Astro bundles and dedupes it across the page. The
-storage key, sync attribute, and tab selectors below intentionally track
+{/* Storage key, sync attribute, and tab selectors intentionally track
 @astrojs/starlight/user-components/Tabs.astro — keep them in sync. */}
 <script>
   const STORAGE_KEY = "starlight-synced-tabs__package";
@@ -128,15 +127,13 @@ storage key, sync attribute, and tab selectors below intentionally track
     border-bottom: 1px solid var(--sl-color-hairline);
     background: var(--color-surface);
   }
-  /* Vanilla `.tooltip-wrap` tooltips render inside the trigger's stacking
-  context, so the frame's `overflow: hidden` (needed for rounded corners)
-  clips them. Give the preview enough padding to contain a top/bottom/side
-  tooltip without changing the frame's overflow behavior. */
+  /* The frame's `overflow: hidden` (needed for rounded corners) clips vanilla
+  `.tooltip-wrap` tooltips — pad enough to contain one on any side. */
   .example-preview:has(.tooltip-wrap) {
     padding: 3rem;
   }
-  /* Variants are layout-transparent so children flex directly in the
-  preview. The explicit [hidden] rule outranks display: contents. */
+  /* Layout-transparent so children flex directly in the preview; the explicit
+  [hidden] rule must outrank display: contents. */
   .example-preview .preview-variant {
     display: contents;
   }

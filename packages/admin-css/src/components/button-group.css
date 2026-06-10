@@ -7,11 +7,8 @@
     @apply rounded-none relative focus-visible:z-10;
   }
 
-  /* Split-button support: a <details class="menu"> child sits in the strip
-     alongside .btn children, with its .menu-trigger getting the same edge
-     treatment as the buttons around it. inline-flex on the details makes
-     the <summary> stretch vertically to match sibling .btn heights, so an
-     icon-only trigger doesn't end up shorter than its neighbours. */
+  /* Split buttons: a <details class="menu"> sits in the strip; inline-flex
+     stretches its <summary> to match sibling .btn heights. */
   .btn-group > .menu {
     @apply relative focus-visible:z-10;
     display: inline-flex;
@@ -21,10 +18,7 @@
     @apply rounded-none;
   }
 
-  /* Horizontal-only: overlap left edges, round outer left/right corners,
-     and paint the seam between adjacent items as a left-side divider.
-     Scoped with :not(.btn-group-vertical) so vertical groups (which share
-     the .btn-group class) don't inherit horizontal edge treatment. */
+  /* Horizontal-only — vertical groups also carry .btn-group, hence the :not() scope. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
   .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) {
     @apply -ml-px;
@@ -40,11 +34,8 @@
     @apply rounded-r-lg;
   }
 
-  /* Divider between adjacent items so same-coloured siblings (e.g. a
-     split button) read as separate actions. currentColor + color-mix
-     means the divider works across every .btn variant — light on
-     coloured buttons, dark on ghost/secondary — without per-variant
-     rules. */
+  /* Seam divider — color-mix on currentColor adapts to every .btn variant
+     without per-variant rules. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
   .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger {
     border-left-color: color-mix(in oklab, currentColor 25%, transparent);
@@ -78,11 +69,8 @@
     border-top-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
-  /* Full width — the group stretches across its container instead of
-     shrinking to its content. Horizontal groups split the row evenly so
-     every item is the same width regardless of label length; vertical
-     groups already stretch their items to the group's width, so widening
-     the group is enough. Mirrors the `fullWidth` treatment on tabs. */
+  /* Full width — horizontal items split the row evenly; vertical items
+     already stretch, so widening the group is enough. */
   .btn-group-full-width:not(.btn-group-vertical) {
     @apply flex w-full;
   }

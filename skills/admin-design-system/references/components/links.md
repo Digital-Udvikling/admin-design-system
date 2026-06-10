@@ -20,7 +20,7 @@ A styled `<a>`: link color, hover shift, underline, and a focus-visible ring.
 
 ### With icon
 
-Pass `icon` for a leading icon or `iconTrailing` for a trailing one. See [Icons](../basics/icons.md).
+See [Icons](../basics/icons.md).
 
 **Example**
 

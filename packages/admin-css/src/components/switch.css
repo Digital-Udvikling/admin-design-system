@@ -30,7 +30,7 @@
     @apply translate-x-4;
   }
 
-  /* Native input variant: state is driven by :checked, thumb is ::before. */
+  /* Native input variant. */
   input.switch {
     @apply appearance-none bg-border-strong m-0;
   }
@@ -49,12 +49,10 @@
     @apply translate-x-4;
   }
 
-  /* A <label> wrapping a switch + text lays out inline.
-     Switches are wider than checkboxes/radios so the gap is a touch larger. */
+  /* Switches are wider than checkboxes/radios, so the label gap is larger. */
   label:has(> .switch) {
     @apply inline-flex items-center gap-3 cursor-pointer;
-    /* Let a long setting label break and shrink beside the `shrink-0` track
-       instead of overflowing a narrow settings panel. */
+    /* Let a long label break and shrink beside the shrink-0 track instead of overflowing. */
     overflow-wrap: break-word;
     min-width: 0;
   }

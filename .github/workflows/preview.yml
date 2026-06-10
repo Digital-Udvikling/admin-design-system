@@ -1,14 +1,9 @@
 name: Preview release
 
-# Publishes per-commit prereleases of every public package under `packages/*`
-# to pkg.pr.new (https://pkg.pr.new). The pkg.pr.new GitHub App must be
-# installed on the org with access to this repo — once installed, the bot
-# comments on each PR with install URLs of the form
-#   pnpm add https://pkg.pr.new/@aortl/admin-react@<sha>
-# Install: https://github.com/apps/pkg-pr-new
-#
-# Main-branch pushes also publish under the commit SHA so the latest
-# unreleased state can be tried via the same URL scheme.
+# Per-commit prereleases via pkg.pr.new. Requires the pkg.pr.new GitHub App
+# (https://github.com/apps/pkg-pr-new) installed with access to this repo; the bot
+# then comments install URLs (pnpm add https://pkg.pr.new/@aortl/admin-react@<sha>)
+# on each PR. Main pushes also publish under the commit SHA.
 
 on:
   push:

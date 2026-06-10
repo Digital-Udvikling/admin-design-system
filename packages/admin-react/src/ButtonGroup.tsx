@@ -5,11 +5,8 @@ export type ButtonGroupOrientation = "horizontal" | "vertical";
 
 export interface ButtonGroupProps extends ComponentProps<"div"> {
   orientation?: ButtonGroupOrientation;
-  /**
-   * Stretch the group across its container. Horizontal groups split the row
-   * evenly so every button is the same width; vertical groups fill the
-   * container width.
-   */
+  /** Stretch across the container. Horizontal groups split the row into
+   *  equal-width buttons; vertical groups fill the container width. */
   fullWidth?: boolean;
 }
 

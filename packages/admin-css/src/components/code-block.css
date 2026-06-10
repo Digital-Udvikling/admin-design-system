@@ -9,10 +9,8 @@
     overflow: auto;
   }
 
-  /* Opt out of wrapping for log-style content where long lines should
-     scroll horizontally instead of breaking. Pair with an inline
-     `max-height` to clamp vertical growth — `overflow: auto` above
-     turns into a scrollbar automatically. */
+  /* Long lines scroll horizontally instead of breaking; pair with an inline
+     `max-height` to clamp vertical growth. */
   .code-block-nowrap {
     white-space: pre;
     word-wrap: normal;

@@ -1,12 +1,10 @@
 @layer components {
-  /* Native <details> drives open state — no JS needed. The popup is a
-     position: absolute child of the relative .menu root. */
+  /* Native <details> drives open state — no JS. */
   .menu {
     @apply relative inline-block;
   }
 
-  /* Behaviour — applied always so the trigger works regardless of
-     additional visual classes (e.g. `btn btn-primary` for a split button). */
+  /* Behaviour only — visual classes (e.g. `btn btn-primary`) may stack on top. */
   .menu-trigger {
     @apply inline-flex items-center gap-1.5
            cursor-pointer select-none
@@ -19,17 +17,14 @@
     display: none;
   }
 
-  /* Default appearance — bows out when `.btn` is also on the trigger so
-     button classes (bg, hover, padding, text colour) take over cleanly. */
+  /* Default appearance — bows out when `.btn` supplies its own. */
   .menu-trigger:not(.btn) {
     @apply px-2.5 py-1.5 rounded-md text-sm leading-none
            text-text bg-transparent
            hover:bg-surface-strong;
   }
 
-  /* Chevron uses currentColor so it tracks the trigger's text colour —
-     muted text on the default trigger, content colour on a btn-primary
-     split button, etc. Sized in em so it scales with btn-sm / btn-lg. */
+  /* em-sized so the chevron scales with btn-sm / btn-lg. */
   .menu-trigger::after {
     content: "";
     width: 0.5em;
@@ -41,8 +36,7 @@
     flex-shrink: 0;
   }
 
-  /* Icon-only triggers (e.g. the dropdown half of a split button) center
-     their chevron instead of letting it sit at the start. */
+  /* A text-less trigger (split-button dropdown half) centers its chevron. */
   .menu-trigger:empty {
     @apply justify-center;
   }
@@ -59,15 +53,9 @@
            border border-border rounded-lg shadow-md;
   }
 
-  /* CSS anchor positioning makes the popup `position: fixed` so it escapes
-     ancestor `overflow: hidden`/`overflow: auto` clipping — necessary when
-     the menu lives inside a `<dialog>` (top-layer + overflow: hidden) or a
-     scroll-clipped surface like a card body. `anchor-scope` keeps each
-     menu's anchor lookups isolated so multiple menus on the page don't
-     cross-target, and `position-try-fallbacks` flips the popup above the
-     trigger when there isn't room below. Browsers without anchor
-     positioning (Firefox, as of early 2026) fall back to the absolute
-     rules above and clip as before. */
+  /* Anchor positioning makes the popup fixed so it escapes ancestor overflow
+     clipping (e.g. inside a <dialog>); browsers without it (Firefox, early
+     2026) fall back to the absolute rules above and clip as before. */
   @supports (anchor-name: --x) {
     .menu {
       anchor-scope: --menu-trigger;
@@ -100,9 +88,7 @@
            hover:bg-surface-muted
            focus-visible:bg-surface-muted focus-visible:outline-none
            disabled:opacity-50 disabled:cursor-not-allowed;
-    /* The popup has no max-width, so let a long label (entity name, file path)
-       break and shrink rather than grow the popup horizontally. Item icons stay
-       `flex-shrink: 0` below. */
+    /* The popup has no max-width — break long labels instead of growing it. */
     overflow-wrap: break-word;
     min-width: 0;
   }
@@ -111,7 +97,6 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
-  /* Don't let a constrained menu width squish a leading/trailing icon. */
   .menu-trigger > :is(i, svg),
   .menu-item > :is(i, svg) {
     flex-shrink: 0;

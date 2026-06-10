@@ -3,9 +3,8 @@
     @apply inline-flex w-full;
   }
 
-  /* Clear all corners, then re-apply the outer ones on the first/last
-     child. Equal-specificity rules win because input-group.css imports
-     after input.css. */
+  /* Equal-specificity override of `.input`'s radius — works only because
+     input-group.css imports after input.css. */
   .input-group > * {
     @apply rounded-none;
   }
@@ -18,13 +17,11 @@
     @apply rounded-r-lg;
   }
 
-  /* Collapse the shared edge between adjacent children. */
   .input-group > :not(:first-child) {
     margin-left: -1px;
   }
 
-  /* Float the focused element so its outline ring and accented border
-     can't be clipped by its neighbour's overlapping edge. */
+  /* Lift above the neighbour's overlapping edge so the focus ring isn't clipped. */
   .input-group > :focus,
   .input-group > :focus-within {
     @apply relative z-10;

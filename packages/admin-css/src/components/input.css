@@ -18,8 +18,7 @@
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
-  /* Status variants — border + focus outline only; text stays `text-text`, so
-     warning's yellow accent (which fails AA as text) is fine here. */
+  /* Status variants tint border + outline only — warning's yellow fails AA as text. */
   .input-info {
     @apply border-info hover:border-info focus-visible:outline-info;
   }
@@ -41,9 +40,7 @@
     @apply text-base px-4 py-2.5;
   }
 
-  /* Native date/time picker glyph. The browser handles dark-mode coloring
-     via the inherited `color-scheme` set on [data-theme]; we just tone the
-     glyph down at rest and brighten it on hover so it reads as interactive. */
+  /* Dark-mode glyph coloring comes free via the inherited `color-scheme`. */
   .input::-webkit-calendar-picker-indicator {
     @apply opacity-60 cursor-pointer hover:opacity-100;
   }

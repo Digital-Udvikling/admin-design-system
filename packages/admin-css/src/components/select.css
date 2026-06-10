@@ -26,7 +26,6 @@
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
-  /* Sizes */
   .select-sm {
     @apply text-xs px-2.5 py-1.5;
   }
@@ -35,14 +34,9 @@
     @apply text-base px-4 py-2.5;
   }
 
-  /* Native <select> usage: same class, but suppress the native chevron and
-     supply our own via background-image so the look matches the Base UI
-     trigger. A bare native <select> is a replaced element and can't host a
-     tinted `::after` (the React trigger uses a real `.select-icon` SVG), and
-     data URIs can't read CSS variables — so the chevron can't ride the
-     `--color-text-muted` token directly. The stroke is Flexoki `base-500`
-     (#848484), the same mid-gray as the token's dark-mode value, which reads
-     as a neutral chevron in both light and dark mode. */
+  /* A replaced <select> can't host a tinted ::after and data URIs can't read
+     CSS variables, so the chevron is a background-image with a hard-coded
+     stroke: Flexoki base-500 (#848484), which reads neutral in both modes. */
   select.select {
     appearance: none;
     padding-right: 2rem;
@@ -90,8 +84,7 @@
   .select-item {
     @apply flex items-center gap-2 px-3 py-1.5 text-sm
            cursor-pointer select-none outline-none;
-    /* Let a long option label (path, ID, email) break and shrink rather than
-       grow the popup horizontally. The trailing indicator stays `ml-auto`. */
+    /* Break long option labels rather than grow the popup horizontally. */
     overflow-wrap: break-word;
     min-width: 0;
   }

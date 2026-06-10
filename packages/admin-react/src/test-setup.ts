@@ -6,9 +6,8 @@ afterEach(() => {
   cleanup();
 });
 
-// Matcher that hides the admin class prefix from individual tests, so a future
-// rename of the prefix (or the namespacing strategy itself) doesn't ripple
-// through every assertion. Pair with `adminSelector` for querySelector sites.
+// Hides the admin class prefix from tests so a prefix rename doesn't ripple
+// through every assertion; `adminSelector` covers querySelector sites.
 const ADMIN_PREFIX = "_ao-";
 
 export const adminSelector = (name: string): string => `.${ADMIN_PREFIX}${name}`;
@@ -36,8 +35,7 @@ expect.extend({
 });
 
 declare module "vitest" {
-  // Default `T = any` matches @testing-library/jest-dom's `Assertion<T = any>`
-  // augmentation; mismatched defaults would trigger TS2428.
+  // `T = any` must match jest-dom's `Assertion<T = any>` augmentation, or TS2428.
   interface Assertion<T = any> {
     toHaveAdminClass(...names: string[]): T;
   }

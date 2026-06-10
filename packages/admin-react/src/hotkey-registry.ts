@@ -2,16 +2,8 @@ import type { RefObject } from "react";
 import { normalizeEvent } from "./hotkey-parse";
 
 /**
- * Module-level keyboard shortcut registry. One window keydown listener,
+ * Module-level keyboard shortcut registry: one window keydown listener,
  * attached on first registration and detached when the registry empties.
- *
- * On keydown:
- *   1. Ignore OS autorepeat (`e.repeat`) so a held chord fires once, not per tick.
- *   2. Normalize the event to a canonical chord string.
- *   3. Look up the bucket. Skip if empty.
- *   4. Apply input suppression — bare-key chords are skipped while focus is
- *      in an editable element, except for `escape`.
- *   5. `preventDefault()`, then invoke every surviving handler (bag semantics).
  */
 
 export type HotkeyHandler = (e: KeyboardEvent) => void;
@@ -44,17 +36,14 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 function dispatch(e: KeyboardEvent): void {
-  // Edge-triggered: a held chord autorepeats keydown, but the bound action
-  // (save, open a dialog, navigate) should fire once per press.
+  // A held chord autorepeats keydown; the bound action should fire once per press.
   if (e.repeat) return;
   const chord = normalizeEvent(e);
   if (chord === null) return;
   const bucket = registry.get(chord);
   if (!bucket || bucket.size === 0) return;
 
-  // Input suppression: bare-key chords (no `+`) are silent while focused in
-  // an editable element. `escape` is always allowed to fire so dialogs can
-  // close even from a focused input.
+  // Bare-key chords are silent in editable elements; `escape` stays live so dialogs can close.
   if (isEditableTarget(e.target) && !chord.includes("+") && chord !== "escape") return;
 
   e.preventDefault();
@@ -63,11 +52,7 @@ function dispatch(e: KeyboardEvent): void {
   }
 }
 
-/**
- * Register a hotkey entry under each of its canonical chord strings.
- * Returns an unregister function that removes the entry from every bucket
- * and detaches the listener if the registry is empty.
- */
+/** Returns an unregister function. */
 export function register(canonicalChords: readonly string[], entry: HotkeyEntry): () => void {
   for (const chord of canonicalChords) {
     let bucket = registry.get(chord);

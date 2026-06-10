@@ -78,8 +78,6 @@ Pass `error` for a single message that shows whenever the control is invalid. In
 </Field>
 ```
 
-For separate messages per `ValidityState` key, use `<Field.Container>` — see [below](#advanced-composition-with-fieldcontainer).
-
 ### Inline label
 
 Pass `inline` to place the control beside its label rather than above — suited to switches and single checkboxes. In vanilla, add `.field-row`.

@@ -1,9 +1,6 @@
 @layer components {
   .breadcrumbs {
     @apply text-sm text-text-muted;
-    /* Crumb labels are often free-form entity names/slugs — let a long one
-       break rather than overflow the (flex-wrap) row. Inherited by every item;
-       crumb/separator icons stay `flex-shrink: 0` below. */
     overflow-wrap: break-word;
   }
 
@@ -18,15 +15,11 @@
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
-  /* `aria-current` on the last item promotes it to body text weight. Non-links
-     stay non-interactive — same selector matches both <a aria-current> and
-     <span aria-current>. */
   .breadcrumb-item[aria-current="page"] {
     @apply text-text font-medium pointer-events-none;
   }
 
-  /* Slash separator. Use `<span class="breadcrumb-separator">` between items;
-     swap content via a child icon when you want a chevron instead. */
+  /* An empty separator renders a slash; a child icon replaces it. */
   .breadcrumb-separator {
     @apply inline-flex items-center text-text-muted/60 select-none;
   }
@@ -40,9 +33,7 @@
     height: 0.875rem;
   }
 
-  /* Setting a width on a flex item doesn't stop it from shrinking, so pin the
-     shrink factor too — keeps crumb and separator icons from squishing when a
-     long label tightens the row. */
+  /* A width alone doesn't stop a flex item from shrinking. */
   .breadcrumb-item > :is(i, svg),
   .breadcrumb-separator > :is(i, svg) {
     flex-shrink: 0;

@@ -16,7 +16,6 @@ describe("Breadcrumbs", () => {
     expect(nav).toBeInTheDocument();
     expect(screen.getByText("Home").tagName).toBe("A");
     expect(screen.getByText("Detail")).toHaveAttribute("aria-current", "page");
-    // Two separators between three items.
     expect(nav.querySelectorAll(adminSelector("breadcrumb-separator"))).toHaveLength(2);
   });
 

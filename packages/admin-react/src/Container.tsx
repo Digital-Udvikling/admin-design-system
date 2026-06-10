@@ -11,10 +11,9 @@ export interface ContainerProps extends ComponentProps<"div"> {
 }
 
 /**
- * Page content region: a centered, max-width column that also owns the
- * vertical gap between stacked sections. Place inside `<AppShell.Main>`,
- * which provides no padding of its own. Distinct from the `.Container`
- * escape hatch (e.g. `Card.Container`) — this is a standalone page region.
+ * Page content region: a centered, max-width column that owns the vertical
+ * gap between stacked sections. Place inside `<AppShell.Main>`, which has no
+ * padding of its own. Not the `.Container` escape hatch (`Card.Container`).
  */
 export function Container({ size = "md", compact, className, ...rest }: ContainerProps) {
   return (

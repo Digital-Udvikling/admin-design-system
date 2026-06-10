@@ -2,7 +2,7 @@
 
 > A centered, max-width page region that spaces its sections.
 
-The page body you drop inside `<AppShell.Main>` (which has no padding of its own). It centers content at an admin-wide max-width and puts a consistent gap between stacked sections.
+The page body you drop inside `<AppShell.Main>` (which has no padding of its own).
 
 Not to be confused with the `.Container` escape hatch on compound components like [`Card.Container`](cards.md#advanced-layout-with-cardcontainer) — `<Container>` is a standalone page region, not a bare-primitive sub-part.
 
@@ -107,7 +107,7 @@ Tightens the vertical rhythm and block padding for dense screens.
 
 ### Custom width
 
-Every preset just sets `--container-max`. Override it inline for a one-off width — here a narrow reading column, capped at 40rem and centered.
+Every preset just sets `--container-max`. Override it inline for a one-off width.
 
 **Example**
 
@@ -130,7 +130,7 @@ Every preset just sets `--container-max`. Override it inline for a one-off width
 
 ### In an app shell
 
-Place a `<Container>` inside `<AppShell.Main>`. See [App shell](../modules/app-shell.md).
+See [App shell](../modules/app-shell.md).
 
 **Example**
 

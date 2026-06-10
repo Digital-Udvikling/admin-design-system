@@ -56,7 +56,7 @@ Beyond the standard `<div>` attributes, two typed shortcuts:
 
 ## Add icons (optional)
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md) for sizing and usage.
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md).
 
 ```bash
 npm install @tabler/icons-react

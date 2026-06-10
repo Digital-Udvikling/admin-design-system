@@ -31,8 +31,6 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
 
 ## Quick start
 
-Navbar above, `main` below.
-
 **Example**
 
 ```html
@@ -187,7 +185,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 
 ### Actions slot
 
-Right-aligned slot for shop switcher, user menu, sign-out, etc. The vanilla example uses a native `<select>`; React's `<Select>` is preferable when option rows need custom rendering (icons, two lines, etc.).
+The vanilla example uses a native `<select>`; React's `<Select>` is preferable when option rows need custom rendering (icons, two lines, etc.).
 
 **Example**
 
@@ -466,8 +464,6 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 ## Examples
 
 ### Classic admin
-
-Sidebar-first with a shop selector in the navbar, tree navigation, and a collapse toggle.
 
 **Example**
 

@@ -18,8 +18,7 @@
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
-  /* Status variants — border + focus outline only; text stays `text-text`, so
-     warning's yellow accent (which fails AA as text) is fine here. */
+  /* Status variants color border + outline only — warning's yellow fails AA as text. */
   .textarea-info {
     @apply border-info hover:border-info focus-visible:outline-info;
   }
@@ -32,16 +31,13 @@
     @apply border-warning hover:border-warning focus-visible:outline-warning;
   }
 
-  /* Grow with content (Chromium 123+; degrades to a fixed resizable box
-     elsewhere). The floor is the larger of the base `min-h-*` and the `rows`
-     attribute; cap growth with a consumer `max-height`. Manual drag-resize is
-     off — height is content-driven. */
+  /* Grow with content (Chromium 123+; fixed box elsewhere). Floor is the larger
+     of `min-h-*` and `rows`; cap with a consumer `max-height`. */
   .textarea-autosize {
     field-sizing: content;
     resize: none;
   }
 
-  /* Sizes */
   .textarea-sm {
     @apply text-xs px-2.5 py-1.5 min-h-16;
   }

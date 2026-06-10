@@ -1,9 +1,7 @@
 /*
- * Layer order: push Tailwind's `components` and `utilities` after Starlight's
- * own layers so admin-css component styles (e.g. `.btn-sm { font-size }`) win
- * over `@layer starlight.reset { button { font: inherit } }`. Without this
- * pre-declaration, Starlight's layers append *after* Tailwind's and override
- * our component sizing regardless of selector specificity.
+ * Pre-declare layer order so Tailwind's `components`/`utilities` land after
+ * Starlight's layers — otherwise Starlight's append later and `starlight.reset`
+ * overrides component sizing regardless of selector specificity.
  */
 @layer theme, base, starlight.base, starlight.reset, starlight.core,
   starlight.content, starlight.components, starlight.utils, components,
@@ -11,41 +9,30 @@
 
 @import "tailwindcss";
 
-/*
- * Tabler icon webfont — the recommended icon family for this system. Drives
- * `<i class="ti ti-x">` in vanilla previews. The React side uses
- * `@tabler/icons-react` and doesn't need this CSS.
- */
+/* Tabler webfont for `<i class="ti ti-x">` in vanilla previews. */
 @import "@tabler/icons-webfont/dist/tabler-icons.min.css";
 
 /*
- * Pull design-system source files (not the built bundle) so the docs share
- * Tailwind's single compilation pass — no duplicated preflight, and edits to
- * admin-css source hot-reload immediately during dev.
- *
- * We skip admin-css/base.css — Starlight has its own body/font reset. Instead
- * we remap Starlight's --sl-color-* variables onto the Flexoki palette below
- * so the page chrome shares the design system's tokens.
+ * Design-system *source*, not the built bundle, so docs share Tailwind's single
+ * compilation pass and admin-css edits hot-reload in dev. admin-css/base.css is
+ * skipped — Starlight owns the body/font reset; its --sl-color-* variables are
+ * remapped onto the Flexoki palette below.
  */
 @import "@aortl/admin-css/src/fonts.css";
 @import "@aortl/admin-css/src/theme.css";
 @import "@aortl/admin-css/src/components/index.css";
 
 /*
- * Scoped + prefixed bundle for React previews. Components imported from
- * `@aortl/admin-react` emit `_ao-`-prefixed class names and require an
- * ancestor `._ao-admin-root` element; the example plugin wraps every React
- * preview in `<AdminRoot>` so this stylesheet matches their DOM. Loaded as
- * the built artifact (not source) so it survives the wrap-scoped transform.
+ * Scoped `_ao-` bundle matching the React previews (each is wrapped in
+ * `<AdminRoot>`). Built artifact, not source — the scoping only exists
+ * post-wrap-scoped.
  */
 @import "@aortl/admin-css/admin.scoped.css";
 
 /*
- * AdminRoot in production owns its surface and forks its own color-scheme
- * (that's the point — admin styles can't bleed in or out). In the docs it's
- * wrapping React previews that need to sit flush inside `.example-preview`:
- * the wrapper would otherwise break the flex layout, paint over Starlight's
- * chrome, and ignore the theme toggle. Neutralize it just for previews.
+ * AdminRoot deliberately owns its surface and forks color-scheme; inside
+ * `.example-preview` that breaks the flex layout, paints over Starlight's
+ * chrome, and ignores the theme toggle. Neutralize it for previews only.
  */
 .example-preview ._ao-admin-root {
   display: contents;
@@ -55,13 +42,10 @@
 }
 
 /*
- * Restore markdown list styling. Tailwind's Preflight resets
- * `ul, ol { list-style: none; margin: 0; padding: 0 }` in `@layer base`, and
- * Starlight's markdown CSS only handles list *spacing* — it leans on the
- * user-agent defaults for markers and indentation, which the reset wipes out.
- * These rules are unlayered, so they win over Preflight regardless of
- * specificity. Scoped to `.sl-markdown-content` and skipping `.not-content`
- * subtrees so embedded component examples keep their own list styling.
+ * Restore markdown list styling: Tailwind's Preflight wipes the UA list
+ * markers/indentation Starlight's markdown CSS relies on. Unlayered, so these
+ * beat Preflight regardless of specificity; `.not-content` subtrees keep their
+ * own list styling.
  */
 .sl-markdown-content :is(ul, ol):not(:where(.not-content *)) {
   padding-inline-start: 1.25rem;
@@ -74,14 +58,12 @@
 }
 
 /*
- * Map Starlight chrome tokens onto the Flexoki palette. Starlight defaults
- * `:root` to dark and overrides `:root[data-theme='light']` for light, so we
- * mirror that structure. These rules sit outside `@layer starlight.base`, so
- * they win against Starlight's defaults.
+ * Map Starlight chrome tokens onto Flexoki. Starlight treats `:root` as dark
+ * and overrides `[data-theme='light']` — mirror that. Unlayered, so these win
+ * over `@layer starlight.base`.
  */
 :root,
 ::backdrop {
-  /* Font — share the design system stack (IBM Plex + system fallback) */
   --sl-font: var(--font-sans);
   --sl-font-mono: var(--font-mono);
 
@@ -118,7 +100,6 @@
 
 :root[data-theme="light"],
 [data-theme="light"] ::backdrop {
-  /* Light mode — Flexoki paper + base ramp */
   --sl-color-white: var(--color-black);
   --sl-color-gray-1: var(--color-base-900);
   --sl-color-gray-2: var(--color-base-700);

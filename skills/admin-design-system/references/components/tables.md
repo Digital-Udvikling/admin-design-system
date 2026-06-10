@@ -8,8 +8,6 @@ Native `<table>` semantics. Cells inherit style from descendant selectors — no
 
 ### Basic
 
-The React API mirrors the HTML via dot-notation subparts.
-
 **Example**
 
 ```html
@@ -72,7 +70,7 @@ The React API mirrors the HTML via dot-notation subparts.
 
 ### Modifiers
 
-`striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding, `sticky` pins the header (requires a scrolling ancestor — see below).
+`striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding.
 
 **Example**
 

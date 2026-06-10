@@ -16,7 +16,7 @@ npm install @aortl/admin-css
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry. Package page: [`@aortl/admin-css` on npm](https://www.npmjs.com/package/@aortl/admin-css).
 
-Embedding admin markup inside a non-admin page? See [Scoped bundle](scoped.md) for a variant that wraps every rule in `@scope (._ao-admin-root)` and prefixes class names with `_ao-` so they can't collide with the host's CSS.
+Embedding admin markup inside a non-admin page? See [Scoped bundle](scoped.md).
 
 ## Utilities (optional)
 
@@ -63,7 +63,7 @@ Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-bl
 
 ## Add icons (optional)
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md) for sizing and usage. The webfont drops in without a bundler:
+The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md). The webfont drops in without a bundler:
 
 ```html
 <link

@@ -23,11 +23,7 @@ function MenuPopup({ className, role = "menu", ...rest }: MenuPopupProps) {
 }
 
 interface MenuItemHotkeyProp {
-  /**
-   * Keyboard shortcut bound to this item. Pressing the chord synthesizes a
-   * click on this item. Right-pinned visually inside the menu row. Same
-   * syntax as `useHotkey`.
-   */
+  /** Keyboard shortcut (`useHotkey` syntax) — synthesizes a click; shown right-pinned in the row. */
   hotkey?: string | readonly string[];
 }
 
@@ -41,9 +37,7 @@ function MenuItem(props: MenuItemProps) {
   const ref = useRef<HTMLElement | null>(null);
   const hotkey = props.hotkey;
 
-  // An item is inert when it carries the native `disabled` (button branch) or
-  // an `aria-disabled` (anchor branch — links have no `disabled` attribute).
-  // `aria-disabled` may arrive as the boolean `true` or the string `"true"`.
+  // Anchors have no native `disabled`, hence the `aria-disabled` branch.
   const ariaDisabled = props["aria-disabled"];
   const isDisabled =
     ("disabled" in props && props.disabled === true) ||
@@ -57,9 +51,7 @@ function MenuItem(props: MenuItemProps) {
   if (props.href !== undefined) {
     const { className, role = "menuitem", icon, children, hotkey: _hk, onClick, ...rest } = props;
     return (
-      // An <a href> with role="menuitem" is natively keyboard-activable (Enter);
-      // this onClick only intercepts clicks on a disabled item, so the static-
-      // element / key-events a11y rules are false positives here.
+      // <a href> is natively keyboard-activable, so these a11y rules are false positives.
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <a
         ref={ref as Ref<HTMLAnchorElement>}
@@ -67,8 +59,7 @@ function MenuItem(props: MenuItemProps) {
         aria-keyshortcuts={ariaKeyShortcuts}
         className={cn("menu-item", className)}
         onClick={(event) => {
-          // Anchors ignore `aria-disabled` natively, so a real click (or a
-          // hotkey-synthesized one) would still navigate and fire onClick.
+          // Anchors ignore `aria-disabled` natively — without this, clicks would still navigate.
           if (isDisabled) {
             event.preventDefault();
             return;

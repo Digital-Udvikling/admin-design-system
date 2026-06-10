@@ -63,11 +63,8 @@ describe("Select", () => {
     });
 
     it("portals the popup into an ancestor <Dialog> instead of document.body", async () => {
-      // Regression guard: a `<dialog>` opened with showModal() lives in the
-      // browser's top layer. Popups portaled to `document.body` (the Base UI
-      // default) paint behind the dialog regardless of z-index. Our wrapper
-      // consumes the Dialog's `PortalContainerContext` ref so the popup
-      // renders inside the dialog and inherits the top-layer paint context.
+      // A modal <dialog> sits in the top layer; popups portaled to document.body
+      // paint behind it regardless of z-index, so the wrapper portals into the dialog.
       const user = userEvent.setup();
       render(
         <Dialog.Container open>
@@ -92,10 +89,8 @@ describe("Select", () => {
     });
 
     it("portals the popup into an ancestor <AdminRoot> when there's no Dialog", async () => {
-      // The scoped bundle admin-react ships wraps every rule in
-      // @scope (._ao-admin-root). A popup portaled to document.body (the Base
-      // UI default) falls outside that scope and renders unstyled; AdminRoot
-      // publishes itself as the PortalContainerContext so popups stay in-scope.
+      // The scoped bundle wraps every rule in @scope (._ao-admin-root); a popup
+      // portaled to document.body falls outside the scope and renders unstyled.
       const user = userEvent.setup();
       render(
         <AdminRoot data-testid="root">

@@ -7,9 +7,7 @@ export interface TableProps extends ComponentProps<"table"> {
   striped?: boolean;
   bordered?: boolean;
   relaxed?: boolean;
-  /** Pins `<thead>` while the surrounding scroll container scrolls.
-   *  Requires an overflowing ancestor — wrap the table in
-   *  `<div style="overflow:auto; max-height: …">`. */
+  /** Pins `<thead>`; requires an overflowing ancestor (`overflow: auto` + `max-height` wrapper). */
   sticky?: boolean;
 }
 
@@ -47,13 +45,9 @@ function TableFoot({ className, ...rest }: TableFootProps) {
 }
 
 export interface TableRowProps extends ComponentProps<"tr"> {
-  /** Visually marks the row as selected. Independent of the CSS rule that
-   *  tints rows containing a checked checkbox — use this for programmatic
-   *  selection (single-select on row click, server-driven highlight, …). */
+  /** Programmatic selection highlight — independent of the CSS rule tinting rows with a checked checkbox. */
   selected?: boolean;
-  /** Applies `.table-row-link` so the first `<a>` inside the row expands to
-   *  fill the row. The consumer still supplies the anchor — this just adds
-   *  the CSS hook so the hit-area covers the whole row. */
+  /** Applies `.table-row-link` so the first `<a>` in the row fills it; the consumer still supplies the anchor. */
   asLink?: boolean;
 }
 function TableRow({ selected, asLink, className, ...rest }: TableRowProps) {
@@ -68,9 +62,7 @@ function TableRow({ selected, asLink, className, ...rest }: TableRowProps) {
 
 export interface TableHeaderCellProps extends Omit<ComponentProps<"th">, "align"> {
   align?: TableAlign;
-  /** Narrow first-column gutter — mirrors the body cell `gutter` modifier so
-   *  the column lines up. Use for status-icon columns and select-all
-   *  checkboxes. */
+  /** Narrow first-column gutter, mirroring the body cell `gutter` so the column lines up. */
   gutter?: boolean;
 }
 function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHeaderCellProps) {

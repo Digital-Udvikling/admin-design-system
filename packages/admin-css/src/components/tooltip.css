@@ -1,17 +1,9 @@
 @layer components {
-  /*
-   * Two paths, one class.
-   *
-   * React: Base UI portals the popup to <body> and anchors it with floating-ui;
-   * the `.tooltip` class only carries paint + per-side enter/exit transitions
-   * driven by Base UI's `data-side` / `data-starting-style` / `data-ending-style`
-   * attributes.
-   *
-   * Vanilla: `.tooltip-wrap` is a `position: relative` parent that reveals a
-   * nested `.tooltip` on `:hover` / `:focus-within`. No portal, no JS — works in
-   * every modern browser today. The platform-native future is `interesttarget` +
-   * `popover="hint"`, but cross-browser support is still rolling out.
-   */
+  /* Two paths, one class. React: Base UI portals and positions the popup;
+     `.tooltip` carries paint + per-side transitions via Base UI's data attrs.
+     Vanilla: `.tooltip-wrap` reveals a nested `.tooltip` on :hover /
+     :focus-within — no JS. Replace with `interesttarget` + `popover="hint"`
+     once cross-browser support lands. */
   .tooltip {
     @apply inline-block max-w-xs px-2 py-1
            rounded-md
@@ -22,13 +14,11 @@
     text-wrap: balance;
   }
 
-  /* Sizes */
   .tooltip-sm {
     @apply px-1.5 py-0.5;
   }
 
-  /* React (portalled) enter/exit — Base UI sets these data attrs on Popup.
-     150ms ease, matching Dialog. */
+  /* React enter/exit — Base UI sets these data attrs; 150ms matches Dialog. */
   .tooltip {
     transition:
       opacity 150ms ease-out,

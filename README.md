@@ -24,7 +24,7 @@ pnpm dev            # runs the docs site at http://localhost:4321 in watch mode
 
 ## Adding a new component
 
-See [**Contributing → Adding a component**](https://digital-udvikling.github.io/admin-design-system/contributing/adding-a-component/) in the docs for the full walkthrough, conventions, and skill-bundle regeneration. The short version:
+See [**Contributing → Adding a component**](https://digital-udvikling.github.io/admin-design-system/contributing/adding-a-component/). The short version:
 
 1. `packages/admin-css/src/components/<name>.css` + an `@import` in `index.css`.
 2. (Optional) `packages/admin-react/src/<Name>.tsx` + re-export from `src/index.ts`.

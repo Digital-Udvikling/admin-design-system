@@ -10,16 +10,12 @@
            disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
   }
 
-  /* Keep leading/trailing icons at their intrinsic size — a flex item defaults
-     to `flex-shrink: 1`, so a narrow flex container would otherwise squish the
-     glyph horizontally before wrapping or truncating the label. */
+  /* Don't let a narrow container squish the glyph before the label wraps. */
   .btn > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* Variants — the bare `.btn` (no modifier) is the low-emphasis default, so
-     most admin buttons need no variant class. The colored variants reset the
-     border to transparent since the base now carries a visible one. */
+  /* Variants — bare `.btn` is the low-emphasis default; most buttons need no variant class. */
   .btn-primary {
     @apply bg-primary text-primary-content border-transparent hover:bg-primary-hover;
   }
@@ -28,11 +24,7 @@
     @apply bg-transparent text-text border-transparent hover:bg-surface-muted;
   }
 
-  /* Muted — fills with the page background (`surface`) so it sits flush
-     instead of reading as a raised control, mirroring `card-muted`. The
-     default `.btn` is one step up (`surface-muted`); hover lifts the muted
-     button to that resting fill. For de-emphasised actions that should
-     recede into the page. */
+  /* Fills with the page background so it sits flush instead of raised — mirrors `card-muted`. */
   .btn-muted {
     @apply bg-surface hover:bg-surface-muted;
   }
@@ -50,14 +42,11 @@
     @apply text-base px-5 py-2.5 gap-2.5;
   }
 
-  /* Modifiers */
   .btn-full-width {
     @apply w-full;
   }
 
-  /* Icon-only — equalises padding so the button reads as a square. The React
-     wrapper adds this automatically when `.btn` has an icon but no text
-     children; vanilla callers add it themselves. Pair with `aria-label`. */
+  /* Icon-only — equalises padding so the button reads as a square. Pair with `aria-label`. */
   .btn-square {
     @apply px-2;
   }
@@ -70,11 +59,8 @@
     @apply px-2.5;
   }
 
-  /* Loading state — paints a spinner via ::before, so no extra markup is
-     required. Sized in `em` so it tracks btn-sm / btn-lg. Pair with the
-     `disabled` attribute (or the React wrapper, which sets it for you) for
-     keyboard a11y; the visual disable lives here so vanilla still feels right
-     without it. */
+  /* Spinner via ::before, `em`-sized so it tracks btn-sm / btn-lg. Pair with
+     the `disabled` attribute for keyboard a11y. */
   .btn-loading {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
   }
@@ -91,9 +77,7 @@
     animation: spinner-spin 0.6s linear infinite;
   }
 
-  /* Suppress a leading icon while loading so we don't show two glyphs.
-     Trailing icons stay visible — they may convey structural meaning
-     (e.g. a dropdown chevron on a split-button trigger). */
+  /* Hide the leading icon while loading; trailing icons (e.g. a dropdown chevron) stay. */
   .btn-loading > :is(i, svg):first-child {
     display: none;
   }

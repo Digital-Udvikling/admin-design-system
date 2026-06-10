@@ -45,7 +45,7 @@ export function ProductPageAdminMenu() {
 </div>
 ```
 
-The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../basics/dark-mode.md) for the full picture.
+The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../basics/dark-mode.md).
 
 ## Host-page style isolation
 

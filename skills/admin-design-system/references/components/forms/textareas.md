@@ -80,7 +80,7 @@ Height tracks content via CSS `field-sizing` — no JavaScript. The floor is the
 
 ### Inside a Field
 
-See [Fields](fields.md) for label, description, and validation.
+See [Fields](fields.md).
 
 **Example**
 

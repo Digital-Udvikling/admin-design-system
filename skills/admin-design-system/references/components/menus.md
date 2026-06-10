@@ -123,8 +123,6 @@ The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edg
 
 ### Grouped items
 
-Cluster related entries with `<Menu.Group>` + `<Menu.GroupLabel>`.
-
 **Example**
 
 ```html

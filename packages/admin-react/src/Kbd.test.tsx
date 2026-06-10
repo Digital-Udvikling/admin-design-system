@@ -31,7 +31,6 @@ describe("Kbd", () => {
   it("renders only the first alternative when keys is an array", () => {
     render(<Kbd keys={["mod+s", "mod+enter"]} />);
     const chips = screen.getAllByText((_, el) => el?.tagName === "KBD");
-    // Ctrl + S (not Enter, not a second Ctrl)
     expect(chips).toHaveLength(2);
     expect(chips[0]).toHaveTextContent("Ctrl");
     expect(chips[1]).toHaveTextContent("S");

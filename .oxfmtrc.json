@@ -17,6 +17,7 @@
     "**/.turbo",
     "**/.vite",
     "pnpm-lock.yaml",
-    "skills"
+    "skills",
+    "**/CHANGELOG.md"
   ]
 }

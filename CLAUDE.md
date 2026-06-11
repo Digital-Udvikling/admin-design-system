@@ -185,7 +185,9 @@ The repo ships an Agent Skill at `skills/admin-design-system/` (see [getting-sta
 
 Root `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/) format. **One file for both packages** — they share a version and release together; tag each entry `(css)` / `(react)` / `(both)` to show which dep a consumer bumps. It is hand-curated, not generated from commits: every PR with a consumer-visible change adds a bullet under `## [Unreleased]` (the Conventional Commit prefix maps to the H3 — `feat:` → Added, `fix:` → Fixed). Skip docs-only and internal changes.
 
-The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` directly via the `@changelog` Vite alias (also a `tsconfig.json` path) and renders it inside Starlight's `<StarlightPage>` — no copy step, no generated file. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
+The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` via the `@changelog` Vite alias (typed by the ambient `apps/docs/src/changelog.d.ts`) and renders it inside Starlight's `<StarlightPage>`, passing `getHeadings()` so the version TOC populates — no copy step, no generated file. The file has no top-level `# Changelog` heading; the page title supplies it. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
+
+`CHANGELOG.md` is in `.oxfmtrc.json`'s `ignorePatterns`: the keep-a-changelog release plugin owns its formatting, and oxfmt (which also formats markdown) disagrees with the plugin's compare-link spacing — so the release plugin is the single formatter.
 
 ## Releasing
 

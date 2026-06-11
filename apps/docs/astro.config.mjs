@@ -19,6 +19,9 @@ export default defineConfig({
     starlight({
       title: "Admin design system",
       customCss: ["./src/styles/global.css"],
+      components: {
+        SiteTitle: "./src/components/SiteTitle.astro",
+      },
       editLink: {
         baseUrl: "https://github.com/Digital-Udvikling/admin-design-system/edit/main/apps/docs/",
       },

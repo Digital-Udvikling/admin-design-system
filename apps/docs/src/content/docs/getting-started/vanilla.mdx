@@ -5,6 +5,8 @@ sidebar:
   order: 1
 ---
 
+import InstallCommand from "../../../components/InstallCommand.astro";
+
 ## Install via CDN
 
 ```html
@@ -13,9 +15,7 @@ sidebar:
 
 ## Or via npm
 
-```bash
-npm install @aortl/admin-css
-```
+<InstallCommand pkg="@aortl/admin-css" />
 
 Then import `@aortl/admin-css/admin.min.css` from your bundler entry. Package page: [`@aortl/admin-css` on npm](https://www.npmjs.com/package/@aortl/admin-css).
 

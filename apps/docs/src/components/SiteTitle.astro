@@ -1,0 +1,27 @@
+---
+import Default from "@astrojs/starlight/components/SiteTitle.astro";
+import { version } from "../version";
+---
+
+<Default />
+<a class="version-badge" href={`${import.meta.env.BASE_URL}changelog/`}>v{version}</a>
+
+<style>
+  .version-badge {
+    align-self: center;
+    margin-inline-start: 0.5rem;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    font-size: var(--sl-text-xs);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
+    color: var(--sl-color-text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .version-badge:hover {
+    border-color: var(--sl-color-text-accent);
+    color: var(--sl-color-text-accent);
+  }
+</style>

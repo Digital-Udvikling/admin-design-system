@@ -1,0 +1,16 @@
+---
+import { Code } from "@astrojs/starlight/components";
+import { version } from "../version";
+
+interface Props {
+  /** The `@aortl` package to pin to the current release. */
+  pkg: string;
+  /** Extra packages to install unpinned (e.g. peer deps like `react react-dom`). */
+  extra?: string;
+}
+
+const { pkg, extra } = Astro.props;
+const command = `npm install ${pkg}@${version}${extra ? ` ${extra}` : ""}`;
+---
+
+<Code code={command} lang="bash" />

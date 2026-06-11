@@ -5,13 +5,13 @@ sidebar:
   order: 2
 ---
 
+import InstallCommand from "../../../components/InstallCommand.astro";
+
 Every component emits `_ao-`-prefixed class names; `<AdminRoot>` is required to scope the subtree into the bundled CSS. See [Scoped bundle](../scoped/).
 
 ## Install
 
-```bash
-npm install @aortl/admin-react react react-dom
-```
+<InstallCommand pkg="@aortl/admin-react" extra="react react-dom" />
 
 Package page: [`@aortl/admin-react` on npm](https://www.npmjs.com/package/@aortl/admin-react).
 

@@ -110,6 +110,15 @@ function stripMdxNoiseInProse(prose) {
   });
   prose = prose.replace(/^\s*<\/Card>\s*$/gm, "");
 
+  // The docs `<InstallCommand>` pins the live version; the skill is a static
+  // artifact, so render the unversioned command to avoid churn on every release.
+  prose = prose.replace(/<InstallCommand\b([^>]*?)\/>/g, (_, attrs) => {
+    const pkg = attrs.match(/pkg="([^"]+)"/)?.[1];
+    if (!pkg) return "";
+    const extra = attrs.match(/extra="([^"]+)"/)?.[1];
+    return `\`\`\`bash\nnpm install ${pkg}${extra ? ` ${extra}` : ""}\n\`\`\``;
+  });
+
   prose = prose.replace(/<LinkCard\b([\s\S]*?)\/>/g, (_, attrs) => {
     const title = attrs.match(/title="([^"]+)"/)?.[1];
     const tplHref = attrs.match(/href=\{`\$\{import\.meta\.env\.BASE_URL\}([^`}]+)`\}/)?.[1];

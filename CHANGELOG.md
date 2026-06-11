@@ -1,0 +1,50 @@
+All notable changes to `@aortl/admin-css` and `@aortl/admin-react` are documented here. The two packages share a version and release together; each entry is tagged `(css)`, `(react)`, or `(both)` to show which package a consumer needs to bump.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+- Add a changelog following the Keep a Changelog format.
+
+## [0.16.1] - 2026-06-03
+
+### Fixed
+
+- Break long unbreakable tokens instead of overflowing flex/grid tracks. (css)
+
+## [0.16.0] - 2026-06-03
+
+### Added
+
+- `Prose` component / `.prose` class for styling rendered markdown and HTML. (both)
+
+### Changed
+
+- Rename the default `Progress` and chart variant from `primary` to `info`. (both)
+
+### Fixed
+
+- Block activation and hotkeys on disabled `Menu` items. (both)
+- Style native vanilla checkbox and radio inputs to match the React components. (css)
+- Let the `Dialog` body scroll on tall content. (css)
+- Merge a consumer-supplied `Dialog` ref so open/close survives. (react)
+- Drop `overflow-auto` on `Card` so popovers and focus rings aren't clipped. (css)
+
+## [0.15.1] - 2026-06-02
+
+### Added
+
+- Sliding animation on `Tabs`. (both)
+
+## [0.15.0] - 2026-06-02
+
+### Changed
+
+- Make `primary` a high-contrast neutral and move blue to `info`. (both)
+- Use solid color fills for `Alert` and `Badge` status variants. (both)
+
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.1...HEAD
+[0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
+[0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
+[0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
+[0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0

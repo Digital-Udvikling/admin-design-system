@@ -1,5 +1,6 @@
 {
   "name": "admin",
+  "version": "0.16.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +11,7 @@
     "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
     "test": "pnpm -r --filter='@aortl/*' run test",
     "generate-skill": "pnpm --filter docs generate-skill",
+    "release": "release-it",
     "clean": "pnpm -r exec rm -rf dist .astro node_modules/.vite",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -18,9 +20,12 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@release-it/bumper": "7.0.6",
+    "@release-it/keep-a-changelog": "7.1.0",
     "husky": "9.1.7",
     "oxfmt": "0.50.0",
     "oxlint": "1.65.0",
+    "release-it": "20.2.0",
     "typescript": "5.8.3"
   },
   "engines": {

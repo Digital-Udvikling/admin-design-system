@@ -19,7 +19,8 @@
   "files": [
     "dist",
     "src",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "type": "module",
   "sideEffects": [
@@ -51,6 +52,7 @@
     "dev:css": "tailwindcss -i ./src/admin.css -o ./dist/admin.css --watch",
     "dev:scoped": "node --watch-path=./dist/admin.css ./scripts/wrap-scoped.mjs",
     "prepublishOnly": "pnpm build",
+    "prepack": "cp ../../CHANGELOG.md ./CHANGELOG.md",
     "test": "vitest run",
     "test:watch": "vitest"
   },

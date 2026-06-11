@@ -1,0 +1,26 @@
+{
+  "git": {
+    "commit": true,
+    "commitMessage": "chore(release): v${version}",
+    "tag": false,
+    "tagName": "v${version}",
+    "tagMatch": "v[0-9]*.[0-9]*.[0-9]*",
+    "push": true
+  },
+  "npm": {
+    "publish": false
+  },
+  "github": {
+    "release": false
+  },
+  "plugins": {
+    "@release-it/keep-a-changelog": {
+      "filename": "CHANGELOG.md",
+      "addUnreleased": true,
+      "addVersionUrl": true
+    },
+    "@release-it/bumper": {
+      "out": ["packages/admin-css/package.json", "packages/admin-react/package.json"]
+    }
+  }
+}

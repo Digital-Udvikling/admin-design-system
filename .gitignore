@@ -10,3 +10,6 @@ dist
 .turbo
 coverage
 .claude/worktrees
+
+# Copied from the repo root at pack time so npm shows a Changelog tab.
+packages/*/CHANGELOG.md

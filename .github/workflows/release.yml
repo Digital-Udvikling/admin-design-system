@@ -72,6 +72,15 @@ jobs:
       - name: Validate before publishing
         if: steps.plan.outputs.packages != ''
         run: |
+          set -euo pipefail
+          for NAME in ${{ steps.plan.outputs.packages }}; do
+            for f in packages/*/package.json; do
+              [ "$(jq -r .name "$f")" = "$NAME" ] || continue
+              VER="$(jq -r .version "$f")"
+              grep -q "^## \[$VER\]" CHANGELOG.md \
+                || { echo "CHANGELOG.md has no \"## [$VER]\" section"; exit 1; }
+            done
+          done
           pnpm lint
           pnpm format:check
           pnpm build
@@ -82,6 +91,8 @@ jobs:
       # supports OIDC trusted publishing + provenance — `pnpm publish` does neither.
       - name: Build, publish, and tag each package
         if: steps.plan.outputs.packages != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           for NAME in ${{ steps.plan.outputs.packages }}; do
@@ -104,5 +115,17 @@ jobs:
             )
             git tag "$TAG"
             git push origin "$TAG"
+
+            # Umbrella tag + GitHub Release, keyed off the shared version. The
+            # changelog compare links point at v<version>; both packages bump in
+            # lockstep, so the second package this run finds it already pushed.
+            UTAG="v$VERSION"
+            if ! git rev-parse -q --verify "refs/tags/$UTAG" >/dev/null \
+               && ! git ls-remote --exit-code --tags origin "$UTAG" >/dev/null 2>&1; then
+              git tag "$UTAG"
+              git push origin "$UTAG"
+              NOTES="$(awk "/^## \[$VERSION\]/{f=1;next} /^## \[/{f=0} f" CHANGELOG.md)"
+              gh release create "$UTAG" --title "$UTAG" --notes "${NOTES:-No changelog entry.}"
+            fi
             echo "::endgroup::"
           done

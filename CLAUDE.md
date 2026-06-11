@@ -167,6 +167,7 @@ Keep: code examples, a11y hooks, version-pinning, override/escape-hatch APIs, no
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke test at minimum; interaction tests for controlled state.
 5. `apps/docs/src/content/docs/components/<name>.mdx` — each example as a `:::example` block.
 6. `pnpm generate-skill` to regenerate the agent-skill bundle from the new MDX. CI verifies the bundle is in sync via `git diff --exit-code -- skills`, so a forgotten regen turns into a red build.
+7. Add a bullet under `## [Unreleased]` in `CHANGELOG.md` (see [Changelog](#changelog)).
 
 No build config changes needed.
 
@@ -180,11 +181,23 @@ The repo ships an Agent Skill at `skills/admin-design-system/` (see [getting-sta
 
 `skills/` is in `.oxfmtrc.json`'s `ignorePatterns` because it's a generated artifact. `apps/docs/scripts/skill-header.md` is NOT ignored — oxfmt formats it as normal markdown.
 
+## Changelog
+
+Root `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/) format. **One file for both packages** — they share a version and release together; tag each entry `(css)` / `(react)` / `(both)` to show which dep a consumer bumps. It is hand-curated, not generated from commits: every PR with a consumer-visible change adds a bullet under `## [Unreleased]` (the Conventional Commit prefix maps to the H3 — `feat:` → Added, `fix:` → Fixed). Skip docs-only and internal changes.
+
+The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` directly via the `@changelog` Vite alias (also a `tsconfig.json` path) and renders it inside Starlight's `<StarlightPage>` — no copy step, no generated file. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
+
 ## Releasing
 
-Bump `version` in a package's `package.json`, commit, push to `main`. `.github/workflows/release.yml` triggers on path `packages/*/package.json`, diffs the version against existing git tags, then builds + `pnpm publish --provenance` + tags `<name>@<version>` for each package ahead. Don't publish manually; don't amend version commits after push.
+Run `pnpm release` (interactive: pick patch/minor/major; `pnpm release minor` skips the prompt). It uses **release-it** (`.release-it.json` + `@release-it/keep-a-changelog`) to, in one step:
 
-Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publishes `apps/docs/dist` to GitHub Pages.
+1. compute the next version and cut `## [Unreleased]` into a dated `## [x.y.z]` section with a fresh Unreleased and updated compare links (the keep-a-changelog plugin);
+2. bump the root `package.json` (the canonical release pointer, though root is private) and write the same version into both packages' `package.json` (the bumper plugin — JSON mode, which matches oxfmt's `package.json` formatting, so no reformat step is needed);
+3. commit (`chore(release): v${version}`) and push to `main`.
+
+release-it does **not** publish, tag, or create the GitHub release — that stays in CI. On the pushed commit, `.github/workflows/release.yml` triggers on path `packages/*/package.json`, diffs each version against its `<name>@<version>` git tag, and for every package ahead: gates on `grep`-ing the `## [version]` section out of `CHANGELOG.md` (catches a hand-bump that bypassed `pnpm release`, **before** the irreversible publish) alongside lint/build/types/test, then builds + `npm publish --provenance` + tags `<name>@<version>`, pushes one shared umbrella `v<version>` tag (the target of the compare links), and cuts a GitHub Release from that version's changelog section. Don't publish manually.
+
+Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publishes `apps/docs/dist` (including the changelog page) to GitHub Pages.
 
 ## Conventions
 

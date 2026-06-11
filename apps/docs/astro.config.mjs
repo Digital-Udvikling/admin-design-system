@@ -32,6 +32,7 @@ export default defineConfig({
       sidebar: [
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
         { label: "Basics", items: [{ autogenerate: { directory: "basics/" } }] },
+        { label: "Changelog", link: "/changelog/" },
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
         { label: "Modules", items: [{ autogenerate: { directory: "modules/" } }] },
         { label: "Contributing", items: [{ autogenerate: { directory: "contributing/" } }] },
@@ -70,6 +71,7 @@ export default defineConfig({
         ),
         "@docs": fileURLToPath(new URL("./src", import.meta.url)),
         "@example": fileURLToPath(new URL("./plugins/example", import.meta.url)),
+        "@changelog": fileURLToPath(new URL("../../CHANGELOG.md", import.meta.url)),
       },
     },
   },

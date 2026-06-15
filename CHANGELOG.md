@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - `.link` inside an `.alert` inherits the variant's content color instead of the link blue. (css)
+- `tfoot` rows are styled by default — semibold cells with a strong divider above the first footer row (previously unstyled). (css)
 
 ## [0.16.2] - 2026-06-11
 

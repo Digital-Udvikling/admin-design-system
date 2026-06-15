@@ -20,12 +20,34 @@ describe("Table", () => {
             <Table.Cell>ada@example.com</Table.Cell>
           </Table.Row>
         </Table.Body>
+        <Table.Foot>
+          <Table.Row>
+            <Table.Cell>Total</Table.Cell>
+            <Table.Cell numeric>1</Table.Cell>
+          </Table.Row>
+        </Table.Foot>
       </Table>,
     );
     const table = screen.getByRole("table");
     expect(table).toHaveAdminClass("table");
     expect(screen.getByRole("columnheader", { name: "Name" })).toHaveAttribute("scope", "col");
     expect(screen.getByRole("cell", { name: "ada@example.com" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Total" })).toBeInTheDocument();
+  });
+
+  it("Table.Foot renders a tfoot and passes className through", () => {
+    render(
+      <Table>
+        <Table.Foot className="totals" data-testid="foot">
+          <Table.Row>
+            <Table.Cell>Total</Table.Cell>
+          </Table.Row>
+        </Table.Foot>
+      </Table>,
+    );
+    const foot = screen.getByTestId("foot");
+    expect(foot.tagName).toBe("TFOOT");
+    expect(foot).toHaveClass("totals");
   });
 
   it("emits modifier classes on the root", () => {

@@ -16,6 +16,16 @@
     @apply font-medium text-text-muted bg-surface-muted border-b-border-strong whitespace-nowrap;
   }
 
+  /* Totals/footer — all tfoot rows are emphasized; the first row carries a
+     strong divider against the body. 2px so border-collapse picks it over the
+     tbody last row's 1px border-b (equal widths resolve to the upper cell). */
+  .table :where(tfoot :is(td, th)) {
+    @apply font-semibold;
+  }
+  .table :where(tfoot tr:first-child :is(td, th)) {
+    @apply border-t-2 border-t-border-strong;
+  }
+
   /* Body cells only — break long unbreakable values (IDs, hashes, URLs) instead
      of forcing the table into horizontal overflow. */
   .table :where(td),

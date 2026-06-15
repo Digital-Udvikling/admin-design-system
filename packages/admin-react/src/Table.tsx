@@ -40,6 +40,7 @@ function TableBody({ className, ...rest }: TableBodyProps) {
 }
 
 export type TableFootProps = ComponentProps<"tfoot">;
+/** Footer rows are semibold by default; the first row gets a strong top divider against the body. */
 function TableFoot({ className, ...rest }: TableFootProps) {
   return <tfoot className={className} {...rest} />;
 }

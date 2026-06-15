@@ -599,7 +599,7 @@ Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the l
 
 ### Footer row
 
-`<Table.Foot>` (or `<tfoot>`) is unstyled — class it yourself. Common use: a totals row mirroring the body's column alignment.
+`<Table.Foot>` (or `<tfoot>`) rows are semibold, and the first footer row gets a strong top divider against the body.
 
 **Example**
 
@@ -623,8 +623,8 @@ Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the l
   </tbody>
   <tfoot>
     <tr>
-      <td><strong>Total</strong></td>
-      <td data-align="right"><strong>$201.50</strong></td>
+      <td>Total</td>
+      <td data-align="right">$201.50</td>
     </tr>
   </tfoot>
 </table>
@@ -650,12 +650,93 @@ Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the l
   </Table.Body>
   <Table.Foot>
     <Table.Row>
+      <Table.Cell>Total</Table.Cell>
+      <Table.Cell numeric>$201.50</Table.Cell>
+    </Table.Row>
+  </Table.Foot>
+</Table>
+```
+
+Every footer row is semibold; the divider lands above the first. For an invoice-style breakdown, stack subtotal, tax, and total rows.
+
+**Example**
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th data-align="right">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Widget</td>
+      <td data-align="right">$129.00</td>
+    </tr>
+    <tr>
+      <td>Gadget</td>
+      <td data-align="right">$72.50</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Subtotal</td>
+      <td data-align="right">$201.50</td>
+    </tr>
+    <tr>
+      <td>Tax</td>
+      <td data-align="right">$20.15</td>
+    </tr>
+    <tr>
+      <td>
+        Total
+        <span class="badge badge-success badge-soft">
+          <i class="ti ti-trending-up" aria-hidden="true"></i>
+          +12%
+        </span>
+      </td>
+      <td data-align="right">$221.65</td>
+    </tr>
+  </tfoot>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Item</Table.HeaderCell>
+      <Table.HeaderCell align="right">Amount</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Widget</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Gadget</Table.Cell>
+      <Table.Cell numeric>$72.50</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+  <Table.Foot>
+    <Table.Row>
+      <Table.Cell>Subtotal</Table.Cell>
+      <Table.Cell numeric>$201.50</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Tax</Table.Cell>
+      <Table.Cell numeric>$20.15</Table.Cell>
+    </Table.Row>
+    <Table.Row>
       <Table.Cell>
-        <strong>Total</strong>
+        Total{" "}
+        <Badge variant="success" soft icon={IconTrendingUp}>
+          +12%
+        </Badge>
       </Table.Cell>
-      <Table.Cell numeric>
-        <strong>$201.50</strong>
-      </Table.Cell>
+      <Table.Cell numeric>$221.65</Table.Cell>
     </Table.Row>
   </Table.Foot>
 </Table>

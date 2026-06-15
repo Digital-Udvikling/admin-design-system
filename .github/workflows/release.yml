@@ -1,7 +1,8 @@
 name: Release
 
-# Bump a package version on `main`; each package ahead of its `<name>@<version>`
-# git tag is built, published, and tagged.
+# Bump a package version on `main`; each package whose version isn't yet on npm
+# is built and published. A shared `v<version>` umbrella tag + GitHub Release are
+# cut once per release (the target of the changelog compare links).
 #
 # Auth: OIDC trusted publishing (no NPM_TOKEN). Configure once per package on its
 # npm page: Settings → Trusted Publishers → Add → GitHub Actions, with owner
@@ -40,11 +41,10 @@ jobs:
             [ "$(jq -r '.private // false' "$f")" = "true" ] && continue
             NAME="$(jq -r .name "$f")"
             VERSION="$(jq -r .version "$f")"
-            TAG="$NAME@$VERSION"
-            if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
-              echo "✓ $TAG already tagged, skipping"
+            if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+              echo "✓ $NAME@$VERSION already published, skipping"
             else
-              echo "→ Will release $TAG"
+              echo "→ Will release $NAME@$VERSION"
               PKGS="$PKGS $NAME"
             fi
           done
@@ -66,9 +66,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # This runs in parallel with ci.yml (no dependency on it), so gate the
-      # irreversible publish + tag here — a red version-bump commit would otherwise
-      # publish a broken release permanently, since its tag makes the plan step skip
-      # re-publishing. `build` first: the docs type-check needs built workspace types.
+      # irreversible publish here — a red version-bump commit would otherwise publish
+      # a broken release permanently, since the published version makes the plan step
+      # skip re-publishing. `build` first: the docs type-check needs built workspace types.
       - name: Validate before publishing
         if: steps.plan.outputs.packages != ''
         run: |
@@ -89,7 +89,7 @@ jobs:
 
       # `pnpm pack` rewrites `workspace:*` deps to real versions, and npm 11.5+
       # supports OIDC trusted publishing + provenance — `pnpm publish` does neither.
-      - name: Build, publish, and tag each package
+      - name: Build and publish each package
         if: steps.plan.outputs.packages != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -104,8 +104,7 @@ jobs:
               fi
             done
             VERSION="$(jq -r .version "$DIR/package.json")"
-            TAG="$NAME@$VERSION"
-            echo "::group::Release $TAG"
+            echo "::group::Release $NAME@$VERSION"
             pnpm -r --filter "$NAME..." build
             (
               cd "$DIR"
@@ -113,8 +112,6 @@ jobs:
               npm publish ./*.tgz --access public --provenance
               rm -f ./*.tgz
             )
-            git tag "$TAG"
-            git push origin "$TAG"
 
             # Umbrella tag + GitHub Release, keyed off the shared version. The
             # changelog compare links point at v<version>; both packages bump in

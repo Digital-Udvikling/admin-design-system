@@ -113,6 +113,12 @@ export {
   type TrendIntent,
 } from "./StatCard";
 export {
+  Timeline,
+  type TimelineProps,
+  type TimelineItemProps,
+  type TimelineStatus,
+} from "./Timeline";
+export {
   Item,
   ItemGroup,
   type ItemProps,

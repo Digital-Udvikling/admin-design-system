@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Menu` checkbox/radio items (`checked` / `.menu-item[aria-checked]` + `.menu-item-indicator`). (both)
 - `Input` `clearable` button and a `PasswordInput` reveal toggle (`.input-action`). (both)
 - `Item` and `ItemGroup` components / `.item` — compact list rows with media, content, and actions. (both)
+- `Timeline` component / `.timeline` — vertical event rail with a numbered steps variant. (both)
 
 ## [0.17.0] - 2026-06-15
 

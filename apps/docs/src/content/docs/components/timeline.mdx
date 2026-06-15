@@ -1,0 +1,141 @@
+---
+title: Timeline
+description: Vertical event rail for activity and status history.
+---
+
+import { Timeline } from "@aortl/admin-react";
+import { IconCircleCheck, IconUpload, IconUserPlus } from "@tabler/icons-react";
+
+A vertical rail of events — audit logs, status history, activity feeds. Each item has an indicator (dot, icon, or number), a title, an optional timestamp, and a description. The connector line is drawn in CSS and stops at the last item.
+
+## Examples
+
+### Activity feed
+
+:::example
+
+```html
+<ol class="timeline">
+  <li class="timeline-item timeline-item-success">
+    <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Order shipped</div>
+      <div class="timeline-time">14:32 · today</div>
+      <div class="timeline-description">Handed to DHL, tracking 1Z999AA1.</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Payment captured</div>
+      <div class="timeline-time">14:30 · today</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Order placed</div>
+      <div class="timeline-time">14:28 · today</div>
+    </div>
+  </li>
+</ol>
+```
+
+```tsx
+<Timeline>
+  <Timeline.Item
+    status="success"
+    title="Order shipped"
+    time="14:32 · today"
+    description="Handed to DHL, tracking 1Z999AA1."
+  />
+  <Timeline.Item title="Payment captured" time="14:30 · today" />
+  <Timeline.Item title="Order placed" time="14:28 · today" />
+</Timeline>
+```
+
+:::
+
+### With icons
+
+Pass `icon` to replace the dot with a glyph. See [Icons](../../basics/icons/).
+
+:::example
+
+```html
+<ol class="timeline">
+  <li class="timeline-item">
+    <span class="timeline-indicator"><i class="ti ti-user-plus" aria-hidden="true"></i></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Account created</div>
+      <div class="timeline-time">Mon 09:14</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><i class="ti ti-upload" aria-hidden="true"></i></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Uploaded 12 files</div>
+      <div class="timeline-time">Mon 09:20</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><i class="ti ti-circle-check" aria-hidden="true"></i></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Verified</div>
+      <div class="timeline-time">Mon 09:45</div>
+    </div>
+  </li>
+</ol>
+```
+
+```tsx
+<Timeline>
+  <Timeline.Item icon={IconUserPlus} title="Account created" time="Mon 09:14" />
+  <Timeline.Item icon={IconUpload} title="Uploaded 12 files" time="Mon 09:20" />
+  <Timeline.Item icon={IconCircleCheck} title="Verified" time="Mon 09:45" />
+</Timeline>
+```
+
+:::
+
+### Numbered steps
+
+The `timeline-numbered` variant turns the rail into a step list. Mark completed or current steps with `status` so the marker fills — advance logic stays with the consumer.
+
+:::example
+
+```html
+<ol class="timeline timeline-numbered">
+  <li class="timeline-item timeline-item-success">
+    <span class="timeline-indicator"><span class="timeline-marker">1</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Details</div>
+      <div class="timeline-description">Name and contact.</div>
+    </div>
+  </li>
+  <li class="timeline-item timeline-item-current">
+    <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Payment</div>
+      <div class="timeline-description">Card or invoice.</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><span class="timeline-marker">3</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Review</div>
+      <div class="timeline-description">Confirm and submit.</div>
+    </div>
+  </li>
+</ol>
+```
+
+```tsx
+<Timeline numbered>
+  <Timeline.Item status="success" marker="1" title="Details" description="Name and contact." />
+  <Timeline.Item status="current" marker="2" title="Payment" description="Card or invoice." />
+  <Timeline.Item marker="3" title="Review" description="Confirm and submit." />
+</Timeline>
+```
+
+:::

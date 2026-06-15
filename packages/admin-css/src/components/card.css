@@ -96,4 +96,42 @@
 
   /* No `.card-warning .card-title` rule — the yellow-400 accent fails AA on
      the muted yellow surface. */
+
+  /* Full-bleed media. Sibling of .card-body; first/last placement picks up the
+     card's corner rounding without overflow on the root. */
+  .card-media {
+    @apply block w-full shrink-0 overflow-hidden;
+  }
+  .card-media:first-child {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+  .card-media:last-child {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+  .card-media > :is(img, video) {
+    @apply block w-full h-full object-cover;
+  }
+
+  /* Scroll region — header/actions pin, body scrolls; consumer sets the height.
+     Direct-child header/actions gain padding + a divider since inside
+     .card-body they carry none. */
+  .card-scroll > .card-header {
+    @apply shrink-0 px-5 py-3 border-b border-border;
+  }
+  .card-scroll > .card-body {
+    @apply flex-1 min-h-0 overflow-y-auto;
+  }
+  .card-scroll > .card-body:last-child {
+    /* Keep the scrollbar inside the rounded corners when there's no footer. */
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+  .card-scroll > .card-actions {
+    @apply shrink-0 px-5 py-3 border-t border-border;
+  }
+  .card-compact.card-scroll > :is(.card-header, .card-actions) {
+    @apply px-3 py-2;
+  }
 }

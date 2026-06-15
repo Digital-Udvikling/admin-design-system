@@ -76,4 +76,39 @@ describe("Card", () => {
       "card-actions",
     );
   });
+
+  it("wraps the media prop and places it before the body", () => {
+    render(
+      <Card media={<img src="cover.jpg" alt="Cover" />} title="Promo">
+        body content
+      </Card>,
+    );
+    const media = screen.getByRole("img", { name: "Cover" }).parentElement;
+    expect(media).toHaveAdminClass("card-media");
+    const body = screen.getByText("body content");
+    expect(body).toHaveAdminClass("card-body");
+    expect(media?.nextElementSibling).toBe(body);
+  });
+
+  it("Card.Media renders the media wrapper", () => {
+    render(
+      <Card.Media>
+        <img src="cover.jpg" alt="Cover" />
+      </Card.Media>,
+    );
+    expect(screen.getByRole("img", { name: "Cover" }).parentElement).toHaveAdminClass("card-media");
+  });
+
+  it("Card.Container composes the scroll region", () => {
+    render(
+      <Card.Container scroll>
+        <Card.Header>
+          <Card.Title>Activity</Card.Title>
+        </Card.Header>
+        <Card.Body>rows</Card.Body>
+      </Card.Container>,
+    );
+    const root = screen.getByText("Activity").closest(adminSelector("card"));
+    expect(root).toHaveAdminClass("card-scroll");
+  });
 });

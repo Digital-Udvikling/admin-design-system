@@ -16,6 +16,8 @@ export interface CardContainerProps extends ComponentProps<"div"> {
   variant?: CardVariant;
   bordered?: boolean;
   compact?: boolean;
+  /** Pins direct-child header/actions and scrolls the body. Set the height yourself. */
+  scroll?: boolean;
 }
 
 /**
@@ -26,6 +28,7 @@ function CardContainer({
   variant = "default",
   bordered,
   compact,
+  scroll,
   className,
   ...rest
 }: CardContainerProps) {
@@ -37,6 +40,7 @@ function CardContainer({
           variant !== "default" && `card-${variant}`,
           bordered && "card-bordered",
           compact && "card-compact",
+          scroll && "card-scroll",
         ],
         className,
       )}
@@ -50,6 +54,8 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
   variant?: CardVariant;
   bordered?: boolean;
   compact?: boolean;
+  /** Full-bleed media rendered as `<Card.Media>` above the body. */
+  media?: ReactNode;
   /** Leading icon for the title row. */
   icon?: IconProp;
   /** Renders as `<Card.Title>`. */
@@ -71,6 +77,7 @@ function CardRoot({
   variant,
   bordered,
   compact,
+  media,
   icon,
   title,
   description,
@@ -90,6 +97,7 @@ function CardRoot({
       className={className}
       {...rest}
     >
+      {media !== undefined ? <CardMedia>{media}</CardMedia> : null}
       <CardBody>
         {toolbar !== undefined ? (
           <CardHeader>
@@ -105,6 +113,11 @@ function CardRoot({
       </CardBody>
     </CardContainer>
   );
+}
+
+export type CardMediaProps = ComponentProps<"div">;
+function CardMedia({ className, ...rest }: CardMediaProps) {
+  return <div className={cn("card-media", className)} {...rest} />;
 }
 
 export type CardBodyProps = ComponentProps<"div">;
@@ -147,6 +160,7 @@ function CardActions({ className, ...rest }: CardActionsProps) {
 
 export const Card = Object.assign(CardRoot, {
   Container: CardContainer,
+  Media: CardMedia,
   Body: CardBody,
   Header: CardHeader,
   Toolbar: CardToolbar,

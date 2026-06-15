@@ -90,6 +90,7 @@ export {
   type CardProps,
   type CardVariant,
   type CardContainerProps,
+  type CardMediaProps,
   type CardBodyProps,
   type CardHeaderProps,
   type CardToolbarProps,

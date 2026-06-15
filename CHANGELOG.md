@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Badge soft tinted variants (`soft` / `.badge-soft`) and a dismissible remove button (`onRemove`, `removeLabel` / `.badge-remove`). (both)
 - Alert trailing action slot (`action` / `Alert.Action` / `.alert-action`). (both)
 - In-field input icons — `icon` / `iconTrailing` on `Input`, `.input-icon` wrapper. (both)
+- Card media slot (`media` / `Card.Media` / `.card-media`) and scroll region (`scroll` on `Card.Container` / `.card-scroll`). (both)
 
 ### Changed
 

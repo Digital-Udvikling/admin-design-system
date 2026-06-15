@@ -8,7 +8,7 @@ import { IconShoppingBag, IconArrowRight, IconPencil, IconX } from "@tabler/icon
 
 ### Basic
 
-`<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (media above the body, multiple bodies, custom header), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
+`<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (multiple bodies, a scroll region, custom dividers), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
 
 :::example
 
@@ -246,6 +246,38 @@ Pass `toolbar` for trailing header controls. It sits at the end of the title row
 
 :::
 
+### Media
+
+Pass `media` for full-bleed content above the body. Size the media element itself — here with `aspect-ratio`.
+
+:::example
+
+```html
+<div class="card card-bordered" style="max-width: 20rem">
+  <div class="card-media">
+    <img src="https://picsum.photos/seed/orders/640/360" alt="" style="aspect-ratio: 16 / 9" />
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">Storefront</h3>
+    <p class="card-description">Live since March, 1.2k monthly orders.</p>
+  </div>
+</div>
+```
+
+```tsx
+<Card
+  bordered
+  style={{ maxWidth: "20rem" }}
+  media={
+    <img src="https://picsum.photos/seed/orders/640/360" alt="" style={{ aspectRatio: "16 / 9" }} />
+  }
+  title="Storefront"
+  description="Live since March, 1.2k monthly orders."
+/>
+```
+
+:::
+
 ## Advanced: layout with `Card.Container`
 
 `<Card.Container>` renders the bare `.card` and lets you compose sub-parts directly.
@@ -289,3 +321,53 @@ Pass `toolbar` for trailing header controls. It sits at the end of the title row
 :::
 
 `<Card.Title>` still accepts the `icon` prop in the advanced path, and `<Card.Header>` + `<Card.Toolbar>` are available for composing a header row by hand.
+
+### Scroll region
+
+`scroll` pins a direct-child `.card-header` and `.card-actions` while the body scrolls. Set the card's height; the header and actions gain their own padding and dividers.
+
+:::example
+
+```html
+<div class="card card-bordered card-scroll" style="height: 14rem">
+  <div class="card-header">
+    <h3 class="card-title">Activity</h3>
+  </div>
+  <div class="card-body">
+    <p>Order #1024 placed</p>
+    <p>Order #1023 refunded</p>
+    <p>Order #1022 shipped</p>
+    <p>Order #1021 placed</p>
+    <p>Order #1020 placed</p>
+    <p>Order #1019 cancelled</p>
+    <p>Order #1018 shipped</p>
+  </div>
+  <div class="card-actions">
+    <button class="btn btn-ghost btn-sm">View all</button>
+  </div>
+</div>
+```
+
+```tsx
+<Card.Container bordered scroll style={{ height: "14rem" }}>
+  <Card.Header>
+    <Card.Title>Activity</Card.Title>
+  </Card.Header>
+  <Card.Body>
+    <p>Order #1024 placed</p>
+    <p>Order #1023 refunded</p>
+    <p>Order #1022 shipped</p>
+    <p>Order #1021 placed</p>
+    <p>Order #1020 placed</p>
+    <p>Order #1019 cancelled</p>
+    <p>Order #1018 shipped</p>
+  </Card.Body>
+  <Card.Actions>
+    <Button variant="ghost" size="sm">
+      View all
+    </Button>
+  </Card.Actions>
+</Card.Container>
+```
+
+:::

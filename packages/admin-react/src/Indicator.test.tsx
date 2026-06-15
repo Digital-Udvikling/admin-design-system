@@ -59,6 +59,24 @@ describe("Indicator", () => {
     expect(dot).not.toHaveAdminClass("indicator-dot-neutral");
   });
 
+  it("clamps a numeric label above max to `${max}+`", () => {
+    render(
+      <Indicator label={128} max={99}>
+        <span>anchor</span>
+      </Indicator>,
+    );
+    expect(screen.getByText("99+")).toHaveAdminClass("badge");
+  });
+
+  it("leaves a numeric label at or below max unclamped", () => {
+    render(
+      <Indicator label={5} max={99}>
+        <span>anchor</span>
+      </Indicator>,
+    );
+    expect(screen.getByText("5")).toBeInTheDocument();
+  });
+
   it("sets --indicator-offset on the wrapper when offset is provided", () => {
     const { container } = render(
       <Indicator label="3" offset={4}>

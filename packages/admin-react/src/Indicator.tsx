@@ -23,6 +23,8 @@ export interface IndicatorProps extends ComponentProps<"div"> {
    * the visual corner of rounded anchors (e.g. `4` for `rounded-md`).
    */
   offset?: number;
+  /** Clamp a numeric `label` to `${max}+` when it exceeds this value. */
+  max?: number;
 }
 
 export function Indicator({
@@ -32,6 +34,7 @@ export function Indicator({
   icon,
   placement = "top-end",
   offset,
+  max,
   className,
   "aria-label": ariaLabel,
   style: styleProp,
@@ -45,6 +48,8 @@ export function Indicator({
     horizontal !== "end" && `indicator-${horizontal}`,
   ];
   const hasContent = label !== undefined || icon !== undefined;
+  const displayLabel =
+    typeof label === "number" && max !== undefined && label > max ? `${max}+` : label;
   const style =
     offset !== undefined
       ? ({ ...styleProp, "--indicator-offset": `${offset}px` } as CSSProperties)
@@ -59,7 +64,7 @@ export function Indicator({
           icon={icon}
           aria-label={ariaLabel}
         >
-          {label}
+          {displayLabel}
         </Badge>
       ) : (
         <span

@@ -1,0 +1,81 @@
+@layer components {
+  /* A Dialog variant: the same native <dialog> machinery (showModal, ::backdrop,
+     @starting-style, allow-discrete transitions), edge-anchored instead of
+     centred. `.drawer` overrides `.dialog`'s centring; it imports after dialog.css
+     so equal-specificity rules win. The base opacity fade still applies. */
+  .drawer {
+    margin: 0;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    height: 100dvh;
+    width: min(28rem, 100vw);
+    /* Default: anchored to the inline-end (right in LTR) edge. */
+    margin-inline-start: auto;
+    transform: translateX(100%);
+  }
+  .drawer[open] {
+    transform: translateX(0);
+  }
+  @starting-style {
+    .drawer[open] {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Inline-start (left in LTR) edge. */
+  .drawer-start {
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    transform: translateX(-100%);
+  }
+  @starting-style {
+    .drawer-start[open] {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Bottom sheet. */
+  .drawer-bottom {
+    width: 100vw;
+    height: auto;
+    max-height: 85dvh;
+    margin-block-start: auto;
+    margin-inline: 0;
+    transform: translateY(100%);
+  }
+  .drawer-bottom[open] {
+    transform: translateY(0);
+  }
+  @starting-style {
+    .drawer-bottom[open] {
+      transform: translateY(100%);
+    }
+  }
+
+  /* Sizes adjust the cross-axis extent. */
+  .drawer-sm {
+    width: min(20rem, 100vw);
+  }
+  .drawer-lg {
+    width: min(36rem, 100vw);
+  }
+  .drawer-bottom.drawer-sm {
+    width: 100vw;
+    max-height: 50dvh;
+  }
+  .drawer-bottom.drawer-lg {
+    width: 100vw;
+    max-height: 95dvh;
+  }
+
+  /* Slide is decorative — drop it under reduced motion, keep the opacity fade. */
+  @media (prefers-reduced-motion: reduce) {
+    .drawer {
+      transition:
+        display 150ms allow-discrete,
+        overlay 150ms allow-discrete,
+        opacity 150ms ease-out;
+    }
+  }
+}

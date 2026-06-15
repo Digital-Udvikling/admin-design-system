@@ -1,24 +1,11 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  type ComponentProps,
-  type ReactNode,
-} from "react";
+import { useContext, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
+import { DialogContext, useDialogElement } from "./dialog-internal";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
 
 export type DialogSize = "sm" | "md" | "lg";
 export type DialogClosedBy = "any" | "closerequest" | "none";
-
-interface DialogContextValue {
-  close: () => void;
-}
-
-const DialogContext = createContext<DialogContextValue | null>(null);
 
 function DefaultCloseIcon() {
   return (
@@ -61,39 +48,7 @@ function DialogContainer({
   ref: consumerRef,
   ...rest
 }: DialogContainerProps) {
-  const ref = useRef<HTMLDialogElement | null>(null);
-  const onOpenChangeRef = useRef(onOpenChange);
-  onOpenChangeRef.current = onOpenChange;
-
-  // Without this merge, a consumer `ref` would flow through `...rest`, override
-  // `ref={ref}`, and silently break open/close.
-  const setRef = useCallback(
-    (node: HTMLDialogElement | null) => {
-      ref.current = node;
-      if (typeof consumerRef === "function") consumerRef(node);
-      else if (consumerRef) consumerRef.current = node;
-    },
-    [consumerRef],
-  );
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || open === undefined) return;
-    if (open && !el.open) el.showModal();
-    else if (!open && el.open) el.close();
-  }, [open]);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const handleClose = () => onOpenChangeRef.current?.(false);
-    el.addEventListener("close", handleClose);
-    return () => el.removeEventListener("close", handleClose);
-  }, []);
-
-  const ctx: DialogContextValue = {
-    close: () => ref.current?.close(),
-  };
+  const { setRef, ctx, ref } = useDialogElement(open, onOpenChange, consumerRef);
 
   return (
     <DialogContext.Provider value={ctx}>

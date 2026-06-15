@@ -163,6 +163,13 @@ export {
   type DialogCloseButtonProps,
 } from "./Dialog";
 export {
+  Drawer,
+  type DrawerProps,
+  type DrawerContainerProps,
+  type DrawerSide,
+  type DrawerSize,
+} from "./Drawer";
+export {
   Field,
   type FieldProps,
   type FieldContainerProps,

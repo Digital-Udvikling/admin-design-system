@@ -122,3 +122,30 @@ The `alert-action` class can sit on the link itself or on a wrapper. Inside an a
   A new version is available.
 </Alert>
 ```
+
+### Dismissible
+
+`onDismiss` renders a trailing × button. The alert stays stateless, so wire the click to hide or remove it. It pins to the trailing edge alongside an action.
+
+**Example**
+
+```html
+<div class="alert alert-success" role="status">
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  Changes saved.
+  <button
+    type="button"
+    class="alert-dismiss"
+    aria-label="Dismiss"
+    onclick="this.closest('.alert').remove()"
+  >
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<Alert variant="success" icon={IconCircleCheck} onDismiss={() => {}}>
+  Changes saved.
+</Alert>
+```

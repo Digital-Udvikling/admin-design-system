@@ -145,12 +145,14 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native dialog element.
+- [Drawers](references/components/drawer.md) — Edge-anchored panel built on the native dialog element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.
 - [Forms: Fields](references/components/forms/fields.md) — Accessibility wiring (label, description, validation) around inputs.
 - [Forms: File inputs](references/components/forms/file-inputs.md) — File picker styled to match other inputs.
 - [Forms: Input groups](references/components/forms/input-groups.md) — Combine inputs, addons, and buttons into a flush row.
 - [Forms: Inputs](references/components/forms/inputs.md) — Single-line text input.
+- [Forms: Number inputs](references/components/forms/number-inputs.md) — Numeric field with steppers and clamping.
 - [Forms: Radios](references/components/forms/radios.md) — Mutually exclusive choice within a group.
 - [Forms: Selects](references/components/forms/selects.md) — Compound Select with Trigger + Popup + Item.
 - [Forms: Switches](references/components/forms/switches.md) — Immediate on/off setting.
@@ -159,6 +161,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Indicator](references/components/indicator.md) — Place a badge, count, or dot on the corner of another element.
 - [Kbd](references/components/kbd.md) — Keyboard shortcut chips for help text, tooltips, and bindings.
 - [Links](references/components/links.md) — Styled text links with an optional external affordance.
+- [List](references/components/list.md) — Compact rows for settings, members, and notifications.
 - [Menus](references/components/menus.md) — Dropdown action menu.
 - [Pagination](references/components/pagination.md) — Numbered page navigation with prev/next controls.
 - [Progress](references/components/progress.md) — Styled native <progress> element.
@@ -170,6 +173,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
 - [Tables](references/components/tables.md) — Native table with row selection, sticky headers, and row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.
+- [Timeline](references/components/timeline.md) — Vertical event rail for activity and status history.
 - [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.
 
 ### Modules

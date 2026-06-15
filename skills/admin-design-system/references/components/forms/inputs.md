@@ -93,6 +93,55 @@ The `.input-icon` wrapper floats a borderless muted icon inside the field. Posit
 <Input variant="ghost" type="search" placeholder="Filter rows…" icon={IconSearch} />
 ```
 
+### Clearable
+
+`clearable` floats a × button in the trailing slot while the field holds a value; clicking it empties the field and fires a real change event. The `.input-action` button styling ships to both bundles — vanilla wires the clear in a line of JS.
+
+**Example**
+
+```html
+<label class="input-icon">
+  <input class="input" type="search" value="report" />
+  <button
+    type="button"
+    class="input-action"
+    aria-label="Clear"
+    onclick="const i = this.previousElementSibling; i.value = ''; i.focus();"
+  >
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+</label>
+```
+
+```tsx
+<Input type="search" defaultValue="report" clearable />
+```
+
+### Password
+
+`<PasswordInput>` adds a reveal toggle that flips the field between `password` and `text`, keeping focus and setting `aria-pressed`.
+
+**Example**
+
+```html
+<label class="input-icon">
+  <input class="input" type="password" value="hunter2" />
+  <button
+    type="button"
+    class="input-action"
+    aria-label="Show password"
+    aria-pressed="false"
+    onclick="const i = this.parentElement.querySelector('input'); const shown = i.type === 'text'; i.type = shown ? 'password' : 'text'; this.setAttribute('aria-pressed', String(!shown)); i.focus();"
+  >
+    <i class="ti ti-eye" aria-hidden="true"></i>
+  </button>
+</label>
+```
+
+```tsx
+<PasswordInput defaultValue="hunter2" />
+```
+
 ### Types
 
 **Example**

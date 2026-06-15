@@ -1,0 +1,142 @@
+# Number inputs
+
+> Numeric field with steppers and clamping.
+
+A numeric field with −/+ steppers for quantities, limits, seat counts, and prices. The React component wraps Base UI NumberField for min/max clamping, step, and `Intl` formatting. Vanilla styles a native `<input type="number">` and steps with the platform `stepUp()` / `stepDown()` methods.
+
+The vanilla bundle gets native stepping and constraint validation, but not grouped-thousands formatting — a formatted `1,000` is not a valid `type="number"` value, so the React wrapper manages the display-vs-value split.
+
+## Examples
+
+### Basic
+
+**Example**
+
+```html
+<div class="number-input">
+  <button
+    type="button"
+    class="number-input-step"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input
+    class="number-input-field"
+    type="number"
+    value="3"
+    min="0"
+    max="10"
+    aria-label="Quantity"
+  />
+  <button
+    type="button"
+    class="number-input-step"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<NumberInput defaultValue={3} min={0} max={10} inputAriaLabel="Quantity" />
+```
+
+### Step and range
+
+`step` sets the increment; `min` / `max` clamp the value.
+
+**Example**
+
+```html
+<div class="number-input">
+  <button
+    type="button"
+    class="number-input-step"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input
+    class="number-input-field"
+    type="number"
+    value="50"
+    min="0"
+    max="100"
+    step="5"
+    aria-label="Threshold"
+  />
+  <button
+    type="button"
+    class="number-input-step"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<NumberInput defaultValue={50} min={0} max={100} step={5} inputAriaLabel="Threshold" />
+```
+
+### Sizes
+
+**Example**
+
+```html
+<div class="number-input number-input-sm">
+  <button type="button" class="number-input-step" aria-label="Decrease">
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input class="number-input-field" type="number" value="1" aria-label="Small" />
+  <button type="button" class="number-input-step" aria-label="Increase">
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+<div class="number-input">
+  <button type="button" class="number-input-step" aria-label="Decrease">
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input class="number-input-field" type="number" value="1" aria-label="Medium" />
+  <button type="button" class="number-input-step" aria-label="Increase">
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+<div class="number-input number-input-lg">
+  <button type="button" class="number-input-step" aria-label="Decrease">
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input class="number-input-field" type="number" value="1" aria-label="Large" />
+  <button type="button" class="number-input-step" aria-label="Increase">
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<NumberInput size="sm" defaultValue={1} inputAriaLabel="Small" />
+<NumberInput defaultValue={1} inputAriaLabel="Medium" />
+<NumberInput size="lg" defaultValue={1} inputAriaLabel="Large" />
+```
+
+### Formatting <StarlightBadge text="React only" variant="caution" />
+
+Pass `format` (an `Intl.NumberFormat` options object) for currency, percentages, or grouped thousands. The displayed string and the numeric value diverge, so this is React-only.
+
+**Example**
+
+```tsx
+<NumberInput
+  defaultValue={1499}
+  min={0}
+  step={1}
+  format={{ style: "currency", currency: "USD" }}
+  inputAriaLabel="Price"
+/>
+```

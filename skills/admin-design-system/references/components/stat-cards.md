@@ -153,9 +153,37 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
 </div>
 ```
 
+### Trend
+
+`trend` adds a delta line with a directional caret below the value. Tone is independent of direction — a falling error rate is good, so pass `intent` to override the default mapping (`up` → positive, `down` → negative).
+
+**Example**
+
+```html
+<div class="card stat-card">
+  <p class="stat-card-label">Revenue</p>
+  <p class="stat-card-value">$8.4k</p>
+  <p class="stat-card-trend" data-trend="up" data-intent="positive">+12.4% vs last week</p>
+</div>
+<div class="card stat-card">
+  <p class="stat-card-label">Error rate</p>
+  <p class="stat-card-value">0.42%</p>
+  <p class="stat-card-trend" data-trend="down" data-intent="positive">-0.18 vs prior</p>
+</div>
+```
+
+```tsx
+<StatCard label="Revenue" value="$8.4k" trend={{ direction: "up", value: "+12.4% vs last week" }} />
+<StatCard
+  label="Error rate"
+  value="0.42%"
+  trend={{ direction: "down", intent: "positive", value: "-0.18 vs prior" }}
+/>
+```
+
 ### Custom content
 
-For trend chips, sparklines, or anything else, drop it in as children — it renders below `detail`.
+For sparklines or anything else, drop it in as children — it renders below the trend and `detail`.
 
 **Example**
 

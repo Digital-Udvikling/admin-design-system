@@ -30,6 +30,30 @@ The wrapper is `position: relative`; the floating child is placed by a vertical 
 </Indicator>
 ```
 
+### Count overflow
+
+Pass `max` to clamp a numeric `label` — anything above it renders as `${max}+`. Vanilla consumers write the clamped string directly.
+
+**Example**
+
+```html
+<div class="indicator">
+  <span class="indicator-item badge badge-danger badge-sm">99+</span>
+  <button class="btn btn-primary">
+    <i class="ti ti-inbox" aria-hidden="true"></i>
+    Inbox
+  </button>
+</div>
+```
+
+```tsx
+<Indicator label={128} max={99} variant="danger">
+  <Button variant="primary" icon={IconInbox}>
+    Inbox
+  </Button>
+</Indicator>
+```
+
 ### Status dot
 
 Omit `label` for a label-less status dot. The React component renders a small `.indicator-dot` instead of a `.badge`; in vanilla, swap `.badge` for `.indicator-dot` and add a `.indicator-dot-{variant}` color class. Use `aria-label` to keep it accessible.

@@ -1,0 +1,36 @@
+@layer components {
+  .avatar {
+    @apply relative inline-flex items-center justify-center
+           size-8 rounded-full overflow-hidden
+           bg-surface-strong text-text-muted
+           text-xs font-medium leading-none tracking-tight
+           select-none shrink-0;
+  }
+
+  /* Layered over the initials so they show until the image loads (no JS). */
+  .avatar > img {
+    @apply absolute inset-0 size-full object-cover;
+  }
+
+  .avatar-square {
+    @apply rounded-md;
+  }
+
+  .avatar-sm {
+    @apply size-6 text-[0.625rem];
+  }
+  .avatar-lg {
+    @apply size-10 text-sm;
+  }
+
+  /* Overlapping stack — later siblings paint on top. */
+  .avatar-group {
+    @apply inline-flex items-center;
+  }
+  .avatar-group > .avatar {
+    @apply ring-2 ring-surface;
+  }
+  .avatar-group > .avatar + .avatar {
+    @apply -ms-2;
+  }
+}

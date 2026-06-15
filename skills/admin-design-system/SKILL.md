@@ -135,6 +135,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 - [Accordions](references/components/accordions.md) — Disclosure rows built on <details>.
 - [Alerts](references/components/alerts.md) — Inline notifications for errors, confirmations, and contextual feedback.
+- [Avatar](references/components/avatar.md) — Image with a no-JS initials fallback, plus a group stack.
 - [Badges](references/components/badges.md) — Compact status indicator for tags and counts.
 - [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square for the navbar.
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.

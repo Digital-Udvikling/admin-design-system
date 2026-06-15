@@ -15,6 +15,18 @@
   .indicator:has(> .card) {
     --indicator-offset: 6px;
   }
+  .indicator:has(> .avatar) {
+    --indicator-offset: 5px;
+  }
+  .indicator:has(> .avatar-sm) {
+    --indicator-offset: 3px;
+  }
+  .indicator:has(> .avatar-lg) {
+    --indicator-offset: 6px;
+  }
+  .indicator:has(> .avatar-square) {
+    --indicator-offset: 2px;
+  }
 
   .indicator-item {
     @apply absolute z-[1] whitespace-nowrap;

@@ -8,7 +8,7 @@ The wrapper is `position: relative`; the floating child is placed by a vertical 
 
 ### Count on a button
 
-`.indicator` auto-detects common rounded anchors (`.btn`, `.input`, `.card`) via `:has()` and pulls the badge inward so it aligns with the visual corner. Override with `offset` (or `--indicator-offset`) for custom anchors — e.g. a circular avatar.
+`.indicator` auto-detects common rounded anchors (`.btn`, `.input`, `.card`, `.avatar`) via `:has()` and pulls the badge inward so it aligns with the visual corner. Override with `offset` (or `--indicator-offset`) for other anchors.
 
 **Example**
 

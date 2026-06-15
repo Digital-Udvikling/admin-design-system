@@ -51,6 +51,7 @@ export default defineConfig({
     // ("jsxDEV is not a function"). Pin their full dep surface to keep it stable.
     optimizeDeps: {
       include: [
+        "@base-ui/react/avatar",
         "@base-ui/react/button",
         "@base-ui/react/checkbox",
         "@base-ui/react/dialog",

@@ -40,6 +40,7 @@ export {
   type IndicatorHorizontal,
 } from "./Indicator";
 export { Link, type LinkProps } from "./Link";
+export { Separator, type SeparatorProps } from "./Separator";
 export {
   Pagination,
   getPaginationItems,

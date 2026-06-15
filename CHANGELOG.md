@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Separator` component / `.separator` class — a styled `<hr>` with a vertical modifier. (both)
+
 ## [0.16.2] - 2026-06-11
 
 - Add a changelog following the Keep a Changelog format.

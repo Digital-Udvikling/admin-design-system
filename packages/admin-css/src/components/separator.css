@@ -1,0 +1,13 @@
+@layer components {
+  /* Works on <hr> (border reset) and any block element. Margins are zeroed —
+     spacing comes from the parent's gap or margin utilities. */
+  .separator {
+    @apply block h-px w-full m-0 shrink-0 border-0 bg-border;
+  }
+
+  .separator-vertical {
+    @apply w-px h-auto self-stretch;
+    /* Visible outside a stretching flex/grid cross axis. */
+    min-height: 1lh;
+  }
+}

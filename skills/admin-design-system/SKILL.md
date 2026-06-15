@@ -164,6 +164,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Property list](references/components/property-list.md) — Label-and-value rows for one-entity-N-attributes panels.
 - [Prose](references/components/prose.md) — Styling for rendered markdown and other HTML you don't control.
 - [Row](references/components/row.md) — One-dimensional layouts with flex utilities.
+- [Separator](references/components/separator.md) — A styled hr with an optional vertical modifier.
 - [Spinners](references/components/spinners.md) — Compact CSS-only loading indicator.
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
 - [Tables](references/components/tables.md) — Native table with row selection, sticky headers, and row links.

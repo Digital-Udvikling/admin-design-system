@@ -14,16 +14,25 @@
     align-items: center;
   }
 
-  /* A trailing action switches to grid even without an icon. */
-  .alert:has(> .alert-action) {
+  /* A trailing action or dismiss switches to grid even without an icon. */
+  .alert:has(> .alert-action),
+  .alert:has(> .alert-dismiss) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
     align-items: center;
   }
-  .alert:has(> :is(i, svg):first-child):has(> .alert-action) {
+  /* Action + dismiss together need two trailing columns. */
+  .alert:has(> .alert-action):has(> .alert-dismiss) {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+  /* A leading icon prepends an auto column to whichever trailing layout applies. */
+  .alert:has(> :is(i, svg):first-child):is(:has(> .alert-action), :has(> .alert-dismiss)) {
     grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .alert:has(> :is(i, svg):first-child):has(> .alert-action):has(> .alert-dismiss) {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
   }
 
   .alert > :is(i, svg):first-child {
@@ -32,7 +41,11 @@
   }
 
   /* Replaces the icon-gated explicit-rows rule — rows whenever anything spans them. */
-  .alert:has(> .alert-title):is(:has(> :is(i, svg):first-child), :has(> .alert-action)) {
+  .alert:has(> .alert-title):is(
+      :has(> :is(i, svg):first-child),
+      :has(> .alert-action),
+      :has(> .alert-dismiss)
+    ) {
     grid-template-rows: auto auto;
     align-items: start;
   }
@@ -50,13 +63,23 @@
     grid-column: 2;
   }
 
-  /* `-2` is the last explicit column in both grids; spans both rows, centered. */
-  .alert > .alert-action {
-    @apply font-medium whitespace-nowrap;
-    grid-column: -2;
+  /* Trailing controls pin to the last column(s), spanning both rows, centered.
+     `-2` is the last column in the single-trailing grids; with both present the
+     dismiss keeps `-2` and the action shifts one column left to `-3`. */
+  .alert > :is(.alert-action, .alert-dismiss) {
     grid-row: 1 / -1;
     justify-self: end;
     align-self: center;
+  }
+  .alert > .alert-action {
+    @apply font-medium whitespace-nowrap;
+    grid-column: -2;
+  }
+  .alert > .alert-dismiss {
+    grid-column: -2;
+  }
+  .alert:has(> .alert-dismiss) > .alert-action {
+    grid-column: -3;
   }
 
   /* Solid status fills. Title and icon inherit the `-content` color from the
@@ -83,6 +106,19 @@
 
   .alert-description {
     opacity: 0.85;
+  }
+
+  /* Dismiss button — currentColor hover wash works on the solid fills (where
+     text is `-content`) and the bordered neutral alert alike, like badge-remove. */
+  .alert-dismiss {
+    @apply inline-flex items-center justify-center shrink-0
+           size-5 -mr-1 rounded
+           text-inherit cursor-pointer
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus;
+  }
+  .alert-dismiss:hover {
+    background-color: color-mix(in oklab, currentColor 15%, transparent);
   }
 
   /* `.link`'s blue is illegible on the solid fills; inherit the variant's content

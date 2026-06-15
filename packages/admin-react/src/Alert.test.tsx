@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import { Alert } from "./Alert";
 
 describe("Alert", () => {
@@ -85,5 +86,41 @@ describe("Alert", () => {
     const alert = screen.getByRole("alert");
     expect(alert.firstElementChild).toBe(screen.getByTestId("icon"));
     expect(alert.lastElementChild).toHaveAdminClass("alert-action");
+  });
+
+  it("renders a dismiss button that fires onDismiss once", async () => {
+    const user = userEvent.setup();
+    const onDismiss = vi.fn();
+    render(
+      <Alert variant="info" onDismiss={onDismiss}>
+        Saved.
+      </Alert>,
+    );
+    const button = screen.getByRole("button", { name: "Dismiss" });
+    expect(button).toHaveAdminClass("alert-dismiss");
+
+    await user.click(button);
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the dismiss trailing alongside an icon, title, and action", () => {
+    render(
+      <Alert
+        variant="warning"
+        icon={<svg data-testid="icon" aria-hidden />}
+        title="Storage almost full"
+        action={
+          <a href="/x" className="link">
+            Manage
+          </a>
+        }
+        onDismiss={() => {}}
+        dismissLabel="Dismiss warning"
+      />,
+    );
+    const alert = screen.getByRole("alert");
+    expect(alert.firstElementChild).toBe(screen.getByTestId("icon"));
+    expect(alert.lastElementChild).toHaveAdminClass("alert-dismiss");
+    expect(screen.getByRole("button", { name: "Dismiss warning" })).toBeInTheDocument();
   });
 });

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Alert` dismiss button (`onDismiss` / `.alert-dismiss`). (both)
+
 ## [0.17.0] - 2026-06-15
 
 ### Added

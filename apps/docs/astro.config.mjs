@@ -57,6 +57,7 @@ export default defineConfig({
         "@base-ui/react/dialog",
         "@base-ui/react/field",
         "@base-ui/react/input",
+        "@base-ui/react/number-field",
         "@base-ui/react/radio",
         "@base-ui/react/radio-group",
         "@base-ui/react/select",

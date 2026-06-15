@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Item` and `ItemGroup` components / `.item` — compact list rows with media, content, and actions. (both)
 - `Timeline` component / `.timeline` — vertical event rail with a numbered steps variant. (both)
 - `Drawer` component / `.drawer` — edge-anchored panel sharing the `<dialog>` machinery. (both)
+- `NumberInput` component / `.number-input` — numeric field with steppers over Base UI NumberField. (both)
 
 ## [0.17.0] - 2026-06-15
 

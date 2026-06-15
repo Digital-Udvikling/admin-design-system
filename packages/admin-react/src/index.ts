@@ -48,6 +48,7 @@ export {
   type FileInputSize,
 } from "./FileInput";
 export { InputGroup, type InputGroupProps, type InputGroupAddonProps } from "./InputGroup";
+export { NumberInput, type NumberInputProps, type NumberInputSize } from "./NumberInput";
 export {
   Indicator,
   type IndicatorProps,

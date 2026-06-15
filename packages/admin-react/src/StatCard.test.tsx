@@ -48,4 +48,23 @@ describe("StatCard", () => {
     const { container } = render(<StatCard value="42" detail="vs last week" />);
     expect(container.querySelector(adminSelector("stat-card-label"))).toBeNull();
   });
+
+  it("derives trend intent from direction when intent is omitted", () => {
+    const { container } = render(
+      <StatCard value="128" trend={{ value: "+12%", direction: "up" }} />,
+    );
+    const trend = container.querySelector(adminSelector("stat-card-trend"));
+    expect(trend).toHaveTextContent("+12%");
+    expect(trend).toHaveAttribute("data-trend", "up");
+    expect(trend).toHaveAttribute("data-intent", "positive");
+  });
+
+  it("keeps trend tone independent of caret direction", () => {
+    const { container } = render(
+      <StatCard value="0.42%" trend={{ value: "-0.18", direction: "down", intent: "positive" }} />,
+    );
+    const trend = container.querySelector(adminSelector("stat-card-trend"));
+    expect(trend).toHaveAttribute("data-trend", "down");
+    expect(trend).toHaveAttribute("data-intent", "positive");
+  });
 });

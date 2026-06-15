@@ -3,6 +3,24 @@ import type { CardVariant } from "./Card";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
+export type TrendDirection = "up" | "down" | "flat";
+export type TrendIntent = "positive" | "negative" | "neutral";
+
+export interface StatCardTrend {
+  /** Delta text, e.g. "+12.4%" or "+1,204 this week". */
+  value: ReactNode;
+  /** Caret direction. Default `"up"`. */
+  direction?: TrendDirection;
+  /** Tone, independent of direction (a falling error rate is good). Derived from direction when omitted. */
+  intent?: TrendIntent;
+}
+
+function trendIntent(direction: TrendDirection): TrendIntent {
+  if (direction === "down") return "negative";
+  if (direction === "flat") return "neutral";
+  return "positive";
+}
+
 export interface StatCardProps extends ComponentProps<"div"> {
   /** Tinted surface + matching border, shared with `<Card>`. The value picks up the accent (except `warning`). Defaults to the neutral surface. */
   variant?: CardVariant;
@@ -12,6 +30,8 @@ export interface StatCardProps extends ComponentProps<"div"> {
   value?: ReactNode;
   /** Subordinate line under the value (e.g. "42 completed / 12 pending"). */
   detail?: ReactNode;
+  /** Directional delta line under the value. Tone is independent of direction. */
+  trend?: StatCardTrend;
   /** Leading icon in the label row. */
   icon?: IconProp;
   compact?: boolean;
@@ -28,6 +48,7 @@ export function StatCard({
   label,
   value,
   detail,
+  trend,
   icon,
   compact,
   bordered,
@@ -58,6 +79,15 @@ export function StatCard({
         </p>
       ) : null}
       {value !== undefined ? <p className={cn("stat-card-value", undefined)}>{value}</p> : null}
+      {trend !== undefined ? (
+        <p
+          className={cn("stat-card-trend", undefined)}
+          data-trend={trend.direction ?? "up"}
+          data-intent={trend.intent ?? trendIntent(trend.direction ?? "up")}
+        >
+          {trend.value}
+        </p>
+      ) : null}
       {detail !== undefined ? <p className={cn("stat-card-detail", undefined)}>{detail}</p> : null}
       {children}
     </div>

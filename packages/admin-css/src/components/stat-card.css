@@ -21,6 +21,39 @@
     @apply text-sm text-text-muted;
   }
 
+  /* Trend delta — caret drawn from borders (no icon dependency) plus a value.
+     `data-trend` rotates the caret; `data-intent` colors it, kept independent
+     because up is not always good (a rising error rate is bad). */
+  .stat-card-trend {
+    @apply inline-flex items-center gap-1 text-sm font-medium tabular-nums text-text-muted;
+  }
+  .stat-card-trend::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-inline: 0.3em solid transparent;
+    border-block-end: 0.42em solid currentColor;
+  }
+  .stat-card-trend[data-trend="down"]::before {
+    border-block-end: 0;
+    border-block-start: 0.42em solid currentColor;
+  }
+  .stat-card-trend[data-trend="flat"]::before {
+    width: 0.55em;
+    border-inline: 0;
+    border-block-end: 0;
+    border-block-start: 0.16em solid currentColor;
+  }
+  .stat-card-trend[data-intent="positive"] {
+    @apply text-success;
+  }
+  .stat-card-trend[data-intent="negative"] {
+    @apply text-danger;
+  }
+  .stat-card-trend[data-intent="neutral"] {
+    @apply text-text-muted;
+  }
+
   /* `.card-compact` targets `.card-body`; with no body, step the root instead. */
   .card-compact.stat-card {
     @apply p-3 gap-0.5;

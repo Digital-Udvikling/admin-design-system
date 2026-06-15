@@ -98,7 +98,13 @@ export {
   type CardDescriptionProps,
   type CardActionsProps,
 } from "./Card";
-export { StatCard, type StatCardProps } from "./StatCard";
+export {
+  StatCard,
+  type StatCardProps,
+  type StatCardTrend,
+  type TrendDirection,
+  type TrendIntent,
+} from "./StatCard";
 export {
   BarChart,
   type BarChartProps,

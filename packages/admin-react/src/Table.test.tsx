@@ -69,6 +69,56 @@ describe("Table", () => {
     );
   });
 
+  it("maps density to the padding modifier and keeps relaxed working", () => {
+    const { rerender } = render(
+      <Table density="compact" data-testid="t">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>x</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>,
+    );
+    expect(screen.getByTestId("t")).toHaveAdminClass("table-compact");
+
+    rerender(
+      <Table relaxed data-testid="t">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>x</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>,
+    );
+    expect(screen.getByTestId("t")).toHaveAdminClass("table-relaxed");
+  });
+
+  it("pins the first column with pinCol", () => {
+    render(
+      <Table pinCol data-testid="t">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>x</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>,
+    );
+    expect(screen.getByTestId("t")).toHaveAdminClass("table-pin-col");
+  });
+
+  it("Table.Empty renders a spanning message row", () => {
+    render(
+      <Table>
+        <Table.Body>
+          <Table.Empty colSpan={3}>No results</Table.Empty>
+        </Table.Body>
+      </Table>,
+    );
+    const cell = screen.getByRole("cell", { name: "No results" });
+    expect(cell).toHaveAdminClass("table-empty");
+    expect(cell).toHaveAttribute("colspan", "3");
+  });
+
   it("Table.Cell composes align, numeric, and gutter modifiers", () => {
     render(
       <Table>

@@ -121,4 +121,48 @@
   .table-row-link:focus-within {
     @apply outline-2 -outline-offset-2 outline-focus;
   }
+
+  /* Compact density — mirrors table-relaxed at the tight end. */
+  .table-compact :where(th, td),
+  .table-compact .table-cell,
+  .table-compact .table-header-cell {
+    @apply px-2 py-1 text-xs;
+  }
+
+  /* Empty state — a centered, muted message row (author sets colspan). */
+  .table :where(td).table-empty,
+  .table-empty {
+    @apply text-center text-text-muted py-8;
+  }
+  /* No hover affordance on the empty-state row. */
+  .table tbody tr:has(> .table-empty):hover :where(td) {
+    background-color: transparent;
+  }
+
+  /* Pinned first column — sticky against horizontal scroll. Requires an
+     overflow-x ancestor (the table adds no wrapper, same stance as table-sticky).
+     Each row state repaints the cell so scrolled content doesn't bleed through. */
+  .table-pin-col :where(thead th, tbody td, tfoot :is(td, th)):first-child {
+    position: sticky;
+    inset-inline-start: 0;
+  }
+  .table-pin-col tbody td:first-child {
+    z-index: 1;
+    background-color: var(--color-surface);
+  }
+  /* Header corner sits above the body column and the sticky header row. */
+  .table-pin-col :where(thead th):first-child {
+    z-index: 11;
+  }
+  .table-pin-col.table-striped tbody tr:nth-child(even) td:first-child {
+    background-color: var(--color-surface-muted);
+  }
+  .table-pin-col tbody tr:hover td:first-child {
+    background-color: var(--color-surface-muted);
+  }
+  .table-pin-col tbody tr:has(input[type="checkbox"]:checked) td:first-child,
+  .table-pin-col tbody tr:has(.checkbox[data-checked]) td:first-child,
+  .table-pin-col tbody tr[data-selected] td:first-child {
+    background-color: var(--color-primary-muted);
+  }
 }

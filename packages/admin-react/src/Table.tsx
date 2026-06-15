@@ -2,16 +2,32 @@ import type { ComponentProps } from "react";
 import { cn } from "./cn";
 
 export type TableAlign = "left" | "right" | "center";
+export type TableDensity = "compact" | "default" | "relaxed";
 
 export interface TableProps extends ComponentProps<"table"> {
   striped?: boolean;
   bordered?: boolean;
+  /** Cell padding. Default `"default"`. */
+  density?: TableDensity;
+  /** @deprecated Use `density="relaxed"`. Kept for the class-name contract. */
   relaxed?: boolean;
   /** Pins `<thead>`; requires an overflowing ancestor (`overflow: auto` + `max-height` wrapper). */
   sticky?: boolean;
+  /** Pins the first column against horizontal scroll; requires an overflow-x ancestor. */
+  pinCol?: boolean;
 }
 
-function TableRoot({ striped, bordered, relaxed, sticky, className, ...rest }: TableProps) {
+function TableRoot({
+  striped,
+  bordered,
+  density,
+  relaxed,
+  sticky,
+  pinCol,
+  className,
+  ...rest
+}: TableProps) {
+  const resolvedDensity = density ?? (relaxed ? "relaxed" : "default");
   return (
     <table
       className={cn(
@@ -19,8 +35,10 @@ function TableRoot({ striped, bordered, relaxed, sticky, className, ...rest }: T
           "table",
           striped && "table-striped",
           bordered && "table-bordered",
-          relaxed && "table-relaxed",
+          resolvedDensity === "compact" && "table-compact",
+          resolvedDensity === "relaxed" && "table-relaxed",
           sticky && "table-sticky",
+          pinCol && "table-pin-col",
         ],
         className,
       )}
@@ -97,6 +115,21 @@ function TableCell({ align, gutter, numeric, className, ...rest }: TableCellProp
   );
 }
 
+export interface TableEmptyProps extends ComponentProps<"td"> {
+  /** Columns to span — set to the table's column count. */
+  colSpan?: number;
+}
+/** A centered "no results" row; renders its own `<tr>`, so drop it inside `<Table.Body>`. */
+function TableEmpty({ colSpan, className, children, ...rest }: TableEmptyProps) {
+  return (
+    <tr>
+      <td className={cn("table-empty", className)} colSpan={colSpan} {...rest}>
+        {children}
+      </td>
+    </tr>
+  );
+}
+
 export const Table = Object.assign(TableRoot, {
   Head: TableHead,
   Body: TableBody,
@@ -104,4 +137,5 @@ export const Table = Object.assign(TableRoot, {
   Row: TableRow,
   HeaderCell: TableHeaderCell,
   Cell: TableCell,
+  Empty: TableEmpty,
 });

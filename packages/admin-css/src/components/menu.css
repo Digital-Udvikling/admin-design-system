@@ -102,6 +102,21 @@
     flex-shrink: 0;
   }
 
+  /* Checkbox/radio items — a leading indicator column whose check shows only when
+     aria-checked. In vanilla, set role=menuitemcheckbox/menuitemradio + aria-checked;
+     the gutter is always reserved so labels stay aligned across the group. */
+  .menu-item-indicator {
+    @apply inline-flex items-center justify-center shrink-0;
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+  .menu-item-indicator > :is(i, svg) {
+    opacity: 0;
+  }
+  .menu-item[aria-checked="true"] .menu-item-indicator > :is(i, svg) {
+    opacity: 1;
+  }
+
   .menu-separator {
     @apply h-px my-1 bg-border border-0;
   }

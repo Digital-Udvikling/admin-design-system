@@ -105,6 +105,62 @@ A `<button>` item disables with the native `disabled` attribute. An anchor item 
 
 :::
 
+### Checkbox and radio items
+
+Set `checked` to render a leading check. Items reserve the indicator gutter whether checked or not, so labels stay aligned. Use `role="menuitemradio"` for single-select groups. The styling ships to both bundles — in vanilla, add `role` and `aria-checked` yourself. The check state itself stays with the consumer.
+
+:::example
+
+```html
+<details class="menu">
+  <summary class="menu-trigger">View</summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">
+      <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+      Show grid
+    </button>
+    <button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="false">
+      <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+      Show ruler
+    </button>
+    <hr class="menu-separator" />
+    <div class="menu-group" role="group">
+      <div class="menu-group-label">Density</div>
+      <button class="menu-item" type="button" role="menuitemradio" aria-checked="true">
+        <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+        Comfortable
+      </button>
+      <button class="menu-item" type="button" role="menuitemradio" aria-checked="false">
+        <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+        Compact
+      </button>
+    </div>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger>View</Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item checked>Show grid</Menu.Item>
+    <Menu.Item checked={false}>Show ruler</Menu.Item>
+    <Menu.Separator />
+    <Menu.Group>
+      <Menu.GroupLabel>Density</Menu.GroupLabel>
+      <Menu.Item role="menuitemradio" checked>
+        Comfortable
+      </Menu.Item>
+      <Menu.Item role="menuitemradio" checked={false}>
+        Compact
+      </Menu.Item>
+    </Menu.Group>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
 ### Hotkey <StarlightBadge text="React only" variant="caution" />
 
 The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edge of the row. Works on both the button and anchor (`href`) branches.

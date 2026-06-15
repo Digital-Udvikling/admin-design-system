@@ -57,6 +57,26 @@ describe("Menu", () => {
       expect(screen.getByRole("menuitem", { name: "Action" }).tagName).toBe("BUTTON");
     });
 
+    it("renders checkable items with role and aria-checked", () => {
+      render(
+        <Menu open>
+          <Menu.Trigger>View</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item checked>Show grid</Menu.Item>
+            <Menu.Item checked={false}>Show ruler</Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      expect(screen.getByRole("menuitemcheckbox", { name: "Show grid" })).toHaveAttribute(
+        "aria-checked",
+        "true",
+      );
+      expect(screen.getByRole("menuitemcheckbox", { name: "Show ruler" })).toHaveAttribute(
+        "aria-checked",
+        "false",
+      );
+    });
+
     it("closes when the trigger is clicked a second time", async () => {
       const user = userEvent.setup();
       render(

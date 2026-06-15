@@ -6,4 +6,40 @@
            bg-system-accent text-system-accent-content
            shrink-0 select-none;
   }
+
+  /* Glyph sizing moves into CSS so vanilla drops the inline font-size
+     and React renders icons at 1em. */
+  .brand-tile > :is(i, svg) {
+    font-size: 14px;
+  }
+
+  .brand-tile-lg {
+    @apply size-10 rounded-md text-sm;
+  }
+  .brand-tile-lg > :is(i, svg) {
+    font-size: 20px;
+  }
+
+  /* Soft tints — *-muted fill, colored glyph. */
+  .brand-tile-soft {
+    @apply bg-system-accent-muted text-system-accent;
+  }
+  .brand-tile-info {
+    @apply bg-info-muted text-info;
+  }
+  .brand-tile-success {
+    @apply bg-success-muted text-success;
+  }
+  .brand-tile-danger {
+    @apply bg-danger-muted text-danger;
+  }
+
+  /* Image tile (shop logo) — :has() flips the accent fill to a bordered
+     surface; object-contain keeps arbitrary-ratio logos uncropped. */
+  .brand-tile:has(> img) {
+    @apply bg-surface border border-border p-0.5;
+  }
+  .brand-tile > img {
+    @apply size-full object-contain rounded-[inherit];
+  }
 }

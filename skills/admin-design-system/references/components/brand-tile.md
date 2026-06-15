@@ -1,6 +1,6 @@
 # Brand tile
 
-> A 24px monogram or icon square for the navbar.
+> A monogram, icon, or logo square for the navbar.
 
 Sits in [`<Navbar.Brand>`](../modules/app-shell.md#navbar). Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
 
@@ -28,19 +28,19 @@ Keep monograms to 1–2 characters; the 24px box won't fit more.
 
 ## Icon
 
-Pass a [Tabler icon](../basics/icons.md) instead. In React, the `icon` prop renders at 14px; for vanilla, drop a sized `<i>`/`<svg>` inside `.brand-tile`. `icon` wins over `monogram`.
+Pass a [Tabler icon](../basics/icons.md). In React, use the `icon` prop; for vanilla, drop an `<i>`/`<svg>` inside `.brand-tile`. `icon` wins over `monogram`.
 
 **Example**
 
 ```html
 <span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-green-600)">
-  <i class="ti ti-shopping-cart" style="font-size: 14px"></i>
+  <i class="ti ti-shopping-cart"></i>
 </span>
 <span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-orange-600)">
-  <i class="ti ti-chart-bar" style="font-size: 14px"></i>
+  <i class="ti ti-chart-bar"></i>
 </span>
 <span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-cyan-600)">
-  <i class="ti ti-package" style="font-size: 14px"></i>
+  <i class="ti ti-package"></i>
 </span>
 ```
 
@@ -48,4 +48,72 @@ Pass a [Tabler icon](../basics/icons.md) instead. In React, the `icon` prop rend
 <BrandTile icon={IconShoppingCart} style={{ "--color-system-accent": "var(--color-green-600)" }} />
 <BrandTile icon={IconChartBar} style={{ "--color-system-accent": "var(--color-orange-600)" }} />
 <BrandTile icon={IconPackage} style={{ "--color-system-accent": "var(--color-cyan-600)" }} />
+```
+
+## Sizes
+
+**Example**
+
+```html
+<span class="brand-tile" aria-hidden>OR</span>
+<span class="brand-tile brand-tile-lg" aria-hidden>OR</span>
+```
+
+```tsx
+<BrandTile monogram="OR" />
+<BrandTile monogram="OR" size="lg" />
+```
+
+## Soft tints
+
+`soft` retints with the accent's `*-muted` fill and a colored glyph; one `--color-system-accent` override drives both the solid and soft tiles. `info`/`success`/`danger` use the status tokens. No `warning` — a yellow glyph fails contrast on the tinted fill.
+
+**Example**
+
+```html
+<span class="brand-tile brand-tile-soft" aria-hidden>OR</span>
+<span
+  class="brand-tile brand-tile-soft"
+  aria-hidden
+  style="--color-system-accent: var(--color-purple-600)"
+>
+  OR
+</span>
+<span class="brand-tile brand-tile-info" aria-hidden>
+  <i class="ti ti-package"></i>
+</span>
+<span class="brand-tile brand-tile-success" aria-hidden>
+  <i class="ti ti-shopping-cart"></i>
+</span>
+<span class="brand-tile brand-tile-danger" aria-hidden>
+  <i class="ti ti-chart-bar"></i>
+</span>
+```
+
+```tsx
+<BrandTile monogram="OR" variant="soft" />
+<BrandTile
+  monogram="OR"
+  variant="soft"
+  style={{ "--color-system-accent": "var(--color-purple-600)" }}
+/>
+<BrandTile icon={IconPackage} variant="info" />
+<BrandTile icon={IconShoppingCart} variant="success" />
+<BrandTile icon={IconChartBar} variant="danger" />
+```
+
+## Image
+
+Pass `src` for a shop logo. The tile flips to a bordered surface and the image is `object-contain`. `src` wins over `icon` and `monogram`; `alt` defaults to `""`.
+
+**Example**
+
+```html
+<span class="brand-tile brand-tile-lg">
+  <img src="/admin-design-system/favicon.svg" alt="Acme" />
+</span>
+```
+
+```tsx
+<BrandTile src={`${import.meta.env.BASE_URL}favicon.svg`} alt="Acme" size="lg" />
 ```

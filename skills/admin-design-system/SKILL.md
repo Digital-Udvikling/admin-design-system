@@ -137,7 +137,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Alerts](references/components/alerts.md) — Inline notifications for errors, confirmations, and contextual feedback.
 - [Avatar](references/components/avatar.md) — Image with a no-JS initials fallback, plus a group stack.
 - [Badges](references/components/badges.md) — Compact status indicator for tags and counts.
-- [Brand tile](references/components/brand-tile.md) — A 24px monogram or icon square for the navbar.
+- [Brand tile](references/components/brand-tile.md) — A monogram, icon, or logo square for the navbar.
 - [Breadcrumbs](references/components/breadcrumbs.md) — Trail of links to ancestor pages, ending in the current page.
 - [Buttons](references/components/buttons.md) — Buttons with variants, sizes, icons, and loading state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.

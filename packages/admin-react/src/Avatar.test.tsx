@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Avatar, AvatarGroup } from "./Avatar";
+import { adminSelector } from "./test-setup";
 
 describe("Avatar", () => {
   it("renders initials", () => {
@@ -61,5 +62,29 @@ describe("AvatarGroup", () => {
       </AvatarGroup>,
     );
     expect(screen.getByTestId("group")).toHaveAdminClass("avatar-group");
+  });
+
+  it("collapses avatars beyond max into a +N tile", () => {
+    const { container } = render(
+      <AvatarGroup max={2}>
+        <Avatar initials="AA" />
+        <Avatar initials="BB" />
+        <Avatar initials="CC" />
+        <Avatar initials="DD" />
+      </AvatarGroup>,
+    );
+    const more = container.querySelector(adminSelector("avatar-more"));
+    expect(more).toHaveTextContent("+2");
+    expect(more).toHaveAttribute("aria-label", "+2 more");
+  });
+
+  it("shows every avatar and no tile when the count is within max", () => {
+    const { container } = render(
+      <AvatarGroup max={5}>
+        <Avatar initials="AA" />
+        <Avatar initials="BB" />
+      </AvatarGroup>,
+    );
+    expect(container.querySelector(adminSelector("avatar-more"))).toBeNull();
   });
 });

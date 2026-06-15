@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `Alert` dismiss button (`onDismiss` / `.alert-dismiss`). (both)
 - `StatCard` `trend` slot with a directional caret and direction-independent intent color (`.stat-card-trend`). (both)
+- `AvatarGroup` `max` overflow with a `+N` tile (`.avatar-more`). (both)
 
 ## [0.17.0] - 2026-06-15
 

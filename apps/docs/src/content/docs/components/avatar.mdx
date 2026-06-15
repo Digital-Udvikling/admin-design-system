@@ -84,7 +84,7 @@ The initials sit underneath the image and show through when it has not loaded.
 
 ## Group
 
-Later avatars paint on top. The overflow count is a plain initials avatar.
+Later avatars paint on top. Pass `max` to cap the visible avatars; the rest collapse into a trailing `avatar-more` tile. Vanilla consumers write the surplus tile themselves.
 
 :::example
 
@@ -99,16 +99,18 @@ Later avatars paint on top. The overflow count is a plain initials avatar.
   <span class="avatar">
     <img src="https://i.pravatar.cc/64?img=3" alt="Alan Turing" />
   </span>
-  <span class="avatar" aria-hidden="true">+3</span>
+  <span class="avatar avatar-more" aria-label="+3 more">+3</span>
 </div>
 ```
 
 ```tsx
-<AvatarGroup>
+<AvatarGroup max={3}>
   <Avatar src="https://i.pravatar.cc/64?img=1" alt="Ada Lovelace" />
   <Avatar src="https://i.pravatar.cc/64?img=2" alt="Grace Hopper" />
   <Avatar src="https://i.pravatar.cc/64?img=3" alt="Alan Turing" />
-  <Avatar initials="+3" aria-hidden />
+  <Avatar src="https://i.pravatar.cc/64?img=4" alt="Katherine Johnson" />
+  <Avatar src="https://i.pravatar.cc/64?img=5" alt="Edsger Dijkstra" />
+  <Avatar src="https://i.pravatar.cc/64?img=6" alt="Barbara Liskov" />
 </AvatarGroup>
 ```
 

@@ -33,4 +33,10 @@
   .avatar-group > .avatar + .avatar {
     @apply -ms-2;
   }
+
+  /* Surplus tile closing an overflowing group (e.g. "+3"). */
+  .avatar-more {
+    @apply bg-surface-strong text-text-muted font-medium;
+    font-variant-numeric: tabular-nums;
+  }
 }

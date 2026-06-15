@@ -1,5 +1,5 @@
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
-import type { ComponentProps, ReactNode } from "react";
+import { Children, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
 
 export type AvatarSize = "sm" | "md" | "lg";
@@ -44,9 +44,29 @@ export function Avatar({
   );
 }
 
-export type AvatarGroupProps = ComponentProps<"div">;
+export interface AvatarGroupProps extends ComponentProps<"div"> {
+  /** Cap the visible avatars; the rest collapse into a trailing "+N" tile. */
+  max?: number;
+  /** Size for the surplus tile — match the avatars inside. Default `"md"`. */
+  size?: AvatarSize;
+}
 
-/** Overlapping stack of avatars; later children paint on top. */
-export function AvatarGroup({ className, ...rest }: AvatarGroupProps) {
-  return <div className={cn("avatar-group", className)} {...rest} />;
+/** Overlapping stack of avatars; later children paint on top. `max` caps the visible count. */
+export function AvatarGroup({ max, size = "md", className, children, ...rest }: AvatarGroupProps) {
+  const items = Children.toArray(children);
+  const overflow = max !== undefined && items.length > max ? items.length - max : 0;
+  const visible = overflow > 0 ? items.slice(0, max) : items;
+  return (
+    <div className={cn("avatar-group", className)} {...rest}>
+      {visible}
+      {overflow > 0 ? (
+        <span
+          className={cn(["avatar", size !== "md" && `avatar-${size}`, "avatar-more"], undefined)}
+          aria-label={`+${overflow} more`}
+        >
+          +{overflow}
+        </span>
+      ) : null}
+    </div>
+  );
 }

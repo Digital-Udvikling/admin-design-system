@@ -33,7 +33,14 @@ export {
   type BreadcrumbItemProps,
   type BreadcrumbSeparatorProps,
 } from "./Breadcrumbs";
-export { Input, type InputProps, type InputVariant, type InputSize } from "./Input";
+export {
+  Input,
+  PasswordInput,
+  type InputProps,
+  type PasswordInputProps,
+  type InputVariant,
+  type InputSize,
+} from "./Input";
 export {
   FileInput,
   type FileInputProps,

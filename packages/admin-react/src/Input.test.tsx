@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Field } from "./Field";
-import { Input, type InputProps } from "./Input";
+import { Input, PasswordInput, type InputProps } from "./Input";
 
 function StubIcon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
   return <svg data-testid="icon" {...props} />;
@@ -113,6 +113,68 @@ describe("Input", () => {
       const el = screen.getByLabelText("x") as HTMLInputElement;
       await user.type(el, "abc");
       expect(el).toHaveValue("abc");
+    });
+  });
+
+  describe("clearable", () => {
+    it("uncontrolled: shows the clear button once there's a value and empties on click", async () => {
+      const user = userEvent.setup();
+      render(<Input aria-label="x" clearable />);
+      const el = screen.getByLabelText("x") as HTMLInputElement;
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+
+      await user.type(el, "hello");
+      const clear = screen.getByRole("button", { name: "Clear" });
+      await user.click(clear);
+
+      expect(el).toHaveValue("");
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    });
+
+    it("controlled: clearing fires onChange with an empty value", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+
+      function Controlled() {
+        const [value, setValue] = useState("seed");
+        return (
+          <Input
+            aria-label="x"
+            clearable
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value);
+              setValue(e.target.value);
+            }}
+          />
+        );
+      }
+
+      render(<Controlled />);
+      await user.click(screen.getByRole("button", { name: "Clear" }));
+      expect(onChange).toHaveBeenLastCalledWith("");
+      expect(screen.getByLabelText("x")).toHaveValue("");
+    });
+
+    it("does not show the clear button when disabled", async () => {
+      render(<Input aria-label="x" clearable disabled defaultValue="locked" />);
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    });
+  });
+
+  describe("PasswordInput", () => {
+    it("toggles the input type via the reveal button", async () => {
+      const user = userEvent.setup();
+      render(<PasswordInput aria-label="pw" defaultValue="secret" />);
+      const el = screen.getByLabelText("pw") as HTMLInputElement;
+      expect(el).toHaveAttribute("type", "password");
+
+      const toggle = screen.getByRole("button", { name: "Show password" });
+      expect(toggle).toHaveAttribute("aria-pressed", "false");
+
+      await user.click(toggle);
+      expect(el).toHaveAttribute("type", "text");
+      expect(toggle).toHaveAttribute("aria-pressed", "true");
     });
   });
 });

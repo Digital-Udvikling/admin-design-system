@@ -19,7 +19,7 @@
     --input-icon-pad: calc(var(--spacing) * 10);
   }
 
-  /* Clicks pass through the icon to the input beneath it. */
+  /* Decorative glyphs pass clicks through; an interactive trailing button doesn't. */
   .input-icon > :where(i, svg) {
     @apply absolute top-1/2 -translate-y-1/2 pointer-events-none;
   }
@@ -28,7 +28,8 @@
     left: var(--input-icon-inset);
   }
 
-  .input-icon > .input ~ :where(i, svg) {
+  /* Trailing slot — a glyph or an interactive `.input-action` button after the input. */
+  .input-icon > .input ~ :where(i, svg, .input-action) {
     right: var(--input-icon-inset);
   }
 
@@ -36,11 +37,29 @@
     padding-left: var(--input-icon-pad);
   }
 
-  .input-icon:has(> .input ~ :where(i, svg)) > .input {
+  .input-icon:has(> .input ~ :where(i, svg, .input-action)) > .input {
     padding-right: var(--input-icon-pad);
   }
 
   .input-icon:has(> .input:disabled) > :where(i, svg) {
     @apply opacity-50;
+  }
+
+  /* Interactive trailing control (clear, password reveal). Positioned like the
+     trailing glyph but clickable, with a currentColor hover wash. */
+  .input-action {
+    @apply absolute top-1/2 -translate-y-1/2
+           inline-flex items-center justify-center
+           size-5 rounded
+           text-text-muted cursor-pointer
+           bg-transparent border-0
+           hover:text-text
+           focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus;
+  }
+  .input-action:hover {
+    background-color: color-mix(in oklab, currentColor 12%, transparent);
+  }
+  .input-icon:has(> .input:disabled) > .input-action {
+    @apply opacity-50 pointer-events-none;
   }
 }

@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Indicator` `max` clamp for numeric labels (e.g. `99+`). (react)
 - `Table` density (`compact`), an empty-state row (`Table.Empty` / `.table-empty`), and a pinned first column (`pinCol` / `.table-pin-col`). (both)
 - `Menu` checkbox/radio items (`checked` / `.menu-item[aria-checked]` + `.menu-item-indicator`). (both)
+- `Input` `clearable` button and a `PasswordInput` reveal toggle (`.input-action`). (both)
 
 ## [0.17.0] - 2026-06-15
 

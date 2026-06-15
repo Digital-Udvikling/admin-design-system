@@ -34,6 +34,42 @@
     @apply bg-primary text-primary-content;
   }
 
+  /* Soft — composable modifier, pairs with a variant class; bare `.badge` is already the soft neutral. */
+  .badge-soft.badge-info {
+    @apply bg-info-muted text-info border-info-muted;
+  }
+  .badge-soft.badge-success {
+    @apply bg-success-muted text-success border-success-muted;
+  }
+  /* Yellow accent text fails contrast on the tinted surface — same constraint as stat-card. */
+  .badge-soft.badge-warning {
+    @apply bg-warning-muted text-text border-warning-muted;
+  }
+  .badge-soft.badge-danger {
+    @apply bg-danger-muted text-danger border-danger-muted;
+  }
+  .badge-soft.badge-primary {
+    @apply bg-primary-muted text-text border-primary-muted;
+  }
+
+  /* Remove button — sized to the chip; hover wash from `currentColor` works on solid, soft, and neutral fills. */
+  .badge-remove {
+    @apply inline-flex items-center justify-center shrink-0
+           size-3.5 -mr-1 rounded-full
+           text-inherit cursor-pointer
+           transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus;
+  }
+  .badge-remove:hover {
+    background-color: color-mix(in oklab, currentColor 15%, transparent);
+  }
+  .badge-sm .badge-remove {
+    @apply size-3 -mr-0.5;
+  }
+  .badge-lg .badge-remove {
+    @apply size-4.5 -mr-1.5;
+  }
+
   /* Sizes (md is the default; modifiers override) */
   .badge-sm {
     @apply h-4 px-1.5 text-[0.625rem] gap-0.5;

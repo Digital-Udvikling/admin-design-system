@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `Separator` component / `.separator` class — a styled `<hr>` with a vertical modifier. (both)
 - `Avatar` and `AvatarGroup` / `.avatar` — image with a no-JS initials fallback, circle/square, `sm`/`md`/`lg`, plus `.indicator` auto-offsets for avatar anchors. (both)
+- Badge soft tinted variants (`soft` / `.badge-soft`) and a dismissible remove button (`onRemove`, `removeLabel` / `.badge-remove`). (both)
 
 ## [0.16.2] - 2026-06-11
 

@@ -4,7 +4,12 @@ description: Compact status indicator for tags and counts.
 ---
 
 import { Badge } from "@aortl/admin-react";
-import { IconCircleCheck, IconAlertTriangle } from "@tabler/icons-react";
+import {
+  IconCircleCheck,
+  IconAlertTriangle,
+  IconTrendingUp,
+  IconTrendingDown,
+} from "@tabler/icons-react";
 
 Inline-flex pills at `text-xs` by default.
 
@@ -86,6 +91,77 @@ Pass `icon` or drop an `<i>`/`<svg>` as the first child.
 
 ```tsx
 <Badge variant="primary" size="sm">12</Badge> <Badge size="sm">99+</Badge>
+```
+
+:::
+
+### Soft
+
+Add `badge-soft` alongside a variant for a tinted fill with accent text.
+
+:::example
+
+```html
+<span class="badge badge-info badge-soft">Info</span>
+<span class="badge badge-success badge-soft">Active</span>
+<span class="badge badge-warning badge-soft">Review</span>
+<span class="badge badge-danger badge-soft">Blocked</span>
+<span class="badge badge-primary badge-soft">New</span>
+```
+
+```tsx
+<Badge variant="info" soft>Info</Badge>
+<Badge variant="success" soft>Active</Badge>
+<Badge variant="warning" soft>Review</Badge>
+<Badge variant="danger" soft>Blocked</Badge>
+<Badge variant="primary" soft>New</Badge>
+```
+
+:::
+
+### Trend deltas
+
+Direction-to-tone is domain-specific — a falling error rate is good.
+
+:::example
+
+```html
+<span class="badge badge-success badge-soft">
+  <i class="ti ti-trending-up" aria-hidden="true"></i>
+  +12.4%
+</span>
+<span class="badge badge-danger badge-soft">
+  <i class="ti ti-trending-down" aria-hidden="true"></i>
+  -3.1%
+</span>
+```
+
+```tsx
+<Badge variant="success" soft icon={IconTrendingUp}>+12.4%</Badge>
+<Badge variant="danger" soft icon={IconTrendingDown}>-3.1%</Badge>
+```
+
+:::
+
+### Dismissible
+
+`onRemove` renders a trailing remove button; wire the click to drop the chip.
+
+:::example
+
+```html
+<span class="badge badge-info badge-soft">
+  Digital salg
+  <button type="button" class="badge-remove" aria-label="Remove Digital salg">
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+</span>
+```
+
+```tsx
+<Badge variant="info" soft onRemove={() => {}} removeLabel="Remove Digital salg">
+  Digital salg
+</Badge>
 ```
 
 :::

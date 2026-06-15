@@ -1,0 +1,76 @@
+@layer components {
+  /* Compact low-chrome row between Table and Card: media | content | actions.
+     For settings rows, member lists, notifications, search results. */
+  .item {
+    @apply flex items-center gap-3 w-full px-3 py-2 text-sm text-text;
+  }
+
+  .item-media {
+    @apply flex items-center shrink-0 text-text-muted;
+  }
+  .item-media > :is(i, svg) {
+    font-size: 1.25rem;
+  }
+
+  /* min-w-0 lets the text column shrink so long values wrap instead of pushing
+     the actions off the row. */
+  .item-content {
+    @apply flex flex-col gap-0.5 flex-1 min-w-0;
+  }
+  .item-title {
+    @apply font-medium leading-tight;
+    overflow-wrap: break-word;
+  }
+  .item-description {
+    @apply text-text-muted leading-snug;
+    text-wrap: pretty;
+  }
+
+  .item-actions {
+    @apply flex items-center gap-2 shrink-0 relative z-[1];
+    margin-inline-start: auto;
+  }
+
+  /* Variants — keep it flat: default / outline / muted only. */
+  .item-outline {
+    @apply border border-border rounded-lg;
+  }
+  .item-muted {
+    @apply bg-surface-muted rounded-lg;
+  }
+
+  /* Sizes */
+  .item-sm {
+    @apply gap-2 px-2 py-1.5 text-xs;
+  }
+  .item-lg {
+    @apply gap-4 px-4 py-3 text-base;
+  }
+
+  /* Divided stack. */
+  .item-group {
+    @apply flex flex-col;
+  }
+  .item-group > .item:not(:last-child) {
+    @apply border-b border-border;
+  }
+  .item-group-bordered {
+    @apply border border-border rounded-lg overflow-hidden;
+  }
+
+  /* Clickable row — the first nested <a> fills the row via ::after; actions keep
+     their own stacking context so they stay clickable (same trick as table-row-link). */
+  .item-link {
+    @apply relative cursor-pointer;
+  }
+  .item-link:hover {
+    @apply bg-surface-muted;
+  }
+  .item-link a:first-of-type::after {
+    content: "";
+    @apply absolute inset-0;
+  }
+  .item-link:focus-within {
+    @apply outline-2 -outline-offset-2 outline-focus;
+  }
+}

@@ -113,6 +113,20 @@ export {
   type TrendIntent,
 } from "./StatCard";
 export {
+  Item,
+  ItemGroup,
+  type ItemProps,
+  type ItemContainerProps,
+  type ItemMediaProps,
+  type ItemContentProps,
+  type ItemTitleProps,
+  type ItemDescriptionProps,
+  type ItemActionsProps,
+  type ItemGroupProps,
+  type ItemVariant,
+  type ItemSize,
+} from "./Item";
+export {
   BarChart,
   type BarChartProps,
   type BarChartContainerProps,

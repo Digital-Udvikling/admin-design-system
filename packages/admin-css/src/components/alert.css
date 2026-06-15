@@ -14,13 +14,25 @@
     align-items: center;
   }
 
+  /* A trailing action switches to grid even without an icon. */
+  .alert:has(> .alert-action) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    align-items: center;
+  }
+  .alert:has(> :is(i, svg):first-child):has(> .alert-action) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
   .alert > :is(i, svg):first-child {
     font-size: 1rem;
     line-height: 1.25;
   }
 
-  /* Explicit rows — the icon's `grid-row: 1 / -1` only resolves against an explicit grid. */
-  .alert:has(> :is(i, svg):first-child):has(> .alert-title) {
+  /* Replaces the icon-gated explicit-rows rule — rows whenever anything spans them. */
+  .alert:has(> .alert-title):is(:has(> :is(i, svg):first-child), :has(> .alert-action)) {
     grid-template-rows: auto auto;
     align-items: start;
   }
@@ -29,10 +41,22 @@
     grid-row: 1 / -1;
   }
 
-  /* Grid items default to `min-width: auto` and won't shrink below their longest word. */
+  /* The column-2 pin becomes icon-gated so title/description auto-place into
+     column 1 in an action-only grid. min-width stays unconditional. */
   .alert > :is(.alert-title, .alert-description) {
-    grid-column: 2;
     min-width: 0;
+  }
+  .alert:has(> :is(i, svg):first-child) > :is(.alert-title, .alert-description) {
+    grid-column: 2;
+  }
+
+  /* `-2` is the last explicit column in both grids; spans both rows, centered. */
+  .alert > .alert-action {
+    @apply font-medium whitespace-nowrap;
+    grid-column: -2;
+    grid-row: 1 / -1;
+    justify-self: end;
+    align-self: center;
   }
 
   /* Solid status fills. Title and icon inherit the `-content` color from the
@@ -59,5 +83,11 @@
 
   .alert-description {
     opacity: 0.85;
+  }
+
+  /* `.link`'s blue is illegible on the solid fills; inherit the variant's content
+     color. Underline + weight carry the affordance. */
+  .alert .link {
+    @apply text-current hover:text-current hover:opacity-85 focus-visible:outline-current;
   }
 }

@@ -12,6 +12,7 @@ export {
   type AlertVariant,
   type AlertTitleProps,
   type AlertDescriptionProps,
+  type AlertActionProps,
 } from "./Alert";
 export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";

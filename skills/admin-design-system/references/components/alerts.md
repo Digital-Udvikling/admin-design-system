@@ -94,3 +94,31 @@ Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../basics/
   description="Could not reach the database. Retrying in 30s."
 />
 ```
+
+### With a trailing action
+
+The `alert-action` class can sit on the link itself or on a wrapper. Inside an alert, `.link` inherits the variant's content color.
+
+**Example**
+
+```html
+<div class="alert alert-info" role="status">
+  <i class="ti ti-info-circle" aria-hidden="true"></i>
+  A new version is available.
+  <a href="#" class="link alert-action">Reload</a>
+</div>
+```
+
+```tsx
+<Alert
+  variant="info"
+  icon={IconInfoCircle}
+  action={
+    <a href="#" className="link">
+      Reload
+    </a>
+  }
+>
+  A new version is available.
+</Alert>
+```

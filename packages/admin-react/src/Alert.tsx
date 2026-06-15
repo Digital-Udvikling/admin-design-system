@@ -12,6 +12,8 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   title?: ReactNode;
   /** Renders as `<Alert.Description>`. */
   description?: ReactNode;
+  /** Trailing action. Renders as `<Alert.Action>` after children so reading order matches. */
+  action?: ReactNode;
 }
 
 function AlertRoot({
@@ -19,6 +21,7 @@ function AlertRoot({
   icon,
   title,
   description,
+  action,
   className,
   role,
   children,
@@ -35,6 +38,7 @@ function AlertRoot({
       {title !== undefined ? <AlertTitle>{title}</AlertTitle> : null}
       {description !== undefined ? <AlertDescription>{description}</AlertDescription> : null}
       {children}
+      {action !== undefined ? <AlertAction>{action}</AlertAction> : null}
     </div>
   );
 }
@@ -49,7 +53,13 @@ function AlertDescription({ className, ...rest }: AlertDescriptionProps) {
   return <p className={cn("alert-description", className)} {...rest} />;
 }
 
+export type AlertActionProps = ComponentProps<"div">;
+function AlertAction({ className, ...rest }: AlertActionProps) {
+  return <div className={cn("alert-action", className)} {...rest} />;
+}
+
 export const Alert = Object.assign(AlertRoot, {
   Title: AlertTitle,
   Description: AlertDescription,
+  Action: AlertAction,
 });

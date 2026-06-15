@@ -2,7 +2,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Field } from "./Field";
 import { Input, type InputProps } from "./Input";
+
+function StubIcon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+  return <svg data-testid="icon" {...props} />;
+}
 
 describe("Input", () => {
   it("renders", () => {
@@ -61,6 +66,53 @@ describe("Input", () => {
       const el = screen.getByLabelText("x") as HTMLInputElement;
       await user.type(el, "xyz");
       expect(el).toHaveValue("locked");
+    });
+  });
+
+  describe("icons", () => {
+    it("leading icon: wraps, sits before the input, and is aria-hidden", () => {
+      render(<Input aria-label="x" icon={StubIcon} />);
+      const el = screen.getByLabelText("x");
+      const wrapper = el.parentElement as HTMLElement;
+      expect(wrapper).toHaveAdminClass("input-icon");
+      const iconEl = el.previousElementSibling as HTMLElement;
+      expect(iconEl).toBe(screen.getByTestId("icon"));
+      expect(iconEl).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("trailing icon: sits after the input inside the wrapper", () => {
+      render(<Input aria-label="x" iconTrailing={StubIcon} />);
+      const el = screen.getByLabelText("x");
+      expect(el.parentElement).toHaveAdminClass("input-icon");
+      expect(el.nextElementSibling).toBe(screen.getByTestId("icon"));
+    });
+
+    it("no icon props: renders no wrapper", () => {
+      render(<Input aria-label="x" />);
+      const el = screen.getByLabelText("x");
+      expect(el.parentElement).not.toHaveAdminClass("input-icon");
+      expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+    });
+
+    it("Field label wiring survives the wrapper", async () => {
+      const user = userEvent.setup();
+      render(
+        <Field label="Search">
+          <Input icon={StubIcon} />
+        </Field>,
+      );
+      const el = screen.getByLabelText("Search");
+      expect(el.parentElement).toHaveAdminClass("input-icon");
+      await user.click(screen.getByText("Search"));
+      expect(el).toHaveFocus();
+    });
+
+    it("uncontrolled typing works with an icon set", async () => {
+      const user = userEvent.setup();
+      render(<Input aria-label="x" icon={StubIcon} />);
+      const el = screen.getByLabelText("x") as HTMLInputElement;
+      await user.type(el, "abc");
+      expect(el).toHaveValue("abc");
     });
   });
 });

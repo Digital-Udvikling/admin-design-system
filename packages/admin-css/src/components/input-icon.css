@@ -1,0 +1,46 @@
+@layer components {
+  /* Overlay wrapper — the .input child keeps its own border, background,
+     and focus outline; icons float above it, :has() padding clears them. */
+  .input-icon {
+    @apply relative inline-flex w-full items-center text-sm text-text-muted;
+    --input-icon-inset: calc(var(--spacing) * 3); /* matches .input px-3 */
+    --input-icon-pad: calc(var(--spacing) * 9);
+  }
+
+  .input-icon:has(> .input-sm) {
+    @apply text-xs;
+    --input-icon-inset: calc(var(--spacing) * 2.5);
+    --input-icon-pad: calc(var(--spacing) * 8);
+  }
+
+  .input-icon:has(> .input-lg) {
+    @apply text-base;
+    --input-icon-inset: calc(var(--spacing) * 4);
+    --input-icon-pad: calc(var(--spacing) * 10);
+  }
+
+  /* Clicks pass through the icon to the input beneath it. */
+  .input-icon > :where(i, svg) {
+    @apply absolute top-1/2 -translate-y-1/2 pointer-events-none;
+  }
+
+  .input-icon > :where(i, svg):first-child {
+    left: var(--input-icon-inset);
+  }
+
+  .input-icon > .input ~ :where(i, svg) {
+    right: var(--input-icon-inset);
+  }
+
+  .input-icon:has(> :where(i, svg):first-child) > .input {
+    padding-left: var(--input-icon-pad);
+  }
+
+  .input-icon:has(> .input ~ :where(i, svg)) > .input {
+    padding-right: var(--input-icon-pad);
+  }
+
+  .input-icon:has(> .input:disabled) > :where(i, svg) {
+    @apply opacity-50;
+  }
+}

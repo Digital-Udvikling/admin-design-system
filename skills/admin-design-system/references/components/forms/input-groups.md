@@ -82,7 +82,7 @@
 
 ### With icon addons
 
-`.input-group-addon` accepts any content. See [Icons](../../basics/icons.md).
+`.input-group-addon` accepts any content. For a borderless icon floated inside the field instead, use [input icons](inputs.md#with-icons). See [Icons](../../basics/icons.md).
 
 **Example**
 

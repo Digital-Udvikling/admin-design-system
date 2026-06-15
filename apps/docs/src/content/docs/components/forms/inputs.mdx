@@ -4,6 +4,7 @@ description: Single-line text input.
 ---
 
 import { Field, Input } from "@aortl/admin-react";
+import { IconSearch, IconMail } from "@tabler/icons-react";
 
 ## Examples
 
@@ -73,6 +74,35 @@ import { Field, Input } from "@aortl/admin-react";
 
 ```tsx
 <Input disabled defaultValue="Disabled" />
+```
+
+:::
+
+### With icons
+
+The `.input-icon` wrapper floats a borderless muted icon inside the field. Position is structural — an `i`/`svg` before the `.input` is leading, after is trailing. For a bordered segment instead, use [input groups](../input-groups/). See [Icons](../../../basics/icons/).
+
+:::example
+
+```html
+<label class="input-icon">
+  <i class="ti ti-search" aria-hidden="true"></i>
+  <input class="input" type="search" placeholder="Search…" />
+</label>
+<label class="input-icon">
+  <input class="input" type="email" placeholder="you@example.com" />
+  <i class="ti ti-mail" aria-hidden="true"></i>
+</label>
+<label class="input-icon">
+  <i class="ti ti-search" aria-hidden="true"></i>
+  <input class="input input-ghost" type="search" placeholder="Filter rows…" />
+</label>
+```
+
+```tsx
+<Input type="search" placeholder="Search…" icon={IconSearch} />
+<Input type="email" placeholder="you@example.com" iconTrailing={IconMail} />
+<Input variant="ghost" type="search" placeholder="Filter rows…" icon={IconSearch} />
 ```
 
 :::

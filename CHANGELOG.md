@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Avatar` and `AvatarGroup` / `.avatar` — image with a no-JS initials fallback, circle/square, `sm`/`md`/`lg`, plus `.indicator` auto-offsets for avatar anchors. (both)
 - Badge soft tinted variants (`soft` / `.badge-soft`) and a dismissible remove button (`onRemove`, `removeLabel` / `.badge-remove`). (both)
 - Alert trailing action slot (`action` / `Alert.Action` / `.alert-action`). (both)
+- In-field input icons — `icon` / `iconTrailing` on `Input`, `.input-icon` wrapper. (both)
 
 ### Changed
 

@@ -2,6 +2,21 @@
 
 > Single-line text input.
 
+## Contents
+
+- [Examples](#examples)
+  - [Variants](#variants)
+  - [Status variants](#status-variants)
+  - [Sizes](#sizes)
+  - [Disabled](#disabled)
+  - [With icons](#with-icons)
+  - [Clearable](#clearable)
+  - [Password](#password)
+  - [Types](#types)
+  - [Date and time](#date-and-time)
+  - [File](#file)
+  - [Inside a Field](#inside-a-field)
+
 ## Examples
 
 ### Variants

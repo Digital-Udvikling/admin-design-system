@@ -2,6 +2,18 @@
 
 > Compact KPI tile with label, value, and detail.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [With icon](#with-icon)
+  - [Compact + bordered](#compact-bordered)
+  - [Color variants](#color-variants)
+  - [Dashboard grid](#dashboard-grid)
+  - [Trend](#trend)
+  - [Per-slot styling (React only)](#per-slot-styling-react-only)
+  - [Custom content](#custom-content)
+
 Pair `stat-card` with [`card`](cards.md) so it inherits every card surface and modifier. For free-form tiles, use [Cards](cards.md); for label/value tables, use [Property list](property-list.md).
 
 ## Examples
@@ -181,7 +193,7 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
 />
 ```
 
-### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+### Per-slot styling (React only)
 
 A stat card has no compound parts, so `classNames` is the only way to reach the label, value, trend, and detail. See [Slot styling](../basics/slots.md).
 

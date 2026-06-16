@@ -2,6 +2,14 @@
 
 > Numbered page navigation with prev/next controls.
 
+## Contents
+
+- [Examples](#examples)
+  - [Small range](#small-range)
+  - [Large range with ellipses](#large-range-with-ellipses)
+  - [Custom prev/next icons](#custom-prevnext-icons)
+  - [Custom renderer (routing libraries)](#custom-renderer-routing-libraries)
+
 The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange`. It is always controlled.
 
 ## Examples

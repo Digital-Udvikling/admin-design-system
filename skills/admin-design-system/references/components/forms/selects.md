@@ -2,6 +2,16 @@
 
 > Compound Select with Trigger + Popup + Item.
 
+## Contents
+
+- [Examples](#examples)
+  - [Default](#default)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [Groups](#groups)
+  - [Disabled](#disabled)
+  - [Inside a Field](#inside-a-field)
+
 React's `Select` is a compound with a custom popup. Vanilla uses a native `<select>` with the `.select` class — the browser owns its dropdown UI.
 
 ## Examples

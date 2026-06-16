@@ -2,6 +2,13 @@
 
 > Disclosure rows built on <details>.
 
+## Contents
+
+- [Examples](#examples)
+  - [Single item](#single-item)
+  - [Grouped items](#grouped-items)
+  - [Open by default](#open-by-default)
+
 Modern browsers animate the open/close via `interpolate-size: allow-keywords` + `::details-content`; older browsers degrade to instant toggle.
 
 ## Examples

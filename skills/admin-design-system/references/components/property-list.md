@@ -2,6 +2,18 @@
 
 > Label-and-value rows for one-entity-N-attributes panels.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Striped](#striped)
+  - [Copyable (React only)](#copyable-react-only)
+  - [Numeric column](#numeric-column)
+  - [Empty values](#empty-values)
+  - [Rich value](#rich-value)
+  - [Compact density](#compact-density)
+  - [Subpart escape hatch](#subpart-escape-hatch)
+
 A `<dl>` with a label column that aligns across every row. Use it for summary panels, identifier strips, metadata blocks. See [Table](tables.md) for tabular/multi-row data.
 
 ## Examples
@@ -65,7 +77,7 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 </PropertyList>
 ```
 
-### Copyable <StarlightBadge text="React only" variant="caution" />
+### Copyable (React only)
 
 `copyable` on an item reveals a copy button on its value cell on hover or focus; click copies and confirms with a check for ~1.2s. Text selection on the value still works. Opt in row-by-row.
 

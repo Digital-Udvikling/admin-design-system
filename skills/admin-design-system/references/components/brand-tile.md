@@ -2,6 +2,14 @@
 
 > A monogram, icon, or logo square for the navbar.
 
+## Contents
+
+- [Monogram](#monogram)
+- [Icon](#icon)
+- [Sizes](#sizes)
+- [Soft tints](#soft-tints)
+- [Image](#image)
+
 Sits in [`<Navbar.Brand>`](../modules/app-shell.md#navbar). Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
 
 ## Monogram
@@ -110,10 +118,10 @@ Pass `src` for a shop logo. The tile flips to a bordered surface and the image i
 
 ```html
 <span class="brand-tile brand-tile-lg">
-  <img src="/admin-design-system/favicon.svg" alt="Acme" />
+  <img src="/favicon.svg" alt="Acme" />
 </span>
 ```
 
 ```tsx
-<BrandTile src={`${import.meta.env.BASE_URL}favicon.svg`} alt="Acme" size="lg" />
+<BrandTile src={`/favicon.svg`} alt="Acme" size="lg" />
 ```

@@ -2,6 +2,15 @@
 
 > Type scale, weights, and font stack.
 
+## Contents
+
+- [Font stack](#font-stack)
+- [Specimen](#specimen)
+- [Scale](#scale)
+- [Body and small text](#body-and-small-text)
+- [Weights](#weights)
+- [Monospace](#monospace)
+
 Body text is **14px**; the UI typeface is IBM Plex.
 
 ## Font stack

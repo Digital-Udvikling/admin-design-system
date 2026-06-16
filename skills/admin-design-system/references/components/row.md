@@ -2,6 +2,17 @@
 
 > One-dimensional layouts with flex utilities.
 
+## Contents
+
+  - [Basic](#basic)
+  - [Alignment](#alignment)
+  - [Distribution](#distribution)
+  - [Grow to fill](#grow-to-fill)
+  - [Wrap](#wrap)
+  - [Direction](#direction)
+  - [Dividers](#dividers)
+  - [Toolbar](#toolbar)
+
 There's no `.row` component — for one-dimensional layouts, use Tailwind's flex utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For 2D layouts, see [Grid](grid.md); for spacing between stacked page sections, [Container](container.md).
 
 ### Basic

@@ -2,296 +2,230 @@
 
 > Color tokens — brand, surfaces, borders, text, and state.
 
-<ColorCopy />
+## Contents
+
+- [Semantic tokens](#semantic-tokens)
+- [Palette](#palette)
 
 The palette is [Flexoki](https://stephango.com/flexoki). The system layers it as palette tones (`--color-blue-600`, `--color-base-50`, …) and semantic aliases that point at them (`--color-primary`, `--color-surface`, …) — see [Principles › Two-layer tokens](principles.md#two-layer-tokens).
 
-Override either layer to reskin the system — see [Customize](customize.md). Click any swatch to copy its hex, Tailwind class, or CSS variable.
+Override either layer to reskin the system — see [Customize](customize.md).
 
 ## Semantic tokens
 
 Primary and the state families (danger, success, warning, info) share a four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base). Text, Surface, Border, Link, and Focus use lighter scales.
 
-<ColorFamily
-  family="Primary"
-  description="High-contrast neutral (ink). Used by solid primary buttons, badges, and selected states. Inverts with the mode — near-black on light, near-white on dark."
-  variants={[
-    { label: "Base", variable: "--color-primary" },
-    { label: "Hover", variable: "--color-primary-hover" },
-    { label: "Muted", variable: "--color-primary-muted" },
-    { label: "Content", variable: "--color-primary-content" },
-  ]}
-/>
+**Primary** — High-contrast neutral (ink). Used by solid primary buttons, badges, and selected states. Inverts with the mode — near-black on light, near-white on dark.
 
-<ColorFamily
-  family="Link"
-  description="Text-link color. Separate from Info so links can be retinted independently."
-  variants={[
-    { label: "Base", variable: "--color-link" },
-    { label: "Hover", variable: "--color-link-hover" },
-  ]}
-/>
+- Base — `--color-primary`
+- Hover — `--color-primary-hover`
+- Muted — `--color-primary-muted`
+- Content — `--color-primary-content`
 
-<ColorFamily
-  family="Focus"
-  description="Focus-ring color for every interactive component."
-  variants={[{ label: "Base", variable: "--color-focus" }]}
-/>
+**Link** — Text-link color. Separate from Info so links can be retinted independently.
 
-<ColorFamily
-  family="Text"
-  description="Foreground content on neutral surfaces."
-  variants={[
-    { label: "Base", variable: "--color-text" },
-    { label: "Muted", variable: "--color-text-muted" },
-  ]}
-/>
+- Base — `--color-link`
+- Hover — `--color-link-hover`
 
-<ColorFamily
-  family="Surface"
-  description="Page and component backgrounds, lightest to strongest."
-  variants={[
-    { label: "Base", variable: "--color-surface" },
-    { label: "Muted", variable: "--color-surface-muted" },
-    { label: "Strong", variable: "--color-surface-strong" },
-  ]}
-/>
+**Focus** — Focus-ring color for every interactive component.
 
-<ColorFamily
-  family="Code"
-  description="Neutral surface and text for <pre>-style output blocks — logs, JSON, LLM output."
-  variants={[
-    { label: "Base", variable: "--color-code-surface" },
-    { label: "Content", variable: "--color-code-text" },
-  ]}
-/>
+- Base — `--color-focus`
 
-<ColorFamily
-  family="Danger"
-  description="Destructive actions and error states."
-  variants={[
-    { label: "Base", variable: "--color-danger" },
-    { label: "Hover", variable: "--color-danger-hover" },
-    { label: "Muted", variable: "--color-danger-muted" },
-    { label: "Content", variable: "--color-danger-content" },
-  ]}
-/>
+**Text** — Foreground content on neutral surfaces.
 
-<ColorFamily
-  family="Success"
-  description="Confirmation and positive outcomes."
-  variants={[
-    { label: "Base", variable: "--color-success" },
-    { label: "Hover", variable: "--color-success-hover" },
-    { label: "Muted", variable: "--color-success-muted" },
-    { label: "Content", variable: "--color-success-content" },
-  ]}
-/>
+- Base — `--color-text`
+- Muted — `--color-text-muted`
 
-<ColorFamily
-  family="Warning"
-  description="Caution and non-blocking issues. Base and Content stay fixed — bright yellow with dark text in both modes; only Hover and Muted invert. That's why tinted card/stat-card surfaces skip the warning variant."
-  variants={[
-    { label: "Base", variable: "--color-warning" },
-    { label: "Hover", variable: "--color-warning-hover" },
-    { label: "Muted", variable: "--color-warning-muted" },
-    { label: "Content", variable: "--color-warning-content" },
-  ]}
-/>
+**Surface** — Page and component backgrounds, lightest to strongest.
 
-<ColorFamily
-  family="Info"
-  description="Neutral notifications and helper hints."
-  variants={[
-    { label: "Base", variable: "--color-info" },
-    { label: "Hover", variable: "--color-info-hover" },
-    { label: "Muted", variable: "--color-info-muted" },
-    { label: "Content", variable: "--color-info-content" },
-  ]}
-/>
+- Base — `--color-surface`
+- Muted — `--color-surface-muted`
+- Strong — `--color-surface-strong`
 
-<ColorFamily
-  family="Border"
-  description="Dividers and outlines."
-  variants={[
-    { label: "Base", variable: "--color-border" },
-    { label: "Strong", variable: "--color-border-strong" },
-  ]}
-/>
+**Code** — Neutral surface and text for <pre>-style output blocks — logs, JSON, LLM output.
+
+- Base — `--color-code-surface`
+- Content — `--color-code-text`
+
+**Danger** — Destructive actions and error states.
+
+- Base — `--color-danger`
+- Hover — `--color-danger-hover`
+- Muted — `--color-danger-muted`
+- Content — `--color-danger-content`
+
+**Success** — Confirmation and positive outcomes.
+
+- Base — `--color-success`
+- Hover — `--color-success-hover`
+- Muted — `--color-success-muted`
+- Content — `--color-success-content`
+
+**Warning** — Caution and non-blocking issues. Base and Content stay fixed — bright yellow with dark text in both modes; only Hover and Muted invert. That's why tinted card/stat-card surfaces skip the warning variant.
+
+- Base — `--color-warning`
+- Hover — `--color-warning-hover`
+- Muted — `--color-warning-muted`
+- Content — `--color-warning-content`
+
+**Info** — Neutral notifications and helper hints.
+
+- Base — `--color-info`
+- Hover — `--color-info-hover`
+- Muted — `--color-info-muted`
+- Content — `--color-info-content`
+
+**Border** — Dividers and outlines.
+
+- Base — `--color-border`
+- Strong — `--color-border-strong`
 
 ## Palette
 
 Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp adds `paper` at the light end and `black` at the dark end.
 
-<ColorRamp
-  family="Base"
-  tones={[
-    { label: "paper", variable: "--color-paper" },
-    { label: "50", variable: "--color-base-50" },
-    { label: "100", variable: "--color-base-100" },
-    { label: "150", variable: "--color-base-150" },
-    { label: "200", variable: "--color-base-200" },
-    { label: "300", variable: "--color-base-300" },
-    { label: "400", variable: "--color-base-400" },
-    { label: "500", variable: "--color-base-500" },
-    { label: "600", variable: "--color-base-600" },
-    { label: "700", variable: "--color-base-700" },
-    { label: "800", variable: "--color-base-800" },
-    { label: "850", variable: "--color-base-850" },
-    { label: "900", variable: "--color-base-900" },
-    { label: "950", variable: "--color-base-950" },
-    { label: "black", variable: "--color-black" },
-  ]}
-/>
+**Base**
 
-<ColorRamp
-  family="Red"
-  tones={[
-    { label: "50", variable: "--color-red-50" },
-    { label: "100", variable: "--color-red-100" },
-    { label: "150", variable: "--color-red-150" },
-    { label: "200", variable: "--color-red-200" },
-    { label: "300", variable: "--color-red-300" },
-    { label: "400", variable: "--color-red-400" },
-    { label: "500", variable: "--color-red-500" },
-    { label: "600", variable: "--color-red-600" },
-    { label: "700", variable: "--color-red-700" },
-    { label: "800", variable: "--color-red-800" },
-    { label: "850", variable: "--color-red-850" },
-    { label: "900", variable: "--color-red-900" },
-    { label: "950", variable: "--color-red-950" },
-  ]}
-/>
+- paper — `--color-paper`
+- 50 — `--color-base-50`
+- 100 — `--color-base-100`
+- 150 — `--color-base-150`
+- 200 — `--color-base-200`
+- 300 — `--color-base-300`
+- 400 — `--color-base-400`
+- 500 — `--color-base-500`
+- 600 — `--color-base-600`
+- 700 — `--color-base-700`
+- 800 — `--color-base-800`
+- 850 — `--color-base-850`
+- 900 — `--color-base-900`
+- 950 — `--color-base-950`
+- black — `--color-black`
 
-<ColorRamp
-  family="Orange"
-  tones={[
-    { label: "50", variable: "--color-orange-50" },
-    { label: "100", variable: "--color-orange-100" },
-    { label: "150", variable: "--color-orange-150" },
-    { label: "200", variable: "--color-orange-200" },
-    { label: "300", variable: "--color-orange-300" },
-    { label: "400", variable: "--color-orange-400" },
-    { label: "500", variable: "--color-orange-500" },
-    { label: "600", variable: "--color-orange-600" },
-    { label: "700", variable: "--color-orange-700" },
-    { label: "800", variable: "--color-orange-800" },
-    { label: "850", variable: "--color-orange-850" },
-    { label: "900", variable: "--color-orange-900" },
-    { label: "950", variable: "--color-orange-950" },
-  ]}
-/>
+**Red**
 
-<ColorRamp
-  family="Yellow"
-  tones={[
-    { label: "50", variable: "--color-yellow-50" },
-    { label: "100", variable: "--color-yellow-100" },
-    { label: "150", variable: "--color-yellow-150" },
-    { label: "200", variable: "--color-yellow-200" },
-    { label: "300", variable: "--color-yellow-300" },
-    { label: "400", variable: "--color-yellow-400" },
-    { label: "500", variable: "--color-yellow-500" },
-    { label: "600", variable: "--color-yellow-600" },
-    { label: "700", variable: "--color-yellow-700" },
-    { label: "800", variable: "--color-yellow-800" },
-    { label: "850", variable: "--color-yellow-850" },
-    { label: "900", variable: "--color-yellow-900" },
-    { label: "950", variable: "--color-yellow-950" },
-  ]}
-/>
+- 50 — `--color-red-50`
+- 100 — `--color-red-100`
+- 150 — `--color-red-150`
+- 200 — `--color-red-200`
+- 300 — `--color-red-300`
+- 400 — `--color-red-400`
+- 500 — `--color-red-500`
+- 600 — `--color-red-600`
+- 700 — `--color-red-700`
+- 800 — `--color-red-800`
+- 850 — `--color-red-850`
+- 900 — `--color-red-900`
+- 950 — `--color-red-950`
 
-<ColorRamp
-  family="Green"
-  tones={[
-    { label: "50", variable: "--color-green-50" },
-    { label: "100", variable: "--color-green-100" },
-    { label: "150", variable: "--color-green-150" },
-    { label: "200", variable: "--color-green-200" },
-    { label: "300", variable: "--color-green-300" },
-    { label: "400", variable: "--color-green-400" },
-    { label: "500", variable: "--color-green-500" },
-    { label: "600", variable: "--color-green-600" },
-    { label: "700", variable: "--color-green-700" },
-    { label: "800", variable: "--color-green-800" },
-    { label: "850", variable: "--color-green-850" },
-    { label: "900", variable: "--color-green-900" },
-    { label: "950", variable: "--color-green-950" },
-  ]}
-/>
+**Orange**
 
-<ColorRamp
-  family="Cyan"
-  tones={[
-    { label: "50", variable: "--color-cyan-50" },
-    { label: "100", variable: "--color-cyan-100" },
-    { label: "150", variable: "--color-cyan-150" },
-    { label: "200", variable: "--color-cyan-200" },
-    { label: "300", variable: "--color-cyan-300" },
-    { label: "400", variable: "--color-cyan-400" },
-    { label: "500", variable: "--color-cyan-500" },
-    { label: "600", variable: "--color-cyan-600" },
-    { label: "700", variable: "--color-cyan-700" },
-    { label: "800", variable: "--color-cyan-800" },
-    { label: "850", variable: "--color-cyan-850" },
-    { label: "900", variable: "--color-cyan-900" },
-    { label: "950", variable: "--color-cyan-950" },
-  ]}
-/>
+- 50 — `--color-orange-50`
+- 100 — `--color-orange-100`
+- 150 — `--color-orange-150`
+- 200 — `--color-orange-200`
+- 300 — `--color-orange-300`
+- 400 — `--color-orange-400`
+- 500 — `--color-orange-500`
+- 600 — `--color-orange-600`
+- 700 — `--color-orange-700`
+- 800 — `--color-orange-800`
+- 850 — `--color-orange-850`
+- 900 — `--color-orange-900`
+- 950 — `--color-orange-950`
 
-<ColorRamp
-  family="Blue"
-  tones={[
-    { label: "50", variable: "--color-blue-50" },
-    { label: "100", variable: "--color-blue-100" },
-    { label: "150", variable: "--color-blue-150" },
-    { label: "200", variable: "--color-blue-200" },
-    { label: "300", variable: "--color-blue-300" },
-    { label: "400", variable: "--color-blue-400" },
-    { label: "500", variable: "--color-blue-500" },
-    { label: "600", variable: "--color-blue-600" },
-    { label: "700", variable: "--color-blue-700" },
-    { label: "800", variable: "--color-blue-800" },
-    { label: "850", variable: "--color-blue-850" },
-    { label: "900", variable: "--color-blue-900" },
-    { label: "950", variable: "--color-blue-950" },
-  ]}
-/>
+**Yellow**
 
-<ColorRamp
-  family="Purple"
-  tones={[
-    { label: "50", variable: "--color-purple-50" },
-    { label: "100", variable: "--color-purple-100" },
-    { label: "150", variable: "--color-purple-150" },
-    { label: "200", variable: "--color-purple-200" },
-    { label: "300", variable: "--color-purple-300" },
-    { label: "400", variable: "--color-purple-400" },
-    { label: "500", variable: "--color-purple-500" },
-    { label: "600", variable: "--color-purple-600" },
-    { label: "700", variable: "--color-purple-700" },
-    { label: "800", variable: "--color-purple-800" },
-    { label: "850", variable: "--color-purple-850" },
-    { label: "900", variable: "--color-purple-900" },
-    { label: "950", variable: "--color-purple-950" },
-  ]}
-/>
+- 50 — `--color-yellow-50`
+- 100 — `--color-yellow-100`
+- 150 — `--color-yellow-150`
+- 200 — `--color-yellow-200`
+- 300 — `--color-yellow-300`
+- 400 — `--color-yellow-400`
+- 500 — `--color-yellow-500`
+- 600 — `--color-yellow-600`
+- 700 — `--color-yellow-700`
+- 800 — `--color-yellow-800`
+- 850 — `--color-yellow-850`
+- 900 — `--color-yellow-900`
+- 950 — `--color-yellow-950`
 
-<ColorRamp
-  family="Magenta"
-  tones={[
-    { label: "50", variable: "--color-magenta-50" },
-    { label: "100", variable: "--color-magenta-100" },
-    { label: "150", variable: "--color-magenta-150" },
-    { label: "200", variable: "--color-magenta-200" },
-    { label: "300", variable: "--color-magenta-300" },
-    { label: "400", variable: "--color-magenta-400" },
-    { label: "500", variable: "--color-magenta-500" },
-    { label: "600", variable: "--color-magenta-600" },
-    { label: "700", variable: "--color-magenta-700" },
-    { label: "800", variable: "--color-magenta-800" },
-    { label: "850", variable: "--color-magenta-850" },
-    { label: "900", variable: "--color-magenta-900" },
-    { label: "950", variable: "--color-magenta-950" },
-  ]}
-/>
+**Green**
+
+- 50 — `--color-green-50`
+- 100 — `--color-green-100`
+- 150 — `--color-green-150`
+- 200 — `--color-green-200`
+- 300 — `--color-green-300`
+- 400 — `--color-green-400`
+- 500 — `--color-green-500`
+- 600 — `--color-green-600`
+- 700 — `--color-green-700`
+- 800 — `--color-green-800`
+- 850 — `--color-green-850`
+- 900 — `--color-green-900`
+- 950 — `--color-green-950`
+
+**Cyan**
+
+- 50 — `--color-cyan-50`
+- 100 — `--color-cyan-100`
+- 150 — `--color-cyan-150`
+- 200 — `--color-cyan-200`
+- 300 — `--color-cyan-300`
+- 400 — `--color-cyan-400`
+- 500 — `--color-cyan-500`
+- 600 — `--color-cyan-600`
+- 700 — `--color-cyan-700`
+- 800 — `--color-cyan-800`
+- 850 — `--color-cyan-850`
+- 900 — `--color-cyan-900`
+- 950 — `--color-cyan-950`
+
+**Blue**
+
+- 50 — `--color-blue-50`
+- 100 — `--color-blue-100`
+- 150 — `--color-blue-150`
+- 200 — `--color-blue-200`
+- 300 — `--color-blue-300`
+- 400 — `--color-blue-400`
+- 500 — `--color-blue-500`
+- 600 — `--color-blue-600`
+- 700 — `--color-blue-700`
+- 800 — `--color-blue-800`
+- 850 — `--color-blue-850`
+- 900 — `--color-blue-900`
+- 950 — `--color-blue-950`
+
+**Purple**
+
+- 50 — `--color-purple-50`
+- 100 — `--color-purple-100`
+- 150 — `--color-purple-150`
+- 200 — `--color-purple-200`
+- 300 — `--color-purple-300`
+- 400 — `--color-purple-400`
+- 500 — `--color-purple-500`
+- 600 — `--color-purple-600`
+- 700 — `--color-purple-700`
+- 800 — `--color-purple-800`
+- 850 — `--color-purple-850`
+- 900 — `--color-purple-900`
+- 950 — `--color-purple-950`
+
+**Magenta**
+
+- 50 — `--color-magenta-50`
+- 100 — `--color-magenta-100`
+- 150 — `--color-magenta-150`
+- 200 — `--color-magenta-200`
+- 300 — `--color-magenta-300`
+- 400 — `--color-magenta-400`
+- 500 — `--color-magenta-500`
+- 600 — `--color-magenta-600`
+- 700 — `--color-magenta-700`
+- 800 — `--color-magenta-800`
+- 850 — `--color-magenta-850`
+- 900 — `--color-magenta-900`
+- 950 — `--color-magenta-950`

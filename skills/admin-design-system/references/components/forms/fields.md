@@ -2,6 +2,15 @@
 
 > Accessibility wiring (label, description, validation) around inputs.
 
+## Contents
+
+- [Examples](#examples)
+  - [Label + description](#label-description)
+  - [Required](#required)
+  - [With validation](#with-validation)
+  - [Inline label](#inline-label)
+- [Advanced: composition with Field.Container](#advanced-composition-with-fieldcontainer)
+
 Vanilla: wire `<label for>` and `aria-describedby` yourself. `<Field>` takes `label`, `description`, `error`, and `required`, and wraps its child control with the matching markup. For per-`ValidityState` errors or irregular layouts, use [`<Field.Container>`](#advanced-composition-with-fieldcontainer).
 
 ## Examples

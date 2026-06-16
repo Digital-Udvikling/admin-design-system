@@ -2,6 +2,19 @@
 
 > A container with optional title, description, and actions.
 
+## Contents
+
+  - [Basic](#basic)
+  - [Sign-in form](#sign-in-form)
+  - [Compact + bordered](#compact-bordered)
+  - [Color variants](#color-variants)
+  - [With icon](#with-icon)
+  - [Header toolbar](#header-toolbar)
+  - [Media](#media)
+  - [Per-slot styling (React only)](#per-slot-styling-react-only)
+- [Advanced: layout with Card.Container](#advanced-layout-with-cardcontainer)
+  - [Scroll region](#scroll-region)
+
 ### Basic
 
 `<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (multiple bodies, a scroll region, custom dividers), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
@@ -260,7 +273,7 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
 />
 ```
 
-### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+### Per-slot styling (React only)
 
 `classNames` targets the elements the shorthand props render — here the title and description. See [Slot styling](../basics/slots.md).
 

@@ -2,6 +2,19 @@
 
 > Pure-CSS bar, proportion, and donut primitives.
 
+## Contents
+
+- [Bar chart](#bar-chart)
+  - [Vertical](#vertical)
+  - [Variants](#variants)
+- [Proportion bar](#proportion-bar)
+- [Donut](#donut)
+  - [Pie](#pie)
+  - [Sizes](#sizes)
+- [Inline](#inline)
+- [Colors](#colors)
+- [Accessibility](#accessibility)
+
 Values drive each chart through inline custom properties: a bar's `--value` against the container's `--chart-max`, a segment's `flex: var(--value)`, a donut's cumulative `conic-gradient` string. In React the `data` prop fills them in. No axes, ticks, or gridlines; use a dedicated library for analytical charts.
 
 ## Bar chart

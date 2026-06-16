@@ -2,6 +2,14 @@
 
 > Section a view into named panels.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic (bordered)](#basic-bordered)
+  - [Boxed (segmented control)](#boxed-segmented-control)
+  - [Full width](#full-width)
+  - [Vertical orientation](#vertical-orientation)
+
 Vanilla tabs are radio-input driven, so switching works without JavaScript, but they cap at 6 panels. React adds ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
 
 ## Examples

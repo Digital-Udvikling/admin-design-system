@@ -2,6 +2,15 @@
 
 > Place a badge, count, or dot on the corner of another element.
 
+## Contents
+
+- [Examples](#examples)
+  - [Count on a button](#count-on-a-button)
+  - [Count overflow](#count-overflow)
+  - [Status dot](#status-dot)
+  - [Placements](#placements)
+  - [Multiple items](#multiple-items)
+
 The wrapper is `position: relative`; the floating child is placed by a vertical (`top`/`middle`/`bottom`) and horizontal (`start`/`center`/`end`) modifier. Default is `top end`, with the item half-overflowing the corner.
 
 ## Examples

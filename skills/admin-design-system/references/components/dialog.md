@@ -2,6 +2,16 @@
 
 > Modal dialogs built on the native dialog element.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Sizes](#sizes)
+  - [Form dialog](#form-dialog)
+  - [Destructive: no light dismiss](#destructive-no-light-dismiss)
+- [Advanced: layout with Dialog.Container](#advanced-layout-with-dialogcontainer)
+- [Controlled state](#controlled-state)
+
 `showModal()` provides the focus trap, scroll lock, Esc dismissal, and `::backdrop`. `<Dialog>` provides shorthand props (`title`, `description`, `actions`); `<Dialog.Container>` is the bare primitive for custom layouts.
 
 The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. Requires no JavaScript. For state-driven flows, pair `open` with `onOpenChange` — see [Controlled state](#controlled-state).

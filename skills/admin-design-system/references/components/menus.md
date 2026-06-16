@@ -2,16 +2,16 @@
 
 > Dropdown action menu.
 
-IconPencil,
-  IconCopy,
-  IconTrash,
-  IconBook,
-  IconHistory,
-  IconLifebuoy,
-  IconPlus,
-  IconDeviceFloppy,
-  IconSearch,
-} from "@tabler/icons-react";
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Disabled](#disabled)
+  - [Checkbox and radio items](#checkbox-and-radio-items)
+  - [Hotkey (React only)](#hotkey-react-only)
+  - [Grouped items](#grouped-items)
+  - [Button-styled trigger](#button-styled-trigger)
+  - [Split button](#split-button)
 
 Built on `<details>` + `<summary>`. The browser handles open/close. There is no light dismiss — click the trigger again or move focus to close.
 
@@ -151,7 +151,7 @@ Set `checked` to render a leading check. Items reserve the indicator gutter whet
 </Menu>
 ```
 
-### Hotkey <StarlightBadge text="React only" variant="caution" />
+### Hotkey (React only)
 
 The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edge of the row. Works on both the button and anchor (`href`) branches.
 

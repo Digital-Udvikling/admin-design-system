@@ -2,6 +2,13 @@
 
 > Edge-anchored panel built on the native dialog element.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Sides](#sides)
+  - [Record detail](#record-detail)
+
 A `<Drawer>` is a [Dialog](dialog.md) anchored to a screen edge instead of centred — for record detail, filters, and bulk edit. It reuses the same native `<dialog>`: `showModal()` gives the focus trap, scroll lock, Esc dismissal, and `::backdrop` for free. The trigger uses the same [Invoker Commands](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) pattern as Dialog; for state-driven flows, pair `open` with `onOpenChange`.
 
 ## Examples

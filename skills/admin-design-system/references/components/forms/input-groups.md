@@ -2,6 +2,15 @@
 
 > Combine inputs, addons, and buttons into a flush row.
 
+## Contents
+
+- [Examples](#examples)
+  - [Prepended addon](#prepended-addon)
+  - [Appended addon](#appended-addon)
+  - [Both ends](#both-ends)
+  - [With a button](#with-a-button)
+  - [With icon addons](#with-icon-addons)
+
 ## Examples
 
 ### Prepended addon

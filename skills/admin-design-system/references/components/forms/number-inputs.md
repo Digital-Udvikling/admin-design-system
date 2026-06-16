@@ -2,6 +2,14 @@
 
 > Numeric field with steppers and clamping.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Step and range](#step-and-range)
+  - [Sizes](#sizes)
+  - [Formatting (React only)](#formatting-react-only)
+
 A numeric field with −/+ steppers for quantities, limits, seat counts, and prices. The React component wraps Base UI NumberField for min/max clamping, step, and `Intl` formatting. Vanilla styles a native `<input type="number">` and steps with the platform `stepUp()` / `stepDown()` methods.
 
 The vanilla bundle gets native stepping and constraint validation, but not grouped-thousands formatting — a formatted `1,000` is not a valid `type="number"` value, so the React wrapper manages the display-vs-value split.
@@ -125,7 +133,7 @@ The vanilla bundle gets native stepping and constraint validation, but not group
 <NumberInput size="lg" defaultValue={1} inputAriaLabel="Large" />
 ```
 
-### Formatting <StarlightBadge text="React only" variant="caution" />
+### Formatting (React only)
 
 Pass `format` (an `Intl.NumberFormat` options object) for currency, percentages, or grouped thousands. The displayed string and the numeric value diverge, so this is React-only.
 

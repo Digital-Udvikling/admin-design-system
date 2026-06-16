@@ -2,11 +2,14 @@
 
 > Inline notifications for errors, confirmations, and contextual feedback.
 
-IconInfoCircle,
-  IconCircleCheck,
-  IconAlertTriangle,
-  IconAlertOctagon,
-} from "@tabler/icons-react";
+## Contents
+
+- [Examples](#examples)
+  - [Variants](#variants)
+  - [With title and description](#with-title-and-description)
+  - [With a leading icon](#with-a-leading-icon)
+  - [With a trailing action](#with-a-trailing-action)
+  - [Dismissible](#dismissible)
 
 For single-field validation, use [Fields](forms/fields.md) instead.
 

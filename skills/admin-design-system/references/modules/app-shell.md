@@ -2,15 +2,26 @@
 
 > Page chrome — navbar, optional sidebar, optional footer — around a main content area.
 
-IconHome,
-  IconReceipt,
-  IconPackage,
-  IconChartBar,
-  IconSettings,
-  IconTruck,
-  IconShoppingCart,
-  IconHeadset,
-} from "@tabler/icons-react";
+## Contents
+
+- [Anatomy](#anatomy)
+- [Quick start](#quick-start)
+- [Navbar](#navbar)
+  - [Dropdowns](#dropdowns)
+  - [Actions slot](#actions-slot)
+  - [Mobile toggle](#mobile-toggle)
+- [Sidebar](#sidebar)
+  - [Items and groups](#items-and-groups)
+  - [Tree navigation](#tree-navigation)
+  - [Click to collapse](#click-to-collapse)
+  - [Mobile drawer](#mobile-drawer)
+- [Footer](#footer)
+- [Examples](#examples)
+  - [Classic admin](#classic-admin)
+  - [Top-nav heavy](#top-nav-heavy)
+  - [Dashboard](#dashboard)
+- [Customization](#customization)
+- [Branding multiple systems](#branding-multiple-systems)
 
 A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a small React context that wires `<Navbar.MobileToggle>` to the sidebar drawer. The composed pieces (navbar, sidebar, footer) also work standalone.
 
@@ -595,6 +606,115 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
     <Footer.Meta>v2.1.0</Footer.Meta>
   </Footer>
 </AppShell>
+```
+
+### Dashboard
+
+Everything together. `<Container>` goes inside `<AppShell.Main>` (which has no padding of its own) and stacks the page sections — a stat grid, a [filter toolbar](../components/tables.md#filter-toolbar), and the [table](../components/tables.md). The toolbar's button opens a form [Drawer](../components/drawer.md); its `commandfor` matches the drawer's `id`.
+
+**Example**
+
+```tsx
+<AppShell hasSidebar systemAccent="var(--color-blue-600)" style={{ minHeight: "30rem" }}>
+  <Navbar>
+    <Navbar.Brand>
+      <BrandTile monogram="A" />
+      Acme Admin
+    </Navbar.Brand>
+  </Navbar>
+  <Sidebar>
+    <Sidebar.Nav>
+      <Sidebar.Item href="#" active icon={IconHome}>
+        Dashboard
+      </Sidebar.Item>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
+      </Sidebar.Item>
+    </Sidebar.Nav>
+  </Sidebar>
+  <AppShell.Main>
+    <Container>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <StatCard
+          icon={IconShoppingCart}
+          label="Orders today"
+          value="128"
+          detail="14 awaiting fulfilment"
+        />
+        <StatCard icon={IconCash} label="Revenue" value="$8.4k" detail="+8% vs target" />
+        <StatCard label="Failed jobs" value="3" detail="last 24h" />
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-semibold">Orders</span>
+        <Input type="search" placeholder="Search orders" className="flex-1" />
+        <Button
+          variant="primary"
+          size="sm"
+          icon={IconPlus}
+          commandfor="new-order"
+          command="show-modal"
+        >
+          New order
+        </Button>
+      </div>
+      <Table striped>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell>Order</Table.HeaderCell>
+            <Table.HeaderCell>Customer</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>#1001</Table.Cell>
+            <Table.Cell>Ada Lovelace</Table.Cell>
+            <Table.Cell>Shipped</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>#1002</Table.Cell>
+            <Table.Cell>Grace Hopper</Table.Cell>
+            <Table.Cell>Processing</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>#1003</Table.Cell>
+            <Table.Cell>Alan Turing</Table.Cell>
+            <Table.Cell>Shipped</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+    </Container>
+  </AppShell.Main>
+  <Footer>
+    <Footer.Meta>© Acme</Footer.Meta>
+  </Footer>
+</AppShell>
+
+<Drawer.Container id="new-order">
+  <form method="dialog">
+    <Drawer.Header>
+      <Drawer.Title>New order</Drawer.Title>
+    </Drawer.Header>
+    <Drawer.Body className="flex flex-col gap-4">
+      <Field>
+        <Field.Label>Customer</Field.Label>
+        <Input placeholder="Name" />
+      </Field>
+      <Field>
+        <Field.Label>Reference</Field.Label>
+        <Input placeholder="#0000" />
+      </Field>
+    </Drawer.Body>
+    <Drawer.Footer>
+      <Button variant="ghost" value="cancel" type="submit" formNoValidate>
+        Cancel
+      </Button>
+      <Button variant="primary" value="save" type="submit">
+        Create
+      </Button>
+    </Drawer.Footer>
+  </form>
+</Drawer.Container>
 ```
 
 ## Customization

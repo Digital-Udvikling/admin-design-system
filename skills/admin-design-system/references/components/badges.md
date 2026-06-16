@@ -2,11 +2,16 @@
 
 > Compact status indicator for tags and counts.
 
-IconCircleCheck,
-  IconAlertTriangle,
-  IconTrendingUp,
-  IconTrendingDown,
-} from "@tabler/icons-react";
+## Contents
+
+- [Examples](#examples)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [With a leading icon](#with-a-leading-icon)
+  - [Counts](#counts)
+  - [Soft](#soft)
+  - [Trend deltas](#trend-deltas)
+  - [Dismissible](#dismissible)
 
 Inline-flex pills at `text-xs` by default.
 

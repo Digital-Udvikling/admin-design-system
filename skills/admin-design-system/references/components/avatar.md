@@ -2,6 +2,15 @@
 
 > Image with a no-JS initials fallback, plus a group stack.
 
+## Contents
+
+- [Examples](#examples)
+- [Sizes](#sizes)
+- [Square](#square)
+- [Image fallback](#image-fallback)
+- [Group](#group)
+- [Status](#status)
+
 The `<img>` overlays the initials, so they show while it loads. A broken-image fallback to initials is React-only; vanilla consumers omit the `<img>` when the URL may be dead. For an initials-only avatar beside a visible name, mark it `aria-hidden` so the name is not read twice.
 
 ## Examples

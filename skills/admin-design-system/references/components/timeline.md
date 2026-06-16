@@ -2,6 +2,13 @@
 
 > Vertical event rail for activity and status history.
 
+## Contents
+
+- [Examples](#examples)
+  - [Activity feed](#activity-feed)
+  - [With icons](#with-icons)
+  - [Numbered steps](#numbered-steps)
+
 A vertical rail of events — audit logs, status history, activity feeds. Each item has an indicator (dot, icon, or number), a title, an optional timestamp, and a description. The connector line is drawn in CSS and stops at the last item.
 
 ## Examples

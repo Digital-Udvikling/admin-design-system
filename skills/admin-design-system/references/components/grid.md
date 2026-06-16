@@ -2,6 +2,17 @@
 
 > Two-dimensional layouts with grid utilities.
 
+## Contents
+
+- [Examples](#examples)
+  - [Columns](#columns)
+  - [Responsive columns](#responsive-columns)
+  - [Auto-fit](#auto-fit)
+  - [Spanning](#spanning)
+  - [Placement](#placement)
+  - [Cell alignment](#cell-alignment)
+  - [Two-pane layout](#two-pane-layout)
+
 There's no `.grid` component — for two-dimensional layouts, use Tailwind's grid utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For laying items out in a single line, see [Row](row.md).
 
 ## Examples

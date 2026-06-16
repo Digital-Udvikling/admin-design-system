@@ -2,6 +2,16 @@
 
 > Transient hints anchored to a trigger.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Sides](#sides)
+  - [Sizes](#sizes)
+  - [Group delay (React only)](#group-delay-react-only)
+  - [Rich content](#rich-content)
+- [Vanilla path notes](#vanilla-path-notes)
+
 React's `<Tooltip>` adds delay, focus, dismiss, and portal positioning. The vanilla `.tooltip-wrap` parent shows a nested `.tooltip` on `:hover` / `:focus-within`.
 
 ## Examples
@@ -93,7 +103,7 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 </>
 ```
 
-### Group delay <StarlightBadge text="React only" variant="caution" />
+### Group delay (React only)
 
 Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones open instantly until the user pauses for `timeout` ms.
 

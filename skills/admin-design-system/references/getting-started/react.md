@@ -2,6 +2,17 @@
 
 > Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
 
+## Contents
+
+- [Install](#install)
+- [Import styles + components](#import-styles-components)
+  - [Props](#props)
+- [Framework setup](#framework-setup)
+  - [Next.js (App Router)](#nextjs-app-router)
+  - [Vite / SPA](#vite-spa)
+- [Add icons (optional)](#add-icons-optional)
+- [Upgrading from 0.3](#upgrading-from-03)
+
 Every component emits `_ao-`-prefixed class names; `<AdminRoot>` is required to scope the subtree into the bundled CSS. See [Scoped bundle](scoped.md).
 
 ## Install
@@ -54,6 +65,60 @@ Beyond the standard `<div>` attributes, two typed shortcuts:
 </AdminRoot>
 ```
 
+## Framework setup
+
+Where the stylesheet import and `<AdminRoot>` live depends on the host framework. `<AdminRoot>` uses hooks and React context, and the package ships **no** `'use client'` directive — so under React Server Components you mount it from a client boundary. The CSS import has no such constraint.
+
+### Next.js (App Router)
+
+Import the stylesheet once in the root layout (a server component — CSS imports are fine there) and render `<AdminRoot>` from a small client wrapper:
+
+```tsx
+// app/providers.tsx
+"use client";
+import { AdminRoot } from "@aortl/admin-react";
+
+export function AdminProviders({ children }: { children: React.ReactNode }) {
+  return <AdminRoot>{children}</AdminRoot>;
+}
+```
+
+```tsx
+// app/layout.tsx
+import "@aortl/admin-react/styles.css";
+import { AdminProviders } from "./providers";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <AdminProviders>{children}</AdminProviders>
+      </body>
+    </html>
+  );
+}
+```
+
+The interactive components (`Button`, `Select`, `Dialog`, …) are client components, so any page or component that renders them needs `'use client'` at its own top, or to be reached from one.
+
+### Vite / SPA
+
+Import the stylesheet in the entry and wrap the app once:
+
+```tsx
+// src/main.tsx
+import "@aortl/admin-react/styles.css";
+import { AdminRoot } from "@aortl/admin-react";
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <AdminRoot>
+    <App />
+  </AdminRoot>,
+);
+```
+
 ## Add icons (optional)
 
 The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md).
@@ -70,7 +135,7 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 </Button>;
 ```
 
-`<Button>`, `<Menu.Item>`, `<Alert>`, `<Card>`, `<Navbar.Item>`, and `<Sidebar.Item>` all accept an `icon` prop — pass the component and the wrapper sizes it and adds `aria-hidden`.
+Most leaf and shorthand components — `<Button>`, `<Badge>`, `<Link>`, `<Input>`, `<Card>`, `<Alert>`, `<Menu.Item>`, `<StatCard>`, and more — accept an `icon` prop; pass the component and the wrapper sizes it and adds `aria-hidden`. See [Icons](../basics/icons.md).
 
 ## Upgrading from 0.3
 

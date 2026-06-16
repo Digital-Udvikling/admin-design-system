@@ -2,6 +2,23 @@
 
 > Native table with row selection, sticky headers, and row links.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Filter toolbar](#filter-toolbar)
+  - [Sortable columns](#sortable-columns)
+  - [Modifiers](#modifiers)
+  - [Sticky header](#sticky-header)
+  - [Pinned column](#pinned-column)
+  - [Cell alignment](#cell-alignment)
+  - [Status gutter](#status-gutter)
+  - [Row selection](#row-selection)
+  - [Whole-row link](#whole-row-link)
+  - [Footer row](#footer-row)
+  - [Empty state](#empty-state)
+- [Horizontal overflow](#horizontal-overflow)
+
 Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `compact`/`relaxed`, `sticky`, `pinCol`) compose. Default row height is ~32px; `compact` tightens it and `relaxed` opens it up.
 
 ## Examples
@@ -63,6 +80,214 @@ Native `<table>` semantics. Cells inherit style from descendant selectors — no
       <Table.Cell>Alan Turing</Table.Cell>
       <Table.Cell>alan@example.com</Table.Cell>
       <Table.Cell>Viewer</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+### Filter toolbar
+
+Sorting and filtering logic is the consumer's to wire — the markup is a flex [toolbar](row.md#toolbar) above the table. The search field grows to fill, a **Filters** button opens a [Drawer](drawer.md) of advanced controls, and the primary action sits at the right edge.
+
+**Example**
+
+```html
+<div class="flex w-full flex-col gap-3">
+  <div class="flex flex-wrap items-center gap-2">
+    <input class="input flex-1" type="search" placeholder="Search orders" />
+    <button type="button" class="btn btn-sm" commandfor="orders-filters" command="show-modal">
+      <i class="ti ti-filter" aria-hidden="true"></i> Filters
+    </button>
+    <button type="button" class="btn btn-primary btn-sm">
+      <i class="ti ti-plus" aria-hidden="true"></i> New order
+    </button>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Order</th>
+        <th>Customer</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#1001</td>
+        <td>Ada Lovelace</td>
+        <td>Shipped</td>
+      </tr>
+      <tr>
+        <td>#1002</td>
+        <td>Grace Hopper</td>
+        <td>Processing</td>
+      </tr>
+      <tr>
+        <td>#1003</td>
+        <td>Alan Turing</td>
+        <td>Shipped</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<dialog id="orders-filters" class="dialog drawer" closedby="any">
+  <form method="dialog">
+    <div class="dialog-header">
+      <h2 class="dialog-title">Filters</h2>
+    </div>
+    <div class="dialog-body flex flex-col gap-4">
+      <div class="field">
+        <label class="field-label" for="filter-customer">Customer</label>
+        <input class="input" id="filter-customer" type="search" placeholder="Any" />
+      </div>
+      <div class="field">
+        <label class="field-label">
+          <input type="checkbox" class="checkbox" /> Unfulfilled only
+        </label>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="submit" class="btn btn-ghost" value="reset" formnovalidate>Reset</button>
+      <button type="submit" class="btn btn-primary" value="apply">Apply</button>
+    </div>
+  </form>
+</dialog>
+```
+
+```tsx
+<div className="flex w-full flex-col gap-3">
+  <div className="flex flex-wrap items-center gap-2">
+    <Input type="search" placeholder="Search orders" className="flex-1" />
+    <Button size="sm" icon={IconFilter} commandfor="orders-filters-r" command="show-modal">
+      Filters
+    </Button>
+    <Button variant="primary" size="sm" icon={IconPlus}>
+      New order
+    </Button>
+  </div>
+  <Table striped>
+    <Table.Head>
+      <Table.Row>
+        <Table.HeaderCell>Order</Table.HeaderCell>
+        <Table.HeaderCell>Customer</Table.HeaderCell>
+        <Table.HeaderCell>Status</Table.HeaderCell>
+      </Table.Row>
+    </Table.Head>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>#1001</Table.Cell>
+        <Table.Cell>Ada Lovelace</Table.Cell>
+        <Table.Cell>Shipped</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>#1002</Table.Cell>
+        <Table.Cell>Grace Hopper</Table.Cell>
+        <Table.Cell>Processing</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>#1003</Table.Cell>
+        <Table.Cell>Alan Turing</Table.Cell>
+        <Table.Cell>Shipped</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table>
+</div>
+
+<Drawer.Container id="orders-filters-r">
+  <form method="dialog">
+    <Drawer.Header>
+      <Drawer.Title>Filters</Drawer.Title>
+    </Drawer.Header>
+    <Drawer.Body className="flex flex-col gap-4">
+      <Field>
+        <Field.Label>Customer</Field.Label>
+        <Input type="search" placeholder="Any" />
+      </Field>
+      <Field>
+        <Field.Label>
+          <Checkbox /> Unfulfilled only
+        </Field.Label>
+      </Field>
+    </Drawer.Body>
+    <Drawer.Footer>
+      <Button variant="ghost" value="reset" type="submit" formNoValidate>
+        Reset
+      </Button>
+      <Button variant="primary" value="apply" type="submit">
+        Apply
+      </Button>
+    </Drawer.Footer>
+  </form>
+</Drawer.Container>
+```
+
+### Sortable columns
+
+There's no sort component — wire the click handler and ordering yourself. The markup is a button in the `<th>` and `aria-sort` (`ascending` / `descending`) on the sorted column only; a caret shows direction, `selector` marks the unsorted columns.
+
+**Example**
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th aria-sort="ascending">
+        <button type="button" class="btn btn-ghost btn-sm">
+          Name <i class="ti ti-chevron-up" aria-hidden="true"></i>
+        </button>
+      </th>
+      <th>
+        <button type="button" class="btn btn-ghost btn-sm">
+          Created <i class="ti ti-selector" aria-hidden="true"></i>
+        </button>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ada Lovelace</td>
+      <td>2024-01-12</td>
+    </tr>
+    <tr>
+      <td>Alan Turing</td>
+      <td>2024-03-04</td>
+    </tr>
+    <tr>
+      <td>Grace Hopper</td>
+      <td>2024-05-21</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell aria-sort="ascending">
+        <Button variant="ghost" size="sm" iconTrailing={IconChevronUp}>
+          Name
+        </Button>
+      </Table.HeaderCell>
+      <Table.HeaderCell>
+        <Button variant="ghost" size="sm" iconTrailing={IconSelector}>
+          Created
+        </Button>
+      </Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Ada Lovelace</Table.Cell>
+      <Table.Cell>2024-01-12</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Alan Turing</Table.Cell>
+      <Table.Cell>2024-03-04</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Grace Hopper</Table.Cell>
+      <Table.Cell>2024-05-21</Table.Cell>
     </Table.Row>
   </Table.Body>
 </Table>

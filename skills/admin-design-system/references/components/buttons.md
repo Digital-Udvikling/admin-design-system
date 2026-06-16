@@ -2,15 +2,23 @@
 
 > Buttons with variants, sizes, icons, and loading state.
 
-IconPlus,
-  IconTrash,
-  IconDownload,
-  IconDotsVertical,
-  IconPencil,
-  IconCopy,
-  IconArchive,
-  IconDeviceFloppy,
-} from "@tabler/icons-react";
+## Contents
+
+- [Examples](#examples)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [Disabled](#disabled)
+  - [Loading](#loading)
+  - [Full width](#full-width)
+  - [As a link](#as-a-link)
+  - [With icons](#with-icons)
+  - [Icon-only](#icon-only)
+  - [Hotkey (React only)](#hotkey-react-only)
+- [Groups](#groups)
+  - [Horizontal](#horizontal)
+  - [Full width](#full-width)
+  - [Vertical](#vertical)
+  - [With variants and icons](#with-variants-and-icons)
 
 ## Examples
 
@@ -167,7 +175,7 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
 ```
 
-### Hotkey <StarlightBadge text="React only" variant="caution" />
+### Hotkey (React only)
 
 Bind a chord to the button — pressing it dispatches a native click and renders a trailing chip. Because it's a real click, `onClick` fires, `type="submit"` submits the form, and an anchor-rendered button (`render={<a href>}`) navigates. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../basics/hotkeys.md) for page-level bindings.
 

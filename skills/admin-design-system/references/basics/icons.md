@@ -2,19 +2,17 @@
 
 > Tabler Icons — webfont for vanilla, typed components for React.
 
-IconHome,
-  IconSearch,
-  IconSettings,
-  IconUser,
-  IconTrash,
-  IconPencil,
-  IconPlus,
-  IconChevronDown,
-  IconInfoCircle,
-  IconCircleCheck,
-  IconAlertTriangle,
-  IconAlertOctagon,
-} from "@tabler/icons-react";
+## Contents
+
+- [Install](#install)
+- [Vanilla usage](#vanilla-usage)
+- [React usage](#react-usage)
+- [Sizing](#sizing)
+- [Accessibility](#accessibility)
+- [In context](#in-context)
+  - [Alert with status icon](#alert-with-status-icon)
+  - [Menu items with leading icons](#menu-items-with-leading-icons)
+- [Substituting your own set](#substituting-your-own-set)
 
 The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React.
 

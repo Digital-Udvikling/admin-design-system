@@ -2,6 +2,14 @@
 
 > Compact rows for settings, members, and notifications.
 
+## Contents
+
+- [Examples](#examples)
+  - [Settings rows](#settings-rows)
+  - [With media](#with-media)
+  - [Whole-row link](#whole-row-link)
+  - [Sizes](#sizes)
+
 A low-chrome row — leading media, a title and description, trailing actions. Use `Item` when each row is a small record with an action or two. For tabular data with columns, use a [Table](tables.md); for a self-contained panel, use a [Card](cards.md).
 
 ## Examples

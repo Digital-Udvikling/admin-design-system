@@ -97,10 +97,38 @@ function transformProseOnly(body, transform) {
   return out.join("\n");
 }
 
+// Flatten the docs-only color components (`<ColorFamily>` / `<ColorRamp>` /
+// `<ColorCopy>`) into plain markdown. Without this the colors page ships as
+// raw Astro source — token names buried in JSX prop syntax.
+function flattenColorComponents(prose) {
+  prose = prose.replace(/^[ \t]*<ColorCopy\s*\/>[ \t]*$/gm, "");
+  // Live-site-only affordance — the static skill has no clickable swatches.
+  prose = prose.replace(/\s*Click any swatch to copy[^.]*\./g, "");
+  return prose.replace(/<Color(?:Family|Ramp)\b([\s\S]*?)\/>/g, (_, attrs) => {
+    const family = attrs.match(/family="([^"]+)"/)?.[1] ?? "";
+    const description = attrs.match(/description="([^"]+)"/)?.[1];
+    const rows = [];
+    const itemRe = /\{\s*label:\s*"([^"]+)",\s*variable:\s*"([^"]+)"\s*\}/g;
+    let m;
+    while ((m = itemRe.exec(attrs)) !== null) rows.push(`- ${m[1]} — \`${m[2]}\``);
+    const head = description ? `**${family}** — ${description}` : `**${family}**`;
+    return `${head}\n\n${rows.join("\n")}`;
+  });
+}
+
 // Best-effort stripping of MDX-only constructs from prose. Component pages
 // don't use these wrappers — this mostly cleans up the landing page.
 function stripMdxNoiseInProse(prose) {
-  prose = prose.replace(/^\s*import\s[^\n]*?;?\s*$/gm, "");
+  // Drop ESM imports — single-line, multi-line braced, and side-effect forms.
+  // A single-line `[^\n]` strip would orphan the body/closer of a braced
+  // multi-line import (the icon names and `} from "..."` line).
+  prose = prose.replace(/^[ \t]*import\b[\s\S]*?\bfrom[ \t]+["'][^"']+["'][ \t]*;?[ \t]*$/gm, "");
+  prose = prose.replace(/^[ \t]*import[ \t]+["'][^"']+["'][ \t]*;?[ \t]*$/gm, "");
+
+  prose = flattenColorComponents(prose);
+
+  // React-only marker: keep the human-readable text, drop the raw Astro JSX.
+  prose = prose.replace(/<StarlightBadge\b[^>]*?\btext="([^"]+)"[^>]*?\/>/g, "($1)");
 
   prose = prose.replace(/^\s*<\/?CardGrid>\s*$/gm, "");
 
@@ -175,16 +203,62 @@ function rewriteExamples(body) {
     let m;
     while ((m = fenceRe.exec(inner)) !== null) {
       const lang = m[1] === "jsx" ? "tsx" : m[1];
-      fences.push(`\`\`\`${lang}\n${m[2]}\n\`\`\``);
+      // Neutralize docs-site GitHub-Pages base paths so copied example code is
+      // portable: `import.meta.env.BASE_URL` is Astro-only, `/admin-design-system/`
+      // is the Pages base. Both resolve to a plain root path in a consumer app.
+      const code = m[2]
+        .replaceAll("${import.meta.env.BASE_URL}", "/")
+        .replaceAll("/admin-design-system/", "/");
+      fences.push(`\`\`\`${lang}\n${code}\n\`\`\``);
     }
     if (fences.length === 0) return "";
     return ["**Example**", "", fences.join("\n\n")].join("\n");
   });
 }
 
+// GitHub-style heading slug, matching the anchor form used by intra-docs links.
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+// Outline of `##`/`###` headings (outside fenced code) for a Contents block.
+function tocFor(body) {
+  let fence = null;
+  const items = [];
+  for (const line of body.split("\n")) {
+    const f = line.match(/^(`{3,}|~{3,})/);
+    if (fence) {
+      if (f && line.startsWith(fence)) fence = null;
+      continue;
+    }
+    if (f) {
+      fence = f[1];
+      continue;
+    }
+    const h = line.match(/^(#{2,3})\s+(.+?)\s*$/);
+    if (!h) continue;
+    const text = h[2].replace(/`/g, "");
+    const indent = h[1].length === 3 ? "  " : "";
+    items.push(`${indent}- [${text}](#${slugify(text)})`);
+  }
+  return items;
+}
+
+// Reference files over ~100 lines get a Contents outline up top so a partial
+// read still sees the full scope (per Anthropic's skill best-practices).
+const TOC_LINE_THRESHOLD = 100;
+
 function transformPage(src, info, pageMap) {
   const { fm, body } = parseFrontmatter(src);
-  const cleaned = rewriteExamples(stripMdxNoise(body, info, pageMap)).trim();
+  let cleaned = rewriteExamples(stripMdxNoise(body, info, pageMap)).trim();
+  if (cleaned.split("\n").length > TOC_LINE_THRESHOLD) {
+    const toc = tocFor(cleaned);
+    if (toc.length > 1) cleaned = `## Contents\n\n${toc.join("\n")}\n\n${cleaned}`;
+  }
   const header =
     `# ${fm.title || "Untitled"}\n` + (fm.description ? `\n> ${fm.description}\n` : "");
   return `${header}\n${cleaned}\n`;
@@ -225,7 +299,7 @@ function buildSkillMd(pages) {
   for (const group of TOP_LEVEL_ORDER) {
     const entries = grouped.get(group) ?? [];
     if (entries.length === 0) continue;
-    entries.sort((a, b) => a.label.localeCompare(b.label));
+    entries.sort((a, b) => a.label.localeCompare(b.label, "en"));
     sections.push(`### ${GROUP_TITLES[group]}`);
     sections.push("");
     for (const entry of entries) {
@@ -237,6 +311,31 @@ function buildSkillMd(pages) {
 
   const header = readFileSync(HEADER_FILE, "utf8").replace(/\s+$/, "");
   return `${header}\n\n## Reference index\n\n${sections.join("\n").trimEnd()}\n`;
+}
+
+// Fail the build if a known transform gap leaked into the output: docs-site
+// globals, un-flattened Astro components, or orphaned multi-line import lines.
+// CI re-runs this generator, so a regression in the strip rules turns red here
+// instead of silently shipping in the committed bundle.
+function validateOutput(files) {
+  const problems = [];
+  for (const { path, content } of files) {
+    const rel = relative(SKILL_DIR, path);
+    if (content.includes("import.meta.env.BASE_URL")) {
+      problems.push(`${rel}: leaked import.meta.env.BASE_URL`);
+    }
+    const tag = content.match(/<(StarlightBadge|ColorFamily|ColorRamp|ColorCopy)\b/);
+    if (tag) problems.push(`${rel}: un-transformed <${tag[1]}>`);
+    content.split("\n").forEach((line, i) => {
+      if (/^\}\s+from\s+["']/.test(line)) {
+        problems.push(`${rel}:${i + 1}: orphaned import residue: ${line.trim()}`);
+      }
+    });
+  }
+  if (problems.length > 0) {
+    console.error("Skill generation produced invalid output:\n  " + problems.join("\n  "));
+    process.exit(1);
+  }
 }
 
 function main() {
@@ -261,6 +360,7 @@ function main() {
   );
 
   const pages = [];
+  const generated = [];
 
   for (const { abs, info } of included) {
     const src = readFileSync(abs, "utf8");
@@ -270,6 +370,7 @@ function main() {
     const outPath = join(REF_DIR, info.outRel);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, out, "utf8");
+    generated.push({ path: outPath, content: out });
 
     pages.push({
       ...info,
@@ -278,8 +379,13 @@ function main() {
     });
   }
 
-  pages.sort((a, b) => a.rel.localeCompare(b.rel));
-  writeFileSync(join(SKILL_DIR, "SKILL.md"), buildSkillMd(pages), "utf8");
+  pages.sort((a, b) => a.rel.localeCompare(b.rel, "en"));
+  const skillMd = buildSkillMd(pages);
+  const skillPath = join(SKILL_DIR, "SKILL.md");
+  writeFileSync(skillPath, skillMd, "utf8");
+  generated.push({ path: skillPath, content: skillMd });
+
+  validateOutput(generated);
 
   console.log(
     `Generated ${pages.length} references + SKILL.md → ${relative(REPO_ROOT, SKILL_DIR)}`,

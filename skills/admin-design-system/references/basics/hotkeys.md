@@ -6,7 +6,7 @@ For shortcuts tied to a visible control, use the `hotkey` prop on [Buttons](../c
 
 `mod` resolves to `Cmd` on macOS and `Ctrl` on every other platform.
 
-## Page-level shortcut <StarlightBadge text="React only" variant="caution" />
+## Page-level shortcut (React only)
 
 ```tsx
 import { useHotkey } from "@aortl/admin-react";

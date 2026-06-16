@@ -2,6 +2,14 @@
 
 > Mutually exclusive choice within a group.
 
+## Contents
+
+- [Examples](#examples)
+  - [Group (horizontal)](#group-horizontal)
+  - [Vertical](#vertical)
+  - [Disabled](#disabled)
+  - [Inside a Field](#inside-a-field)
+
 `RadioGroup` owns the selection state. A `<label>` wrapping a `.radio` lays out inline. Default orientation is horizontal.
 
 ## Examples

@@ -2,6 +2,15 @@
 
 > A centered, max-width page region that spaces its sections.
 
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Sizes](#sizes)
+  - [Compact](#compact)
+  - [Custom width](#custom-width)
+  - [In an app shell](#in-an-app-shell)
+
 The page body you drop inside `<AppShell.Main>` (which has no padding of its own).
 
 Not to be confused with the `.Container` escape hatch on compound components like [`Card.Container`](cards.md#advanced-layout-with-cardcontainer) — `<Container>` is a standalone page region, not a bare-primitive sub-part.

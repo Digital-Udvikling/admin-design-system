@@ -9,7 +9,7 @@ Shorthand props like `title` and `actions` render inner elements a single `class
 
 Both pass through verbatim — only admin's own classes carry the `_ao-` scope prefix. Slot names autocomplete from each component's types.
 
-## Example <StarlightBadge text="React only" variant="caution" />
+## Example (React only)
 
 **Example**
 

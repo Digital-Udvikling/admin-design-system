@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-06-16
+
 ### Added
 
 - `classNames` prop for per-slot class overrides on shorthand components — reach inner elements the shorthand props render (`Card`, `StatCard`, `Alert`, `Item`, `Field`, `Dialog`, `Drawer`, `Timeline.Item`, `PropertyList`, `Input`, `NumberInput`, `Pagination`, `Sidebar.Item`/`SubItem`/`Collapsible`/`CollapseToggle`, `Tooltip`). Exports a `SlotClasses` type helper. (react)
@@ -77,11 +79,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.0...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.18.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.2...v0.17.0
 [0.16.2]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.16.2

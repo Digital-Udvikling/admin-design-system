@@ -1,3 +1,4 @@
+export type { SlotClasses } from "./cn";
 export {
   Accordion,
   type AccordionProps,

@@ -2,7 +2,7 @@ import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { createContext, useContext, useState } from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 interface SidebarContextValue {
@@ -21,6 +21,8 @@ export interface SidebarProps extends Omit<ComponentProps<"aside">, "onChange"> 
   onCollapsedChange?: (collapsed: boolean) => void;
   /** Accessible label for the mobile drawer dialog. Default: "Navigation". */
   drawerLabel?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"drawer" | "drawerBackdrop">;
 }
 
 function SidebarRoot({
@@ -29,6 +31,7 @@ function SidebarRoot({
   onCollapsedChange,
   drawerLabel = "Navigation",
   className,
+  classNames,
   children,
   ...rest
 }: SidebarProps) {
@@ -43,9 +46,11 @@ function SidebarRoot({
       {shell ? (
         <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
           <BaseDialog.Portal>
-            <BaseDialog.Backdrop className={cn("sidebar-drawer-backdrop", undefined)} />
+            <BaseDialog.Backdrop
+              className={cn("sidebar-drawer-backdrop", classNames?.drawerBackdrop)}
+            />
             <BaseDialog.Popup
-              className={cn("sidebar-drawer", undefined)}
+              className={cn("sidebar-drawer", classNames?.drawer)}
               aria-label={drawerLabel}
               onClick={(event) => {
                 const target = event.target as HTMLElement;
@@ -93,18 +98,34 @@ export interface SidebarItemProps extends ComponentProps<"a"> {
   icon?: IconProp;
   /** Trailing badge. Rendered inside `<Sidebar.Badge>`. */
   badge?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"icon" | "label" | "badge">;
 }
 
-function SidebarItem({ active, icon, badge, className, children, ...rest }: SidebarItemProps) {
+function SidebarItem({
+  active,
+  icon,
+  badge,
+  className,
+  classNames,
+  children,
+  ...rest
+}: SidebarItemProps) {
   return (
     <a
       className={cn("sidebar-item", className)}
       aria-current={active ? "page" : undefined}
       {...rest}
     >
-      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
-      {children !== undefined ? <SidebarLabel>{children}</SidebarLabel> : null}
-      {badge !== undefined ? <SidebarBadge>{badge}</SidebarBadge> : null}
+      {icon != null ? (
+        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+      ) : null}
+      {children !== undefined ? (
+        <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+      ) : null}
+      {badge !== undefined ? (
+        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
+      ) : null}
     </a>
   );
 }
@@ -142,6 +163,8 @@ export interface SidebarCollapsibleProps extends Omit<
   /** Uncontrolled initial open state. */
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"icon" | "label" | "trigger" | "panel">;
 }
 
 function SidebarCollapsible({
@@ -150,6 +173,7 @@ function SidebarCollapsible({
   trigger,
   children,
   className,
+  classNames,
   open,
   defaultOpen,
   onOpenChange,
@@ -161,8 +185,12 @@ function SidebarCollapsible({
 
   const triggerContent = trigger ?? (
     <>
-      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
-      {label !== undefined ? <SidebarLabel>{label}</SidebarLabel> : null}
+      {icon != null ? (
+        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+      ) : null}
+      {label !== undefined ? (
+        <SidebarLabel className={classNames?.label}>{label}</SidebarLabel>
+      ) : null}
     </>
   );
 
@@ -177,8 +205,10 @@ function SidebarCollapsible({
       }}
       {...rest}
     >
-      <summary className={cn("sidebar-collapsible-trigger", undefined)}>{triggerContent}</summary>
-      <div className={cn("sidebar-collapsible-panel", undefined)}>{children}</div>
+      <summary className={cn("sidebar-collapsible-trigger", classNames?.trigger)}>
+        {triggerContent}
+      </summary>
+      <div className={cn("sidebar-collapsible-panel", classNames?.panel)}>{children}</div>
     </details>
   );
 }
@@ -187,6 +217,8 @@ export interface SidebarSubItemProps extends ComponentProps<"a"> {
   active?: boolean;
   icon?: IconProp;
   badge?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"icon" | "badge">;
 }
 
 function SidebarSubItem({
@@ -194,6 +226,7 @@ function SidebarSubItem({
   icon,
   badge,
   className,
+  classNames,
   children,
   ...rest
 }: SidebarSubItemProps) {
@@ -203,9 +236,13 @@ function SidebarSubItem({
       aria-current={active ? "page" : undefined}
       {...rest}
     >
-      {icon != null ? <SidebarIcon>{renderIcon(icon)}</SidebarIcon> : null}
+      {icon != null ? (
+        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+      ) : null}
       {children}
-      {badge !== undefined ? <SidebarBadge>{badge}</SidebarBadge> : null}
+      {badge !== undefined ? (
+        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
+      ) : null}
     </a>
   );
 }
@@ -219,11 +256,14 @@ function SidebarFooter({ className, ...rest }: SidebarFooterProps) {
 export interface SidebarCollapseToggleProps extends Omit<ComponentProps<"label">, "htmlFor"> {
   /** Accessible label for the checkbox. Default: "Toggle sidebar". */
   label?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"input">;
 }
 
 function SidebarCollapseToggle({
   label = "Toggle sidebar",
   className,
+  classNames,
   children,
   ...rest
 }: SidebarCollapseToggleProps) {
@@ -235,7 +275,7 @@ function SidebarCollapseToggle({
     <label className={cn("sidebar-collapse-toggle", className)} {...rest}>
       <input
         type="checkbox"
-        className={cn("sidebar-toggle", undefined)}
+        className={cn("sidebar-toggle", classNames?.input)}
         aria-label={label}
         {...(isControlled
           ? { checked: controlledChecked }

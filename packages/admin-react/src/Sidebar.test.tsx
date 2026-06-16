@@ -45,6 +45,17 @@ describe("Sidebar", () => {
     expect(link.querySelector(adminSelector("sidebar-badge"))).toHaveTextContent("12");
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Sidebar>
+        <Sidebar.Item href="#x" classNames={{ label: "x-custom" }}>
+          Orders
+        </Sidebar.Item>
+      </Sidebar>,
+    );
+    expect(screen.getByText("Orders")).toHaveClass("x-custom");
+  });
+
   it("does not render children twice when the mobile drawer is closed", () => {
     render(
       <AppShell hasSidebar>

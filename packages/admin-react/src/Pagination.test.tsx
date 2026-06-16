@@ -84,6 +84,13 @@ describe("Pagination", () => {
     expect(screen.getByRole("button", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Pagination page={3} total={5} onPageChange={() => {}} classNames={{ link: "x-custom" }} />,
+    );
+    expect(screen.getByRole("button", { name: "Page 3" })).toHaveClass("x-custom");
+  });
+
   it("uses the renderItem slot when provided", () => {
     render(
       <Pagination

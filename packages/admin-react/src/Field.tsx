@@ -1,6 +1,6 @@
 import { Field as BaseField } from "@base-ui/react/field";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 
 export type FieldContainerProps = ComponentProps<typeof BaseField.Root>;
 
@@ -24,6 +24,8 @@ export interface FieldProps extends FieldContainerProps {
   required?: boolean;
   /** Inline layout (`.field-row`) — control beside its label; pairs with switches and single checkboxes. */
   inline?: boolean;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"label" | "description" | "error">;
 }
 
 /** Standard field — label, control (`children`), description, error. For other shapes, compose `<Field.Container>` by hand. */
@@ -34,13 +36,26 @@ function FieldRoot({
   required,
   inline,
   className,
+  classNames,
   children,
   ...rest
 }: FieldProps) {
-  const labelEl = label !== undefined ? <FieldLabel required={required}>{label}</FieldLabel> : null;
+  const labelEl =
+    label !== undefined ? (
+      <FieldLabel required={required} className={classNames?.label}>
+        {label}
+      </FieldLabel>
+    ) : null;
   const descriptionEl =
-    description !== undefined ? <FieldDescription>{description}</FieldDescription> : null;
-  const errorEl = error !== undefined ? <FieldError match={true}>{error}</FieldError> : null;
+    description !== undefined ? (
+      <FieldDescription className={classNames?.description}>{description}</FieldDescription>
+    ) : null;
+  const errorEl =
+    error !== undefined ? (
+      <FieldError match={true} className={classNames?.error}>
+        {error}
+      </FieldError>
+    ) : null;
   return (
     <FieldContainer className={cn(inline && "field-row", className)} {...rest}>
       {inline ? (

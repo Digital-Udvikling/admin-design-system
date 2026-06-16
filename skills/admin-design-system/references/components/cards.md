@@ -260,6 +260,21 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
 />
 ```
 
+### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+
+`classNames` targets the elements the shorthand props render — here the title and description. See [Slot styling](../basics/slots.md).
+
+**Example**
+
+```tsx
+<Card
+  bordered
+  title="Deploy failed"
+  description="Build #2042 exited with code 1."
+  classNames={{ title: "text-danger", description: "font-mono" }}
+/>
+```
+
 ## Advanced: layout with `Card.Container`
 
 `<Card.Container>` renders the bare `.card` and lets you compose sub-parts directly.

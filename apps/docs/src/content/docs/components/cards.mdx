@@ -3,6 +3,7 @@ title: Cards
 description: A container with optional title, description, and actions.
 ---
 
+import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 import { Button, Card, Input } from "@aortl/admin-react";
 import { IconShoppingBag, IconArrowRight, IconPencil, IconX } from "@tabler/icons-react";
 
@@ -273,6 +274,23 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
   }
   title="Storefront"
   description="Live since March, 1.2k monthly orders."
+/>
+```
+
+:::
+
+### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+
+`classNames` targets the elements the shorthand props render — here the title and description. See [Slot styling](../../basics/slots/).
+
+:::example
+
+```tsx
+<Card
+  bordered
+  title="Deploy failed"
+  description="Build #2042 exited with code 1."
+  classNames={{ title: "text-danger", description: "font-mono" }}
 />
 ```
 

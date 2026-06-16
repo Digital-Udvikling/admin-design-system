@@ -59,6 +59,11 @@ describe("StatCard", () => {
     expect(trend).toHaveAttribute("data-intent", "positive");
   });
 
+  it("forwards classNames to slots", () => {
+    render(<StatCard label="Total" value="1,234" classNames={{ value: "x-custom" }} />);
+    expect(screen.getByText("1,234")).toHaveClass("x-custom");
+  });
+
   it("keeps trend tone independent of caret direction", () => {
     const { container } = render(
       <StatCard value="0.42%" trend={{ value: "-0.18", direction: "down", intent: "positive" }} />,

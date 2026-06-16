@@ -3,6 +3,7 @@ title: Stat cards
 description: Compact KPI tile with label, value, and detail.
 ---
 
+import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 import { Badge, StatCard } from "@aortl/admin-react";
 import { IconShoppingBag, IconUsers, IconActivity, IconCash } from "@tabler/icons-react";
 
@@ -192,6 +193,23 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
   label="Error rate"
   value="0.42%"
   trend={{ direction: "down", intent: "positive", value: "-0.18 vs prior" }}
+/>
+```
+
+:::
+
+### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+
+A stat card has no compound parts, so `classNames` is the only way to reach the label, value, trend, and detail. See [Slot styling](../../basics/slots/).
+
+:::example
+
+```tsx
+<StatCard
+  label="Error rate"
+  value="0.42%"
+  detail="last 24h"
+  classNames={{ value: "text-danger", detail: "font-mono" }}
 />
 ```
 

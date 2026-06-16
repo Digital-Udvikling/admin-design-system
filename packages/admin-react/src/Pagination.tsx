@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type PaginationItem =
@@ -24,6 +24,8 @@ export interface PaginationProps extends Omit<ComponentProps<"nav">, "onChange">
   nextIcon?: IconProp;
   /** Override the renderer for one item — for routing libraries that supply their own Link. */
   renderItem?: (item: PaginationItem) => ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"item" | "link" | "ellipsis">;
 }
 
 /** Pure (safe during render): previous, numbers/ellipses (`boundaryCount` at each end, `siblingCount` around `page`), next. */
@@ -117,6 +119,7 @@ export function Pagination({
   nextIcon,
   renderItem,
   className,
+  classNames,
   "aria-label": ariaLabel = "Pagination",
   ...rest
 }: PaginationProps) {
@@ -127,8 +130,10 @@ export function Pagination({
     <nav aria-label={ariaLabel} className={cn("pagination", className)} {...rest}>
       <ul>
         {items.map((item, i) => (
-          <li key={paginationItemKey(item, i)} className={cn("page-item", undefined)}>
-            {renderItem ? renderItem(item) : defaultRender(item, onPageChange, prev, next)}
+          <li key={paginationItemKey(item, i)} className={cn("page-item", classNames?.item)}>
+            {renderItem
+              ? renderItem(item)
+              : defaultRender(item, onPageChange, prev, next, classNames)}
           </li>
         ))}
       </ul>
@@ -192,13 +197,14 @@ function defaultRender(
   onPageChange: (n: number) => void,
   prev: ReactNode,
   next: ReactNode,
+  classNames: SlotClasses<"item" | "link" | "ellipsis"> | undefined,
 ): ReactNode {
   switch (item.type) {
     case "previous":
       return (
         <button
           type="button"
-          className={cn("page-link", undefined)}
+          className={cn("page-link", classNames?.link)}
           aria-label="Previous page"
           aria-disabled={item.disabled || undefined}
           disabled={item.disabled}
@@ -211,7 +217,7 @@ function defaultRender(
       return (
         <button
           type="button"
-          className={cn("page-link", undefined)}
+          className={cn("page-link", classNames?.link)}
           aria-label="Next page"
           aria-disabled={item.disabled || undefined}
           disabled={item.disabled}
@@ -222,7 +228,7 @@ function defaultRender(
       );
     case "ellipsis":
       return (
-        <span className={cn("page-ellipsis", undefined)} aria-hidden="true">
+        <span className={cn("page-ellipsis", classNames?.ellipsis)} aria-hidden="true">
           …
         </span>
       );
@@ -230,7 +236,7 @@ function defaultRender(
       return (
         <button
           type="button"
-          className={cn(["page-link", item.selected && "active"], undefined)}
+          className={cn(["page-link", item.selected && "active"], classNames?.link)}
           aria-current={item.selected ? "page" : undefined}
           aria-label={`Page ${item.page}`}
           onClick={() => onPageChange(item.page)}

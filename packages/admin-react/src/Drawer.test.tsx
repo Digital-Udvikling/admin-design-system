@@ -58,4 +58,13 @@ describe("Drawer", () => {
     );
     expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
   });
+
+  it("forwards classNames to slots", () => {
+    render(
+      <Drawer open title="Filters" classNames={{ title: "x-custom" }}>
+        Body
+      </Drawer>,
+    );
+    expect(screen.getByText("Filters")).toHaveClass("x-custom");
+  });
 });

@@ -1,6 +1,6 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import { useContext, type ComponentProps, type ReactElement, type ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { PortalContainerContext } from "./portal-context";
 
 export type TooltipProviderProps = ComponentProps<typeof BaseTooltip.Provider>;
@@ -64,6 +64,8 @@ export interface TooltipProps extends Omit<TooltipRootProps, "children"> {
   align?: TooltipPopupProps["align"];
   sideOffset?: TooltipPopupProps["sideOffset"];
   size?: TooltipSize;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"popup">;
   /** The trigger element. Must be a single React element so Base UI can merge trigger props/refs into it. */
   children: ReactElement;
 }
@@ -74,13 +76,20 @@ function TooltipShorthand({
   align,
   sideOffset,
   size,
+  classNames,
   children,
   ...rootProps
 }: TooltipProps) {
   return (
     <TooltipRoot {...rootProps}>
       <BaseTooltip.Trigger render={children} />
-      <TooltipPopup side={side} align={align} sideOffset={sideOffset} size={size}>
+      <TooltipPopup
+        side={side}
+        align={align}
+        sideOffset={sideOffset}
+        size={size}
+        className={classNames?.popup}
+      >
         {content}
       </TooltipPopup>
     </TooltipRoot>

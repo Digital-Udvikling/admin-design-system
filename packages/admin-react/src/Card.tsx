@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type CardVariant =
@@ -66,6 +66,10 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
   toolbar?: ReactNode;
   /** Renders as `<Card.Actions>`. */
   actions?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<
+    "media" | "body" | "header" | "toolbar" | "title" | "description" | "actions"
+  >;
 }
 
 /**
@@ -84,11 +88,16 @@ function CardRoot({
   toolbar,
   actions,
   className,
+  classNames,
   children,
   ...rest
 }: CardProps) {
   const hasTitle = icon !== undefined || title !== undefined;
-  const titleEl = hasTitle ? <CardTitle icon={icon}>{title}</CardTitle> : null;
+  const titleEl = hasTitle ? (
+    <CardTitle icon={icon} className={classNames?.title}>
+      {title}
+    </CardTitle>
+  ) : null;
   return (
     <CardContainer
       variant={variant}
@@ -97,19 +106,23 @@ function CardRoot({
       className={className}
       {...rest}
     >
-      {media !== undefined ? <CardMedia>{media}</CardMedia> : null}
-      <CardBody>
+      {media !== undefined ? <CardMedia className={classNames?.media}>{media}</CardMedia> : null}
+      <CardBody className={classNames?.body}>
         {toolbar !== undefined ? (
-          <CardHeader>
+          <CardHeader className={classNames?.header}>
             {titleEl}
-            <CardToolbar>{toolbar}</CardToolbar>
+            <CardToolbar className={classNames?.toolbar}>{toolbar}</CardToolbar>
           </CardHeader>
         ) : (
           titleEl
         )}
-        {description !== undefined ? <CardDescription>{description}</CardDescription> : null}
+        {description !== undefined ? (
+          <CardDescription className={classNames?.description}>{description}</CardDescription>
+        ) : null}
         {children}
-        {actions !== undefined ? <CardActions>{actions}</CardActions> : null}
+        {actions !== undefined ? (
+          <CardActions className={classNames?.actions}>{actions}</CardActions>
+        ) : null}
       </CardBody>
     </CardContainer>
   );

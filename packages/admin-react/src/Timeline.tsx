@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type TimelineStatus = "default" | "info" | "success" | "warning" | "danger" | "current";
@@ -23,6 +23,10 @@ export interface TimelineItemProps extends Omit<ComponentProps<"li">, "title"> {
   /** Timestamp line. */
   time?: ReactNode;
   description?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<
+    "indicator" | "marker" | "dot" | "content" | "title" | "time" | "description"
+  >;
 }
 function TimelineItem({
   status = "default",
@@ -32,16 +36,17 @@ function TimelineItem({
   time,
   description,
   className,
+  classNames,
   children,
   ...rest
 }: TimelineItemProps) {
   let indicator: ReactNode;
   if (marker !== undefined) {
-    indicator = <span className={cn("timeline-marker", undefined)}>{marker}</span>;
+    indicator = <span className={cn("timeline-marker", classNames?.marker)}>{marker}</span>;
   } else if (icon != null) {
     indicator = renderIcon(icon);
   } else {
-    indicator = <span className={cn("timeline-dot", undefined)} />;
+    indicator = <span className={cn("timeline-dot", classNames?.dot)} />;
   }
   return (
     <li
@@ -51,14 +56,16 @@ function TimelineItem({
       )}
       {...rest}
     >
-      <span className={cn("timeline-indicator", undefined)}>{indicator}</span>
-      <div className={cn("timeline-content", undefined)}>
+      <span className={cn("timeline-indicator", classNames?.indicator)}>{indicator}</span>
+      <div className={cn("timeline-content", classNames?.content)}>
         {title !== undefined ? (
-          <div className={cn("timeline-title", undefined)}>{title}</div>
+          <div className={cn("timeline-title", classNames?.title)}>{title}</div>
         ) : null}
-        {time !== undefined ? <div className={cn("timeline-time", undefined)}>{time}</div> : null}
+        {time !== undefined ? (
+          <div className={cn("timeline-time", classNames?.time)}>{time}</div>
+        ) : null}
         {description !== undefined ? (
-          <div className={cn("timeline-description", undefined)}>{description}</div>
+          <div className={cn("timeline-description", classNames?.description)}>{description}</div>
         ) : null}
         {children}
       </div>

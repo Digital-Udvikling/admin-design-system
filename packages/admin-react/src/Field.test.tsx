@@ -39,6 +39,19 @@ describe("Field", () => {
       expect(screen.getByText("Email")).toHaveAttribute("data-required");
     });
 
+    it("forwards classNames to slots", () => {
+      render(
+        <Field
+          label="Email"
+          description="We will not share your email."
+          classNames={{ description: "x-custom" }}
+        >
+          <Input />
+        </Field>,
+      );
+      expect(screen.getByText("We will not share your email.")).toHaveClass("x-custom");
+    });
+
     it("places the control before the label and applies field-row when inline", () => {
       const { container } = render(
         <Field inline label="Email me about new orders">

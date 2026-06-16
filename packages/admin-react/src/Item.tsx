@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type ItemVariant = "default" | "outline" | "muted";
@@ -71,23 +71,40 @@ export interface ItemProps extends Omit<ItemContainerProps, "title"> {
   description?: ReactNode;
   /** Trailing controls, pinned to the row's end. */
   actions?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"media" | "content" | "title" | "description" | "actions">;
 }
 
 /** Opinionated row with media / title+description / actions shorthand. For other shapes, compose `<Item.Container>`. */
-function ItemRoot({ media, icon, title, description, actions, children, ...rest }: ItemProps) {
+function ItemRoot({
+  media,
+  icon,
+  title,
+  description,
+  actions,
+  classNames,
+  children,
+  ...rest
+}: ItemProps) {
   const leading = media ?? renderIcon(icon);
   const hasContent = title !== undefined || description !== undefined;
   return (
     <ItemContainer {...rest}>
-      {leading != null ? <ItemMedia>{leading}</ItemMedia> : null}
+      {leading != null ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
       {hasContent ? (
-        <ItemContent>
-          {title !== undefined ? <ItemTitle>{title}</ItemTitle> : null}
-          {description !== undefined ? <ItemDescription>{description}</ItemDescription> : null}
+        <ItemContent className={classNames?.content}>
+          {title !== undefined ? (
+            <ItemTitle className={classNames?.title}>{title}</ItemTitle>
+          ) : null}
+          {description !== undefined ? (
+            <ItemDescription className={classNames?.description}>{description}</ItemDescription>
+          ) : null}
         </ItemContent>
       ) : null}
       {children}
-      {actions !== undefined ? <ItemActions>{actions}</ItemActions> : null}
+      {actions !== undefined ? (
+        <ItemActions className={classNames?.actions}>{actions}</ItemActions>
+      ) : null}
     </ItemContainer>
   );
 }

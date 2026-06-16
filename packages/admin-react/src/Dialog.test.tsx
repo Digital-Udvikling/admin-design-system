@@ -71,6 +71,15 @@ describe("Dialog", () => {
     );
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Dialog open title="Settings" description="Desc" classNames={{ description: "x-custom" }}>
+        Body
+      </Dialog>,
+    );
+    expect(screen.getByText("Desc")).toHaveClass("x-custom");
+  });
+
   describe("interactions", () => {
     it("calls showModal when open transitions false -> true", () => {
       const showModal = vi.spyOn(HTMLDialogElement.prototype, "showModal");

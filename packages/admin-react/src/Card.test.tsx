@@ -99,6 +99,15 @@ describe("Card", () => {
     expect(screen.getByRole("img", { name: "Cover" }).parentElement).toHaveAdminClass("card-media");
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Card title="Plan" description="Pro tier" classNames={{ description: "x-custom" }}>
+        body content
+      </Card>,
+    );
+    expect(screen.getByText("Pro tier")).toHaveClass("x-custom");
+  });
+
   it("Card.Container composes the scroll region", () => {
     render(
       <Card.Container scroll>

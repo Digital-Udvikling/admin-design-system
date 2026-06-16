@@ -29,6 +29,15 @@ describe("Timeline", () => {
     expect(container.querySelector(adminSelector("timeline-marker"))).toHaveTextContent("1");
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Timeline>
+        <Timeline.Item title="Order placed" classNames={{ title: "x-custom" }} />
+      </Timeline>,
+    );
+    expect(screen.getByText("Order placed")).toHaveClass("x-custom");
+  });
+
   it("uses an icon indicator when icon is set", () => {
     function Star(props: { size?: number | string }) {
       return <svg data-testid="star" {...props} />;

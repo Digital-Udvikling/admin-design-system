@@ -1,6 +1,6 @@
 import { Input as BaseInput } from "@base-ui/react/input";
 import { useCallback, useRef, useState, type ComponentProps, type ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type InputVariant = "bordered" | "ghost" | "danger" | "info" | "success" | "warning";
@@ -26,6 +26,8 @@ export interface InputProps extends BaseInputProps {
   onClear?: () => void;
   /** Custom interactive trailing control (style it `.input-action`), e.g. a reveal toggle. */
   action?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"wrapper" | "action">;
 }
 
 function ClearIcon() {
@@ -57,6 +59,7 @@ export function Input({
   onClear,
   action,
   className,
+  classNames,
   type = "text",
   value,
   defaultValue,
@@ -130,7 +133,7 @@ export function Input({
   const trailing = showClear ? (
     <button
       type="button"
-      className={cn("input-action", undefined)}
+      className={cn("input-action", classNames?.action)}
       aria-label={clearLabel}
       onClick={handleClear}
     >
@@ -141,7 +144,7 @@ export function Input({
   );
 
   return (
-    <span className={cn("input-icon", undefined)}>
+    <span className={cn("input-icon", classNames?.wrapper)}>
       {renderIcon(icon)}
       {inputEl}
       {trailing}
@@ -197,7 +200,11 @@ export interface PasswordInputProps extends Omit<
 }
 
 /** Password field with a trailing reveal toggle. Emits the same `.input` / `.input-action` classes. */
-export function PasswordInput({ revealLabel = "Show password", ...rest }: PasswordInputProps) {
+export function PasswordInput({
+  revealLabel = "Show password",
+  classNames,
+  ...rest
+}: PasswordInputProps) {
   const [revealed, setRevealed] = useState(false);
   return (
     <Input
@@ -205,7 +212,7 @@ export function PasswordInput({ revealLabel = "Show password", ...rest }: Passwo
       action={
         <button
           type="button"
-          className={cn("input-action", undefined)}
+          className={cn("input-action", classNames?.action)}
           aria-label={revealLabel}
           aria-pressed={revealed}
           onClick={() => setRevealed((v) => !v)}
@@ -213,6 +220,7 @@ export function PasswordInput({ revealLabel = "Show password", ...rest }: Passwo
           {revealed ? <EyeOffIcon /> : <EyeIcon />}
         </button>
       }
+      classNames={classNames}
       {...rest}
     />
   );

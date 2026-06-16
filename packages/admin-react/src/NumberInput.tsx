@@ -1,6 +1,6 @@
 import { NumberField } from "@base-ui/react/number-field";
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 
 export type NumberInputSize = "sm" | "md" | "lg";
 
@@ -42,6 +42,8 @@ function PlusIcon() {
 
 export interface NumberInputProps extends ComponentProps<typeof NumberField.Root> {
   size?: NumberInputSize;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"group" | "decrement" | "input" | "increment">;
   /** Input placeholder. */
   placeholder?: string;
   /** aria-label for the field when there's no associated `<label>`. */
@@ -63,6 +65,7 @@ export interface NumberInputProps extends ComponentProps<typeof NumberField.Root
  */
 export function NumberInput({
   size = "md",
+  classNames,
   placeholder,
   inputAriaLabel,
   decrementLabel = "Decrease",
@@ -75,21 +78,21 @@ export function NumberInput({
   return (
     <NumberField.Root className={cn("number-input-root", className)} {...rootProps}>
       <NumberField.Group
-        className={cn(["number-input", size !== "md" && `number-input-${size}`], undefined)}
+        className={cn(["number-input", size !== "md" && `number-input-${size}`], classNames?.group)}
       >
         <NumberField.Decrement
-          className={cn("number-input-step", undefined)}
+          className={cn("number-input-step", classNames?.decrement)}
           aria-label={decrementLabel}
         >
           {decrementIcon ?? <MinusIcon />}
         </NumberField.Decrement>
         <NumberField.Input
-          className={cn("number-input-field", undefined)}
+          className={cn("number-input-field", classNames?.input)}
           placeholder={placeholder}
           aria-label={inputAriaLabel}
         />
         <NumberField.Increment
-          className={cn("number-input-step", undefined)}
+          className={cn("number-input-step", classNames?.increment)}
           aria-label={incrementLabel}
         >
           {incrementIcon ?? <PlusIcon />}

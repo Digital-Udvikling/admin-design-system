@@ -162,6 +162,11 @@ describe("Input", () => {
     });
   });
 
+  it("forwards classNames to slots", () => {
+    render(<PasswordInput aria-label="pw" classNames={{ action: "x-custom" }} />);
+    expect(screen.getByRole("button", { name: "Show password" })).toHaveClass("x-custom");
+  });
+
   describe("PasswordInput", () => {
     it("toggles the input type via the reveal button", async () => {
       const user = userEvent.setup();

@@ -108,6 +108,15 @@ describe("PropertyList", () => {
     expect(screen.getByText("rich")).toHaveAdminClass("property-list-value");
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <PropertyList title="Heading" classNames={{ title: "x-custom" }}>
+        <PropertyList.Item label="X" value="Y" />
+      </PropertyList>,
+    );
+    expect(screen.getByRole("heading", { level: 3, name: "Heading" })).toHaveClass("x-custom");
+  });
+
   it("title prop is optional — list renders without a heading", () => {
     render(
       <PropertyList data-testid="root">

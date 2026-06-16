@@ -1,5 +1,5 @@
 import { useContext, type ComponentProps, type ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { DialogContext, useDialogElement } from "./dialog-internal";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
@@ -148,6 +148,8 @@ export interface DialogProps extends Omit<DialogContainerProps, "title" | "child
   dismissible?: boolean;
   /** aria-label for the close button. Default: `"Close"`. */
   closeLabel?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"header" | "title" | "close" | "description" | "body" | "footer">;
   children?: ReactNode;
 }
 
@@ -159,6 +161,7 @@ function DialogRoot({
   actions,
   dismissible = true,
   closeLabel = "Close",
+  classNames,
   children,
   ...containerProps
 }: DialogProps) {
@@ -167,18 +170,28 @@ function DialogRoot({
   return (
     <DialogContainer {...containerProps}>
       {showHeader ? (
-        <DialogHeader>
+        <DialogHeader className={classNames?.header}>
           {hasTitle ? (
-            <DialogTitle icon={icon}>{title}</DialogTitle>
+            <DialogTitle icon={icon} className={classNames?.title}>
+              {title}
+            </DialogTitle>
           ) : (
             <span className={cn("flex-1", undefined)} />
           )}
-          {dismissible ? <DialogCloseButton aria-label={closeLabel} /> : null}
+          {dismissible ? (
+            <DialogCloseButton aria-label={closeLabel} className={classNames?.close} />
+          ) : null}
         </DialogHeader>
       ) : null}
-      {description !== undefined ? <DialogDescription>{description}</DialogDescription> : null}
-      {children !== undefined ? <DialogBody>{children}</DialogBody> : null}
-      {actions !== undefined ? <DialogFooter>{actions}</DialogFooter> : null}
+      {description !== undefined ? (
+        <DialogDescription className={classNames?.description}>{description}</DialogDescription>
+      ) : null}
+      {children !== undefined ? (
+        <DialogBody className={classNames?.body}>{children}</DialogBody>
+      ) : null}
+      {actions !== undefined ? (
+        <DialogFooter className={classNames?.footer}>{actions}</DialogFooter>
+      ) : null}
     </DialogContainer>
   );
 }

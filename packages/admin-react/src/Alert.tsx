@@ -1,5 +1,5 @@
 import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type AlertVariant = "info" | "success" | "warning" | "danger";
@@ -37,6 +37,8 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   onDismiss?: MouseEventHandler<HTMLButtonElement>;
   /** aria-label for the dismiss button. Default: "Dismiss". */
   dismissLabel?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"title" | "description" | "action" | "dismiss">;
 }
 
 function AlertRoot({
@@ -47,6 +49,7 @@ function AlertRoot({
   action,
   onDismiss,
   dismissLabel = "Dismiss",
+  classNames,
   className,
   role,
   children,
@@ -60,14 +63,18 @@ function AlertRoot({
       {...rest}
     >
       {renderIcon(icon)}
-      {title !== undefined ? <AlertTitle>{title}</AlertTitle> : null}
-      {description !== undefined ? <AlertDescription>{description}</AlertDescription> : null}
+      {title !== undefined ? <AlertTitle className={classNames?.title}>{title}</AlertTitle> : null}
+      {description !== undefined ? (
+        <AlertDescription className={classNames?.description}>{description}</AlertDescription>
+      ) : null}
       {children}
-      {action !== undefined ? <AlertAction>{action}</AlertAction> : null}
+      {action !== undefined ? (
+        <AlertAction className={classNames?.action}>{action}</AlertAction>
+      ) : null}
       {onDismiss ? (
         <button
           type="button"
-          className={cn("alert-dismiss", undefined)}
+          className={cn("alert-dismiss", classNames?.dismiss)}
           aria-label={dismissLabel}
           onClick={onDismiss}
         >

@@ -28,6 +28,17 @@ Both packages share base names. The unscoped vanilla bundle renders `<Button var
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
+### Targeting inner elements (`classNames`)
+
+React components whose shorthand props render inner elements expose a `classNames` prop — an object mapping slot names to classes. `className` styles the root; `classNames={{ slot: "…" }}` reaches the inner slots. Slot classes pass through verbatim (no `_ao-` prefix), exactly like `className`, and slot names autocomplete from the component's types.
+
+```tsx
+<Card title="Deploy failed" description="Build #2042 failed." classNames={{ title: "text-danger" }} />
+<StatCard label="Errors" value="37" classNames={{ value: "text-danger" }} />
+```
+
+Available on the shorthand/opinionated components: `Alert`, `Card`, `Dialog`, `Drawer`, `Field`, `Input` / `PasswordInput`, `Item`, `NumberInput`, `Pagination`, `PropertyList` (+ `.Item` / `.Value`), `Sidebar.Item` / `SubItem` / `Collapsible` / `CollapseToggle` (+ `Sidebar` drawer), `StatCard`, `Timeline.Item`, `Tooltip`. Leaves (`Button`, `Badge`) and pure compound components (`Table`, `Tabs`, `Select`, `Accordion`) don't need it — take `className` on the element or on each composed part. Vanilla CSS has no equivalent; write the classes on the elements directly.
+
 ### Icons
 
 Iconized React components accept an `icon` (and where applicable `iconTrailing`) prop that takes a Tabler-style component reference:

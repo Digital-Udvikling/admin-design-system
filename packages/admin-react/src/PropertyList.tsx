@@ -1,5 +1,5 @@
 import { useRef, useState, type ComponentProps, type ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 
 // Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
 function CopyGlyph({ className }: { className: string }) {
@@ -51,6 +51,8 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
   hideIfAllEmpty?: boolean;
   /** Section heading rendered as `<h3 class="property-list-title">`. */
   title?: ReactNode;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"title" | "items">;
 }
 
 function PropertyListRoot({
@@ -59,6 +61,7 @@ function PropertyListRoot({
   hideIfAllEmpty,
   title,
   className,
+  classNames,
   children,
   ...rest
 }: PropertyListProps) {
@@ -76,9 +79,9 @@ function PropertyListRoot({
       {...rest}
     >
       {title !== undefined ? (
-        <h3 className={cn("property-list-title", undefined)}>{title}</h3>
+        <h3 className={cn("property-list-title", classNames?.title)}>{title}</h3>
       ) : null}
-      <dl className={cn("property-list-items", undefined)}>{children}</dl>
+      <dl className={cn("property-list-items", classNames?.items)}>{children}</dl>
     </section>
   );
 }
@@ -91,6 +94,8 @@ export interface PropertyListItemProps extends Omit<ComponentProps<"dd">, "title
   copyable?: boolean;
   /** Overrides the text the copy button writes to the clipboard. */
   copyValue?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"label" | "copy">;
 }
 
 function isEmptyValue(value: ReactNode): boolean {
@@ -106,6 +111,7 @@ function PropertyListItem({
   numeric,
   copyable,
   copyValue,
+  classNames,
   children,
   ...rest
 }: PropertyListItemProps) {
@@ -115,12 +121,13 @@ function PropertyListItem({
   const empty = isEmptyValue(value);
   return (
     <>
-      <PropertyListLabel>{label}</PropertyListLabel>
+      <PropertyListLabel className={classNames?.label}>{label}</PropertyListLabel>
       <PropertyListValue
         numeric={numeric}
         copyable={copyable}
         empty={empty}
         copyValue={copyValue ?? (typeof value === "string" ? value : undefined)}
+        classNames={classNames?.copy ? { copy: classNames.copy } : undefined}
         {...rest}
       >
         {empty ? "—" : value}
@@ -141,6 +148,8 @@ export interface PropertyListValueProps extends ComponentProps<"dd"> {
   empty?: boolean;
   /** Overrides the text the copy button writes to the clipboard. */
   copyValue?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"copy">;
 }
 
 function PropertyListValue({
@@ -149,6 +158,7 @@ function PropertyListValue({
   empty,
   copyValue,
   className,
+  classNames,
   children,
   ...rest
 }: PropertyListValueProps) {
@@ -185,7 +195,7 @@ function PropertyListValue({
       <button
         type="button"
         aria-label="Copy"
-        className={cn("property-list-copy", undefined)}
+        className={cn("property-list-copy", classNames?.copy)}
         onClick={handleCopy}
         data-copied={copied ? "true" : undefined}
       >

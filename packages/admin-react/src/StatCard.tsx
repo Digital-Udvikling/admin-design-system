@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import type { CardVariant } from "./Card";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
 export type TrendDirection = "up" | "down" | "flat";
@@ -32,6 +32,8 @@ export interface StatCardProps extends ComponentProps<"div"> {
   detail?: ReactNode;
   /** Directional delta line under the value. Tone is independent of direction. */
   trend?: StatCardTrend;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"label" | "value" | "trend" | "detail">;
   /** Leading icon in the label row. */
   icon?: IconProp;
   compact?: boolean;
@@ -53,6 +55,7 @@ export function StatCard({
   compact,
   bordered,
   className,
+  classNames,
   children,
   ...rest
 }: StatCardProps) {
@@ -73,22 +76,26 @@ export function StatCard({
       {...rest}
     >
       {hasLabel ? (
-        <p className={cn("stat-card-label", undefined)}>
+        <p className={cn("stat-card-label", classNames?.label)}>
           {renderIcon(icon)}
           {label}
         </p>
       ) : null}
-      {value !== undefined ? <p className={cn("stat-card-value", undefined)}>{value}</p> : null}
+      {value !== undefined ? (
+        <p className={cn("stat-card-value", classNames?.value)}>{value}</p>
+      ) : null}
       {trend !== undefined ? (
         <p
-          className={cn("stat-card-trend", undefined)}
+          className={cn("stat-card-trend", classNames?.trend)}
           data-trend={trend.direction ?? "up"}
           data-intent={trend.intent ?? trendIntent(trend.direction ?? "up")}
         >
           {trend.value}
         </p>
       ) : null}
-      {detail !== undefined ? <p className={cn("stat-card-detail", undefined)}>{detail}</p> : null}
+      {detail !== undefined ? (
+        <p className={cn("stat-card-detail", classNames?.detail)}>{detail}</p>
+      ) : null}
       {children}
     </div>
   );

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `classNames` prop for per-slot class overrides on shorthand components — reach inner elements the shorthand props render (`Card`, `StatCard`, `Alert`, `Item`, `Field`, `Dialog`, `Drawer`, `Timeline.Item`, `PropertyList`, `Input`, `NumberInput`, `Pagination`, `Sidebar.Item`/`SubItem`/`Collapsible`/`CollapseToggle`, `Tooltip`). Exports a `SlotClasses` type helper. (react)
 - `Alert` dismiss button (`onDismiss` / `.alert-dismiss`). (both)
 - `StatCard` `trend` slot with a directional caret and direction-independent intent color (`.stat-card-trend`). (both)
 - `AvatarGroup` `max` overflow with a `+N` tile (`.avatar-more`). (both)

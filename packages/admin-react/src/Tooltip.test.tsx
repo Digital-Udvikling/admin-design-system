@@ -34,6 +34,15 @@ describe("Tooltip", () => {
     expect(screen.getAllByRole("button", { name: /Save/ })).toHaveLength(1);
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Tooltip content="Hint" defaultOpen classNames={{ popup: "x-custom" }}>
+        <button type="button">target</button>
+      </Tooltip>,
+    );
+    expect(screen.getByText("Hint")).toHaveClass("x-custom");
+  });
+
   describe("interactions", () => {
     it("opens on hover and closes on unhover", async () => {
       const user = userEvent.setup();

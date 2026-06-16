@@ -22,6 +22,11 @@ describe("Item", () => {
     );
   });
 
+  it("forwards classNames to slots", () => {
+    render(<Item title="Ada Lovelace" classNames={{ title: "x-custom" }} />);
+    expect(screen.getByText("Ada Lovelace")).toHaveClass("x-custom");
+  });
+
   it("applies variant, size, and asLink modifiers", () => {
     const { container } = render(<Item variant="outline" size="lg" asLink title="x" />);
     expect(container.querySelector(adminSelector("item"))).toHaveAdminClass(

@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { Dialog, type DialogClosedBy } from "./Dialog";
 import { DialogContext, useDialogElement } from "./dialog-internal";
 import { type IconProp } from "./icon";
@@ -71,6 +71,8 @@ export interface DrawerProps extends Omit<DrawerContainerProps, "title" | "child
   dismissible?: boolean;
   /** aria-label for the close button. Default `"Close"`. */
   closeLabel?: string;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"header" | "title" | "close" | "description" | "body" | "footer">;
   children?: ReactNode;
 }
 
@@ -82,6 +84,7 @@ function DrawerRoot({
   actions,
   dismissible = true,
   closeLabel = "Close",
+  classNames,
   children,
   ...containerProps
 }: DrawerProps) {
@@ -90,18 +93,28 @@ function DrawerRoot({
   return (
     <DrawerContainer {...containerProps}>
       {showHeader ? (
-        <Dialog.Header>
+        <Dialog.Header className={classNames?.header}>
           {hasTitle ? (
-            <Dialog.Title icon={icon}>{title}</Dialog.Title>
+            <Dialog.Title icon={icon} className={classNames?.title}>
+              {title}
+            </Dialog.Title>
           ) : (
             <span className={cn("flex-1", undefined)} />
           )}
-          {dismissible ? <Dialog.CloseButton aria-label={closeLabel} /> : null}
+          {dismissible ? (
+            <Dialog.CloseButton aria-label={closeLabel} className={classNames?.close} />
+          ) : null}
         </Dialog.Header>
       ) : null}
-      {description !== undefined ? <Dialog.Description>{description}</Dialog.Description> : null}
-      {children !== undefined ? <Dialog.Body>{children}</Dialog.Body> : null}
-      {actions !== undefined ? <Dialog.Footer>{actions}</Dialog.Footer> : null}
+      {description !== undefined ? (
+        <Dialog.Description className={classNames?.description}>{description}</Dialog.Description>
+      ) : null}
+      {children !== undefined ? (
+        <Dialog.Body className={classNames?.body}>{children}</Dialog.Body>
+      ) : null}
+      {actions !== undefined ? (
+        <Dialog.Footer className={classNames?.footer}>{actions}</Dialog.Footer>
+      ) : null}
     </DrawerContainer>
   );
 }

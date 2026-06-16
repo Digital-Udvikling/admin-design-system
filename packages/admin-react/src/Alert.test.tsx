@@ -103,6 +103,18 @@ describe("Alert", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
+  it("forwards classNames to slots", () => {
+    render(
+      <Alert
+        variant="info"
+        title="Heads up"
+        description="Details here."
+        classNames={{ title: "x-custom" }}
+      />,
+    );
+    expect(screen.getByText("Heads up")).toHaveClass("x-custom");
+  });
+
   it("keeps the dismiss trailing alongside an icon, title, and action", () => {
     render(
       <Alert

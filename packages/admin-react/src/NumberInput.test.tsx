@@ -21,6 +21,11 @@ describe("NumberInput", () => {
     );
   });
 
+  it("forwards classNames to slots", () => {
+    render(<NumberInput inputAriaLabel="Q" classNames={{ increment: "x-custom" }} />);
+    expect(screen.getByRole("button", { name: "Increase" })).toHaveClass("x-custom");
+  });
+
   it("increments the value when the + button is clicked", async () => {
     const user = userEvent.setup();
     function Controlled() {

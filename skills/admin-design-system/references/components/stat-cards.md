@@ -181,6 +181,21 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
 />
 ```
 
+### Per-slot styling <StarlightBadge text="React only" variant="caution" />
+
+A stat card has no compound parts, so `classNames` is the only way to reach the label, value, trend, and detail. See [Slot styling](../basics/slots.md).
+
+**Example**
+
+```tsx
+<StatCard
+  label="Error rate"
+  value="0.42%"
+  detail="last 24h"
+  classNames={{ value: "text-danger", detail: "font-mono" }}
+/>
+```
+
 ### Custom content
 
 For sparklines or anything else, drop it in as children — it renders below the trend and `detail`.

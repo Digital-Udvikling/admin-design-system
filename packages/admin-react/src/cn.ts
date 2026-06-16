@@ -1,6 +1,14 @@
 import { clsx, type ClassValue } from "clsx";
 
 /**
+ * Per-slot class overrides for a component's internal sub-elements. Keys are
+ * slot names; values are consumer classes passed through verbatim (never
+ * `_ao-`-prefixed), exactly like the top-level `className`. `className` targets
+ * the root; `classNames` reaches the inner slots the shorthand props render.
+ */
+export type SlotClasses<Slot extends string> = Partial<Record<Slot, string>>;
+
+/**
  * Every admin class is prefixed so the bundle coexists with host-page CSS
  * without colliding on common names like `.btn`. Must match the selector
  * prefix `wrap-scoped.mjs` bakes into `@aortl/admin-css/admin.scoped.css`.

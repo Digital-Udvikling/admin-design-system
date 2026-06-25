@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-06-25
+
 ### Fixed
 
 - Scoped bundle (`admin.scoped.css`) now ships with native CSS nesting pre-flattened. The nested form silently broke once a consumer's build pipeline downleveled it — LightningCSS mis-lowers a nested `&` inside `@scope` to a bare `:scope`, rewriting `._ao-btn:hover` to `:scope:hover` and killing every `:hover`/`:focus`/state rule. (both)
@@ -83,12 +85,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.1...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.18.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.2...v0.17.0
 [0.16.2]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.16.2

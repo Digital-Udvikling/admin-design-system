@@ -26,27 +26,27 @@ Vanilla CSS has no equivalent — write the classes on the elements directly.
 
 ## Slots
 
-| Component                | Slots                                                                  |
-| ------------------------ | --------------------------------------------------------------------- |
-| `Alert`                  | `title`, `description`, `action`, `dismiss`                            |
+| Component                | Slots                                                                   |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `Alert`                  | `title`, `description`, `action`, `dismiss`                             |
 | `Card`                   | `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions` |
-| `Dialog`                 | `header`, `title`, `close`, `description`, `body`, `footer`            |
-| `Drawer`                 | `header`, `title`, `close`, `description`, `body`, `footer`            |
-| `Field`                  | `label`, `description`, `error`                                        |
-| `Input`, `PasswordInput` | `wrapper`, `action`                                                    |
-| `Item`                   | `media`, `content`, `title`, `description`, `actions`                  |
-| `NumberInput`            | `group`, `decrement`, `input`, `increment`                            |
-| `Pagination`             | `item`, `link`, `ellipsis`                                             |
-| `PropertyList`           | `title`, `items`                                                       |
-| `PropertyList.Item`      | `label`, `copy`                                                        |
-| `PropertyList.Value`     | `copy`                                                                 |
-| `Sidebar`                | `drawer`, `drawerBackdrop`                                             |
-| `Sidebar.Item`           | `icon`, `label`, `badge`                                               |
-| `Sidebar.SubItem`        | `icon`, `badge`                                                        |
-| `Sidebar.Collapsible`    | `icon`, `label`, `trigger`, `panel`                                    |
-| `Sidebar.CollapseToggle` | `input`                                                                |
-| `StatCard`               | `label`, `value`, `trend`, `detail`                                    |
+| `Dialog`                 | `header`, `title`, `close`, `description`, `body`, `footer`             |
+| `Drawer`                 | `header`, `title`, `close`, `description`, `body`, `footer`             |
+| `Field`                  | `label`, `description`, `error`                                         |
+| `Input`, `PasswordInput` | `wrapper`, `action`                                                     |
+| `Item`                   | `media`, `content`, `title`, `description`, `actions`                   |
+| `NumberInput`            | `group`, `decrement`, `input`, `increment`                              |
+| `Pagination`             | `item`, `link`, `ellipsis`                                              |
+| `PropertyList`           | `title`, `items`                                                        |
+| `PropertyList.Item`      | `label`, `copy`                                                         |
+| `PropertyList.Value`     | `copy`                                                                  |
+| `Sidebar`                | `drawer`, `drawerBackdrop`                                              |
+| `Sidebar.Item`           | `icon`, `label`, `badge`                                                |
+| `Sidebar.SubItem`        | `icon`, `badge`                                                         |
+| `Sidebar.Collapsible`    | `icon`, `label`, `trigger`, `panel`                                     |
+| `Sidebar.CollapseToggle` | `input`                                                                 |
+| `StatCard`               | `label`, `value`, `trend`, `detail`                                     |
 | `Timeline.Item`          | `indicator`, `marker`, `dot`, `content`, `title`, `time`, `description` |
-| `Tooltip`                | `popup`                                                                |
+| `Tooltip`                | `popup`                                                                 |
 
 Other components don't take `classNames`: leaves (`Button`, `Badge`) carry `className` on their only element, and compound components (`Table`, `Tabs`, `Select`, `Accordion`) take `className` on each part you compose by hand.

@@ -1,10 +1,10 @@
 import { fileURLToPath } from "node:url";
+import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-import remarkDirective from "remark-directive";
 import remarkExample from "./plugins/example/index.mjs";
 import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
 
@@ -12,7 +12,13 @@ export default defineConfig({
   site: "https://digital-udvikling.github.io",
   base: "/admin-design-system/",
   markdown: {
-    remarkPlugins: [remarkDirective, remarkExample],
+    // Astro 7's native Sätteri pipeline. `directive: true` enables `:::example`
+    // (Starlight also flips it on for its asides). The example transform parses
+    // fences natively — no remark-directive needed.
+    processor: satteri({
+      features: { directive: true },
+      mdastPlugins: [remarkExample],
+    }),
   },
   integrations: [
     react(),

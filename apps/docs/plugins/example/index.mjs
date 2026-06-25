@@ -3,7 +3,6 @@ import { Parser } from "acorn";
 import jsx from "acorn-jsx";
 import { generate } from "astring";
 import { format } from "oxfmt";
-import { visit, SKIP } from "unist-util-visit";
 import { previewId, registerPreview } from "./virtual-previews.mjs";
 
 const JsxParser = Parser.extend(jsx());
@@ -21,121 +20,108 @@ const PREVIEW_PREFIX = "__ExamplePreview";
 const RENDERER_IMPORT = `import ${RENDERER_NAME} from "@example/Example.astro";`;
 
 /**
- * Rewrites `:::example` directives (with optional ```html / ```tsx fences) into
- * the Example renderer. The tsx fence is compiled into a default-exported
- * component, registered as a virtual module (`virtual:example-preview/<hash>.tsx`),
- * and hydrated as one client island — a single React SSR pass + hydration tree
- * is required for context-publishing primitives (`Field`, `RadioGroup`,
- * `Select.Root`) to reach descendants and for Base UI's stateful components to
- * be interactive at all.
+ * Sätteri MDAST plugin (factory — fresh per-document closure state) that rewrites
+ * `:::example` directives (with optional ```html / ```tsx fences) into the Example
+ * renderer. The tsx fence is compiled into a default-exported component, registered
+ * as a virtual module (`virtual:example-preview/<hash>.tsx`), and hydrated as one
+ * client island — a single React SSR pass + hydration tree is required for
+ * context-publishing primitives (`Field`, `RadioGroup`, `Select.Root`) to reach
+ * descendants and for Base UI's stateful components to be interactive at all.
  *
- * @returns {(tree: import("mdast").Root, file: import("vfile").VFile) => Promise<void>}
+ * Directive syntax is parsed natively by Sätteri (`features.directive`); the
+ * `mdxjsEsm` and `containerDirective` visitors run in document order within one
+ * pass, so author imports (at the top of every page) are collected before any
+ * example below them is transformed.
+ *
+ * @returns {import("@astrojs/markdown-satteri").MdastPluginDefinition}
  */
 export default function remarkExample() {
-  return async (tree, file) => {
-    /** @type {any[]} */
-    const jobs = [];
-    visit(tree, (node) => {
-      if (
-        node.type !== "containerDirective" ||
-        /** @type {{ name?: string }} */ (node).name !== "example"
-      ) {
+  /** Author imports, reused verbatim inside each preview module so identifiers
+   *  resolve as they do in the surrounding MDX. */
+  const userImports = [];
+  let previewCount = 0;
+  let rendererInjected = false;
+
+  return {
+    name: "admin-example",
+
+    mdxjsEsm(node) {
+      let program;
+      try {
+        program = JsxParser.parse(node.value, {
+          ecmaVersion: "latest",
+          sourceType: "module",
+        });
+      } catch {
         return;
       }
-      jobs.push(node);
-      return SKIP;
-    });
+      for (const stmt of program.body) {
+        if (stmt.type !== "ImportDeclaration") continue;
+        // Astro components can't live inside the React preview's TSX module.
+        if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
+        userImports.push(generate(stmt).trim());
+      }
+    },
 
-    if (jobs.length === 0) return;
+    async containerDirective(node, ctx) {
+      if (node.name !== "example") return;
 
-    // Capture author imports before injecting our own; each preview module
-    // reuses them so identifiers resolve as they do in the surrounding MDX.
-    const userImportsBlock = collectMdxImports(tree).join("\n");
-
-    /** @type {string[]} */
-    const previewImports = [];
-    let previewCount = 0;
-
-    await Promise.all(
-      jobs.map(async (node) => {
-        const fences = collectFences(node.children ?? []);
-
-        if (fences.html === undefined && fences.tsx === undefined) {
-          file.message("`:::example` block needs at least one ```html or ```tsx fence", node);
-          return;
-        }
-
-        const [html, react] = await Promise.all([
-          fences.html !== undefined ? formatHtml(fences.html, file, node) : undefined,
-          fences.tsx !== undefined ? formatReact(fences.tsx, file, node) : undefined,
-        ]);
-
-        const attributes = [];
-        if (html !== undefined) attributes.push(stringAttr("html", html));
-        if (react !== undefined) attributes.push(stringAttr("react", react));
-
-        /** @type {any[]} */
-        const children = [];
-        if (react !== undefined) {
-          const previewSource = buildPreviewSource(userImportsBlock, react);
-          const moduleId = previewId(hash(previewSource));
-          registerPreview(moduleId, previewSource);
-
-          const previewName = `${PREVIEW_PREFIX}${previewCount++}`;
-          previewImports.push(`import ${previewName} from "${moduleId}";`);
-
-          children.push({
-            type: "mdxJsxFlowElement",
-            name: previewName,
-            attributes: [
-              { type: "mdxJsxAttribute", name: "client:load", value: null },
-              { type: "mdxJsxAttribute", name: "slot", value: "preview" },
-            ],
-            children: [],
-          });
-        }
-
-        Object.assign(node, {
-          type: "mdxJsxFlowElement",
-          name: RENDERER_NAME,
-          attributes,
-          children,
+      const fences = collectFences(node.children ?? []);
+      if (fences.html === undefined && fences.tsx === undefined) {
+        ctx.report({
+          message: "`:::example` block needs at least one ```html or ```tsx fence",
+          node,
+          severity: "warning",
         });
-      }),
-    );
+        return;
+      }
 
-    const esmSource = [RENDERER_IMPORT, ...previewImports].join("\n");
-    injectEsm(tree, esmSource);
+      // Allocate shared state synchronously, before the first `await`, so
+      // concurrent async visitors keep deterministic names and inject the
+      // renderer import exactly once regardless of resume order.
+      const injectRenderer = !rendererInjected;
+      rendererInjected = true;
+      const previewName = fences.tsx !== undefined ? `${PREVIEW_PREFIX}${previewCount++}` : null;
+      const authorImports = userImports.join("\n");
+
+      const [html, react] = await Promise.all([
+        fences.html !== undefined ? formatHtml(fences.html, ctx, node) : undefined,
+        fences.tsx !== undefined ? formatReact(fences.tsx, ctx, node) : undefined,
+      ]);
+
+      const attributes = [];
+      if (html !== undefined) attributes.push(exprAttr("html", html));
+      if (react !== undefined) attributes.push(exprAttr("react", react));
+
+      const imports = [];
+      if (injectRenderer) imports.push(RENDERER_IMPORT);
+
+      const children = [];
+      if (react !== undefined && previewName !== null) {
+        const previewSource = buildPreviewSource(authorImports, react);
+        const moduleId = previewId(hash(previewSource));
+        registerPreview(moduleId, previewSource);
+        imports.push(`import ${previewName} from "${moduleId}";`);
+        children.push({
+          type: "mdxJsxFlowElement",
+          name: previewName,
+          attributes: [boolAttr("client:load"), stringAttr("slot", "preview")],
+          children: [],
+        });
+      }
+
+      if (imports.length > 0) {
+        ctx.insertBefore(node, { type: "mdxjsEsm", value: imports.join("\n") });
+      }
+
+      return {
+        type: "mdxJsxFlowElement",
+        name: RENDERER_NAME,
+        attributes,
+        children,
+      };
+    },
   };
-}
-
-/**
- * @param {import("mdast").Root} tree
- * @returns {string[]}
- */
-function collectMdxImports(tree) {
-  /** @type {string[]} */
-  const sources = [];
-  visit(tree, (node) => {
-    if (node.type !== "mdxjsEsm") return;
-    /** @type {any} */
-    let program;
-    try {
-      program = JsxParser.parse(/** @type {any} */ (node).value, {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      });
-    } catch {
-      return;
-    }
-    for (const stmt of program.body) {
-      if (stmt.type !== "ImportDeclaration") continue;
-      // Astro components can't live inside the React preview's TSX module.
-      if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
-      sources.push(generate(stmt).trim());
-    }
-  });
-  return sources;
 }
 
 /**
@@ -181,8 +167,8 @@ function collectFences(children) {
 }
 
 /**
- * Multi-line values are safe — @mdx-js/mdx compiles JSX attributes into JS
- * object properties, not `attr="..."` syntax, so newlines stay literal.
+ * String-valued JSX attribute (`name="value"`). Safe only for control values
+ * without quotes/newlines (`slot`).
  *
  * @param {string} name
  * @param {string} value
@@ -191,21 +177,24 @@ function stringAttr(name, value) {
   return { type: "mdxJsxAttribute", name, value };
 }
 
+/** Valueless JSX attribute (`client:load`). @param {string} name */
+function boolAttr(name) {
+  return { type: "mdxJsxAttribute", name, value: null };
+}
+
 /**
- * @param {import("mdast").Root} tree
- * @param {string} source
+ * Expression-valued JSX attribute (`name={"..."}`). The value rides through as a
+ * JS string literal, so arbitrary HTML/TSX (quotes, newlines) survives intact.
+ *
+ * @param {string} name
+ * @param {string} value
  */
-function injectEsm(tree, source) {
-  const program = /** @type {any} */ (
-    JsxParser.parse(source, { ecmaVersion: "latest", sourceType: "module" })
-  );
-  /** @type {any} */
-  const node = {
-    type: "mdxjsEsm",
-    value: source,
-    data: { estree: program },
+function exprAttr(name, value) {
+  return {
+    type: "mdxJsxAttribute",
+    name,
+    value: { type: "mdxJsxAttributeValueExpression", value: JSON.stringify(value) },
   };
-  tree.children.unshift(node);
 }
 
 /**
@@ -235,13 +224,13 @@ function dedent(s) {
 
 /**
  * @param {string} code
- * @param {import("vfile").VFile} file
+ * @param {import("@astrojs/markdown-satteri").MdastVisitorContext} ctx
  * @param {any} node
  */
-async function formatHtml(code, file, node) {
+async function formatHtml(code, ctx, node) {
   const wrapped = `<div>\n${code}\n</div>`;
   const result = await format("snippet.html", wrapped, { ...PRETTIER_OPTS, parser: "html" });
-  failOnFormatErrors(result, file, node, "html");
+  failOnFormatErrors(result, ctx, node, "html");
   const out = result.code.trim();
   const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
   return dedent(inner);
@@ -249,16 +238,16 @@ async function formatHtml(code, file, node) {
 
 /**
  * @param {string} code
- * @param {import("vfile").VFile} file
+ * @param {import("@astrojs/markdown-satteri").MdastVisitorContext} ctx
  * @param {any} node
  */
-async function formatReact(code, file, node) {
+async function formatReact(code, ctx, node) {
   const wrapped = `<>\n${code}\n</>;\n`;
   const result = await format("snippet.tsx", wrapped, {
     ...PRETTIER_OPTS,
     parser: "babel-ts",
   });
-  failOnFormatErrors(result, file, node, "tsx");
+  failOnFormatErrors(result, ctx, node, "tsx");
   const out = result.code.trim();
   const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
   return dedent(inner);
@@ -267,22 +256,23 @@ async function formatReact(code, file, node) {
 /**
  * oxfmt returns malformed input *unchanged* with parse errors in `errors`
  * rather than throwing; unchecked, an invalid fence crashes far from its
- * source with no MDX line. Fail at the directive node with oxfmt's codeframe.
+ * source with no MDX line. Report at the directive node with oxfmt's codeframe.
  *
  * @param {{ errors?: Array<{ severity?: string, message?: string, codeframe?: string }> }} result
- * @param {import("vfile").VFile} file
+ * @param {import("@astrojs/markdown-satteri").MdastVisitorContext} ctx
  * @param {any} node
  * @param {string} lang
  */
-function failOnFormatErrors(result, file, node, lang) {
+function failOnFormatErrors(result, ctx, node, lang) {
   const errors = (result.errors ?? []).filter(
     (e) => String(e.severity ?? "error").toLowerCase() === "error",
   );
   if (errors.length === 0) return;
   const first = errors[0];
   const detail = first.codeframe ? `\n${first.codeframe}` : "";
-  file.fail(
-    `malformed \`${lang}\` fence in \`:::example\`: ${first.message ?? "syntax error"}${detail}`,
+  ctx.report({
+    message: `malformed \`${lang}\` fence in \`:::example\`: ${first.message ?? "syntax error"}${detail}`,
     node,
-  );
+    severity: "error",
+  });
 }

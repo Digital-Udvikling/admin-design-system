@@ -129,3 +129,34 @@ test("@keyframes selectors are not rewritten", () => {
   expect(output).not.toContain(":scope from");
   expect(output).not.toContain(":scope to");
 });
+
+test("native CSS nesting is flattened — no `&` survives, hover targets the element not the scope root", () => {
+  // The scoped bundle is embedded into host apps that re-process it. Native `&`
+  // nesting left inside @scope gets mis-lowered to a bare `:scope` by some
+  // toolchains (LightningCSS), rewriting `._ao-btn-muted:hover` to `:scope:hover`
+  // and killing every state rule. Ship it pre-flattened instead.
+  const input = `
+    @layer components {
+      .btn-muted {
+        background-color: white;
+        &:hover {
+          @media (hover: hover) { background-color: gray; }
+        }
+      }
+    }
+  `;
+  const output = wrap(input);
+  expect(output, "no native nesting selector may survive").not.toContain("&");
+
+  const scope = getScope(output);
+  let hoverSelector = null;
+  scope.walkRules((rule) => {
+    if (rule.selector.includes(":hover")) hoverSelector = rule.selector;
+  });
+  expect(hoverSelector, "a :hover rule must exist").toBeTruthy();
+  for (const part of topLevelSelectors(hoverSelector)) {
+    // Must target the button (`...._ao-btn-muted:hover`), never the bare scope root.
+    expect(part).toMatch(/_ao-btn-muted:hover$/);
+    expect(part).not.toMatch(/^:scope:hover$/);
+  }
+});

@@ -13,6 +13,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import postcss from "postcss";
+import postcssNesting from "postcss-nesting";
 import selectorParser from "postcss-selector-parser";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -273,7 +274,16 @@ function shouldHoist(node) {
 }
 
 export function wrap(css) {
-  const root = postcss.parse(css);
+  // Flatten native CSS nesting first, while selectors are still plain class
+  // names and there's no @scope yet. The scoped bundle is embedded into host
+  // apps that re-process it through their own build, and some toolchains
+  // (notably LightningCSS) mis-lower a nested `&` *inside* @scope to a bare
+  // `:scope` — silently rewriting `._ao-btn:hover` to `:scope:hover` and
+  // breaking every hover/focus/state rule. De-nesting here ships the bundle
+  // pre-flattened so no consumer ever has to downlevel it; it's trivial and
+  // correct at this point because the @scope context doesn't exist yet.
+  const flattened = postcss([postcssNesting]).process(css, { from: undefined }).css;
+  const root = postcss.parse(flattened);
 
   // Capture layer order before stripping the statements, which would
   // otherwise declare Tailwind's layer order document-wide in the consumer's

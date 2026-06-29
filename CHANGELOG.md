@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Tabs.Tab` `icon` prop (leading glyph via `renderIcon`); tab SVG icons are pinned to the label size (`.tabs .tab > svg`), so non-Tabler sets (e.g. Heroicons) render uniformly. (both)
+- `Tabs` `wrap` prop (`.tabs-wrap`) lets the list wrap onto new rows instead of overflowing, keeping each tab's label on one line. (both)
+
 ## [0.18.2] - 2026-06-29
 
 ### Added

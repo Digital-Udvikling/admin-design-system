@@ -8,6 +8,8 @@
   - [Basic (bordered)](#basic-bordered)
   - [Boxed (segmented control)](#boxed-segmented-control)
   - [Full width](#full-width)
+  - [Wrapping](#wrapping)
+  - [With icons](#with-icons)
   - [Vertical orientation](#vertical-orientation)
 
 Vanilla tabs are radio-input driven, so switching works without JavaScript, but they cap at 6 panels. React adds ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
@@ -147,6 +149,90 @@ Pair `fullWidth` with `variant="boxed"` for a full-width segmented control.
   <Tabs.Panel value="day">Daily breakdown.</Tabs.Panel>
   <Tabs.Panel value="week">Weekly breakdown.</Tabs.Panel>
   <Tabs.Panel value="month">Monthly breakdown.</Tabs.Panel>
+</Tabs>
+```
+
+### Wrapping
+
+`wrap` lets the list flow onto new rows instead of overflowing, keeping each tab's label on one line. Use it for variable-length, free-text labels in a narrow container; without it a `boxed` segmented control squishes labels to equal slivers.
+
+**Example**
+
+```html
+<div style="max-width: 22rem">
+  <div class="tabs tabs-boxed tabs-sm tabs-wrap">
+    <div class="tab-list" role="tablist">
+      <input class="tab-input" type="radio" name="wrap" id="wrap-1" value="1" checked />
+      <label class="tab" for="wrap-1">1 click, 10s on page</label>
+      <input class="tab-input" type="radio" name="wrap" id="wrap-2" value="2" />
+      <label class="tab" for="wrap-2">0 clicks, 5s on page</label>
+      <input class="tab-input" type="radio" name="wrap" id="wrap-3" value="3" />
+      <label class="tab" for="wrap-3">1 click, no automatic popup</label>
+    </div>
+    <div class="tab-panel" data-value="1">Variant A.</div>
+    <div class="tab-panel" data-value="2">Variant B.</div>
+    <div class="tab-panel" data-value="3">Variant C.</div>
+  </div>
+</div>
+```
+
+```tsx
+<div style={{ maxWidth: "22rem" }}>
+  <Tabs defaultValue="a" variant="boxed" size="sm" wrap>
+    <Tabs.List>
+      <Tabs.Tab value="a">1 click, 10s on page</Tabs.Tab>
+      <Tabs.Tab value="b">0 clicks, 5s on page</Tabs.Tab>
+      <Tabs.Tab value="c">1 click, no automatic popup</Tabs.Tab>
+    </Tabs.List>
+    <Tabs.Panel value="a">Variant A.</Tabs.Panel>
+    <Tabs.Panel value="b">Variant B.</Tabs.Panel>
+    <Tabs.Panel value="c">Variant C.</Tabs.Panel>
+  </Tabs>
+</div>
+```
+
+### With icons
+
+Pass `icon` to `Tabs.Tab` for a leading glyph, rendered at the label size. See [Icons](../basics/icons.md).
+
+**Example**
+
+```html
+<div class="tabs tabs-boxed tabs-sm">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="icons" id="icons-1" value="1" checked />
+    <label class="tab" for="icons-1"
+      ><i class="ti ti-layout-grid" aria-hidden="true"></i> Grid</label
+    >
+    <input class="tab-input" type="radio" name="icons" id="icons-2" value="2" />
+    <label class="tab" for="icons-2"><i class="ti ti-list" aria-hidden="true"></i> List</label>
+    <input class="tab-input" type="radio" name="icons" id="icons-3" value="3" />
+    <label class="tab" for="icons-3"
+      ><i class="ti ti-chart-bar" aria-hidden="true"></i> Chart</label
+    >
+  </div>
+  <div class="tab-panel" data-value="1">Grid view.</div>
+  <div class="tab-panel" data-value="2">List view.</div>
+  <div class="tab-panel" data-value="3">Chart view.</div>
+</div>
+```
+
+```tsx
+<Tabs defaultValue="grid" variant="boxed" size="sm">
+  <Tabs.List>
+    <Tabs.Tab value="grid" icon={IconLayoutGrid}>
+      Grid
+    </Tabs.Tab>
+    <Tabs.Tab value="list" icon={IconList}>
+      List
+    </Tabs.Tab>
+    <Tabs.Tab value="chart" icon={IconChartBar}>
+      Chart
+    </Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="grid">Grid view.</Tabs.Panel>
+  <Tabs.Panel value="list">List view.</Tabs.Panel>
+  <Tabs.Panel value="chart">Chart view.</Tabs.Panel>
 </Tabs>
 ```
 

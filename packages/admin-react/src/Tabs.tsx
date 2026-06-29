@@ -1,6 +1,7 @@
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
+import { renderIcon, type IconProp } from "./icon";
 
 export type TabsVariant = "bordered" | "boxed";
 export type TabsSize = "sm" | "md" | "lg";
@@ -9,12 +10,15 @@ export interface TabsProps extends ComponentProps<typeof BaseTabs.Root> {
   variant?: TabsVariant;
   size?: TabsSize;
   fullWidth?: boolean;
+  /** Let the list wrap to multiple rows instead of overflowing; each tab stays on one line. */
+  wrap?: boolean;
 }
 
 function TabsRoot({
   variant = "bordered",
   size = "md",
   fullWidth = false,
+  wrap = false,
   className,
   ...rest
 }: TabsProps) {
@@ -26,6 +30,7 @@ function TabsRoot({
           variant !== "bordered" && `tabs-${variant}`,
           size !== "md" && `tabs-${size}`,
           fullWidth && "tabs-full-width",
+          wrap && "tabs-wrap",
         ],
         className,
       )}
@@ -40,10 +45,18 @@ function TabsList({ className, ...rest }: TabsListProps) {
   return <BaseTabs.List className={cn("tab-list", className)} {...rest} />;
 }
 
-export type TabsTabProps = ComponentProps<typeof BaseTabs.Tab>;
+export interface TabsTabProps extends ComponentProps<typeof BaseTabs.Tab> {
+  /** Leading icon. Pass a component (`icon={IconLock}`) or an element. */
+  icon?: IconProp;
+}
 
-function TabsTab({ className, ...rest }: TabsTabProps) {
-  return <BaseTabs.Tab className={cn("tab", className)} {...rest} />;
+function TabsTab({ icon, className, children, ...rest }: TabsTabProps) {
+  return (
+    <BaseTabs.Tab className={cn("tab", className)} {...rest}>
+      {renderIcon(icon)}
+      {children}
+    </BaseTabs.Tab>
+  );
 }
 
 export type TabsPanelProps = ComponentProps<typeof BaseTabs.Panel>;

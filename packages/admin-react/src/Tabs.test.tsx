@@ -20,6 +20,40 @@ describe("Tabs", () => {
     expect(screen.getByText("First panel")).toBeInTheDocument();
   });
 
+  it("renders a tab icon before the label", () => {
+    function IconLead(props: {
+      size?: number | string;
+      "aria-hidden"?: boolean | "true" | "false";
+    }) {
+      return <svg data-testid="lead" {...props} />;
+    }
+    render(
+      <Tabs defaultValue="a">
+        <Tabs.List>
+          <Tabs.Tab value="a" icon={IconLead}>
+            A
+          </Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="a">First panel</Tabs.Panel>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab", { name: "A" }).firstElementChild).toBe(
+      screen.getByTestId("lead"),
+    );
+  });
+
+  it("maps wrap to the matching class", () => {
+    const { container } = render(
+      <Tabs defaultValue="a" wrap>
+        <Tabs.List>
+          <Tabs.Tab value="a">A</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="a">First panel</Tabs.Panel>
+      </Tabs>,
+    );
+    expect(container.firstChild).toHaveAdminClass("tabs-wrap");
+  });
+
   describe("interactions", () => {
     it("uncontrolled: clicking switches the visible panel", async () => {
       const user = userEvent.setup();

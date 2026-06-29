@@ -32,6 +32,14 @@
     flex-shrink: 0;
   }
 
+  /* Pin SVG icons to the label size so any icon set renders uniformly in the
+     segmented control — not just Tabler's `size="1em"` (e.g. Heroicons, which
+     carry no width/height). */
+  .tabs .tab > svg {
+    width: 1em;
+    height: 1em;
+  }
+
   /* Vanilla radio pattern: hidden inputs; :checked styles the following label. */
   .tabs .tab-input {
     position: absolute;
@@ -169,6 +177,16 @@
 
   .tabs-full-width:not([data-orientation="vertical"]) .tab {
     @apply flex-1 justify-center;
+  }
+
+  /* Wrap long, free-text labels onto new rows instead of overflowing or
+     squishing them; each tab keeps its label on one line. */
+  .tabs-wrap .tab-list {
+    @apply flex-wrap;
+  }
+
+  .tabs-wrap .tab {
+    @apply whitespace-nowrap;
   }
 
   .tabs-sm .tab {

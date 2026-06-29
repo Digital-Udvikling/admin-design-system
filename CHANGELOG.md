@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - `Tabs` `primary` prop (`.tabs-primary`) fills the active segment of a boxed segmented control with the primary color. (both)
+- `.btn-group` members can be wrapped in `.indicator` to float a badge or status dot at a button's corner; the seam, rounding, and full-width/vertical sizing logic now drills through the wrapper. (css)
 
 ## [0.18.3] - 2026-06-29
 

@@ -3,7 +3,8 @@
     @apply inline-flex;
   }
 
-  .btn-group > .btn {
+  .btn-group > .btn,
+  .btn-group > .indicator > .btn {
     @apply rounded-none relative focus-visible:z-10;
   }
 
@@ -20,24 +21,28 @@
 
   /* Horizontal-only — vertical groups also carry .btn-group, hence the :not() scope. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
-  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) {
+  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child),
+  .btn-group:not(.btn-group-vertical) > .indicator:not(:first-child) {
     @apply -ml-px;
   }
 
   .btn-group:not(.btn-group-vertical) > .btn:first-child,
-  .btn-group:not(.btn-group-vertical) > .menu:first-child > .menu-trigger {
+  .btn-group:not(.btn-group-vertical) > .menu:first-child > .menu-trigger,
+  .btn-group:not(.btn-group-vertical) > .indicator:first-child > .btn {
     @apply rounded-l-lg;
   }
 
   .btn-group:not(.btn-group-vertical) > .btn:last-child,
-  .btn-group:not(.btn-group-vertical) > .menu:last-child > .menu-trigger {
+  .btn-group:not(.btn-group-vertical) > .menu:last-child > .menu-trigger,
+  .btn-group:not(.btn-group-vertical) > .indicator:last-child > .btn {
     @apply rounded-r-lg;
   }
 
   /* Seam divider — color-mix on currentColor adapts to every .btn variant
      without per-variant rules. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
-  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger {
+  .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger,
+  .btn-group:not(.btn-group-vertical) > .indicator:not(:first-child) > .btn {
     border-left-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
@@ -45,27 +50,42 @@
     @apply inline-flex flex-col;
   }
 
-  .btn-group-vertical > .btn {
+  .btn-group-vertical > .btn,
+  .btn-group-vertical > .indicator > .btn {
     @apply justify-start;
   }
 
+  /* .indicator hugs its button (w-max) when horizontal; a vertical group
+     stretches every cell, so the wrapper and its button fill the width. */
+  .btn-group-vertical > .indicator {
+    @apply w-auto;
+  }
+
+  .btn-group-vertical > .indicator > .btn {
+    @apply w-full;
+  }
+
   .btn-group-vertical > .btn:not(:first-child),
-  .btn-group-vertical > .menu:not(:first-child) {
+  .btn-group-vertical > .menu:not(:first-child),
+  .btn-group-vertical > .indicator:not(:first-child) {
     @apply -mt-px;
   }
 
   .btn-group-vertical > .btn:first-child,
-  .btn-group-vertical > .menu:first-child > .menu-trigger {
+  .btn-group-vertical > .menu:first-child > .menu-trigger,
+  .btn-group-vertical > .indicator:first-child > .btn {
     @apply rounded-t-lg;
   }
 
   .btn-group-vertical > .btn:last-child,
-  .btn-group-vertical > .menu:last-child > .menu-trigger {
+  .btn-group-vertical > .menu:last-child > .menu-trigger,
+  .btn-group-vertical > .indicator:last-child > .btn {
     @apply rounded-b-lg;
   }
 
   .btn-group-vertical > .btn:not(:first-child),
-  .btn-group-vertical > .menu:not(:first-child) > .menu-trigger {
+  .btn-group-vertical > .menu:not(:first-child) > .menu-trigger,
+  .btn-group-vertical > .indicator:not(:first-child) > .btn {
     border-top-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
@@ -76,8 +96,13 @@
   }
 
   .btn-group-full-width:not(.btn-group-vertical) > .btn,
-  .btn-group-full-width:not(.btn-group-vertical) > .menu {
+  .btn-group-full-width:not(.btn-group-vertical) > .menu,
+  .btn-group-full-width:not(.btn-group-vertical) > .indicator {
     @apply flex-1;
+  }
+
+  .btn-group-full-width:not(.btn-group-vertical) > .indicator > .btn {
+    @apply w-full;
   }
 
   .btn-group-full-width.btn-group-vertical {

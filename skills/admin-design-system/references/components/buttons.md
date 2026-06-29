@@ -19,6 +19,7 @@
   - [Full width](#full-width)
   - [Vertical](#vertical)
   - [With variants and icons](#with-variants-and-icons)
+  - [With indicators](#with-indicators)
 
 ## Examples
 
@@ -296,5 +297,32 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
   <Button variant="danger" icon={IconTrash}>
     Delete
   </Button>
+</ButtonGroup>
+```
+
+### With indicators
+
+Wrap a member in `.indicator` to float a [badge or dot](indicator.md) at its corner. The seam logic drills through the wrapper, so rounding and dividers stay intact. A badge on a middle member overhangs its neighbor; pass `offset={0}` to sit it flush against a square corner.
+
+**Example**
+
+```html
+<div class="btn-group">
+  <button class="btn">Inbox</button>
+  <div class="indicator">
+    <span class="indicator-item badge badge-primary badge-sm">3</span>
+    <button class="btn">Messages</button>
+  </div>
+  <button class="btn">Archive</button>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <Button>Inbox</Button>
+  <Indicator label={3} variant="primary">
+    <Button>Messages</Button>
+  </Indicator>
+  <Button>Archive</Button>
 </ButtonGroup>
 ```

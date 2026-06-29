@@ -123,6 +123,10 @@ describe("Dialog", () => {
       expect(getDialog()).toHaveAdminClass("dialog-sm");
       rerender(<Dialog size="lg" title="x" />);
       expect(getDialog()).toHaveAdminClass("dialog-lg");
+      rerender(<Dialog size="auto" title="x" />);
+      expect(getDialog()).toHaveAdminClass("dialog-auto");
+      rerender(<Dialog size="metabase" title="x" />);
+      expect(getDialog()).toHaveAdminClass("dialog-metabase");
       rerender(<Dialog size="md" title="x" />);
       const el = getDialog();
       expect(el).not.toHaveAdminClass("dialog-sm");

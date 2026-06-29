@@ -54,6 +54,27 @@
     max-width: 48rem;
   }
 
+  /* Shrink to fit content rather than filling a preset width, still capped to
+     the viewport so long content scrolls instead of overflowing. */
+  .dialog-auto {
+    width: auto;
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* Sized for an embedded Metabase iframe: a full-width body child lands at
+     1048px inside the 1138px modal (1138 - 2px border - 2x 44px gutter). The
+     wider gutter is applied to every subpart so header/iframe/footer stay flush. */
+  .dialog-metabase {
+    max-width: 1138px;
+  }
+
+  .dialog-metabase .dialog-header,
+  .dialog-metabase .dialog-description,
+  .dialog-metabase .dialog-body,
+  .dialog-metabase .dialog-footer {
+    @apply px-11;
+  }
+
   /* Subparts */
   .dialog-header {
     @apply flex items-start gap-3 px-5 pt-5 pb-3;

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Dialog` `size="auto"` (`.dialog-auto`) shrinks the modal to fit its content, and `size="metabase"` (`.dialog-metabase`) widens it to 1138px with 44px gutters so a full-width embedded iframe lands at 1048px. (both)
+
 ## [0.18.1] - 2026-06-25
 
 ### Fixed

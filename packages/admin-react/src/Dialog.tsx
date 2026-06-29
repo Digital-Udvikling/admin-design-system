@@ -4,7 +4,7 @@ import { DialogContext, useDialogElement } from "./dialog-internal";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
 
-export type DialogSize = "sm" | "md" | "lg";
+export type DialogSize = "sm" | "md" | "lg" | "auto" | "metabase";
 export type DialogClosedBy = "any" | "closerequest" | "none";
 
 function DefaultCloseIcon() {
@@ -31,7 +31,7 @@ export interface DialogContainerProps extends Omit<ComponentProps<"dialog">, "op
   open?: boolean;
   /** Fires when the dialog closes (Esc, backdrop, close button, form method="dialog"). */
   onOpenChange?: (open: boolean) => void;
-  /** Width preset. Default: `"md"`. */
+  /** Width preset. `"auto"` shrinks to content; `"metabase"` fits a 1048px embedded iframe (1138px modal). Default: `"md"`. */
   size?: DialogSize;
   /** Native `closedby` attribute. Default: `"any"`. */
   closedby?: DialogClosedBy;

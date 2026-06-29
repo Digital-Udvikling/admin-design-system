@@ -90,7 +90,7 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
 
 ### Sizes
 
-`size="sm"` for confirms, `"md"` (default) for short forms, `"lg"` for longer ones.
+`size="sm"` for confirms, `"md"` (default) for short forms, `"lg"` for longer ones, `"auto"` to shrink to content.
 
 :::example
 
@@ -98,6 +98,7 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
 <button type="button" class="btn" commandfor="dialog-sm" command="show-modal">Small</button>
 <button type="button" class="btn" commandfor="dialog-md" command="show-modal">Medium</button>
 <button type="button" class="btn" commandfor="dialog-lg" command="show-modal">Large</button>
+<button type="button" class="btn" commandfor="dialog-auto" command="show-modal">Auto</button>
 
 <dialog id="dialog-sm" class="dialog dialog-sm">
   <div class="dialog-header">
@@ -128,12 +129,23 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
     <button type="button" class="btn" commandfor="dialog-lg" command="close">Close</button>
   </div>
 </dialog>
+
+<dialog id="dialog-auto" class="dialog dialog-auto">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Auto</h2>
+  </div>
+  <div class="dialog-body">Shrinks to fit its content.</div>
+  <div class="dialog-footer">
+    <button type="button" class="btn" commandfor="dialog-auto" command="close">Close</button>
+  </div>
+</dialog>
 ```
 
 ```tsx
 <Button commandfor="dialog-sm-r" command="show-modal">Small</Button>
 <Button commandfor="dialog-md-r" command="show-modal">Medium</Button>
 <Button commandfor="dialog-lg-r" command="show-modal">Large</Button>
+<Button commandfor="dialog-auto-r" command="show-modal">Auto</Button>
 
 <Dialog
   id="dialog-sm-r"
@@ -160,6 +172,76 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
   actions={<Button commandfor="dialog-lg-r" command="close">Close</Button>}
 >
   Up to 48rem — room for two-column forms.
+</Dialog>
+<Dialog
+  id="dialog-auto-r"
+  size="auto"
+  title="Auto"
+  dismissible={false}
+  actions={<Button commandfor="dialog-auto-r" command="close">Close</Button>}
+>
+  Shrinks to fit its content.
+</Dialog>
+```
+
+:::
+
+### Metabase embed
+
+`size="metabase"` widens the modal to 1138px and the gutters to 44px, so a full-width body child — a Metabase iframe — lands at exactly 1048px.
+
+:::example
+
+```html
+<button type="button" class="btn" commandfor="dialog-metabase" command="show-modal">
+  Open report
+</button>
+
+<dialog id="dialog-metabase" class="dialog dialog-metabase">
+  <div class="dialog-header">
+    <h2 class="dialog-title">Revenue report</h2>
+    <button
+      type="button"
+      class="dialog-close"
+      commandfor="dialog-metabase"
+      command="close"
+      aria-label="Close"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </div>
+  <div class="dialog-body">
+    <iframe
+      src="https://metabase.example.com/public/dashboard/…"
+      style="width: 100%; aspect-ratio: 16 / 9; border: 0;"
+      title="Revenue report"
+    ></iframe>
+  </div>
+</dialog>
+```
+
+```tsx
+<Button commandfor="dialog-metabase-r" command="show-modal">Open report</Button>
+
+<Dialog id="dialog-metabase-r" size="metabase" title="Revenue report">
+  <iframe
+    src="https://metabase.example.com/public/dashboard/…"
+    style={{ width: "100%", aspectRatio: "16 / 9", border: 0 }}
+    title="Revenue report"
+  />
 </Dialog>
 ```
 

@@ -82,6 +82,50 @@ The active thumb is anchored to the selected tab via [CSS anchor positioning](ht
 
 :::
 
+### Primary
+
+`tabs-primary` (React `primary`) fills the active segment with the primary color. Only affects the boxed variant.
+
+:::example
+
+```html
+<div class="tabs tabs-boxed tabs-primary tabs-sm">
+  <div class="tab-list" role="tablist">
+    <input class="tab-input" type="radio" name="boxed-primary" id="boxed-primary-1" value="1" />
+    <label class="tab" for="boxed-primary-1">Day</label>
+    <input
+      class="tab-input"
+      type="radio"
+      name="boxed-primary"
+      id="boxed-primary-2"
+      value="2"
+      checked
+    />
+    <label class="tab" for="boxed-primary-2">Week</label>
+    <input class="tab-input" type="radio" name="boxed-primary" id="boxed-primary-3" value="3" />
+    <label class="tab" for="boxed-primary-3">Month</label>
+  </div>
+  <div class="tab-panel" data-value="1">Daily breakdown.</div>
+  <div class="tab-panel" data-value="2">Weekly breakdown.</div>
+  <div class="tab-panel" data-value="3">Monthly breakdown.</div>
+</div>
+```
+
+```tsx
+<Tabs defaultValue="week" variant="boxed" size="sm" primary>
+  <Tabs.List>
+    <Tabs.Tab value="day">Day</Tabs.Tab>
+    <Tabs.Tab value="week">Week</Tabs.Tab>
+    <Tabs.Tab value="month">Month</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="day">Daily breakdown.</Tabs.Panel>
+  <Tabs.Panel value="week">Weekly breakdown.</Tabs.Panel>
+  <Tabs.Panel value="month">Monthly breakdown.</Tabs.Panel>
+</Tabs>
+```
+
+:::
+
 ### Full width
 
 `fullWidth` stretches the list across the container and divides space evenly between tabs. Composes with both variants.

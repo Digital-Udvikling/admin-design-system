@@ -12,6 +12,8 @@ export interface TabsProps extends ComponentProps<typeof BaseTabs.Root> {
   fullWidth?: boolean;
   /** Let the list wrap to multiple rows instead of overflowing; each tab stays on one line. */
   wrap?: boolean;
+  /** Fill the active segment with the primary color. Only affects `variant="boxed"`. */
+  primary?: boolean;
 }
 
 function TabsRoot({
@@ -19,6 +21,7 @@ function TabsRoot({
   size = "md",
   fullWidth = false,
   wrap = false,
+  primary = false,
   className,
   ...rest
 }: TabsProps) {
@@ -31,6 +34,7 @@ function TabsRoot({
           size !== "md" && `tabs-${size}`,
           fullWidth && "tabs-full-width",
           wrap && "tabs-wrap",
+          primary && "tabs-primary",
         ],
         className,
       )}

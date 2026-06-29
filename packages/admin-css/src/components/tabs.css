@@ -98,6 +98,13 @@
     @apply bg-surface text-text shadow-sm;
   }
 
+  /* Primary-filled thumb — the active segment uses the primary color. */
+  .tabs-boxed.tabs-primary .tab[data-selected],
+  .tabs-boxed.tabs-primary .tab[aria-selected="true"],
+  .tabs-boxed.tabs-primary .tab-input:checked + .tab {
+    @apply bg-primary text-primary-content shadow-sm;
+  }
+
   /* Sliding active marker, zero extra DOM: the selected tab becomes a CSS
      anchor and a single .tab-list pseudo tracks it via anchor() insets, which
      the browser interpolates between tabs — vanilla `:checked` and React both
@@ -168,6 +175,18 @@
         right 180ms ease,
         bottom 180ms ease,
         left 180ms ease;
+    }
+
+    /* Keep the label legible on the primary thumb; the bg-primary here overrides
+       the higher-specificity fallback above so the sliding thumb still shows. */
+    .tabs-boxed.tabs-primary .tab[data-selected],
+    .tabs-boxed.tabs-primary .tab[aria-selected="true"],
+    .tabs-boxed.tabs-primary .tab-input:checked + .tab {
+      @apply bg-transparent text-primary-content shadow-none;
+    }
+
+    .tabs-boxed.tabs-primary .tab-list::before {
+      @apply bg-primary shadow-none;
     }
   }
 

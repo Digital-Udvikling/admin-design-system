@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Tabs` `primary` prop (`.tabs-primary`) fills the active segment of a boxed segmented control with the primary color. (both)
+
 ## [0.18.3] - 2026-06-29
 
 ### Added

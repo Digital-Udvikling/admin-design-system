@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-06-29
+
 ### Added
 
 - `Tabs.Tab` `icon` prop (leading glyph via `renderIcon`); tab SVG icons are pinned to the label size (`.tabs .tab > svg`), so non-Tabler sets (e.g. Heroicons) render uniformly. (both)
@@ -96,12 +98,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.2...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.3...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.18.3]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.2...v0.18.3
 [0.18.2]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.1...v0.18.2
 [0.18.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.17.0...v0.18.0

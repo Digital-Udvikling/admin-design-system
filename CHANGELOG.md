@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Dialog body no longer clips its content in Safari. `.dialog-body` (and the form-dialog wrapper) used `flex: 1 1 0%`; Safari collapses a `flex-basis: 0` item that is itself an `overflow` scroll container to ~0 content height, so even short bodies were cut off behind a scrollbar. Switched to `flex: 1 1 auto` — content still shrinks and scrolls when tall. (css)
+
 ## [0.18.5] - 2026-06-30
 
 ### Fixed

@@ -90,16 +90,18 @@
     @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
   }
 
-  /* min-h-0 beats the flex default `min-height: auto` so tall content scrolls
-     here while the header/footer stay pinned. */
+  /* flex-auto (basis auto), not flex-1 (basis 0): Safari collapses a basis-0 flex
+     item that is itself an `overflow` scroll container to ~0 content height,
+     clipping short bodies. min-h-0 still lets tall content shrink and scroll here
+     while the header/footer stay pinned. */
   .dialog-body {
-    @apply flex-1 min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
+    @apply flex-auto min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
   }
 
   /* In the form-dialog pattern the form is the sole flex child; it must carry
-     the flex column so the body's `flex-1 min-h-0` still scrolls. */
+     the flex column so the body's `flex-auto min-h-0` still scrolls. */
   .dialog > form {
-    @apply flex flex-col min-h-0 flex-1;
+    @apply flex flex-col min-h-0 flex-auto;
   }
 
   .dialog-footer {

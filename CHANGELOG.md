@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-06-30
+
 ### Fixed
 
 - Global hotkey handling no longer throws on synthetic `keydown` events that omit `key` (autofill, password managers, some IMEs); `normalizeEvent` now treats a `key`-less event as no chord. (react)
@@ -109,12 +111,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.4...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.5...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.18.5]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.4...v0.18.5
 [0.18.4]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.3...v0.18.4
 [0.18.3]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.2...v0.18.3
 [0.18.2]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.1...v0.18.2

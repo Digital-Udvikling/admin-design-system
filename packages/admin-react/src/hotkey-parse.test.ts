@@ -31,3 +31,31 @@ describe("hotkey-parse mod resolution", () => {
     expect(apple.formatChord(apple.parseChord("mod+s"))).toEqual(["⌘", "S"]);
   });
 });
+
+describe("normalizeEvent", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.resetModules();
+  });
+
+  async function load() {
+    vi.stubGlobal("navigator", { platform: "Linux x86_64" } as Navigator);
+    vi.resetModules();
+    return import("./hotkey-parse");
+  }
+
+  it("normalizes a plain key press to its chord string", async () => {
+    const { normalizeEvent } = await load();
+    expect(normalizeEvent({ key: "K" } as KeyboardEvent)).toBe("k");
+  });
+
+  it("returns null for a bare modifier press", async () => {
+    const { normalizeEvent } = await load();
+    expect(normalizeEvent({ key: "Shift", shiftKey: true } as KeyboardEvent)).toBeNull();
+  });
+
+  it("returns null for a synthetic event with no key (autofill, IME)", async () => {
+    const { normalizeEvent } = await load();
+    expect(normalizeEvent({} as KeyboardEvent)).toBeNull();
+  });
+});

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Global hotkey handling no longer throws on synthetic `keydown` events that omit `key` (autofill, password managers, some IMEs); `normalizeEvent` now treats a `key`-less event as no chord. (react)
+
 ## [0.18.4] - 2026-06-29
 
 ### Added

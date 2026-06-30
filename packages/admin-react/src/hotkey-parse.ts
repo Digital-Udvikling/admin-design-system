@@ -89,8 +89,10 @@ export function canonicalize(chord: ParsedChord): string {
   return parts.join("+");
 }
 
-/** Canonical chord string for a keyboard event; `null` for a bare modifier press. */
+/** Canonical chord string for a keyboard event; `null` for a bare modifier press or a `key`-less synthetic event. */
 export function normalizeEvent(e: KeyboardEvent): string | null {
+  // Synthetic keydowns (autofill, password managers, some IMEs) can omit `key`.
+  if (!e.key) return null;
   const key = e.key.toLowerCase();
   if (key === "control" || key === "shift" || key === "alt" || key === "meta") {
     return null;

@@ -1,9 +1,9 @@
 import { Button as BaseButton } from "@base-ui/react/button";
-import { useCallback, useRef, type ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
-import { useHotkey } from "./useHotkey";
+import { useHotkeyClick } from "./useHotkey";
 
 export type ButtonVariant = "default" | "primary" | "ghost" | "muted" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -44,19 +44,7 @@ export function Button({
   ref,
   ...rest
 }: ButtonProps) {
-  // Latch the rendered element so the hotkey can dispatch a real `.click()`
-  // with its native side effects (form submit, anchor navigation).
-  const elementRef = useRef<HTMLElement | null>(null);
-  const setRef = useCallback(
-    (node: HTMLElement | null) => {
-      elementRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [ref],
-  );
-
-  const { ariaKeyShortcuts, primaryChord } = useHotkey(hotkey, () => elementRef.current?.click(), {
+  const { ariaKeyShortcuts, primaryChord, setRef } = useHotkeyClick(hotkey, ref, {
     enabled: !disabled && !loading,
   });
 

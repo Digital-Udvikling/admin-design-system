@@ -33,6 +33,44 @@
     @apply bg-danger text-danger-content border-transparent hover:opacity-90;
   }
 
+  /* Toggle buttons — no class; aria-pressed is the state (data-pressed is Base
+     UI's mirror). After the variants so a pressed ghost/muted wins the tie. */
+  .btn:is([aria-pressed="true"], [data-pressed]) {
+    @apply bg-primary-muted text-primary;
+  }
+
+  /* Leading mini switch — .switch shrunk to the label's em box; the thumb is
+     a background circle so the slide is one background-position. Drawn in
+     both states so an off toggle still reads as a toggle. */
+  .btn:is([aria-pressed], [data-pressed])::before {
+    --btn-toggle-thumb: var(--color-paper);
+    content: "";
+    flex-shrink: 0;
+    inline-size: 1.75em;
+    block-size: 1em;
+    border-radius: 9999px;
+    background-color: var(--color-border-strong);
+    background-image: radial-gradient(
+      circle closest-side,
+      var(--btn-toggle-thumb) calc(100% - 0.5px),
+      transparent
+    );
+    background-size: calc(1em - 4px) calc(1em - 4px);
+    background-position: 2px 50%;
+    background-repeat: no-repeat;
+    transition:
+      background-color 150ms,
+      background-position 150ms;
+  }
+
+  .btn:is([aria-pressed="true"], [data-pressed])::before {
+    /* Thumb is primary-content, not .switch's paper — paper would vanish on
+       the dark-mode paper track. */
+    --btn-toggle-thumb: var(--color-primary-content);
+    background-color: var(--color-primary);
+    background-position: calc(100% - 2px) 50%;
+  }
+
   /* Sizes (md is the default; modifiers override) */
   .btn-sm {
     @apply text-xs px-3 py-1.5 gap-1.5;
@@ -85,6 +123,10 @@
   @media (prefers-reduced-motion: reduce) {
     .btn-loading::before {
       animation-duration: 2s;
+    }
+
+    .btn:is([aria-pressed], [data-pressed])::before {
+      transition: none;
     }
   }
 }

@@ -13,12 +13,14 @@
   - [As a link](#as-a-link)
   - [With icons](#with-icons)
   - [Icon-only](#icon-only)
+  - [Toggle](#toggle)
   - [Hotkey (React only)](#hotkey-react-only)
 - [Groups](#groups)
   - [Horizontal](#horizontal)
   - [Full width](#full-width)
   - [Vertical](#vertical)
   - [With variants and icons](#with-variants-and-icons)
+  - [With toggles](#with-toggles)
   - [With indicators](#with-indicators)
 
 ## Examples
@@ -176,6 +178,32 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <Button variant="danger" size="lg" icon={IconTrash} aria-label="Delete" />
 ```
 
+### Toggle
+
+`aria-pressed` carries the state — any `.btn` with the attribute renders a leading mini switch, and `aria-pressed="true"` slides it on and adds a selected wash. Vanilla consumers flip the attribute themselves; `<ToggleButton>` wraps [Base UI Toggle](https://base-ui.com/react/components/toggle) and takes the same `variant`, `size`, `icon`, and `hotkey` props as `Button` (`pressed`/`defaultPressed`/`onPressedChange` for state).
+
+**Example**
+
+```html
+<button class="btn" type="button" aria-pressed="true">Auto-refresh</button>
+<button class="btn" type="button" aria-pressed="false">Auto-refresh</button>
+```
+
+```tsx
+<ToggleButton defaultPressed>Auto-refresh</ToggleButton>
+<ToggleButton>Auto-refresh</ToggleButton>
+```
+
+A `hotkey` chord flips the pressed state:
+
+**Example**
+
+```tsx
+<ToggleButton hotkey="mod+e" defaultPressed>
+  Preview
+</ToggleButton>
+```
+
 ### Hotkey (React only)
 
 Bind a chord to the button — pressing it dispatches a native click and renders a trailing chip. Because it's a real click, `onClick` fires, `type="submit"` submits the form, and an anchor-rendered button (`render={<a href>}`) navigates. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../basics/hotkeys.md) for page-level bindings.
@@ -198,7 +226,7 @@ Bind a chord to the button — pressing it dispatches a native click and renders
 
 ## Groups
 
-Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit. Presentational only — each child is an independently focusable button. For single-select toggles, use a dedicated segmented control.
+Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit. Presentational only — each child is an independently focusable button. For single-select, use a [boxed tab list](tabs.md) as the segmented control.
 
 ### Horizontal
 
@@ -297,6 +325,28 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
   <Button variant="danger" icon={IconTrash}>
     Delete
   </Button>
+</ButtonGroup>
+```
+
+### With toggles
+
+Toggle buttons compose into groups for independent on/off options.
+
+**Example**
+
+```html
+<div class="btn-group">
+  <button class="btn" type="button" aria-pressed="true">Stripes</button>
+  <button class="btn" type="button" aria-pressed="false">Compact</button>
+  <button class="btn" type="button" aria-pressed="false">Wrap text</button>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <ToggleButton defaultPressed>Stripes</ToggleButton>
+  <ToggleButton>Compact</ToggleButton>
+  <ToggleButton>Wrap text</ToggleButton>
 </ButtonGroup>
 ```
 

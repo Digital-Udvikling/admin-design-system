@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, type Ref } from "react";
 import { canonicalize, parseKeys, toAriaKeyShortcuts } from "./hotkey-parse";
 import { register, type HotkeyEntry, type HotkeyHandler } from "./hotkey-registry";
 
@@ -53,4 +53,29 @@ export function useHotkey(
   }, [derived, enabled]);
 
   return derived;
+}
+
+/**
+ * `useHotkey` bound to a rendered element: the chord dispatches a native
+ * `.click()`, so `onClick` fires, `type="submit"` submits, an anchor
+ * navigates. Returns `setRef` to pass as the element's ref; it latches the
+ * element and forwards `ref`.
+ */
+export function useHotkeyClick<E extends HTMLElement>(
+  keys: string | readonly string[] | null | undefined,
+  ref: Ref<E> | undefined,
+  options?: HotkeyOptions,
+): HotkeyInfo & { setRef: (node: E | null) => void } {
+  const elementRef = useRef<E | null>(null);
+  const setRef = useCallback(
+    (node: E | null) => {
+      elementRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
+
+  const info = useHotkey(keys, () => elementRef.current?.click(), options);
+  return { ...info, setRef };
 }

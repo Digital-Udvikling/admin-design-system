@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `ToggleButton` — a two-state button styled like `Button` (same variants, sizes, icons, `hotkey`), wrapping Base UI Toggle. CSS-side there is no new class: any `.btn` with an `aria-pressed` attribute renders a leading mini-switch indicator, and `aria-pressed="true"` slides it on and adds a selected wash — so vanilla toggles and `.btn-group` composition work out of the box. (both)
+
 ### Fixed
 
 - Dialog body no longer clips its content in Safari. `.dialog-body` (and the form-dialog wrapper) used `flex: 1 1 0%`; Safari collapses a `flex-basis: 0` item that is itself an `overflow` scroll container to ~0 content height, so even short bodies were cut off behind a scrollbar. Switched to `flex: 1 1 auto` — content still shrinks and scrolls when tall. (css)

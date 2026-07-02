@@ -69,6 +69,7 @@ export default defineConfig({
         "@base-ui/react/select",
         "@base-ui/react/switch",
         "@base-ui/react/tabs",
+        "@base-ui/react/toggle",
         "@base-ui/react/tooltip",
         "@tabler/icons-react",
         "@astrojs/starlight/components",

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Copyable `PropertyList` value cells copy on click anywhere in the cell, not only on the copy button (which stays as the keyboard and screen-reader path). Selecting text or clicking an interactive child doesn't trigger a copy; the cell shows a pointer cursor. (both)
+
 ## [0.19.0] - 2026-07-02
 
 ### Added

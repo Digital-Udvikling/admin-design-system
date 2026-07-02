@@ -1,4 +1,4 @@
-import { useRef, useState, type ComponentProps, type ReactNode } from "react";
+import { useRef, useState, type ComponentProps, type MouseEvent, type ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 
 // Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
@@ -160,9 +160,11 @@ function PropertyListValue({
   className,
   classNames,
   children,
+  onClick,
   ...rest
 }: PropertyListValueProps) {
   const ddRef = useRef<HTMLElement | null>(null);
+  const copyButtonRef = useRef<HTMLButtonElement | null>(null);
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -177,7 +179,20 @@ function PropertyListValue({
     }
   }
 
+  // The whole cell is the click target; the button carries no handler of its
+  // own — its keyboard activation click bubbles here — so a button press and
+  // a cell click can't double-fire.
+  function handleCellClick(event: MouseEvent<HTMLElement>) {
+    onClick?.(event);
+    if (event.defaultPrevented) return;
+    if (window.getSelection()?.toString()) return;
+    const interactive = (event.target as HTMLElement).closest("a, button, input, select, textarea");
+    if (interactive && interactive !== copyButtonRef.current) return;
+    void handleCopy();
+  }
+
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- the nested copy button is the keyboard path; the cell click is a pointer-only convenience
     <dd
       ref={ddRef}
       className={cn(
@@ -189,14 +204,15 @@ function PropertyListValue({
         ],
         className,
       )}
+      onClick={copyable ? handleCellClick : onClick}
       {...rest}
     >
       {children}
       <button
+        ref={copyButtonRef}
         type="button"
         aria-label="Copy"
         className={cn("property-list-copy", classNames?.copy)}
-        onClick={handleCopy}
         data-copied={copied ? "true" : undefined}
       >
         <CopyGlyph className={cn("property-list-copy-icon", undefined)} />

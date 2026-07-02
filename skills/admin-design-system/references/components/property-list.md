@@ -79,7 +79,7 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 
 ### Copyable (React only)
 
-`copyable` on an item reveals a copy button on its value cell on hover or focus; click copies and confirms with a check for ~1.2s. Text selection on the value still works. Opt in row-by-row.
+`copyable` on an item reveals a copy button on its value cell on hover or focus; clicking anywhere in the cell copies and confirms with a check for ~1.2s. Text selection and links inside the value still work. Opt in row-by-row.
 
 **Example**
 

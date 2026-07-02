@@ -93,6 +93,49 @@ describe("PropertyList", () => {
     expect(button).toHaveAttribute("data-copied", "true");
   });
 
+  it("clicking anywhere on the value cell copies", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    });
+
+    render(
+      <PropertyList>
+        <PropertyList.Item label="EAN" value="4005176923197" copyable data-testid="value" />
+      </PropertyList>,
+    );
+
+    screen.getByTestId("value").click();
+    await Promise.resolve();
+    expect(writeText).toHaveBeenCalledWith("4005176923197");
+  });
+
+  it("clicking an interactive child inside the value cell does not copy", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    });
+
+    render(
+      <PropertyList>
+        <PropertyList.Item>
+          <PropertyList.Label>Link</PropertyList.Label>
+          <PropertyList.Value copyable copyValue="https://example.com">
+            <a href="https://example.com" onClick={(e) => e.preventDefault()}>
+              example.com
+            </a>
+          </PropertyList.Value>
+        </PropertyList.Item>
+      </PropertyList>,
+    );
+
+    screen.getByRole("link").click();
+    await Promise.resolve();
+    expect(writeText).not.toHaveBeenCalled();
+  });
+
   it("children form: Item renders user-supplied Label and Value subparts directly with no wrapper", () => {
     render(
       <PropertyList data-testid="root">

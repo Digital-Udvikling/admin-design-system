@@ -68,6 +68,10 @@
       color 100ms ease;
   }
 
+  .property-list-value-copyable {
+    @apply cursor-pointer;
+  }
+
   .property-list-value-copyable .property-list-copy {
     display: inline-flex;
     opacity: 0;

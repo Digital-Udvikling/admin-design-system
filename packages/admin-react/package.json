@@ -1,6 +1,6 @@
 {
   "name": "@aortl/admin-react",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "React component library for the admin design system. Pairs with @aortl/admin-css.",
   "keywords": [
     "components",

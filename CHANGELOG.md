@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-07-06
+
 ### Added
 
 - `Timeline` horizontal variant — `.timeline-horizontal` (React `horizontal` prop) lays items out as equal-width columns with the connector running along the indicator row. Composes with the numbered variant for a step tracker. (both)
@@ -131,12 +133,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.1...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.0...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.20.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.1...v0.20.0
 [0.19.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.0...v0.19.1
 [0.19.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.5...v0.19.0
 [0.18.5]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.4...v0.18.5

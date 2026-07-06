@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Timeline` horizontal variant — `.timeline-horizontal` (React `horizontal` prop) lays items out as equal-width columns with the connector running along the indicator row. Composes with the numbered variant for a step tracker. (both)
+
 ## [0.19.1] - 2026-07-02
 
 ### Changed

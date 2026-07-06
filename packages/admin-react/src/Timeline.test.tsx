@@ -29,6 +29,15 @@ describe("Timeline", () => {
     expect(container.querySelector(adminSelector("timeline-marker"))).toHaveTextContent("1");
   });
 
+  it("renders the horizontal variant", () => {
+    const { container } = render(
+      <Timeline horizontal>
+        <Timeline.Item title="Step" />
+      </Timeline>,
+    );
+    expect(container.querySelector("ol")).toHaveAdminClass("timeline-horizontal");
+  });
+
   it("forwards classNames to slots", () => {
     render(
       <Timeline>

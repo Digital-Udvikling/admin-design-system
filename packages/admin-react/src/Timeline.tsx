@@ -7,9 +7,19 @@ export type TimelineStatus = "default" | "info" | "success" | "warning" | "dange
 export interface TimelineProps extends ComponentProps<"ol"> {
   /** Turn the rail into a numbered step list. */
   numbered?: boolean;
+  /** Lay items out as side-by-side columns instead of a vertical rail. */
+  horizontal?: boolean;
 }
-function TimelineRoot({ numbered, className, ...rest }: TimelineProps) {
-  return <ol className={cn(["timeline", numbered && "timeline-numbered"], className)} {...rest} />;
+function TimelineRoot({ numbered, horizontal, className, ...rest }: TimelineProps) {
+  return (
+    <ol
+      className={cn(
+        ["timeline", numbered && "timeline-numbered", horizontal && "timeline-horizontal"],
+        className,
+      )}
+      {...rest}
+    />
+  );
 }
 
 export interface TimelineItemProps extends Omit<ComponentProps<"li">, "title"> {

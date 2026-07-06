@@ -110,4 +110,47 @@
   .timeline-item-current .timeline-marker {
     @apply bg-primary text-primary-content;
   }
+
+  /* Horizontal variant — items sit side by side as equal columns, indicator
+     above centred content, and the connector runs along the indicator row. */
+  .timeline-horizontal {
+    display: flex;
+    flex-direction: row;
+  }
+  .timeline-horizontal .timeline-item {
+    grid-template-columns: none;
+    grid-template-rows: 1.5rem auto;
+    row-gap: 0.5rem;
+    flex: 1 1 0;
+    min-width: 0;
+    padding-bottom: 0;
+    padding-inline: 0.5rem;
+    text-align: center;
+  }
+  /* Connector — horizontal line centred on the indicator row, from this item's
+     centre to the next item's centre (equal columns make -50% land on centre). */
+  .timeline-horizontal .timeline-item:not(:last-child)::before {
+    inset: 0.75rem -50% auto 50%;
+    width: auto;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+  .timeline-horizontal .timeline-indicator {
+    grid-row: 1;
+    grid-column: auto;
+    justify-self: center;
+  }
+  .timeline-horizontal .timeline-content {
+    grid-row: 2;
+    grid-column: auto;
+    align-items: center;
+    padding-block: 0;
+  }
+
+  .timeline-horizontal.timeline-numbered .timeline-item {
+    grid-template-rows: 1.75rem auto;
+  }
+  .timeline-horizontal.timeline-numbered .timeline-item:not(:last-child)::before {
+    inset-block-start: 0.875rem;
+  }
 }

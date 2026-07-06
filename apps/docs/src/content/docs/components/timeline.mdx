@@ -1,6 +1,6 @@
 ---
 title: Timeline
-description: Vertical event rail for activity and status history.
+description: Event rail for activity and status history.
 ---
 
 import { Timeline } from "@aortl/admin-react";
@@ -135,6 +135,52 @@ The `timeline-numbered` variant turns the rail into a step list. Mark completed 
   <Timeline.Item status="success" marker="1" title="Details" description="Name and contact." />
   <Timeline.Item status="current" marker="2" title="Payment" description="Card or invoice." />
   <Timeline.Item marker="3" title="Review" description="Confirm and submit." />
+</Timeline>
+```
+
+:::
+
+### Horizontal
+
+The `timeline-horizontal` variant lays items out as equal-width columns with the connector running along the indicator row. Pairs with `timeline-numbered` for a step tracker.
+
+:::example
+
+```html
+<ol class="timeline timeline-horizontal timeline-numbered">
+  <li class="timeline-item timeline-item-success">
+    <span class="timeline-indicator"><span class="timeline-marker">1</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Cart</div>
+    </div>
+  </li>
+  <li class="timeline-item timeline-item-current">
+    <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Shipping</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><span class="timeline-marker">3</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Payment</div>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <span class="timeline-indicator"><span class="timeline-marker">4</span></span>
+    <div class="timeline-content">
+      <div class="timeline-title">Confirm</div>
+    </div>
+  </li>
+</ol>
+```
+
+```tsx
+<Timeline horizontal numbered>
+  <Timeline.Item status="success" marker="1" title="Cart" />
+  <Timeline.Item status="current" marker="2" title="Shipping" />
+  <Timeline.Item marker="3" title="Payment" />
+  <Timeline.Item marker="4" title="Confirm" />
 </Timeline>
 ```
 

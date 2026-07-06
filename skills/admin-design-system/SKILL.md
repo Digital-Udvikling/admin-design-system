@@ -198,7 +198,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Stat cards](references/components/stat-cards.md) — Compact KPI tile with label, value, and detail.
 - [Tables](references/components/tables.md) — Native table with row selection, sticky headers, and row links.
 - [Tabs](references/components/tabs.md) — Section a view into named panels.
-- [Timeline](references/components/timeline.md) — Vertical event rail for activity and status history.
+- [Timeline](references/components/timeline.md) — Event rail for activity and status history.
 - [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.
 
 ### Modules

@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-07-30
+
 ### Fixed
 
 - `Select` and `Tooltip` popups no longer paint behind host chrome. Base UI positions them in a `position: fixed` wrapper with `z-index: auto`, so an `<AdminRoot>` embedded in a page whose own elements carry a positive `z-index` hid its own dropdowns. Both positioners now carry a `.popup-layer` class: `z-index: var(--z-popup, 1000)`. Declare `--z-popup` on `.admin-root` or any ancestor to slot popups into a host's own stacking scale. (both)
@@ -137,12 +139,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Make `primary` a high-contrast neutral and move blue to `info`. (both)
 - Use solid color fills for `Alert` and `Badge` status variants. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.0...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.1...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.20.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.0...v0.20.1
 [0.20.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.1...v0.20.0
 [0.19.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.0...v0.19.1
 [0.19.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.18.5...v0.19.0

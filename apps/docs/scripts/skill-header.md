@@ -61,7 +61,7 @@ import { IconPlus } from "@tabler/icons-react";
 <Button icon={IconPlus}>Add</Button>;
 ```
 
-Pass JSX (`icon={<IconPlus size={20} />}`) to override the default 16px size. Most leaf and shorthand components accept `icon` — among them `Button`, `Badge`, `Link`, `Input`, `Item`, `Card` / `Card.Title`, `Alert`, `Menu.Item`, `Navbar.Item`, `Dialog`, `Drawer`, `StatCard`, `Timeline.Item`, `Breadcrumbs.Item`, `Indicator`, `BrandTile`, and `Sidebar.Item` / `SubItem` / `Collapsible`. A trailing `iconTrailing` slot is on `Button`, `Input`, and `Link`. Prefer the prop over passing icon JSX as children; check the component's reference page if unsure.
+Component references render at `size="1em"` with `aria-hidden`, so the glyph inherits the host `font-size`. Pass JSX (`icon={<IconPlus size={20} />}`) to override that. Most leaf and shorthand components accept `icon` — among them `Button`, `Badge`, `Link`, `Input`, `Item`, `Card` / `Card.Title`, `Alert`, `Menu.Item`, `Navbar.Item`, `Dialog`, `Drawer`, `StatCard`, `Timeline.Item`, `Breadcrumbs.Item`, `Indicator`, `BrandTile`, and `Sidebar.Item` / `SubItem` / `Collapsible`. A trailing `iconTrailing` slot is on `Button`, `Input`, and `Link`. Prefer the prop over passing icon JSX as children; check the component's reference page if unsure.
 
 Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
 
@@ -93,16 +93,9 @@ For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package sh
 
 ### Prefer the platform
 
-Admin users run current browsers — there is no legacy budget. Reach for modern HTML and CSS before reaching for JavaScript.
+Admin users run current browsers — there is no legacy budget. Reach for modern HTML and CSS before reaching for JavaScript, and don't pull in `framer-motion`, manual portals, `requestAnimationFrame` loops, or `useState` mirroring what the DOM already tracks. Base UI handles the cases where JS is genuinely needed.
 
-- Disclosure: `<details>` + `<summary>` with `interactivity: inert` and `::details-content`.
-- Modals: `<dialog>` + `showModal()`.
-- Popovers / tooltips / menus: `popover` attribute + `anchor-name` / `position-anchor`.
-- Animations: CSS `transition`, `@keyframes`, `@starting-style`, `transition-behavior: allow-discrete`.
-- Form state: `:has()`, `:user-valid`, `:user-invalid`, `:placeholder-shown`, `field-sizing: content`.
-- Layout: container queries, `subgrid`, `aspect-ratio`, `text-wrap: balance`.
-
-Don't pull in `framer-motion`, manual portals, or `requestAnimationFrame` loops. Base UI handles the cases where JS is genuinely needed.
+What the system itself builds on, so you can match it: `<dialog>` + `showModal()`, the `popover` attribute with `anchor-name` / `position-anchor`, `<details>` + `::details-content`, `:has()`, `field-sizing: content`, `@starting-style` with `transition-behavior: allow-discrete`, `subgrid`, `text-wrap: balance`, `light-dark()` and `color-mix()`. Don't infer support for anything beyond what a component's reference page shows.
 
 ### Charts
 
@@ -132,5 +125,9 @@ Sketch locally first, then propose upstream as a PR. The single-source-of-truth 
 ## How to use the references
 
 The `references/` folder contains one markdown file per docs page. Each contains paired `html` and `tsx` code blocks showing both flavors for every documented variant.
+
+Component pages end in a `Reference` section: a `React` table of props (plus a parts table for compound components) and a `Vanilla` table of classes and custom properties. **That table is authoritative** — the examples show common cases, the table shows the whole surface. Read it before assuming a prop or class exists, and note that defaults usually emit no class (`md`, `neutral`, `default`).
+
+Cross-cutting props that hold everywhere — `className`, `classNames`, `icon`, sizes, tones, `.Container` — are in [Conventions](references/basics/conventions.md) and are not repeated per component.
 
 Read references **on demand** — do not pre-load. The index below lists every available file.

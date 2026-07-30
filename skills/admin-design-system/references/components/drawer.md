@@ -8,14 +8,13 @@
   - [Basic](#basic)
   - [Sides](#sides)
   - [Record detail](#record-detail)
-
-A `<Drawer>` is a [Dialog](dialog.md) anchored to a screen edge instead of centred — for record detail, filters, and bulk edit. It reuses the same native `<dialog>`: `showModal()` gives the focus trap, scroll lock, Esc dismissal, and `::backdrop` for free. The trigger uses the same [Invoker Commands](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) pattern as Dialog; for state-driven flows, pair `open` with `onOpenChange`.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
 ### Basic
-
-Anchors to the inline-end edge by default.
 
 **Example**
 
@@ -87,8 +86,6 @@ Anchors to the inline-end edge by default.
 
 ### Sides
 
-`side` anchors the panel to `end` (default), `start`, or `bottom`.
-
 **Example**
 
 ```html
@@ -145,8 +142,6 @@ Anchors to the inline-end edge by default.
 
 ### Record detail
 
-A wider drawer (`size="lg"`) edits a record next to the table it came from. As with Dialog, wrapping the body in `<form method="dialog">` closes the drawer on submit.
-
 **Example**
 
 ```tsx
@@ -181,4 +176,43 @@ A wider drawer (`size="lg"`) edits a record next to the table it came from. As w
 </Drawer.Container>
 ```
 
-A non-modal `persistent` drawer would forgo the focus trap and scroll lock that `showModal()` provides, so it is intentionally out of scope.
+## Reference
+
+### React
+
+A `Drawer` is a [Dialog](dialog.md) anchored to a screen edge, and it re-exports Dialog's parts: `Drawer.Header`, `.Title`, `.Description`, `.Body`, `.Footer`, `.CloseButton` are the same components, emitting the same `dialog-*` classes. `Drawer.Container` is the bare primitive.
+
+| Prop           | Type                                          | Default   |
+| -------------- | --------------------------------------------- | --------- |
+| `open`         | `boolean`                                     | —         |
+| `onOpenChange` | `(open: boolean) => void`                     | —         |
+| `side`         | `"start" \| "end" \| "bottom"`                | `"end"`   |
+| `size`         | `"sm" \| "md" \| "lg"`                        | `"md"`    |
+| `closedby`     | `"any" \| "closerequest" \| "none"`           | `"any"`   |
+| `icon`         | [`IconProp`](../basics/conventions.md#icons) | —         |
+| `title`        | `ReactNode`                                   | —         |
+| `description`  | `ReactNode`                                   | —         |
+| `actions`      | `ReactNode`                                   | —         |
+| `dismissible`  | `boolean`                                     | `true`    |
+| `closeLabel`   | `string`                                      | `"Close"` |
+| `classNames`   | [slots](../basics/conventions.md#classnames) | —         |
+
+`size` sets the cross-axis extent: a width for a side drawer, a max-height for a bottom sheet. Everything else — the shorthand props, `classNames` slots, the controlled/uncontrolled split, the `<form method="dialog">` pattern — behaves exactly as on [Dialog](dialog.md#reference). Plus native `<dialog>` attributes.
+
+### Vanilla
+
+Pair `drawer` with `dialog`: the drawer classes override the centring and radius, and inherit everything else, including the backdrop and the fade.
+
+| Class           | Effect                                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------ |
+| `drawer`        | Full-height panel on the inline-end edge, `min(28rem, 100vw)` wide, square corners, sliding in from the edge |
+| `drawer-start`  | Inline-start edge instead                                                                                    |
+| `drawer-bottom` | Bottom sheet: full width, `85dvh` max-height, sliding up                                                     |
+| `drawer-sm`     | `min(20rem, 100vw)` wide — or `50dvh` tall as a bottom sheet                                                 |
+| `drawer-lg`     | `min(36rem, 100vw)` — or `95dvh` tall                                                                        |
+
+There is no `drawer-md` or `drawer-end` — both are the unmodified `drawer`. The slide is dropped under `prefers-reduced-motion: reduce`, keeping the opacity fade.
+
+Modal behaviour, the Invoker Commands trigger, `closedby`, and the `<form method="dialog">` pattern are all Dialog's — see [its reference](dialog.md#reference).
+
+There is deliberately no non-modal or persistent drawer: it would give up the focus trap and scroll lock that `showModal()` provides for free, and a panel that doesn't trap focus is a [Card](cards.md) or a sidebar, not a drawer.

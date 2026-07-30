@@ -1,0 +1,99 @@
+---
+// Starlight's own asides can't be used here: they inject their icon as a raw-HTML
+// mdast node, which the Sätteri processor escapes instead of parsing, so the icon
+// renders as visible SVG source.
+//
+// This reuses the design system's `.alert` for the icon/text grid, radius and
+// padding, but swaps the solid status fill for a muted tint — a docs note is not
+// an app alert and shouldn't shout. `not-content` opts the body out of Starlight's
+// prose styles, which otherwise fight the tinted surface (white `<code>` chips,
+// stacked paragraph margins).
+interface Props {
+  /** Tone. Sets the tint, border and icon. */
+  variant?: "info" | "success" | "warning" | "danger";
+}
+
+const { variant = "warning" } = Astro.props;
+
+const ICONS = {
+  info: "ti-info-circle",
+  success: "ti-circle-check",
+  warning: "ti-alert-triangle",
+  danger: "ti-alert-octagon",
+};
+---
+
+<div class="callout alert not-content" data-variant={variant}>
+  <i class={`ti ${ICONS[variant]}`} aria-hidden="true"></i>
+  <div class="callout-body"><slot /></div>
+</div>
+
+<style>
+  .callout {
+    /* Align the glyph to the first line rather than centring it against a
+       multi-line body, which `.alert`'s own `align-items: center` would do. */
+    align-items: start;
+    margin-block: 1.25rem;
+    background-color: var(--callout-tint);
+    border-color: color-mix(in oklab, var(--callout-tone) 40%, var(--callout-tint));
+    color: var(--color-text);
+  }
+
+  .callout[data-variant="info"] {
+    --callout-tone: var(--color-info);
+    --callout-tint: var(--color-info-muted);
+    --callout-accent: var(--color-info);
+  }
+  .callout[data-variant="success"] {
+    --callout-tone: var(--color-success);
+    --callout-tint: var(--color-success-muted);
+    --callout-accent: var(--color-success);
+  }
+  /* `--color-warning` is an absolute yellow-400; as a glyph on a yellow tint it
+     fails contrast, so the icon takes the text colour — same rule as badge-soft. */
+  .callout[data-variant="warning"] {
+    --callout-tone: var(--color-warning);
+    --callout-tint: var(--color-warning-muted);
+    --callout-accent: var(--color-text);
+  }
+  .callout[data-variant="danger"] {
+    --callout-tone: var(--color-danger);
+    --callout-tint: var(--color-danger-muted);
+    --callout-accent: var(--color-danger);
+  }
+
+  .callout > i {
+    color: var(--callout-accent);
+    font-size: 1rem;
+    /* Match the body's line box so the glyph sits on the first line's baseline. */
+    line-height: 1.25rem;
+  }
+
+  .callout-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .callout-body :global(p) {
+    margin: 0;
+  }
+
+  .callout-body :global(code) {
+    padding: 0.0625rem 0.25rem;
+    border-radius: 0.25rem;
+    background-color: color-mix(in oklab, currentColor 8%, transparent);
+    font-size: 0.875em;
+  }
+
+  .callout-body :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Expressive Code owns the fence's own chrome; just tighten the spacing. */
+  .callout-body :global(.expressive-code) {
+    margin: 0;
+  }
+</style>

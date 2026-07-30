@@ -5,21 +5,46 @@
 ## Contents
 
 - [Install](#install)
+  - [Vanilla — webfont](#vanilla-webfont)
+  - [React — components](#react-components)
 - [Vanilla usage](#vanilla-usage)
 - [React usage](#react-usage)
 - [Sizing](#sizing)
 - [Accessibility](#accessibility)
-- [In context](#in-context)
-  - [Alert with status icon](#alert-with-status-icon)
-  - [Menu items with leading icons](#menu-items-with-leading-icons)
 - [Substituting your own set](#substituting-your-own-set)
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React.
+The recommended icon library is [Tabler Icons](https://tabler.io/icons). Each icon's name maps to `ti-{name}` for the webfont and `Icon{Name}` for React. Neither admin package depends on it — both are optional installs.
 
 ## Install
 
-- **Vanilla CSS** — see [Getting Started › Vanilla CSS](../getting-started/vanilla.md#add-icons-optional).
-- **React** — see [Getting Started › React](../getting-started/react.md#add-icons-optional).
+### Vanilla — webfont
+
+Drops in without a bundler. Pin a version (e.g. `@3.44.0`) for production:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+/>
+```
+
+With an existing CSS pipeline, install the package and `@import` it instead:
+
+```bash
+npm install @tabler/icons-webfont
+```
+
+```css
+@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+```
+
+### React — components
+
+```bash
+npm install @tabler/icons-react
+```
+
+Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-hidden`. See [Conventions › Icons](conventions.md#icons) for the prop contract.
 
 ## Vanilla usage
 
@@ -127,83 +152,6 @@ When an icon is the only content, give the surrounding element an accessible nam
 
 ```tsx
 <Button variant="ghost" icon={IconTrash} aria-label="Delete row" />
-```
-
-## In context
-
-### Alert with status icon
-
-**Example**
-
-```html
-<div class="alert alert-info" role="status">
-  <i class="ti ti-info-circle" aria-hidden="true"></i>
-  Backups run nightly at 02:00 UTC.
-</div>
-<div class="alert alert-success" role="status">
-  <i class="ti ti-circle-check" aria-hidden="true"></i>
-  Changes saved.
-</div>
-<div class="alert alert-warning" role="alert">
-  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-  This action is not reversible.
-</div>
-<div class="alert alert-danger" role="alert">
-  <i class="ti ti-alert-octagon" aria-hidden="true"></i>
-  Connection to the database failed.
-</div>
-```
-
-```tsx
-<Alert variant="info" icon={IconInfoCircle}>
-  Backups run nightly at 02:00 UTC.
-</Alert>
-<Alert variant="success" icon={IconCircleCheck}>
-  Changes saved.
-</Alert>
-<Alert variant="warning" icon={IconAlertTriangle}>
-  This action is not reversible.
-</Alert>
-<Alert variant="danger" icon={IconAlertOctagon}>
-  Connection to the database failed.
-</Alert>
-```
-
-### Menu items with leading icons
-
-**Example**
-
-```html
-<details class="menu">
-  <summary class="menu-trigger">Account</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">
-      <i class="ti ti-user" aria-hidden="true"></i>
-      Profile
-    </button>
-    <button class="menu-item" type="button">
-      <i class="ti ti-settings" aria-hidden="true"></i>
-      Settings
-    </button>
-    <hr class="menu-separator" />
-    <button class="menu-item" type="button">
-      <i class="ti ti-trash" aria-hidden="true"></i>
-      Delete account
-    </button>
-  </div>
-</details>
-```
-
-```tsx
-<Menu>
-  <Menu.Trigger>Account</Menu.Trigger>
-  <Menu.Popup>
-    <Menu.Item icon={IconUser}>Profile</Menu.Item>
-    <Menu.Item icon={IconSettings}>Settings</Menu.Item>
-    <Menu.Separator />
-    <Menu.Item icon={IconTrash}>Delete account</Menu.Item>
-  </Menu.Popup>
-</Menu>
 ```
 
 ## Substituting your own set

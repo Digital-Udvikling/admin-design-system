@@ -14,8 +14,7 @@ import {
   IconSelector,
   IconTrendingUp,
 } from "@tabler/icons-react";
-
-Native `<table>` semantics. Cells inherit style from descendant selectors — no per-cell class. Modifiers (`striped`, `bordered`, `compact`/`relaxed`, `sticky`, `pinCol`) compose. Default row height is ~32px; `compact` tightens it and `relaxed` opens it up.
+import Callout from "../../../components/Callout.astro";
 
 ## Examples
 
@@ -85,7 +84,7 @@ Native `<table>` semantics. Cells inherit style from descendant selectors — no
 
 ### Filter toolbar
 
-Sorting and filtering logic is the consumer's to wire — the markup is a flex [toolbar](../row/#toolbar) above the table. The search field grows to fill, a **Filters** button opens a [Drawer](../drawer/) of advanced controls, and the primary action sits at the right edge.
+Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](../row/#toolbar) above the table.
 
 :::example
 
@@ -223,8 +222,6 @@ Sorting and filtering logic is the consumer's to wire — the markup is a flex [
 
 ### Sortable columns
 
-There's no sort component — wire the click handler and ordering yourself. The markup is a button in the `<th>` and `aria-sort` (`ascending` / `descending`) on the sorted column only; a caret shows direction, `selector` marks the unsorted columns.
-
 :::example
 
 ```html
@@ -295,9 +292,13 @@ There's no sort component — wire the click handler and ordering yourself. The 
 
 :::
 
-### Modifiers
+<Callout variant="warning">
 
-`striped` zebra-stripes the body, `bordered` draws cell borders, `relaxed` increases padding.
+There is no sort component — the click handler and ordering are yours. Set `aria-sort` to `ascending` or `descending` on the sorted column **only**; leaving it on every column tells a screen reader they are all sorted.
+
+</Callout>
+
+### Modifiers
 
 :::example
 
@@ -407,8 +408,6 @@ There's no sort component — wire the click handler and ordering yourself. The 
 
 :::
 
-`compact` tightens padding the other way for dense operational tables — pass `density="compact"` (the `relaxed` prop maps to `density="relaxed"`).
-
 :::example
 
 ```html
@@ -472,8 +471,6 @@ There's no sort component — wire the click handler and ordering yourself. The 
 :::
 
 ### Sticky header
-
-`sticky` pins the header while the body scrolls. The table doesn't own the scroll region — wrap it in an overflowing container.
 
 :::example
 
@@ -568,8 +565,6 @@ There's no sort component — wire the click handler and ordering yourself. The 
 
 ### Pinned column
 
-`pinCol` keeps the first column visible during horizontal scroll. Like the sticky header, the table owns no scroll region — wrap it in an `overflow-x` container.
-
 :::example
 
 ```html
@@ -640,8 +635,6 @@ There's no sort component — wire the click handler and ordering yourself. The 
 
 ### Cell alignment
 
-Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to `<Table.Cell>` / `<Table.HeaderCell>`. For currency or totals, prefer `numeric` on body cells (right-aligns, adds `tabular-nums`) and `align="right"` on the matching header.
-
 :::example
 
 ```html
@@ -695,8 +688,6 @@ Set `data-align="right"` (or `"center"`) on `<td>`/`<th>` — or pass `align` to
 :::
 
 ### Status gutter
-
-A narrow leading cell for row-level status glyphs. `.table-cell-gutter` (or `gutter` prop) centers the icon and uses muted text; colour the icon explicitly when status carries meaning.
 
 :::example
 
@@ -780,7 +771,7 @@ A narrow leading cell for row-level status glyphs. `.table-cell-gutter` (or `gut
 
 ### Row selection
 
-Put a [Checkbox](../forms/checkboxes/) in the first cell — the row tint reacts to native `:checked`, Base UI's `[data-checked]`, or the `data-selected` hook (see below). Wire the select-all header checkbox yourself.
+Put a [Checkbox](../forms/checkboxes/) in the first cell. Wire the select-all header checkbox yourself.
 
 :::example
 
@@ -860,8 +851,6 @@ Put a [Checkbox](../forms/checkboxes/) in the first cell — the row tint reacts
 
 :::
 
-For programmatic selection without a checkbox, use `<Table.Row selected>` — it sets `data-selected` and applies the same tint.
-
 :::example
 
 ```html
@@ -905,8 +894,6 @@ For programmatic selection without a checkbox, use `<Table.Row selected>` — it
 :::
 
 ### Whole-row link
-
-Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the link in the first cell. CSS expands the anchor's hit area via `::after`, so the whole row is clickable and keyboard-focusable through the real `<a>`. Other in-row buttons and links stay clickable because they sit above the pseudo-element.
 
 :::example
 
@@ -976,9 +963,13 @@ Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the l
 
 :::
 
-### Footer row
+<Callout variant="warning">
 
-`<Table.Foot>` (or `<tfoot>`) rows are semibold, and the first footer row gets a strong top divider against the body.
+The row-filling hit area is an `::after` on the row's first `<a>`. Any other link or button in the row must establish its own stacking context — `position: relative` plus a non-`auto` `z-index` — or the pseudo-element swallows its clicks. `.btn` already qualifies.
+
+</Callout>
+
+### Footer row
 
 :::example
 
@@ -1037,8 +1028,6 @@ Add `.table-row-link` to the `<tr>` (or `asLink` on `<Table.Row>`) and put the l
 ```
 
 :::
-
-Every footer row is semibold; the divider lands above the first. For an invoice-style breakdown, stack subtotal, tax, and total rows.
 
 :::example
 
@@ -1127,8 +1116,6 @@ Every footer row is semibold; the divider lands above the first. For an invoice-
 
 ### Empty state
 
-`<Table.Empty>` (or a `.table-empty` cell) renders a centered, muted message spanning the table. Set `colspan` to the column count.
-
 :::example
 
 ```html
@@ -1165,14 +1152,73 @@ Every footer row is semibold; the divider lands above the first. For an invoice-
 
 :::
 
-## Horizontal overflow
+<Callout variant="warning">
 
-`<Table>` doesn't wrap itself in a scroll container. Wrap explicitly when you need horizontal scroll on narrow viewports:
+A table never owns a scroll region. `sticky`, `pinCol`, and horizontal overflow on narrow viewports all need you to supply the scrolling ancestor:
 
 ```html
-<div style="overflow-x: auto">
-  <table class="table">
+<div style="overflow: auto; max-height: 240px">
+  <table class="table table-sticky">
     …
   </table>
 </div>
 ```
+
+</Callout>
+
+## Reference
+
+### React
+
+| Part               | Renders                 | Class                          |
+| ------------------ | ----------------------- | ------------------------------ |
+| `Table`            | `<table>`               | `table`                        |
+| `Table.Head`       | `<thead>`               | —                              |
+| `Table.Body`       | `<tbody>`               | —                              |
+| `Table.Foot`       | `<tfoot>`               | —                              |
+| `Table.Row`        | `<tr>`                  | `table-row-link` when `asLink` |
+| `Table.HeaderCell` | `<th scope="col">`      | `table-header-cell`            |
+| `Table.Cell`       | `<td>`                  | `table-cell`                   |
+| `Table.Empty`      | its own `<tr>` + `<td>` | `table-empty`                  |
+
+| Part                             | Prop       | Type                                  | Default     |
+| -------------------------------- | ---------- | ------------------------------------- | ----------- |
+| `Table`                          | `striped`  | `boolean`                             | `false`     |
+| `Table`                          | `bordered` | `boolean`                             | `false`     |
+| `Table`                          | `density`  | `"compact" \| "default" \| "relaxed"` | `"default"` |
+| `Table`                          | `relaxed`  | `boolean`                             | `false`     |
+| `Table`                          | `sticky`   | `boolean`                             | `false`     |
+| `Table`                          | `pinCol`   | `boolean`                             | `false`     |
+| `Table.Row`                      | `selected` | `boolean`                             | `false`     |
+| `Table.Row`                      | `asLink`   | `boolean`                             | `false`     |
+| `Table.Cell`, `Table.HeaderCell` | `align`    | `"left" \| "right" \| "center"`       | `"left"`    |
+| `Table.Cell`, `Table.HeaderCell` | `gutter`   | `boolean`                             | `false`     |
+| `Table.Cell`                     | `numeric`  | `boolean`                             | `false`     |
+
+`relaxed` is deprecated — use `density="relaxed"`. `sticky` needs a scrolling ancestor and `pinCol` an `overflow-x` one. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
+
+Plus each element's native attributes. `Table` takes no `classNames` — every part accepts `className`. `Table.Empty` renders its own `<tr>`, so drop it straight into `Table.Body`.
+
+### Vanilla
+
+| Class / var          | Effect                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `table`              | Full width, `text-sm`, collapsed borders; cells get `0.75rem`/`0.375rem` padding and a bottom divider (~32px rows) |
+| `table-striped`      | Tints even `<tbody>` rows                                                                                          |
+| `table-bordered`     | Border on the table and every cell                                                                                 |
+| `table-compact`      | `0.5rem`/`0.25rem` padding, `text-xs`                                                                              |
+| `table-relaxed`      | `1rem`/`0.75rem` padding                                                                                           |
+| `table-sticky`       | Pins `<thead>` cells to the top of the scroll region                                                               |
+| `table-pin-col`      | Pins the first cell of every row against horizontal scroll                                                         |
+| `table-header-cell`  | Header styling for a cell outside `<thead>`                                                                        |
+| `table-cell`         | Cell styling for markup that isn't a real `<td>`                                                                   |
+| `table-cell-numeric` | Right-aligns and uses tabular figures                                                                              |
+| `table-cell-gutter`  | `1.5rem` centered status column with muted text — colour the icon yourself when status carries meaning             |
+| `table-empty`        | Centered muted message cell; set `colspan` to the column count                                                     |
+| `table-row-link`     | Row-filling hit area taken from the row's first `<a>`                                                              |
+
+Modifiers compose — `striped` with `sticky` with `relaxed` is fine.
+
+Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, or `[data-selected]` on the `<tr>`.
+
+Striping, hover and selection are scoped to `<tbody>`, and `table-pin-col` pins `:first-child` — so the pinned column must literally be first, and a loose `<tr>` outside `<tbody>` won't stripe.

@@ -11,15 +11,15 @@
   - [Groups](#groups)
   - [Disabled](#disabled)
   - [Inside a Field](#inside-a-field)
-- [Layering](#layering)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
-React's `Select` is a compound with a custom popup. Vanilla uses a native `<select>` with the `.select` class — the browser owns its dropdown UI.
+React's `Select` is a compound with a custom popup. Vanilla uses a native `<select>` with the `.select` class — the browser owns its dropdown UI, so the two paths share styling but not structure.
 
 ## Examples
 
 ### Default
-
-Pass an `items` map (value → label) to `<Select>` so `<Select.Value>` can show the selected label in the trigger; without it, the trigger falls back to the raw value.
 
 **Example**
 
@@ -257,6 +257,53 @@ Pass an `items` map (value → label) to `<Select>` so `<Select.Value>` can show
 </Field>
 ```
 
-## Layering
+**Caution** — The React popup is portaled out of the trigger's stacking context onto `.popup-layer`, so an ancestor `overflow: hidden` can't clip it — but a host page with a higher stacking context can still paint over it. See [Theming › Popup layering](../../basics/theming.md#popup-layering).
 
-The React popup is portaled out of the trigger's stacking context onto `.popup-layer`, so an ancestor `overflow: hidden` can't clip it. Native `select.select` uses the browser's own picker. See [Customize › Popup layering](../../basics/customize.md#popup-layering).
+## Reference
+
+### React
+
+| Part                   | Renders                        | Class                         |
+| ---------------------- | ------------------------------ | ----------------------------- |
+| `Select`               | nothing — provides context     | —                             |
+| `Select.Trigger`       | `<button>`                     | `select`                      |
+| `Select.Value`         | `<span>`                       | —                             |
+| `Select.Icon`          | `<span>`, chevron by default   | `select-icon`                 |
+| `Select.Popup`         | portal → positioner → `<div>`  | `popup-layer`, `select-popup` |
+| `Select.Item`          | `<div>`                        | `select-item`                 |
+| `Select.ItemText`      | `<div>`                        | —                             |
+| `Select.ItemIndicator` | `<span>`, checkmark by default | `select-item-indicator`       |
+| `Select.Group`         | `<div>`                        | —                             |
+| `Select.GroupLabel`    | `<div>`                        | `select-group-label`          |
+
+| Part             | Prop          | Type                                              | Default      |
+| ---------------- | ------------- | ------------------------------------------------- | ------------ |
+| `Select`         | `items`       | `Record<string, ReactNode>` or `{label, value}[]` | —            |
+| `Select.Trigger` | `variant`     | `"bordered" \| "ghost" \| "danger"`               | `"bordered"` |
+| `Select.Trigger` | `triggerSize` | `"sm" \| "md" \| "lg"`                            | `"md"`       |
+| `Select.Popup`   | `sideOffset`  | `number`                                          | `4`          |
+
+Without `items`, `Select.Value` shows the raw value instead of the label. `sideOffset` is the trigger-to-popup gap in px.
+
+Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
+
+Only the trigger responds to `variant` and `triggerSize`. The chevron, popup and items keep one fixed size.
+
+### Vanilla
+
+| Class / var             | Effect                                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `select`                | On a native `<select>`: `0.75rem`/`0.5rem` padding, `text-sm`, bordered surface, and a custom chevron |
+| `select-ghost`          | Transparent fill and border until hover                                                               |
+| `select-danger`         | Danger border and focus outline                                                                       |
+| `select-sm`             | `text-xs`, tighter padding, smaller chevron                                                           |
+| `select-lg`             | `text-base`, looser padding                                                                           |
+| `select-icon`           | React chevron slot, `1rem` square; rotates 180° while the popup is open                               |
+| `select-popup`          | React popup: min-width tracks the trigger, `18rem` max height, scrolls                                |
+| `select-item`           | React option row; `[data-highlighted]`, `[data-selected]` and `[data-disabled]` carry its states      |
+| `select-item-indicator` | React checkmark slot, pushed to the row end                                                           |
+| `select-group-label`    | React group heading: uppercase, muted, `text-xs`                                                      |
+| `popup-layer`           | Applied to the React positioner so portaled popups paint above host chrome                            |
+| `--z-popup`             | Read by `popup-layer`, defaults to `1000`. Set it on any ancestor to re-layer                         |
+
+Use `<optgroup>` for groups. The native chevron is a background image with a fixed neutral stroke — a data URI can't read CSS variables, so it doesn't follow your tokens. The five React-only classes above ship in both bundles but have no native equivalent to attach to.

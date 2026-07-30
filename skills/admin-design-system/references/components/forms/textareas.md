@@ -2,6 +2,18 @@
 
 > Multi-line text input.
 
+## Contents
+
+- [Examples](#examples)
+  - [Variants](#variants)
+  - [Status variants](#status-variants)
+  - [Sizes](#sizes)
+  - [Auto-resize](#auto-resize)
+  - [Disabled](#disabled)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
+
 ## Examples
 
 ### Variants
@@ -54,8 +66,6 @@
 
 ### Auto-resize
 
-Height tracks content via CSS `field-sizing` — no JavaScript. The floor is the larger of the base min-height and `rows`; cap growth with `max-height`. Chromium-only today; other browsers fall back to a fixed, resizable box.
-
 **Example**
 
 ```html
@@ -78,24 +88,32 @@ Height tracks content via CSS `field-sizing` — no JavaScript. The floor is the
 <Textarea disabled defaultValue="Disabled" />
 ```
 
-### Inside a Field
+## Reference
 
-See [Fields](fields.md).
+### React
 
-**Example**
+| Prop           | Type                                                                    | Default      |
+| -------------- | ----------------------------------------------------------------------- | ------------ |
+| `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
+| `textareaSize` | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
+| `autoResize`   | `boolean`                                                               | `false`      |
 
-```html
-<div class="field">
-  <label class="field-label" for="notes">Notes</label>
-  <textarea id="notes" class="textarea" placeholder="Anything you'd like to share"></textarea>
-  <p class="field-description">Markdown is supported.</p>
-</div>
-```
+The size prop is `textareaSize`, not `size`, because `<textarea>` has no native `size` but the type would still collide — see [Conventions › Sizes](../../basics/conventions.md#sizes).
 
-```tsx
-<Field name="notes">
-  <Field.Label>Notes</Field.Label>
-  <Textarea placeholder="Anything you'd like to share" />
-  <Field.Description>Markdown is supported.</Field.Description>
-</Field>
-```
+Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](fields.md) it gets the same id, label association and validity wiring as an `Input`, and works standalone outside one. Plus native `<textarea>` attributes.
+
+### Vanilla
+
+| Class                                                 | Effect                                                                                                          |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `textarea`                                            | Full-width box, `0.75rem`/`0.5rem` padding, `0.5rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
+| `textarea-ghost`                                      | No fill or border until hover                                                                                   |
+| `textarea-danger`                                     | Danger border and focus outline                                                                                 |
+| `textarea-info` `textarea-success` `textarea-warning` | Status border and focus outline                                                                                 |
+| `textarea-sm`                                         | `text-xs`, tighter padding, `4rem` min-height                                                                   |
+| `textarea-lg`                                         | `text-base`, looser padding, `6rem` min-height                                                                  |
+| `textarea-autosize`                                   | Height tracks content and manual resizing is off                                                                |
+
+There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+
+`textarea-autosize` is `field-sizing: content`, so growth needs no JavaScript. Its floor is whichever is larger, the class's `min-height` or the `rows` attribute; cap it with your own `max-height`. Chromium-only today — elsewhere the box stays fixed and resizable, which is the same as omitting the class.

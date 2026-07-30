@@ -9,7 +9,7 @@
 
 The palette is [Flexoki](https://stephango.com/flexoki). The system layers it as palette tones (`--color-blue-600`, `--color-base-50`, …) and semantic aliases that point at them (`--color-primary`, `--color-surface`, …) — see [Principles › Two-layer tokens](principles.md#two-layer-tokens).
 
-Override either layer to reskin the system — see [Customize](customize.md).
+Override either layer to reskin the system — see [Theming](theming.md).
 
 ## Semantic tokens
 

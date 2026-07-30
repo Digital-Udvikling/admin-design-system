@@ -2,8 +2,6 @@
 
 > Styled text links with an optional external affordance.
 
-A styled `<a>`: link color, hover shift, underline, and a focus-visible ring.
-
 ## Examples
 
 ### Basic
@@ -19,8 +17,6 @@ A styled `<a>`: link color, hover shift, underline, and a focus-visible ring.
 ```
 
 ### With icon
-
-See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -40,8 +36,6 @@ See [Icons](../basics/icons.md).
 
 ### External
 
-`external` renders a trailing ↗ (CSS-driven, so it ships in both bundles) and defaults `target="_blank"` + `rel="noopener noreferrer"`.
-
 **Example**
 
 ```html
@@ -55,3 +49,27 @@ See [Icons](../basics/icons.md).
   Open in inRiver
 </Link>
 ```
+
+## Reference
+
+### React
+
+| Prop           | Type                                          | Default |
+| -------------- | --------------------------------------------- | ------- |
+| `external`     | `boolean`                                     | `false` |
+| `icon`         | [`IconProp`](../basics/conventions.md#icons) | —       |
+| `iconTrailing` | [`IconProp`](../basics/conventions.md#icons) | —       |
+
+`external` adds the trailing ↗ and defaults `target="_blank"` + `rel="noopener noreferrer"`; passing either prop explicitly wins. It's independent of `iconTrailing`, so setting both renders two trailing markers. Plus native `<a>` attributes — `href` included, which this component does not supply.
+
+### Vanilla
+
+| Class / var             | Effect                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| `link`                  | Inline-flex, `0.25rem` gap, link colour, underline at `2px` offset, focus-visible ring; long URLs break |
+| `link-external`         | Adds a `0.85em` ↗ via `::after`, masked from `currentColor`                                             |
+| `--link-external-arrow` | The arrow's mask image. Override to swap the glyph                                                      |
+
+The ↗ is drawn in CSS, so it ships in both bundles with no icon-font dependency. `target` and `rel` are yours to write in vanilla. A direct-child `<i>` or `<svg>` is kept from shrinking; no wrapper class needed.
+
+For blocks of HTML you can't annotate, [Prose](prose.md) styles bare `<a>` the same way.

@@ -9,8 +9,9 @@
   - [Large range with ellipses](#large-range-with-ellipses)
   - [Custom prev/next icons](#custom-prevnext-icons)
   - [Custom renderer (routing libraries)](#custom-renderer-routing-libraries)
-
-The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). The React component computes the visible range from `page`, `total`, and `onPageChange`. It is always controlled.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -48,8 +49,6 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 
 ### Large range with ellipses
 
-`siblingCount` (default `1`) controls how many pages flank the current page; `boundaryCount` (default `1`) controls how many pages stick to each end.
-
 **Example**
 
 ```tsx
@@ -57,8 +56,6 @@ The CSS only styles the parts (`.pagination`, `.page-link`, `.page-ellipsis`). T
 ```
 
 ### Custom prev/next icons
-
-Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon` (default: built-in chevrons). See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -108,8 +105,6 @@ Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon` 
 
 ### Custom renderer (routing libraries)
 
-`renderItem` is called once per item (`"page"`, `"previous"`, `"next"`, `"ellipsis"`) — use it to render router `<Link>` components so prev/next/numbers are real anchors.
-
 ```tsx
 <Pagination
   page={2}
@@ -149,3 +144,38 @@ Pass any icon component or pre-rendered element via `previousIcon` / `nextIcon` 
   }}
 />
 ```
+
+## Reference
+
+### React
+
+| Prop            | Type                                          | Default        |
+| --------------- | --------------------------------------------- | -------------- |
+| `page`          | `number`                                      | — (required)   |
+| `total`         | `number`                                      | — (required)   |
+| `onPageChange`  | `(page: number) => void`                      | — (required)   |
+| `siblingCount`  | `number`                                      | `1`            |
+| `boundaryCount` | `number`                                      | `1`            |
+| `previousIcon`  | [`IconProp`](../basics/conventions.md#icons) | chevron        |
+| `nextIcon`      | [`IconProp`](../basics/conventions.md#icons) | chevron        |
+| `renderItem`    | `(item: PaginationItem) => ReactNode`         | —              |
+| `classNames`    | [slots](../basics/conventions.md#classnames) | —              |
+| `aria-label`    | `string`                                      | `"Pagination"` |
+
+Always controlled: `page` is 1-based and clamped into `[1, total]`, and the component never holds page state. `siblingCount` is how many pages flank the current one, `boundaryCount` how many stick to each end; a gap of exactly one page renders that page instead of an ellipsis. `classNames` covers `item`, `link`, `ellipsis`.
+
+`renderItem` is called once per item and replaces the default `<button>`, the hook a routing library's `<Link>` needs. The four `item.type` values are `"page"`, `"previous"`, `"next"`, `"ellipsis"`. It must supply its own classes and ARIA, as above. `getPaginationItems` is exported separately if you want the range without the markup; it is pure and safe to call during render.
+
+Plus native `<nav>` attributes.
+
+### Vanilla
+
+| Class           | Effect                                                                                          |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| `pagination`    | Root `<nav>`. Turns its direct `<ol>`/`<ul>` into an inline-flex row, `0.25rem` gap, no markers |
+| `page-item`     | One `<li>`                                                                                      |
+| `page-link`     | Page control: `2rem` square minimum, `0.375rem` radius, `text-sm`, transparent until hover      |
+| `active`        | On a `page-link`, marks the current page — the same styling as `aria-current="page"`            |
+| `page-ellipsis` | Muted `…` occupying the same `2rem` box                                                         |
+
+`pagination` itself sets nothing — it exists to scope the list. `page-link` marks the current page from either `.active` or `aria-current="page"`; write `aria-current` for assistive tech and use `.active` only where you can't. It dims for both `[disabled]` and `[aria-disabled="true"]`, so an anchor that can't be a real `<button>` still reads as inactive. The React range logic has no vanilla equivalent — compute it server-side.

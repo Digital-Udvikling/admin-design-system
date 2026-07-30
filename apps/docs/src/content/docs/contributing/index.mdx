@@ -38,13 +38,20 @@ pnpm check-types    # tsc on admin-react + astro check on docs
 pnpm test           # vitest on admin-react (happy-dom + RTL)
 pnpm lint           # oxlint
 pnpm format         # oxfmt
+pnpm check-docs     # docs links, anchors, and class-name drift
 pnpm generate-skill # regenerate skills/ from docs MDX
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
 
 ## Releasing
 
-Bump the `version` field in a package's `package.json`, commit, push to `main`. `.github/workflows/release.yml` watches `packages/*/package.json`, builds, runs `pnpm publish --provenance`, and tags `<name>@<version>` for each package whose version is ahead of its latest tag. Don't publish manually and don't amend version commits after push.
+```bash
+pnpm release        # interactive: patch / minor / major
+```
+
+[release-it](https://github.com/release-it/release-it) computes the next version, cuts `## [Unreleased]` into a dated section in `CHANGELOG.md` with fresh compare links, writes the version into both packages' `package.json`, then commits `chore(release): v<version>` and pushes to `main`. Both packages share one version and release together.
+
+It does **not** publish, tag, or cut a GitHub release — `.github/workflows/release.yml` does, triggered by the change to `packages/*/package.json`. For each package whose version is ahead of its `<name>@<version>` tag it re-runs the full check suite, requires a matching `## [version]` section in `CHANGELOG.md`, then publishes with `npm publish --provenance` and tags. Don't hand-bump a `package.json`: it skips the changelog step, and the release job fails on the missing section rather than publishing something undocumented.
 
 Docs deploy is a separate workflow — every push to `main` publishes `apps/docs/dist` to GitHub Pages.

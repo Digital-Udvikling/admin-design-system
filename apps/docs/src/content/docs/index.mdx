@@ -3,30 +3,18 @@ title: Admin design system
 description: An opinionated design system for admin interfaces.
 template: splash
 hero:
-  tagline: An opinionated design system for admin interfaces.
+  tagline: Density-first components for internal admin tooling — not for customer-facing surfaces. Vanilla CSS or React, same class names.
   actions:
     - text: Browse components
       link: components/buttons/
       icon: right-arrow
       variant: primary
+    - text: Why it looks like this
+      link: basics/principles/
+      variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
-
-<CardGrid>
-  <Card title="Built for admin tooling" icon="rocket">
-    Density-first defaults for screens an operator sits in all day. Predictable primitives, minimal chrome.
-  </Card>
-  <Card title="Modern web platform" icon="star">
-    Disclosure uses `<details>` and `popover`, modals use `<dialog>`, animation is CSS transitions, state is read with `:has()` and `:user-valid`. Less JavaScript to ship.
-  </Card>
-  <Card title="Two flavors, one source of truth" icon="puzzle">
-    Vanilla CSS for any stack, React components for typed call sites. Both render the same class names.
-  </Card>
-  <Card title="Not for marketing surfaces" icon="warning">
-    Use a different system for customer-facing or marketing surfaces.
-  </Card>
-</CardGrid>
+import { CardGrid, LinkCard } from "@astrojs/starlight/components";
 
 ## Pick a flavor
 
@@ -34,13 +22,13 @@ import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
   <LinkCard
     title="Vanilla CSS"
     href={`${import.meta.env.BASE_URL}getting-started/vanilla/`}
-    description="A pre-built stylesheet. Drop it in via <link> — no build setup, no Tailwind required."
+    description="One pre-built stylesheet, dropped in with a stylesheet tag. No build step, no Tailwind."
   />
   <LinkCard
     title="React"
     href={`${import.meta.env.BASE_URL}getting-started/react/`}
-    description="A tree-shakeable component library. Same class names as the CSS package."
+    description="Typed components wrapping Base UI. Emits the same class names as the CSS."
   />
 </CardGrid>
 
-On npm: [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css) · [`@aortl/admin-react`](https://www.npmjs.com/package/@aortl/admin-react).
+On npm: [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css) · [`@aortl/admin-react`](https://www.npmjs.com/package/@aortl/admin-react). Coding agents can install the [Agent Skill](./getting-started/skill/).

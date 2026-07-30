@@ -41,6 +41,9 @@ jobs:
             exit 1
           fi
 
+      - name: Docs links + class-name drift
+        run: pnpm --filter docs check-docs -- --require-build --strict-coverage
+
       - name: Type check (tsc / astro)
         run: pnpm check-types
 

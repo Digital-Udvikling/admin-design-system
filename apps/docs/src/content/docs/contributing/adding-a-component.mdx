@@ -11,16 +11,17 @@ Pick a kebab-case name (`badge`, `button-group`, `app-shell`) and reuse it as th
 2. `packages/admin-css/src/components/index.css` — add `@import "./<name>.css";`.
 3. (Optional) `packages/admin-react/src/<Name>.tsx` + re-export from `src/index.ts`.
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke + interactions.
-5. `apps/docs/src/content/docs/components/<name>.mdx` — paired examples + reference.
-6. `pnpm generate-skill` — regenerate the bundle.
+5. `apps/docs/src/content/docs/components/<name>.mdx` — `## Examples`, then a `## Reference` table per flavor.
+6. A bullet under `## [Unreleased]` in `CHANGELOG.md`.
+7. `pnpm generate-skill` — regenerate the bundle and commit it alongside the MDX.
 
 No build-config changes needed.
 
 ## The class-name contract
 
-Both packages emit the same class names. `<Button variant="primary" size="sm">` renders as `<button class="btn btn-primary btn-sm">`. **Both must change together** — a new CSS modifier needs a React prop; a new React prop needs a class. Renaming a class is a breaking change.
+Both packages emit the same class names. `<Button variant="primary" size="sm">` renders as `<button class="btn btn-primary btn-sm">`. **Both must change together**: a new CSS modifier needs a React prop, and a new React prop needs a class.
 
-Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes are `sm` / `md` (default, omitted) / `lg`.
+See [Principles › Two flavors, one contract](../../basics/principles/#two-flavors-one-contract) for the naming pattern and why a rename is a breaking change.
 
 ## 1. CSS
 
@@ -56,7 +57,7 @@ Fold the **default** variant's look into the base class instead of a separate mo
 }
 ```
 
-If the component can host a leading icon, lay the root out with `flex items-center gap-2` (or `:has()` to switch layout when a leading `<i>`/`<svg>` is present). No wrapper class — the icon goes directly into the root in both flavors.
+If the component can host a leading icon, lay the root out with `flex items-center gap-2` (or `:has()` to switch layout when a leading `<i>`/`<svg>` is present). No wrapper class: the icon goes directly into the root in both flavors.
 
 ```css
 .alert:has(> :is(i, svg):first-child) {
@@ -79,7 +80,7 @@ That's everything for vanilla. The docs site imports `admin-css` **source**, so 
 Skip if the component is just CSS — `Spinner`, `Footer`, and the rail-only `Sidebar` parts are all-vanilla in places where Base UI adds nothing. Otherwise:
 
 - Wrap a Base UI primitive (`@base-ui/react/button`, `/input`, `/field`) when the component is interactive or needs a11y wiring.
-- Compose class names with the local `cn` helper (`src/cn.ts`) — it prefixes admin's own classes with `_ao-` (the scoped contract) while passing the consumer's `className` through verbatim. Don't use bare `clsx`; an unprefixed `badge` won't match the scoped `._ao-badge` rule.
+- Compose class names with the local `cn` helper (`src/cn.ts`). It prefixes admin's own classes with `_ao-` (the scoped contract) while passing the consumer's `className` through verbatim. Don't use bare `clsx`; an unprefixed `badge` won't match the scoped `._ao-badge` rule.
 - Spread the rest of the props so callers can pass `id`, `aria-*`, event handlers, `ref`, etc.
 - Take an `icon` (and `iconTrailing` if structural) prop instead of letting callers pass icon JSX as children — see [Icons](#icons) below.
 
@@ -130,7 +131,7 @@ export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Bad
 
 ### Default-omit the default variant and size
 
-Skip the class when the value is the default — the default look already lives in the base class. So `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all render the same DOM as the bare `.badge` vanilla markup.
+Skip the class when the value is the default, since the default look already lives in the base class. So `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all render the same DOM as the bare `.badge` vanilla markup.
 
 ### Compound components: `Object.assign` dot-notation
 
@@ -153,7 +154,7 @@ Export every part's props type from `index.ts`.
 When a component has a meaningful container / inner-wrapper distinction in CSS (e.g. `.card` + `.card-body`) **and** shorthand props that auto-fill the wrapper:
 
 - The default export (`<Card>`) is opinionated — always renders the inner wrapper, accepts shorthand props (`title`, `description`, `icon`, `actions`) around children.
-- `<Card.Container>` is the bare primitive — just the outer class — for layouts that don't fit the default (multiple bodies, media headers, custom dividers).
+- `<Card.Container>` is the bare primitive, just the outer class, for layouts that don't fit the default (multiple bodies, media headers, custom dividers).
 
 Only use this split when there's real layout variation. Leaf components (`Button`), linear layouts (`Alert`, `Sidebar.Item`), and Base UI compounds (`Field`, `Select`) don't need it.
 
@@ -165,7 +166,7 @@ Components that can host an icon take an `icon` prop (and `iconTrailing` where a
 <Button icon={IconPlus}>Add</Button>
 ```
 
-Use `renderIcon` from `src/icon.ts`. It renders at `size="1em"` with `aria-hidden` by default — so SVG icons inherit the host `font-size` and match the Tabler webfont in the vanilla bundle — and also accepts a pre-instantiated element (`icon={<IconPlus size={20} />}`) when callers need a fixed size.
+Use `renderIcon` from `src/icon.ts`. It renders at `size="1em"` with `aria-hidden` by default, so SVG icons inherit the host `font-size` and match the Tabler webfont in the vanilla bundle. It also accepts a pre-instantiated element (`icon={<IconPlus size={20} />}`) when callers need a fixed size.
 
 ```tsx
 import { renderIcon, type IconProp } from "./icon";
@@ -188,7 +189,7 @@ export function Button({ icon, iconTrailing, children }: ButtonProps) {
 }
 ```
 
-Prefer this prop over passing icon JSX as children — the rendered DOM is identical, but the prop ensures consistent sizing and `aria-hidden`. See [Icons](../../basics/icons/).
+Prefer this prop over passing icon JSX as children — the rendered DOM is identical, but the prop ensures consistent sizing and `aria-hidden`. See [Conventions › Icons](../../basics/conventions/#icons) for the consumer-facing contract.
 
 ## 3. Tests
 
@@ -213,68 +214,31 @@ describe("Badge", () => {
 });
 ```
 
-`src/test-setup.ts` wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup hooks vitest at module-load time, before `afterEach` is exposed. Without this the DOM leaks across tests in the same file.
+`src/test-setup.ts` wires an explicit `afterEach(cleanup)`, because RTL's auto-cleanup hooks vitest at module-load time, before `afterEach` is exposed. Without this the DOM leaks across tests in the same file.
 
 Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` — visual checks belong in the docs.
 
 ## 4. Docs page
 
-Add `apps/docs/src/content/docs/components/<name>.mdx`. The frontmatter `description` is one short sentence (≤ ~10 words); don't restate it as the body's first paragraph.
+Add `apps/docs/src/content/docs/components/<name>.mdx`. Two sections, both mandatory:
 
-````mdx
----
-title: Badges
-description: Base class .badge + a variant + an optional size.
----
+- **`## Examples`** — one `###` per variation, each holding a `:::example` with an `html` fence and a `tsx` fence. No prose under the headings, and no page-level intro paragraph.
+- **`## Reference`** — `### React` for props and parts, `### Vanilla` for **every** class the new CSS file defines. This is not optional: `pnpm check-docs` fails on a class the component CSS doesn't define, and reports every class that no Reference table mentions.
 
-import { Badge } from "@aortl/admin-react";
-
-## Examples
-
-### Variants
-
-:::example
-
-```html
-<span class="badge badge-info">Info</span> <span class="badge badge-danger">Danger</span>
-```
-````
-
-```tsx
-<Badge variant="info">Info</Badge>
-<Badge variant="danger">Danger</Badge>
+```bash
+pnpm check-docs
 ```
 
-:::
+[Writing docs](../writing-docs/) has the full shape, the `:::example` directive, callouts, prose style, and the rules for writing a Reference table that reads well without the rendered preview.
 
-## Reference
+## 5. Changelog
 
-**Variants** — `variant` prop. Default `neutral` (no class — folded into the base `.badge`).
+Add a bullet under `## [Unreleased]` in the root `CHANGELOG.md`, tagged `(css)` / `(react)` / `(both)` so a consumer knows which dependency to bump. Skip docs-only and internal changes. The release workflow greps the version's section out of `CHANGELOG.md` before it publishes, so a missing entry fails the release.
 
-| Name      | Class           |
-| --------- | --------------- |
-| `neutral` | — (base)        |
-| `info`    | `.badge-info`   |
-| `danger`  | `.badge-danger` |
-
-**Sizes** — `size` prop. Default `md`.
-
-| Name | Class       |
-| ---- | ----------- |
-| `sm` | `.badge-sm` |
-| `md` | —           |
-| `lg` | `.badge-lg` |
-
-````
-
-See [Writing docs](../writing-docs/) for the `:::example` directive and how to regenerate the agent skill.
-
-## 5. Regenerate the skill
-
-The repo ships an [agent skill](../../getting-started/skill/) bundle at `skills/admin-design-system/`. It's generated from the docs MDX and committed to the repo.
+## 6. Regenerate the skill
 
 ```bash
 pnpm generate-skill
-````
+```
 
-CI fails on drift via `git diff --exit-code -- skills`, so commit the regenerated bundle alongside your MDX change in the same commit.
+Commit `skills/` in the same commit as the MDX change. See [Writing docs › Regenerating the agent skill](../writing-docs/#regenerating-the-agent-skill).

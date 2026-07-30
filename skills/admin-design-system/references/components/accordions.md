@@ -8,8 +8,9 @@
   - [Single item](#single-item)
   - [Grouped items](#grouped-items)
   - [Open by default](#open-by-default)
-
-Modern browsers animate the open/close via `interpolate-size: allow-keywords` + `::details-content`; older browsers degrade to instant toggle.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -36,8 +37,6 @@ Modern browsers animate the open/close via `interpolate-size: allow-keywords` + 
 ```
 
 ### Grouped items
-
-See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -95,8 +94,6 @@ See [Icons](../basics/icons.md).
 
 ### Open by default
 
-Add the native `open` attribute.
-
 **Example**
 
 ```html
@@ -112,3 +109,29 @@ Add the native `open` attribute.
   <Accordion.Content>Visible without a click.</Accordion.Content>
 </Accordion.Item>
 ```
+
+## Reference
+
+### React
+
+| Part                | Renders     | Class               |
+| ------------------- | ----------- | ------------------- |
+| `Accordion`         | `<div>`     | `accordion`         |
+| `Accordion.Item`    | `<details>` | `accordion-item`    |
+| `Accordion.Summary` | `<summary>` | `accordion-summary` |
+| `Accordion.Content` | `<div>`     | `accordion-content` |
+
+No props of its own — each part takes the native attributes of the element it renders, so `open` on `Accordion.Item` and `name` for a single-open group both come from `<details>`. State lives in the DOM; there is no controlled mode.
+
+### Vanilla
+
+| Class               | Effect                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `accordion`         | Vertical stack. Rounds the first and last item and collapses the shared borders                              |
+| `accordion-item`    | On `<details>`: bordered surface panel                                                                       |
+| `accordion-summary` | Row trigger: `1rem`/`0.75rem` padding, `text-sm` medium, hover tint, trailing chevron that rotates when open |
+| `accordion-content` | Body: `1rem`/`0.75rem` padding, `text-sm`, divided from the summary by a top border                          |
+
+Built on `<details>`/`<summary>`, so the disclosure needs no JavaScript in either bundle: `open` starts an item expanded, and a shared `name` attribute makes a group single-open. The default marker is hidden and replaced by the CSS chevron.
+
+The open/close is animated with `interpolate-size: allow-keywords` on the item plus a `::details-content` transition, which lets `height: 0` interpolate to `auto`; browsers without it toggle instantly. Closed content keeps `content-visibility: visible` so it still contributes intrinsic width — otherwise a shrink-to-fit parent would reflow narrower on close.

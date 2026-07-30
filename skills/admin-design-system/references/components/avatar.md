@@ -5,15 +5,19 @@
 ## Contents
 
 - [Examples](#examples)
-- [Sizes](#sizes)
-- [Square](#square)
-- [Image fallback](#image-fallback)
-- [Group](#group)
-- [Status](#status)
-
-The `<img>` overlays the initials, so they show while it loads. A broken-image fallback to initials is React-only; vanilla consumers omit the `<img>` when the URL may be dead. For an initials-only avatar beside a visible name, mark it `aria-hidden` so the name is not read twice.
+  - [Basic](#basic)
+  - [Sizes](#sizes)
+  - [Square](#square)
+  - [Image fallback](#image-fallback)
+  - [Group](#group)
+  - [Status](#status)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
+
+### Basic
 
 **Example**
 
@@ -31,7 +35,7 @@ The `<img>` overlays the initials, so they show while it loads. A broken-image f
 <Avatar src="https://i.pravatar.cc/64?img=12" alt="Ada Lovelace" />
 ```
 
-## Sizes
+### Sizes
 
 **Example**
 
@@ -47,7 +51,7 @@ The `<img>` overlays the initials, so they show while it loads. A broken-image f
 <Avatar initials="OR" size="lg" />
 ```
 
-## Square
+### Square
 
 **Example**
 
@@ -63,9 +67,7 @@ The `<img>` overlays the initials, so they show while it loads. A broken-image f
 <Avatar src="https://i.pravatar.cc/64?img=5" alt="Grace Hopper" size="lg" shape="square" />
 ```
 
-## Image fallback
-
-The initials sit underneath the image and show through when it has not loaded.
+### Image fallback
 
 **Example**
 
@@ -80,9 +82,7 @@ The initials sit underneath the image and show through when it has not loaded.
 <Avatar src="https://i.pravatar.cc/64?img=8" alt="Alan Turing" initials="AT" />
 ```
 
-## Group
-
-Later avatars paint on top. Pass `max` to cap the visible avatars; the rest collapse into a trailing `avatar-more` tile. Vanilla consumers write the surplus tile themselves.
+### Group
 
 **Example**
 
@@ -112,9 +112,7 @@ Later avatars paint on top. Pass `max` to cap the visible avatars; the rest coll
 </AvatarGroup>
 ```
 
-## Status
-
-Compose with [`<Indicator>`](indicator.md) for a presence dot. The offset is auto-detected per size and shape.
+### Status
 
 **Example**
 
@@ -132,3 +130,40 @@ Compose with [`<Indicator>`](indicator.md) for a presence dot. The offset is aut
   <Avatar src="https://i.pravatar.cc/64?img=12" alt="Ada Lovelace" size="lg" />
 </Indicator>
 ```
+
+**Caution** — For an initials-only avatar sitting beside a visible name, mark it `aria-hidden` so the name isn't announced twice.
+
+## Reference
+
+### React
+
+| Component     | Prop       | Type                   | Default    |
+| ------------- | ---------- | ---------------------- | ---------- |
+| `Avatar`      | `src`      | `string`               | —          |
+| `Avatar`      | `alt`      | `string`               | —          |
+| `Avatar`      | `initials` | `string`               | —          |
+| `Avatar`      | `size`     | `"sm" \| "md" \| "lg"` | `"md"`     |
+| `Avatar`      | `shape`    | `"circle" \| "square"` | `"circle"` |
+| `AvatarGroup` | `max`      | `number`               | —          |
+| `AvatarGroup` | `size`     | `"sm" \| "md" \| "lg"` | `"md"`     |
+
+`initials` wants 1–3 letters and is ignored when `children` is given. Wraps [Base UI Avatar](https://base-ui.com/react/components/avatar), which adds one thing the CSS can't: on an image _error_ it falls back to the initials, not just during loading.
+
+`AvatarGroup` keeps the first `max` children and collapses the remainder into a trailing `avatar-more` tile labelled `+N more`. Its `size` only sizes that surplus tile — match it to the avatars inside, since the group doesn't resize its children.
+
+Plus native `<span>` attributes on `Avatar`, `<div>` on `AvatarGroup`.
+
+### Vanilla
+
+| Class           | Effect                                                                                       |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| `avatar`        | `2rem` circle, `surface-strong` fill, `text-xs` centred initials, clipped                    |
+| `avatar-sm`     | `1.5rem`, `0.625rem` text                                                                    |
+| `avatar-lg`     | `2.5rem`, `text-sm`                                                                          |
+| `avatar-square` | `0.375rem` radius instead of a circle                                                        |
+| `avatar-group`  | Inline row that overlaps its `avatar` children by `0.5rem`, each ringed `2px` in the surface |
+| `avatar-more`   | Surplus tile styling for the trailing `+N`; tabular figures. Combine with `avatar`           |
+
+There is no `avatar-md` or `avatar-circle` — both are the unmodified `avatar`. A direct `<img>` child is layered over the initials and fills the tile, so the initials show until it loads with no JS involved; if the URL may be dead, omit the `<img>` rather than rely on a fallback. Later children in a group paint on top. The surplus tile and its `aria-label` are yours to write.
+
+[Indicator](indicator.md) knows this component's sizes and shapes, so a presence dot lands on the right corner without an explicit offset.

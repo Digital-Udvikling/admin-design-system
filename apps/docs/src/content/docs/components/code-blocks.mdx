@@ -5,13 +5,9 @@ description: Styled <pre> for logs, JSON, and terminal output.
 
 import { CodeBlock } from "@aortl/admin-react";
 
-For inline keyboard chips, use [Kbd](../kbd/) instead.
-
 ## Examples
 
 ### Basic
-
-Wraps long lines by default. Surface and text tones follow the page's `color-scheme` for dark mode.
 
 :::example
 
@@ -38,8 +34,6 @@ Wraps long lines by default. Surface and text tones follow the page's `color-sch
 :::
 
 ### Nowrap + max-height
-
-For log viewers and anything with long, fixed-format lines: `nowrap` lets long lines scroll horizontally, and an inline `max-height` clamps vertical growth — `overflow: auto` on the root handles the scrollbar automatically.
 
 :::example
 
@@ -73,8 +67,27 @@ For log viewers and anything with long, fixed-format lines: `nowrap` lets long l
 
 ### With syntax highlighting
 
-Layer Shiki, Prism, or similar on a nested `<code>` — the `.code-block` styles the outer surface and doesn't fight the highlighter's token colors.
-
 ```html
 <pre class="code-block"><code class="language-json">{ "highlighted": true }</code></pre>
 ```
+
+## Reference
+
+### React
+
+| Prop     | Type      | Default |
+| -------- | --------- | ------- |
+| `nowrap` | `boolean` | `false` |
+
+Plus native `<pre>` attributes.
+
+### Vanilla
+
+| Class               | Effect                                                                                              |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono, `0.5rem` radius, long lines wrapped |
+| `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                  |
+
+Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. The root already has `overflow: auto`, so an inline `max-height` is all a log viewer needs to clamp vertical growth. There is no syntax highlighting — layer Shiki or Prism on a nested `<code>`, which this class leaves alone so the highlighter's token colours show through.
+
+For inline keyboard chips, use [Kbd](../kbd/).

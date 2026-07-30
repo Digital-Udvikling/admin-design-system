@@ -6,15 +6,9 @@ description: Modal dialogs built on the native dialog element.
 import { Button, Dialog, Field, Input } from "@aortl/admin-react";
 import { IconAlertTriangle } from "@tabler/icons-react";
 
-`showModal()` provides the focus trap, scroll lock, Esc dismissal, and `::backdrop`. `<Dialog>` provides shorthand props (`title`, `description`, `actions`); `<Dialog.Container>` is the bare primitive for custom layouts.
-
-The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor) (`commandfor` + `command="show-modal"`): a `<button>` paired with a dialog `id`. Requires no JavaScript. For state-driven flows, pair `open` with `onOpenChange` — see [Controlled state](#controlled-state).
-
 ## Examples
 
 ### Basic
-
-`closedby="any"` is the default — Esc, backdrop click, and the X all dismiss.
 
 :::example
 
@@ -89,8 +83,6 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
 :::
 
 ### Sizes
-
-`size="sm"` for confirms, `"md"` (default) for short forms, `"lg"` for longer ones, `"auto"` to shrink to content.
 
 :::example
 
@@ -188,8 +180,6 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
 
 ### Metabase embed
 
-`size="metabase"` widens the modal to 1138px and the gutters to 44px, so a full-width body child — a Metabase iframe — lands at exactly 1048px.
-
 :::example
 
 ```html
@@ -248,8 +238,6 @@ The trigger pattern uses the [Invoker Commands API](https://developer.mozilla.or
 :::
 
 ### Form dialog
-
-Wrap the body in `<form method="dialog">` — submitting any button inside closes the dialog, and the submitter's `value` lands on `<dialog>.returnValue`.
 
 :::example
 
@@ -328,9 +316,7 @@ Wrap the body in `<form method="dialog">` — submitting any button inside close
 
 :::
 
-### Destructive: no light dismiss
-
-For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no longer dismiss.
+### Destructive, no light dismiss
 
 :::example
 
@@ -384,9 +370,7 @@ For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no long
 
 :::
 
-## Advanced: layout with `Dialog.Container`
-
-`<Dialog.Container>` renders the bare `<dialog>` element and lets you compose subparts directly.
+### Composed with Dialog.Container
 
 :::example
 
@@ -422,11 +406,7 @@ For irreversible actions, set `closedby="closerequest"`. Backdrop clicks no long
 
 :::
 
-`<Dialog.Title>` accepts the `icon` prop in the advanced path.
-
-## Controlled state
-
-When the open state lives in React (multi-step flow, async submit, deep-linked routes), pair `open` with `onOpenChange`. The wrapper bridges to `showModal()` / `close()` and forwards the native `close` event back through `onOpenChange(false)`.
+### Controlled state
 
 ```tsx
 import { useState } from "react";
@@ -467,3 +447,68 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
   );
 }
 ```
+
+## Reference
+
+### React
+
+| Part                 | Renders    | Class                |
+| -------------------- | ---------- | -------------------- |
+| `Dialog`             | `<dialog>` | `dialog`             |
+| `Dialog.Container`   | `<dialog>` | `dialog`             |
+| `Dialog.Header`      | `<div>`    | `dialog-header`      |
+| `Dialog.Title`       | `<h2>`     | `dialog-title`       |
+| `Dialog.Description` | `<p>`      | `dialog-description` |
+| `Dialog.Body`        | `<div>`    | `dialog-body`        |
+| `Dialog.Footer`      | `<div>`    | `dialog-footer`      |
+| `Dialog.CloseButton` | `<button>` | `dialog-close`       |
+
+| Part                 | Prop           | Type                                           | Default   |
+| -------------------- | -------------- | ---------------------------------------------- | --------- |
+| `Dialog`             | `open`         | `boolean`                                      | —         |
+| `Dialog`             | `onOpenChange` | `(open: boolean) => void`                      | —         |
+| `Dialog`             | `size`         | `"sm" \| "md" \| "lg" \| "auto" \| "metabase"` | `"md"`    |
+| `Dialog`             | `closedby`     | `"any" \| "closerequest" \| "none"`            | `"any"`   |
+| `Dialog`             | `icon`         | [`IconProp`](../../basics/conventions/#icons)  | —         |
+| `Dialog`             | `title`        | `ReactNode`                                    | —         |
+| `Dialog`             | `description`  | `ReactNode`                                    | —         |
+| `Dialog`             | `actions`      | `ReactNode`                                    | —         |
+| `Dialog`             | `dismissible`  | `boolean`                                      | `true`    |
+| `Dialog`             | `closeLabel`   | `string`                                       | `"Close"` |
+| `Dialog`             | `classNames`   | [slots](../../basics/conventions/#classnames)  | —         |
+| `Dialog.Title`       | `icon`         | [`IconProp`](../../basics/conventions/#icons)  | —         |
+| `Dialog.CloseButton` | `icon`         | [`IconProp`](../../basics/conventions/#icons)  | X glyph   |
+
+`Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
+
+`size` and `closedby` live on the element, so they work on [`Dialog.Container`](../../basics/conventions/#container-escape-hatch) too — the form to use when the layout doesn't fit, most often to wrap everything in a `<form>`. `Dialog.Title` keeps its `icon` prop there.
+
+Leave `open` off for the uncontrolled case, as the Invoker Commands pattern below does: no state, no effect, no ref. Pass `open` with `onOpenChange` when the open state belongs to React (a multi-step flow, an async submit, a deep-linked route): the wrapper bridges it to `showModal()` / `close()` and forwards the native `close` event back as `onOpenChange(false)`, so Esc and backdrop clicks stay in sync with your state.
+
+Plus native `<dialog>` attributes.
+
+### Vanilla
+
+| Class                | Effect                                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `dialog`             | Centred modal: `32rem` max-width, `0.75rem` radius, large shadow, capped to the viewport, scrim backdrop, `150ms` fade and lift |
+| `dialog-sm`          | `24rem` max-width — confirms                                                                                                    |
+| `dialog-lg`          | `48rem` — longer forms                                                                                                          |
+| `dialog-auto`        | Shrinks to content, still capped to the viewport                                                                                |
+| `dialog-metabase`    | `1138px` wide with `2.75rem` gutters, so a full-width body child lands at `1048px`                                              |
+| `dialog-header`      | Title row: `1.25rem` side padding, `0.75rem` gap                                                                                |
+| `dialog-title`       | `text-lg` semibold, `0.5rem` gap for a leading icon                                                                             |
+| `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
+| `dialog-body`        | The scrolling region; header and footer stay pinned                                                                             |
+| `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping                                                                     |
+| `dialog-close`       | `1.75rem` square X button                                                                                                       |
+
+There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, scroll lock, Esc, and `::backdrop`. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete`, so the exit animation runs without JavaScript.
+
+Open it without JavaScript through the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor): a `<button commandfor="<dialog-id>" command="show-modal">`, and `command="close"` to dismiss. The `closedby` attribute picks the dismissal set — `"any"` (the default) allows Esc and a backdrop click, `"closerequest"` drops the backdrop click, the right choice for an irreversible action, and `"none"` requires an explicit close.
+
+Wrap the contents in `<form method="dialog">` and any submit button inside closes the dialog, with the submitter's `value` landing on the dialog's `returnValue` — that's the whole pattern for a form dialog, no handler required.
+
+Write the close button's `aria-label` yourself. Don't put `overflow: hidden` on the root to clip the footer's fill — it also clips any [menu](../menus/) or [select](../forms/selects/) popup inside; the footer inherits the corner radius instead.
+
+For an edge-anchored panel rather than a centred one, use a [Drawer](../drawer/).

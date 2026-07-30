@@ -10,8 +10,9 @@
   - [With a leading icon](#with-a-leading-icon)
   - [With a trailing action](#with-a-trailing-action)
   - [Dismissible](#dismissible)
-
-For single-field validation, use [Fields](forms/fields.md) instead.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -35,8 +36,6 @@ For single-field validation, use [Fields](forms/fields.md) instead.
 
 ### With title and description
 
-`<Alert>` accepts `title` and `description` props. Use the sub-components to interleave them with other content.
-
 **Example**
 
 ```html
@@ -55,8 +54,6 @@ For single-field validation, use [Fields](forms/fields.md) instead.
 ```
 
 ### With a leading icon
-
-Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -100,8 +97,6 @@ Pass `icon`, or drop an `<i>`/`<svg>` as the first child. See [Icons](../basics/
 
 ### With a trailing action
 
-The `alert-action` class can sit on the link itself or on a wrapper. Inside an alert, `.link` inherits the variant's content color.
-
 **Example**
 
 ```html
@@ -128,8 +123,6 @@ The `alert-action` class can sit on the link itself or on a wrapper. Inside an a
 
 ### Dismissible
 
-`onDismiss` renders a trailing × button. The alert stays stateless, so wire the click to hide or remove it. It pins to the trailing edge alongside an action.
-
 **Example**
 
 ```html
@@ -152,3 +145,50 @@ The `alert-action` class can sit on the link itself or on a wrapper. Inside an a
   Changes saved.
 </Alert>
 ```
+
+## Reference
+
+### React
+
+| Part                | Renders    | Class               |
+| ------------------- | ---------- | ------------------- |
+| `Alert`             | `<div>`    | `alert`             |
+| `Alert.Title`       | `<strong>` | `alert-title`       |
+| `Alert.Description` | `<p>`      | `alert-description` |
+| `Alert.Action`      | `<div>`    | `alert-action`      |
+
+| Prop           | Type                                           | Default      |
+| -------------- | ---------------------------------------------- | ------------ |
+| `variant`      | `"info" \| "success" \| "warning" \| "danger"` | — (required) |
+| `icon`         | [`IconProp`](../basics/conventions.md#icons)  | —            |
+| `title`        | `ReactNode`                                    | —            |
+| `description`  | `ReactNode`                                    | —            |
+| `action`       | `ReactNode`                                    | —            |
+| `onDismiss`    | `MouseEventHandler<HTMLButtonElement>`         | —            |
+| `dismissLabel` | `string`                                       | `"Dismiss"`  |
+| `classNames`   | [slots](../basics/conventions.md#classnames)  | —            |
+
+`variant` is required — there is no neutral alert. It also picks the `role`: `"alert"` for `warning` and `danger`, which interrupts a screen reader, `"status"` for `info` and `success`, which waits for a pause. Pass `role` to override.
+
+`title`, `description` and `action` are shorthand for the matching parts; use the parts directly to interleave them with other children. `onDismiss` renders the × button and takes its accessible name from `dismissLabel` — the alert stays stateless, so the handler is what hides or removes it. `classNames` covers `title`, `description`, `action`, `dismiss`.
+
+Plus native `<div>` attributes.
+
+### Vanilla
+
+| Class                                                       | Effect                                                                              |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `alert`                                                     | Full-width bordered block, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm` |
+| `alert-info` `alert-success` `alert-warning` `alert-danger` | Solid status fill with matching border and `-content` text                          |
+| `alert-title`                                               | Medium weight                                                                       |
+| `alert-description`                                         | `0.85` opacity against the fill                                                     |
+| `alert-action`                                              | Trailing control, pinned to the end column, vertically centred, no wrapping         |
+| `alert-dismiss`                                             | `1.25rem` square × button with a `currentColor` hover wash                          |
+
+Write the `role` yourself: `role="alert"` for warning and danger, `role="status"` otherwise.
+
+The layout is `:has()`-driven, so structure alone switches it. A leading `<i>`/`<svg>` as the _first_ child turns the block into an icon + text grid; an `alert-action` or `alert-dismiss` adds a trailing column, and both together add two. A title alongside any of these splits the text into two rows with the icon spanning both. Nothing needs a wrapper class.
+
+`alert-action` can go on the link itself or on a wrapper around it. A `link` inside an alert inherits the variant's content colour, since the link blue is illegible on a solid fill — the underline carries the affordance instead. The dismiss button's `aria-label` is yours to write.
+
+For single-field validation, use [Fields](forms/fields.md). For a docs-style note rather than an app alert, this component is the wrong shape — it's built to be loud.

@@ -6,8 +6,6 @@ description: Trail of links to ancestor pages, ending in the current page.
 import { Breadcrumbs } from "@aortl/admin-react";
 import { IconChevronRight, IconHome } from "@tabler/icons-react";
 
-A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link current entry (marked `aria-current="page"`). Separators are CSS-driven.
-
 ## Examples
 
 ### Basic
@@ -37,8 +35,6 @@ A `<nav aria-label="Breadcrumb">` wrapping an `<ol>` of links plus a non-link cu
 :::
 
 ### With a chevron separator
-
-Drop an icon inside `.breadcrumb-separator` to override the default slash.
 
 :::example
 
@@ -77,8 +73,6 @@ Drop an icon inside `.breadcrumb-separator` to override the default slash.
 
 ### Deep paths
 
-Long paths wrap onto a second line on narrow viewports.
-
 :::example
 
 ```html
@@ -111,3 +105,33 @@ Long paths wrap onto a second line on narrow viewports.
 ```
 
 :::
+
+## Reference
+
+### React
+
+| Part                    | Renders                                                | Class                  |
+| ----------------------- | ------------------------------------------------------ | ---------------------- |
+| `Breadcrumbs`           | `<nav>` wrapping an `<ol>`                             | `breadcrumbs`          |
+| `Breadcrumbs.Item`      | `<li>` + `<a>`, or `<li>` + `<span>` without an `href` | `breadcrumb-item`      |
+| `Breadcrumbs.Separator` | `<li role="presentation" aria-hidden>`                 | `breadcrumb-separator` |
+
+| Part               | Prop         | Type                                          | Default        |
+| ------------------ | ------------ | --------------------------------------------- | -------------- |
+| `Breadcrumbs`      | `separator`  | `ReactNode`                                   | —              |
+| `Breadcrumbs`      | `aria-label` | `string`                                      | `"Breadcrumb"` |
+| `Breadcrumbs.Item` | `href`       | `string`                                      | —              |
+| `Breadcrumbs.Item` | `current`    | `boolean`                                     | `false`        |
+| `Breadcrumbs.Item` | `icon`       | [`IconProp`](../../basics/conventions/#icons) | —              |
+
+The root inserts a `Separator` between every pair of children, so you never write one by hand — pass `separator` to change the glyph. Omitting `href` renders a `<span>`, correct for the last entry; `current` adds `aria-current="page"` independently, so set both on an entry that is a link and the current page. `Item` takes the native attributes of whichever element it renders.
+
+### Vanilla
+
+| Class                  | Effect                                                                                                |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| `breadcrumbs`          | Root `<nav>`: `text-sm`, muted. Its direct `<ol>` becomes an inline-flex wrapping row, `0.375rem` gap |
+| `breadcrumb-item`      | One entry, `0.375rem` gap for a leading icon, muted until hover                                       |
+| `breadcrumb-separator` | Renders `/` when empty; a child `<i>`/`<svg>` replaces it, sized `0.875rem`                           |
+
+Write `aria-label="Breadcrumb"` on the `<nav>`, `aria-current="page"` on the final entry — which also turns off its pointer events — and `role="presentation" aria-hidden="true"` on each separator so it stays out of the list semantics. Long trails wrap onto a second line.

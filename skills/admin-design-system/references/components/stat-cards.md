@@ -13,8 +13,9 @@
   - [Trend](#trend)
   - [Per-slot styling (React only)](#per-slot-styling-react-only)
   - [Custom content](#custom-content)
-
-Pair `stat-card` with [`card`](cards.md) so it inherits every card surface and modifier. For free-form tiles, use [Cards](cards.md); for label/value tables, use [Property list](property-list.md).
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -36,8 +37,6 @@ Pair `stat-card` with [`card`](cards.md) so it inherits every card surface and m
 
 ### With icon
 
-Pass `icon` — it lands in the label row. See [Icons](../basics/icons.md).
-
 **Example**
 
 ```html
@@ -57,8 +56,6 @@ Pass `icon` — it lands in the label row. See [Icons](../basics/icons.md).
 
 ### Compact + bordered
 
-`compact` tightens padding; `bordered` drops the shadow. Same [`card-compact` / `card-bordered`](cards.md#compact--bordered) modifiers as a card.
-
 **Example**
 
 ```html
@@ -74,8 +71,6 @@ Pass `icon` — it lands in the label row. See [Icons](../basics/icons.md).
 ```
 
 ### Color variants
-
-The same [variants as `<Card>`](cards.md#color-variants); the value picks up the matching accent. `warning` keeps its value at the default colour — yellow fails contrast on the tinted surface. Use sparingly.
 
 **Example**
 
@@ -114,8 +109,6 @@ The same [variants as `<Card>`](cards.md#color-variants); the value picks up the
 ```
 
 ### Dashboard grid
-
-Grid layout is the consumer's call — the tile bakes in no wrapper.
 
 **Example**
 
@@ -167,8 +160,6 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
 
 ### Trend
 
-`trend` adds a delta line with a directional caret below the value. Tone is independent of direction — a falling error rate is good, so pass `intent` to override the default mapping (`up` → positive, `down` → negative).
-
 **Example**
 
 ```html
@@ -195,8 +186,6 @@ Grid layout is the consumer's call — the tile bakes in no wrapper.
 
 ### Per-slot styling (React only)
 
-A stat card has no compound parts, so `classNames` is the only way to reach the label, value, trend, and detail. See [Slot styling](../basics/slots.md).
-
 **Example**
 
 ```tsx
@@ -209,8 +198,6 @@ A stat card has no compound parts, so `classNames` is the only way to reach the 
 ```
 
 ### Custom content
-
-For sparklines or anything else, drop it in as children — it renders below the trend and `detail`.
 
 **Example**
 
@@ -230,3 +217,43 @@ For sparklines or anything else, drop it in as children — it renders below the
   </Badge>
 </StatCard>
 ```
+
+## Reference
+
+### React
+
+| Prop         | Type                                                                                | Default     |
+| ------------ | ----------------------------------------------------------------------------------- | ----------- |
+| `variant`    | `"default" \| "muted" \| "primary" \| "info" \| "success" \| "warning" \| "danger"` | `"default"` |
+| `label`      | `ReactNode`                                                                         | —           |
+| `value`      | `ReactNode`                                                                         | —           |
+| `detail`     | `ReactNode`                                                                         | —           |
+| `trend`      | `StatCardTrend`                                                                     | —           |
+| `icon`       | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
+| `compact`    | `boolean`                                                                           | `false`     |
+| `bordered`   | `boolean`                                                                           | `false`     |
+| `classNames` | [slots](../basics/conventions.md#classnames)                                       | —           |
+
+`trend` is `{ value, direction?, intent? }`: `direction` is `"up"` (default), `"down"` or `"flat"` and rotates the caret; `intent` is `"positive"`, `"negative"` or `"neutral"` and colours it. They're independent because a falling error rate is good — omit `intent` and it follows direction (`up` → positive).
+
+`variant`, `compact` and `bordered` are the [Card](cards.md) modifiers, and the component emits both classes, so a stat card inherits every card surface. Children render below the detail line, which is where a sparkline goes.
+
+There are no sub-parts, so `classNames` — covering `label`, `value`, `trend`, `detail` — is the only way to reach the inner elements. Plus native `<div>` attributes.
+
+### Vanilla
+
+| Class              | Effect                                                                          |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `stat-card`        | Flat tile padding: `1rem`, `0.25rem` gap. Pair with `card`, with no `card-body` |
+| `stat-card-label`  | `text-sm` muted medium row, `0.5rem` gap for a leading icon                     |
+| `stat-card-value`  | `text-2xl` bold, tabular figures so digits don't shift between values           |
+| `stat-card-detail` | `text-sm` muted                                                                 |
+| `stat-card-trend`  | Delta line with a CSS caret, `text-sm` medium, tabular figures                  |
+
+`stat-card` is a modifier on `card`, not a standalone component — it replaces the `card-body` rather than sitting inside one, which is why `card-compact` steps the root here instead of a body.
+
+`stat-card-trend` reads two attributes: `data-trend` (`up` / `down` / `flat`) rotates the caret, and `data-intent` (`positive` / `negative` / `neutral`) colours it. The caret is drawn from borders, so no icon set is involved.
+
+The value picks up the accent under `card-primary`, `card-info`, `card-success` and `card-danger` — but not `card-warning`, per [Conventions › Tones](../basics/conventions.md#tones). A tinted surface signals status, so it stops meaning anything if every tile has one.
+
+Grid layout is yours: the tile bakes in no wrapper. For free-form tiles use [Cards](cards.md); for label/value pairs, a [Property list](property-list.md).

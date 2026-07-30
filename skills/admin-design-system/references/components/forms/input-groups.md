@@ -10,6 +10,9 @@
   - [Both ends](#both-ends)
   - [With a button](#with-a-button)
   - [With icon addons](#with-icon-addons)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -91,8 +94,6 @@
 
 ### With icon addons
 
-`.input-group-addon` accepts any content. For a borderless icon floated inside the field instead, use [input icons](inputs.md#with-icons). See [Icons](../../basics/icons.md).
-
 **Example**
 
 ```html
@@ -132,3 +133,25 @@
   </Button>
 </InputGroup>
 ```
+
+## Reference
+
+### React
+
+| Part               | Renders  | Class               |
+| ------------------ | -------- | ------------------- |
+| `InputGroup`       | `<div>`  | `input-group`       |
+| `InputGroup.Addon` | `<span>` | `input-group-addon` |
+
+No props of its own — each part takes the native attributes of its element. Any child works: `Input`, `Button`, `Addon`, or your own element.
+
+### Vanilla
+
+| Class               | Effect                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------- |
+| `input-group`       | Joins its children into one flush row: square inner corners, `1px` overlap, focus lifted above the seam |
+| `input-group-addon` | Static segment: `0.75rem` side padding, `text-sm` muted on a muted fill, bordered, no wrapping          |
+
+The seam rules target _every_ direct child, not a specific class, so an `input`, a `btn`, an addon, or anything else joins the row in source order. The first and last child keep their outer radius. A focused child is lifted above its neighbour's overlapping edge so the focus ring isn't clipped.
+
+An addon takes any content, including an icon — mark a decorative one `aria-hidden`. For a borderless glyph floating _inside_ the field instead, use [input icons](inputs.md#with-icons).

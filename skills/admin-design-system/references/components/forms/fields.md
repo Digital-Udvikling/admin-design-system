@@ -9,9 +9,10 @@
   - [Required](#required)
   - [With validation](#with-validation)
   - [Inline label](#inline-label)
-- [Advanced: composition with Field.Container](#advanced-composition-with-fieldcontainer)
-
-Vanilla: wire `<label for>` and `aria-describedby` yourself. `<Field>` takes `label`, `description`, `error`, and `required`, and wraps its child control with the matching markup. For per-`ValidityState` errors or irregular layouts, use [`<Field.Container>`](#advanced-composition-with-fieldcontainer).
+  - [One error per validity key](#one-error-per-validity-key)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -41,8 +42,6 @@ Vanilla: wire `<label for>` and `aria-describedby` yourself. `<Field>` takes `la
 
 ### Required
 
-Pass `required` to add a red asterisk after the label. Vanilla can also use `<span class="asteriskField">*</span>` inside the label, which template generators (e.g. django-crispy-forms) often emit. Setting `required` on `<Field>` does not propagate to the control — set it on the control too.
-
 **Example**
 
 ```html
@@ -62,9 +61,9 @@ Pass `required` to add a red asterisk after the label. Vanilla can also use `<sp
 </Field>
 ```
 
-### With validation
+**Caution** — `required` on the `Field` only marks the label. Set it on the control too, or nothing validates.
 
-Pass `error` for a single message that shows whenever the control is invalid. In vanilla, render a `<p class="field-error">` after the input — typically populated server-side.
+### With validation
 
 **Example**
 
@@ -89,16 +88,11 @@ Pass `error` for a single message that shows whenever the control is invalid. In
 
 ### Inline label
 
-Pass `inline` to place the control beside its label rather than above — suited to switches and single checkboxes. In vanilla, add `.field-row`.
-
 **Example**
 
 ```html
 <div class="field field-row">
-  <label class="switch">
-    <input type="checkbox" class="switch-input" />
-    <span class="switch-thumb"></span>
-  </label>
+  <input type="checkbox" role="switch" class="switch" />
   <label class="field-label" for="notify">Email me about new orders</label>
 </div>
 ```
@@ -109,9 +103,7 @@ Pass `inline` to place the control beside its label rather than above — suited
 </Field>
 ```
 
-## Advanced: composition with `Field.Container`
-
-`<Field.Container>` renders the bare `.field` and lets you compose the sub-parts yourself — useful when `<Field.Error match="…">` needs to tie individual messages to specific `ValidityState` keys.
+### One error per validity key
 
 **Example**
 
@@ -138,3 +130,47 @@ Pass `inline` to place the control beside its label rather than above — suited
   <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
 </Field.Container>
 ```
+
+## Reference
+
+### React
+
+| Part                | Renders                     | Class               |
+| ------------------- | --------------------------- | ------------------- |
+| `Field`             | `<div>`                     | `field`             |
+| `Field.Container`   | `<div>`                     | `field`             |
+| `Field.Label`       | `<label>`                   | `field-label`       |
+| `Field.Description` | `<p>`                       | `field-description` |
+| `Field.Error`       | `<div>`, only when matching | `field-error`       |
+
+| Prop          | Type                                             | Default |
+| ------------- | ------------------------------------------------ | ------- |
+| `label`       | `ReactNode`                                      | —       |
+| `description` | `ReactNode`                                      | —       |
+| `error`       | `ReactNode`                                      | —       |
+| `required`    | `boolean`                                        | `false` |
+| `inline`      | `boolean`                                        | `false` |
+| `classNames`  | [slots](../../basics/conventions.md#classnames) | —       |
+
+Wraps [Base UI Field](https://base-ui.com/react/components/field), which earns the component its place: it generates the control's `id`, points the label's `for` at it, wires `aria-describedby` to both the description and the error, and mirrors the browser's `ValidityState` onto the root as `[data-invalid]` — the hook the CSS uses to redden every control inside. `name`, `validationMode` and `validate` come from there.
+
+`Field` with `label` / `description` / `error` covers the ordinary case, rendering the parts in the right order around `children`. `Field.Container` renders only the `.field` box and leaves you to place the parts, which an irregular layout calls for. It is also the form to use when each message ties to a specific `ValidityState` key through `Field.Error`'s `match`, since the `error` prop is one message shown for any failure. Both render the same element; only the amount of assembly differs. See the [`.Container` escape hatch](../../basics/conventions.md#container-escape-hatch).
+
+`inline` puts the control before the label on one row, the layout for a switch or a lone checkbox. `classNames` covers `label`, `description`, `error`. Plus native `<div>` attributes.
+
+### Vanilla
+
+| Class               | Effect                                                                 |
+| ------------------- | ---------------------------------------------------------------------- |
+| `field`             | Vertical stack, `0.375rem` gap; long tokens break rather than overflow |
+| `field-row`         | Lays the field out on one line instead, `0.75rem` gap                  |
+| `field-label`       | `text-sm` medium                                                       |
+| `field-description` | `text-xs` muted                                                        |
+| `field-error`       | `text-xs` in the danger colour                                         |
+| `asteriskField`     | Danger-coloured `*`, for template generators that emit their own       |
+
+None of the wiring is automatic here: set `for` on the label, `id` on the control, and `aria-describedby` pointing at the description and the error. `[data-required]` on the label appends a red asterisk, the same result as an inline `asteriskField` span — pick whichever your templates emit.
+
+`[data-invalid]` on the `field` reddens the border of a contained `input`, `textarea`, `select`, `file-input`, and unchecked `checkbox` or `radio`, and rings an unchecked `switch`. React sets it from validation; in vanilla, add it server-side alongside the `field-error` text.
+
+Controls that belong inside a field: [Inputs](inputs.md), [Textareas](textareas.md), [Selects](selects.md), [Checkboxes](checkboxes.md), [Radios](radios.md), [Switches](switches.md), [File inputs](file-inputs.md), [Number inputs](number-inputs.md).

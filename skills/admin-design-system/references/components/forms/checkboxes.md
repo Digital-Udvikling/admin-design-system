@@ -17,6 +17,24 @@
 <Checkbox defaultChecked />
 ```
 
+### With a label
+
+**Example**
+
+```html
+<label>
+  <input type="checkbox" class="checkbox" name="newsletter" />
+  Subscribe to the newsletter
+</label>
+```
+
+```tsx
+<label>
+  <Checkbox name="newsletter" />
+  Subscribe to the newsletter
+</label>
+```
+
 ### Disabled
 
 **Example**
@@ -33,8 +51,6 @@
 
 ### Indeterminate
 
-Set imperatively in vanilla via `node.indeterminate = true`; React takes an `indeterminate` prop. The CSS treats it identically to checked.
-
 **Example**
 
 ```html
@@ -48,26 +64,30 @@ Set imperatively in vanilla via `node.indeterminate = true`; React takes an `ind
 <Checkbox indeterminate />
 ```
 
-### Inside a Field
+## Reference
 
-**Example**
+### React
 
-```html
-<div class="field">
-  <label class="field-label">
-    <input type="checkbox" class="checkbox" name="newsletter" />
-    Subscribe to the newsletter
-  </label>
-  <p class="field-description">One short email per month. Unsubscribe anytime.</p>
-</div>
-```
+| Part                 | Renders    | Class                |
+| -------------------- | ---------- | -------------------- |
+| `Checkbox`           | `<button>` | `checkbox`           |
+| `Checkbox.Indicator` | `<span>`   | `checkbox-indicator` |
 
-```tsx
-<Field name="newsletter">
-  <Field.Label>
-    <Checkbox />
-    Subscribe to the newsletter
-  </Field.Label>
-  <Field.Description>One short email per month. Unsubscribe anytime.</Field.Description>
-</Field>
-```
+Wraps [Base UI Checkbox](https://base-ui.com/react/components/checkbox), so state and behaviour come from there: `checked` / `defaultChecked` / `onCheckedChange`, `indeterminate`, `name`, `value`, `required`, `disabled`, `parent` for a tri-state group. It renders a `<button>` with `role="checkbox"`, not an `<input>`, and keeps a hidden input for form submission.
+
+`Checkbox` supplies its own indicator and checkmark; pass `children` only to replace them. Plus native `<button>` attributes.
+
+For labels, descriptions and validation, wrap it in a [Field](fields.md).
+
+### Vanilla
+
+| Class                | Effect                                                                        |
+| -------------------- | ----------------------------------------------------------------------------- |
+| `checkbox`           | `1rem` square, `0.125rem` radius, bordered surface; primary fill when checked |
+| `checkbox-indicator` | `0.75rem` checkmark slot in `primary-content` — the React indicator's box     |
+
+Works two ways with identical output. On a native `<input type="checkbox">` the appearance is reset and the checkmark drawn as a masked `::after`, keyed off `:checked` / `:indeterminate`. On a `<button role="checkbox">` the states come from `[data-checked]`, `[data-unchecked]`, `[data-indeterminate]` and `[data-disabled]` instead, matching what the React component emits.
+
+Indeterminate renders exactly like checked. It can't be set in HTML — assign `node.indeterminate = true` in JS.
+
+A `<label>` wrapping the control is laid out for you: inline row, `0.5rem` gap, pointer cursor, dimmed when the control is disabled, and long text wraps beside the box rather than overflowing. No class needed on the label.

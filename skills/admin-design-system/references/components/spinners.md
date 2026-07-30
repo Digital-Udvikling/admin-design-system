@@ -2,10 +2,6 @@
 
 > Compact CSS-only loading indicator.
 
-A pure-CSS rotating arc. The visible edge uses `currentColor`, so it inherits the surrounding text colour.
-
-For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — see [Buttons → Loading](buttons.md#loading).
-
 ## Examples
 
 ### Sizes
@@ -43,8 +39,6 @@ For buttons, prefer the `.btn-loading` modifier (or React's `loading` prop) — 
 
 ### Accessible label
 
-The React component sets `aria-label="Loading"` by default. Override via the `label` prop; in vanilla, set `aria-label` directly.
-
 **Example**
 
 ```html
@@ -54,3 +48,26 @@ The React component sets `aria-label="Loading"` by default. Override via the `la
 ```tsx
 <Spinner label="Indlæser" />
 ```
+
+## Reference
+
+### React
+
+| Prop    | Type                   | Default     |
+| ------- | ---------------------- | ----------- |
+| `size`  | `"sm" \| "md" \| "lg"` | `"md"`      |
+| `label` | `string`               | `"Loading"` |
+
+Renders `<output>`, whose implicit `role="status"` announces the `label` politely. Plus native `<output>` attributes.
+
+For a button, use its `loading` prop instead — see [Buttons › Loading](buttons.md#loading).
+
+### Vanilla
+
+| Class        | Effect                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------ |
+| `spinner`    | `1rem` circle, `2px` ring at 25% `currentColor` with a solid top edge, one turn per `0.6s` |
+| `spinner-sm` | `0.75rem`, `1.5px` ring                                                                    |
+| `spinner-lg` | `1.5rem`, `3px` ring                                                                       |
+
+The arc is `currentColor`, so it follows the surrounding text colour. Under `prefers-reduced-motion: reduce` the rotation slows to `2s` rather than stopping, since a frozen spinner reads as a hung request. `<output>` carries `role="status"` for free but no accessible name — write the `aria-label` yourself.

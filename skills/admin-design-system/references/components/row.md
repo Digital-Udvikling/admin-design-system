@@ -4,6 +4,7 @@
 
 ## Contents
 
+- [Examples](#examples)
   - [Basic](#basic)
   - [Alignment](#alignment)
   - [Distribution](#distribution)
@@ -12,8 +13,9 @@
   - [Direction](#direction)
   - [Dividers](#dividers)
   - [Toolbar](#toolbar)
+- [Reference](#reference)
 
-There's no `.row` component — for one-dimensional layouts, use Tailwind's flex utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For 2D layouts, see [Grid](grid.md); for spacing between stacked page sections, [Container](container.md).
+## Examples
 
 ### Basic
 
@@ -34,8 +36,6 @@ There's no `.row` component — for one-dimensional layouts, use Tailwind's flex
 ```
 
 ### Alignment
-
-`items-center` is the common default; `items-start`, `items-end`, and `items-baseline` cover the rest.
 
 **Example**
 
@@ -89,8 +89,6 @@ There's no `.row` component — for one-dimensional layouts, use Tailwind's flex
 
 ### Grow to fill
 
-`flex-1` makes one child absorb the leftover space; the others keep their natural size.
-
 **Example**
 
 ```html
@@ -131,8 +129,6 @@ There's no `.row` component — for one-dimensional layouts, use Tailwind's flex
 
 ### Direction
 
-The default is a row. `flex-col` stacks vertically; pair it with a responsive prefix (`sm:flex-row`) to switch axes at a breakpoint.
-
 **Example**
 
 ```html
@@ -154,8 +150,6 @@ The default is a row. `flex-col` stacks vertically; pair it with a responsive pr
 ```
 
 ### Dividers
-
-`divide-x` draws a hairline between children; no border class on each item. Add horizontal padding (`px-*`) on each child.
 
 **Example**
 
@@ -195,8 +189,6 @@ The default is a row. `flex-col` stacks vertically; pair it with a responsive pr
 
 ### Toolbar
 
-`flex-1` on the search field pushes the action cluster to the right edge; `flex-wrap` lets it stack on narrow screens.
-
 **Example**
 
 ```html
@@ -229,4 +221,21 @@ The default is a row. `flex-col` stacks vertically; pair it with a responsive pr
 </div>
 ```
 
-Flex also offers `order-*` to reorder children and `content-*` to align wrapped lines on the cross axis — see [Utilities](../getting-started/vanilla.md#utilities-optional).
+## Reference
+
+There is no `.row` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The class names are identical in both bundles, so the two tabs above differ only in `class` vs `className`.
+
+| Utility     | Effect                                                                           |
+| ----------- | -------------------------------------------------------------------------------- |
+| `flex`      | Lays children out on one line                                                    |
+| `flex-col`  | Stacks them instead. Pair with `sm:flex-row` to switch axes at a breakpoint      |
+| `gap-*`     | Space between children                                                           |
+| `items-*`   | Cross-axis alignment: `center` is the usual one, plus `start`, `end`, `baseline` |
+| `justify-*` | Main-axis distribution: `between`, `end`, `center`, `around`                     |
+| `flex-1`    | One child absorbs the leftover space; the others keep their natural size         |
+| `flex-wrap` | Overflowing children move to a new line                                          |
+| `divide-x`  | Hairline between children, no border class on each. Add `px-*` to the children   |
+| `order-*`   | Reorders children visually                                                       |
+| `content-*` | Aligns wrapped lines on the cross axis                                           |
+
+For two-dimensional layouts see [Grid](grid.md); for spacing between stacked page sections, [Container](container.md). The full utility set is Tailwind's — these are the ones an admin layout reaches for.

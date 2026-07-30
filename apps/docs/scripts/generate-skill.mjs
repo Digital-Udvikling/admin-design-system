@@ -97,6 +97,70 @@ function transformProseOnly(body, transform) {
   return out.join("\n");
 }
 
+const CALLOUT_LABELS = { info: "Note", success: "Tip", warning: "Caution", danger: "Danger" };
+
+// Flatten `<Callout variant="…">` blocks into a bolded lead-in. Pages use them for
+// the constraints that survive the zero-prose rule, so the raw JSX must not ship.
+// Fence-aware and run over the whole body rather than per prose chunk, so a callout
+// wrapping a code fence still flattens.
+function flattenCallouts(body) {
+  const out = [];
+  let fenceMarker = null;
+  let inExample = false;
+  let label = null;
+  let buffer = [];
+
+  const flushCallout = () => {
+    const lead = buffer.findIndex((line) => line.trim() !== "");
+    if (lead === -1) out.push(`**${label}**`);
+    else {
+      buffer[lead] = `**${label}** — ${buffer[lead].trim()}`;
+      out.push(...buffer);
+    }
+    label = null;
+    buffer = [];
+  };
+
+  for (const line of body.split("\n")) {
+    const target = label === null ? out : buffer;
+    if (fenceMarker) {
+      target.push(line);
+      const closer = line.match(/^(`{3,}|~{3,})\s*$/);
+      if (closer && line.startsWith(fenceMarker)) fenceMarker = null;
+      continue;
+    }
+    if (inExample) {
+      target.push(line);
+      if (/^:::\s*$/.test(line)) inExample = false;
+      continue;
+    }
+    const fenceOpen = line.match(/^(`{3,}|~{3,})/);
+    if (fenceOpen) {
+      target.push(line);
+      fenceMarker = fenceOpen[1];
+      continue;
+    }
+    if (/^:::example\b/.test(line)) {
+      target.push(line);
+      inExample = true;
+      continue;
+    }
+    const open = line.match(/^<Callout(?:\s+variant="(\w+)")?\s*>\s*$/);
+    if (open && label === null) {
+      label = CALLOUT_LABELS[open[1] ?? "warning"] ?? "Note";
+      continue;
+    }
+    if (label !== null && /^<\/Callout>\s*$/.test(line)) {
+      flushCallout();
+      continue;
+    }
+    target.push(line);
+  }
+  // Unterminated callout — emit what we collected rather than dropping it.
+  if (label !== null) flushCallout();
+  return out.join("\n");
+}
+
 // Flatten the docs-only color components (`<ColorFamily>` / `<ColorRamp>` /
 // `<ColorCopy>`) into plain markdown. Without this the colors page ships as
 // raw Astro source — token names buried in JSX prop syntax.
@@ -162,7 +226,7 @@ function stripMdxNoiseInProse(prose) {
 }
 
 function stripMdxNoise(body, info, pageMap) {
-  const stripped = transformProseOnly(body, (prose) =>
+  const stripped = transformProseOnly(flattenCallouts(body), (prose) =>
     rewriteRelativeLinksInProse(stripMdxNoiseInProse(prose), info, pageMap),
   );
   // Collapsing blank-line runs is harmless inside code blocks too.
@@ -324,8 +388,14 @@ function validateOutput(files) {
     if (content.includes("import.meta.env.BASE_URL")) {
       problems.push(`${rel}: leaked import.meta.env.BASE_URL`);
     }
-    const tag = content.match(/<(StarlightBadge|ColorFamily|ColorRamp|ColorCopy)\b/);
+    const tag = content.match(/<(StarlightBadge|ColorFamily|ColorRamp|ColorCopy|\/?Callout)\b/);
     if (tag) problems.push(`${rel}: un-transformed <${tag[1]}>`);
+    // `:::example` is the only directive authored today; asides don't work in this
+    // pipeline (see Callout.astro), so a surviving marker is a gap, not content.
+    content.split("\n").forEach((line, i) => {
+      if (line.startsWith(":::"))
+        problems.push(`${rel}:${i + 1}: un-flattened directive: ${line.trim()}`);
+    });
     content.split("\n").forEach((line, i) => {
       if (/^\}\s+from\s+["']/.test(line)) {
         problems.push(`${rel}:${i + 1}: orphaned import residue: ${line.trim()}`);

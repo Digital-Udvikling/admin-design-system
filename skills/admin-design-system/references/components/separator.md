@@ -2,8 +2,6 @@
 
 > A styled hr with an optional vertical modifier.
 
-A styled `<hr>` (implicit `role="separator"`). Margins are zeroed — spacing comes from the parent's `gap` or margin utilities.
-
 ## Examples
 
 ### Horizontal
@@ -19,8 +17,6 @@ A styled `<hr>` (implicit `role="separator"`). Margins are zeroed — spacing co
 ```
 
 ### Vertical
-
-Set `aria-orientation="vertical"` by hand in vanilla; the React `orientation` prop adds it.
 
 **Example**
 
@@ -74,4 +70,23 @@ Set `aria-orientation="vertical"` by hand in vanilla; the React `orientation` pr
 </Card.Container>
 ```
 
-[Menus](menus.md) and [Breadcrumbs](breadcrumbs.md) keep their own scoped separators.
+**Caution** — A vertical rule needs `aria-orientation="vertical"` — the implicit `role="separator"` on `<hr>` reports horizontal otherwise. React's `orientation` prop sets it; in vanilla, write it yourself.
+
+## Reference
+
+### React
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+
+Plus native `<hr>` attributes.
+
+### Vanilla
+
+| Class                | Effect                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------- |
+| `separator`          | `1px` full-width rule in the border colour, margins zeroed. Works on `<hr>` or any block          |
+| `separator-vertical` | `1px` wide, stretches to the flex line, `1lh` minimum so it stays visible in a non-stretching row |
+
+Margins are zeroed — spacing comes from the parent's `gap` or margin utilities. [Menus](menus.md) and [Breadcrumbs](breadcrumbs.md) keep their own scoped separators.

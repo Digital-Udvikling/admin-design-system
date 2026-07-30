@@ -12,8 +12,7 @@
   - [Placement](#placement)
   - [Cell alignment](#cell-alignment)
   - [Two-pane layout](#two-pane-layout)
-
-There's no `.grid` component — for two-dimensional layouts, use Tailwind's grid utilities directly. Vanilla projects get them from the [utilities bundle](../getting-started/vanilla.md#utilities-optional); React projects should [add Tailwind](../getting-started/tailwind.md) so the bare class names resolve. Everything below is those utilities. For laying items out in a single line, see [Row](row.md).
+- [Reference](#reference)
 
 ## Examples
 
@@ -91,8 +90,6 @@ There's no `.grid` component — for two-dimensional layouts, use Tailwind's gri
 
 ### Auto-fit
 
-A track list can't be a utility, so set it inline. `repeat(auto-fill, minmax(12rem, 1fr))` fits as many 12rem columns as the width allows. Swap `auto-fill` for `auto-fit` to collapse empty tracks when there are few items.
-
 **Example**
 
 ```html
@@ -142,8 +139,6 @@ A track list can't be a utility, so set it inline. `repeat(auto-fill, minmax(12r
 
 ### Placement
 
-For explicit positioning, `col-start` / `col-end` (and the row pair) pin a cell to specific grid lines. Lines run `1…n+1`, so a 3-column grid has lines 1–4.
-
 **Example**
 
 ```html
@@ -166,8 +161,6 @@ For explicit positioning, `col-start` / `col-end` (and the row pair) pin a cell 
 
 ### Cell alignment
 
-Cells stretch to fill their track by default. `justify-items-*` aligns them on the inline axis, `items-*` on the block axis, and `place-items-*` both at once.
-
 **Example**
 
 ```html
@@ -187,8 +180,6 @@ Cells stretch to fill their track by default. `justify-items-*` aligns them on t
 ```
 
 ### Two-pane layout
-
-Grids nest: a content pane can run its own responsive grid inside an outer column. All utilities, no inline track list.
 
 **Example**
 
@@ -218,4 +209,21 @@ Grids nest: a content pane can run its own responsive grid inside an outer colum
 </div>
 ```
 
-Grid also offers `grid-flow-dense` to pack items into earlier gaps and `grid-cols-subgrid` for a nested grid that inherits its parent's tracks — see [Utilities](../getting-started/vanilla.md#utilities-optional).
+## Reference
+
+There is no `.grid` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The class names are identical in both bundles, so the two tabs above differ only in `class` vs `className`.
+
+| Utility             | Effect                                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `grid`              | Two-dimensional layout                                                                                                        |
+| `grid-cols-{n}`     | `n` equal columns. Prefix for a breakpoint: `sm:grid-cols-2 lg:grid-cols-4`                                                   |
+| `gap-*`             | Space between cells                                                                                                           |
+| `col-span-{n}`      | A cell covers `n` columns; `row-span-{n}` for rows                                                                            |
+| `col-start-{n}`     | Pins a cell to grid line `n`; likewise `col-end`, `row-start`, `row-end`. Lines run `1…n+1`, so a 3-column grid has lines 1–4 |
+| `justify-items-*`   | Cell alignment on the inline axis; `items-*` on the block axis, `place-items-*` both                                          |
+| `grid-flow-dense`   | Packs later items into earlier gaps                                                                                           |
+| `grid-cols-subgrid` | A nested grid inherits its parent's tracks                                                                                    |
+
+Cells stretch to fill their track by default. A track list can't be a utility, so set `grid-template-columns` inline: `repeat(auto-fill, minmax(12rem, 1fr))` fits as many `12rem` columns as the width allows, and `auto-fit` instead collapses the empty tracks when there are few items.
+
+Grids nest, so a pane can run its own responsive grid inside an outer column. For one-dimensional layouts see [Row](row.md). The full utility set is Tailwind's — these are the ones an admin layout reaches for.

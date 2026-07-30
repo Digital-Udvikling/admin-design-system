@@ -1,0 +1,142 @@
+---
+title: Conventions
+description: Props and classes every component shares.
+sidebar:
+  order: 1
+---
+
+import { Card } from "@aortl/admin-react";
+import Callout from "../../../components/Callout.astro";
+
+What holds across the whole library. Component pages list their own props and classes in a `Reference` section and don't repeat any of this.
+
+## Sizes
+
+Three sizes, named the same everywhere. `md` is the default and emits **no** class — `sm` and `lg` add `<base>-sm` / `<base>-lg`.
+
+| React                 | Vanilla       |
+| --------------------- | ------------- |
+| `size="sm"`           | `btn-sm`      |
+| `size="md"` (or omit) | _no modifier_ |
+| `size="lg"`           | `btn-lg`      |
+
+`Select.Trigger` names its prop `triggerSize` instead — a native `<button>` already has a `size` attribute, so the union would collide.
+
+## Tones
+
+The status vocabulary is `info`, `success`, `warning` and `danger`, plus `primary` for brand emphasis and `neutral` as the unmodified default. Not every component offers all of them; each component's `Reference` lists its own set.
+
+<Callout variant="warning">
+
+On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text colour rather than taking the accent — accent-on-tint fails contrast, most visibly for yellow. Each component's `Reference` says which. `BrandTile` drops `warning` altogether for the same reason.
+
+</Callout>
+
+## Icons
+
+Components that host an icon take an `icon` prop (and `iconTrailing` where a trailing slot exists). It accepts a **component reference**, rendered at `size="1em"` with `aria-hidden` so SVGs inherit the host `font-size` and match the Tabler webfont:
+
+```tsx
+<Button icon={IconPlus}>Add</Button>
+```
+
+Pass a pre-instantiated element when you need to override that:
+
+```tsx
+<Button icon={<IconPlus size={20} />}>Add</Button>
+```
+
+In vanilla, drop an `<i>` or `<svg>` as a direct child of the component root — no wrapper class. The root already lays out with `flex` + `gap`, and a `flex-shrink: 0` rule keeps the glyph from squashing. Position in the markup decides leading vs trailing.
+
+See [Icons](../icons/) for the library, install, and sizing table.
+
+## `className`
+
+Every component accepts `className` on its root. It is **appended** to admin's own classes, never replaces them, and passes through verbatim — only admin's classes carry the `_ao-` scope prefix.
+
+:::example
+
+```html
+<div class="card flex-1">…</div>
+```
+
+```tsx
+<Card className="flex-1">…</Card>
+```
+
+:::
+
+## `classNames`
+
+React only — vanilla has no equivalent, so write the classes on the elements directly.
+
+Shorthand props like `title` and `actions` render inner elements a single `className` can't reach. `classNames` maps each inner slot to a class. Slot names autocomplete from the component's types, and values pass through verbatim like `className`.
+
+:::example
+
+```tsx
+<Card
+  bordered
+  title="Deploy failed"
+  description="Build #2042 exited with code 1."
+  classNames={{ title: "text-danger", description: "font-mono" }}
+/>
+```
+
+:::
+
+| Component                | Slots                                                                   |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `Alert`                  | `title`, `description`, `action`, `dismiss`                             |
+| `Card`                   | `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions` |
+| `Dialog`                 | `header`, `title`, `close`, `description`, `body`, `footer`             |
+| `Drawer`                 | `header`, `title`, `close`, `description`, `body`, `footer`             |
+| `Field`                  | `label`, `description`, `error`                                         |
+| `Input`, `PasswordInput` | `wrapper`, `action`                                                     |
+| `Item`                   | `media`, `content`, `title`, `description`, `actions`                   |
+| `NumberInput`            | `group`, `decrement`, `input`, `increment`                              |
+| `Pagination`             | `item`, `link`, `ellipsis`                                              |
+| `PropertyList`           | `title`, `items`                                                        |
+| `PropertyList.Item`      | `label`, `copy`                                                         |
+| `PropertyList.Value`     | `copy`                                                                  |
+| `Sidebar`                | `drawer`, `drawerBackdrop`                                              |
+| `Sidebar.Item`           | `icon`, `label`, `badge`                                                |
+| `Sidebar.SubItem`        | `icon`, `badge`                                                         |
+| `Sidebar.Collapsible`    | `icon`, `label`, `trigger`, `panel`                                     |
+| `Sidebar.CollapseToggle` | `input`                                                                 |
+| `StatCard`               | `label`, `value`, `trend`, `detail`                                     |
+| `Timeline.Item`          | `indicator`, `marker`, `dot`, `content`, `title`, `time`, `description` |
+| `Tooltip`                | `popup`                                                                 |
+
+Components not listed don't take it: leaves (`Button`, `Badge`) carry `className` on their only element, and compounds you assemble by hand (`Table`, `Tabs`, `Select`, `Accordion`) take `className` on each part.
+
+## `.Container` escape hatch
+
+Where a component has shorthand props that auto-fill an inner wrapper, the default export is the opinionated form and `.Container` is the bare primitive — the root element and nothing else, for layouts the shorthand can't express (multiple bodies, media headers, custom dividers).
+
+`BarChart`, `Card`, `Dialog`, `Drawer`, `Field` and `Item` expose one. In vanilla there is no distinction: you are always composing the bare classes.
+
+## Hotkeys
+
+For a shortcut tied to a visible control, use the `hotkey` prop on [Buttons](../../components/buttons/) and [Menu.Item](../../components/menus/) — it renders a trailing chip and dispatches a real click, so `onClick` fires, `type="submit"` submits, and an anchor navigates.
+
+For everything else — a help dialog, focusing search, navigation — call `useHotkey()`:
+
+```tsx
+import { useHotkey } from "@aortl/admin-react";
+
+function HelpShortcut({ onOpen }: { onOpen: () => void }) {
+  useHotkey("?", onOpen);
+  return null;
+}
+```
+
+`mod` resolves to `Cmd` on macOS and `Ctrl` elsewhere. Pass an array for alternatives; only the first renders as a chip. `{ enabled: false }` pauses registration without unmounting, and a nullish chord is a no-op, so the hook is safe to call unconditionally.
+
+Vanilla has no equivalent — bind your own `keydown` listener and use [Kbd](../../components/kbd/) for the chip.
+
+## Layout
+
+There is no `.row` or `.grid` component. Use Tailwind's flex and grid utilities directly — see [Row](../../components/row/) and [Grid](../../components/grid/) for the patterns.
+
+Vanilla projects get those utilities from the [utilities bundle](../../getting-started/vanilla/#utilities-optional). React projects should add [Tailwind](../../getting-started/tailwind/) so the bare class names resolve.

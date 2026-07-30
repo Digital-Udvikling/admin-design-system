@@ -1,19 +1,16 @@
 # React
 
-> Thin React wrappers around Base UI primitives, scoped to <AdminRoot>.
+> Typed components emitting the same class names as the CSS package.
 
 ## Contents
 
 - [Install](#install)
 - [Import styles + components](#import-styles-components)
-  - [Props](#props)
+- [<AdminRoot> props](#adminroot-props)
 - [Framework setup](#framework-setup)
   - [Next.js (App Router)](#nextjs-app-router)
   - [Vite / SPA](#vite-spa)
-- [Add icons (optional)](#add-icons-optional)
-- [Upgrading from 0.3](#upgrading-from-03)
-
-Every component emits `_ao-`-prefixed class names; `<AdminRoot>` is required to scope the subtree into the bundled CSS. See [Scoped bundle](scoped.md).
+- [Next steps](#next-steps)
 
 ## Install
 
@@ -48,16 +45,19 @@ export function SignIn() {
 }
 ```
 
-`<AdminRoot>` renders a `<div class="_ao-admin-root">` and forwards every prop. Mount it once near the top of your tree — at the app root for a full-page admin app, or around an embedded admin surface inside a host app.
+Two things that example is doing:
 
-### Props
+- `<AdminRoot>` is required. Components emit `_ao-`-prefixed class names that only match inside `@scope (._ao-admin-root)`, and `<AdminRoot>` is the `<div>` that opens that scope. Mount it once near the top of your tree: at the app root for a full-page admin app, or around each embedded admin surface inside a host app. It also publishes itself as the portal container, so `Select` and `Tooltip` popups land inside the scope instead of on `document.body`.
+- You supply `'use client'` yourself. The package ships no directive of its own, so under React Server Components every module rendering an interactive component needs it at the top, or must be reached from one that has it. The stylesheet import has no such constraint.
 
-Beyond the standard `<div>` attributes, two typed shortcuts:
+## `<AdminRoot>` props
 
-| Prop           | Type                 | Effect                                                                                                                                                    |
-| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../basics/dark-mode.md) on this subtree. Omit to follow the OS.                                              |
-| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline to brand-shift the navbar + footer stripes and `<BrandTile>`. See [Customize](../basics/customize.md#system-accent). |
+Beyond the standard `<div>` attributes — all forwarded, including `style` and `ref` — two typed shortcuts:
+
+| Prop           | Type                 | Effect                                                                                                               |
+| -------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `theme`        | `"light" \| "dark"`  | Sets `data-theme` to force a [color scheme](../basics/theming.md#dark-mode) on this subtree. Omit to follow the OS. |
+| `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline — see [Theming › System accent](../basics/theming.md#system-accent).            |
 
 ```tsx
 <AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
@@ -65,13 +65,13 @@ Beyond the standard `<div>` attributes, two typed shortcuts:
 </AdminRoot>
 ```
 
-## Framework setup
+A plain `<div className="_ao-admin-root">` opens the scope too, but you write the prefix yourself and lose the portal container.
 
-Where the stylesheet import and `<AdminRoot>` live depends on the host framework. `<AdminRoot>` uses hooks and React context, and the package ships **no** `'use client'` directive — so under React Server Components you mount it from a client boundary. The CSS import has no such constraint.
+## Framework setup
 
 ### Next.js (App Router)
 
-Import the stylesheet once in the root layout (a server component — CSS imports are fine there) and render `<AdminRoot>` from a small client wrapper:
+Import the stylesheet once in the root layout — a server component, where CSS imports are fine — and render `<AdminRoot>` from a small client wrapper:
 
 ```tsx
 // app/providers.tsx
@@ -99,8 +99,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-The interactive components (`Button`, `Select`, `Dialog`, …) are client components, so any page or component that renders them needs `'use client'` at its own top, or to be reached from one.
-
 ### Vite / SPA
 
 Import the stylesheet in the entry and wrap the app once:
@@ -119,25 +117,9 @@ createRoot(document.getElementById("root")!).render(
 );
 ```
 
-## Add icons (optional)
+## Next steps
 
-The recommended icon library is [Tabler Icons](https://tabler.io/icons) — see [Icons](../basics/icons.md).
-
-```bash
-npm install @tabler/icons-react
-```
-
-```tsx
-import { IconPlus, IconTrash } from "@tabler/icons-react";
-
-<Button variant="primary" icon={IconPlus}>
-  New order
-</Button>;
-```
-
-Most leaf and shorthand components — `<Button>`, `<Badge>`, `<Link>`, `<Input>`, `<Card>`, `<Alert>`, `<Menu.Item>`, `<StatCard>`, and more — accept an `icon` prop; pass the component and the wrapper sizes it and adds `aria-hidden`. See [Icons](../basics/icons.md).
-
-## Upgrading from 0.3
-
-- `<AdminRoot>` is now **required**. Components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root` — wrap your app (or each embedded admin surface) once.
-- `@aortl/admin-react/styles.css` is the preferred subpath import. The 0.3-era `@aortl/admin-react/styles.scoped.css` is still aliased to the same bundle, so existing imports keep working.
+- [Icons](../basics/icons.md#install) — install `@tabler/icons-react` and pass a component to any `icon` prop.
+- [Conventions](../basics/conventions.md) — `className`, `classNames`, sizes, tones, and the `.Container` escape hatch, which hold for every component.
+- [Tailwind](tailwind.md) — needed for the bare utility classes (`flex-1`, `gap-2`) that layout examples use.
+- [Theming](../basics/theming.md) — brand accent, dark mode, token overrides.

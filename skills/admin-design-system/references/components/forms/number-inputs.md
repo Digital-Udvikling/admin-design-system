@@ -9,10 +9,9 @@
   - [Step and range](#step-and-range)
   - [Sizes](#sizes)
   - [Formatting (React only)](#formatting-react-only)
-
-A numeric field with −/+ steppers for quantities, limits, seat counts, and prices. The React component wraps Base UI NumberField for min/max clamping, step, and `Intl` formatting. Vanilla styles a native `<input type="number">` and steps with the platform `stepUp()` / `stepDown()` methods.
-
-The vanilla bundle gets native stepping and constraint validation, but not grouped-thousands formatting — a formatted `1,000` is not a valid `type="number"` value, so the React wrapper manages the display-vs-value split.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -54,8 +53,6 @@ The vanilla bundle gets native stepping and constraint validation, but not group
 ```
 
 ### Step and range
-
-`step` sets the increment; `min` / `max` clamp the value.
 
 **Example**
 
@@ -135,8 +132,6 @@ The vanilla bundle gets native stepping and constraint validation, but not group
 
 ### Formatting (React only)
 
-Pass `format` (an `Intl.NumberFormat` options object) for currency, percentages, or grouped thousands. The displayed string and the numeric value diverge, so this is React-only.
-
 **Example**
 
 ```tsx
@@ -148,3 +143,37 @@ Pass `format` (an `Intl.NumberFormat` options object) for currency, percentages,
   inputAriaLabel="Price"
 />
 ```
+
+## Reference
+
+### React
+
+| Prop             | Type                                             | Default      |
+| ---------------- | ------------------------------------------------ | ------------ |
+| `size`           | `"sm" \| "md" \| "lg"`                           | `"md"`       |
+| `placeholder`    | `string`                                         | —            |
+| `inputAriaLabel` | `string`                                         | —            |
+| `decrementLabel` | `string`                                         | `"Decrease"` |
+| `incrementLabel` | `string`                                         | `"Increase"` |
+| `decrementIcon`  | `ReactNode`                                      | `−` glyph    |
+| `incrementIcon`  | `ReactNode`                                      | `+` glyph    |
+| `classNames`     | [slots](../../basics/conventions.md#classnames) | —            |
+
+Renders the whole group — steppers, field, ARIA — from one component, so there are no sub-parts to compose; `classNames` covers `group`, `decrement`, `input`, `increment`. `inputAriaLabel` names the field when there's no associated `<label>`; inside a [Field](fields.md) the label supplies the name instead.
+
+Wraps [Base UI NumberField](https://base-ui.com/react/components/number-field), which owns `value` / `defaultValue` / `onValueChange`, `min`, `max`, `step`, `format`, clamp-on-blur, and scrub-to-change. `format` takes `Intl.NumberFormat` options.
+
+`format` is React-only: a formatted `1,000` is not a valid `type="number"` value, so displaying it means splitting display from value, which needs the wrapper. The vanilla bundle gets native stepping and constraint validation, but not grouped thousands.
+
+### Vanilla
+
+| Class                | Effect                                                                                       |
+| -------------------- | -------------------------------------------------------------------------------------------- |
+| `number-input`       | Connected − / field / + group: bordered `0.5rem`-radius shell, focus ring on `:focus-within` |
+| `number-input-field` | Borderless field inside it: right-aligned tabular digits, native spinners hidden             |
+| `number-input-step`  | `2rem`-wide stepper button, divided from the field, hover tint                               |
+| `number-input-sm`    | `text-xs` field, `1.75rem` steppers                                                          |
+| `number-input-lg`    | `text-base` field, `2.25rem` steppers                                                        |
+| `number-input-root`  | `display: contents` — the React wrapper element, invisible to layout                         |
+
+There is no `number-input-md` — it's the unmodified `number-input`. Step buttons in vanilla call the platform `stepUp()` / `stepDown()`, which also honour `min`, `max` and `step`; each needs its own `aria-label`, and the field needs one too unless a `<label>` is associated. Native spinners are hidden in both engines, so the visible steppers are the only affordance. Digits are right-aligned and tabular so a column of values lines up.

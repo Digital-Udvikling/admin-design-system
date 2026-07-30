@@ -6,13 +6,9 @@ description: Place a badge, count, or dot on the corner of another element.
 import { Indicator, Button, Card } from "@aortl/admin-react";
 import { IconInbox, IconUser } from "@tabler/icons-react";
 
-The wrapper is `position: relative`; the floating child is placed by a vertical (`top`/`middle`/`bottom`) and horizontal (`start`/`center`/`end`) modifier. Default is `top end`, with the item half-overflowing the corner.
-
 ## Examples
 
 ### Count on a button
-
-`.indicator` auto-detects common rounded anchors (`.btn`, `.input`, `.card`, `.avatar`) via `:has()` and pulls the badge inward so it aligns with the visual corner. Override with `offset` (or `--indicator-offset`) for other anchors.
 
 :::example
 
@@ -38,8 +34,6 @@ The wrapper is `position: relative`; the floating child is placed by a vertical 
 
 ### Count overflow
 
-Pass `max` to clamp a numeric `label` — anything above it renders as `${max}+`. Vanilla consumers write the clamped string directly.
-
 :::example
 
 ```html
@@ -63,8 +57,6 @@ Pass `max` to clamp a numeric `label` — anything above it renders as `${max}+`
 :::
 
 ### Status dot
-
-Omit `label` for a label-less status dot. The React component renders a small `.indicator-dot` instead of a `.badge`; in vanilla, swap `.badge` for `.indicator-dot` and add a `.indicator-dot-{variant}` color class. Use `aria-label` to keep it accessible.
 
 :::example
 
@@ -93,8 +85,6 @@ Omit `label` for a label-less status dot. The React component renders a small `.
 :::
 
 ### Placements
-
-Any vertical × horizontal pair composes — pass the combined value as `placement`.
 
 :::example
 
@@ -189,8 +179,6 @@ Any vertical × horizontal pair composes — pass the combined value as `placeme
 
 ### Multiple items
 
-`<Indicator>` carries a single `label`. For two or more floating items on the same anchor, compose the CSS directly — each `.indicator-item` takes its own placement modifiers.
-
 :::example
 
 ```html
@@ -209,3 +197,44 @@ Any vertical × horizontal pair composes — pass the combined value as `placeme
 ```
 
 :::
+
+## Reference
+
+### React
+
+| Prop         | Type                                                                     | Default     |
+| ------------ | ------------------------------------------------------------------------ | ----------- |
+| `label`      | `ReactNode`                                                              | —           |
+| `variant`    | `"neutral" \| "info" \| "success" \| "warning" \| "danger" \| "primary"` | `"neutral"` |
+| `size`       | `"sm" \| "md" \| "lg"`                                                   | `"sm"`      |
+| `icon`       | [`IconProp`](../../basics/conventions/#icons)                            | —           |
+| `placement`  | `` `${"top" \| "middle" \| "bottom"}-${"start" \| "center" \| "end"}` `` | `"top-end"` |
+| `offset`     | `number`                                                                 | auto        |
+| `max`        | `number`                                                                 | —           |
+| `aria-label` | `string`                                                                 | —           |
+
+The anchor goes in `children`; the floating element is built from the props. With `label` or `icon` it is a [Badge](../badges/) and `size` applies; with neither it is a label-less dot and `size` is ignored. `max` clamps a numeric `label` to `${max}+`.
+
+`aria-label` names the floating element, not the wrapper, and a dot gets `role="status"` only when you pass one — without it the dot is decorative. One `Indicator` carries one item; for two on the same anchor, compose the classes as in the last example.
+
+Plus native `<div>` attributes.
+
+### Vanilla
+
+| Class / var                                                                                                         | Effect                                                                               |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `indicator`                                                                                                         | Wrapper: `position: relative`, inline, shrink-wrapped to the anchor                  |
+| `indicator-item`                                                                                                    | The floating child. Absolute, `z-index: 1`, half-overflowing the top-end corner      |
+| `indicator-start`                                                                                                   | Pin to the inline start                                                              |
+| `indicator-center`                                                                                                  | Centre on the inline axis                                                            |
+| `indicator-end`                                                                                                     | Pin to the inline end (default)                                                      |
+| `indicator-top`                                                                                                     | Pin to the top (default)                                                             |
+| `indicator-middle`                                                                                                  | Centre on the block axis                                                             |
+| `indicator-bottom`                                                                                                  | Pin to the bottom                                                                    |
+| `indicator-dot`                                                                                                     | `0.5rem` round dot in the muted text colour — an empty `badge` would still be a pill |
+| `indicator-dot-info` `indicator-dot-success` `indicator-dot-warning` `indicator-dot-danger` `indicator-dot-primary` | Status fill for the dot                                                              |
+| `--indicator-offset`                                                                                                | Pixels to pull the item back toward the anchor's centre                              |
+
+One vertical and one horizontal modifier compose, so placement is nine combinations from six classes rather than a 3×3 selector grid. Both defaults are omitted: a bare `indicator-item` is top-end.
+
+`--indicator-offset` aligns the item with the _visual_ corner of a rounded anchor, and `:has()` sets it from the direct child: `2px` for `btn`, `input` and `avatar-square`, `6px` for `card` and `avatar-lg`, `5px` for `avatar`, `3px` for `avatar-sm`. Any other anchor gets `0`, which centres the item exactly on the geometric corner — set the property (or React's `offset`) yourself for a rounded one.

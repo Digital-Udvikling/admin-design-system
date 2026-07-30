@@ -12,14 +12,13 @@
   - [Grouped items](#grouped-items)
   - [Button-styled trigger](#button-styled-trigger)
   - [Split button](#split-button)
-
-Built on `<details>` + `<summary>`. The browser handles open/close. There is no light dismiss — click the trigger again or move focus to close.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
 ### Basic
-
-See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -57,8 +56,6 @@ See [Icons](../basics/icons.md).
 ```
 
 ### Disabled
-
-A `<button>` item disables with the native `disabled` attribute. An anchor item (`href`) has no `disabled`, so use `aria-disabled="true"` — both render dimmed and `not-allowed`, and neither activates (hotkeys included).
 
 **Example**
 
@@ -98,8 +95,6 @@ A `<button>` item disables with the native `disabled` attribute. An anchor item 
 ```
 
 ### Checkbox and radio items
-
-Set `checked` to render a leading check. Items reserve the indicator gutter whether checked or not, so labels stay aligned. Use `role="menuitemradio"` for single-select groups. The styling ships to both bundles — in vanilla, add `role` and `aria-checked` yourself. The check state itself stays with the consumer.
 
 **Example**
 
@@ -152,8 +147,6 @@ Set `checked` to render a leading check. Items reserve the indicator gutter whet
 ```
 
 ### Hotkey (React only)
-
-The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edge of the row. Works on both the button and anchor (`href`) branches.
 
 **Example**
 
@@ -230,11 +223,7 @@ The `hotkey` prop binds a chord to the item. Chips right-pin to the trailing edg
 </Menu>
 ```
 
-Set `href` on `<Menu.Item>` for a real link (right-click → open in new tab, copy URL). Without `href` it renders as a `<button>`.
-
 ### Button-styled trigger
-
-Add `btn` + a variant class to the `<summary>`; it overrides `.menu-trigger`'s default appearance.
 
 **Example**
 
@@ -263,8 +252,6 @@ Add `btn` + a variant class to the `<summary>`; it overrides `.menu-trigger`'s d
 ```
 
 ### Split button
-
-A primary action on the left, related actions on the right via a `<details>` inside a `<ButtonGroup>`.
 
 **Example**
 
@@ -301,4 +288,51 @@ A primary action on the left, related actions on the right via a `<details>` ins
 </ButtonGroup>
 ```
 
-The summary is empty (only the chevron is visible), so add `aria-label` for screen readers.
+**Caution** — A `<details>` menu has no light dismiss: clicking outside leaves it open. Closing means clicking the trigger again or moving focus away.
+
+## Reference
+
+### React
+
+| Part              | Renders                             | Class              |
+| ----------------- | ----------------------------------- | ------------------ |
+| `Menu`            | `<details>`                         | `menu`             |
+| `Menu.Trigger`    | `<summary>`                         | `menu-trigger`     |
+| `Menu.Popup`      | `<div>`                             | `menu-popup`       |
+| `Menu.Item`       | `<button>`, or `<a>` with an `href` | `menu-item`        |
+| `Menu.Separator`  | `<hr>`                              | `menu-separator`   |
+| `Menu.Group`      | `<div>`                             | `menu-group`       |
+| `Menu.GroupLabel` | `<div>`                             | `menu-group-label` |
+
+| Part        | Prop      | Type                                          | Default |
+| ----------- | --------- | --------------------------------------------- | ------- |
+| `Menu.Item` | `icon`    | [`IconProp`](../basics/conventions.md#icons) | —       |
+| `Menu.Item` | `hotkey`  | `string \| readonly string[]`                 | —       |
+| `Menu.Item` | `checked` | `boolean`                                     | —       |
+
+Open state is the `<details>` element's, so there is no `open` prop to control and no JavaScript involved — pass the native `open` attribute for a menu that starts expanded. Each part takes the native attributes of its element.
+
+`href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work; without it the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled` — both dim, both stop activating, hotkeys included.
+
+`checked` turns an item into a checkable one and renders the leading check; `checked={false}` still reserves the gutter, so labels stay aligned down the group. Set `role="menuitemradio"` for single-select. You hold the state itself.
+
+`hotkey` dispatches a click on the item and right-pins a [Kbd](kbd.md) chip, on both the button and anchor branches — see [Conventions › Hotkeys](../basics/conventions.md#hotkeys).
+
+### Vanilla
+
+| Class                 | Effect                                                                                         |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| `menu`                | Positioning context on a `<details>`                                                           |
+| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open      |
+| `menu-popup`          | Popup panel: `11rem` min-width, `18rem` max-height, scrolls, bordered surface with a shadow    |
+| `menu-item`           | Row: full width, `0.75rem`/`0.375rem` padding, `text-sm`, hover tint, `0.5rem` gap for an icon |
+| `menu-item-indicator` | `1rem` check gutter, always reserved; its glyph shows only when `aria-checked="true"`          |
+| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                         |
+| `menu-group`          | Column wrapper for a labelled set                                                              |
+| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                      |
+
+Open and close is the browser's, via `<details>`/`<summary>` — no JavaScript in either bundle. Write `role="menu"` on the popup and, for checkable items, `role="menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` yourself.
+
+`menu-trigger` only styles behaviour and bows out of appearance when a `btn` class is present, so adding `btn btn-primary` to the `<summary>` gives a button-styled trigger with no override needed. An empty trigger centres its chevron, as the split-button pattern does — pair it with an `aria-label`, since the chevron is the only visible content. A `menu` inside a [`btn-group`](buttons.md#group) joins the strip's rounding and seams.
+
+Where [anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) is available the popup is `position: fixed` and anchored to the trigger, so it escapes an ancestor's `overflow: hidden` — inside a `<dialog>`, for instance — and flips above the trigger when there's no room below. Without it, the popup falls back to absolute positioning and clips as usual.

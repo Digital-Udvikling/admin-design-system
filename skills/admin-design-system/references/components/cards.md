@@ -4,6 +4,7 @@
 
 ## Contents
 
+- [Examples](#examples)
   - [Basic](#basic)
   - [Sign-in form](#sign-in-form)
   - [Compact + bordered](#compact-bordered)
@@ -12,12 +13,15 @@
   - [Header toolbar](#header-toolbar)
   - [Media](#media)
   - [Per-slot styling (React only)](#per-slot-styling-react-only)
-- [Advanced: layout with Card.Container](#advanced-layout-with-cardcontainer)
+  - [Two bodies, composed](#two-bodies-composed)
   - [Scroll region](#scroll-region)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
+
+## Examples
 
 ### Basic
-
-`<Card>` accepts `title`, `description`, and `actions` props; children render inside an auto-wrapped `<Card.Body>`. For layouts that don't fit (multiple bodies, a scroll region, custom dividers), reach for [`<Card.Container>`](#advanced-layout-with-cardcontainer).
 
 **Example**
 
@@ -52,8 +56,6 @@
 ```
 
 ### Sign-in form
-
-Free-form content goes as children, between the title and the actions.
 
 **Example**
 
@@ -110,10 +112,6 @@ Free-form content goes as children, between the title and the actions.
 
 ### Color variants
 
-A tinted surface signals status; the title and any leading icon pick up the matching accent. Use sparingly.
-
-A default card uses `surface-muted`, one step above the page. `card-muted` fills with the page background (`surface`) so it sits flush. It carries no accent or status meaning; use it to de-emphasise or group panels.
-
 **Example**
 
 ```html
@@ -168,8 +166,6 @@ A default card uses `surface-muted`, one step above the page. `card-muted` fills
 
 ### With icon
 
-Pass `icon` — it lands in the title row. See [Icons](../basics/icons.md).
-
 **Example**
 
 ```html
@@ -205,8 +201,6 @@ Pass `icon` — it lands in the title row. See [Icons](../basics/icons.md).
 ```
 
 ### Header toolbar
-
-Pass `toolbar` for trailing header controls. It sits at the end of the title row. These are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`.
 
 **Example**
 
@@ -245,8 +239,6 @@ Pass `toolbar` for trailing header controls. It sits at the end of the title row
 
 ### Media
 
-Pass `media` for full-bleed content above the body. Size the media element itself — here with `aspect-ratio`.
-
 **Example**
 
 ```html
@@ -275,8 +267,6 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
 
 ### Per-slot styling (React only)
 
-`classNames` targets the elements the shorthand props render — here the title and description. See [Slot styling](../basics/slots.md).
-
 **Example**
 
 ```tsx
@@ -288,9 +278,7 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
 />
 ```
 
-## Advanced: layout with `Card.Container`
-
-`<Card.Container>` renders the bare `.card` and lets you compose sub-parts directly.
+### Two bodies, composed
 
 **Example**
 
@@ -328,11 +316,7 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
 </Card.Container>
 ```
 
-`<Card.Title>` still accepts the `icon` prop in the advanced path, and `<Card.Header>` + `<Card.Toolbar>` are available for composing a header row by hand.
-
 ### Scroll region
-
-`scroll` pins a direct-child `.card-header` and `.card-actions` while the body scrolls. Set the card's height; the header and actions gain their own padding and dividers.
 
 **Example**
 
@@ -377,3 +361,67 @@ Pass `media` for full-bleed content above the body. Size the media element itsel
   </Card.Actions>
 </Card.Container>
 ```
+
+## Reference
+
+### React
+
+| Part               | Renders | Class              |
+| ------------------ | ------- | ------------------ |
+| `Card`             | `<div>` | `card`             |
+| `Card.Container`   | `<div>` | `card`             |
+| `Card.Media`       | `<div>` | `card-media`       |
+| `Card.Body`        | `<div>` | `card-body`        |
+| `Card.Header`      | `<div>` | `card-header`      |
+| `Card.Toolbar`     | `<div>` | `card-toolbar`     |
+| `Card.Title`       | `<h3>`  | `card-title`       |
+| `Card.Description` | `<p>`   | `card-description` |
+| `Card.Actions`     | `<div>` | `card-actions`     |
+
+| Part         | Prop          | Type                                                                                | Default     |
+| ------------ | ------------- | ----------------------------------------------------------------------------------- | ----------- |
+| `Card`       | `variant`     | `"default" \| "muted" \| "primary" \| "info" \| "success" \| "warning" \| "danger"` | `"default"` |
+| `Card`       | `bordered`    | `boolean`                                                                           | `false`     |
+| `Card`       | `compact`     | `boolean`                                                                           | `false`     |
+| `Card`       | `scroll`      | `boolean`                                                                           | `false`     |
+| `Card`       | `media`       | `ReactNode`                                                                         | —           |
+| `Card`       | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
+| `Card`       | `title`       | `ReactNode`                                                                         | —           |
+| `Card`       | `description` | `ReactNode`                                                                         | —           |
+| `Card`       | `toolbar`     | `ReactNode`                                                                         | —           |
+| `Card`       | `actions`     | `ReactNode`                                                                         | —           |
+| `Card`       | `classNames`  | [slots](../basics/conventions.md#classnames)                                       | —           |
+| `Card.Title` | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
+
+`Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
+
+`variant`, `bordered`, `compact` and `scroll` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies, a custom divider, a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand.
+
+`toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
+
+### Vanilla
+
+| Class                                                   | Effect                                                                                                        |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.75rem` radius, extra-small shadow                        |
+| `card-body`                                             | Content region: `1.25rem` padding, `0.75rem` gap                                                              |
+| `card-title`                                            | `text-lg` semibold row, `0.5rem` gap for a leading icon                                                       |
+| `card-header`                                           | Title row that can hold a trailing toolbar                                                                    |
+| `card-toolbar`                                          | Trailing controls pushed to the row end; icons render at `1.25rem`                                            |
+| `card-description`                                      | `text-sm` muted                                                                                               |
+| `card-actions`                                          | Wrapping button row pinned to the bottom of the body, `0.5rem` gap                                            |
+| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                              |
+| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                 |
+| `card-bordered`                                         | No shadow, stronger border                                                                                    |
+| `card-muted`                                            | Fills with the page surface so the panel sits flush rather than raised                                        |
+| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent                                              |
+| `card-warning`                                          | Tinted warning surface and border — title keeps the default colour                                            |
+| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body |
+
+There is no `card-default` — it's the unmodified `card`. `card-warning` is the one variant whose title isn't accented: yellow on the muted yellow surface fails contrast, as noted in [Conventions › Tones](../basics/conventions.md#tones).
+
+A tinted surface signals status, so it reads as noise when every panel has one. The default `card` sits one step above the page; `card-muted` sits flush with it and carries no status meaning at all, which makes it the one to reach for when grouping or de-emphasising.
+
+Size the media element yourself — `aspect-ratio` on the `<img>` is usually what you want, since the wrapper has no intrinsic height. `card-scroll` needs an explicit height on the card, and only pins a header and actions that are _direct children_; inside a `card-body` they carry no padding of their own.
+
+For a single metric rather than a panel, use a [stat card](stat-cards.md).

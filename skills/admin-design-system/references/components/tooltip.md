@@ -10,9 +10,9 @@
   - [Sizes](#sizes)
   - [Group delay (React only)](#group-delay-react-only)
   - [Rich content](#rich-content)
-- [Vanilla path notes](#vanilla-path-notes)
-
-React's `<Tooltip>` adds delay, focus, dismiss, and portal positioning. The vanilla `.tooltip-wrap` parent shows a nested `.tooltip` on `:hover` / `:focus-within`.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -37,13 +37,11 @@ React's `<Tooltip>` adds delay, focus, dismiss, and portal positioning. The vani
 
 ### Sides
 
-Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on the wrapper (bare `.tooltip-wrap` defaults to top). React uses `side="top|right|bottom|left"` and auto-flips on collisions.
-
 **Example**
 
 ```html
-<span class="tooltip-wrap tooltip-wrap-top">
-  <button type="button" class="btn">Top</button>
+<span class="tooltip-wrap">
+  <button type="button" class="btn">Top (default)</button>
   <span class="tooltip" role="tooltip">Top</span>
 </span>
 <span class="tooltip-wrap tooltip-wrap-right">
@@ -63,7 +61,7 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 ```tsx
 <>
   <Tooltip content="Top" side="top">
-    <Button>Top</Button>
+    <Button>Top (default)</Button>
   </Tooltip>
   <Tooltip content="Right" side="right">
     <Button>Right</Button>
@@ -105,8 +103,6 @@ Vanilla picks a side with a `.tooltip-wrap-{top|right|bottom|left}` modifier on 
 
 ### Group delay (React only)
 
-Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones open instantly until the user pauses for `timeout` ms.
-
 **Example**
 
 ```tsx
@@ -124,8 +120,6 @@ Wrap a toolbar in `<Tooltip.Provider>` so once one tooltip opens, adjacent ones 
 ```
 
 ### Rich content
-
-The popup body accepts inline content such as a shortcut hint via [`<Kbd>`](kbd.md). `<Tooltip>` takes JSX in `content`; use subparts when `content` isn't enough.
 
 **Example**
 
@@ -154,8 +148,50 @@ The popup body accepts inline content such as a shortcut hint via [`<Kbd>`](kbd.
 </Tooltip>
 ```
 
-## Vanilla path notes
+**Caution** — The vanilla tooltip lives in the trigger's stacking context, so an ancestor `overflow: hidden` clips it. The React popup is portaled and isn't affected.
 
-Vanilla `.tooltip-wrap` is CSS-only and lives in the trigger's stacking context, so an ancestor `overflow: hidden` can clip it. Use the React popup if you need portal positioning.
+## Reference
 
-The React popup is portaled onto `.popup-layer` — see [Customize › Popup layering](../basics/customize.md#popup-layering).
+### React
+
+| Part               | Renders                       | Class                    |
+| ------------------ | ----------------------------- | ------------------------ |
+| `Tooltip`          | trigger + portaled popup      | `tooltip`                |
+| `Tooltip.Provider` | nothing — shares open timing  | —                        |
+| `Tooltip.Root`     | nothing — provides context    | —                        |
+| `Tooltip.Trigger`  | its child                     | —                        |
+| `Tooltip.Popup`    | portal → positioner → `<div>` | `popup-layer`, `tooltip` |
+
+| Part               | Prop         | Type                                          | Default      |
+| ------------------ | ------------ | --------------------------------------------- | ------------ |
+| `Tooltip`          | `content`    | `ReactNode`                                   | — (required) |
+| `Tooltip`          | `side`       | `"top" \| "right" \| "bottom" \| "left"`      | `"top"`      |
+| `Tooltip`          | `align`      | `"start" \| "center" \| "end"`                | `"center"`   |
+| `Tooltip`          | `sideOffset` | `number`                                      | `6`          |
+| `Tooltip`          | `size`       | `"sm" \| "md"`                                | `"md"`       |
+| `Tooltip`          | `classNames` | [slots](../basics/conventions.md#classnames) | —            |
+| `Tooltip.Provider` | `delay`      | `number`                                      | —            |
+| `Tooltip.Provider` | `closeDelay` | `number`                                      | —            |
+
+`Tooltip` is the shorthand: `content` plus a single child element, which must be one React element so Base UI can merge trigger props and refs into it. Reach for the parts when the shorthand isn't enough — `Root` / `Trigger` / `Popup` map onto [Base UI Tooltip](https://base-ui.com/react/components/tooltip), which owns the open state, hover and focus delays, dismissal, and collision handling that flips `side` when there's no room.
+
+`Tooltip.Provider` shares timing across a group: once one tooltip in a toolbar has opened, its neighbours open instantly until the pointer rests. `content` takes JSX, so a shortcut hint via [Kbd](kbd.md) needs no escape hatch. `classNames` covers `popup`.
+
+A tooltip is not an accessible name. An icon-only trigger still needs its own `aria-label`.
+
+### Vanilla
+
+| Class                 | Effect                                                                                                                                    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `tooltip`             | The bubble: inverted `text`-on-`surface` fill, `0.5rem`/`0.25rem` padding, `text-xs`, `20rem` max-width, balanced wrapping, click-through |
+| `tooltip-sm`          | Tighter padding                                                                                                                           |
+| `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` / `:focus-within`, positioned above and centred                                                    |
+| `tooltip-wrap-bottom` | Below the trigger                                                                                                                         |
+| `tooltip-wrap-left`   | To the inline start                                                                                                                       |
+| `tooltip-wrap-right`  | To the inline end                                                                                                                         |
+
+The vanilla path needs no JavaScript: the wrapper reveals the bubble on hover and on `:focus-within`, so keyboard users get it too, after a `200ms` open delay. Write `role="tooltip"` on the bubble yourself.
+
+Above is the default, so there is no `tooltip-wrap-top`. There is no auto-flip either — a side modifier is absolute, so pick one that has room. React's positioner handles collisions instead, and its popup transitions per side from Base UI's `[data-side]` and `[data-starting-style]` attributes, which is why one class covers both paths.
+
+Both bundles ship `popup-layer` for the portaled popup; see [Theming › Popup layering](../basics/theming.md#popup-layering).

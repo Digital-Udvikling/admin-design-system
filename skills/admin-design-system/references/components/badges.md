@@ -7,13 +7,14 @@
 - [Examples](#examples)
   - [Variants](#variants)
   - [Sizes](#sizes)
+  - [Soft](#soft)
   - [With a leading icon](#with-a-leading-icon)
   - [Counts](#counts)
-  - [Soft](#soft)
   - [Trend deltas](#trend-deltas)
   - [Dismissible](#dismissible)
-
-Inline-flex pills at `text-xs` by default.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -55,9 +56,27 @@ Inline-flex pills at `text-xs` by default.
 <Badge variant="success" size="lg">LG</Badge>
 ```
 
-### With a leading icon
+### Soft
 
-Pass `icon` or drop an `<i>`/`<svg>` as the first child.
+**Example**
+
+```html
+<span class="badge badge-info badge-soft">Info</span>
+<span class="badge badge-success badge-soft">Active</span>
+<span class="badge badge-warning badge-soft">Review</span>
+<span class="badge badge-danger badge-soft">Blocked</span>
+<span class="badge badge-primary badge-soft">New</span>
+```
+
+```tsx
+<Badge variant="info" soft>Info</Badge>
+<Badge variant="success" soft>Active</Badge>
+<Badge variant="warning" soft>Review</Badge>
+<Badge variant="danger" soft>Blocked</Badge>
+<Badge variant="primary" soft>New</Badge>
+```
+
+### With a leading icon
 
 **Example**
 
@@ -89,28 +108,6 @@ Pass `icon` or drop an `<i>`/`<svg>` as the first child.
 <Badge variant="primary" size="sm">12</Badge> <Badge size="sm">99+</Badge>
 ```
 
-### Soft
-
-Add `badge-soft` alongside a variant for a tinted fill with accent text.
-
-**Example**
-
-```html
-<span class="badge badge-info badge-soft">Info</span>
-<span class="badge badge-success badge-soft">Active</span>
-<span class="badge badge-warning badge-soft">Review</span>
-<span class="badge badge-danger badge-soft">Blocked</span>
-<span class="badge badge-primary badge-soft">New</span>
-```
-
-```tsx
-<Badge variant="info" soft>Info</Badge>
-<Badge variant="success" soft>Active</Badge>
-<Badge variant="warning" soft>Review</Badge>
-<Badge variant="danger" soft>Blocked</Badge>
-<Badge variant="primary" soft>New</Badge>
-```
-
 ### Trend deltas
 
 Direction-to-tone is domain-specific — a falling error rate is good.
@@ -135,8 +132,6 @@ Direction-to-tone is domain-specific — a falling error rate is good.
 
 ### Dismissible
 
-`onRemove` renders a trailing remove button; wire the click to drop the chip.
-
 **Example**
 
 ```html
@@ -153,3 +148,36 @@ Direction-to-tone is domain-specific — a falling error rate is good.
   Digital salg
 </Badge>
 ```
+
+**Caution** — The remove button is icon-only, so it needs its own accessible name. React sets one from `removeLabel`; in vanilla, write the `aria-label` yourself.
+
+## Reference
+
+### React
+
+| Prop          | Type                                                                     | Default     |
+| ------------- | ------------------------------------------------------------------------ | ----------- |
+| `variant`     | `"neutral" \| "info" \| "success" \| "warning" \| "danger" \| "primary"` | `"neutral"` |
+| `size`        | `"sm" \| "md" \| "lg"`                                                   | `"md"`      |
+| `soft`        | `boolean`                                                                | `false`     |
+| `icon`        | `IconProp`                                                               | —           |
+| `onRemove`    | `MouseEventHandler<HTMLButtonElement>`                                   | —           |
+| `removeLabel` | `string`                                                                 | `"Remove"`  |
+
+`soft` gives a tinted fill; `icon` is the leading slot. `onRemove` renders the trailing remove button and takes its accessible name from `removeLabel` — React supplies the × glyph, vanilla supplies the icon.
+
+Plus native `<span>` attributes. `Badge` takes no `classNames` — the remove button isn't reachable from outside.
+
+### Vanilla
+
+| Class / var                                                 | Effect                                                                                                        |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `badge`                                                     | Inline-flex pill: `1.25rem` tall, `0.5rem` side padding, `text-xs`, full radius, neutral fill                 |
+| `badge-info` `badge-success` `badge-warning` `badge-danger` | Solid status fill with matching border and `-content` text                                                    |
+| `badge-primary`                                             | Solid brand fill; no border colour                                                                            |
+| `badge-soft`                                                | Pair with a variant for a `-muted` fill and accent text. `warning` and `primary` keep the default text colour |
+| `badge-sm`                                                  | `1rem` tall, `0.625rem` text                                                                                  |
+| `badge-lg`                                                  | `1.5rem` tall, `text-sm`                                                                                      |
+| `badge-remove`                                              | Trailing icon button, `0.875rem` square; nest it inside the badge so `badge-sm`/`badge-lg` can scale it       |
+
+There is no `badge-neutral` or `badge-md` — both are the unmodified `badge`. A direct-child `<i>` or `<svg>` is kept from shrinking; no wrapper class needed.

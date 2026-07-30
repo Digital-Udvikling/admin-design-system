@@ -2,9 +2,7 @@
 
 > Drop admin styles into a non-admin app without colliding on class names.
 
-A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. Use it when admin markup lives inside a host app that owns its own design system.
-
-The React library always ships this variant. The default `@aortl/admin-css` bundle stays unprefixed — use it for full-page admin apps that own the document.
+A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. Use it when admin markup lives inside a host app that owns its own design system. The default `@aortl/admin-css` bundle stays unprefixed — use that one for full-page admin apps that own the document.
 
 ## Vanilla CSS
 
@@ -20,40 +18,16 @@ Via npm: import `@aortl/admin-css/admin.scoped.css` (or `.min.css`) from your bu
 
 ## React
 
-```tsx
-import "@aortl/admin-react/styles.css";
-import { AdminRoot, Button } from "@aortl/admin-react";
-
-export function ProductPageAdminMenu() {
-  return (
-    <AdminRoot>
-      <Button variant="primary">Save</Button>
-    </AdminRoot>
-  );
-}
-```
-
-`@aortl/admin-react/styles.css` is the scoped+prefixed bundle — there is no unscoped variant. `<AdminRoot>` is required: it's a thin `<div>` that emits `class="_ao-admin-root"` and forwards every prop, including `data-theme`, `style`, and `ref`. A plain `<div className="_ao-admin-root">` works too, but you have to write the prefix yourself.
-
-## Dark mode
-
-`data-theme` works on the wrapper, not just on `<html>`:
-
-```html
-<div class="_ao-admin-root" data-theme="dark">
-  <!-- dark regardless of host page -->
-</div>
-```
-
-The scope owns its own `color-scheme`, so the host's `:root` color scheme does not leak in. See [Dark mode](../basics/dark-mode.md).
+Nothing to switch on: `@aortl/admin-react/styles.css` **is** this bundle and there is no unscoped variant, so the [React setup](react.md) already produces a scoped subtree. Mount an `<AdminRoot>` around each admin surface rather than once at the app root.
 
 ## Host-page style isolation
 
-The `_ao-` prefix namespaces every admin class, so a host page's `.btn` or `.card` rules can't match admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`.
+The `_ao-` prefix namespaces every admin class, so a host page's `.btn` or `.card` rules can't match admin elements. The `@scope` wrapper additionally pins admin's tokens and `color-scheme` to `._ao-admin-root`, which lets an embedded surface [force its own theme](../basics/theming.md#scope-to-a-subtree) without the host's leaking in.
 
 A host page's bare element rules (`h3 { … }`, `button { … }`) can still target admin descendants; the prefix only namespaces classes, not tag selectors. The scoped bundle ships unlayered CSS so admin's resets outrank an untouched host stylesheet. For hard isolation against arbitrary host CSS, put admin in a cascade layer the host can order (`@layer host, admin;`) or a shadow root.
 
 ## Caveats
 
 - Admin classes only match inside `._ao-admin-root`. If you want admin's tokens or utilities to apply across the whole host app, use the default unscoped bundle.
+- Admin popups need their `z-index` lowered when host chrome should paint above them — see [Popup layering](../basics/theming.md#popup-layering).
 - `@scope` is Baseline-modern (Chrome, Firefox, Safari). There is no legacy fallback.

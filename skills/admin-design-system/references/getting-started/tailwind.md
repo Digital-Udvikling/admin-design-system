@@ -36,4 +36,4 @@ Skip either import if you only want one half.
 </div>
 ```
 
-Override tokens the same way as with vanilla CSS — see [Customize](../basics/customize.md).
+Override tokens the same way as with vanilla CSS — see [Theming](../basics/theming.md).

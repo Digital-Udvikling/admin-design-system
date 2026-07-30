@@ -14,8 +14,9 @@
   - [Password](#password)
   - [Types](#types)
   - [Date and time](#date-and-time)
-  - [File](#file)
-  - [Inside a Field](#inside-a-field)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -36,8 +37,6 @@
 ```
 
 ### Status variants
-
-`info`, `success`, and `warning` set the border and focus ring color.
 
 **Example**
 
@@ -83,8 +82,6 @@
 
 ### With icons
 
-The `.input-icon` wrapper floats a borderless muted icon inside the field. Position is structural — an `i`/`svg` before the `.input` is leading, after is trailing. For a bordered segment instead, use [input groups](input-groups.md). See [Icons](../../basics/icons.md).
-
 **Example**
 
 ```html
@@ -110,8 +107,6 @@ The `.input-icon` wrapper floats a borderless muted icon inside the field. Posit
 
 ### Clearable
 
-`clearable` floats a × button in the trailing slot while the field holds a value; clicking it empties the field and fires a real change event. The `.input-action` button styling ships to both bundles — vanilla wires the clear in a line of JS.
-
 **Example**
 
 ```html
@@ -133,8 +128,6 @@ The `.input-icon` wrapper floats a borderless muted icon inside the field. Posit
 ```
 
 ### Password
-
-`<PasswordInput>` adds a reveal toggle that flips the field between `password` and `text`, keeping focus and setting `aria-pressed`.
 
 **Example**
 
@@ -181,8 +174,6 @@ The `.input-icon` wrapper floats a borderless muted icon inside the field. Posit
 
 ### Date and time
 
-Native browser pickers; dark mode tracks the document's `color-scheme`.
-
 **Example**
 
 ```html
@@ -201,28 +192,48 @@ Native browser pickers; dark mode tracks the document's `color-scheme`.
 <Input type="week" />
 ```
 
-### File
+## Reference
 
-Use [FileInput](file-inputs.md) (`.file-input` class) to style the picker button.
+### React
 
-### Inside a Field
+| Component       | Prop           | Type                                                                    | Default           |
+| --------------- | -------------- | ----------------------------------------------------------------------- | ----------------- |
+| `Input`         | `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"`      |
+| `Input`         | `inputSize`    | `"sm" \| "md" \| "lg"`                                                  | `"md"`            |
+| `Input`         | `icon`         | [`IconProp`](../../basics/conventions.md#icons)                        | —                 |
+| `Input`         | `iconTrailing` | [`IconProp`](../../basics/conventions.md#icons)                        | —                 |
+| `Input`         | `clearable`    | `boolean`                                                               | `false`           |
+| `Input`         | `clearLabel`   | `string`                                                                | `"Clear"`         |
+| `Input`         | `onClear`      | `() => void`                                                            | —                 |
+| `Input`         | `action`       | `ReactNode`                                                             | —                 |
+| `Input`         | `classNames`   | [slots](../../basics/conventions.md#classnames)                        | —                 |
+| `PasswordInput` | `revealLabel`  | `string`                                                                | `"Show password"` |
 
-See [Fields](fields.md).
+The size prop is `inputSize` because `<input>` has a native `size` attribute — see [Conventions › Sizes](../../basics/conventions.md#sizes). `type` defaults to `"text"`.
 
-**Example**
+Any of `icon`, `iconTrailing`, `clearable` or `action` wraps the input in an `input-icon` label; without them the `<input>` is rendered bare. `classNames` covers `wrapper` and `action`. `clearable` shows the × only while the field holds a value and is neither disabled nor read-only; clearing sets the value through the native setter and dispatches a real `input` event, so controlled components and form libraries both see the change, then calls `onClear`. `action` replaces the clear button with your own control — style it `input-action`.
 
-```html
-<div class="field">
-  <label class="field-label" for="email">Email</label>
-  <input id="email" type="email" class="input" placeholder="you@example.com" />
-  <p class="field-description">We'll never share your email.</p>
-</div>
-```
+`PasswordInput` is `Input` with a built-in reveal toggle that flips `type` between `password` and `text`, keeps focus, and tracks state in `aria-pressed`. It accepts every `Input` prop except `type` and the clear-button set.
 
-```tsx
-<Field name="email">
-  <Field.Label>Email</Field.Label>
-  <Input type="email" placeholder="you@example.com" />
-  <Field.Description>We'll never share your email.</Field.Description>
-</Field>
-```
+Wraps [Base UI Input](https://base-ui.com/react/components/input), so inside a [Field](fields.md) it picks up the id, label association and validity wiring. Plus native `<input>` attributes.
+
+### Vanilla
+
+| Class                                        | Effect                                                                                     |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `input`                                      | Full-width field, `0.75rem`/`0.5rem` padding, `0.5rem` radius, `text-sm`, bordered surface |
+| `input-ghost`                                | No fill or border until hover                                                              |
+| `input-danger`                               | Danger border and focus outline                                                            |
+| `input-info` `input-success` `input-warning` | Status border and focus outline                                                            |
+| `input-sm`                                   | `text-xs`, `0.625rem`/`0.375rem` padding                                                   |
+| `input-lg`                                   | `text-base`, `1rem`/`0.625rem` padding                                                     |
+| `input-icon`                                 | Wrapper that floats icons over a contained `input` and pads the field to clear them        |
+| `input-action`                               | `1.25rem` interactive trailing control (clear, reveal) with a `currentColor` hover wash    |
+
+There is no `input-bordered` or `input-md` — both are the unmodified `input`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+
+`input-icon` is position-driven, so no modifier picks a side: an `<i>`/`<svg>` _before_ the `input` is leading, one _after_ it is trailing, and the wrapper reads the contained `input-sm` / `input-lg` to match its own text size and padding. Decorative glyphs are `pointer-events: none` so clicks reach the field; an `input-action` button stays clickable. A disabled input dims both. The wrapper is usually a `<label>`, which also makes the icon a click target for focusing the field.
+
+Both `input-action` behaviours — clearing and password reveal — need a line of your own JS in vanilla; the button styling ships in both bundles. Native date and time pickers follow the document's `color-scheme` in dark mode, and the calendar glyph is dimmed to `0.6` until hover.
+
+For a bordered segment attached to the field instead of a floating glyph, use [input groups](input-groups.md). For the file picker, [FileInput](file-inputs.md); for steppers and clamping, [Number inputs](number-inputs.md).

@@ -7,48 +7,20 @@ sidebar:
 
 ## Built for admin tooling
 
-Operators sit in these screens all day. The defaults reflect that:
-
-- **Information density** — compact spacing, smaller defaults, tabular layouts. Don't pad components to feel "premium."
-- **Operator UX** — keyboard affordances, predictable focus, fast scanning, low chrome.
-- **Clarity over polish** — legible type, honest borders, restrained color. No decorative gradients or oversized hero spacing.
-- **Predictable primitives** — fewer variants, consistent names. A `<Button>` does what `<button>` does.
-
-When in doubt: would this make a 12-row form on a busy admin screen _easier_ or _prettier_? Pick easier.
+Operators sit in these screens all day, so the defaults favour density over padding and keep the variant count low. Keyboard affordances and predictable focus count for more than chrome does. When in doubt: would this make a 12-row form _easier_ or _prettier_? Pick easier. Use a different system for customer-facing surfaces.
 
 ## Prefer the platform
 
-Reach for modern HTML and CSS before JavaScript. No legacy budget, no polyfills, no graceful fallbacks. If a behavior can be expressed declaratively, it should be.
-
-- **Animation** — CSS `transition`, `@keyframes`, `@starting-style`, `transition-behavior: allow-discrete`.
-- **Disclosure and overlays** — `<dialog>` + `showModal()`, the `popover` attribute, `anchor-name` / `position-anchor`.
-- **Accordions** — `<details>` + `<summary>`, with `::details-content` for animated open/close.
-- **Form state** — `:has()`, `:user-valid`, `:user-invalid`, `:placeholder-shown`, `accent-color`, `field-sizing: content`.
-- **Layout** — container queries, `subgrid`, `aspect-ratio`, logical properties, `text-wrap: balance` / `pretty`.
-- **Scroll** — `position: sticky`, `scroll-snap-*`, `overscroll-behavior`, `scroll-margin-*`.
-- **Color and theming** — `light-dark()`, `color-mix()`, relative color syntax, `@property`.
-
-JavaScript shows up when behavior is genuinely stateful, needs data fetching, or has no declarative equivalent. In those cases, use Base UI primitives instead of rolling your own.
+Behaviour HTML and CSS can express declaratively is not written in JavaScript. A dialog is `<dialog>` and an accordion is `<details>`; animation stays in CSS. There is no legacy budget and no polyfills. Where behaviour is genuinely stateful, the React package wraps [Base UI](https://base-ui.com/) rather than rolling its own, and each component's `Reference` names the primitive.
 
 ## Two flavors, one contract
 
-Both packages ship the same class names. `@aortl/admin-css` defines `.btn`, `.input`, `.field`, …. `@aortl/admin-react` wraps Base UI primitives in thin components that emit those same classes. Vanilla HTML and React render identical DOM.
+`@aortl/admin-css` defines `.btn`, `.input`, `.field`; `@aortl/admin-react` emits those same classes. Vanilla HTML and React render identical DOM, so adopting one flavor doesn't lock out the other — mix them on the same page. The CSS is the source of truth and React inherits visual changes from it.
 
-This shapes the rest of the system:
-
-- Adopting one flavor doesn't lock out the other — mix freely on the same page.
-- The CSS is the source of truth. Visual changes happen there, and React inherits them.
-- Class names are part of the public API. Renaming `.btn-primary` is a breaking change.
-
-Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / `md` (default, omitted) / `lg`.
+Class names are therefore public API: renaming `.btn-primary` is a breaking change. They read `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`, with sizes `sm` / `md` (default, omitted) / `lg`.
 
 ## Two-layer tokens
 
-Colors live in two layers, both registered with Tailwind's `@theme`:
+A Flexoki **palette** (`--color-blue-600`, `--color-base-50`) holds absolute tones, identical in light and dark mode. **Semantic** roles (`--color-primary`, `--color-surface`, `--color-danger`) alias them through `light-dark()`. Components reference only the semantic layer, so one override moves everything using that role. Spacing, radii, and shadows use Tailwind's built-in scales.
 
-1. **Palette** — Flexoki ramps (`--color-blue-600`, `--color-base-50`, …). Absolute tones, identical in light and dark mode.
-2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, `--color-danger`, …) point at palette tones via `light-dark()`.
-
-Components only ever reference semantic tokens. Override `--color-primary` and every component follows. Spacing, radii, and shadows use Tailwind's built-in scales (`p-4`, `rounded-lg`, `shadow-xs`).
-
-See [Colors](../colors/) for the full token catalog and [Customize](../customize/) for override patterns.
+See [Colors](../colors/) for the catalog, [Theming](../theming/) for overrides, and [Conventions](../conventions/) for the props and classes every component shares.

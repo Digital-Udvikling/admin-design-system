@@ -9,7 +9,7 @@ Docs live in `apps/docs/src/content/docs/**/*.mdx`. Each page mirrors a feature 
 
 ## The `:::example` directive
 
-A paired-tabs example with a rendered preview. The block accepts one `html` fence and one `tsx` fence — either may be omitted.
+A paired-tabs example with a rendered preview. The block accepts one `html` fence and one `tsx` fence; either may be omitted.
 
 ````markdown
 :::example
@@ -54,24 +54,83 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 :::
 ````
 
-Alias to `StarlightBadge` when the page already imports the admin `<Badge>`. Keep the supporting CSS classes shipping in both bundles — consumers wiring their own vanilla JS still need the styling.
+Alias to `StarlightBadge` when the page already imports the admin `<Badge>`. Keep the supporting CSS classes shipping in both bundles: consumers wiring their own vanilla JS still need the styling.
 
 ### Astro imports in MDX
 
 Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component.
 
+## Callouts
+
+`<Callout variant="info" | "success" | "warning" | "danger">` (`src/components/Callout.astro`) renders the design system's own `.alert`. The skill generator flattens it to a `**Caution** — …` lead-in.
+
+Leave a blank line after the opening tag and before the closing one, so the body stays a markdown block at column 0:
+
+```mdx
+<Callout variant="warning">
+
+Set `aria-sort` on the sorted column **only**.
+
+</Callout>
+```
+
+Without the blank lines the body becomes JSX children, which oxfmt indents. That is harmless on screen, but it misindents any fenced code the callout wraps.
+
+Starlight's `:::note` / `:::caution` asides do **not** work here: they inject their icon as a raw-HTML mdast node, and the Sätteri processor escapes raw HTML instead of parsing it, so the icon renders as visible SVG source. `generate-skill.mjs` fails the build if a `:::` marker survives, which catches an aside written by habit.
+
+Don't use the React `<Alert>` in prose either — it emits `_ao-`-prefixed classes that only match inside `._ao-admin-root`, and page prose has no such wrapper, so it renders unstyled.
+
+## Page shape
+
+A component page is reference material with worked examples. Examples lead, because the rendered preview is the fastest way to find "the one that looks like my design"; the lookup table sits at the bottom, one click away in the table of contents.
+
+```markdown
+---
+title: Badges
+description: Compact status indicator for tags and counts.
+---
+
+## Examples
+
+### <Variation> ← heading, then the example. No intro prose.
+
+### <Variation>
+
+## Reference
+
+### React
+
+### Vanilla
+```
+
+- `## Examples` is mandatory, with one `###` per variation. There is no page-level intro paragraph; the frontmatter `description` is the intro.
+- `## Reference` is mandatory on any page documenting a component. `### React` carries props (and a parts table for compounds); `### Vanilla` carries classes and custom properties. Different people read the two tables, so restating one fact in both (`size="sm"` and `select-sm`) is correct rather than duplication.
+- The Vanilla `Effect` column stands in for the preview. Because the agent skill bundle strips the rendered example, effects must be concrete: "`1rem` tall, `0.625rem` text", never "compact".
+- Full-page assemblies belong in `modules/`. A component page keeps only examples that teach its own component.
+
+### Writing the Reference
+
+- Don't add a `Notes` column. Starlight's content column is max-width constrained, so a table wide enough for prose wraps one word per line. Keep tables to `Prop | Type | Default` (plus a leading `Part` column for compounds) and put the caveats in a short paragraph underneath.
+- List only admin's own props; close with "Plus native `<span>` attributes." rather than enumerating inherited ones.
+- Say when a default emits no class (`md` adds no class), and name classes that don't exist but readers will guess (`badge-neutral`).
+- Write attributes bracketed — `[data-selected]` — so they read as attributes and the docs checker doesn't treat them as class names.
+- Run `pnpm check-docs`. It fails on a class the component CSS doesn't define, and reports how many component classes still have no Reference entry.
+
 ## Prose style
 
-Examples carry the page; prose orients and steps out of the way.
+Examples and the Reference carry the page; prose is for what neither can show.
 
-- **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
-- **Subsection intros are optional.** `### Variants`, `### Sizes`, `### Disabled` usually need no prose. Add a sentence only when the example would surprise (a constraint, a gotcha, an invariant).
-- **No marketing voice, no rationale for third-party choices.** Name the library, link it, move on. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
-- **Voice is flat and factual.** No rhetorical color. Cut antithesis ("X rather than Y"), rule-of-three flavor triads, anthropomorphism ("digits don't shimmy"), marketing intensifiers ("the fastest way", "the simplest path"), empty reassurance ("text stays readable", "visible at a glance"), and soft hedges ("most likely"). Keep an em-dash only for a list or aside that adds information. Delete `###` intros that only narrate the next example.
-- **Consumer pages carry the contract, not the plumbing.** Document the `_ao-` scope, class-name parity, version pinning, and props; leave the remark pipeline, virtual modules, and `@layer` ordering to the contributing pages.
-- **Cross-references are tight.** `See [Icons](../../basics/icons/).` not "for the recommended library, sizing convention, and usage patterns."
-
-Keep: code examples, a11y hooks, version-pinning, override / escape-hatch APIs, non-obvious constraints. Cut: cheerleading, restated descriptions, explanations of what the next code block plainly demonstrates.
+- Any API fact belongs in the Reference table, so no prose goes under an example heading. A sentence survives only when it states something neither the example nor the table can: a browser caveat, a contrast failure, an a11y attribute you must hand-write in vanilla, or a scope boundary ("wire the filtering logic yourself").
+- Reach for `<Callout>` when ignoring it _breaks_ something: a required scrolling ancestor, a stacking-context rule, a missing accessible name. Scope boundaries get a plain short sentence instead. Callouts are heavy, and more than two or three on a page stops being a signal.
+- A heading carrying a `<StarlightBadge>` can't be a deep-link target. The JSX pushes a trailing hyphen into the slug (`classnames-`), and Sätteri's `headingAttributes` feature, which would allow an explicit `{#id}`, is off. If another page needs to link to a section, leave the badge off and state "React only" in the body.
+- Keep the frontmatter `description` to one short sentence (≤ ~10 words), and don't restate it as the body's first paragraph. `title` is sentence case (`App shell`, `Dark mode`, `File inputs`).
+- No marketing voice, and no rationale for third-party choices: name the library, link it, move on. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
+- Voice is flat and factual, with no rhetorical color. Cut antithesis ("X rather than Y"), flavor triads, anthropomorphism ("digits don't shimmy", "an irreversible action wants"), marketing intensifiers ("the fastest way", "the simplest path"), empty reassurance ("text stays readable", "visible at a glance"), and soft hedges ("most likely").
+- Bold marks a term being defined, never a lead-in. A list whose every item opens with a bolded phrase reads as generated; write the rule as the sentence itself.
+- An em-dash needs to earn its place in a list or an aside that adds information. Prefer a colon, a semicolon, or a second sentence to a dash reached for by reflex, and don't let one clause shape (`…, which is what X needs`) become the house tic.
+- Consumer pages carry the contract; the plumbing stays here. Document the `_ao-` scope, class-name parity, version pinning, and props, and leave the remark pipeline, virtual modules, and `@layer` ordering to the contributing pages.
+- State a cross-cutting convention once. `className`, `classNames`, the `icon` prop, the size scale, tones, and `.Container` live on [Conventions](../../basics/conventions/). A component page restates the fact as a Reference row, never as a paragraph, and doesn't append "See [Conventions]" to every section.
+- Keep cross-references tight: `See [Icons](../../basics/icons/).` not "for the recommended library, sizing convention, and usage patterns."
 
 ## Linking
 
@@ -91,7 +150,7 @@ Don't hard-code `/admin-design-system/...` in MDX.
 
 ## Regenerating the agent skill
 
-The repo ships an [agent skill](../../getting-started/skill/) bundle at `skills/admin-design-system/`. The bundle is **generated** — committed but produced by `apps/docs/scripts/generate-skill.mjs` walking every MDX page and writing per-page markdown plus a top-level `SKILL.md`.
+The repo ships an [agent skill](../../getting-started/skill/) bundle at `skills/admin-design-system/`. The bundle is **generated**: committed but produced by `apps/docs/scripts/generate-skill.mjs` walking every MDX page and writing per-page markdown plus a top-level `SKILL.md`.
 
 After any change under `apps/docs/src/content/docs/`:
 

@@ -12,15 +12,14 @@
   - [Empty values](#empty-values)
   - [Rich value](#rich-value)
   - [Compact density](#compact-density)
-  - [Subpart escape hatch](#subpart-escape-hatch)
-
-A `<dl>` with a label column that aligns across every row. Use it for summary panels, identifier strips, metadata blocks. See [Table](tables.md) for tabular/multi-row data.
+  - [Composed row](#composed-row)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
 ### Basic
-
-Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 
 **Example**
 
@@ -79,8 +78,6 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 
 ### Copyable (React only)
 
-`copyable` on an item reveals a copy button on its value cell on hover or focus; clicking anywhere in the cell copies and confirms with a check for ~1.2s. Text selection and links inside the value still work. Opt in row-by-row.
-
 **Example**
 
 ```tsx
@@ -92,8 +89,6 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 ```
 
 ### Numeric column
-
-`numeric` right-aligns the value. Same convention as `<Table.Cell numeric>`.
 
 **Example**
 
@@ -120,8 +115,6 @@ Each row is a label–value pair via shorthand props on `<PropertyList.Item>`.
 
 ### Empty values
 
-Null, undefined, or empty `value` renders an em-dash. Rows never auto-hide. To collapse a section whose every value is missing, pass `hideIfAllEmpty` on the list.
-
 **Example**
 
 ```html
@@ -147,8 +140,6 @@ Null, undefined, or empty `value` renders an em-dash. Rows never auto-hide. To c
 
 ### Rich value
 
-Pass JSX to the shorthand `value` prop for badges, links, or inline icons.
-
 **Example**
 
 ```html
@@ -172,8 +163,6 @@ Pass JSX to the shorthand `value` prop for badges, links, or inline icons.
 ```
 
 ### Compact density
-
-`compact` tightens rows for sidebar info blocks or panels with many short attributes.
 
 **Example**
 
@@ -201,9 +190,7 @@ Pass JSX to the shorthand `value` prop for badges, links, or inline icons.
 </PropertyList>
 ```
 
-### Subpart escape hatch
-
-When you need full control over a row — e.g. a label with a tooltip, a value cell with a custom layout — drop the shorthand props and compose `<PropertyList.Label>` and `<PropertyList.Value>` directly.
+### Composed row
 
 **Example**
 
@@ -228,3 +215,59 @@ When you need full control over a row — e.g. a label with a tooltip, a value c
   </PropertyList.Item>
 </PropertyList>
 ```
+
+## Reference
+
+### React
+
+| Part                 | Renders              | Class                                        |
+| -------------------- | -------------------- | -------------------------------------------- |
+| `PropertyList`       | `<section>`          | `property-list`                              |
+| `PropertyList.Item`  | `<dt>` + `<dd>` pair | `property-list-label`, `property-list-value` |
+| `PropertyList.Label` | `<dt>`               | `property-list-label`                        |
+| `PropertyList.Value` | `<dd>`               | `property-list-value`                        |
+
+| Part                | Prop             | Type                                          | Default |
+| ------------------- | ---------------- | --------------------------------------------- | ------- |
+| `PropertyList`      | `title`          | `ReactNode`                                   | —       |
+| `PropertyList`      | `striped`        | `boolean`                                     | `false` |
+| `PropertyList`      | `compact`        | `boolean`                                     | `false` |
+| `PropertyList`      | `hideIfAllEmpty` | `boolean`                                     | `false` |
+| `PropertyList`      | `classNames`     | [slots](../basics/conventions.md#classnames) | —       |
+| `PropertyList.Item` | `label`          | `ReactNode`                                   | —       |
+| `PropertyList.Item` | `value`          | `ReactNode`                                   | —       |
+| `PropertyList.Item` | `numeric`        | `boolean`                                     | `false` |
+| `PropertyList.Item` | `copyable`       | `boolean`                                     | `false` |
+| `PropertyList.Item` | `copyValue`      | `string`                                      | —       |
+| `PropertyList.Item` | `classNames`     | [slots](../basics/conventions.md#classnames) | —       |
+
+`Item` with `label` / `value` is the ordinary row; passing children instead lets you compose `Label` and `Value` yourself, as a label with a tooltip or a custom value layout requires. `value` takes JSX, so badges, links and inline icons need no escape hatch. The list's `classNames` covers `title` and `items`, an item's covers `label` and `copy`.
+
+A `value` that is `null`, `undefined` or empty renders an em-dash and marks the cell empty; rows never hide themselves, but `hideIfAllEmpty` collapses a section in which _every_ value fell back to the dash. `numeric` right-aligns and tabularises, matching `Table.Cell`'s `numeric`.
+
+`copyable` is React-only: the button writes `copyValue` — or the cell's text — to the clipboard and flips to a check for about 1.2 seconds. The whole value cell is the click target, while text selection and links inside it keep working. Opt in per row. The classes ship in both bundles, so vanilla can wire its own `navigator.clipboard` call and toggle `[data-copied]`.
+
+`PropertyList.Value` also takes `empty` and `copyValue` when composed by hand. Plus the native attributes of each part's element.
+
+### Vanilla
+
+| Class                            | Effect                                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| `property-list`                  | Section wrapper, `text-sm`                                                      |
+| `property-list-title`            | `text-sm` bold heading with `0.5rem` of space beneath                           |
+| `property-list-items`            | The `<dl>`: two-column grid, label track sized to its widest label              |
+| `property-list-label`            | `<dt>` cell: muted, `0.75rem`/`0.375rem` padding, `2rem` min-height             |
+| `property-list-value`            | `<dd>` cell: same metrics, `0.5rem` gap, long values break rather than overflow |
+| `property-list-striped`          | Bands every second row, keeping the `<dt>`/`<dd>` pair together                 |
+| `property-list-compact`          | `0.5rem`/`0.125rem` padding, `1.5rem` min-height                                |
+| `property-list-value-numeric`    | Right-aligns the value, tabular figures                                         |
+| `property-list-value-empty`      | Marks a dash cell so `property-list-hide-if-empty` can count it                 |
+| `property-list-hide-if-empty`    | Hides the whole section when no value cell lacks `-empty`                       |
+| `property-list-copy`             | Copy button, pushed to the cell end; hidden until the row is hovered or focused |
+| `property-list-copy-icon`        | The copy glyph, hidden while `[data-copied]` is set                             |
+| `property-list-copy-icon-copied` | The confirmation glyph, shown only while `[data-copied]` is set                 |
+| `property-list-value-copyable`   | Opts a value cell into showing its copy button                                  |
+
+The `<dl>` is the grid and `<dt>`/`<dd>` auto-flow into its two tracks, so rows need no wrapper element — which is also why the label column aligns across every row without a fixed width.
+
+For tabular, multi-row data use a [Table](tables.md); for a single metric, a [stat card](stat-cards.md).

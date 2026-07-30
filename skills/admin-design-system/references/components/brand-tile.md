@@ -4,17 +4,19 @@
 
 ## Contents
 
-- [Monogram](#monogram)
-- [Icon](#icon)
-- [Sizes](#sizes)
-- [Soft tints](#soft-tints)
-- [Image](#image)
+- [Examples](#examples)
+  - [Monogram](#monogram)
+  - [Icon](#icon)
+  - [Sizes](#sizes)
+  - [Soft tints](#soft-tints)
+  - [Image](#image)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
-Sits in [`<Navbar.Brand>`](../modules/app-shell.md#navbar). Color follows `--color-system-accent` — see [Customize](../basics/customize.md#system-accent).
+## Examples
 
-## Monogram
-
-Keep monograms to 1–2 characters; the 24px box won't fit more.
+### Monogram
 
 **Example**
 
@@ -34,9 +36,7 @@ Keep monograms to 1–2 characters; the 24px box won't fit more.
 <BrandTile monogram="AO" style={{ "--color-system-accent": "var(--color-green-600)" }} />
 ```
 
-## Icon
-
-Pass a [Tabler icon](../basics/icons.md). In React, use the `icon` prop; for vanilla, drop an `<i>`/`<svg>` inside `.brand-tile`. `icon` wins over `monogram`.
+### Icon
 
 **Example**
 
@@ -58,7 +58,7 @@ Pass a [Tabler icon](../basics/icons.md). In React, use the `icon` prop; for van
 <BrandTile icon={IconPackage} style={{ "--color-system-accent": "var(--color-cyan-600)" }} />
 ```
 
-## Sizes
+### Sizes
 
 **Example**
 
@@ -72,9 +72,7 @@ Pass a [Tabler icon](../basics/icons.md). In React, use the `icon` prop; for van
 <BrandTile monogram="OR" size="lg" />
 ```
 
-## Soft tints
-
-`soft` retints with the accent's `*-muted` fill and a colored glyph; one `--color-system-accent` override drives both the solid and soft tiles. `info`/`success`/`danger` use the status tokens. No `warning` — a yellow glyph fails contrast on the tinted fill.
+### Soft tints
 
 **Example**
 
@@ -110,9 +108,7 @@ Pass a [Tabler icon](../basics/icons.md). In React, use the `icon` prop; for van
 <BrandTile icon={IconChartBar} variant="danger" />
 ```
 
-## Image
-
-Pass `src` for a shop logo. The tile flips to a bordered surface and the image is `object-contain`. `src` wins over `icon` and `monogram`; `alt` defaults to `""`.
+### Image
 
 **Example**
 
@@ -125,3 +121,35 @@ Pass `src` for a shop logo. The tile flips to a bordered surface and the image i
 ```tsx
 <BrandTile src={`/favicon.svg`} alt="Acme" size="lg" />
 ```
+
+## Reference
+
+### React
+
+| Prop       | Type                                                   | Default   |
+| ---------- | ------------------------------------------------------ | --------- |
+| `variant`  | `"solid" \| "soft" \| "info" \| "success" \| "danger"` | `"solid"` |
+| `size`     | `"md" \| "lg"`                                         | `"md"`    |
+| `monogram` | `string`                                               | —         |
+| `icon`     | [`IconProp`](../basics/conventions.md#icons)          | —         |
+| `src`      | `string`                                               | —         |
+| `alt`      | `string`                                               | `""`      |
+
+Content precedence is `src` > `icon` > `monogram`. Monogram and icon tiles are marked `aria-hidden`, since the brand name is next to them in the navbar; an image tile exposes `alt` instead. There is no `sm`. Plus native `<span>` attributes.
+
+Sits in [`Navbar.Brand`](../modules/app-shell.md#navbar).
+
+### Vanilla
+
+| Class                                                      | Effect                                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `brand-tile`                                               | `1.5rem` square, `0.25rem` radius, accent fill, `11px` semibold monogram |
+| `brand-tile-lg`                                            | `2.5rem`, `0.375rem` radius, `text-sm`                                   |
+| `brand-tile-soft`                                          | Accent `-muted` fill with an accent glyph                                |
+| `brand-tile-info` `brand-tile-success` `brand-tile-danger` | Status `-muted` fill with a matching glyph                               |
+
+A direct `<i>`/`<svg>` child is sized in CSS — `14px`, or `20px` under `brand-tile-lg` — so vanilla needs no inline `font-size` and React icons render at `1em`. A direct `<img>` child flips the tile to a bordered surface via `:has()` and is `object-contain`, so an arbitrary-ratio logo isn't cropped.
+
+There is no `brand-tile-solid` or `brand-tile-md` — both are the unmodified `brand-tile` — and no `brand-tile-warning`; see [Conventions › Tones](../basics/conventions.md#tones). Keep monograms to two characters; the default box won't fit more.
+
+The fill comes from `--color-system-accent`, so one override retints both the solid and soft variants — see [Theming › System accent](../basics/theming.md#system-accent).

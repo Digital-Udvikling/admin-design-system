@@ -2,9 +2,14 @@
 
 > Styling for rendered markdown and other HTML you don't control.
 
-The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral. That leaves backend-rendered HTML — markdown output, CMS bodies, model output — unstyled. Wrap it in `.prose` (vanilla) or `<Prose>` (React) to re-establish typographic styling for that region only, from the same semantic tokens, so it follows dark mode.
+## Contents
 
-When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md). `.prose` is for HTML you can't annotate.
+- [Examples](#examples)
+  - [Rendered markdown](#rendered-markdown)
+  - [Injecting a rendered HTML string](#injecting-a-rendered-html-string)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -88,9 +93,7 @@ When you control the markup, reach for the dedicated components instead: [Link](
 </Prose>
 ```
 
-## Rendering backend HTML
-
-The common case is an HTML string from a markdown renderer. Inject it into the wrapper — the descendant styles do the rest, no per-element classes.
+### Injecting a rendered HTML string
 
 ```html
 <!-- server renders markdown → html, then: -->
@@ -101,4 +104,22 @@ The common case is an HTML string from a markdown renderer. Inject it into the w
 <Prose dangerouslySetInnerHTML={{ __html: renderedHtml }} />
 ```
 
-Sanitize untrusted HTML before injecting it. In a React app `<Prose>` emits `_ao-prose` and must render inside `<AdminRoot>` like every other component — see [React](../getting-started/react.md).
+**Danger** — Sanitize untrusted HTML before injecting it. The wrapper styles markup; it does not filter it.
+
+## Reference
+
+### React
+
+Takes no props of its own — native `<div>` attributes only.
+
+### Vanilla
+
+| Class   | Effect                                                                                                                                                                                                                                         |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, underlined links, `<code>` chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](tables.md) |
+
+The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral, which leaves backend-rendered HTML unstyled. This class re-establishes it for one region, from the same semantic tokens, so it follows dark mode. First and last children keep their outer margins collapsed.
+
+Every descendant rule is wrapped in `:where()`, so a consumer's own `.prose a { … }` wins on specificity without `!important`.
+
+When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md).

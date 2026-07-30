@@ -14,20 +14,21 @@
   - [With icons](#with-icons)
   - [Icon-only](#icon-only)
   - [Toggle](#toggle)
+  - [Toggle with a hotkey](#toggle-with-a-hotkey)
   - [Hotkey (React only)](#hotkey-react-only)
-- [Groups](#groups)
-  - [Horizontal](#horizontal)
-  - [Full width](#full-width)
-  - [Vertical](#vertical)
-  - [With variants and icons](#with-variants-and-icons)
-  - [With toggles](#with-toggles)
-  - [With indicators](#with-indicators)
+  - [Group](#group)
+  - [Group, full width](#group-full-width)
+  - [Group, vertical](#group-vertical)
+  - [Group, with variants and icons](#group-with-variants-and-icons)
+  - [Group, with toggles](#group-with-toggles)
+  - [Group, with indicators](#group-with-indicators)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
 ### Variants
-
-The bare `.btn` / `<Button>` is the low-emphasis default. Use `primary` for the single main action and `danger` for destructive actions. `ghost` drops the border and fill; `muted` fills with the page background.
 
 **Example**
 
@@ -79,8 +80,6 @@ The bare `.btn` / `<Button>` is the low-emphasis default. Use `primary` for the 
 
 ### Loading
 
-`.btn-loading` paints a spinner in place of the leading icon and freezes interaction. The React `loading` prop also sets `disabled` and `aria-busy="true"`.
-
 **Example**
 
 ```html
@@ -92,8 +91,6 @@ The bare `.btn` / `<Button>` is the low-emphasis default. Use `primary` for the 
 <Button variant="primary" loading>Saving</Button>
 <Button loading>Loading</Button>
 ```
-
-If you pass both `icon` and `loading`, the leading icon is suppressed. A trailing icon stays visible.
 
 ### Full width
 
@@ -111,8 +108,6 @@ If you pass both `icon` and `loading`, the leading icon is suppressed. A trailin
 
 ### As a link
 
-The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a href="/path" />}` and `nativeButton={false}` to render an anchor.
-
 **Example**
 
 ```html
@@ -125,11 +120,9 @@ The `.btn` classes apply to `<a>` for navigation. In React, pass `render={<a hre
 <Button render={<a href="/reports" />} nativeButton={false}>View reports</Button>
 ```
 
-`disabled` doesn't apply to anchors — omit the link (or render plain text) instead of styling a non-interactive link as disabled.
+**Caution** — `disabled` does nothing on an `<a>`. Omit the link or render plain text instead of styling a non-interactive link as disabled.
 
 ### With icons
-
-Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered at `size="1em"` (inherits the host font-size) with `aria-hidden`. See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -156,8 +149,6 @@ Pass `icon` for a leading icon or `iconTrailing` for a trailing one — rendered
 
 ### Icon-only
 
-Drop the label and pass `aria-label` for a square button — table row controls, toolbar icons, dismiss. React adds `.btn-square` automatically when a button has an icon but no children; vanilla callers add the class themselves.
-
 **Example**
 
 ```html
@@ -180,8 +171,6 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 
 ### Toggle
 
-`aria-pressed` carries the state — any `.btn` with the attribute renders a leading mini switch, and `aria-pressed="true"` slides it on and adds a selected wash. Vanilla consumers flip the attribute themselves; `<ToggleButton>` wraps [Base UI Toggle](https://base-ui.com/react/components/toggle) and takes the same `variant`, `size`, `icon`, and `hotkey` props as `Button` (`pressed`/`defaultPressed`/`onPressedChange` for state).
-
 **Example**
 
 ```html
@@ -194,7 +183,7 @@ Drop the label and pass `aria-label` for a square button — table row controls,
 <ToggleButton>Auto-refresh</ToggleButton>
 ```
 
-A `hotkey` chord flips the pressed state:
+### Toggle with a hotkey
 
 **Example**
 
@@ -205,8 +194,6 @@ A `hotkey` chord flips the pressed state:
 ```
 
 ### Hotkey (React only)
-
-Bind a chord to the button — pressing it dispatches a native click and renders a trailing chip. Because it's a real click, `onClick` fires, `type="submit"` submits the form, and an anchor-rendered button (`render={<a href>}`) navigates. Pass an array for alternatives; only the first is rendered. See [Hotkeys](../basics/hotkeys.md) for page-level bindings.
 
 **Example**
 
@@ -224,11 +211,7 @@ Bind a chord to the button — pressing it dispatches a native click and renders
 </Button>
 ```
 
-## Groups
-
-Wrap multiple `.btn` children in `.btn-group` to render them as one segmented unit. Presentational only — each child is an independently focusable button. For single-select, use a [boxed tab list](tabs.md) as the segmented control.
-
-### Horizontal
+### Group
 
 **Example**
 
@@ -248,9 +231,9 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 </ButtonGroup>
 ```
 
-### Full width
+**Caution** — A group is presentational — each child stays independently focusable, and nothing enforces a single selection. For single-select, use a [boxed tab list](tabs.md) as the segmented control.
 
-`fullWidth` stretches the group across its container and splits the row evenly.
+### Group, full width
 
 **Example**
 
@@ -270,7 +253,7 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 </ButtonGroup>
 ```
 
-### Vertical
+### Group, vertical
 
 **Example**
 
@@ -290,7 +273,7 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 </ButtonGroup>
 ```
 
-### With variants and icons
+### Group, with variants and icons
 
 **Example**
 
@@ -328,9 +311,7 @@ Wrap multiple `.btn` children in `.btn-group` to render them as one segmented un
 </ButtonGroup>
 ```
 
-### With toggles
-
-Toggle buttons compose into groups for independent on/off options.
+### Group, with toggles
 
 **Example**
 
@@ -350,9 +331,7 @@ Toggle buttons compose into groups for independent on/off options.
 </ButtonGroup>
 ```
 
-### With indicators
-
-Wrap a member in `.indicator` to float a [badge or dot](indicator.md) at its corner. The seam logic drills through the wrapper, so rounding and dividers stay intact. A badge on a middle member overhangs its neighbor; pass `offset={0}` to sit it flush against a square corner.
+### Group, with indicators
 
 **Example**
 
@@ -376,3 +355,52 @@ Wrap a member in `.indicator` to float a [badge or dot](indicator.md) at its cor
   <Button>Archive</Button>
 </ButtonGroup>
 ```
+
+## Reference
+
+### React
+
+| Component      | Prop              | Type                                                       | Default        |
+| -------------- | ----------------- | ---------------------------------------------------------- | -------------- |
+| `Button`       | `variant`         | `"default" \| "primary" \| "ghost" \| "muted" \| "danger"` | `"default"`    |
+| `Button`       | `size`            | `"sm" \| "md" \| "lg"`                                     | `"md"`         |
+| `Button`       | `fullWidth`       | `boolean`                                                  | `false`        |
+| `Button`       | `loading`         | `boolean`                                                  | `false`        |
+| `Button`       | `icon`            | [`IconProp`](../basics/conventions.md#icons)              | —              |
+| `Button`       | `iconTrailing`    | [`IconProp`](../basics/conventions.md#icons)              | —              |
+| `Button`       | `hotkey`          | `string \| readonly string[]`                              | —              |
+| `ToggleButton` | `pressed`         | `boolean`                                                  | —              |
+| `ToggleButton` | `defaultPressed`  | `boolean`                                                  | `false`        |
+| `ToggleButton` | `onPressedChange` | `(pressed: boolean) => void`                               | —              |
+| `ButtonGroup`  | `orientation`     | `"horizontal" \| "vertical"`                               | `"horizontal"` |
+| `ButtonGroup`  | `fullWidth`       | `boolean`                                                  | `false`        |
+
+`type` defaults to `"button"`, so a button inside a form doesn't submit unless you say so. `loading` implies `disabled` and `aria-busy="true"`, and suppresses the leading icon while keeping a trailing one. A button with an icon and no children gets `btn-square` automatically.
+
+`hotkey` dispatches a native click on the rendered element, so `onClick` fires, `type="submit"` submits, and `render={<a href>}` navigates; it also sets `aria-keyshortcuts` and renders a trailing [Kbd](kbd.md) chip. Pass an array for alternatives — only the first is shown. On a `ToggleButton` it flips the pressed state. For bindings not tied to a control, see [Conventions › Hotkeys](../basics/conventions.md#hotkeys).
+
+`ToggleButton` takes every `Button` prop except `loading`, plus Base UI's pressed state; it wraps [Base UI Toggle](https://base-ui.com/react/components/toggle). `Button` wraps [Base UI Button](https://base-ui.com/react/components/button), so `render` and `nativeButton` come from there — pass both to render an anchor. Plus native `<button>` attributes, and `<div>` on `ButtonGroup`, which also defaults `role="group"`.
+
+### Vanilla
+
+| Class                  | Effect                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| `btn`                  | `1rem`/`0.5rem` padding, `0.5rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap  |
+| `btn-primary`          | Brand fill, `primary-content` text, no border colour                                              |
+| `btn-ghost`            | No fill or border until hover                                                                     |
+| `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                   |
+| `btn-danger`           | Danger fill, `danger-content` text                                                                |
+| `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                           |
+| `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                         |
+| `btn-full-width`       | `width: 100%`                                                                                     |
+| `btn-square`           | Equalises the side padding for an icon-only button                                                |
+| `btn-loading`          | Dims, blocks pointer events, and paints a `1em` spinner via `::before`, hiding a leading icon     |
+| `btn-group`            | Joins its `btn` children into one strip: square inner corners, `1px` overlap, `currentColor` seam |
+| `btn-group-vertical`   | Stacks the strip instead, labels aligned to the start                                             |
+| `btn-group-full-width` | Stretches the group; horizontal members split the row evenly                                      |
+
+There is no `btn-default` or `btn-md` — both are the unmodified `btn`. The classes work on `<a>` as well as `<button>`.
+
+`aria-pressed` is the toggle state, with no class involved: any `btn` carrying the attribute grows a leading mini switch, and `"true"` slides it across and adds the selected wash. Flip the attribute yourself. `btn-loading` doesn't disable the button for keyboard users — pair it with the `disabled` attribute. `btn-square` needs an `aria-label`, since there's no text to name it. Both spinners slow rather than stop under `prefers-reduced-motion: reduce`.
+
+Group members can be a `btn`, an [`indicator`](indicator.md) wrapping one, or a `menu` for a split button — the seam and rounding rules drill through those wrappers. A badge on a middle member overhangs its neighbour, so set the indicator offset to `0` for a flush square corner.

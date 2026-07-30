@@ -9,8 +9,9 @@
   - [With icons](#with-icons)
   - [Numbered steps](#numbered-steps)
   - [Horizontal](#horizontal)
-
-A vertical rail of events — audit logs, status history, activity feeds. Each item has an indicator (dot, icon, or number), a title, an optional timestamp, and a description. The connector line is drawn in CSS and stops at the last item.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -60,8 +61,6 @@ A vertical rail of events — audit logs, status history, activity feeds. Each i
 
 ### With icons
 
-Pass `icon` to replace the dot with a glyph. See [Icons](../basics/icons.md).
-
 **Example**
 
 ```html
@@ -100,8 +99,6 @@ Pass `icon` to replace the dot with a glyph. See [Icons](../basics/icons.md).
 
 ### Numbered steps
 
-The `timeline-numbered` variant turns the rail into a step list. Mark completed or current steps with `status` so the marker fills — advance logic stays with the consumer.
-
 **Example**
 
 ```html
@@ -139,8 +136,6 @@ The `timeline-numbered` variant turns the rail into a step list. Mark completed 
 ```
 
 ### Horizontal
-
-The `timeline-horizontal` variant lays items out as equal-width columns with the connector running along the indicator row. Pairs with `timeline-numbered` for a step tracker.
 
 **Example**
 
@@ -181,3 +176,50 @@ The `timeline-horizontal` variant lays items out as equal-width columns with the
   <Timeline.Item marker="4" title="Confirm" />
 </Timeline>
 ```
+
+## Reference
+
+### React
+
+| Part            | Renders | Class           |
+| --------------- | ------- | --------------- |
+| `Timeline`      | `<ol>`  | `timeline`      |
+| `Timeline.Item` | `<li>`  | `timeline-item` |
+
+| Part            | Prop          | Type                                                                     | Default     |
+| --------------- | ------------- | ------------------------------------------------------------------------ | ----------- |
+| `Timeline`      | `numbered`    | `boolean`                                                                | `false`     |
+| `Timeline`      | `horizontal`  | `boolean`                                                                | `false`     |
+| `Timeline.Item` | `status`      | `"default" \| "info" \| "success" \| "warning" \| "danger" \| "current"` | `"default"` |
+| `Timeline.Item` | `icon`        | [`IconProp`](../basics/conventions.md#icons)                            | —           |
+| `Timeline.Item` | `marker`      | `ReactNode`                                                              | —           |
+| `Timeline.Item` | `title`       | `ReactNode`                                                              | —           |
+| `Timeline.Item` | `time`        | `ReactNode`                                                              | —           |
+| `Timeline.Item` | `description` | `ReactNode`                                                              | —           |
+| `Timeline.Item` | `classNames`  | [slots](../basics/conventions.md#classnames)                            | —           |
+
+The indicator is a dot by default; `icon` replaces it with a glyph, and `marker` — which wins over `icon` — replaces it with the numbered variant's filled marker. `status` accents the dot or fills the marker; `current` is meaningful only for a marker. `classNames` reaches the indicator, dot, marker, content, title, time and description slots.
+
+Nothing here advances a step tracker: compute which item is `current` yourself. Plus native `<ol>` / `<li>` attributes.
+
+### Vanilla
+
+| Class                                                                                       | Effect                                                                             |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `timeline`                                                                                  | Marker-less `<ol>`                                                                 |
+| `timeline-item`                                                                             | Two-column grid: `1.5rem` indicator gutter, `0.75rem` gap, `1rem` of space beneath |
+| `timeline-indicator`                                                                        | Centres the dot, icon or marker in the gutter, above the connector                 |
+| `timeline-dot`                                                                              | `0.625rem` dot in `border-strong`, ringed `3px` in the surface                     |
+| `timeline-content`                                                                          | Text column, `0.125rem` gap, shrinkable so long values wrap                        |
+| `timeline-title`                                                                            | `text-sm` medium                                                                   |
+| `timeline-time`                                                                             | `text-xs` muted, tabular figures                                                   |
+| `timeline-description`                                                                      | `text-sm` muted                                                                    |
+| `timeline-item-info` `timeline-item-success` `timeline-item-warning` `timeline-item-danger` | Status accent on the dot                                                           |
+| `timeline-item-current`                                                                     | Fills a numbered marker with the primary ink, as `-success` does                   |
+| `timeline-numbered`                                                                         | Widens the gutter to `1.75rem` for a marker                                        |
+| `timeline-marker`                                                                           | `1.75rem` circle, `text-xs` semibold tabular figures, ringed in the surface        |
+| `timeline-horizontal`                                                                       | Items become equal-width columns, indicator above centred content                  |
+
+The connector is drawn as a `::before` on each item except the last, so it stops at the end of the rail without any extra markup. An icon indicator gets a surface-coloured background to mask the line running behind it.
+
+`timeline-horizontal` composes with `timeline-numbered` for a step tracker, and re-runs the connector along the indicator row. Equal-width columns are what make it land on each indicator's centre — so items of very different label lengths still line up.

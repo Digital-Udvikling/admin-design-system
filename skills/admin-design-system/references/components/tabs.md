@@ -9,11 +9,13 @@
   - [Boxed (segmented control)](#boxed-segmented-control)
   - [Primary](#primary)
   - [Full width](#full-width)
+  - [Full width, boxed](#full-width-boxed)
   - [Wrapping](#wrapping)
   - [With icons](#with-icons)
   - [Vertical orientation](#vertical-orientation)
-
-Vanilla tabs are radio-input driven, so switching works without JavaScript, but they cap at 6 panels. React adds ARIA semantics, arrow-key navigation, and controlled state; use it for more than 6 panels.
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -52,8 +54,6 @@ Vanilla tabs are radio-input driven, so switching works without JavaScript, but 
 
 ### Boxed (segmented control)
 
-The active thumb is anchored to the selected tab via [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning). Browsers without anchor positioning crossfade the highlight instead.
-
 **Example**
 
 ```html
@@ -86,8 +86,6 @@ The active thumb is anchored to the selected tab via [CSS anchor positioning](ht
 ```
 
 ### Primary
-
-`tabs-primary` (React `primary`) fills the active segment with the primary color. Only affects the boxed variant.
 
 **Example**
 
@@ -129,8 +127,6 @@ The active thumb is anchored to the selected tab via [CSS anchor positioning](ht
 
 ### Full width
 
-`fullWidth` stretches the list across the container and divides space evenly between tabs. Composes with both variants.
-
 **Example**
 
 ```html
@@ -162,7 +158,7 @@ The active thumb is anchored to the selected tab via [CSS anchor positioning](ht
 </Tabs>
 ```
 
-Pair `fullWidth` with `variant="boxed"` for a full-width segmented control.
+### Full width, boxed
 
 **Example**
 
@@ -196,8 +192,6 @@ Pair `fullWidth` with `variant="boxed"` for a full-width segmented control.
 ```
 
 ### Wrapping
-
-`wrap` lets the list flow onto new rows instead of overflowing, keeping each tab's label on one line. Use it for variable-length, free-text labels in a narrow container; without it a `boxed` segmented control squishes labels to equal slivers.
 
 **Example**
 
@@ -235,8 +229,6 @@ Pair `fullWidth` with `variant="boxed"` for a full-width segmented control.
 ```
 
 ### With icons
-
-Pass `icon` to `Tabs.Tab` for a leading glyph, rendered at the label size. See [Icons](../basics/icons.md).
 
 **Example**
 
@@ -316,3 +308,55 @@ Pass `icon` to `Tabs.Tab` for a leading glyph, rendered at the label size. See [
   <Tabs.Panel value="api">Personal access tokens.</Tabs.Panel>
 </Tabs>
 ```
+
+## Reference
+
+### React
+
+| Part         | Renders    | Class       |
+| ------------ | ---------- | ----------- |
+| `Tabs`       | `<div>`    | `tabs`      |
+| `Tabs.List`  | `<div>`    | `tab-list`  |
+| `Tabs.Tab`   | `<button>` | `tab`       |
+| `Tabs.Panel` | `<div>`    | `tab-panel` |
+
+| Part       | Prop        | Type                                          | Default      |
+| ---------- | ----------- | --------------------------------------------- | ------------ |
+| `Tabs`     | `variant`   | `"bordered" \| "boxed"`                       | `"bordered"` |
+| `Tabs`     | `size`      | `"sm" \| "md" \| "lg"`                        | `"md"`       |
+| `Tabs`     | `fullWidth` | `boolean`                                     | `false`      |
+| `Tabs`     | `wrap`      | `boolean`                                     | `false`      |
+| `Tabs`     | `primary`   | `boolean`                                     | `false`      |
+| `Tabs.Tab` | `icon`      | [`IconProp`](../basics/conventions.md#icons) | —            |
+
+`primary` only affects `variant="boxed"`. Wraps [Base UI Tabs](https://base-ui.com/react/components/tabs), which owns `value` / `defaultValue` / `onValueChange` and `orientation`, and supplies the `role="tablist"` wiring plus arrow-key navigation. `Tabs.Tab` and `Tabs.Panel` are matched by `value`, which can be any string. Plus native `<div>` attributes.
+
+Prefer React over the vanilla pattern past six panels — see below.
+
+### Vanilla
+
+| Class             | Effect                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `tabs`            | Root column. Scopes every selector below, so a stray `class="tab"` elsewhere is unaffected |
+| `tab-list`        | Tab row with a bottom border, `0.25rem` gap                                                |
+| `tab`             | `2.25rem` tall, `0.75rem` side padding, `text-sm` medium, muted until selected             |
+| `tab-panel`       | `0.75rem` of top padding; hidden unless its `data-value` matches the checked input         |
+| `tab-input`       | The visually-hidden radio driving selection                                                |
+| `tabs-boxed`      | Segmented control: bordered `0.375rem` box, muted fill, a thumb behind the active label    |
+| `tabs-primary`    | Fills that thumb with the primary colour. Boxed only                                       |
+| `tabs-full-width` | List spans the container, tabs share the row evenly                                        |
+| `tabs-wrap`       | List flows onto new rows, each label staying on one line                                   |
+| `tabs-sm`         | `1.75rem` tall tabs, `text-xs`                                                             |
+| `tabs-lg`         | `2.75rem` tall tabs, `text-base`                                                           |
+
+There is no `tabs-bordered` or `tabs-md` — both are the unmodified `tabs`. `data-orientation="vertical"` on the root turns the rail vertical, moving the border and the marker to the trailing edge.
+
+Selection is a radio group: one `tab-input` per `tab` sharing a `name`, and `tab-panel[data-value]` matched to the input's `value` — so switching needs no JavaScript. The trade-off is a hard cap: the panel-matching rules are enumerated for values `1`–`6`, so a seventh panel never shows. Past six, use React.
+
+Both variants share one marker mechanism: the selected tab becomes a CSS anchor and a single `tab-list` pseudo-element tracks it, which the browser interpolates — so the underline slides between tabs, and the boxed thumb slides behind the labels, with no extra DOM and no JavaScript in either bundle. Where [anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) is missing, a per-tab fallback scales an underline in or crossfades the thumb instead. The slide is dropped under `prefers-reduced-motion: reduce`.
+
+Write `role="tablist"` yourself; the label-and-radio pattern gives keyboard support for free but not the tab ARIA. Selected state is read from `[data-selected]`, `[aria-selected="true"]`, or a checked `tab-input`, so all three markup styles land on the same visuals.
+
+`tabs-wrap` earns its place on variable-length free-text labels in a narrow container: without it, a boxed control squishes them to equal slivers.
+
+For a group of independent toggles rather than a single choice, use a [button group](buttons.md#group).

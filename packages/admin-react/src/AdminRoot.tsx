@@ -11,7 +11,7 @@ export interface AdminRootProps extends ComponentProps<"div"> {
   /**
    * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
    * to brand-shift the navbar + footer stripes and `<BrandTile>`. See
-   * [Customize › System accent](https://digital-udvikling.github.io/admin-design-system/basics/customize/#system-accent).
+   * [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
    */
   systemAccent?: string;
 }

@@ -21,7 +21,7 @@ export interface AppShellProps extends ComponentProps<"div"> {
   onMobileDrawerOpenChange?: (open: boolean) => void;
   /**
    * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
-   * to the shell root. See [Customize › System accent](https://digital-udvikling.github.io/admin-design-system/basics/customize/#system-accent).
+   * to the shell root. See [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
    */
   systemAccent?: string;
   children?: ReactNode;

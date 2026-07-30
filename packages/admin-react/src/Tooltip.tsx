@@ -45,7 +45,12 @@ function TooltipPopup({
   const portalContainer = useContext(PortalContainerContext);
   return (
     <BaseTooltip.Portal container={portalContainer ?? undefined}>
-      <BaseTooltip.Positioner sideOffset={sideOffset} side={side} align={align}>
+      <BaseTooltip.Positioner
+        className={cn("popup-layer", undefined)}
+        sideOffset={sideOffset}
+        side={side}
+        align={align}
+      >
         <BaseTooltip.Popup
           role={role}
           className={cn(["tooltip", size !== "md" && `tooltip-${size}`], className)}

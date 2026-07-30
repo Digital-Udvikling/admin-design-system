@@ -1,0 +1,9 @@
+@layer components {
+  /* Base UI's popup positioner is `position: fixed` with `z-index: auto`, so a
+     portaled popup otherwise paints below any host element with a positive
+     z-index. Read via var() fallback rather than declared as a token, so a host
+     override on any ancestor wins outright. */
+  .popup-layer {
+    z-index: var(--z-popup, 1000);
+  }
+}

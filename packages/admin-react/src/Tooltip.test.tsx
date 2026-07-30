@@ -146,6 +146,18 @@ describe("Tooltip", () => {
       expect(dialog.contains(popup)).toBe(true);
     });
 
+    it("puts the popup's positioner on the shared popup layer", () => {
+      render(
+        <Tooltip.Root defaultOpen>
+          <Tooltip.Trigger>target</Tooltip.Trigger>
+          <Tooltip.Popup>Hint</Tooltip.Popup>
+        </Tooltip.Root>,
+      );
+      const popup = document.querySelector(adminSelector("tooltip")) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(popup?.parentElement).toHaveAdminClass("popup-layer");
+    });
+
     it("applies size modifier class", () => {
       const { rerender } = render(
         <Tooltip.Root defaultOpen>

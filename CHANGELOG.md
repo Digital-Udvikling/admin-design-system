@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- `Select` and `Tooltip` popups no longer paint behind host chrome. Base UI positions them in a `position: fixed` wrapper with `z-index: auto`, so an `<AdminRoot>` embedded in a page whose own elements carry a positive `z-index` hid its own dropdowns. Both positioners now carry a `.popup-layer` class: `z-index: var(--z-popup, 1000)`. Declare `--z-popup` on `.admin-root` or any ancestor to slot popups into a host's own stacking scale. (both)
+
 ## [0.20.0] - 2026-07-06
 
 ### Added

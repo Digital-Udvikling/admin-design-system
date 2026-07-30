@@ -114,6 +114,28 @@ describe("Select", () => {
       expect(root.contains(popup)).toBe(true);
     });
 
+    it("puts the popup's positioner on the shared popup layer", async () => {
+      // Without `.popup-layer` the popup paints behind host chrome with a positive z-index.
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <Select.Trigger aria-label="fruit">
+            <Select.Value placeholder="Pick" />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Popup>
+            <Select.Item value="apple">
+              <Select.ItemText>Apple</Select.ItemText>
+            </Select.Item>
+          </Select.Popup>
+        </Select>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(popup?.parentElement).toHaveAdminClass("popup-layer");
+    });
+
     it("controlled: value prop drives the trigger via onValueChange round-trip", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();

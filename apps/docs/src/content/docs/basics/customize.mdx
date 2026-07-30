@@ -37,6 +37,20 @@ Bright accents like `--color-yellow-400` need a manual `-content` override:
 
 See [Brand tile](../../components/brand-tile/) and [App shell › Branding](../../modules/app-shell/#branding-multiple-systems).
 
+## Popup layering
+
+Portaled popups — [`<Select>`](../../components/forms/selects/) and [`<Tooltip>`](../../components/tooltip/) — render on `.popup-layer`, whose `z-index` reads `--z-popup` and defaults to `1000`. Lower it when an `<AdminRoot>` is embedded in a host page with chrome that should still paint above admin popups:
+
+```css
+.my-embedded-panel {
+  --z-popup: 106;
+}
+```
+
+Declare it on `.admin-root` or any ancestor — the default is a `var()` fallback rather than a token, so any declaration wins outright.
+
+`<Dialog>` and `<Drawer>` are native `<dialog>` elements in the top layer and ignore `z-index`; popups opened inside one are portaled into the dialog so they stay above its backdrop.
+
 ## Advanced
 
 For everything beyond the system accent, the token layers are documented on the [Colors](../colors/) page. Three escape hatches:

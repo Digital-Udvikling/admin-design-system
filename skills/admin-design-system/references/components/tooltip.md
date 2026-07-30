@@ -157,3 +157,5 @@ The popup body accepts inline content such as a shortcut hint via [`<Kbd>`](kbd.
 ## Vanilla path notes
 
 Vanilla `.tooltip-wrap` is CSS-only and lives in the trigger's stacking context, so an ancestor `overflow: hidden` can clip it. Use the React popup if you need portal positioning.
+
+The React popup is portaled onto `.popup-layer` — see [Customize › Popup layering](../basics/customize.md#popup-layering).

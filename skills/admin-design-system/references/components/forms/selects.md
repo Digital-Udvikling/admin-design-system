@@ -11,6 +11,7 @@
   - [Groups](#groups)
   - [Disabled](#disabled)
   - [Inside a Field](#inside-a-field)
+- [Layering](#layering)
 
 React's `Select` is a compound with a custom popup. Vanilla uses a native `<select>` with the `.select` class — the browser owns its dropdown UI.
 
@@ -255,3 +256,7 @@ Pass an `items` map (value → label) to `<Select>` so `<Select.Value>` can show
   <Field.Error match="valueMissing">Pick a role.</Field.Error>
 </Field>
 ```
+
+## Layering
+
+The React popup is portaled out of the trigger's stacking context onto `.popup-layer`, so an ancestor `overflow: hidden` can't clip it. Native `select.select` uses the browser's own picker. See [Customize › Popup layering](../../basics/customize.md#popup-layering).

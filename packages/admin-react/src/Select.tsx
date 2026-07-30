@@ -67,7 +67,11 @@ function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPop
       {/* Opt out of Base UI's macOS-style alignment (selected item overlaid on
           the trigger): admin surfaces expect below-the-trigger placement, and
           the macOS mode collapses the parent dialog's flex layout in <Dialog>. */}
-      <BaseSelect.Positioner sideOffset={sideOffset} alignItemWithTrigger={false}>
+      <BaseSelect.Positioner
+        className={cn("popup-layer", undefined)}
+        sideOffset={sideOffset}
+        alignItemWithTrigger={false}
+      >
         <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
           {children}
         </BaseSelect.Popup>

@@ -260,3 +260,7 @@ Pass an `items` map (value → label) to `<Select>` so `<Select.Value>` can show
 ```
 
 :::
+
+## Layering
+
+The React popup is portaled out of the trigger's stacking context onto `.popup-layer`, so an ancestor `overflow: hidden` can't clip it. Native `select.select` uses the browser's own picker. See [Customize › Popup layering](../../../basics/customize/#popup-layering).

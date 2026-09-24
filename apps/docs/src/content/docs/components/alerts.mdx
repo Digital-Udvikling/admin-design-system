@@ -3,7 +3,7 @@ title: Alerts
 description: Inline notifications for errors, confirmations, and contextual feedback.
 ---
 
-import { Alert } from "@aortl/admin-react";
+import { Alert, Link } from "@aortl/admin-react";
 import {
   IconInfoCircle,
   IconCircleCheck,
@@ -111,15 +111,7 @@ import {
 ```
 
 ```tsx
-<Alert
-  variant="info"
-  icon={IconInfoCircle}
-  action={
-    <a href="#" className="link">
-      Reload
-    </a>
-  }
->
+<Alert variant="info" icon={IconInfoCircle} action={<Link href="#">Reload</Link>}>
   A new version is available.
 </Alert>
 ```

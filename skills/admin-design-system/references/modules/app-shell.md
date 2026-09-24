@@ -145,9 +145,9 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
     <Navbar.Item href="#">Customers</Navbar.Item>
   </Navbar.Items>
   <Navbar.Actions>
-    <button className="btn btn-ghost btn-sm" type="button">
+    <Button variant="ghost" size="sm">
       Sign out
-    </button>
+    </Button>
   </Navbar.Actions>
 </Navbar>
 ```

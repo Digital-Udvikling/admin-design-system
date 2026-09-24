@@ -14,6 +14,8 @@ export const BASE_URL = "/admin-design-system/";
 const EXAMPLE_ID = /^example:(\d+)$/;
 const GLUE_PATH = join(DOCS_ROOT, "__bundle_glue.tsx");
 const STUB = "\0stub";
+// CJS deps inlined into ESM (react-dom/server) `require` node builtins; ESM has no `require`.
+const NODE_REQUIRE = `import { createRequire as __createRequire } from "node:module"; const require = __createRequire(import.meta.url);`;
 
 /**
  * @typedef {object} PreviewModule
@@ -23,16 +25,17 @@ const STUB = "\0stub";
 
 /**
  * Bundles `modules` behind `glue`, a TSX module that imports module `i` as
- * `"example:<i>"`. Browser output is an IIFE, node output ESM; `banner` is
- * prepended verbatim.
+ * `"example:<i>"`. Browser output is an IIFE. Node output is ESM that imports
+ * nothing but node builtins, so it runs from any path (write it to a temp file
+ * and `import()` it).
  *
  * Throws on failure with Rolldown's diagnostics, which name the failing module
  * as `<resolveDir>/__example_<i>.tsx`.
  *
- * @param {{ modules: PreviewModule[]; glue: string; platform: "browser" | "node"; banner?: string }} options
+ * @param {{ modules: PreviewModule[]; glue: string; platform: "browser" | "node" }} options
  * @returns {Promise<string>} The bundled JavaScript.
  */
-export async function bundle({ modules, glue, platform, banner }) {
+export async function bundle({ modules, glue, platform }) {
   // Paths beside each page, so bare and relative imports resolve as they do from the MDX.
   const paths = modules.map((m, i) => join(m.resolveDir, `__example_${i}.tsx`));
   const sources = new Map([[GLUE_PATH, glue], ...paths.map((p, i) => [p, modules[i].source])]);
@@ -82,7 +85,7 @@ export async function bundle({ modules, glue, platform, banner }) {
   try {
     const { output } = await build.generate({
       format: platform === "browser" ? "iife" : "esm",
-      banner,
+      banner: platform === "node" ? NODE_REQUIRE : undefined,
     });
     return output[0].code;
   } finally {

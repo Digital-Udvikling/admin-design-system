@@ -136,6 +136,7 @@ description: Compact status indicator for tags and counts.
 - Say when a default emits no class (`md` adds no class), and name classes that don't exist but readers will guess (`badge-neutral`).
 - Write attributes bracketed — `[data-selected]` — so they read as attributes and the docs checker doesn't treat them as class names.
 - Run `pnpm check-docs`. It fails on a class the component CSS doesn't define, a React prop the component's type doesn't declare, or a `tsx` example that doesn't type-check, and reports how many component classes still have no Reference entry.
+- `check-docs` also server-renders each `tsx` fence and fails when its admin classes differ from the `html` fence's, or when it emits an admin class without the `_ao-` prefix (a raw `className="btn"`, unstyled under the scoped bundle). A class one side renders by design and the other doesn't, such as Base UI's `checkbox-indicator` or the CSS-only tooltip's `tooltip-wrap`, goes in `REACT_ONLY` / `VANILLA_ONLY` in `scripts/check-docs.mjs` with its reason. `pnpm render` shows what the difference looks like.
 
 ## Prose style
 

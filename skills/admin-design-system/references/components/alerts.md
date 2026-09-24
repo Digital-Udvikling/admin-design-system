@@ -108,15 +108,7 @@
 ```
 
 ```tsx
-<Alert
-  variant="info"
-  icon={IconInfoCircle}
-  action={
-    <a href="#" className="link">
-      Reload
-    </a>
-  }
->
+<Alert variant="info" icon={IconInfoCircle} action={<Link href="#">Reload</Link>}>
   A new version is available.
 </Alert>
 ```

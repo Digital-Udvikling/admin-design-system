@@ -93,15 +93,11 @@
 ```html
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
   <div class="indicator">
-    <span class="indicator-item indicator-top indicator-start badge badge-primary badge-sm"
-      >TS</span
-    >
+    <span class="indicator-item indicator-start badge badge-primary badge-sm">TS</span>
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-top indicator-center badge badge-primary badge-sm"
-      >TC</span
-    >
+    <span class="indicator-item indicator-center badge badge-primary badge-sm">TC</span>
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
   <div class="indicator">
@@ -121,9 +117,7 @@
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-middle indicator-end badge badge-primary badge-sm"
-      >ME</span
-    >
+    <span class="indicator-item indicator-middle badge badge-primary badge-sm">ME</span>
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
   <div class="indicator">
@@ -139,9 +133,7 @@
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-bottom indicator-end badge badge-primary badge-sm"
-      >BE</span
-    >
+    <span class="indicator-item indicator-bottom badge badge-primary badge-sm">BE</span>
     <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
   </div>
 </div>

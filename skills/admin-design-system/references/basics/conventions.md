@@ -58,7 +58,7 @@ Every component accepts `className` on its root. It is **appended** to admin's o
 **Example**
 
 ```html
-<div class="card flex-1">…</div>
+<div class="card flex-1"><div class="card-body">…</div></div>
 ```
 
 ```tsx

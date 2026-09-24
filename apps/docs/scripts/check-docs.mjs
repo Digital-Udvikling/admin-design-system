@@ -9,6 +9,8 @@
 //      module the site renders, against packages/admin-react/src
 //   6. every prop in a `## Reference` → `### React` table exists on the props
 //      type of its part (or, without a Part column, of a component the page imports)
+//   7. every example with both fences uses the same admin classes in each: the
+//      tsx fence is server-rendered and compared against the html fence
 //
 // All but check 2 read source only. Check 2 reads apps/docs/dist, which may be
 // missing or stale, so its problems are warnings unless --require-build is passed
@@ -16,15 +18,24 @@
 // Check 4 only reports unless --strict-coverage is passed; flip that on once
 // every component page carries a Reference section.
 
-import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
-import { createRequire } from "node:module";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { Window } from "happy-dom";
 import ts from "typescript";
-import { buildPreviewSource, collectFences, forwardedImports } from "../plugins/example/index.mjs";
+import { buildPreviewSource, forwardedImports } from "../plugins/example/index.mjs";
+import { bundle } from "./lib/bundle.mjs";
+import {
+  DOCS_DIR,
+  collectExamples,
+  loadPages,
+  previewSource,
+  visit,
+  walk,
+} from "./lib/examples.mjs";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
-const DOCS_DIR = join(SCRIPT_DIR, "..", "src", "content", "docs");
 const PAGES_DIR = join(SCRIPT_DIR, "..", "src", "pages");
 const DIST_DIR = join(SCRIPT_DIR, "..", "dist");
 const REPO_ROOT = join(SCRIPT_DIR, "..", "..", "..");
@@ -36,16 +47,6 @@ const strictCoverage = process.argv.includes("--strict-coverage");
 
 const errors = [];
 const warnings = [];
-
-function walk(dir, ext) {
-  const out = [];
-  for (const entry of readdirSync(dir).sort()) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) out.push(...walk(full, ext));
-    else if (entry.endsWith(ext)) out.push(full);
-  }
-  return out;
-}
 
 // Starlight serves directory-style URLs: `a/index.mdx` → `/a/`, `a/b.mdx` → `/a/b/`.
 function urlForDocsRel(rel) {
@@ -219,20 +220,6 @@ for (const abs of mdxFiles) {
 
 // ---------------------------------------------------------------- mdast
 
-// The MDX integration's own Sätteri, so directives and fences parse exactly as
-// the site sees them (a `:::example` shown inside a ````markdown fence is not one).
-const requireFromMdx = createRequire(createRequire(import.meta.url).resolve("@astrojs/mdx"));
-const { mdxToMdast } = await import(pathToFileURL(requireFromMdx.resolve("satteri")).href);
-
-// Mirrors `markdown.processor` in astro.config.mjs; frontmatter keeps line numbers exact.
-const MDAST_FEATURES = { directive: true, gfm: true, frontmatter: true };
-
-/** Calls `fn` on `node` and its descendants in document order. */
-function visit(node, fn) {
-  fn(node);
-  for (const child of node.children ?? []) visit(child, fn);
-}
-
 /** Concatenated `text` / `inlineCode` content under a node. */
 function textOf(node) {
   if (node.type === "text" || node.type === "inlineCode") return node.value;
@@ -246,20 +233,10 @@ function codeSpans(node) {
   return out;
 }
 
-// A page that doesn't parse is reported and left out of checks 5 and 6.
-const pages = [];
-for (const abs of mdxFiles) {
-  const rel = relative(DOCS_DIR, abs).replaceAll("\\", "/");
-  try {
-    pages.push({
-      abs,
-      rel,
-      tree: mdxToMdast(readFileSync(abs, "utf8"), { features: MDAST_FEATURES }),
-    });
-  } catch (e) {
-    errors.push(`${rel}: MDX parse error: ${e instanceof Error ? e.message : e}`);
-  }
-}
+// A page that doesn't parse is reported and left out of checks 5 to 7.
+const { pages, errors: parseErrors } = loadPages();
+errors.push(...parseErrors);
+const examples = collectExamples(pages);
 
 // ---------------------------------------------------------------- react
 
@@ -276,32 +253,21 @@ const importsLine = markerLine(buildPreviewSource(`// ${IMPORTS_MARKER}`, ""), I
 
 /** Virtual preview module path → where its fence lives in the MDX. */
 const previews = new Map();
-for (const { abs, rel, tree } of pages) {
-  // Same accumulation as the remark plugin: an example sees the imports above it.
-  const imports = [];
-  let index = 0;
-  visit(tree, (node) => {
-    if (node.type === "mdxjsEsm") {
-      for (const { code, line } of forwardedImports(node.value)) {
-        imports.push({ code, mdxLine: node.position.start.line + line - 1 });
-      }
-    }
-    if (node.type !== "containerDirective" || node.name !== "example") return;
-    const { tsx } = collectFences(node.children ?? []);
-    if (tsx === undefined) return;
-    const importsBlock = imports.map((i) => i.code).join("\n");
-    // Beside the page, so relative imports resolve as they do from the MDX.
-    const file = join(dirname(abs), `__example_${basename(abs, ".mdx")}_${index++}.tsx`);
-    previews.set(file, {
-      rel,
-      source: buildPreviewSource(importsBlock, tsx.value),
-      // Module line (offset from importsLine) → MDX line of the import it belongs to.
-      importLines: imports.flatMap((i) => i.code.split("\n").map(() => i.mdxLine)),
-      bodyLine: markerLine(buildPreviewSource(importsBlock, BODY_MARKER), BODY_MARKER),
-      bodyLength: tsx.value.split("\n").length,
-      fenceLine: tsx.position.start.line,
-      directiveLine: node.position.start.line,
-    });
+for (const example of examples) {
+  const { abs, rel, index, tsx, imports } = example;
+  if (tsx === undefined) continue;
+  const importsBlock = imports.map((i) => i.code).join("\n");
+  // Beside the page, so relative imports resolve as they do from the MDX.
+  const file = join(dirname(abs), `__example_${basename(abs, ".mdx")}_${index}.tsx`);
+  previews.set(file, {
+    rel,
+    source: previewSource(example),
+    // Module line (offset from importsLine) → MDX line of the import it belongs to.
+    importLines: imports.flatMap((i) => i.code.split("\n").map(() => i.mdxLine)),
+    bodyLine: markerLine(buildPreviewSource(importsBlock, BODY_MARKER), BODY_MARKER),
+    bodyLength: tsx.value.split("\n").length,
+    fenceLine: tsx.line,
+    directiveLine: example.line,
   });
 }
 
@@ -463,6 +429,130 @@ const reactLine =
   `React: ${previews.size} examples type-checked, ${reactRows} Reference props verified ` +
   `(${Math.round(performance.now() - tsStart)} ms).`;
 
+// ---------------------------------------------------------------- parity
+
+// Admin classes one fence uses by design and the other can't or needn't: the
+// structure differs but renders alike, or the server render can't show it.
+// Every other admin class must appear in both fences of an example or neither.
+const REACT_ONLY = new Map([
+  ["checkbox-indicator", "Base UI's indicator span; vanilla styles the native input"],
+  ["radio-indicator", "Base UI's indicator span; vanilla styles the native input"],
+  ["switch-thumb", "Base UI's thumb span; vanilla styles the native input"],
+  ["select-icon", "Base UI Select's chevron; vanilla's native <select> draws its own"],
+  ["number-input-root", "Base UI NumberField's wrapper"],
+  ["table-cell", "explicit cell classes; vanilla matches bare <td> under .table"],
+  ["table-header-cell", "explicit cell classes; vanilla matches bare <th> under .table"],
+  ["kbd-group", "Kbd wraps every `keys` chord, one key included"],
+  ["property-list-copy", "clipboard copy needs JS"],
+  ["property-list-copy-icon", "clipboard copy needs JS"],
+  ["property-list-copy-icon-copied", "clipboard copy needs JS"],
+]);
+const VANILLA_ONLY = new Map([
+  ["tab-input", "CSS-only tabs switch panels with radio inputs"],
+  ["tooltip-wrap", "CSS-only tooltip anchor; React's Tooltip is a Base UI popup"],
+  ["tooltip-wrap-right", "CSS-only tooltip anchor"],
+  ["tooltip-wrap-bottom", "CSS-only tooltip anchor"],
+  ["tooltip-wrap-left", "CSS-only tooltip anchor"],
+  ["field-error", "Field.Error renders once validation fails, never on the server"],
+  ["asteriskField", "template-generator hook for server-rendered forms"],
+]);
+// Vanilla subtrees whose React counterpart only mounts on interaction.
+const VANILLA_SKIP = ".tooltip";
+
+const parityStart = performance.now();
+const pairs = examples.filter((e) => e.html !== undefined && e.tsx !== undefined);
+const parityDom = new Window();
+
+/**
+ * Admin classes in `markup`, `_ao-` prefix removed. With `react`, also the
+ * classes emitted without the prefix, which the scoped bundle leaves unstyled.
+ */
+function adminClasses(markup, react) {
+  const body = new parityDom.DOMParser().parseFromString(markup, "text/html").body;
+  if (!react) for (const el of body.querySelectorAll(VANILLA_SKIP)) el.remove();
+  const classes = new Set();
+  const unprefixed = new Set();
+  for (const el of body.querySelectorAll("[class]")) {
+    for (const token of el.classList) {
+      const name = token.replace(/^_ao-/, "");
+      if (name === "admin-root" || !cssClasses.has(name)) continue;
+      classes.add(name);
+      if (react && name === token) unprefixed.add(name);
+    }
+  }
+  return { classes, unprefixed };
+}
+
+let render = null;
+try {
+  const glue = [
+    `import { createElement } from "react";`,
+    `import { renderToStaticMarkup } from "react-dom/server";`,
+    ...pairs.map((_, i) => `import E${i} from "example:${i}";`),
+    `const previews = [${pairs.map((_, i) => `E${i}`).join(", ")}];`,
+    `export const render = (i) => renderToStaticMarkup(createElement(previews[i]));`,
+  ].join("\n");
+  const code = await bundle({
+    modules: pairs.map((e) => ({ source: previewSource(e), resolveDir: dirname(e.abs) })),
+    glue,
+    platform: "node",
+  });
+  const dir = mkdtempSync(join(tmpdir(), "check-docs-"));
+  try {
+    writeFileSync(join(dir, "previews.mjs"), code);
+    ({ render } = await import(pathToFileURL(join(dir, "previews.mjs")).href));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+} catch (e) {
+  errors.push(`parity: previews failed to bundle\n${e instanceof Error ? e.message : e}`);
+}
+
+let parityChecked = 0;
+if (render !== null) {
+  const consoleError = console.error;
+  for (const [i, example] of pairs.entries()) {
+    const where = `${example.rel}:${example.line}`;
+    // React's dev warnings (keys, invalid DOM nesting) surface as console.error.
+    const warnings = [];
+    console.error = (...args) => warnings.push(args.map(String).join(" "));
+    let markup;
+    try {
+      markup = render(i);
+    } catch (e) {
+      errors.push(
+        `${where}: tsx example throws on server render: ${e instanceof Error ? e.message : e}`,
+      );
+      continue;
+    } finally {
+      console.error = consoleError;
+    }
+    for (const w of warnings) errors.push(`${where}: tsx example warns: ${w.split("\n")[0]}`);
+    parityChecked += 1;
+    const vanilla = adminClasses(example.html.value, false).classes;
+    const react = adminClasses(markup, true);
+    const onlyReact = [...react.classes].filter((c) => !vanilla.has(c) && !REACT_ONLY.has(c));
+    const onlyVanilla = [...vanilla].filter((c) => !react.classes.has(c) && !VANILLA_ONLY.has(c));
+    if (onlyReact.length > 0) {
+      errors.push(
+        `${where}: tsx renders ${onlyReact.map((c) => `.${c}`).join(" ")}, the html fence doesn't`,
+      );
+    }
+    if (onlyVanilla.length > 0) {
+      errors.push(
+        `${where}: html fence uses ${onlyVanilla.map((c) => `.${c}`).join(" ")}, the tsx doesn't render it`,
+      );
+    }
+    if (react.unprefixed.size > 0) {
+      const names = [...react.unprefixed].map((c) => `.${c}`).join(" ");
+      errors.push(
+        `${where}: tsx emits ${names} without the _ao- prefix (a raw className); the scoped bundle leaves it unstyled`,
+      );
+    }
+  }
+}
+const parityLine = `Parity: ${parityChecked}/${pairs.length} vanilla/React example pairs compared (${Math.round(performance.now() - parityStart)} ms).`;
+
 // ---------------------------------------------------------------- coverage
 
 const uncovered = [...cssClasses].filter((c) => !documented.has(c)).sort();
@@ -479,6 +569,7 @@ if (strictCoverage && uncovered.length > 0) {
 
 console.log(coverageLine);
 console.log(reactLine);
+console.log(parityLine);
 if (strictCoverage && uncovered.length > 0) {
   console.log(`Undocumented: ${uncovered.join(", ")}`);
 }

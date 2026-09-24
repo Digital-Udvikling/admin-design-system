@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { CSSProperties, ComponentProps } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
@@ -16,6 +16,12 @@ export interface BrandTileProps extends ComponentProps<"span"> {
   src?: string;
   /** Alt text for the image tile. Defaults to `""` (decorative). */
   alt?: string;
+  /**
+   * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
+   * to the tile. See
+   * [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
+   */
+  systemAccent?: string;
 }
 
 /**
@@ -30,10 +36,16 @@ export function BrandTile({
   icon,
   src,
   alt = "",
+  systemAccent,
   className,
+  style,
   children,
   ...rest
 }: BrandTileProps) {
+  const tileStyle =
+    systemAccent !== undefined
+      ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
+      : style;
   const classes = cn(
     [
       "brand-tile",
@@ -45,14 +57,14 @@ export function BrandTile({
 
   if (src) {
     return (
-      <span className={classes} {...rest}>
+      <span className={classes} style={tileStyle} {...rest}>
         <img src={src} alt={alt} />
       </span>
     );
   }
 
   return (
-    <span className={classes} aria-hidden {...rest}>
+    <span className={classes} style={tileStyle} aria-hidden {...rest}>
       {icon ? renderIcon(icon) : (children ?? monogram)}
     </span>
   );

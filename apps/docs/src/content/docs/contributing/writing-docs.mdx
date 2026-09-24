@@ -114,7 +114,7 @@ description: Compact status indicator for tags and counts.
 - List only admin's own props; close with "Plus native `<span>` attributes." rather than enumerating inherited ones.
 - Say when a default emits no class (`md` adds no class), and name classes that don't exist but readers will guess (`badge-neutral`).
 - Write attributes bracketed — `[data-selected]` — so they read as attributes and the docs checker doesn't treat them as class names.
-- Run `pnpm check-docs`. It fails on a class the component CSS doesn't define, and reports how many component classes still have no Reference entry.
+- Run `pnpm check-docs`. It fails on a class the component CSS doesn't define, a React prop the component's type doesn't declare, or a `tsx` example that doesn't type-check, and reports how many component classes still have no Reference entry.
 
 ## Prose style
 

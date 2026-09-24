@@ -125,7 +125,7 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 ```
 
 ```tsx
-<Container style={{ "--container-max": "40rem" }}>
+<Container maxWidth="40rem">
   <Card title="Release notes" description="Capped at 40rem and centered in the available space." />
 </Container>
 ```
@@ -180,12 +180,13 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 
 ### React
 
-| Prop      | Type                              | Default |
-| --------- | --------------------------------- | ------- |
-| `size`    | `"sm" \| "md" \| "lg" \| "fluid"` | `"md"`  |
-| `compact` | `boolean`                         | `false` |
+| Prop       | Type                              | Default |
+| ---------- | --------------------------------- | ------- |
+| `size`     | `"sm" \| "md" \| "lg" \| "fluid"` | `"md"`  |
+| `compact`  | `boolean`                         | `false` |
+| `maxWidth` | `string` (CSS length)             | —       |
 
-Plus native `<div>` attributes. `<Container>` is a standalone page region, not the [`.Container` escape hatch](../basics/conventions.md#container-escape-hatch) that compound components expose.
+`maxWidth` overrides the `size` cap. Plus native `<div>` attributes. `<Container>` is a standalone page region, not the [`.Container` escape hatch](../basics/conventions.md#container-escape-hatch) that compound components expose.
 
 ### Vanilla
 

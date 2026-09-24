@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Button` types the HTML invoker attributes `commandfor` and `command`, which `@types/react` doesn't declare yet, so the documented `Dialog` and `Drawer` invoker examples type-check. (react)
+- `systemAccent` on `BrandTile` and `Navbar`, as on `AdminRoot` and `AppShell`: sets `--color-system-accent` inline. (react)
+- `maxWidth` on `Container` sets `--container-max` inline, overriding the `size` preset. (react)
+
 ### Fixed
 
 - Containers are no longer capped at Tailwind's breakpoint widths. `admin.css` and `admin.scoped.css` shipped Tailwind's `.container` utility, whose later `utilities` layer overrode `max-width` on every `.container` and `<Container>`: the default, `container-sm`/`-lg`/`-fluid`, and per-instance `--container-max`. Container widths change as a result: wider at most viewports, and `90rem` in place of `96rem` at the widest. Tailwind builds that import the source CSS generated the same utility; `theme.css` now excludes it with `@source not inline("container")`, which needs Tailwind v4.1+. (css)

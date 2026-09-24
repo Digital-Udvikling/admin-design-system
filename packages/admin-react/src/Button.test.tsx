@@ -65,6 +65,17 @@ describe("Button", () => {
     });
   });
 
+  it("passes the invoker commandfor/command attributes through to the DOM", () => {
+    render(
+      <Button commandfor="confirm" command="show-modal">
+        Open
+      </Button>,
+    );
+    const btn = screen.getByRole("button", { name: "Open" });
+    expect(btn).toHaveAttribute("commandfor", "confirm");
+    expect(btn).toHaveAttribute("command", "show-modal");
+  });
+
   it("renders forwardRef icon components (the shape `@tabler/icons-react` uses)", () => {
     const IconForwarded = forwardRef<SVGSVGElement, { size?: number | string }>((props, ref) => (
       <svg ref={ref} data-testid="forwarded" {...props} />

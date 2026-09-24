@@ -26,6 +26,17 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
    * for alternatives — only the first is rendered as a visual chip.
    */
   hotkey?: string | readonly string[];
+  /** Id of the element an HTML invoker `command` targets (`commandfor`). */
+  commandfor?: string;
+  /** HTML invoker command run on the `commandfor` target; `--*` for custom commands. */
+  command?:
+    | "show-modal"
+    | "close"
+    | "request-close"
+    | "show-popover"
+    | "hide-popover"
+    | "toggle-popover"
+    | `--${string}`;
 }
 
 export function Button({

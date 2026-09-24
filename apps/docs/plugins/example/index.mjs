@@ -46,27 +46,14 @@ export default function remarkExample() {
     name: "admin-example",
 
     mdxjsEsm(node) {
-      let program;
-      try {
-        program = JsxParser.parse(node.value, {
-          ecmaVersion: "latest",
-          sourceType: "module",
-        });
-      } catch {
-        return;
-      }
-      for (const stmt of program.body) {
-        if (stmt.type !== "ImportDeclaration") continue;
-        // Astro components can't live inside the React preview's TSX module.
-        if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
-        userImports.push(generate(stmt).trim());
-      }
+      userImports.push(...forwardedImports(node.value).map((i) => i.code));
     },
 
     async containerDirective(node, ctx) {
       if (node.name !== "example") return;
 
-      const fences = collectFences(node.children ?? []);
+      const fenceNodes = collectFences(node.children ?? []);
+      const fences = { html: fenceNodes.html?.value, tsx: fenceNodes.tsx?.value };
       if (fences.html === undefined && fences.tsx === undefined) {
         ctx.report({
           message: "`:::example` block needs at least one ```html or ```tsx fence",
@@ -125,13 +112,42 @@ export default function remarkExample() {
 }
 
 /**
+ * Import statements from one MDX ESM block, as forwarded into every preview
+ * module below it: `code` is the regenerated statement, `line` its 1-based start
+ * line within `esm`. `.astro` imports are dropped; an unparseable block yields none.
+ *
+ * @param {string} esm
+ * @returns {{ code: string; line: number }[]}
+ */
+export function forwardedImports(esm) {
+  let program;
+  try {
+    program = JsxParser.parse(esm, {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      locations: true,
+    });
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const stmt of program.body) {
+    if (stmt.type !== "ImportDeclaration") continue;
+    // Astro components can't live inside the React preview's TSX module.
+    if (String(stmt.source.value ?? "").endsWith(".astro")) continue;
+    out.push({ code: generate(stmt).trim(), line: stmt.loc?.start.line ?? 1 });
+  }
+  return out;
+}
+
+/**
  * TSX source for one preview's virtual module. The source is hashed into the
  * module id, so any change here invalidates the cache.
  *
  * @param {string} importsBlock
  * @param {string} reactSource
  */
-function buildPreviewSource(importsBlock, reactSource) {
+export function buildPreviewSource(importsBlock, reactSource) {
   const header = importsBlock.length > 0 ? `${importsBlock}\n\n` : "";
   const adminRootImport = `import { AdminRoot as __ExampleAdminRoot } from "@aortl/admin-react";`;
   return `${adminRootImport}\n${header}export default function ExamplePreview() {
@@ -150,17 +166,19 @@ function hash(s) {
 }
 
 /**
+ * The first `html` and first `tsx`/`jsx` code node among a directive's children.
+ *
  * @param {readonly any[]} children
- * @returns {{ html?: string; tsx?: string }}
+ * @returns {{ html?: any; tsx?: any }}
  */
-function collectFences(children) {
-  /** @type {{ html?: string; tsx?: string }} */
+export function collectFences(children) {
+  /** @type {{ html?: any; tsx?: any }} */
   const out = {};
   for (const child of children) {
     if (child?.type !== "code") continue;
-    if (child.lang === "html" && out.html === undefined) out.html = child.value;
+    if (child.lang === "html" && out.html === undefined) out.html = child;
     else if ((child.lang === "tsx" || child.lang === "jsx") && out.tsx === undefined) {
-      out.tsx = child.value;
+      out.tsx = child;
     }
   }
   return out;

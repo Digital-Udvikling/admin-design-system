@@ -1,19 +1,27 @@
 #!/usr/bin/env node
-// Validate the docs site against itself and against the CSS source:
+// Validate the docs site against itself, the CSS source, and the React source:
 //   1. every relative/BASE_URL link points at a page that exists
 //   2. every `#anchor` on such a link exists in the built HTML
 //   3. every class and custom property named in a `## Reference` → `### Vanilla`
 //      table is defined in packages/admin-css/src/components/
 //   4. coverage report: component classes no Reference table mentions yet
+//   5. every `:::example` tsx fence type-checks, built into the same preview
+//      module the site renders, against packages/admin-react/src
+//   6. every prop in a `## Reference` → `### React` table exists on the props
+//      type of its part (or, without a Part column, of a component the page imports)
 //
-// Checks 1 and 3 need no build. Check 2 reads apps/docs/dist, so it is skipped
-// with a warning unless --require-build is passed (CI builds first, so it does).
+// All but check 2 read source only. Check 2 reads apps/docs/dist, which may be
+// missing or stale, so its problems are warnings unless --require-build is passed
+// (CI builds first, so it does).
 // Check 4 only reports unless --strict-coverage is passed; flip that on once
 // every component page carries a Reference section.
 
 import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
-import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+import { basename, dirname, join, relative } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import ts from "typescript";
+import { buildPreviewSource, collectFences, forwardedImports } from "../plugins/example/index.mjs";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = join(SCRIPT_DIR, "..", "src", "content", "docs");
@@ -21,6 +29,7 @@ const PAGES_DIR = join(SCRIPT_DIR, "..", "src", "pages");
 const DIST_DIR = join(SCRIPT_DIR, "..", "dist");
 const REPO_ROOT = join(SCRIPT_DIR, "..", "..", "..");
 const CSS_DIR = join(REPO_ROOT, "packages", "admin-css", "src", "components");
+const REACT_ENTRY = join(REPO_ROOT, "packages", "admin-react", "src", "index.ts");
 
 const requireBuild = process.argv.includes("--require-build");
 const strictCoverage = process.argv.includes("--strict-coverage");
@@ -117,7 +126,9 @@ if (!existsSync(DIST_DIR)) {
       warnings.push(`${rel}: no built HTML for ${targetUrl}, anchor '${hash}' unverified`);
       continue;
     }
-    if (!ids.has(hash)) errors.push(`${rel}: anchor not found on ${targetUrl}: ${href}`);
+    if (ids.has(hash)) continue;
+    if (requireBuild) errors.push(`${rel}: anchor not found on ${targetUrl}: ${href}`);
+    else warnings.push(`${rel}: anchor not found on ${targetUrl}: ${href} (dist may be stale)`);
   }
 }
 
@@ -206,6 +217,252 @@ for (const abs of mdxFiles) {
   }
 }
 
+// ---------------------------------------------------------------- mdast
+
+// The MDX integration's own Sätteri, so directives and fences parse exactly as
+// the site sees them (a `:::example` shown inside a ````markdown fence is not one).
+const requireFromMdx = createRequire(createRequire(import.meta.url).resolve("@astrojs/mdx"));
+const { mdxToMdast } = await import(pathToFileURL(requireFromMdx.resolve("satteri")).href);
+
+// Mirrors `markdown.processor` in astro.config.mjs; frontmatter keeps line numbers exact.
+const MDAST_FEATURES = { directive: true, gfm: true, frontmatter: true };
+
+/** Calls `fn` on `node` and its descendants in document order. */
+function visit(node, fn) {
+  fn(node);
+  for (const child of node.children ?? []) visit(child, fn);
+}
+
+/** Concatenated `text` / `inlineCode` content under a node. */
+function textOf(node) {
+  if (node.type === "text" || node.type === "inlineCode") return node.value;
+  return (node.children ?? []).map(textOf).join("");
+}
+
+/** Every `inlineCode` value under a node. */
+function codeSpans(node) {
+  const out = [];
+  visit(node, (n) => n.type === "inlineCode" && out.push(n.value));
+  return out;
+}
+
+// A page that doesn't parse is reported and left out of checks 5 and 6.
+const pages = [];
+for (const abs of mdxFiles) {
+  const rel = relative(DOCS_DIR, abs).replaceAll("\\", "/");
+  try {
+    pages.push({
+      abs,
+      rel,
+      tree: mdxToMdast(readFileSync(abs, "utf8"), { features: MDAST_FEATURES }),
+    });
+  } catch (e) {
+    errors.push(`${rel}: MDX parse error: ${e instanceof Error ? e.message : e}`);
+  }
+}
+
+// ---------------------------------------------------------------- react
+
+// One program covers both React checks; the checker is shared.
+const tsStart = performance.now();
+
+// Marker lines locate the forwarded imports and the fence body inside the
+// generated module, so MDX lines stay right whatever buildPreviewSource wraps
+// around them.
+const IMPORTS_MARKER = "__CHECK_DOCS_IMPORTS__";
+const BODY_MARKER = "__CHECK_DOCS_BODY__";
+const markerLine = (source, marker) => source.split("\n").findIndex((l) => l.includes(marker));
+const importsLine = markerLine(buildPreviewSource(`// ${IMPORTS_MARKER}`, ""), IMPORTS_MARKER);
+
+/** Virtual preview module path → where its fence lives in the MDX. */
+const previews = new Map();
+for (const { abs, rel, tree } of pages) {
+  // Same accumulation as the remark plugin: an example sees the imports above it.
+  const imports = [];
+  let index = 0;
+  visit(tree, (node) => {
+    if (node.type === "mdxjsEsm") {
+      for (const { code, line } of forwardedImports(node.value)) {
+        imports.push({ code, mdxLine: node.position.start.line + line - 1 });
+      }
+    }
+    if (node.type !== "containerDirective" || node.name !== "example") return;
+    const { tsx } = collectFences(node.children ?? []);
+    if (tsx === undefined) return;
+    const importsBlock = imports.map((i) => i.code).join("\n");
+    // Beside the page, so relative imports resolve as they do from the MDX.
+    const file = join(dirname(abs), `__example_${basename(abs, ".mdx")}_${index++}.tsx`);
+    previews.set(file, {
+      rel,
+      source: buildPreviewSource(importsBlock, tsx.value),
+      // Module line (offset from importsLine) → MDX line of the import it belongs to.
+      importLines: imports.flatMap((i) => i.code.split("\n").map(() => i.mdxLine)),
+      bodyLine: markerLine(buildPreviewSource(importsBlock, BODY_MARKER), BODY_MARKER),
+      bodyLength: tsx.value.split("\n").length,
+      fenceLine: tsx.position.start.line,
+      directiveLine: node.position.start.line,
+    });
+  });
+}
+
+const tsconfigPath = join(SCRIPT_DIR, "..", "tsconfig.json");
+const tsconfig = ts.getParsedCommandLineOfConfigFile(tsconfigPath, undefined, {
+  ...ts.sys,
+  onUnRecoverableConfigFileDiagnostic: (d) => {
+    throw new Error(ts.flattenDiagnosticMessageText(d.messageText, "\n"));
+  },
+});
+const compilerOptions = {
+  ...tsconfig.options,
+  noEmit: true,
+  // What the generated `.astro/types.d.ts` references (it needs `astro sync`):
+  // `import.meta.env`, `*.astro` modules.
+  types: ["astro/client"],
+  // Source, like the docs' Vite alias; dist is often stale.
+  paths: { "@aortl/admin-react": [REACT_ENTRY] },
+};
+
+const host = ts.createCompilerHost(compilerOptions);
+const { getSourceFile, fileExists, readFile } = host;
+host.getSourceFile = (file, lang, ...rest) =>
+  previews.has(file)
+    ? ts.createSourceFile(file, previews.get(file).source, lang, true, ts.ScriptKind.TSX)
+    : getSourceFile.call(host, file, lang, ...rest);
+host.fileExists = (file) => previews.has(file) || fileExists.call(host, file);
+host.readFile = (file) => previews.get(file)?.source ?? readFile.call(host, file);
+
+const program = ts.createProgram({
+  rootNames: [...previews.keys(), REACT_ENTRY],
+  options: compilerOptions,
+  host,
+});
+
+const flatten = (d) => ts.flattenDiagnosticMessageText(d.messageText, " ").replace(/\s+/g, " ");
+
+for (const d of [...program.getOptionsDiagnostics(), ...program.getGlobalDiagnostics()]) {
+  errors.push(`examples: TS${d.code} ${flatten(d)}`);
+}
+
+const exampleErrors = new Set();
+for (const [file, preview] of previews) {
+  const sourceFile = program.getSourceFile(file);
+  const diagnostics = [
+    ...program.getSyntacticDiagnostics(sourceFile),
+    ...program.getSemanticDiagnostics(sourceFile),
+  ];
+  for (const d of diagnostics) {
+    const { line } = sourceFile.getLineAndCharacterOfPosition(d.start ?? 0);
+    const offset = line - preview.bodyLine;
+    // Neither body nor a forwarded import means the wrapper; point at the directive.
+    const mdxLine =
+      offset >= 0 && offset < preview.bodyLength
+        ? preview.fenceLine + 1 + offset
+        : (preview.importLines[line - importsLine] ?? preview.directiveLine);
+    // A bad import fails every example below it; its shared MDX line dedupes them.
+    exampleErrors.add(`${preview.rel}:${mdxLine} TS${d.code} ${flatten(d)}`);
+  }
+}
+errors.push(...exampleErrors);
+
+const checker = program.getTypeChecker();
+const reactExports = new Map(
+  checker
+    .getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(REACT_ENTRY)))
+    .map((s) => [s.name, s]),
+);
+
+const propsCache = new Map();
+/** Prop names of an exported component or compound part (`Navbar.Brand`), or null. */
+function propsOf(part) {
+  if (propsCache.has(part)) return propsCache.get(part);
+  const [head, ...path] = part.split(".");
+  let symbol = reactExports.get(head);
+  let props = null;
+  if (symbol) {
+    if (symbol.flags & ts.SymbolFlags.Alias) symbol = checker.getAliasedSymbol(symbol);
+    let type = checker.getTypeOfSymbol(symbol);
+    for (const segment of path) {
+      const member = type?.getProperty(segment);
+      type = member ? checker.getTypeOfSymbol(member) : undefined;
+    }
+    const param = type?.getCallSignatures()[0]?.parameters[0];
+    if (param) {
+      const propsType = checker.getTypeOfSymbol(param);
+      // A union's own properties are only those common to every branch.
+      const branches = propsType.isUnion() ? propsType.types : [propsType];
+      props = new Set(branches.flatMap((t) => checker.getPropertiesOfType(t)).map((p) => p.name));
+    }
+  }
+  propsCache.set(part, props);
+  return props;
+}
+
+let reactRows = 0;
+for (const { rel, tree } of pages) {
+  const imported = [];
+  let inReference = false;
+  let inReact = false;
+  for (const node of tree.children) {
+    if (node.type === "mdxjsEsm") {
+      for (const { code } of forwardedImports(node.value)) {
+        const m = code.match(/^import\s*\{([^}]*)\}\s*from\s*"@aortl\/admin-react"/);
+        if (!m) continue;
+        for (const spec of m[1].split(",")) {
+          const name = spec.trim().split(/\s+as\s+/)[0];
+          if (name) imported.push(name);
+        }
+      }
+    }
+    if (node.type === "heading" && node.depth === 2) {
+      inReference = textOf(node).trim() === "Reference";
+      inReact = false;
+    } else if (node.type === "heading" && node.depth === 3) {
+      inReact = inReference && /^React\b/.test(textOf(node).trim());
+    }
+    if (!inReact || node.type !== "table") continue;
+
+    const [header, ...rows] = node.children;
+    const columns = header.children.map((cell) => textOf(cell).trim().toLowerCase());
+    const propCol = columns.indexOf("prop");
+    if (propCol < 0) continue;
+    const partCol = columns.findIndex((c) => c === "part" || c === "component");
+    for (const row of rows) {
+      const line = row.position.start.line;
+      const parts =
+        partCol >= 0
+          ? codeSpans(row.children[partCol]).map((p) => p.replace(/^<|\s*\/?>$/g, ""))
+          : imported;
+      const known = parts.filter((p) => propsOf(p) !== null);
+      const unknown = parts.filter((p) => propsOf(p) === null);
+      if (partCol >= 0) {
+        for (const part of unknown) {
+          errors.push(`${rel}:${line}: React Reference names ${part}, not a component export`);
+        }
+      }
+      if (known.length === 0) {
+        if (partCol < 0 || unknown.length === 0) {
+          errors.push(
+            `${rel}:${line}: React Reference row has no component to check its props against`,
+          );
+        }
+        continue;
+      }
+      for (const prop of codeSpans(row.children[propCol])) {
+        reactRows += 1;
+        if (!known.some((p) => propsOf(p).has(prop))) {
+          errors.push(
+            `${rel}:${line}: React Reference lists \`${prop}\`, not a prop of ${known.join(" / ")}`,
+          );
+        }
+      }
+    }
+  }
+}
+
+const reactLine =
+  `React: ${previews.size} examples type-checked, ${reactRows} Reference props verified ` +
+  `(${Math.round(performance.now() - tsStart)} ms).`;
+
 // ---------------------------------------------------------------- coverage
 
 const uncovered = [...cssClasses].filter((c) => !documented.has(c)).sort();
@@ -221,6 +478,7 @@ if (strictCoverage && uncovered.length > 0) {
 // ---------------------------------------------------------------- report
 
 console.log(coverageLine);
+console.log(reactLine);
 if (strictCoverage && uncovered.length > 0) {
   console.log(`Undocumented: ${uncovered.join(", ")}`);
 }

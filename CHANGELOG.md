@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `systemAccent` on `BrandTile` and `Navbar`, as on `AdminRoot` and `AppShell`: sets `--color-system-accent` inline. (react)
 - `maxWidth` on `Container` sets `--container-max` inline, overriding the `size` preset. (react)
 - `useConfirm()`, a promise-based `window.confirm`: `await confirm({ title, description, confirmLabel, cancelLabel, variant })` resolves `true` on Confirm and `false` on Cancel, Esc, or unmount. `<AdminRoot>` hosts the dialog, a `size="sm"` `Dialog` with no light dismiss that renders only while a confirm is pending, and queues concurrent calls in order. `variant: "danger"` renders a danger confirm button and focuses Cancel. Throws outside `<AdminRoot>`. (react)
+- `variant` and `size` on `Menu.Trigger` style the trigger as a `Button` (`_ao-btn`, square without children), for button-styled and split-button menus. A raw `className="btn"` on the trigger rendered unstyled under the scoped bundle, since the `_ao-` prefix is added only to admin's own classes. (react)
 
 ### Changed
 

@@ -253,7 +253,7 @@ import Callout from "../../../components/Callout.astro";
 
 ```tsx
 <Menu>
-  <Menu.Trigger className="btn btn-primary">Actions</Menu.Trigger>
+  <Menu.Trigger variant="primary">Actions</Menu.Trigger>
   <Menu.Popup>
     <Menu.Item>Approve</Menu.Item>
     <Menu.Item>Reject</Menu.Item>
@@ -291,7 +291,7 @@ import Callout from "../../../components/Callout.astro";
 <ButtonGroup>
   <Button variant="primary">Save</Button>
   <Menu>
-    <Menu.Trigger className="btn btn-primary btn-square" aria-label="More save options" />
+    <Menu.Trigger variant="primary" aria-label="More save options" />
     <Menu.Popup>
       <Menu.Item>Save as draft</Menu.Item>
       <Menu.Item>Save and publish</Menu.Item>
@@ -324,11 +324,15 @@ A `<details>` menu has no light dismiss: clicking outside leaves it open. Closin
 | `Menu.Group`      | `<div>`                             | `menu-group`       |
 | `Menu.GroupLabel` | `<div>`                             | `menu-group-label` |
 
-| Part        | Prop      | Type                                          | Default |
-| ----------- | --------- | --------------------------------------------- | ------- |
-| `Menu.Item` | `icon`    | [`IconProp`](../../basics/conventions/#icons) | —       |
-| `Menu.Item` | `hotkey`  | `string \| readonly string[]`                 | —       |
-| `Menu.Item` | `checked` | `boolean`                                     | —       |
+| Part           | Prop      | Type                                          | Default |
+| -------------- | --------- | --------------------------------------------- | ------- |
+| `Menu.Trigger` | `variant` | `ButtonVariant`                               | —       |
+| `Menu.Trigger` | `size`    | `ButtonSize`                                  | `"md"`  |
+| `Menu.Item`    | `icon`    | [`IconProp`](../../basics/conventions/#icons) | —       |
+| `Menu.Item`    | `hotkey`  | `string \| readonly string[]`                 | —       |
+| `Menu.Item`    | `checked` | `boolean`                                     | —       |
+
+`variant` styles the trigger as a [Button](../buttons/) of that variant, square when it has no children; `size` applies only alongside it.
 
 Open state is the `<details>` element's, so there is no `open` prop to control and no JavaScript involved — pass the native `open` attribute for a menu that starts expanded. Each part takes the native attributes of its element.
 

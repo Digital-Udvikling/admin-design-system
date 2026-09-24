@@ -119,7 +119,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 
 In a consumer repo you use the system; changing it is a separate task in a checkout of [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system).
 
-1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition.
+1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers and master-detail.
 2. Prefer composition: a prop, `className` / `classNames`, `.Container`, or a documented class on your own element (a router `Link` with `navbar-item`, written `_ao-navbar-item` inside `<AdminRoot>`).
 3. Otherwise write the smallest local workaround, either a stand-in built from system primitives and semantic tokens or a narrow override of one system class, and mark it with a comment in the file's own syntax:
    `aortl-gap: <component> — <what the system can't express> — #<issue> | unreported`

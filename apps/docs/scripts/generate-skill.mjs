@@ -374,7 +374,15 @@ function buildSkillMd(pages) {
   }
 
   const header = readFileSync(HEADER_FILE, "utf8").replace(/\s+$/, "");
-  return `${header}\n\n## Reference index\n\n${sections.join("\n").trimEnd()}\n`;
+  // Root package.json is the release pointer release-it bumps (see src/version.ts).
+  const { version } = JSON.parse(readFileSync(join(REPO_ROOT, "package.json"), "utf8"));
+  const stamp =
+    `Generated for \`@aortl/admin\` ${version}. If the repo depends on, or pins an unpkg URL to, ` +
+    "a different `@aortl/*` version, tell the user to update this skill (`npx skills update`, or " +
+    "`/plugin marketplace update digital-udvikling`) before trusting the references: props and " +
+    "classes may differ.";
+  const stamped = header.replace(/^# .+$/m, (title) => `${title}\n\n${stamp}`);
+  return `${stamped}\n\n## Reference index\n\n${sections.join("\n").trimEnd()}\n`;
 }
 
 // Fail the build if a known transform gap leaked into the output: docs-site

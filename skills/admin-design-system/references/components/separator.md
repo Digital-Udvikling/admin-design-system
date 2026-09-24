@@ -1,6 +1,6 @@
 # Separator
 
-> A styled hr with an optional vertical modifier.
+> Divide content with a horizontal or vertical rule.
 
 ## Examples
 

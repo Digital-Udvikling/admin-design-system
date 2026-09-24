@@ -79,6 +79,8 @@ Wraps [Base UI Checkbox](https://base-ui.com/react/components/checkbox), so stat
 
 For labels, descriptions and validation, wrap it in a [Field](fields.md).
 
+For a setting that applies immediately, use a [Switch](switches.md); for a pressed toolbar button, a [ToggleButton](../buttons.md#toggle).
+
 ### Vanilla
 
 | Class                | Effect                                                                        |

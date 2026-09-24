@@ -61,6 +61,8 @@
 
 Wraps [Base UI Switch](https://base-ui.com/react/components/switch): `checked` / `defaultChecked` / `onCheckedChange`, `name`, `required`, `disabled`. It renders a `<button role="switch">` with a hidden input for form submission. `Switch` supplies its own thumb; pass `children` only to replace it. Plus native `<button>` attributes.
 
+For a choice submitted with a form, use a [Checkbox](checkboxes.md).
+
 ### Vanilla
 
 | Class          | Effect                                                                                       |

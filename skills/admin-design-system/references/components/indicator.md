@@ -217,6 +217,8 @@ The anchor goes in `children`; the floating element is built from the props. Wit
 
 Plus native `<div>` attributes.
 
+For a label inline with text, use a [Badge](badges.md).
+
 ### Vanilla
 
 | Class / var                                                                                                         | Effect                                                                               |

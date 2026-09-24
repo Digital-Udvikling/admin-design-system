@@ -1,6 +1,6 @@
 # Buttons
 
-> Buttons with variants, sizes, icons, and loading state.
+> Trigger an action, submit a form, or toggle a state.
 
 ## Contents
 
@@ -380,6 +380,8 @@
 `hotkey` dispatches a native click on the rendered element, so `onClick` fires, `type="submit"` submits, and `render={<a href>}` navigates; it also sets `aria-keyshortcuts` and renders a trailing [Kbd](kbd.md) chip. Pass an array for alternatives — only the first is shown. On a `ToggleButton` it flips the pressed state. For bindings not tied to a control, see [Conventions › Hotkeys](../basics/conventions.md#hotkeys).
 
 `ToggleButton` takes every `Button` prop except `loading`, plus Base UI's pressed state; it wraps [Base UI Toggle](https://base-ui.com/react/components/toggle). An icon-only `ToggleButton` doesn't get `btn-square`: the leading mini switch sits beside the icon, so the button can't be square. `Button` wraps [Base UI Button](https://base-ui.com/react/components/button), so `render` and `nativeButton` come from there — pass both to render an anchor. Plus native `<button>` attributes, and `<div>` on `ButtonGroup`, which also defaults `role="group"`.
+
+An icon-only `Button` needs an `aria-label`; a Tooltip is not an accessible name.
 
 ### Vanilla
 

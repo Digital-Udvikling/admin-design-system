@@ -106,6 +106,8 @@
 
 For a group label, description and validation, wrap the whole group in a [Field](fields.md).
 
+For a long list of options, use a [Select](selects.md).
+
 ### Vanilla
 
 | Class                  | Effect                                                          |

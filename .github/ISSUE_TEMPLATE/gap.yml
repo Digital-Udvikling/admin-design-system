@@ -1,0 +1,42 @@
+name: Design system gap
+description: Something an admin screen needed that the system can't express.
+title: "gap: "
+labels: [gap]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is public. Describe the need generically: no code, repository names, file paths or URLs from private repositories.
+  - type: textarea
+    id: need
+    attributes:
+      label: Need
+      description: What the screen has to do, in a sentence or two.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried
+      description: Components, props or classes you checked, and the Reference rows that ruled them out.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it didn't fit
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround
+      description: What the local stand-in does, not where it lives. Its `aortl-gap` marker links back to this issue.
+  - type: dropdown
+    id: flavor
+    attributes:
+      label: Flavor
+      options:
+        - React (@aortl/admin-react)
+        - Vanilla (admin.css)
+        - Tailwind (source CSS)

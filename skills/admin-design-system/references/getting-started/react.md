@@ -6,6 +6,7 @@
 
 - [Install](#install)
 - [Import styles + components](#import-styles-components)
+- [With Tailwind](#with-tailwind)
 - [<AdminRoot> props](#adminroot-props)
 - [Framework setup](#framework-setup)
   - [Next.js (App Router)](#nextjs-app-router)
@@ -44,6 +45,19 @@ export function SignIn() {
   );
 }
 ```
+
+## With Tailwind
+
+The scoped bundle ships unlayered so it wins over a host page's own CSS. In a Tailwind app that owns the page, that also makes its reset (`:scope * { margin: 0; padding: 0 }`) beat every layered utility inside `<AdminRoot>`, so `mt-4` or `p-2` does nothing. Import the bundle into a layer between `base` and `components`:
+
+```css
+@layer theme, base, admin, components, utilities;
+@import "tailwindcss";
+@import "@aortl/admin-react/styles.css" layer(admin);
+@import "@aortl/admin-css/src/theme.css";
+```
+
+Admin styles still beat Tailwind's preflight, and your utilities beat admin styles. Skip this when embedding in a page whose unlayered CSS would then override the components. `theme.css` registers the design tokens for utilities like `bg-primary`; see [Tailwind](tailwind.md).
 
 Two things that example is doing:
 

@@ -1,6 +1,6 @@
 # Badges
 
-> Compact status indicator for tags and counts.
+> Short status, category, or count label on an item.
 
 ## Contents
 
@@ -167,6 +167,8 @@ Direction-to-tone is domain-specific — a falling error rate is good.
 `soft` gives a tinted fill; `icon` is the leading slot. `onRemove` renders the trailing remove button and takes its accessible name from `removeLabel` — React supplies the × glyph, vanilla supplies the icon.
 
 Plus native `<span>` attributes. `Badge` takes no `classNames` — the remove button isn't reachable from outside.
+
+For a count or dot on the corner of an icon or avatar, use an [Indicator](indicator.md).
 
 ### Vanilla
 

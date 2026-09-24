@@ -179,6 +179,8 @@
 
 A tooltip is not an accessible name. An icon-only trigger still needs its own `aria-label`.
 
+Keep tooltip content to text; put links and controls in a [Menu](menus.md) or on the page.
+
 ### Vanilla
 
 | Class                 | Effect                                                                                                                                    |

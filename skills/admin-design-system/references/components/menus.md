@@ -1,6 +1,6 @@
 # Menus
 
-> Dropdown action menu.
+> Actions behind a trigger, in a dropdown.
 
 ## Contents
 
@@ -317,6 +317,8 @@ Open state is the `<details>` element's, so there is no `open` prop to control a
 `checked` turns an item into a checkable one and renders the leading check; `checked={false}` still reserves the gutter, so labels stay aligned down the group. Set `role="menuitemradio"` for single-select. You hold the state itself.
 
 `hotkey` dispatches a click on the item and right-pins a [Kbd](kbd.md) chip, on both the button and anchor branches — see [Conventions › Hotkeys](../basics/conventions.md#hotkeys).
+
+For a form value, use a [Select](forms/selects.md).
 
 ### Vanilla
 

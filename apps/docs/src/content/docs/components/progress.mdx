@@ -1,6 +1,6 @@
 ---
 title: Progress
-description: Styled native <progress> element.
+description: Task progress bar, determinate or indeterminate.
 ---
 
 import { Progress } from "@aortl/admin-react";
@@ -96,6 +96,8 @@ import Callout from "../../../components/Callout.astro";
 | `size`    | `"sm" \| "md" \| "lg"`                         | `"md"`   |
 
 Omitting `value` (or passing `undefined`) gives an indeterminate bar. Plus native `<progress>` attributes.
+
+For an inline busy state, use a [Spinner](../spinners/).
 
 ### Vanilla
 

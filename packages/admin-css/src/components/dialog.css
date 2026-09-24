@@ -115,9 +115,10 @@
     border-bottom-right-radius: inherit;
   }
 
+  /* ms-auto pins the button to the header's end when there is no title. */
   .dialog-close {
     @apply inline-flex items-center justify-center
-           size-7 shrink-0
+           size-7 shrink-0 ms-auto
            rounded-md text-text-muted
            bg-transparent
            hover:bg-surface-strong hover:text-text

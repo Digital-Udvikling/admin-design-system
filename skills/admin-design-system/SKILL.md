@@ -139,7 +139,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill.
 - [React](references/getting-started/react.md) — Typed components emitting the same class names as the CSS package.
 - [Scoped bundle](references/getting-started/scoped.md) — Drop admin styles into a non-admin app without colliding on class names.
-- [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4 project.
+- [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4.1+ project.
 - [Vanilla CSS](references/getting-started/vanilla.md) — One pre-built stylesheet, no build tooling required.
 
 ### Basics

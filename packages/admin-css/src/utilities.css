@@ -3,7 +3,7 @@
 @reference "tailwindcss";
 @reference "./theme.css";
 
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
 
 /*
  * Pre-built utility safelist for the no-build `admin.utilities.css` bundle,

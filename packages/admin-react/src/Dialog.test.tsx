@@ -138,6 +138,13 @@ describe("Dialog", () => {
       expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
     });
 
+    it("a title-less header holds only the close button (CSS pins it to the end)", () => {
+      render(<Dialog open />);
+      const close = screen.getByRole("button", { name: "Close" });
+      expect(close.parentElement).toHaveAdminClass("dialog-header");
+      expect(close.parentElement?.children).toHaveLength(1);
+    });
+
     it("forwards closedby to the dialog element with 'any' as default", () => {
       const { rerender } = render(<Dialog title="x" />);
       expect(getDialog()).toHaveAttribute("closedby", "any");

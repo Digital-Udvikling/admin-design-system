@@ -4,6 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Containers are no longer capped at Tailwind's breakpoint widths. `admin.css` and `admin.scoped.css` shipped Tailwind's `.container` utility, whose later `utilities` layer overrode `max-width` on every `.container` and `<Container>`: the default, `container-sm`/`-lg`/`-fluid`, and per-instance `--container-max`. Container widths change as a result: wider at most viewports, and `90rem` in place of `96rem` at the widest. Tailwind builds that import the source CSS generated the same utility; `theme.css` now excludes it with `@source not inline("container")`, which needs Tailwind v4.1+. (css)
+- The checked `Switch` thumb no longer vanishes in dark mode. It was `paper` on the `primary` track, which is also paper in dark mode; the checked thumb now uses `primary-content`, as `ToggleButton`'s mini switch already did. (css)
+
+### Removed
+
+- Stray Tailwind utilities in `admin.css` and `admin.scoped.css`: `.flex`, `.grid`, `.block`, `.inline`, `.hidden`, `.sr-only`, `.relative`, `.absolute`, `.fixed`, `.sticky`, `.flex-1`, `.overflow-hidden`, `.rounded`, `.text-right`, `.tabular-nums` and a few more. The build scanned the repo for class-like strings and emitted whatever matched. Vanilla pages that relied on any of them without `admin.utilities.css` must add that bundle. `Dialog` and `Drawer` headers without a title and `Sidebar.CollapseToggle` used two of them; `.dialog-close` now pins itself to the header end with `margin-inline-start: auto`, and the toggle drops its redundant `sr-only` label (the checkbox keeps its `aria-label`). `admin.utilities.css` also loses `.transform`, which its safelist never included. (both)
+
 ## [0.20.1] - 2026-07-30
 
 ### Fixed

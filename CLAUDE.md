@@ -38,15 +38,17 @@ pnpm build:css
 pnpm build:react     # depends on admin-css dist
 pnpm dev             # docs at http://localhost:4321, HMR into source CSS
 pnpm check-types     # tsc on admin-react + astro check on docs
-pnpm test            # vitest on admin-react (happy-dom + RTL)
+pnpm test            # vitest: admin-react (happy-dom + RTL) + admin-css build scripts
 pnpm lint            # oxlint (NOT eslint)
 pnpm lint:fix
 pnpm format          # oxfmt (NOT prettier)
 pnpm format:check
+pnpm check-docs      # links, anchors, Reference class names vs component CSS
+pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm clean
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-types`, `test` — replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, the skill drift check (`generate-skill` + `git diff --exit-code -- skills`), `check-docs --require-build --strict-coverage`, `check-types`, `test` — replicate locally before pushing.
 
 ## Architecture
 
@@ -61,7 +63,7 @@ Two output forms ship from one source:
 - **Unscoped, unprefixed** (`@aortl/admin-css/admin.css`) — class names are bare (`.btn`, `.card`). For full-page admin apps that own the document. Hand-written HTML uses these names directly.
 - **Scoped, prefixed** (`@aortl/admin-css/admin.scoped.css`, also re-exported as `@aortl/admin-react/styles.css`) — every selector is wrapped in `@scope (._ao-admin-root)` and every class is prefixed `_ao-` (`._ao-btn`, `._ao-card`). The build script `packages/admin-css/scripts/wrap-scoped.mjs` derives this from the unscoped bundle. **`admin-react` always uses this variant** — components emit `_ao-`-prefixed classes via the `cn` helper in `packages/admin-react/src/cn.ts`, and `<AdminRoot>` (which renders `class="_ao-admin-root"`) is required.
 
-In React source you still write the bare name (`cn("btn", className)`); `cn` adds the prefix at render time. The consumer-supplied `className` prop is passed through verbatim — only admin's own classes carry the prefix. Tests assert on the prefixed form (`expect(el).toHaveClass("_ao-btn")`).
+In React source you still write the bare name (`cn("btn", className)`); `cn` adds the prefix at render time. The consumer-supplied `className` prop is passed through verbatim — only admin's own classes carry the prefix. Tests assert on the prefixed form (`expect(el).toHaveClass("_ao-btn")`). `admin.css` ships no Tailwind utilities (`source(none)`), so `cn` must only name classes defined in `components/*.css` — `cn("sr-only")` renders `_ao-sr-only` with no rule behind it.
 
 React components wrap Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) for a11y wiring, focus, validation. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
 
@@ -148,6 +150,8 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 
 ### Docs writing style
 
+`apps/docs/src/content/docs/contributing/*.mdx` is canonical for page shape and prose; when it and this file disagree, correct this file.
+
 Examples carry the page; prose should orient and step out of the way.
 
 - **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
@@ -163,9 +167,9 @@ Keep: code examples, a11y hooks, version-pinning, override/escape-hatch APIs, no
 
 1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`). If the component might host an icon, lay out the root with flex + gap so a leading `<i>`/`<svg>` works without a wrapper.
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
-3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose with `clsx`, re-export from `src/index.ts` (component + types).
+3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose classes with `cn` (not bare `clsx`), re-export from `src/index.ts` (component + types).
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke test at minimum; interaction tests for controlled state.
-5. `apps/docs/src/content/docs/components/<name>.mdx` — each example as a `:::example` block.
+5. `apps/docs/src/content/docs/components/<name>.mdx` — `## Examples` (one `###` + `:::example` per variation), then `## Reference` with `### React` and `### Vanilla` tables; the Vanilla table lists every class the CSS defines. Run what CI runs: `pnpm build && pnpm --filter docs check-docs -- --require-build --strict-coverage`.
 6. `pnpm generate-skill` to regenerate the agent-skill bundle from the new MDX. CI verifies the bundle is in sync via `git diff --exit-code -- skills`, so a forgotten regen turns into a red build.
 7. Add a bullet under `## [Unreleased]` in `CHANGELOG.md` (see [Changelog](#changelog)).
 

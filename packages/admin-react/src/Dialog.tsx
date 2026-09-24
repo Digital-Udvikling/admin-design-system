@@ -175,9 +175,7 @@ function DialogRoot({
             <DialogTitle icon={icon} className={classNames?.title}>
               {title}
             </DialogTitle>
-          ) : (
-            <span className={cn("flex-1", undefined)} />
-          )}
+          ) : null}
           {dismissible ? (
             <DialogCloseButton aria-label={closeLabel} className={classNames?.close} />
           ) : null}

@@ -422,6 +422,7 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
         onOpenChange={setOpen}
         size="sm"
         closedby="closerequest"
+        dismissible={false}
         title="Delete project?"
         description="This cannot be undone."
         actions={
@@ -499,7 +500,7 @@ Plus native `<dialog>` attributes.
 | `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
 | `dialog-body`        | The scrolling region; header and footer stay pinned                                                                             |
 | `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping                                                                     |
-| `dialog-close`       | `1.75rem` square X button                                                                                                       |
+| `dialog-close`       | `1.75rem` square X button, pinned to the header's inline end                                                                    |
 
 There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, scroll lock, Esc, and `::backdrop`. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete`, so the exit animation runs without JavaScript.
 

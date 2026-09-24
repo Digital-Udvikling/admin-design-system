@@ -43,6 +43,7 @@
      a background circle so the slide is one background-position. Drawn in
      both states so an off toggle still reads as a toggle. */
   .btn:is([aria-pressed], [data-pressed])::before {
+    /* Off thumb is paper in both modes — it reads on the border-strong track either way. */
     --btn-toggle-thumb: var(--color-paper);
     content: "";
     flex-shrink: 0;
@@ -64,8 +65,8 @@
   }
 
   .btn:is([aria-pressed="true"], [data-pressed])::before {
-    /* Thumb is primary-content, not .switch's paper — paper would vanish on
-       the dark-mode paper track. */
+    /* Thumb is primary-content, not paper — paper would vanish on the
+       dark-mode paper track. */
     --btn-toggle-thumb: var(--color-primary-content);
     background-color: var(--color-primary);
     background-position: calc(100% - 2px) 50%;

@@ -72,10 +72,10 @@ Wraps [Base UI Switch](https://base-ui.com/react/components/switch): `checked` /
 
 ### Vanilla
 
-| Class          | Effect                                                                     |
-| -------------- | -------------------------------------------------------------------------- |
-| `switch`       | `2.25rem` × `1.25rem` track, full radius, `border-strong` off / primary on |
-| `switch-thumb` | `1rem` paper circle with a shadow, sliding `1rem` when checked             |
+| Class          | Effect                                                                                       |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `switch`       | `2.25rem` × `1.25rem` track, full radius, `border-strong` off / primary on                   |
+| `switch-thumb` | `1rem` circle with a shadow, paper off and `primary-content` on, sliding `1rem` when checked |
 
 Works two ways with identical output. On a native `<input type="checkbox" role="switch">` the appearance is reset and the thumb drawn as a `::before`, keyed off `:checked` — no `switch-thumb` element needed. On a `<button role="switch">` the states come from `[data-checked]`, `[data-unchecked]` and `[data-disabled]`, and the thumb is a real `switch-thumb` child; that's what React emits. Write `role="switch"` yourself on the native input, otherwise it announces as a checkbox.
 

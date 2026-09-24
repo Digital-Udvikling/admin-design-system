@@ -1,8 +1,8 @@
 # Tailwind
 
-> Drop the design system into an existing Tailwind v4 project.
+> Drop the design system into an existing Tailwind v4.1+ project.
 
-Built on Tailwind v4. Importing the source CSS gives utilities like `bg-primary` the same tokens that power `.btn`, `.card`, and `.input`. Radii and shadows use Tailwind's built-in scale (`rounded-lg`, `shadow-xs`, …).
+Built on Tailwind v4.1+. Importing the source CSS gives utilities like `bg-primary` the same tokens that power `.btn`, `.card`, and `.input`. Radii and shadows use Tailwind's built-in scale (`rounded-lg`, `shadow-xs`, …).
 
 ## Install
 

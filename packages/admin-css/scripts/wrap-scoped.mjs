@@ -106,8 +106,8 @@ function classifyFirstNode(selector) {
 // used to provide and keeps admin ahead of unlayered host rules of the same
 // shape. Selectors already referencing `:scope` and `&`-nested ones are left
 // alone. First compounds that could match the scope root emit both a compound
-// and a descendant form, so `<AdminRoot className="grid">` still picks up
-// `._ao-grid`.
+// and a descendant form, so `._ao-admin-root` rules still reach the scope
+// element itself.
 function bumpSpecificity(selectorList) {
   const root = selectorParser().astSync(selectorList);
   const out = [];

@@ -205,6 +205,12 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Timeline](references/components/timeline.md) — Event rail for activity and status history.
 - [Tooltips](references/components/tooltip.md) — Transient hints anchored to a trigger.
 
+### Patterns
+
+- [Empty, loading and error states](references/patterns/states.md) — Fill a panel or table while its data is missing.
+- [Master-detail](references/patterns/master-detail.md) — Pick a row and show its record beside the list.
+- [Section header](references/patterns/section-header.md) — Title a list or table with a count and actions.
+
 ### Modules
 
 - [App shell](references/modules/app-shell.md) — Page chrome — navbar, optional sidebar, optional footer — around a main content area.

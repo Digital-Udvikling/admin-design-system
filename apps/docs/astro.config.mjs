@@ -43,6 +43,7 @@ export default defineConfig({
         { label: "Basics", items: [{ autogenerate: { directory: "basics/" } }] },
         { label: "Changelog", link: "/changelog/" },
         { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
+        { label: "Patterns", items: [{ autogenerate: { directory: "patterns/" } }] },
         { label: "Modules", items: [{ autogenerate: { directory: "modules/" } }] },
         { label: "Contributing", items: [{ autogenerate: { directory: "contributing/" } }] },
       ],

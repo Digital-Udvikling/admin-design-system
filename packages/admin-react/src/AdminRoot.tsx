@@ -1,6 +1,7 @@
 import { useCallback, useRef, type CSSProperties, type ComponentProps } from "react";
 import { cn } from "./cn";
 import { PortalContainerContext } from "./portal-context";
+import { ConfirmHost } from "./useConfirm";
 
 export interface AdminRootProps extends ComponentProps<"div"> {
   /**
@@ -16,7 +17,15 @@ export interface AdminRootProps extends ComponentProps<"div"> {
   systemAccent?: string;
 }
 
-export function AdminRoot({ className, theme, systemAccent, style, ref, ...rest }: AdminRootProps) {
+export function AdminRoot({
+  className,
+  theme,
+  systemAccent,
+  style,
+  ref,
+  children,
+  ...rest
+}: AdminRootProps) {
   const rootStyle =
     systemAccent !== undefined
       ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
@@ -43,7 +52,9 @@ export function AdminRoot({ className, theme, systemAccent, style, ref, ...rest 
         style={rootStyle}
         {...rest}
         {...(theme !== undefined && { "data-theme": theme })}
-      />
+      >
+        <ConfirmHost>{children}</ConfirmHost>
+      </div>
     </PortalContainerContext.Provider>
   );
 }

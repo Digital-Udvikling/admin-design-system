@@ -13,11 +13,12 @@ const SKILL_DIR = join(REPO_ROOT, "skills", "admin-design-system");
 const REF_DIR = join(SKILL_DIR, "references");
 const HEADER_FILE = join(SCRIPT_DIR, "skill-header.md");
 
-const TOP_LEVEL_ORDER = ["getting-started", "basics", "components", "modules"];
+const TOP_LEVEL_ORDER = ["getting-started", "basics", "components", "patterns", "modules"];
 const GROUP_TITLES = {
   "getting-started": "Getting started",
   basics: "Basics",
   components: "Components",
+  patterns: "Patterns",
   modules: "Modules",
 };
 

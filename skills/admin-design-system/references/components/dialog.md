@@ -10,6 +10,7 @@
   - [Metabase embed](#metabase-embed)
   - [Form dialog](#form-dialog)
   - [Destructive, no light dismiss](#destructive-no-light-dismiss)
+  - [Confirmation (React only)](#confirmation-react-only)
   - [Composed with Dialog.Container](#composed-with-dialogcontainer)
   - [Controlled state](#controlled-state)
 - [Reference](#reference)
@@ -370,6 +371,40 @@
 />
 ```
 
+### Confirmation (React only)
+
+`useConfirm()` needs an `<AdminRoot>` ancestor, which renders the dialog, and throws without one.
+
+**Example**
+
+```tsx
+function DeleteProject() {
+  const confirm = useConfirm();
+  const [answer, setAnswer] = useState("No answer yet");
+  return (
+    <>
+      <Button
+        variant="danger"
+        onClick={async () => {
+          const ok = await confirm({
+            title: "Delete project?",
+            description: "This permanently removes all data. This cannot be undone.",
+            confirmLabel: "Delete",
+            variant: "danger",
+          });
+          setAnswer(ok ? "Confirmed" : "Cancelled");
+        }}
+      >
+        Delete project
+      </Button>
+      <span>{answer}</span>
+    </>
+  );
+}
+
+<DeleteProject />;
+```
+
 ### Composed with Dialog.Container
 
 **Example**
@@ -478,6 +513,14 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
 | `Dialog.Title`       | `icon`         | [`IconProp`](../basics/conventions.md#icons)  | —         |
 | `Dialog.CloseButton` | `icon`         | [`IconProp`](../basics/conventions.md#icons)  | X glyph   |
 
+| `confirm()` option | Type                    | Default      |
+| ------------------ | ----------------------- | ------------ |
+| `title`            | `ReactNode`             | — (required) |
+| `description`      | `ReactNode`             | —            |
+| `confirmLabel`     | `ReactNode`             | `"Confirm"`  |
+| `cancelLabel`      | `ReactNode`             | `"Cancel"`   |
+| `variant`          | `"default" \| "danger"` | `"default"`  |
+
 `Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
 
 `size` and `closedby` live on the element, so they work on [`Dialog.Container`](../basics/conventions.md#container-escape-hatch) too — the form to use when the layout doesn't fit, most often to wrap everything in a `<form>`. `Dialog.Title` keeps its `icon` prop there.
@@ -485,6 +528,8 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
 Leave `open` off for the uncontrolled case, as the Invoker Commands pattern below does: no state, no effect, no ref. Pass `open` with `onOpenChange` when the open state belongs to React (a multi-step flow, an async submit, a deep-linked route): the wrapper bridges it to `showModal()` / `close()` and forwards the native `close` event back as `onOpenChange(false)`, so Esc and backdrop clicks stay in sync with your state.
 
 Plus native `<dialog>` attributes.
+
+`useConfirm()` returns `confirm(options)`, which opens a `size="sm"` dialog with Cancel then Confirm and resolves `Promise<boolean>`: `true` on Confirm, `false` on Cancel, Esc, or when the `<AdminRoot>` unmounts. A backdrop click does nothing. Calls made while one is open queue and open in call order. `variant: "danger"` renders a danger confirm button and puts initial focus on Cancel; otherwise Confirm takes focus. The caller runs the action and shows its pending and error state after the promise resolves.
 
 ### Vanilla
 

@@ -29,9 +29,10 @@
     @apply border-danger outline-danger;
   }
 
-  /* Borderless field: right-aligned tabular digits, native spinners hidden. */
+  /* Borderless field: right-aligned tabular digits, native spinners hidden. Tighter inline
+     padding than .input, since the step dividers already frame it and narrow fields clip digits. */
   .number-input-field {
-    @apply flex-1 min-w-0 w-full px-3 py-0
+    @apply flex-1 min-w-0 w-full px-2 py-0
            bg-transparent text-sm leading-none text-text text-right tabular-nums
            border-0 outline-none
            placeholder:text-text-muted
@@ -73,7 +74,7 @@
     @apply h-6.5;
   }
   .number-input-sm .number-input-field {
-    @apply text-xs px-2.5;
+    @apply text-xs px-1.5;
   }
   .number-input-sm .number-input-step {
     @apply w-7;
@@ -82,7 +83,7 @@
     @apply h-9.5;
   }
   .number-input-lg .number-input-field {
-    @apply text-base px-4;
+    @apply text-base px-2.5;
   }
   .number-input-lg .number-input-step {
     @apply w-9;

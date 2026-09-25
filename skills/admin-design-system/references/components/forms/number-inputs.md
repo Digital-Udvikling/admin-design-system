@@ -25,6 +25,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Decrease"
     onclick="this.parentElement.querySelector('input').stepDown()"
   >
@@ -41,6 +42,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Increase"
     onclick="this.parentElement.querySelector('input').stepUp()"
   >
@@ -62,6 +64,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Decrease"
     onclick="this.parentElement.querySelector('input').stepDown()"
   >
@@ -79,6 +82,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Increase"
     onclick="this.parentElement.querySelector('input').stepUp()"
   >
@@ -97,29 +101,65 @@
 
 ```html
 <div class="number-input number-input-sm">
-  <button type="button" class="number-input-step" aria-label="Decrease">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
     <i class="ti ti-minus" aria-hidden="true"></i>
   </button>
   <input class="number-input-field" type="number" value="1" aria-label="Small" />
-  <button type="button" class="number-input-step" aria-label="Increase">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
     <i class="ti ti-plus" aria-hidden="true"></i>
   </button>
 </div>
 <div class="number-input">
-  <button type="button" class="number-input-step" aria-label="Decrease">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
     <i class="ti ti-minus" aria-hidden="true"></i>
   </button>
   <input class="number-input-field" type="number" value="1" aria-label="Medium" />
-  <button type="button" class="number-input-step" aria-label="Increase">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
     <i class="ti ti-plus" aria-hidden="true"></i>
   </button>
 </div>
 <div class="number-input number-input-lg">
-  <button type="button" class="number-input-step" aria-label="Decrease">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
     <i class="ti ti-minus" aria-hidden="true"></i>
   </button>
   <input class="number-input-field" type="number" value="1" aria-label="Large" />
-  <button type="button" class="number-input-step" aria-label="Increase">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
     <i class="ti ti-plus" aria-hidden="true"></i>
   </button>
 </div>
@@ -140,6 +180,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Decrease"
     onclick="this.parentElement.querySelector('input').stepDown()"
   >
@@ -149,6 +190,7 @@
   <button
     type="button"
     class="number-input-step"
+    tabindex="-1"
     aria-label="Increase"
     onclick="this.parentElement.querySelector('input').stepUp()"
   >
@@ -209,6 +251,6 @@ Wraps [Base UI NumberField](https://base-ui.com/react/components/number-field), 
 | `number-input-lg`     | `2.375rem` tall, `text-base` field, `2.25rem` steppers                                                           |
 | `number-input-root`   | `display: contents` — the React wrapper element, invisible to layout                                             |
 
-There is no `number-input-md` — it's the unmodified `number-input`. Step buttons in vanilla call the platform `stepUp()` / `stepDown()`, which also honour `min`, `max` and `step`; each needs its own `aria-label`, and the field needs one too unless a `<label>` is associated. Native spinners are hidden in both engines, so the visible steppers are the only affordance. Digits are right-aligned and tabular so a column of values lines up.
+There is no `number-input-md` — it's the unmodified `number-input`. Step buttons in vanilla call the platform `stepUp()` / `stepDown()`, which also honour `min`, `max` and `step`; each needs its own `aria-label`, and the field needs one too unless a `<label>` is associated. `stepUp()` and `stepDown()` fire no `input` or `change` event, so dispatch `new Event("input", { bubbles: true })` on the field if something listens. The steppers take `tabindex="-1"`, as Base UI's do: the field's arrow keys already step, so a field is one Tab stop. Native spinners are hidden in both engines, so the visible steppers are the only affordance. Digits are right-aligned and tabular so a column of values lines up.
 
 The danger look also applies without the modifier: to a group with `data-invalid`, a group whose field has `aria-invalid="true"` or matches `:user-invalid`, and a group inside a `.field[data-invalid]`.

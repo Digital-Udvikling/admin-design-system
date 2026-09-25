@@ -181,7 +181,7 @@
 </div>
 <div class="input-group">
   <input class="input" type="text" placeholder="Enter command" />
-  <button class="btn btn-primary" type="submit" aria-label="Run">
+  <button class="btn btn-primary btn-square" type="submit" aria-label="Run">
     <i class="ti ti-arrow-right" aria-hidden="true"></i>
   </button>
 </div>
@@ -190,21 +190,19 @@
 ```tsx
 <InputGroup>
   <InputGroup.Addon aria-hidden>
-    <IconSearch size={16} />
+    <IconSearch size="1em" />
   </InputGroup.Addon>
   <Input type="search" placeholder="Search products…" />
 </InputGroup>
 <InputGroup>
   <InputGroup.Addon aria-hidden>
-    <IconAt size={16} />
+    <IconAt size="1em" />
   </InputGroup.Addon>
   <Input type="email" placeholder="you@example.com" />
 </InputGroup>
 <InputGroup>
   <Input placeholder="Enter command" />
-  <Button variant="primary" type="submit" aria-label="Run">
-    <IconArrowRight size={16} aria-hidden />
-  </Button>
+  <Button variant="primary" type="submit" icon={IconArrowRight} aria-label="Run" />
 </InputGroup>
 ```
 

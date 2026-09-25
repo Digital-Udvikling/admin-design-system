@@ -31,9 +31,9 @@
 ```
 
 ```tsx
-<FileInput inputSize="sm" />
+<FileInput size="sm" />
 <FileInput />
-<FileInput inputSize="lg" />
+<FileInput size="lg" />
 ```
 
 ### Restricting file types
@@ -64,12 +64,12 @@
 
 ### React
 
-| Prop        | Type                                | Default      |
-| ----------- | ----------------------------------- | ------------ |
-| `variant`   | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
-| `inputSize` | `"sm" \| "md" \| "lg"`              | `"md"`       |
+| Prop      | Type                                | Default      |
+| --------- | ----------------------------------- | ------------ |
+| `variant` | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
+| `size`    | `"sm" \| "md" \| "lg"`              | `"md"`       |
 
-The size prop is `inputSize` because `<input>` has a native `size` attribute — see [Conventions › Sizes](../../basics/conventions.md#sizes). `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
+`inputSize` is a deprecated alias of `size`; `size` wins when both are set. The native `size` attribute doesn't apply to file inputs. `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
 
 There are no status variants beyond `danger`, and no `info` / `success` / `warning`, unlike [Inputs](inputs.md). For a label, description and validation, wrap it in a [Field](fields.md).
 

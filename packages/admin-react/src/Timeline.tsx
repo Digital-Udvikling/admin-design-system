@@ -23,7 +23,7 @@ function TimelineRoot({ numbered, horizontal, className, ...rest }: TimelineProp
 }
 
 export interface TimelineItemProps extends Omit<ComponentProps<"li">, "title"> {
-  /** Accent for the indicator. `current` highlights a numbered marker. */
+  /** Accent for the dot, icon or marker. `current` fills with the primary ink and sets `aria-current="step"`. */
   status?: TimelineStatus;
   /** Indicator icon, replacing the default dot. */
   icon?: IconProp;
@@ -64,6 +64,7 @@ function TimelineItem({
         ["timeline-item", status !== "default" && `timeline-item-${status}`],
         className,
       )}
+      aria-current={status === "current" ? "step" : undefined}
       {...rest}
     >
       <span className={cn("timeline-indicator", classNames?.indicator)}>{indicator}</span>

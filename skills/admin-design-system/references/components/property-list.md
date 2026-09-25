@@ -241,9 +241,9 @@
 | `PropertyList.Item` | `copyValue`      | `string`                                      | —       |
 | `PropertyList.Item` | `classNames`     | [slots](../basics/conventions.md#classnames) | —       |
 
-`Item` with `label` / `value` is the ordinary row; passing children instead lets you compose `Label` and `Value` yourself, as a label with a tooltip or a custom value layout requires. `value` takes JSX, so badges, links and inline icons need no escape hatch. The list's `classNames` covers `title` and `items`, an item's covers `label` and `copy`.
+`Item` with `label` / `value` is the ordinary row; passing children instead lets you compose `Label` and `Value` yourself, as a label with a tooltip or a custom value layout requires. `value` takes JSX, so badges, links and inline icons need no escape hatch. The value cell is a flex row with a `0.5rem` gap, so wrap a sentence that mixes text with links or `<strong>` in one `<span>`. The list's `classNames` covers `title` and `items`, an item's covers `label` and `copy`.
 
-A `value` that is `null`, `undefined` or empty renders an em-dash and marks the cell empty; rows never hide themselves, but `hideIfAllEmpty` collapses a section in which _every_ value fell back to the dash. `numeric` right-aligns and tabularises, matching `Table.Cell`'s `numeric`.
+A `value` that is `null`, `undefined` or empty renders an em-dash and marks the cell empty; rows never hide themselves, but `hideIfAllEmpty` collapses a section in which _every_ value fell back to the dash. `numeric` right-aligns and tabularises, matching `Table.Cell`'s `numeric`, and puts a copy button before the figure.
 
 `copyable` is React-only: the button writes `copyValue` — or the cell's text — to the clipboard and flips to a check for about 1.2 seconds. The whole value cell is the click target, while text selection and links inside it keep working. Opt in per row. The classes ship in both bundles, so vanilla can wire its own `navigator.clipboard` call and toggle `[data-copied]`.
 
@@ -251,23 +251,23 @@ A `value` that is `null`, `undefined` or empty renders an em-dash and marks the 
 
 ### Vanilla
 
-| Class                            | Effect                                                                          |
-| -------------------------------- | ------------------------------------------------------------------------------- |
-| `property-list`                  | Section wrapper, `text-sm`                                                      |
-| `property-list-title`            | `text-sm` bold heading with `0.5rem` of space beneath                           |
-| `property-list-items`            | The `<dl>`: two-column grid, label track sized to its widest label              |
-| `property-list-label`            | `<dt>` cell: muted, `0.75rem`/`0.375rem` padding, `2rem` min-height             |
-| `property-list-value`            | `<dd>` cell: same metrics, `0.5rem` gap, long values break rather than overflow |
-| `property-list-striped`          | Bands every second row, keeping the `<dt>`/`<dd>` pair together                 |
-| `property-list-compact`          | `0.5rem`/`0.125rem` padding, `1.5rem` min-height                                |
-| `property-list-value-numeric`    | Right-aligns the value, tabular figures                                         |
-| `property-list-value-empty`      | Marks a dash cell so `property-list-hide-if-empty` can count it                 |
-| `property-list-hide-if-empty`    | Hides the whole section when no value cell lacks `-empty`                       |
-| `property-list-copy`             | Copy button, pushed to the cell end; hidden until the row is hovered or focused |
-| `property-list-copy-icon`        | The copy glyph, hidden while `[data-copied]` is set                             |
-| `property-list-copy-icon-copied` | The confirmation glyph, shown only while `[data-copied]` is set                 |
-| `property-list-value-copyable`   | Opts a value cell into showing its copy button                                  |
+| Class                            | Effect                                                                                  |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| `property-list`                  | Section wrapper, `text-sm`                                                              |
+| `property-list-title`            | `text-sm` semibold heading with `0.5rem` of space beneath                               |
+| `property-list-items`            | The `<dl>`: two-column grid, label track sized to its widest label                      |
+| `property-list-label`            | `<dt>` cell: muted block, `0.75rem`/`0.375rem` padding, `2rem` min-height               |
+| `property-list-value`            | `<dd>` cell: flex row, same metrics, `0.5rem` gap; long IDs and URLs wrap               |
+| `property-list-striped`          | Bands every second row with a translucent wash, keeping the `<dt>`/`<dd>` pair together |
+| `property-list-compact`          | `0.5rem`/`0.125rem` padding, `1.5rem` min-height                                        |
+| `property-list-value-numeric`    | Right-aligns the value, tabular figures                                                 |
+| `property-list-value-empty`      | Marks a dash cell so `property-list-hide-if-empty` can count it                         |
+| `property-list-hide-if-empty`    | Hides the whole section when no value cell lacks `-empty`                               |
+| `property-list-copy`             | Copy button, pushed to the cell end; hidden until the row is hovered or focused         |
+| `property-list-copy-icon`        | The copy glyph, hidden while `[data-copied]` is set                                     |
+| `property-list-copy-icon-copied` | The confirmation glyph, shown only while `[data-copied]` is set                         |
+| `property-list-value-copyable`   | Opts a value cell into showing its copy button                                          |
 
-The `<dl>` is the grid and `<dt>`/`<dd>` auto-flow into its two tracks, so rows need no wrapper element — which is also why the label column aligns across every row without a fixed width.
+The `<dl>` is the grid and `<dt>`/`<dd>` auto-flow into its two tracks, so rows need no wrapper element — which is also why the label column aligns across every row without a fixed width. A label sits on the first line of a text value, a bare `<span>` included, and centres on the row when the value holds any other element, such as an avatar, a badge or a button. Without `property-list-striped`, labels start and values end flush with the list's edges, in line with `property-list-title`; striped rows keep the inset to pad their bands.
 
 For tabular, multi-row data use a [Table](tables.md); for a single metric, a [stat card](stat-cards.md).

@@ -29,6 +29,22 @@ describe("Timeline", () => {
     expect(container.querySelector(adminSelector("timeline-marker"))).toHaveTextContent("1");
   });
 
+  it("marks only the current item with aria-current=step, overridable by the consumer", () => {
+    render(
+      <Timeline numbered>
+        <Timeline.Item status="success" marker="1" title="Done" />
+        <Timeline.Item status="current" marker="2" title="Now" />
+        <Timeline.Item marker="3" title="Next" />
+        <Timeline.Item status="current" marker="4" title="Override" aria-current="page" />
+      </Timeline>,
+    );
+    const items = screen.getAllByRole("listitem");
+    expect(items[0]).not.toHaveAttribute("aria-current");
+    expect(items[1]).toHaveAttribute("aria-current", "step");
+    expect(items[2]).not.toHaveAttribute("aria-current");
+    expect(items[3]).toHaveAttribute("aria-current", "page");
+  });
+
   it("renders the horizontal variant", () => {
     const { container } = render(
       <Timeline horizontal>

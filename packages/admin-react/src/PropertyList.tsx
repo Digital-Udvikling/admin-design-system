@@ -1,4 +1,11 @@
-import { useRef, useState, type ComponentProps, type MouseEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+  type ComponentProps,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { cn, type SlotClasses } from "./cn";
 
 // Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
@@ -161,9 +168,19 @@ function PropertyListValue({
   classNames,
   children,
   onClick,
+  ref,
   ...rest
 }: PropertyListValueProps) {
+  // Merged, not overridden by `rest`: copy reads the cell's text through ddRef.
   const ddRef = useRef<HTMLElement | null>(null);
+  const setRef = useCallback(
+    (node: HTMLElement | null) => {
+      ddRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
   const copyButtonRef = useRef<HTMLButtonElement | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -194,7 +211,7 @@ function PropertyListValue({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- the nested copy button is the keyboard path; the cell click is a pointer-only convenience
     <dd
-      ref={ddRef}
+      ref={setRef}
       className={cn(
         [
           "property-list-value",

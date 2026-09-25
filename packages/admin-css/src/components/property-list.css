@@ -4,7 +4,7 @@
   }
 
   .property-list-title {
-    @apply text-sm font-bold text-text mb-2;
+    @apply text-sm font-semibold text-text mb-2;
   }
 
   /* The <dl> is the grid; <dt>/<dd> auto-flow into the two tracks. */
@@ -15,17 +15,29 @@
 
   .property-list-label,
   .property-list-value {
-    @apply flex items-center px-3 py-1.5 min-h-8;
+    @apply px-3 py-1.5 min-h-8;
   }
 
+  /* Block, not flex: a flex label drops the space in `EAN <small>` and
+     centres on wrapped text instead of sitting on its first line. */
   .property-list-label {
     @apply text-text-muted;
   }
+  /* An element in the value (avatar, button, badge) centres the value's text
+     on the row, so centre the label too. A bare <span> is wrapped text. */
+  .property-list-label:has(+ .property-list-value > :not(.property-list-copy, span:not([class]))) {
+    align-content: center;
+  }
+  /* Preflight makes <svg> a block; keep an inline icon on the text line. */
+  .property-list-label > svg {
+    display: inline-block;
+    vertical-align: -0.125em;
+  }
 
-  /* `min-w-0` lets the track shrink below its content so long unbreakable
-     values break instead of overflowing the column. */
+  /* Flex row so icon + text and badge pairs keep their gap. `min-w-0` and
+     `wrap-anywhere` let unbreakable IDs and URLs wrap inside the track. */
   .property-list-value {
-    @apply gap-2 min-w-0 break-words;
+    @apply flex items-center gap-2 min-w-0 wrap-anywhere;
   }
 
   .property-list-compact .property-list-title {
@@ -37,15 +49,29 @@
     @apply px-2 py-0.5 min-h-6;
   }
 
+  /* Unbanded rows sit flush with the title and the container edge; only
+     striped rows need the inset to pad their bands. (0,3,0) beats compact. */
+  .property-list:not(.property-list-striped) .property-list-label {
+    padding-inline-start: 0;
+  }
+  .property-list:not(.property-list-striped) .property-list-value {
+    padding-inline-end: 0;
+  }
+
   .property-list-value-numeric {
     justify-content: flex-end;
     @apply tabular-nums;
   }
+  /* Button before the number, so figures end on the cell edge in every row. */
+  .property-list-value-numeric > .property-list-copy {
+    order: -1;
+  }
 
-  /* Striped — band every second row (matching <dt> + <dd> pair). */
+  /* Striped — band every second row (matching <dt> + <dd> pair). A wash, so
+     the band shows on a surface-muted card too. */
   .property-list-striped dt:nth-of-type(2n + 2),
   .property-list-striped dd:nth-of-type(2n + 2) {
-    @apply bg-surface-muted;
+    @apply bg-surface-stripe;
   }
 
   /* Collapse the section when every value rendered the auto em-dash. */

@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { PropertyList } from "./PropertyList";
 import { adminSelector } from "./test-setup";
@@ -134,6 +136,31 @@ describe("PropertyList", () => {
     screen.getByRole("link").click();
     await Promise.resolve();
     expect(writeText).not.toHaveBeenCalled();
+  });
+
+  it("a consumer ref on Value reaches the cell and copy still reads its text", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    });
+    const ref = createRef<HTMLElement>();
+
+    render(
+      <PropertyList>
+        <PropertyList.Item>
+          <PropertyList.Label>Order</PropertyList.Label>
+          <PropertyList.Value ref={ref} copyable data-testid="value">
+            <code>ord_123</code>
+          </PropertyList.Value>
+        </PropertyList.Item>
+      </PropertyList>,
+    );
+
+    expect(ref.current).toBe(screen.getByTestId("value"));
+    await user.click(screen.getByRole("button", { name: "Copy" }));
+    expect(writeText).toHaveBeenCalledWith("ord_123");
   });
 
   it("children form: Item renders user-supplied Label and Value subparts directly with no wrapper", () => {

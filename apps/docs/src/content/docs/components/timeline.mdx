@@ -107,7 +107,7 @@ import { IconCircleCheck, IconUpload, IconUserPlus } from "@tabler/icons-react";
       <div class="timeline-description">Name and contact.</div>
     </div>
   </li>
-  <li class="timeline-item timeline-item-current">
+  <li class="timeline-item timeline-item-current" aria-current="step">
     <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
     <div class="timeline-content">
       <div class="timeline-title">Payment</div>
@@ -146,7 +146,7 @@ import { IconCircleCheck, IconUpload, IconUserPlus } from "@tabler/icons-react";
       <div class="timeline-title">Cart</div>
     </div>
   </li>
-  <li class="timeline-item timeline-item-current">
+  <li class="timeline-item timeline-item-current" aria-current="step">
     <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
     <div class="timeline-content">
       <div class="timeline-title">Shipping</div>
@@ -199,28 +199,28 @@ import { IconCircleCheck, IconUpload, IconUserPlus } from "@tabler/icons-react";
 | `Timeline.Item` | `description` | `ReactNode`                                                              | —           |
 | `Timeline.Item` | `classNames`  | [slots](../../basics/conventions/#classnames)                            | —           |
 
-The indicator is a dot by default; `icon` replaces it with a glyph, and `marker` — which wins over `icon` — replaces it with the numbered variant's filled marker. `status` accents the dot or fills the marker; `current` is meaningful only for a marker. `classNames` reaches the indicator, dot, marker, content, title, time and description slots.
+The indicator is a dot by default; `icon` replaces it with a glyph, and `marker` — which wins over `icon` — replaces it with the numbered variant's filled marker. `status` colours the dot, icon or marker: `success` for a done step, `danger` for a failed one, `current` in the primary ink. `current` also sets `aria-current="step"`; set it yourself on the vanilla `<li>`. `classNames` reaches the indicator, dot, marker, content, title, time and description slots.
 
 Nothing here advances a step tracker: compute which item is `current` yourself. Plus native `<ol>` / `<li>` attributes.
 
 ### Vanilla
 
-| Class                                                                                       | Effect                                                                             |
-| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `timeline`                                                                                  | Marker-less `<ol>`                                                                 |
-| `timeline-item`                                                                             | Two-column grid: `1.5rem` indicator gutter, `0.75rem` gap, `1rem` of space beneath |
-| `timeline-indicator`                                                                        | Centres the dot, icon or marker in the gutter, above the connector                 |
-| `timeline-dot`                                                                              | `0.625rem` dot in `border-strong`, ringed `3px` in the surface                     |
-| `timeline-content`                                                                          | Text column, `0.125rem` gap, shrinkable so long values wrap                        |
-| `timeline-title`                                                                            | `text-sm` medium                                                                   |
-| `timeline-time`                                                                             | `text-xs` muted, tabular figures                                                   |
-| `timeline-description`                                                                      | `text-sm` muted                                                                    |
-| `timeline-item-info` `timeline-item-success` `timeline-item-warning` `timeline-item-danger` | Status accent on the dot                                                           |
-| `timeline-item-current`                                                                     | Fills a numbered marker with the primary ink, as `-success` does                   |
-| `timeline-numbered`                                                                         | Widens the gutter to `1.75rem` for a marker                                        |
-| `timeline-marker`                                                                           | `1.75rem` circle, `text-xs` semibold tabular figures, ringed in the surface        |
-| `timeline-horizontal`                                                                       | Items become equal-width columns, indicator above centred content                  |
+| Class                                                                                       | Effect                                                                                                        |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `timeline`                                                                                  | Marker-less `<ol>`                                                                                            |
+| `timeline-item`                                                                             | Two-column grid: `1.5rem` indicator gutter, `0.75rem` gap, `1rem` of space beneath                            |
+| `timeline-indicator`                                                                        | Centres the dot, icon or marker in the gutter, above the connector                                            |
+| `timeline-dot`                                                                              | `0.625rem` dot in `border-strong`, ringed `3px` in `--surface-current`                                        |
+| `timeline-content`                                                                          | Text column, `0.125rem` gap, shrinkable so long values wrap                                                   |
+| `timeline-title`                                                                            | `text-sm` medium                                                                                              |
+| `timeline-time`                                                                             | `text-xs` muted, tabular figures                                                                              |
+| `timeline-description`                                                                      | `text-sm` muted                                                                                               |
+| `timeline-item-info` `timeline-item-success` `timeline-item-warning` `timeline-item-danger` | Status colour on the dot, icon or marker                                                                      |
+| `timeline-item-current`                                                                     | Primary ink on the dot, icon or marker; pair with `aria-current="step"`                                       |
+| `timeline-numbered`                                                                         | Widens the gutter to `1.75rem` for a marker                                                                   |
+| `timeline-marker`                                                                           | `1.75rem` circle in `surface-strong`, `text-xs` semibold tabular figures, ringed `3px` in `--surface-current` |
+| `timeline-horizontal`                                                                       | Items become equal-width grid columns, indicator above centred content                                        |
 
-The connector is drawn as a `::before` on each item except the last, so it stops at the end of the rail without any extra markup. An icon indicator gets a surface-coloured background to mask the line running behind it.
+The connector is drawn as a `::before` on each item except the last, so it stops at the end of the rail without any extra markup. Dot and marker rings and the icon backing mask the line in `var(--surface-current, var(--color-surface))`. Filled containers such as cards, dialogs, the navbar and the sidebar set `--surface-current` to their fill; set it next to the background of any other filled container that hosts a timeline, for example `--surface-current: var(--color-info-muted)`.
 
-`timeline-horizontal` composes with `timeline-numbered` for a step tracker, and re-runs the connector along the indicator row. Equal-width columns are what make it land on each indicator's centre — so items of very different label lengths still line up.
+`timeline-horizontal` composes with `timeline-numbered` for a step tracker, and re-runs the connector along the indicator row. Columns are equal width, and as wide as the widest label when the rail is sized to its content, so the connector lands on each indicator's centre.

@@ -24,13 +24,13 @@
     --indicator-offset: 2px;
   }
 
-  /* Auto-offset (~half the anchor's border-radius) aligns with the visual
-     corner of rounded anchors; override `--indicator-offset` inline. */
+  /* Auto-offset (~0.3 × the anchor's border-radius, the arc's 45° point) aligns
+     with the visual corner of rounded anchors; override `--indicator-offset` inline. */
   .indicator:has(> .btn) {
     --indicator-offset: 2px;
   }
   .indicator:has(> .card) {
-    --indicator-offset: 6px;
+    --indicator-offset: 4px;
   }
   .indicator:has(> .avatar) {
     --indicator-offset: 5px;

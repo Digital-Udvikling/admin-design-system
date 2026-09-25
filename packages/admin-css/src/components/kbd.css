@@ -23,7 +23,7 @@
   }
 
   /* Matches native menu convention. */
-  .menu-item > .kbd-group {
+  .menu-item > :is(.kbd, .kbd-group) {
     margin-inline-start: auto;
   }
 

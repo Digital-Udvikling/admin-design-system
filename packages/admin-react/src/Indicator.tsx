@@ -20,9 +20,9 @@ export interface IndicatorProps extends ComponentProps<"div"> {
   /** Where the indicator sits relative to children. Default `"top-end"`. */
   placement?: IndicatorPlacement;
   /**
-   * Pixels to pull the indicator toward the anchor's center — aligns it with
-   * the visual corner of rounded anchors (e.g. `4` for `rounded-md`). Ignored by
-   * `*-center` and `middle-*` placements, which sit on a straight edge.
+   * Pixels to pull a corner indicator toward the anchor's center, onto the arc
+   * of a rounded corner (about 0.3 × the radius, e.g. `2` for `rounded-lg`).
+   * Ignored by `*-center` and `middle-*` placements, which sit on a straight edge.
    */
   offset?: number;
   /** Clamp a numeric `label` to `${max}+` when it exceeds this value. */

@@ -3,7 +3,7 @@
      so padding can't match .btn. Not flex, or date/time glyphs sit mid-field. */
   .input {
     @apply inline-block w-full h-8 px-3 py-0
-           rounded-lg text-sm
+           rounded-md text-sm
            bg-surface text-text
            border border-border hover:border-border-strong
            transition-colors duration-150

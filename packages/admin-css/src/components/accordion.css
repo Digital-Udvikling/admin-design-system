@@ -25,9 +25,9 @@
     --accordion-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
     /* pe reserves the chevron: its inset, the 1rem glyph and a 0.5rem gap. */
     @apply relative block
-           ps-4 pe-10 py-3 cursor-pointer select-none
+           ps-3 pe-9 py-2 cursor-pointer select-none
            text-sm font-medium text-text
-           hover:bg-surface-hover
+           hover:bg-surface-hover transition-colors duration-150
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
     list-style: none;
     /* Explicit inner radius (inherit resolves to 0 through the details slot), so the hover wash and inset ring follow the curve. */
@@ -50,7 +50,7 @@
   }
 
   .accordion-summary:has(> :is(i, svg):first-child) {
-    padding-inline-start: calc(1rem + 1em + 0.5rem);
+    padding-inline-start: calc(0.75rem + 1em + 0.5rem);
   }
 
   /* Floated into the start padding so it sits on the first line. 1.25rem is the
@@ -64,9 +64,9 @@
   .accordion-summary::after {
     content: "";
     position: absolute;
-    inset-inline-end: 1rem;
+    inset-inline-end: 0.75rem;
     /* Centred on the first line: top padding plus half the line box the glyph leaves. */
-    inset-block-start: calc(0.75rem + (1lh - 1rem) / 2);
+    inset-block-start: calc(0.5rem + (1lh - 1rem) / 2);
     width: 1rem;
     height: 1rem;
     @apply text-text-muted;
@@ -81,7 +81,7 @@
   }
 
   .accordion-content {
-    @apply px-4 py-3 text-sm text-text border-t border-border;
+    @apply p-3 text-sm text-text border-t border-border;
     overflow-wrap: break-word;
   }
 
@@ -93,9 +93,9 @@
     content-visibility: visible;
     visibility: hidden;
     transition:
-      opacity 200ms ease,
-      height 200ms ease,
-      visibility 200ms;
+      opacity 150ms ease,
+      height 150ms ease,
+      visibility 150ms;
   }
 
   .accordion-item[open]::details-content {
@@ -103,6 +103,13 @@
     height: auto;
     /* inherit, not visible, so an open item nested in a closed one stays hidden. */
     visibility: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-item::details-content,
+    .accordion-summary::after {
+      transition: none;
+    }
   }
 
   @media (forced-colors: active) {

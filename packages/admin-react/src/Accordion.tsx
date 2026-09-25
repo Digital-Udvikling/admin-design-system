@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
+import { renderIcon, type IconProp } from "./icon";
 
 export type AccordionProps = ComponentProps<"div">;
 
@@ -13,10 +14,18 @@ function AccordionItem({ className, ...rest }: AccordionItemProps) {
   return <details className={cn("accordion-item", className)} {...rest} />;
 }
 
-export type AccordionSummaryProps = ComponentProps<"summary">;
+export interface AccordionSummaryProps extends ComponentProps<"summary"> {
+  /** Leading icon. Pass a component (`icon={IconUser}`) or an element. */
+  icon?: IconProp;
+}
 
-function AccordionSummary({ className, ...rest }: AccordionSummaryProps) {
-  return <summary className={cn("accordion-summary", className)} {...rest} />;
+function AccordionSummary({ icon, className, children, ...rest }: AccordionSummaryProps) {
+  return (
+    <summary className={cn("accordion-summary", className)} {...rest}>
+      {renderIcon(icon)}
+      {children}
+    </summary>
+  );
 }
 
 export type AccordionContentProps = ComponentProps<"div">;

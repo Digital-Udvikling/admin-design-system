@@ -265,6 +265,12 @@
   .tabs:not(:has(.tab-input[value="4"]:checked)) .tab-panel[data-value="4"],
   .tabs:not(:has(.tab-input[value="5"]:checked)) .tab-panel[data-value="5"],
   .tabs:not(:has(.tab-input[value="6"]:checked)) .tab-panel[data-value="6"],
+  .tabs:not(:has(.tab-input[value="7"]:checked)) .tab-panel[data-value="7"],
+  .tabs:not(:has(.tab-input[value="8"]:checked)) .tab-panel[data-value="8"],
+  .tabs:not(:has(.tab-input[value="9"]:checked)) .tab-panel[data-value="9"],
+  .tabs:not(:has(.tab-input[value="10"]:checked)) .tab-panel[data-value="10"],
+  .tabs:not(:has(.tab-input[value="11"]:checked)) .tab-panel[data-value="11"],
+  .tabs:not(:has(.tab-input[value="12"]:checked)) .tab-panel[data-value="12"],
   .tabs
     .tab-panel[data-value]:not(
       [data-value="1"],
@@ -272,7 +278,13 @@
       [data-value="3"],
       [data-value="4"],
       [data-value="5"],
-      [data-value="6"]
+      [data-value="6"],
+      [data-value="7"],
+      [data-value="8"],
+      [data-value="9"],
+      [data-value="10"],
+      [data-value="11"],
+      [data-value="12"]
     ) {
     display: none !important;
   }

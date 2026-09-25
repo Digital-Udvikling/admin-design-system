@@ -2,7 +2,7 @@
   .btn {
     --btn-hover: var(--color-surface-strong);
     @apply inline-flex items-center justify-center gap-2 px-4 py-2
-           rounded-lg font-medium text-sm leading-none whitespace-nowrap
+           rounded-md font-medium text-sm leading-none whitespace-nowrap
            border border-border
            bg-surface-muted text-text
            transition-colors duration-150

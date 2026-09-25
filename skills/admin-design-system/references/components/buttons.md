@@ -431,7 +431,7 @@ An icon-only `Button` needs an `aria-label`; a Tooltip is not an accessible name
 
 | Class                  | Effect                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `btn`                  | `1rem`/`0.5rem` padding, `0.5rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap, label doesn't wrap                                 |
+| `btn`                  | `1rem`/`0.5rem` padding, `0.375rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap, label doesn't wrap                               |
 | `btn-primary`          | Brand fill, `primary-content` text, no border colour                                                                                                 |
 | `btn-ghost`            | No fill or border until hover                                                                                                                        |
 | `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                                                                      |

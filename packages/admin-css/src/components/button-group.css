@@ -33,13 +33,13 @@
   .btn-group:not(.btn-group-vertical) > .btn:first-child,
   .btn-group:not(.btn-group-vertical) > .menu:first-child > .menu-trigger,
   .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):first-child > .btn {
-    @apply rounded-l-lg;
+    @apply rounded-l-md;
   }
 
   .btn-group:not(.btn-group-vertical) > .btn:last-child,
   .btn-group:not(.btn-group-vertical) > .menu:last-child > .menu-trigger,
   .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):last-child > .btn {
-    @apply rounded-r-lg;
+    @apply rounded-r-md;
   }
 
   /* Seam divider — color-mix on currentColor adapts to every .btn variant
@@ -88,13 +88,13 @@
   .btn-group-vertical > .btn:first-child,
   .btn-group-vertical > .menu:first-child > .menu-trigger,
   .btn-group-vertical > :is(.indicator, .tooltip-wrap):first-child > .btn {
-    @apply rounded-t-lg;
+    @apply rounded-t-md;
   }
 
   .btn-group-vertical > .btn:last-child,
   .btn-group-vertical > .menu:last-child > .menu-trigger,
   .btn-group-vertical > :is(.indicator, .tooltip-wrap):last-child > .btn {
-    @apply rounded-b-lg;
+    @apply rounded-b-md;
   }
 
   .btn-group-vertical > .btn:not(:first-child),

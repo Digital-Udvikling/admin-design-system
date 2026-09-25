@@ -140,6 +140,28 @@ export function forwardedImports(esm) {
   return out;
 }
 
+/** A tsx fence opening with a declaration is a module fence (see splitModuleFence). */
+const MODULE_FENCE = /^\s*(?:export\s+)?(?:async\s+)?(?:function|const|let|type|interface)\b/;
+
+/**
+ * Splits a module fence: top-level declarations (a component that calls hooks),
+ * then a blank line, then the JSX to render, starting at column 0 with `<`.
+ * Returns null for an ordinary JSX fence or when no such split exists.
+ *
+ * @param {string} code
+ * @returns {{ declarations: string; jsx: string } | null}
+ */
+export function splitModuleFence(code) {
+  if (!MODULE_FENCE.test(code)) return null;
+  const lines = code.split("\n");
+  for (let i = lines.length - 2; i > 0; i--) {
+    if (lines[i]?.trim() === "" && lines[i + 1]?.startsWith("<")) {
+      return { declarations: lines.slice(0, i).join("\n"), jsx: lines.slice(i + 1).join("\n") };
+    }
+  }
+  return null;
+}
+
 /**
  * TSX source for one preview's virtual module. The source is hashed into the
  * module id, so any change here invalidates the cache.
@@ -150,6 +172,19 @@ export function forwardedImports(esm) {
 export function buildPreviewSource(importsBlock, reactSource) {
   const header = importsBlock.length > 0 ? `${importsBlock}\n\n` : "";
   const adminRootImport = `import { AdminRoot as __ExampleAdminRoot } from "@aortl/admin-react";`;
+  const split = splitModuleFence(reactSource);
+  if (split !== null) {
+    // Same three lines before the fence as the JSX form, and the blank separator
+    // replaced 1:1, so check-docs' marker-based line mapping holds for both.
+    return `${adminRootImport}\n${header}export default function ExamplePreview() {
+  return <__ExampleAdminRoot><__ExampleBody /></__ExampleAdminRoot>;
+}
+${split.declarations}
+function __ExampleBody() { return (<>
+${split.jsx}
+</>); }
+`;
+  }
   return `${adminRootImport}\n${header}export default function ExamplePreview() {
   return (
     <__ExampleAdminRoot>
@@ -260,6 +295,34 @@ async function formatHtml(code, ctx, node) {
  * @param {any} node
  */
 async function formatReact(code, ctx, node) {
+  if (MODULE_FENCE.test(code)) {
+    const split = splitModuleFence(code);
+    if (split === null) {
+      ctx.report({
+        message:
+          "module `tsx` fence in `:::example` needs a blank line, then the JSX to render at column 0",
+        node,
+        severity: "error",
+      });
+      return code;
+    }
+    const result = await format(
+      "snippet.tsx",
+      `${split.declarations}\n\n<>\n${split.jsx}\n</>;\n`,
+      {
+        ...PRETTIER_OPTS,
+        parser: "babel-ts",
+      },
+    );
+    failOnFormatErrors(result, ctx, node, "tsx");
+    const out = result.code.trim();
+    const at = out.lastIndexOf("\n<>");
+    const inner = out
+      .slice(at + 1)
+      .replace(/^<>\n?/, "")
+      .replace(/\n?<\/>;?\s*$/, "");
+    return `${out.slice(0, at).trimEnd()}\n\n${dedent(inner)}`;
+  }
   const wrapped = `<>\n${code}\n</>;\n`;
   const result = await format("snippet.tsx", wrapped, {
     ...PRETTIER_OPTS,

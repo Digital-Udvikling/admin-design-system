@@ -56,6 +56,27 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 
 Alias to `StarlightBadge` when the page already imports the admin `<Badge>`. Keep the supporting CSS classes shipping in both bundles: consumers wiring their own vanilla JS still need the styling.
 
+### Examples that call hooks
+
+A `tsx` fence holds JSX children, so it can't call a hook. To demo one, open the fence with the component's declaration, leave a blank line, then render it from a line starting with `<`:
+
+````markdown
+:::example
+
+```tsx
+function DeleteProject() {
+  const confirm = useConfirm();
+  return <Button onClick={() => confirm({ title: "Delete project?" })}>Delete</Button>;
+}
+
+<DeleteProject />;
+```
+
+:::
+````
+
+The declarations land at module level in the preview module and the trailing JSX renders inside its `<AdminRoot>`. Import the hook at the top of the MDX like any other identifier.
+
 ### Astro imports in MDX
 
 Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component.

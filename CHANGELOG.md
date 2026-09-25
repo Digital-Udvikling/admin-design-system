@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Button` types the HTML invoker attributes `commandfor` and `command`, which `@types/react` doesn't declare yet, so the documented `Dialog` and `Drawer` invoker examples type-check. (react)
 - `systemAccent` on `BrandTile` and `Navbar`, as on `AdminRoot` and `AppShell`: sets `--color-system-accent` inline. (react)
 - `maxWidth` on `Container` sets `--container-max` inline, overriding the `size` preset. (react)
+- `useConfirm()`, a promise-based `window.confirm`: `await confirm({ title, description, confirmLabel, cancelLabel, variant })` resolves `true` on Confirm and `false` on Cancel, Esc, or unmount. `<AdminRoot>` hosts the dialog, a `size="sm"` `Dialog` with no light dismiss that renders only while a confirm is pending, and queues concurrent calls in order. `variant: "danger"` renders a danger confirm button and focuses Cancel. Throws outside `<AdminRoot>`. (react)
 
 ### Changed
 

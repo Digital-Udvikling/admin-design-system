@@ -13,7 +13,10 @@ export interface TableProps extends ComponentProps<"table"> {
   relaxed?: boolean;
   /** Pins `<thead>`; requires an overflowing ancestor (`overflow: auto` + `max-height` wrapper). */
   sticky?: boolean;
-  /** Pins the first column against horizontal scroll; requires an overflow-x ancestor. */
+  /**
+   * Pins the first column against horizontal scroll; requires an overflow-x ancestor.
+   * Put an `asLink` row's link in a later column; the pinned cell stays outside the row's hit area.
+   */
   pinCol?: boolean;
 }
 
@@ -66,7 +69,10 @@ function TableFoot({ className, ...rest }: TableFootProps) {
 export interface TableRowProps extends ComponentProps<"tr"> {
   /** Programmatic selection highlight — independent of the CSS rule tinting rows with a checked checkbox. */
   selected?: boolean;
-  /** Applies `.table-row-link` so the first `<a>` in the row fills it; the consumer still supplies the anchor. */
+  /**
+   * Applies `.table-row-link`: the row's first `<a>` fills it.
+   * The consumer still supplies the anchor; other links and controls in the row stay clickable.
+   */
   asLink?: boolean;
 }
 function TableRow({ selected, asLink, className, ...rest }: TableRowProps) {
@@ -84,10 +90,14 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<"th">, "align"
   /** Narrow first-column gutter, mirroring the body cell `gutter` so the column lines up. */
   gutter?: boolean;
 }
+/** Column header by default; `scope="row"` renders a row header styled as a body cell (`table-cell`). */
 function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHeaderCellProps) {
   return (
     <th
-      className={cn(["table-header-cell", gutter && "table-cell-gutter"], className)}
+      className={cn(
+        [scope === "row" ? "table-cell" : "table-header-cell", gutter && "table-cell-gutter"],
+        className,
+      )}
       data-align={align && align !== "left" ? align : undefined}
       scope={scope ?? "col"}
       {...rest}

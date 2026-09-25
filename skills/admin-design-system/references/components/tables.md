@@ -94,7 +94,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 ```html
 <div class="flex w-full flex-col gap-3">
   <div class="flex flex-wrap items-center gap-2">
-    <input class="input flex-1" type="search" placeholder="Search orders" />
+    <input class="input input-sm flex-1" type="search" placeholder="Search orders" />
     <button type="button" class="btn btn-sm" commandfor="orders-filters" command="show-modal">
       <i class="ti ti-filter" aria-hidden="true"></i> Filters
     </button>
@@ -157,7 +157,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 ```tsx
 <div className="flex w-full flex-col gap-3">
   <div className="flex flex-wrap items-center gap-2">
-    <Input type="search" placeholder="Search orders" className="flex-1" />
+    <Input type="search" placeholder="Search orders" inputSize="sm" className="flex-1" />
     <Button size="sm" icon={IconFilter} commandfor="orders-filters-r" command="show-modal">
       Filters
     </Button>
@@ -672,13 +672,15 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 
 ### Status gutter
 
+When the icon is the only carrier of status, give it `role="img"` and an `aria-label`, and label the header cell.
+
 **Example**
 
 ```html
 <table class="table">
   <thead>
     <tr>
-      <th class="table-cell-gutter"></th>
+      <th class="table-cell-gutter" aria-label="Status"></th>
       <th>Order</th>
       <th>Customer</th>
       <th data-align="right">Total</th>
@@ -687,21 +689,33 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
   <tbody>
     <tr>
       <td class="table-cell-gutter">
-        <i class="ti ti-circle-check" style="color: var(--color-success)" aria-hidden="true"></i>
+        <i
+          class="ti ti-circle-check"
+          style="color: var(--color-success)"
+          role="img"
+          aria-label="Shipped"
+        ></i>
       </td>
       <td>#1001</td>
       <td>Ada Lovelace</td>
       <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
-      <td class="table-cell-gutter"><i class="ti ti-clock" aria-hidden="true"></i></td>
+      <td class="table-cell-gutter">
+        <i class="ti ti-clock" role="img" aria-label="Processing"></i>
+      </td>
       <td>#1002</td>
       <td>Grace Hopper</td>
       <td class="table-cell-numeric">$72.50</td>
     </tr>
     <tr>
       <td class="table-cell-gutter">
-        <i class="ti ti-circle-x" style="color: var(--color-danger)" aria-hidden="true"></i>
+        <i
+          class="ti ti-circle-x"
+          style="color: var(--color-danger)"
+          role="img"
+          aria-label="Cancelled"
+        ></i>
       </td>
       <td>#1003</td>
       <td>Alan Turing</td>
@@ -715,7 +729,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 <Table>
   <Table.Head>
     <Table.Row>
-      <Table.HeaderCell gutter />
+      <Table.HeaderCell gutter aria-label="Status" />
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
       <Table.HeaderCell align="right">Total</Table.HeaderCell>
@@ -724,7 +738,12 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
   <Table.Body>
     <Table.Row>
       <Table.Cell gutter>
-        <IconCircleCheck size={16} style={{ color: "var(--color-success)" }} aria-hidden />
+        <IconCircleCheck
+          size={16}
+          style={{ color: "var(--color-success)" }}
+          role="img"
+          aria-label="Shipped"
+        />
       </Table.Cell>
       <Table.Cell>#1001</Table.Cell>
       <Table.Cell>Ada Lovelace</Table.Cell>
@@ -732,7 +751,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
     </Table.Row>
     <Table.Row>
       <Table.Cell gutter>
-        <IconClock size={16} aria-hidden />
+        <IconClock size={16} role="img" aria-label="Processing" />
       </Table.Cell>
       <Table.Cell>#1002</Table.Cell>
       <Table.Cell>Grace Hopper</Table.Cell>
@@ -740,7 +759,12 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
     </Table.Row>
     <Table.Row>
       <Table.Cell gutter>
-        <IconCircleX size={16} style={{ color: "var(--color-danger)" }} aria-hidden />
+        <IconCircleX
+          size={16}
+          style={{ color: "var(--color-danger)" }}
+          role="img"
+          aria-label="Cancelled"
+        />
       </Table.Cell>
       <Table.Cell>#1003</Table.Cell>
       <Table.Cell>Alan Turing</Table.Cell>
@@ -881,6 +905,7 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
       <th>Order</th>
       <th>Customer</th>
       <th data-align="right">Total</th>
+      <th aria-label="Actions"></th>
     </tr>
   </thead>
   <tbody>
@@ -888,16 +913,19 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
       <td><a href="#1001">#1001</a></td>
       <td>Ada Lovelace</td>
       <td class="table-cell-numeric">$129.00</td>
+      <td><button type="button" class="btn btn-sm">Approve</button></td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1002">#1002</a></td>
       <td>Grace Hopper</td>
       <td class="table-cell-numeric">$72.50</td>
+      <td><button type="button" class="btn btn-sm">Approve</button></td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1003">#1003</a></td>
       <td>Alan Turing</td>
       <td class="table-cell-numeric">$310.00</td>
+      <td><button type="button" class="btn btn-sm">Approve</button></td>
     </tr>
   </tbody>
 </table>
@@ -910,35 +938,31 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
       <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell aria-label="Actions" />
     </Table.Row>
   </Table.Head>
   <Table.Body>
-    <Table.Row asLink>
-      <Table.Cell>
-        <a href="#1001">#1001</a>
-      </Table.Cell>
-      <Table.Cell>Ada Lovelace</Table.Cell>
-      <Table.Cell numeric>$129.00</Table.Cell>
-    </Table.Row>
-    <Table.Row asLink>
-      <Table.Cell>
-        <a href="#1002">#1002</a>
-      </Table.Cell>
-      <Table.Cell>Grace Hopper</Table.Cell>
-      <Table.Cell numeric>$72.50</Table.Cell>
-    </Table.Row>
-    <Table.Row asLink>
-      <Table.Cell>
-        <a href="#1003">#1003</a>
-      </Table.Cell>
-      <Table.Cell>Alan Turing</Table.Cell>
-      <Table.Cell numeric>$310.00</Table.Cell>
-    </Table.Row>
+    {[
+      ["#1001", "Ada Lovelace", "$129.00"],
+      ["#1002", "Grace Hopper", "$72.50"],
+      ["#1003", "Alan Turing", "$310.00"],
+    ].map(([id, name, total]) => (
+      <Table.Row key={id} asLink>
+        <Table.Cell>
+          <a href={id}>{id}</a>
+        </Table.Cell>
+        <Table.Cell>{name}</Table.Cell>
+        <Table.Cell numeric>{total}</Table.Cell>
+        <Table.Cell>
+          <Button size="sm">Approve</Button>
+        </Table.Cell>
+      </Table.Row>
+    ))}
   </Table.Body>
 </Table>
 ```
 
-**Caution** — The row-filling hit area is an `::after` on the row's first `<a>`. Any other link or button in the row must establish its own stacking context — `position: relative` plus a non-`auto` `z-index` — or the pseudo-element swallows its clicks. `.btn` already qualifies.
+**Caution** — The row-filling hit area is an `::after` on the row's first `<a>` in document order, so a row-actions menu or other control with links goes after the row link. Buttons, form controls and later links in the row sit above it and stay clickable. Keyboard focus on that link rings the row. With `table-pin-col`, put the link in a later column; the pinned cell stays outside the row's hit area.
 
 ### Footer row
 
@@ -1131,16 +1155,16 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
 
 ### React
 
-| Part               | Renders                 | Class                          |
-| ------------------ | ----------------------- | ------------------------------ |
-| `Table`            | `<table>`               | `table`                        |
-| `Table.Head`       | `<thead>`               | —                              |
-| `Table.Body`       | `<tbody>`               | —                              |
-| `Table.Foot`       | `<tfoot>`               | —                              |
-| `Table.Row`        | `<tr>`                  | `table-row-link` when `asLink` |
-| `Table.HeaderCell` | `<th scope="col">`      | `table-header-cell`            |
-| `Table.Cell`       | `<td>`                  | `table-cell`                   |
-| `Table.Empty`      | its own `<tr>` + `<td>` | `table-empty`                  |
+| Part               | Renders                 | Class                                                |
+| ------------------ | ----------------------- | ---------------------------------------------------- |
+| `Table`            | `<table>`               | `table`                                              |
+| `Table.Head`       | `<thead>`               | —                                                    |
+| `Table.Body`       | `<tbody>`               | —                                                    |
+| `Table.Foot`       | `<tfoot>`               | —                                                    |
+| `Table.Row`        | `<tr>`                  | `table-row-link` when `asLink`                       |
+| `Table.HeaderCell` | `<th scope="col">`      | `table-header-cell`; `table-cell` when `scope="row"` |
+| `Table.Cell`       | `<td>`                  | `table-cell`                                         |
+| `Table.Empty`      | its own `<tr>` + `<td>` | `table-empty`                                        |
 
 | Part                             | Prop       | Type                                  | Default     |
 | -------------------------------- | ---------- | ------------------------------------- | ----------- |
@@ -1162,24 +1186,25 @@ Plus each element's native attributes. `Table` takes no `classNames` — every p
 
 ### Vanilla
 
-| Class / var          | Effect                                                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `table`              | Full width, `text-sm`, collapsed borders; cells get `0.75rem`/`0.375rem` padding and a bottom divider (~32px rows) |
-| `table-striped`      | Tints even `<tbody>` rows                                                                                          |
-| `table-bordered`     | Border on the table and every cell                                                                                 |
-| `table-compact`      | `0.5rem`/`0.25rem` padding, `text-xs`                                                                              |
-| `table-relaxed`      | `1rem`/`0.75rem` padding                                                                                           |
-| `table-sticky`       | Pins `<thead>` cells to the top of the scroll region                                                               |
-| `table-pin-col`      | Pins the first cell of every row against horizontal scroll                                                         |
-| `table-header-cell`  | Header styling for a cell outside `<thead>`                                                                        |
-| `table-cell`         | Cell styling for markup that isn't a real `<td>`                                                                   |
-| `table-cell-numeric` | Right-aligns and uses tabular figures                                                                              |
-| `table-cell-gutter`  | `1.5rem` centered status column with muted text — colour the icon yourself when status carries meaning             |
-| `table-empty`        | Centered muted message cell; set `colspan` to the column count                                                     |
-| `table-row-link`     | Row-filling hit area taken from the row's first `<a>`                                                              |
+| Class / var          | Effect                                                                                                                  |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `table`              | Full width, `text-sm`, collapsed borders; cells get `0.75rem`/`0.375rem` padding and a bottom divider (~32px rows)      |
+| `table-striped`      | Tints even `<tbody>` rows                                                                                               |
+| `table-bordered`     | Border around the table and between columns                                                                             |
+| `table-compact`      | `0.5rem`/`0.25rem` padding, `text-xs`                                                                                   |
+| `table-relaxed`      | `1rem`/`0.75rem` padding                                                                                                |
+| `table-sticky`       | Pins `<thead>` cells to the top of the scroll region                                                                    |
+| `table-pin-col`      | Pins the first cell of every row against horizontal scroll, with a divider on its edge                                  |
+| `table-header-cell`  | Header styling for a cell outside `<thead>`                                                                             |
+| `table-cell`         | Cell styling for markup that isn't a real `<td>`                                                                        |
+| `table-cell-numeric` | Right-aligns, uses tabular figures and doesn't wrap                                                                     |
+| `table-cell-gutter`  | `1.5rem` centered status column with muted text — colour the icon yourself when status carries meaning                  |
+| `table-empty`        | Centered muted message cell; set `colspan` to the column count                                                          |
+| `table-row-link`     | Row-filling hit area taken from the row's first `<a>`                                                                   |
+| `--surface-current`  | Fill painted under the pinned column and sticky header; containers such as `card` set it. Defaults to `--color-surface` |
 
 Modifiers compose — `striped` with `sticky` with `relaxed` is fine.
 
-Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, or `[data-selected]` on the `<tr>`.
+Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, or `[data-selected]` on the `<tr>`; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
 
 Striping, hover and selection are scoped to `<tbody>`, and `table-pin-col` pins `:first-child` — so the pinned column must literally be first, and a loose `<tr>` outside `<tbody>` won't stripe.

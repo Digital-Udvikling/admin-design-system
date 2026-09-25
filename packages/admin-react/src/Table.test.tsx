@@ -143,6 +143,23 @@ describe("Table", () => {
     expect(screen.getByTestId("center")).toHaveAttribute("data-align", "center");
   });
 
+  it("Table.HeaderCell with scope=row renders a body-styled row header", () => {
+    render(
+      <Table>
+        <Table.Body>
+          <Table.Row>
+            <Table.HeaderCell scope="row">#1001</Table.HeaderCell>
+            <Table.Cell>Ada</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>,
+    );
+    const header = screen.getByRole("rowheader", { name: "#1001" });
+    expect(header).toHaveAttribute("scope", "row");
+    expect(header).toHaveAdminClass("table-cell");
+    expect(header).not.toHaveAdminClass("table-header-cell");
+  });
+
   it("Table.Row exposes selected and asLink hooks", () => {
     render(
       <Table>

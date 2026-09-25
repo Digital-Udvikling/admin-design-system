@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "check-types": "astro check",
     "check-docs": "node scripts/check-docs.mjs",
-    "generate-skill": "node scripts/generate-skill.mjs"
+    "generate-skill": "node scripts/generate-skill.mjs",
+    "render": "node scripts/render.mjs"
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",
@@ -39,6 +40,8 @@
     "@base-ui/react": "1.4.1",
     "acorn": "8.16.0",
     "acorn-jsx": "5.3.2",
-    "clsx": "2.1.1"
+    "clsx": "2.1.1",
+    "playwright-core": "1.63.0",
+    "rolldown": "1.0.1"
   }
 }

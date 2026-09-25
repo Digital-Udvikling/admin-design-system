@@ -12,6 +12,7 @@
     "check-docs": "pnpm --filter docs check-docs",
     "test": "pnpm -r --filter='@aortl/*' run test",
     "generate-skill": "pnpm --filter docs generate-skill",
+    "render": "pnpm --filter docs render",
     "release": "release-it",
     "clean": "pnpm -r exec rm -rf dist .astro node_modules/.vite",
     "lint": "oxlint",

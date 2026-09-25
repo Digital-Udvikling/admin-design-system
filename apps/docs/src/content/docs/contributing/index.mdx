@@ -44,6 +44,19 @@ pnpm generate-skill # regenerate skills/ from docs MDX
 
 CI runs `lint`, `format:check`, `build`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
 
+## Rendering an example
+
+`pnpm render` screenshots docs examples without the dev server: vanilla and React side by side, light and dark, in one PNG. It needs Chromium (`CHROME_PATH`, or `chromium` / `google-chrome` on `PATH`) and rebuilds admin-css first when its source changed.
+
+```bash
+pnpm render components/buttons.mdx:42                       # the example spanning line 42
+pnpm render components/dialog.mdx#0 --click .btn-primary    # open it first
+pnpm render components/list.mdx --probe .btn --props width  # computed styles per cell
+pnpm render --html '<span class="badge">New</span>' --tsx '<Badge>New</Badge>'
+```
+
+Cells mirror the docs preview frame. React renders client-side from admin-react source; both sides load `admin.utilities.css`, so a utility missing from that bundle shows up unstyled. `pnpm render --help` lists every option.
+
 ## Releasing
 
 ```bash

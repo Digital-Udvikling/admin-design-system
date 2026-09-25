@@ -45,6 +45,7 @@ pnpm format          # oxfmt (NOT prettier)
 pnpm format:check
 pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check
 pnpm generate-skill  # regenerate skills/ from the docs MDX
+pnpm render components/buttons.mdx:42   # PNG of an example: vanilla + React × light + dark (--help)
 pnpm clean
 ```
 
@@ -111,6 +112,8 @@ Two shapes per component:
 2. **Interactions** — controlled + uncontrolled paths for stateful components (`Input`, `Textarea`, `Checkbox`, `Switch`, `Radio`, `Select`), plus a "parent ignores change → state stays put" case. Use `@testing-library/user-event`, not `fireEvent`.
 
 `src/test-setup.ts` wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup checks for `afterEach` at module-load which vitest doesn't expose that early, so without this the DOM leaks across tests in the same file. Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` — visual checks belong in docs.
+
+To see a CSS or component change, run `pnpm render <page>.mdx:<line>` and read the PNG it prints. `--click <selector>` opens dialogs, menus and popovers first. `--probe <selector> --props width,color` prints computed styles for each cell, which is cheaper than reading an image when you're checking a number. The render is static apart from the clicks, so hover, focus-visible and Safari quirks still need `pnpm dev` and a browser.
 
 ### Docs `:::example` directive
 

@@ -128,10 +128,10 @@ The root inserts a `Separator` between every pair of children, so you never writ
 
 ### Vanilla
 
-| Class                  | Effect                                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| `breadcrumbs`          | Root `<nav>`: `text-sm`, muted. Its direct `<ol>` becomes an inline-flex wrapping row, `0.375rem` gap |
-| `breadcrumb-item`      | One entry, `0.375rem` gap for a leading icon, muted until hover                                       |
-| `breadcrumb-separator` | Renders `/` when empty; a child `<i>`/`<svg>` replaces it, sized `0.875rem`                           |
+| Class                  | Effect                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `breadcrumbs`          | Root `<nav>`: `text-sm`, muted. Its direct `<ol>` becomes a wrapping flex row, `0.375rem` gap |
+| `breadcrumb-item`      | One entry, `0.375rem` gap for a leading icon, muted until hover                               |
+| `breadcrumb-separator` | Renders `/` when empty; a child `<i>`/`<svg>` replaces it, sized `0.875rem`                   |
 
-Write `aria-label="Breadcrumb"` on the `<nav>`, `aria-current="page"` on the final entry — which also turns off its pointer events — and `role="presentation" aria-hidden="true"` on each separator so it stays out of the list semantics. Long trails wrap onto a second line.
+Write `aria-label="Breadcrumb"` on the `<nav>`, `aria-current="page"` on the final entry — which also turns off its pointer events — and `role="presentation" aria-hidden="true"` on each separator so it stays out of the list semantics. Long trails wrap onto a second line; an unbreakable ID or hash breaks inside its crumb.

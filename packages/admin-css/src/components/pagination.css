@@ -8,14 +8,15 @@
     @apply inline-flex;
   }
 
+  /* px-1.5 keeps 16px icons and 2-digit pages on the 2rem minimum, so the row doesn't shift while paging. */
   .page-link {
     @apply inline-flex items-center justify-center
-           min-w-8 h-8 px-2
+           min-w-8 h-8 px-1.5
            rounded-md
            text-sm font-medium leading-none
            text-text bg-transparent
            border border-transparent
-           hover:bg-surface-muted
+           hover:bg-surface-hover
            cursor-pointer select-none no-underline
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
@@ -28,13 +29,25 @@
     @apply bg-primary-muted text-primary border-primary-muted;
   }
 
-  .page-link[aria-disabled="true"] {
+  .page-link:is([aria-disabled="true"], [data-disabled]) {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
   }
 
   .page-ellipsis {
     @apply inline-flex items-center justify-center
-           min-w-8 h-8 px-2
+           min-w-8 h-8 px-1.5
            text-sm text-text-muted select-none;
+  }
+
+  /* Forced colors drops the fill; `none` so the link's text backplate doesn't defeat HighlightText.
+     `none` also unforces the focus ring, so it gets a system colour back. */
+  @media (forced-colors: active) {
+    .page-link:is(.active, [aria-current="page"]) {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      border-color: Highlight;
+      color: HighlightText;
+      outline-color: CanvasText;
+    }
   }
 }

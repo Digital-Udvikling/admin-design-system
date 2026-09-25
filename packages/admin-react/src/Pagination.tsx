@@ -8,6 +8,16 @@ export type PaginationItem =
   | { type: "next"; page: number; disabled: boolean }
   | { type: "ellipsis"; key: "start" | "end" };
 
+/** What the default renderer spreads onto an item: `_ao-` classes plus `classNames`, ARIA, and its content. */
+export interface PaginationItemProps {
+  className: string;
+  children: ReactNode;
+  "aria-label"?: string;
+  "aria-current"?: "page";
+  "aria-disabled"?: true;
+  "aria-hidden"?: true;
+}
+
 export interface PaginationProps extends Omit<ComponentProps<"nav">, "onChange"> {
   /** Current page, 1-based. */
   page: number;
@@ -22,8 +32,11 @@ export interface PaginationProps extends Omit<ComponentProps<"nav">, "onChange">
   previousIcon?: IconProp;
   /** Icon for the next-page control. Defaults to a built-in chevron. */
   nextIcon?: IconProp;
-  /** Override the renderer for one item — for routing libraries that supply their own Link. */
-  renderItem?: (item: PaginationItem) => ReactNode;
+  /**
+   * Override the renderer for one item — for routing libraries that supply their own Link.
+   * Spread `props` onto the element to keep the default classes, ARIA and content.
+   */
+  renderItem?: (item: PaginationItem, props: PaginationItemProps) => ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"item" | "link" | "ellipsis">;
 }
@@ -124,18 +137,19 @@ export function Pagination({
   ...rest
 }: PaginationProps) {
   const items = getPaginationItems({ page, total, siblingCount, boundaryCount });
-  const prev = previousIcon !== undefined ? renderIcon(previousIcon, 16) : <ChevronLeftIcon />;
-  const next = nextIcon !== undefined ? renderIcon(nextIcon, 16) : <ChevronRightIcon />;
+  const prev = previousIcon !== undefined ? renderIcon(previousIcon) : <ChevronLeftIcon />;
+  const next = nextIcon !== undefined ? renderIcon(nextIcon) : <ChevronRightIcon />;
   return (
     <nav aria-label={ariaLabel} className={cn("pagination", className)} {...rest}>
       <ul>
-        {items.map((item, i) => (
-          <li key={paginationItemKey(item, i)} className={cn("page-item", classNames?.item)}>
-            {renderItem
-              ? renderItem(item)
-              : defaultRender(item, onPageChange, prev, next, classNames)}
-          </li>
-        ))}
+        {items.map((item, i) => {
+          const props = paginationItemProps(item, prev, next, classNames);
+          return (
+            <li key={paginationItemKey(item, i)} className={cn("page-item", classNames?.item)}>
+              {renderItem ? renderItem(item, props) : defaultRender(item, props, onPageChange)}
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
@@ -144,8 +158,8 @@ export function Pagination({
 function ChevronLeftIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -162,8 +176,8 @@ function ChevronLeftIcon() {
 function ChevronRightIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -192,57 +206,52 @@ function paginationItemKey(item: PaginationItem, index: number): string {
   }
 }
 
-function defaultRender(
+function paginationItemProps(
   item: PaginationItem,
-  onPageChange: (n: number) => void,
   prev: ReactNode,
   next: ReactNode,
   classNames: SlotClasses<"item" | "link" | "ellipsis"> | undefined,
-): ReactNode {
+): PaginationItemProps {
   switch (item.type) {
     case "previous":
-      return (
-        <button
-          type="button"
-          className={cn("page-link", classNames?.link)}
-          aria-label="Previous page"
-          aria-disabled={item.disabled || undefined}
-          disabled={item.disabled}
-          onClick={() => onPageChange(item.page)}
-        >
-          {prev}
-        </button>
-      );
     case "next":
-      return (
-        <button
-          type="button"
-          className={cn("page-link", classNames?.link)}
-          aria-label="Next page"
-          aria-disabled={item.disabled || undefined}
-          disabled={item.disabled}
-          onClick={() => onPageChange(item.page)}
-        >
-          {next}
-        </button>
-      );
+      return {
+        className: cn("page-link", classNames?.link),
+        "aria-label": item.type === "previous" ? "Previous page" : "Next page",
+        "aria-disabled": item.disabled || undefined,
+        children: item.type === "previous" ? prev : next,
+      };
     case "ellipsis":
-      return (
-        <span className={cn("page-ellipsis", classNames?.ellipsis)} aria-hidden="true">
-          …
-        </span>
-      );
+      return {
+        className: cn("page-ellipsis", classNames?.ellipsis),
+        "aria-hidden": true,
+        children: "…",
+      };
     case "page":
-      return (
-        <button
-          type="button"
-          className={cn(["page-link", item.selected && "active"], classNames?.link)}
-          aria-current={item.selected ? "page" : undefined}
-          aria-label={`Page ${item.page}`}
-          onClick={() => onPageChange(item.page)}
-        >
-          {item.page}
-        </button>
-      );
+      return {
+        className: cn(["page-link", item.selected && "active"], classNames?.link),
+        "aria-label": `Page ${item.page}`,
+        "aria-current": item.selected ? "page" : undefined,
+        children: item.page,
+      };
   }
+}
+
+function defaultRender(
+  item: PaginationItem,
+  props: PaginationItemProps,
+  onPageChange: (n: number) => void,
+): ReactNode {
+  if (item.type === "ellipsis") return <span {...props} />;
+  // aria-disabled without `disabled`: disabling the focused button would drop focus to <body>.
+  const disabled = item.type !== "page" && item.disabled;
+  return (
+    <button
+      type="button"
+      {...props}
+      onClick={() => {
+        if (!disabled) onPageChange(item.page);
+      }}
+    />
+  );
 }

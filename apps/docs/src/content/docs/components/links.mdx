@@ -74,12 +74,12 @@ import { IconHome, IconDownload } from "@tabler/icons-react";
 
 ### Vanilla
 
-| Class / var             | Effect                                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------- |
-| `link`                  | Inline-flex, `0.25rem` gap, link colour, underline at `2px` offset, focus-visible ring; long URLs break |
-| `link-external`         | Adds a `0.85em` ↗ via `::after`, masked from `currentColor`                                             |
-| `--link-external-arrow` | The arrow's mask image. Override to swap the glyph                                                      |
+| Class / var             | Effect                                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `link`                  | Inline link colour, underline at `2px` offset, focus-visible ring; long URLs break. With a direct `<i>`/`<svg>`, inline-flex with a `0.25rem` gap |
+| `link-external`         | Adds a `0.85em` ↗ via `::after`, masked from `currentColor`                                                                                       |
+| `--link-external-arrow` | The arrow's mask image. Override to swap the glyph                                                                                                |
 
-The ↗ is drawn in CSS, so it ships in both bundles with no icon-font dependency. `target` and `rel` are yours to write in vanilla. A direct-child `<i>` or `<svg>` is kept from shrinking; no wrapper class needed.
+The ↗ is drawn in CSS, so it ships in both bundles with no icon-font dependency. `target` and `rel` are yours to write in vanilla. A plain link wraps with the surrounding text, and the ↗ stays on the line of its last word. A link with a direct-child `<i>` or `<svg>` wraps as one inline-flex box: the icon sits on the label's first line, doesn't shrink and isn't underlined. No wrapper class needed.
 
 For blocks of HTML you can't annotate, [Prose](../prose/) styles bare `<a>` the same way.

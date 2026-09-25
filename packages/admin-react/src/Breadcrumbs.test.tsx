@@ -31,6 +31,20 @@ describe("Breadcrumbs", () => {
     expect(current).toHaveAttribute("aria-current", "page");
   });
 
+  it("renders an icon at 1em so it follows the breadcrumb font size", () => {
+    function Icon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+      return <svg data-testid="icon" width={props.size} height={props.size} />;
+    }
+    render(
+      <Breadcrumbs>
+        <Breadcrumbs.Item href="/" icon={Icon}>
+          Home
+        </Breadcrumbs.Item>
+      </Breadcrumbs>,
+    );
+    expect(screen.getByTestId("icon")).toHaveAttribute("width", "1em");
+  });
+
   it("accepts a custom aria-label", () => {
     render(
       <Breadcrumbs aria-label="Folder path">

@@ -53,7 +53,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
           aria-current={current ? "page" : undefined}
           {...rest}
         >
-          {renderIcon(icon, 14)}
+          {renderIcon(icon)}
           {children}
         </a>
       </li>
@@ -67,7 +67,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
         aria-current={current ? "page" : undefined}
         {...rest}
       >
-        {renderIcon(icon, 14)}
+        {renderIcon(icon)}
         {children}
       </span>
     </li>

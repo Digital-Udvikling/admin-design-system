@@ -3,13 +3,30 @@
      Placement is var-driven so a horizontal and a vertical modifier compose
      without a 3×3 grid of selectors. */
   .indicator {
-    @apply relative inline-flex w-max;
+    @apply relative inline-flex w-fit;
+  }
+
+  /* A shrink-wrapped form control loses its field width; an auto-width grid keeps
+     it. The offset matches `.btn`'s, which has the same radius. */
+  .indicator:has(
+    > :is(
+      .input,
+      .input-icon,
+      .input-group,
+      .select,
+      .textarea,
+      .number-input,
+      .number-input-root,
+      .file-input
+    )
+  ) {
+    @apply grid w-auto;
+    --indicator-offset: 2px;
   }
 
   /* Auto-offset (~half the anchor's border-radius) aligns with the visual
      corner of rounded anchors; override `--indicator-offset` inline. */
-  .indicator:has(> .btn),
-  .indicator:has(> .input) {
+  .indicator:has(> .btn) {
     --indicator-offset: 2px;
   }
   .indicator:has(> .card) {
@@ -51,11 +68,12 @@
     --indicator-tx: -50%;
     --indicator-offset-x: var(--indicator-offset, 0px);
   }
+  /* `center` and `middle` sit on a straight edge, so both drop the corner pull-in. */
   .indicator-center {
     --indicator-start: 50%;
     --indicator-end: auto;
     --indicator-tx: -50%;
-    --indicator-offset-x: 0px;
+    --indicator-offset: 0px;
   }
   .indicator-end {
     --indicator-start: auto;
@@ -75,7 +93,7 @@
     --indicator-top: 50%;
     --indicator-bottom: auto;
     --indicator-ty: -50%;
-    --indicator-offset-y: 0px;
+    --indicator-offset: 0px;
   }
   .indicator-bottom {
     --indicator-top: auto;
@@ -102,5 +120,12 @@
   }
   .indicator-dot-primary {
     @apply bg-primary;
+  }
+
+  /* Forced colors replaces the fill with Canvas, which erases the dot. */
+  @media (forced-colors: active) {
+    .indicator-dot {
+      background-color: CanvasText;
+    }
   }
 }

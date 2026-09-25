@@ -172,14 +172,14 @@ For a count or dot on the corner of an icon or avatar, use an [Indicator](indica
 
 ### Vanilla
 
-| Class / var                                                 | Effect                                                                                                        |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `badge`                                                     | Inline-flex pill: `1.25rem` tall, `0.5rem` side padding, `text-xs`, full radius, neutral fill                 |
-| `badge-info` `badge-success` `badge-warning` `badge-danger` | Solid status fill with matching border and `-content` text                                                    |
-| `badge-primary`                                             | Solid brand fill; no border colour                                                                            |
-| `badge-soft`                                                | Pair with a variant for a `-muted` fill and accent text. `warning` and `primary` keep the default text colour |
-| `badge-sm`                                                  | `1rem` tall, `0.625rem` text                                                                                  |
-| `badge-lg`                                                  | `1.5rem` tall, `text-sm`                                                                                      |
-| `badge-remove`                                              | Trailing icon button, `0.875rem` square; nest it inside the badge so `badge-sm`/`badge-lg` can scale it       |
+| Class / var                                                 | Effect                                                                                                                                                                |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `badge`                                                     | Inline-flex pill: `1.25rem` tall, `fit-content` wide, `0.5rem` side padding, `text-xs`, full radius, neutral fill                                                     |
+| `badge-info` `badge-success` `badge-warning` `badge-danger` | Solid status fill with matching border and `-content` text                                                                                                            |
+| `badge-primary`                                             | Solid brand fill; no border colour                                                                                                                                    |
+| `badge-soft`                                                | Pair with a variant for a `-muted` fill and accent text mixed 20% toward the text colour. `warning` and `primary` use the text colour                                 |
+| `badge-sm`                                                  | `1rem` tall, `0.625rem` text                                                                                                                                          |
+| `badge-lg`                                                  | `1.5rem` tall, `text-sm`                                                                                                                                              |
+| `badge-remove`                                              | Trailing icon button, `0.875rem` square; nest it inside the badge so `badge-sm`/`badge-lg` can scale it. On a solid variant its focus ring is the badge's text colour |
 
 There is no `badge-neutral` or `badge-md` — both are the unmodified `badge`. A direct-child `<i>` or `<svg>` is kept from shrinking; no wrapper class needed.

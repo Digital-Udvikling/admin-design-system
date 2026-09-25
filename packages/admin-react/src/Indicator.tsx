@@ -20,7 +20,8 @@ export interface IndicatorProps extends ComponentProps<"div"> {
   placement?: IndicatorPlacement;
   /**
    * Pixels to pull the indicator toward the anchor's center — aligns it with
-   * the visual corner of rounded anchors (e.g. `4` for `rounded-md`).
+   * the visual corner of rounded anchors (e.g. `4` for `rounded-md`). Ignored by
+   * `*-center` and `middle-*` placements, which sit on a straight edge.
    */
   offset?: number;
   /** Clamp a numeric `label` to `${max}+` when it exceeds this value. */
@@ -50,6 +51,8 @@ export function Indicator({
   const hasContent = label !== undefined || icon !== undefined;
   const displayLabel =
     typeof label === "number" && max !== undefined && label > max ? `${max}+` : label;
+  // A generic span can't carry a name, so a labelled item becomes a status in both forms.
+  const role = ariaLabel !== undefined ? "status" : undefined;
   const style =
     offset !== undefined
       ? ({ ...styleProp, "--indicator-offset": `${offset}px` } as CSSProperties)
@@ -62,6 +65,7 @@ export function Indicator({
           variant={variant}
           size={size}
           icon={icon}
+          role={role}
           aria-label={ariaLabel}
         >
           {displayLabel}
@@ -76,7 +80,7 @@ export function Indicator({
             ],
             undefined,
           )}
-          role={ariaLabel !== undefined ? "status" : undefined}
+          role={role}
           aria-label={ariaLabel}
         />
       )}

@@ -48,6 +48,30 @@ describe("Indicator", () => {
     expect(dot.textContent).toBe("");
   });
 
+  it("gives a labelled badge and a labelled dot the status role", () => {
+    render(
+      <>
+        <Indicator label={128} max={99} aria-label="128 unread">
+          <span>inbox</span>
+        </Indicator>
+        <Indicator variant="success" aria-label="Online">
+          <span>avatar</span>
+        </Indicator>
+      </>,
+    );
+    expect(screen.getByRole("status", { name: "128 unread" })).toHaveAdminClass("badge");
+    expect(screen.getByRole("status", { name: "Online" })).toHaveAdminClass("indicator-dot");
+  });
+
+  it("leaves an unlabelled badge without a role", () => {
+    render(
+      <Indicator label="3">
+        <span>anchor</span>
+      </Indicator>,
+    );
+    expect(screen.getByText("3")).not.toHaveAttribute("role");
+  });
+
   it("renders a neutral dot without a color modifier class", () => {
     const { container } = render(
       <Indicator aria-label="Idle">

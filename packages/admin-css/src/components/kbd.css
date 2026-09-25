@@ -1,25 +1,19 @@
 @layer components {
-  /* One key per chip; stack inside `.kbd-group` for chords. */
+  /* One key per chip; stack inside `.kbd-group` for chords. 4em/3 of the 0.75em
+     font is the host's 1em, so a chip never grows its host. */
   .kbd {
     @apply inline-flex items-center justify-center
-           min-w-[1.25em] h-[1.4em] px-[0.35em]
-           rounded border border-border
-           bg-surface-strong text-text-muted
+           min-w-[calc(4em/3)] h-[calc(4em/3)] px-[calc(1em/3)]
+           rounded border
            text-[0.75em] font-mono leading-none align-middle
            whitespace-nowrap tabular-nums;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    border-color: color-mix(in srgb, currentColor 22%, transparent);
   }
 
   /* Always emitted by the React `<Kbd>` so selectors can target the whole binding. */
   .kbd-group {
     @apply inline-flex items-center gap-1 align-middle;
-  }
-
-  /* Derive the chip colour from the host so it stays legible on any variant. */
-  .btn .kbd,
-  .menu-item .kbd {
-    color: currentColor;
-    background-color: color-mix(in srgb, currentColor 12%, transparent);
-    border-color: color-mix(in srgb, currentColor 22%, transparent);
   }
 
   /* Dim the cluster (not each chip, so the chord reads as one unit) to keep

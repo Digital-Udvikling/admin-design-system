@@ -163,8 +163,8 @@
   }
 
   /* `.link`'s blue is illegible on the solid fills; inherit the variant's content
-     color. Underline + weight carry the affordance. */
+     color. The underline carries the affordance and thickens on hover. */
   .alert .link {
-    @apply text-current hover:text-current hover:opacity-85;
+    @apply text-current hover:text-current hover:decoration-2;
   }
 }

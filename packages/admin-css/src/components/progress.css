@@ -9,12 +9,12 @@
     border: 0;
     border-radius: 9999px;
     overflow: hidden;
-    background-color: var(--color-surface-strong);
+    background-color: var(--color-border);
     color: var(--color-info);
   }
 
   .progress::-webkit-progress-bar {
-    background-color: var(--color-surface-strong);
+    background-color: var(--color-border);
     border-radius: 9999px;
   }
 
@@ -52,15 +52,13 @@
   }
 
   /* When indeterminate, WebKit hides the value pseudo and Firefox draws it
-     full-width — blank both and animate a gradient on the bar itself. */
+     full-width — blank both and slide a hard-edged segment over the track. */
   .progress:indeterminate {
     background-image: linear-gradient(
       90deg,
-      var(--color-surface-strong) 0%,
-      var(--color-surface-strong) 40%,
-      currentColor 50%,
-      var(--color-surface-strong) 60%,
-      var(--color-surface-strong) 100%
+      transparent 0 40%,
+      currentColor 40% 60%,
+      transparent 60%
     );
     background-size: 250% 100%;
     background-repeat: no-repeat;
@@ -109,12 +107,7 @@
     .progress:indeterminate {
       forced-color-adjust: none;
       background-color: Canvas;
-      background-image: linear-gradient(
-        90deg,
-        transparent 0 40%,
-        Highlight 40% 60%,
-        transparent 60%
-      );
+      color: Highlight;
     }
   }
 }

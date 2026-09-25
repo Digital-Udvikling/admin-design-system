@@ -5,11 +5,11 @@ export type SpinnerSize = "sm" | "md" | "lg";
 
 export interface SpinnerProps extends ComponentProps<"output"> {
   size?: SpinnerSize;
-  /** Accessible label announced by screen readers. Defaults to "Loading". */
+  /** Accessible name (`aria-label`). Defaults to "Loading". */
   label?: string;
 }
 
-// `<output>` has an implicit `role="status"`, so the `aria-label` is announced politely.
+// `<output>` is an implicit status region, but it announces content changes, not a name present on mount.
 export function Spinner({ size = "md", label = "Loading", className, ...rest }: SpinnerProps) {
   return (
     <output

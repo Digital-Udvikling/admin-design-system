@@ -27,7 +27,7 @@ export interface InputProps extends BaseInputProps {
   onClear?: () => void;
   /** Custom interactive trailing control, usually an `Input.Action`. Replaces the clear button and `iconTrailing`. */
   action?: ReactNode;
-  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  /** Per-slot class overrides. `className` and `style` target the `<input>` even when wrapped; size a wrapped field with `wrapper`. */
   classNames?: SlotClasses<"wrapper" | "action">;
 }
 

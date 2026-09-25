@@ -15,9 +15,9 @@ import { Button, Drawer, Field, Input } from "@aortl/admin-react";
 <button type="button" class="btn btn-primary" commandfor="drawer-basic" command="show-modal">
   Open drawer
 </button>
-<dialog id="drawer-basic" class="dialog drawer" closedby="any">
+<dialog id="drawer-basic" class="dialog drawer" closedby="any" aria-labelledby="drawer-basic-title">
   <div class="dialog-header">
-    <h2 class="dialog-title">Filters</h2>
+    <h2 id="drawer-basic-title" class="dialog-title">Filters</h2>
     <button
       type="button"
       class="dialog-close"
@@ -87,15 +87,27 @@ import { Button, Drawer, Field, Input } from "@aortl/admin-react";
 <button type="button" class="btn" commandfor="drawer-start" command="show-modal">Start</button>
 <button type="button" class="btn" commandfor="drawer-bottom" command="show-modal">Bottom</button>
 
-<dialog id="drawer-start" class="dialog drawer drawer-start">
-  <div class="dialog-header"><h2 class="dialog-title">Navigation</h2></div>
+<dialog
+  id="drawer-start"
+  class="dialog drawer drawer-start"
+  closedby="any"
+  aria-labelledby="drawer-start-title"
+>
+  <div class="dialog-header"><h2 id="drawer-start-title" class="dialog-title">Navigation</h2></div>
   <div class="dialog-body">Anchored to the inline-start edge.</div>
   <div class="dialog-footer">
     <button type="button" class="btn" commandfor="drawer-start" command="close">Close</button>
   </div>
 </dialog>
-<dialog id="drawer-bottom" class="dialog drawer drawer-bottom">
-  <div class="dialog-header"><h2 class="dialog-title">Quick actions</h2></div>
+<dialog
+  id="drawer-bottom"
+  class="dialog drawer drawer-bottom"
+  closedby="any"
+  aria-labelledby="drawer-bottom-title"
+>
+  <div class="dialog-header">
+    <h2 id="drawer-bottom-title" class="dialog-title">Quick actions</h2>
+  </div>
   <div class="dialog-body">A bottom sheet.</div>
   <div class="dialog-footer">
     <button type="button" class="btn" commandfor="drawer-bottom" command="close">Close</button>
@@ -202,16 +214,16 @@ A `Drawer` is a [Dialog](../dialog/) anchored to a screen edge, and it re-export
 
 Pair `drawer` with `dialog`: the drawer classes override the centring and radius, and inherit everything else, including the backdrop and the fade.
 
-| Class           | Effect                                                                                                       |
-| --------------- | ------------------------------------------------------------------------------------------------------------ |
-| `drawer`        | Full-height panel on the inline-end edge, `min(28rem, 100vw)` wide, square corners, sliding in from the edge |
-| `drawer-start`  | Inline-start edge instead                                                                                    |
-| `drawer-bottom` | Bottom sheet: full width, `85dvh` max-height, sliding up                                                     |
-| `drawer-sm`     | `min(20rem, 100vw)` wide — or `50dvh` tall as a bottom sheet                                                 |
-| `drawer-lg`     | `min(36rem, 100vw)` — or `95dvh` tall                                                                        |
+| Class           | Effect                                                                                                      |
+| --------------- | ----------------------------------------------------------------------------------------------------------- |
+| `drawer`        | Full-height panel on the inline-end edge, `min(28rem, 100%)` wide, square corners, sliding in from the edge |
+| `drawer-start`  | Inline-start edge instead                                                                                   |
+| `drawer-bottom` | Bottom sheet: full width, as tall as its content up to `85dvh`, sliding up                                  |
+| `drawer-sm`     | `min(20rem, 100%)` wide — or `50dvh` max-height as a bottom sheet                                           |
+| `drawer-lg`     | `min(36rem, 100%)` wide — or `95dvh` max-height as a bottom sheet                                           |
 
 There is no `drawer-md` or `drawer-end` — both are the unmodified `drawer`. The slide is dropped under `prefers-reduced-motion: reduce`, keeping the opacity fade.
 
 Modal behaviour, the Invoker Commands trigger, `closedby`, and the `<form method="dialog">` pattern are all Dialog's — see [its reference](../dialog/#reference).
 
-There is deliberately no non-modal or persistent drawer: it would give up the focus trap and scroll lock that `showModal()` provides for free, and a panel that doesn't trap focus is a [Card](../cards/) or a sidebar, not a drawer.
+There is deliberately no non-modal or persistent drawer: it would give up the focus trap and inert page that `showModal()` provides for free, and a panel that doesn't trap focus is a [Card](../cards/) or a sidebar, not a drawer.

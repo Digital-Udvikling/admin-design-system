@@ -3,13 +3,13 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useId,
   useRef,
   useState,
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
+import { hasSlot } from "./dialog-internal";
 
 export interface ConfirmOptions {
   /** Dialog heading. */
@@ -119,8 +119,6 @@ function ConfirmDialog({
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const initialFocusRef = useRef<HTMLElement | null>(null);
   const confirmed = useRef(false);
-  const titleId = useId();
-  const descriptionId = useId();
 
   // Child effects run first, so the dialog is already open via showModal(),
   // which focused the first button; move focus to the intended one.
@@ -145,15 +143,11 @@ function ConfirmDialog({
       size="sm"
       closedby="closerequest"
       role="alertdialog"
-      aria-labelledby={titleId}
-      aria-describedby={description !== undefined ? descriptionId : undefined}
     >
       <Dialog.Header>
-        <Dialog.Title id={titleId}>{title}</Dialog.Title>
+        <Dialog.Title>{title}</Dialog.Title>
       </Dialog.Header>
-      {description !== undefined ? (
-        <Dialog.Description id={descriptionId}>{description}</Dialog.Description>
-      ) : null}
+      {hasSlot(description) ? <Dialog.Description>{description}</Dialog.Description> : null}
       <Dialog.Footer>
         <Button
           ref={danger ? initialFocusRef : undefined}

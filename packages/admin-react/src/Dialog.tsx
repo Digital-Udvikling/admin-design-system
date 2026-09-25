@@ -1,6 +1,6 @@
 import { useContext, type ComponentProps, type ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
-import { DialogContext, useDialogElement } from "./dialog-internal";
+import { DialogContext, hasSlot, useDialogElement, useDialogLabelId } from "./dialog-internal";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
 
@@ -37,7 +37,11 @@ export interface DialogContainerProps extends Omit<ComponentProps<"dialog">, "op
   closedby?: DialogClosedBy;
 }
 
-/** The bare `<dialog>` primitive — for layouts the default `<Dialog>` doesn't fit. */
+/**
+ * The bare `<dialog>` primitive — for layouts the default `<Dialog>` doesn't fit.
+ * A `Dialog.Title` / `Dialog.Description` inside names and describes it unless
+ * `aria-label`, `aria-labelledby` or `aria-describedby` is passed.
+ */
 function DialogContainer({
   open,
   onOpenChange,
@@ -46,9 +50,15 @@ function DialogContainer({
   className,
   children,
   ref: consumerRef,
+  "aria-labelledby": labelledBy,
+  "aria-describedby": describedBy,
   ...rest
 }: DialogContainerProps) {
-  const { setRef, ctx, ref } = useDialogElement(open, onOpenChange, consumerRef);
+  const { setRef, ctx, ref, titleId, descriptionId } = useDialogElement(
+    open,
+    onOpenChange,
+    consumerRef,
+  );
 
   return (
     <DialogContext.Provider value={ctx}>
@@ -57,6 +67,8 @@ function DialogContainer({
           ref={setRef}
           className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
           closedby={closedby}
+          aria-labelledby={labelledBy ?? (rest["aria-label"] === undefined ? titleId : undefined)}
+          aria-describedby={describedBy ?? descriptionId}
           {...rest}
         >
           {children}
@@ -77,9 +89,10 @@ export interface DialogTitleProps extends ComponentProps<"h2"> {
   icon?: IconProp;
 }
 
-function DialogTitle({ icon, className, children, ...rest }: DialogTitleProps) {
+function DialogTitle({ icon, id, className, children, ...rest }: DialogTitleProps) {
+  const resolvedId = useDialogLabelId("title", id);
   return (
-    <h2 className={cn("dialog-title", className)} {...rest}>
+    <h2 id={resolvedId} className={cn("dialog-title", className)} {...rest}>
       {renderIcon(icon)}
       {children}
     </h2>
@@ -88,8 +101,9 @@ function DialogTitle({ icon, className, children, ...rest }: DialogTitleProps) {
 
 export type DialogDescriptionProps = ComponentProps<"p">;
 
-function DialogDescription({ className, ...rest }: DialogDescriptionProps) {
-  return <p className={cn("dialog-description", className)} {...rest} />;
+function DialogDescription({ id, className, ...rest }: DialogDescriptionProps) {
+  const resolvedId = useDialogLabelId("description", id);
+  return <p id={resolvedId} className={cn("dialog-description", className)} {...rest} />;
 }
 
 export type DialogBodyProps = ComponentProps<"div">;
@@ -153,7 +167,11 @@ export interface DialogProps extends Omit<DialogContainerProps, "title" | "child
   children?: ReactNode;
 }
 
-/** Standard modal with shorthand-driven header/body/footer. For other shapes, compose `<Dialog.Container>` by hand. */
+/**
+ * Standard modal with shorthand-driven header/body/footer; an empty slot
+ * (`null`, `false`, `""`) renders nothing. The title names the dialog and the
+ * description describes it. For other shapes, compose `<Dialog.Container>` by hand.
+ */
 function DialogRoot({
   icon,
   title,
@@ -165,7 +183,7 @@ function DialogRoot({
   children,
   ...containerProps
 }: DialogProps) {
-  const hasTitle = title !== undefined || icon !== undefined;
+  const hasTitle = hasSlot(title) || icon != null;
   const showHeader = hasTitle || dismissible;
   return (
     <DialogContainer {...containerProps}>
@@ -181,13 +199,11 @@ function DialogRoot({
           ) : null}
         </DialogHeader>
       ) : null}
-      {description !== undefined ? (
+      {hasSlot(description) ? (
         <DialogDescription className={classNames?.description}>{description}</DialogDescription>
       ) : null}
-      {children !== undefined ? (
-        <DialogBody className={classNames?.body}>{children}</DialogBody>
-      ) : null}
-      {actions !== undefined ? (
+      {hasSlot(children) ? <DialogBody className={classNames?.body}>{children}</DialogBody> : null}
+      {hasSlot(actions) ? (
         <DialogFooter className={classNames?.footer}>{actions}</DialogFooter>
       ) : null}
     </DialogContainer>

@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { Dialog, type DialogClosedBy } from "./Dialog";
-import { DialogContext, useDialogElement } from "./dialog-internal";
+import { DialogContext, hasSlot, useDialogElement } from "./dialog-internal";
 import { type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
 
@@ -21,7 +21,11 @@ export interface DrawerContainerProps extends Omit<ComponentProps<"dialog">, "op
   closedby?: DialogClosedBy;
 }
 
-/** The bare edge-anchored `<dialog>` primitive — for layouts the default `<Drawer>` doesn't fit. */
+/**
+ * The bare edge-anchored `<dialog>` primitive — for layouts the default `<Drawer>`
+ * doesn't fit. Named and described by its `Drawer.Title` / `Drawer.Description`
+ * unless `aria-label`, `aria-labelledby` or `aria-describedby` is passed.
+ */
 function DrawerContainer({
   open,
   onOpenChange,
@@ -31,9 +35,15 @@ function DrawerContainer({
   className,
   children,
   ref: consumerRef,
+  "aria-labelledby": labelledBy,
+  "aria-describedby": describedBy,
   ...rest
 }: DrawerContainerProps) {
-  const { setRef, ctx, ref } = useDialogElement(open, onOpenChange, consumerRef);
+  const { setRef, ctx, ref, titleId, descriptionId } = useDialogElement(
+    open,
+    onOpenChange,
+    consumerRef,
+  );
   return (
     <DialogContext.Provider value={ctx}>
       <PortalContainerContext.Provider value={ref}>
@@ -49,6 +59,8 @@ function DrawerContainer({
             className,
           )}
           closedby={closedby}
+          aria-labelledby={labelledBy ?? (rest["aria-label"] === undefined ? titleId : undefined)}
+          aria-describedby={describedBy ?? descriptionId}
           {...rest}
         >
           {children}
@@ -76,7 +88,10 @@ export interface DrawerProps extends Omit<DrawerContainerProps, "title" | "child
   children?: ReactNode;
 }
 
-/** Edge-anchored panel with shorthand-driven header/body/footer. For other shapes, compose `<Drawer.Container>`. */
+/**
+ * Edge-anchored panel with shorthand-driven header/body/footer; an empty slot
+ * (`null`, `false`, `""`) renders nothing. For other shapes, compose `<Drawer.Container>`.
+ */
 function DrawerRoot({
   icon,
   title,
@@ -88,7 +103,7 @@ function DrawerRoot({
   children,
   ...containerProps
 }: DrawerProps) {
-  const hasTitle = title !== undefined || icon !== undefined;
+  const hasTitle = hasSlot(title) || icon != null;
   const showHeader = hasTitle || dismissible;
   return (
     <DrawerContainer {...containerProps}>
@@ -104,13 +119,13 @@ function DrawerRoot({
           ) : null}
         </Dialog.Header>
       ) : null}
-      {description !== undefined ? (
+      {hasSlot(description) ? (
         <Dialog.Description className={classNames?.description}>{description}</Dialog.Description>
       ) : null}
-      {children !== undefined ? (
+      {hasSlot(children) ? (
         <Dialog.Body className={classNames?.body}>{children}</Dialog.Body>
       ) : null}
-      {actions !== undefined ? (
+      {hasSlot(actions) ? (
         <Dialog.Footer className={classNames?.footer}>{actions}</Dialog.Footer>
       ) : null}
     </DrawerContainer>

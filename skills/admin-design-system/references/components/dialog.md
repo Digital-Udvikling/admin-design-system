@@ -27,9 +27,15 @@
 <button type="button" class="btn btn-primary" commandfor="dialog-basic" command="show-modal">
   Open dialog
 </button>
-<dialog id="dialog-basic" class="dialog" closedby="any">
+<dialog
+  id="dialog-basic"
+  class="dialog"
+  closedby="any"
+  aria-labelledby="dialog-basic-title"
+  aria-describedby="dialog-basic-desc"
+>
   <div class="dialog-header">
-    <h2 class="dialog-title">Invite teammate</h2>
+    <h2 id="dialog-basic-title" class="dialog-title">Invite teammate</h2>
     <button
       type="button"
       class="dialog-close"
@@ -53,7 +59,9 @@
       </svg>
     </button>
   </div>
-  <p class="dialog-description">They'll receive an email with a sign-up link.</p>
+  <p id="dialog-basic-desc" class="dialog-description">
+    They'll receive an email with a sign-up link.
+  </p>
   <div class="dialog-body">
     <p>Pick a role after they accept.</p>
   </div>
@@ -101,9 +109,9 @@
 <button type="button" class="btn" commandfor="dialog-lg" command="show-modal">Large</button>
 <button type="button" class="btn" commandfor="dialog-auto" command="show-modal">Auto</button>
 
-<dialog id="dialog-sm" class="dialog dialog-sm">
+<dialog id="dialog-sm" class="dialog dialog-sm" closedby="any" aria-labelledby="dialog-sm-title">
   <div class="dialog-header">
-    <h2 class="dialog-title">Small</h2>
+    <h2 id="dialog-sm-title" class="dialog-title">Small</h2>
   </div>
   <div class="dialog-body">Up to 24rem wide.</div>
   <div class="dialog-footer">
@@ -111,9 +119,9 @@
   </div>
 </dialog>
 
-<dialog id="dialog-md" class="dialog">
+<dialog id="dialog-md" class="dialog" closedby="any" aria-labelledby="dialog-md-title">
   <div class="dialog-header">
-    <h2 class="dialog-title">Medium</h2>
+    <h2 id="dialog-md-title" class="dialog-title">Medium</h2>
   </div>
   <div class="dialog-body">Default — up to 32rem.</div>
   <div class="dialog-footer">
@@ -121,9 +129,9 @@
   </div>
 </dialog>
 
-<dialog id="dialog-lg" class="dialog dialog-lg">
+<dialog id="dialog-lg" class="dialog dialog-lg" closedby="any" aria-labelledby="dialog-lg-title">
   <div class="dialog-header">
-    <h2 class="dialog-title">Large</h2>
+    <h2 id="dialog-lg-title" class="dialog-title">Large</h2>
   </div>
   <div class="dialog-body">Up to 48rem — room for two-column forms.</div>
   <div class="dialog-footer">
@@ -131,9 +139,14 @@
   </div>
 </dialog>
 
-<dialog id="dialog-auto" class="dialog dialog-auto">
+<dialog
+  id="dialog-auto"
+  class="dialog dialog-auto"
+  closedby="any"
+  aria-labelledby="dialog-auto-title"
+>
   <div class="dialog-header">
-    <h2 class="dialog-title">Auto</h2>
+    <h2 id="dialog-auto-title" class="dialog-title">Auto</h2>
   </div>
   <div class="dialog-body">Shrinks to fit its content.</div>
   <div class="dialog-footer">
@@ -194,9 +207,14 @@
   Open report
 </button>
 
-<dialog id="dialog-metabase" class="dialog dialog-metabase">
+<dialog
+  id="dialog-metabase"
+  class="dialog dialog-metabase"
+  closedby="any"
+  aria-labelledby="dialog-metabase-title"
+>
   <div class="dialog-header">
-    <h2 class="dialog-title">Revenue report</h2>
+    <h2 id="dialog-metabase-title" class="dialog-title">Revenue report</h2>
     <button
       type="button"
       class="dialog-close"
@@ -250,10 +268,10 @@
 <button type="button" class="btn btn-primary" commandfor="dialog-form" command="show-modal">
   Rename project
 </button>
-<dialog id="dialog-form" class="dialog">
+<dialog id="dialog-form" class="dialog" closedby="any" aria-labelledby="dialog-form-title">
   <form method="dialog">
     <div class="dialog-header">
-      <h2 class="dialog-title">Rename project</h2>
+      <h2 id="dialog-form-title" class="dialog-title">Rename project</h2>
       <button
         type="button"
         class="dialog-close"
@@ -327,14 +345,23 @@
 <button type="button" class="btn btn-danger" commandfor="dialog-destroy" command="show-modal">
   Delete project
 </button>
-<dialog id="dialog-destroy" class="dialog dialog-sm" closedby="closerequest">
+<dialog
+  id="dialog-destroy"
+  class="dialog dialog-sm"
+  closedby="closerequest"
+  role="alertdialog"
+  aria-labelledby="dialog-destroy-title"
+  aria-describedby="dialog-destroy-desc"
+>
   <div class="dialog-header">
-    <h2 class="dialog-title">
+    <h2 id="dialog-destroy-title" class="dialog-title">
       <i class="ti ti-alert-triangle" aria-hidden="true"></i>
       Delete project?
     </h2>
   </div>
-  <p class="dialog-description">This permanently removes all data. This cannot be undone.</p>
+  <p id="dialog-destroy-desc" class="dialog-description">
+    This permanently removes all data. This cannot be undone.
+  </p>
   <div class="dialog-footer">
     <button type="button" class="btn btn-ghost" commandfor="dialog-destroy" command="close">
       Cancel
@@ -354,6 +381,7 @@
   id="dialog-destroy-r"
   size="sm"
   closedby="closerequest"
+  role="alertdialog"
   dismissible={false}
   icon={IconAlertTriangle}
   title="Delete project?"
@@ -426,6 +454,25 @@ function DeleteProject() {
     <Field>
       <Field.Label>Billing email</Field.Label>
       <Input type="email" defaultValue="ops@acme.test" />
+    </Field>
+    <Field name="region">
+      <Field.Label>Data region</Field.Label>
+      <Select defaultValue="eu" items={{ eu: "EU (Frankfurt)", us: "US (Virginia)" }}>
+        <Select.Trigger>
+          <Select.Value />
+          <Select.Icon />
+        </Select.Trigger>
+        <Select.Popup>
+          <Select.Item value="eu">
+            EU (Frankfurt)
+            <Select.ItemIndicator />
+          </Select.Item>
+          <Select.Item value="us">
+            US (Virginia)
+            <Select.ItemIndicator />
+          </Select.Item>
+        </Select.Popup>
+      </Select>
     </Field>
   </Dialog.Body>
   <Dialog.Footer>
@@ -521,7 +568,9 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
 | `cancelLabel`      | `ReactNode`             | `"Cancel"`   |
 | `variant`          | `"default" \| "danger"` | `"default"`  |
 
-`Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
+`Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X, and an empty slot (`null`, `false`, `""`) renders nothing. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
+
+A `Dialog.Title` sets the dialog's `aria-labelledby` and a `Dialog.Description` its `aria-describedby`, in `Dialog.Container` too. Passing `aria-label`, `aria-labelledby` or `aria-describedby` overrides them.
 
 `size` and `closedby` live on the element, so they work on [`Dialog.Container`](../basics/conventions.md#container-escape-hatch) too — the form to use when the layout doesn't fit, most often to wrap everything in a `<form>`. `Dialog.Title` keeps its `icon` prop there.
 
@@ -541,18 +590,22 @@ Plus native `<dialog>` attributes.
 | `dialog-auto`        | Shrinks to content, still capped to the viewport                                                                                |
 | `dialog-metabase`    | `1138px` wide with `2.75rem` gutters, so a full-width body child lands at `1048px`                                              |
 | `dialog-header`      | Title row: `1.25rem` side padding, `0.75rem` gap                                                                                |
-| `dialog-title`       | `text-lg` semibold, `0.5rem` gap for a leading icon                                                                             |
+| `dialog-title`       | `text-lg` semibold; a leading icon sits on the first line with a `0.5rem` gap                                                   |
 | `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
-| `dialog-body`        | The scrolling region; header and footer stay pinned                                                                             |
+| `dialog-body`        | The scroll region: header and footer stay pinned, children keep their set height                                                |
 | `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping                                                                     |
-| `dialog-close`       | `1.75rem` square X button, pinned to the header's inline end                                                                    |
+| `dialog-close`       | `1.75rem` square X button at the header's inline end, centred on the title's first line                                         |
 
-There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, scroll lock, Esc, and `::backdrop`. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete`, so the exit animation runs without JavaScript.
+There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.
 
-Open it without JavaScript through the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor): a `<button commandfor="<dialog-id>" command="show-modal">`, and `command="close"` to dismiss. The `closedby` attribute picks the dismissal set — `"any"` (the default) allows Esc and a backdrop click, `"closerequest"` drops the backdrop click, the right choice for an irreversible action, and `"none"` requires an explicit close.
+A `<dialog>` takes no name from the heading inside it: give the title an `id` and point the dialog's `aria-labelledby` at it, and `aria-describedby` at the description. Use `role="alertdialog"` for a confirmation that needs an answer.
+
+Open it without JavaScript through the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor): a `<button commandfor="<dialog-id>" command="show-modal">`, and `command="close"` to dismiss. The `closedby` attribute picks the dismissal set. Without it a modal dialog closes on Esc only (`"closerequest"`); the React components default to `"any"`, which adds a backdrop click. Use `"closerequest"` for an irreversible action and `"none"` to require an explicit close.
 
 Wrap the contents in `<form method="dialog">` and any submit button inside closes the dialog, with the submitter's `value` landing on the dialog's `returnValue` — that's the whole pattern for a form dialog, no handler required.
 
-Write the close button's `aria-label` yourself. Don't put `overflow: hidden` on the root to clip the footer's fill — it also clips any [menu](menus.md) or [select](forms/selects.md) popup inside; the footer inherits the corner radius instead.
+Write the close button's `aria-label` yourself. A dialog with a `dialog-body` doesn't clip, so [menu](menus.md) and [select](forms/selects.md) popups inside it can extend past its edges; without one, the whole dialog scrolls and clips them. Don't add `overflow: hidden` to the root to clip the footer's fill, which inherits the corner radius instead.
+
+Children of `dialog-body` don't shrink, so a tall child scrolls the body. To scroll inside a child instead, such as a sticky table in an overflow wrapper, give it `flex-shrink: 1`.
 
 For an edge-anchored panel rather than a centred one, use a [Drawer](drawer.md).

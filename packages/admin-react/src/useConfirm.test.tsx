@@ -75,6 +75,12 @@ describe("useConfirm", () => {
     expect(dialog).toHaveAttribute("open");
     expect(dialog).toHaveAttribute("closedby", "closerequest");
     expect(dialog).toHaveAttribute("role", "alertdialog");
+    expect(
+      screen.getByRole("alertdialog", {
+        name: "Delete project?",
+        description: "This cannot be undone.",
+      }),
+    ).toBe(dialog);
     expect(screen.getByText("Delete project?")).toHaveAdminClass("dialog-title");
     expect(screen.getByText("This cannot be undone.")).toHaveAdminClass("dialog-description");
     const [cancel, confirm] = screen.getAllByRole("button").filter((b) => dialog?.contains(b));
@@ -82,6 +88,13 @@ describe("useConfirm", () => {
     expect(confirm).toHaveTextContent("Confirm");
     expect(confirm).toHaveAdminClass("btn-primary");
     expect(document.querySelector(adminSelector("dialog-close"))).toBeNull();
+  });
+
+  it("renders no description for an empty one", async () => {
+    const { user } = setup({ title: "Delete project?", description: "" });
+    await user.click(screen.getByRole("button", { name: "Open" }));
+    expect(document.querySelector(adminSelector("dialog-description"))).toBeNull();
+    expect(document.querySelector("dialog")).not.toHaveAttribute("aria-describedby");
   });
 
   it("resolves true on Confirm and unmounts the dialog", async () => {

@@ -80,6 +80,60 @@ describe("Dialog", () => {
     expect(screen.getByText("Desc")).toHaveClass("x-custom");
   });
 
+  it("empty shorthand slots render nothing", () => {
+    render(
+      <Dialog open dismissible={false} icon={null} title="" description={null} actions={false}>
+        {false}
+      </Dialog>,
+    );
+    expect(getDialog().children).toHaveLength(0);
+  });
+
+  describe("accessible name", () => {
+    it("is labelled by the title and described by the description", () => {
+      render(<Dialog open title="Invite teammate" description="They'll get an email." />);
+      expect(
+        screen.getByRole("dialog", {
+          name: "Invite teammate",
+          description: "They'll get an email.",
+        }),
+      ).toBe(getDialog());
+    });
+
+    it("omits aria-describedby without a description", () => {
+      render(<Dialog open title="Invite teammate" />);
+      expect(getDialog()).toHaveAttribute("aria-labelledby");
+      expect(getDialog()).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("omits aria-labelledby without a title", () => {
+      render(<Dialog open />);
+      expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+    });
+
+    it("covers Dialog.Container compositions and a consumer title id", () => {
+      render(
+        <Dialog.Container open>
+          <form method="dialog">
+            <Dialog.Header>
+              <Dialog.Title id="rename-title">Rename project</Dialog.Title>
+            </Dialog.Header>
+          </form>
+        </Dialog.Container>,
+      );
+      expect(getDialog()).toHaveAttribute("aria-labelledby", "rename-title");
+      expect(screen.getByRole("dialog", { name: "Rename project" })).toBe(getDialog());
+    });
+
+    it("lets aria-label and aria-labelledby win over the title", () => {
+      const { rerender } = render(<Dialog open aria-label="Custom" title="Title" />);
+      expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+      expect(screen.getByRole("dialog", { name: "Custom" })).toBe(getDialog());
+      rerender(<Dialog open aria-labelledby="elsewhere" title="Title" />);
+      expect(getDialog()).toHaveAttribute("aria-labelledby", "elsewhere");
+    });
+  });
+
   describe("interactions", () => {
     it("calls showModal when open transitions false -> true", () => {
       const showModal = vi.spyOn(HTMLDialogElement.prototype, "showModal");

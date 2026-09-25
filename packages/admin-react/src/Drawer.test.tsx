@@ -59,6 +59,14 @@ describe("Drawer", () => {
     expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
   });
 
+  it("is labelled by its title and described by its description", () => {
+    render(<Drawer open title="Filters" description="Narrow the list." />);
+    const dialog = document.querySelector("dialog");
+    expect(screen.getByRole("dialog", { name: "Filters", description: "Narrow the list." })).toBe(
+      dialog,
+    );
+  });
+
   it("forwards classNames to slots", () => {
     render(
       <Drawer open title="Filters" classNames={{ title: "x-custom" }}>

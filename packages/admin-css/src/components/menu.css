@@ -7,7 +7,7 @@
   /* Behaviour only — visual classes (e.g. `btn btn-primary`) may stack on top. */
   .menu-trigger {
     --menu-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
-    @apply inline-flex items-center gap-1.5
+    @apply inline-flex items-center
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
@@ -18,9 +18,9 @@
     display: none;
   }
 
-  /* Default appearance — bows out when `.btn` supplies its own. */
+  /* Default appearance — bows out when `.btn` supplies its own, gap included. */
   .menu-trigger:not(.btn) {
-    @apply px-2.5 py-1.5 rounded-md text-sm leading-none
+    @apply gap-1.5 px-2.5 py-1.5 rounded-md text-sm leading-none
            text-text bg-transparent
            hover:bg-surface-strong;
   }
@@ -60,7 +60,7 @@
 
   .menu-popup {
     @apply absolute top-full left-0 z-30 mt-1
-           min-w-44 max-h-72 overflow-auto
+           min-w-44 max-w-80 max-h-72 overflow-auto
            py-1
            bg-surface text-text
            border border-border rounded-lg shadow-md;
@@ -82,6 +82,8 @@
       position-anchor: --menu-trigger;
       top: anchor(bottom);
       left: anchor(left);
+      /* A trigger wider than 11rem (full-width bulk actions) widens the popup to match. */
+      min-width: max(11rem, anchor-size(width));
       /* flip-block also mirrors mt-1; flip-inline right-aligns to the trigger. */
       position-try-fallbacks:
         flip-block,
@@ -92,7 +94,7 @@
 
   .menu-item {
     /* `relative` confines a `table-row-link` / `item-link` hit-area overlay to its own row. */
-    @apply relative flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
+    @apply relative flex items-center gap-2 w-full px-3 py-1 text-sm leading-5
            text-text bg-transparent
            border-0
            text-left no-underline
@@ -101,9 +103,14 @@
            focus-visible:bg-surface-hover
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:pointer-events-none;
-    /* The popup has no max-width — break long labels instead of growing it. */
-    overflow-wrap: break-word;
+    /* The popup caps at max-w-80; `anywhere` (not break-word) lets an unbreakable ID shrink the text item and wrap. */
+    overflow-wrap: anywhere;
     min-width: 0;
+  }
+
+  /* Destructive action (Delete, Revoke); the icon follows via currentColor. */
+  .menu-item-danger {
+    @apply text-danger hover:bg-danger-muted focus-visible:bg-danger-muted;
   }
 
   .menu-item:is([aria-disabled="true"], [data-disabled]) {
@@ -113,6 +120,13 @@
   .menu-trigger > :is(i, svg),
   .menu-item > :is(i, svg) {
     flex-shrink: 0;
+  }
+
+  /* Pins leading glyphs to the first line of a wrapped label; 1.25rem is the
+     leading-5 line (not 1lh: Tabler's .ti sets line-height 1). */
+  .menu-item > :is(i, svg, .menu-item-indicator) {
+    align-self: flex-start;
+    margin-block: calc((1.25rem - 1em) / 2);
   }
 
   /* Checkbox/radio items — a leading indicator column whose check shows only when

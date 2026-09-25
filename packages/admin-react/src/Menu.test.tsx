@@ -86,6 +86,27 @@ describe("Menu", () => {
     expect(screen.getByText("Export")).not.toHaveClass("_ao-btn-square");
   });
 
+  it("marks a danger item on both the button and anchor branches", () => {
+    render(
+      <Menu open>
+        <Menu.Trigger>Actions</Menu.Trigger>
+        <Menu.Popup>
+          <Menu.Item danger>Delete</Menu.Item>
+          <Menu.Item href="#revoke" danger>
+            Revoke
+          </Menu.Item>
+          <Menu.Item>Edit</Menu.Item>
+        </Menu.Popup>
+      </Menu>,
+    );
+    expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveClass(
+      "_ao-menu-item",
+      "_ao-menu-item-danger",
+    );
+    expect(screen.getByRole("menuitem", { name: "Revoke" })).toHaveClass("_ao-menu-item-danger");
+    expect(screen.getByRole("menuitem", { name: "Edit" })).not.toHaveClass("_ao-menu-item-danger");
+  });
+
   describe("interactions", () => {
     afterEach(() => vi.restoreAllMocks());
 

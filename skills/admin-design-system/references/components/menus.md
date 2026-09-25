@@ -36,7 +36,7 @@
       Duplicate
     </button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button" role="menuitem">
+    <button class="menu-item menu-item-danger" type="button" role="menuitem">
       <i class="ti ti-trash" aria-hidden="true"></i>
       Delete
     </button>
@@ -51,7 +51,9 @@
     <Menu.Item icon={IconPencil}>Edit</Menu.Item>
     <Menu.Item icon={IconCopy}>Duplicate</Menu.Item>
     <Menu.Separator />
-    <Menu.Item icon={IconTrash}>Delete</Menu.Item>
+    <Menu.Item icon={IconTrash} danger>
+      Delete
+    </Menu.Item>
   </Menu.Popup>
 </Menu>
 ```
@@ -271,7 +273,7 @@
       Duplicate
     </button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button" role="menuitem">
+    <button class="menu-item menu-item-danger" type="button" role="menuitem">
       <i class="ti ti-trash" aria-hidden="true"></i>
       Delete
     </button>
@@ -286,7 +288,9 @@
     <Menu.Item icon={IconPencil}>Edit</Menu.Item>
     <Menu.Item icon={IconCopy}>Duplicate</Menu.Item>
     <Menu.Separator />
-    <Menu.Item icon={IconTrash}>Delete</Menu.Item>
+    <Menu.Item icon={IconTrash} danger>
+      Delete
+    </Menu.Item>
   </Menu.Popup>
 </Menu>
 ```
@@ -352,6 +356,7 @@
 | `Menu.Item`    | `icon`    | [`IconProp`](../basics/conventions.md#icons) | —       |
 | `Menu.Item`    | `hotkey`  | `string \| readonly string[]`                 | —       |
 | `Menu.Item`    | `checked` | `boolean`                                     | —       |
+| `Menu.Item`    | `danger`  | `boolean`                                     | `false` |
 
 `variant` styles the trigger as a [Button](buttons.md) of that variant, square when it has no children; `size` applies only alongside it. `icon` renders a leading icon; with `variant` and no children the trigger is an icon-only square without the chevron, so give it an `aria-label`.
 
@@ -369,16 +374,17 @@ For a form value, use a [Select](forms/selects.md).
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                           |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `menu`                | Positioning context on a `<details>`                                                                             |
-| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                        |
-| `menu-popup`          | Popup panel: `11rem` min-width, `18rem` max-height, scrolls, bordered surface with a shadow                      |
-| `menu-item`           | Row: full width, `0.75rem`/`0.375rem` padding, `text-sm`, hover wash, inset focus ring, `0.5rem` gap for an icon |
-| `menu-item-indicator` | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                             |
-| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                                           |
-| `menu-group`          | Column wrapper for a labelled set                                                                                |
-| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                                        |
+| Class                 | Effect                                                                                                                                          |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `menu`                | Positioning context on a `<details>`                                                                                                            |
+| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                                                       |
+| `menu-popup`          | Popup panel: `11rem` min-width (the trigger's width when wider), `20rem` max-width, `18rem` max-height, scrolls, bordered surface with a shadow |
+| `menu-item`           | Row: full width, `0.75rem`/`0.25rem` padding, `text-sm` on a `1.25rem` line, hover wash, inset focus ring, `0.5rem` gap for an icon             |
+| `menu-item-danger`    | Destructive item: danger label and icon, danger-tinted hover                                                                                    |
+| `menu-item-indicator` | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                                                            |
+| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                                                                          |
+| `menu-group`          | Column wrapper for a labelled set                                                                                                               |
+| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                                                                       |
 
 Open and close is the browser's, via `<details>`/`<summary>`. Write the roles yourself: `role="menu"` on the popup, `role="menuitem"` on each item (`"menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` for checkable ones) and `role="group"` on a `menu-group`, named with `aria-labelledby` pointing at its `menu-group-label`. Items are reached with Tab in both bundles; there is no arrow-key navigation. A disabled anchor item takes `aria-disabled="true"` and no `href`, so neither a click nor Enter navigates.
 

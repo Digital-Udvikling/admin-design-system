@@ -99,6 +99,8 @@ interface MenuItemExtras {
   icon?: IconProp;
   /** Render as a checkable item: shows a leading check when `true`, reserves the gutter when `false`. Set `role="menuitemradio"` for single-select groups. */
   checked?: boolean;
+  /** Destructive action (`.menu-item-danger`): danger-colored label and icon. */
+  danger?: boolean;
 }
 
 type MenuItemAsButton = ComponentProps<"button"> & MenuItemExtras & { href?: undefined };
@@ -182,6 +184,7 @@ function MenuItem(props: MenuItemProps) {
       role,
       icon: _icon,
       checked: _checked,
+      danger,
       children,
       hotkey: _hk,
       ref: _ref,
@@ -196,7 +199,7 @@ function MenuItem(props: MenuItemProps) {
         role={role ?? defaultRole}
         aria-checked={checked}
         aria-keyshortcuts={ariaKeyShortcuts}
-        className={cn("menu-item", className)}
+        className={cn(["menu-item", danger && "menu-item-danger"], className)}
         onClick={(event) => activate(event, onClick)}
         {...rest}
       >
@@ -212,6 +215,7 @@ function MenuItem(props: MenuItemProps) {
     role,
     icon: _icon,
     checked: _checked,
+    danger,
     children,
     hotkey: _hk,
     ref: _ref,
@@ -225,7 +229,7 @@ function MenuItem(props: MenuItemProps) {
       role={role ?? defaultRole}
       aria-checked={checked}
       aria-keyshortcuts={ariaKeyShortcuts}
-      className={cn("menu-item", className)}
+      className={cn(["menu-item", danger && "menu-item-danger"], className)}
       onClick={(event) => activate(event, onClick)}
       {...rest}
     >

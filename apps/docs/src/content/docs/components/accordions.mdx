@@ -127,11 +127,11 @@ No props of its own — each part takes the native attributes of the element it 
 
 | Class               | Effect                                                                                                       |
 | ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `accordion`         | Vertical stack. Rounds the first and last item and collapses the shared borders                              |
-| `accordion-item`    | On `<details>`: bordered surface panel                                                                       |
+| `accordion`         | Vertical stack. Joins its items: squares the inner corners and collapses the shared borders                  |
+| `accordion-item`    | On `<details>`: bordered, rounded surface panel. Works standalone outside an `accordion`                     |
 | `accordion-summary` | Row trigger: `1rem`/`0.75rem` padding, `text-sm` medium, hover tint, trailing chevron that rotates when open |
 | `accordion-content` | Body: `1rem`/`0.75rem` padding, `text-sm`, divided from the summary by a top border                          |
 
 Built on `<details>`/`<summary>`, so the disclosure needs no JavaScript in either bundle: `open` starts an item expanded, and a shared `name` attribute makes a group single-open. The default marker is hidden and replaced by the CSS chevron.
 
-The open/close is animated with `interpolate-size: allow-keywords` on the item plus a `::details-content` transition, which lets `height: 0` interpolate to `auto`; browsers without it toggle instantly. Closed content keeps `content-visibility: visible` so it still contributes intrinsic width — otherwise a shrink-to-fit parent would reflow narrower on close.
+The open/close is animated with `interpolate-size: allow-keywords` on the item plus a `::details-content` transition, which lets `height: 0` interpolate to `auto`; browsers without it toggle instantly. Closed content still sizes the item's width, so a shrink-to-fit parent keeps its width on toggle. It is not focusable, not announced by screen readers, and find-in-page skips it.

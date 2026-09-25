@@ -7,6 +7,10 @@ import { Dialog } from "./Dialog";
 import { Select } from "./Select";
 import { adminSelector } from "./test-setup";
 
+function StubIcon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+  return <svg data-testid="icon" {...props} />;
+}
+
 describe("Select", () => {
   it("renders trigger and subparts", () => {
     render(
@@ -39,6 +43,35 @@ describe("Select", () => {
       </Select>,
     );
     expect(screen.getByTestId("value")).toHaveAdminClass("select-value");
+  });
+
+  it("maps size to the size class, with triggerSize as a fallback", () => {
+    render(
+      <Select>
+        <Select.Trigger aria-label="sm" size="sm" />
+        <Select.Trigger aria-label="lg" triggerSize="lg" />
+        <Select.Trigger aria-label="both" size="sm" triggerSize="lg" />
+      </Select>,
+    );
+    expect(screen.getByRole("combobox", { name: "sm" })).toHaveAdminClass("select-sm");
+    expect(screen.getByRole("combobox", { name: "lg" })).toHaveAdminClass("select-lg");
+    expect(screen.getByRole("combobox", { name: "both" })).toHaveAdminClass("select-sm");
+  });
+
+  it("renders the icon prop before the value, aria-hidden", () => {
+    render(
+      <Select>
+        <Select.Trigger aria-label="shop" icon={StubIcon}>
+          <Select.Value placeholder="Pick" />
+          <Select.Icon />
+        </Select.Trigger>
+      </Select>,
+    );
+    const trigger = screen.getByRole("combobox", { name: "shop" });
+    const icon = screen.getByTestId("icon");
+    expect(trigger.firstElementChild).toBe(icon);
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon.nextElementSibling).toHaveAdminClass("select-value");
   });
 
   describe("interactions", () => {

@@ -9,6 +9,7 @@
   - [Variants](#variants)
   - [Sizes](#sizes)
   - [Groups](#groups)
+  - [Leading icon (React only)](#leading-icon-react-only)
   - [Disabled](#disabled)
   - [Inside a Field](#inside-a-field)
 - [Reference](#reference)
@@ -119,7 +120,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 ```tsx
 <Select defaultValue="x" items={{ x: "Small" }}>
-  <Select.Trigger triggerSize="sm">
+  <Select.Trigger size="sm">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -137,7 +138,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Large" }}>
-  <Select.Trigger triggerSize="lg">
+  <Select.Trigger size="lg">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -194,6 +195,25 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
         <Select.ItemIndicator />
       </Select.Item>
     </Select.Group>
+  </Select.Popup>
+</Select>
+```
+
+### Leading icon (React only)
+
+A native `<select>` can't hold an icon.
+
+**Example**
+
+```tsx
+<Select defaultValue="cph" items={{ cph: "Copenhagen", aar: "Aarhus" }}>
+  <Select.Trigger icon={IconBuildingWarehouse} aria-label="Warehouse">
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="cph">Copenhagen</Select.Item>
+    <Select.Item value="aar">Aarhus</Select.Item>
   </Select.Popup>
 </Select>
 ```
@@ -281,17 +301,19 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 | ---------------- | ------------- | ------------------------------------------------- | ------------ |
 | `Select`         | `items`       | `Record<string, ReactNode>` or `{label, value}[]` | —            |
 | `Select.Trigger` | `variant`     | `"bordered" \| "ghost" \| "danger"`               | `"bordered"` |
-| `Select.Trigger` | `triggerSize` | `"sm" \| "md" \| "lg"`                            | `"md"`       |
+| `Select.Trigger` | `size`        | `"sm" \| "md" \| "lg"`                            | `"md"`       |
+| `Select.Trigger` | `triggerSize` | `"sm" \| "md" \| "lg"`                            | —            |
+| `Select.Trigger` | `icon`        | [`IconProp`](../../basics/conventions.md#icons)  | —            |
 | `Select.Popup`   | `side`        | `"top" \| "bottom" \| "left" \| "right"`          | `"bottom"`   |
 | `Select.Popup`   | `align`       | `"start" \| "center" \| "end"`                    | `"start"`    |
 | `Select.Popup`   | `sideOffset`  | `number`                                          | `4`          |
 | `Select.Popup`   | `alignOffset` | `number`                                          | `0`          |
 
-Without `items`, `Select.Value` shows the raw value instead of the label. `side`, `align` and both offsets (in px) go to Base UI's positioner; with `align="start"` a popup wider than the trigger lines up with its left edge.
+`triggerSize` is the deprecated name for `size`; `size` wins when both are set. Without `items`, `Select.Value` shows the raw value instead of the label. `side`, `align` and both offsets (in px) position the popup relative to the trigger; with `align="start"`, a popup wider than the trigger lines up with its start edge.
 
 Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
 
-Only the trigger responds to `variant` and `triggerSize`. The chevron is `1em`, so it scales with the trigger text; the popup and items keep one size. A long value truncates with an ellipsis, and a leading `1em` icon placed before `Select.Value` keeps the trigger height.
+Only the trigger responds to `variant` and `size`. The chevron and `icon` are `1em`, so they scale with the trigger text; the popup and items keep one size. A long value truncates with an ellipsis.
 
 To keep every option visible, use [Radios](radios.md); for actions, [Menus](../menus.md); to switch views, [Tabs](../tabs.md).
 

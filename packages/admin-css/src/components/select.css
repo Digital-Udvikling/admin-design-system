@@ -114,7 +114,7 @@
 
   /* Base UI moves real focus onto items, so :focus-visible marks the keyboard cursor. */
   .select-item {
-    @apply flex items-center gap-2 px-3 py-1.5 text-sm
+    @apply flex items-center gap-2 px-3 py-1 text-sm leading-5
            cursor-pointer select-none
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
     /* Break long option labels rather than grow the popup horizontally. */

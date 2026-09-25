@@ -1,6 +1,7 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
 import { useContext, type ComponentProps } from "react";
 import { cn } from "./cn";
+import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
 
 export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
@@ -16,27 +17,39 @@ type BaseSelectTriggerProps = Omit<ComponentProps<typeof BaseSelect.Trigger>, "s
 
 export interface SelectTriggerProps extends BaseSelectTriggerProps {
   variant?: SelectTriggerVariant;
+  /** Default `"md"`. */
+  size?: SelectTriggerSize;
+  /** @deprecated Use `size`. `size` wins when both are set. */
   triggerSize?: SelectTriggerSize;
+  /** Leading icon, rendered before `children`. */
+  icon?: IconProp;
 }
 
 function SelectTrigger({
   variant = "bordered",
-  triggerSize = "md",
+  size,
+  triggerSize,
+  icon,
   className,
+  children,
   ...rest
 }: SelectTriggerProps) {
+  const resolvedSize = size ?? triggerSize ?? "md";
   return (
     <BaseSelect.Trigger
       className={cn(
         [
           "select",
           variant !== "bordered" && `select-${variant}`,
-          triggerSize !== "md" && `select-${triggerSize}`,
+          resolvedSize !== "md" && `select-${resolvedSize}`,
         ],
         className,
       )}
       {...rest}
-    />
+    >
+      {renderIcon(icon)}
+      {children}
+    </BaseSelect.Trigger>
   );
 }
 

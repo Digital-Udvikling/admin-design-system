@@ -1,7 +1,7 @@
 @layer components {
   .select {
     @apply inline-flex items-center gap-2 w-full min-w-0 px-3 py-2
-           rounded-lg text-sm leading-none text-left
+           rounded-md text-sm leading-none text-left
            bg-surface text-text
            border border-border hover:border-border-strong
            cursor-pointer select-none
@@ -99,7 +99,7 @@
     @apply min-w-[var(--anchor-width)] max-h-72 overflow-auto
            py-1 outline-none
            bg-surface text-text
-           border border-border rounded-lg shadow-md
+           border border-border-strong rounded-lg shadow-sm
            transition-[opacity,transform] duration-100;
     /* Capped like menu-popup; a wider trigger still widens it. */
     max-width: max(20rem, var(--anchor-width));

@@ -13,11 +13,11 @@ import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react
 :::example
 
 ```html
-<span class="brand-tile" aria-hidden>OR</span>
-<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-purple-600)">
+<span class="brand-tile" aria-hidden="true">OR</span>
+<span class="brand-tile" aria-hidden="true" style="--color-system-accent: var(--color-purple-600)">
   OR
 </span>
-<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-green-600)">
+<span class="brand-tile" aria-hidden="true" style="--color-system-accent: var(--color-green-600)">
   AO
 </span>
 ```
@@ -35,13 +35,13 @@ import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react
 :::example
 
 ```html
-<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-green-600)">
+<span class="brand-tile" aria-hidden="true" style="--color-system-accent: var(--color-green-600)">
   <i class="ti ti-shopping-cart"></i>
 </span>
-<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-orange-600)">
+<span class="brand-tile" aria-hidden="true" style="--color-system-accent: var(--color-orange-600)">
   <i class="ti ti-chart-bar"></i>
 </span>
-<span class="brand-tile" aria-hidden style="--color-system-accent: var(--color-cyan-600)">
+<span class="brand-tile" aria-hidden="true" style="--color-system-accent: var(--color-cyan-600)">
   <i class="ti ti-package"></i>
 </span>
 ```
@@ -59,8 +59,8 @@ import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react
 :::example
 
 ```html
-<span class="brand-tile" aria-hidden>OR</span>
-<span class="brand-tile brand-tile-lg" aria-hidden>OR</span>
+<span class="brand-tile" aria-hidden="true">OR</span>
+<span class="brand-tile brand-tile-lg" aria-hidden="true">OR</span>
 ```
 
 ```tsx
@@ -75,21 +75,21 @@ import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react
 :::example
 
 ```html
-<span class="brand-tile brand-tile-soft" aria-hidden>OR</span>
+<span class="brand-tile brand-tile-soft" aria-hidden="true">OR</span>
 <span
   class="brand-tile brand-tile-soft"
-  aria-hidden
-  style="--color-system-accent: var(--color-purple-600)"
+  aria-hidden="true"
+  style="--color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
 >
   OR
 </span>
-<span class="brand-tile brand-tile-info" aria-hidden>
+<span class="brand-tile brand-tile-info" aria-hidden="true">
   <i class="ti ti-package"></i>
 </span>
-<span class="brand-tile brand-tile-success" aria-hidden>
+<span class="brand-tile brand-tile-success" aria-hidden="true">
   <i class="ti ti-shopping-cart"></i>
 </span>
-<span class="brand-tile brand-tile-danger" aria-hidden>
+<span class="brand-tile brand-tile-danger" aria-hidden="true">
   <i class="ti ti-chart-bar"></i>
 </span>
 ```
@@ -99,7 +99,7 @@ import { IconShoppingCart, IconChartBar, IconPackage } from "@tabler/icons-react
 <BrandTile
   monogram="OR"
   variant="soft"
-  systemAccent="var(--color-purple-600)"
+  systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
 />
 <BrandTile icon={IconPackage} variant="info" />
 <BrandTile icon={IconShoppingCart} variant="success" />
@@ -155,4 +155,4 @@ A direct `<i>`/`<svg>` child is sized in CSS — `14px`, or `20px` under `brand-
 
 There is no `brand-tile-solid` or `brand-tile-md` — both are the unmodified `brand-tile` — and no `brand-tile-warning`; see [Conventions › Tones](../../basics/conventions/#tones). Keep monograms to two characters; the default box won't fit more.
 
-The fill comes from `--color-system-accent`, so one override retints both the solid and soft variants — see [Theming › System accent](../../basics/theming/#system-accent).
+The fill comes from `--color-system-accent`. The tile derives `--color-system-accent-muted` and `--color-system-accent-content` from the accent in scope, so an override on the tile, the navbar or the shell retints the soft fill and sets the solid tile's glyph to paper or black by the accent's lightness. An override of `-muted` or `-content` on `:root`, the navbar or the shell doesn't reach the tile; set it on the tile itself (`.brand-tile { --color-system-accent-content: var(--color-paper); }`). The soft glyph is the accent itself: for `brand-tile-soft`, pass a `light-dark()` pair (e.g. `light-dark(var(--color-purple-600), var(--color-purple-400))`) so it stays legible on the dark tint. See [Theming › System accent](../../basics/theming/#system-accent).

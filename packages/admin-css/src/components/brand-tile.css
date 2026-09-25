@@ -1,5 +1,19 @@
 @layer components {
+  /* Re-derived here so an accent set on the tile, navbar or shell resolves
+     locally: -muted tints toward it, -content picks paper or black by the
+     accent's lightness. This shadows ancestor overrides of either token. */
   .brand-tile {
+    --color-system-accent-muted: color-mix(
+      in oklch,
+      var(--color-system-accent) 12%,
+      var(--color-surface)
+    );
+    /* Steps at L 0.58: black (0.168 is --color-black's L) on light accents,
+       paper on dark. Literal, so --color-paper/--color-black overrides don't
+       reach it. */
+    --color-system-accent-content: oklch(
+      from var(--color-system-accent) clamp(0.168, (0.58 - l) * 1000, 1) 0 0
+    );
     @apply inline-flex items-center justify-center
            size-6 rounded
            text-[11px] font-semibold leading-none

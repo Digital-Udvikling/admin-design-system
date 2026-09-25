@@ -64,7 +64,7 @@
 ```html
 <div class="item-group">
   <div class="item">
-    <div class="item-media"><span class="avatar avatar-sm">AL</span></div>
+    <div class="item-media"><span class="avatar avatar-sm" aria-hidden="true">AL</span></div>
     <div class="item-content">
       <div class="item-title">Ada Lovelace</div>
       <div class="item-description">Admin · ada@example.com</div>
@@ -72,7 +72,7 @@
     <div class="item-actions"><span class="badge badge-success badge-soft">Active</span></div>
   </div>
   <div class="item">
-    <div class="item-media"><span class="avatar avatar-sm">GH</span></div>
+    <div class="item-media"><span class="avatar avatar-sm" aria-hidden="true">GH</span></div>
     <div class="item-content">
       <div class="item-title">Grace Hopper</div>
       <div class="item-description">Editor · grace@example.com</div>
@@ -85,7 +85,7 @@
 ```tsx
 <ItemGroup>
   <Item
-    media={<Avatar initials="AL" size="sm" />}
+    media={<Avatar initials="AL" size="sm" aria-hidden />}
     title="Ada Lovelace"
     description="Admin · ada@example.com"
     actions={
@@ -95,7 +95,7 @@
     }
   />
   <Item
-    media={<Avatar initials="GH" size="sm" />}
+    media={<Avatar initials="GH" size="sm" aria-hidden />}
     title="Grace Hopper"
     description="Editor · grace@example.com"
     actions={<Badge soft>Invited</Badge>}
@@ -190,26 +190,28 @@
 
 `media` and `icon` share the leading slot and `media` wins. `classNames` covers `media`, `content`, `title`, `description`, `actions`. Children render between the content and the actions.
 
-`variant`, `size` and `asLink` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and expands the first nested link, but you supply the `<a>`: put it in the `title`. `ItemGroup` is a standalone export, not `Item.Group`.
+`variant`, `size` and `asLink` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and stretches the `<a>` in `title` over it, but you supply the `<a>`. `ItemGroup` is a standalone export, not `Item.Group`.
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                   |
-| --------------------- | -------------------------------------------------------------------------------------------------------- |
-| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                           |
-| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem`                           |
-| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink so long values wrap                |
-| `item-title`          | Primary line: medium weight, tight leading                                                               |
-| `item-description`    | Secondary line: muted, snug leading                                                                      |
-| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap, own stacking context so it survives `item-link`       |
-| `item-outline`        | `1px` border, `0.5rem` radius                                                                            |
-| `item-muted`          | Muted surface, `0.5rem` radius                                                                           |
-| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                     |
-| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                        |
-| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                              |
-| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius, clipping the corners                              |
-| `item-link`           | Expands the row's first `<a>` over the whole row via `::after`, tints on hover, rings on `:focus-within` |
+| Class                 | Effect                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                                            |
+| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem`                                            |
+| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink; long values such as emails and URLs wrap anywhere  |
+| `item-title`          | Primary line: medium weight, tight leading                                                                                |
+| `item-description`    | Secondary line: muted, snug leading                                                                                       |
+| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                          |
+| `item-outline`        | `1px` border, `0.5rem` radius                                                                                             |
+| `item-muted`          | Muted surface, `0.5rem` radius                                                                                            |
+| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                      |
+| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                         |
+| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                               |
+| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it |
+| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::after`, tints on hover, rings when that link has keyboard focus   |
 
 There is no `item-md` or `item-default` — both are the unmodified `item`.
+
+In an `item-link` row the stretched link can also be an `<a>` placed directly in `item-content`, or an `<a class="item-content">`. Other links, buttons and form controls in the row stay clickable above the overlay.
 
 For tabular data with columns use a [Table](tables.md); for a self-contained panel, a [Card](cards.md).

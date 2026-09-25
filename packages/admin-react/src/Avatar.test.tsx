@@ -75,7 +75,7 @@ describe("AvatarGroup", () => {
     );
     const more = container.querySelector(adminSelector("avatar-more"));
     expect(more).toHaveTextContent("+2");
-    expect(more).toHaveAttribute("aria-label", "+2 more");
+    expect(screen.getByRole("img", { name: "+2 more" })).toBe(more);
   });
 
   it("shows every avatar and no tile when the count is within max", () => {

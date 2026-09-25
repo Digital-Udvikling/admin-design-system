@@ -12,14 +12,14 @@
     font-size: 1.25rem;
   }
 
-  /* min-w-0 lets the text column shrink so long values wrap instead of pushing
-     the actions off the row. */
+  /* min-w-0 + overflow-wrap let long values (emails, URLs, IDs) wrap inside the
+     column instead of running under the actions. */
   .item-content {
     @apply flex flex-col gap-0.5 flex-1 min-w-0;
+    overflow-wrap: anywhere;
   }
   .item-title {
     @apply font-medium leading-tight;
-    overflow-wrap: break-word;
   }
   .item-description {
     @apply text-text-muted leading-snug;
@@ -27,7 +27,7 @@
   }
 
   .item-actions {
-    @apply flex items-center gap-2 shrink-0 relative z-[1];
+    @apply flex items-center gap-2 shrink-0;
     margin-inline-start: auto;
   }
 
@@ -37,6 +37,7 @@
   }
   .item-muted {
     @apply bg-surface-muted rounded-lg;
+    --surface-current: var(--color-surface-muted);
   }
 
   /* Sizes */
@@ -54,23 +55,55 @@
   .item-group > .item:not(:last-child) {
     @apply border-b border-border;
   }
+  /* The end rows round themselves instead of the group clipping, so vanilla
+     tooltips and menus can overflow it. */
   .item-group-bordered {
-    @apply border border-border rounded-lg overflow-hidden;
+    @apply border border-border rounded-lg;
+  }
+  .item-group-bordered > .item:first-child {
+    @apply rounded-t-[calc(var(--radius-lg)-1px)];
+  }
+  .item-group-bordered > .item:last-child {
+    @apply rounded-b-[calc(var(--radius-lg)-1px)];
   }
 
-  /* Clickable row — the first nested <a> fills the row via ::after; actions keep
-     their own stacking context so they stay clickable (same trick as table-row-link). */
+  /* Clickable row. The primary link (the <a> in item-title, or an <a> content
+     column) stretches over the row via ::after; the actions slot and every
+     other control sit above it. */
   .item-link {
     @apply relative cursor-pointer;
   }
+  /* Layered as an image so the wash also shows on muted rows. */
   .item-link:hover {
-    @apply bg-surface-muted;
+    background-image: linear-gradient(var(--color-surface-hover), var(--color-surface-hover));
   }
-  .item-link a:first-of-type::after {
+  .item-link :is(.item-title a, .item-content > a, a.item-content)::after {
     content: "";
     @apply absolute inset-0;
   }
-  .item-link:focus-within {
+  .item-link .item-actions {
+    @apply relative z-[1];
+  }
+  /* Zero specificity, so component rules that position their own controls
+     (.input-action, .tab-input) win whatever the import order. */
+  :where(.item-link)
+    :where(a, button, input, select, textarea, label, summary, [tabindex]):not(
+      :where(.item-actions *, .item-title a, .item-content > a, a.item-content)
+    ) {
+    position: relative;
+    z-index: 1;
+  }
+  /* Raised controls share z-1 across rows; lift the row whose menu or tooltip
+     is open above the rows after it. */
+  .item-link:has(.menu[open], .tooltip-wrap:hover, .tooltip-wrap:focus-within) {
+    z-index: 2;
+  }
+  /* Ring the row for keyboard focus on the primary link only; other controls
+     keep their own ring. */
+  .item-link:has(:is(.item-title a, .item-content > a, a.item-content):focus-visible) {
     @apply outline-2 -outline-offset-2 outline-focus;
+  }
+  .item-link :is(.item-title a, .item-content > a, a.item-content):focus-visible {
+    outline: none;
   }
 }

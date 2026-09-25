@@ -22,6 +22,22 @@ describe("Item", () => {
     );
   });
 
+  it("renders no wrapper for empty shorthand props", () => {
+    const { container } = render(
+      <Item media={false} title="" description={null} actions={false} data-testid="row" />,
+    );
+    expect(screen.getByTestId("row")).toBeEmptyDOMElement();
+    expect(container.querySelector(adminSelector("item-content"))).toBeNull();
+  });
+
+  it("falls back to icon when media is empty", () => {
+    const { container } = render(
+      <Item media={false} icon={<svg data-testid="icon" />} title="x" />,
+    );
+    expect(screen.getByTestId("icon").parentElement).toHaveAdminClass("item-media");
+    expect(container.querySelectorAll(adminSelector("item-media"))).toHaveLength(1);
+  });
+
   it("forwards classNames to slots", () => {
     render(<Item title="Ada Lovelace" classNames={{ title: "x-custom" }} />);
     expect(screen.getByText("Ada Lovelace")).toHaveClass("x-custom");

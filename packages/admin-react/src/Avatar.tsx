@@ -7,6 +7,7 @@ export type AvatarShape = "circle" | "square";
 
 export interface AvatarProps extends ComponentProps<"span"> {
   src?: string;
+  /** Alt text for the image. Defaults to `""` (decorative), for avatars beside a visible name. */
   alt?: string;
   /** Fallback text, typically 1–3 letters. Ignored when `children` is given. */
   initials?: string;
@@ -21,7 +22,7 @@ export interface AvatarProps extends ComponentProps<"span"> {
  */
 export function Avatar({
   src,
-  alt,
+  alt = "",
   initials,
   size = "md",
   shape = "circle",
@@ -62,6 +63,9 @@ export function AvatarGroup({ max, size = "md", className, children, ...rest }: 
       {overflow > 0 ? (
         <span
           className={cn(["avatar", size !== "md" && `avatar-${size}`, "avatar-more"], undefined)}
+          // A text tile, not an <img>: the role is what lets aria-label name it.
+          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
+          role="img"
           aria-label={`+${overflow} more`}
         >
           +{overflow}

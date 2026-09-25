@@ -8,7 +8,11 @@ export type ItemSize = "sm" | "md" | "lg";
 export interface ItemContainerProps extends ComponentProps<"div"> {
   variant?: ItemVariant;
   size?: ItemSize;
-  /** Expand the first nested link to fill the whole row (and add hover/focus affordance). */
+  /**
+   * Stretch the `<a>` in the title (or an `<a>` content column) over the whole
+   * row, with a hover wash and a keyboard focus ring. Actions and other
+   * controls stay clickable above it.
+   */
   asLink?: boolean;
 }
 /** The bare row primitive — just the `.item` shell, for layouts the default `<Item>` doesn't fit. */
@@ -75,6 +79,11 @@ export interface ItemProps extends Omit<ItemContainerProps, "title"> {
   classNames?: SlotClasses<"media" | "content" | "title" | "description" | "actions">;
 }
 
+/** Shorthand slots render only for real content: `null`, `false`, `undefined` and `""` emit no wrapper. */
+function filled(node: ReactNode): boolean {
+  return node != null && node !== false && node !== "";
+}
+
 /** Opinionated row with media / title+description / actions shorthand. For other shapes, compose `<Item.Container>`. */
 function ItemRoot({
   media,
@@ -86,23 +95,20 @@ function ItemRoot({
   children,
   ...rest
 }: ItemProps) {
-  const leading = media ?? renderIcon(icon);
-  const hasContent = title !== undefined || description !== undefined;
+  const leading = filled(media) ? media : renderIcon(icon);
   return (
     <ItemContainer {...rest}>
-      {leading != null ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
-      {hasContent ? (
+      {filled(leading) ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
+      {filled(title) || filled(description) ? (
         <ItemContent className={classNames?.content}>
-          {title !== undefined ? (
-            <ItemTitle className={classNames?.title}>{title}</ItemTitle>
-          ) : null}
-          {description !== undefined ? (
+          {filled(title) ? <ItemTitle className={classNames?.title}>{title}</ItemTitle> : null}
+          {filled(description) ? (
             <ItemDescription className={classNames?.description}>{description}</ItemDescription>
           ) : null}
         </ItemContent>
       ) : null}
       {children}
-      {actions !== undefined ? (
+      {filled(actions) ? (
         <ItemActions className={classNames?.actions}>{actions}</ItemActions>
       ) : null}
     </ItemContainer>

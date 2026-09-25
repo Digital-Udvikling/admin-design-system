@@ -69,7 +69,7 @@ export interface TooltipProps extends Omit<TooltipRootProps, "children"> {
   align?: TooltipPopupProps["align"];
   sideOffset?: TooltipPopupProps["sideOffset"];
   size?: TooltipSize;
-  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  /** Per-slot class overrides for the popup. */
   classNames?: SlotClasses<"popup">;
   /** The trigger element. Must be a single React element so Base UI can merge trigger props/refs into it. */
   children: ReactElement;

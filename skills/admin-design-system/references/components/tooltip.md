@@ -148,7 +148,7 @@
 </Tooltip>
 ```
 
-**Caution** — The vanilla tooltip lives in the trigger's stacking context, so an ancestor `overflow: hidden` clips it. The React popup is portaled and isn't affected.
+**Caution** — In browsers without CSS anchor positioning, an ancestor with non-visible `overflow` (`hidden`, `auto`, `scroll`, `clip`) clips the vanilla tooltip. The React popup is portaled.
 
 ## Reference
 
@@ -183,17 +183,17 @@ Keep tooltip content to text; put links and controls in a [Menu](menus.md) or on
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                                                    |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `tooltip`             | The bubble: inverted `text`-on-`surface` fill, `0.5rem`/`0.25rem` padding, `text-xs`, `20rem` max-width, balanced wrapping, click-through |
-| `tooltip-sm`          | Tighter padding                                                                                                                           |
-| `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` / `:focus-within`, positioned above and centred                                                    |
-| `tooltip-wrap-bottom` | Below the trigger                                                                                                                         |
-| `tooltip-wrap-left`   | To the inline start                                                                                                                       |
-| `tooltip-wrap-right`  | To the inline end                                                                                                                         |
+| Class                 | Effect                                                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tooltip`             | The bubble: inverted `text`-on-`surface` fill, `0.5rem`/`0.25rem` padding, `text-xs`, `20rem` max-width, balanced wrapping, long tokens break, click-through |
+| `tooltip-sm`          | Tighter padding                                                                                                                                              |
+| `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` and keyboard focus, positioned above and centred                                                                      |
+| `tooltip-wrap-bottom` | Below the trigger                                                                                                                                            |
+| `tooltip-wrap-left`   | Left of the trigger                                                                                                                                          |
+| `tooltip-wrap-right`  | Right of the trigger                                                                                                                                         |
 
-The vanilla path needs no JavaScript: the wrapper reveals the bubble on hover and on `:focus-within`, so keyboard users get it too, after a `200ms` open delay. Write `role="tooltip"` on the bubble yourself.
+The vanilla path needs no JavaScript: the wrapper reveals the bubble after a `200ms` delay on hover and on keyboard focus (a `:focus-visible` descendant). A mouse click doesn't open it, as in Base UI. Write `role="tooltip"` on the bubble yourself.
 
-Above is the default, so there is no `tooltip-wrap-top`. There is no auto-flip either — a side modifier is absolute, so pick one that has room. React's positioner handles collisions instead, and its popup transitions per side from Base UI's `[data-side]` and `[data-starting-style]` attributes, which is why one class covers both paths.
+Above is the default, so there is no `tooltip-wrap-top`. In browsers with CSS anchor positioning the bubble is `position: fixed` against the wrapper: it escapes ancestor overflow, flips to the opposite side when its own has no room, and shifts to stay inside the viewport. A transformed ancestor, such as an open drawer, still contains it. Other browsers position it absolutely with no flip, so pick a side that has room. React's positioner handles collisions in every browser, and its popup transitions per side from Base UI's `[data-side]` and `[data-starting-style]` attributes, which is why one class covers both paths.
 
-Both bundles ship `popup-layer` for the portaled popup; see [Theming › Popup layering](../basics/theming.md#popup-layering).
+Both bundles ship `popup-layer` for the portaled popup, and the vanilla bubble reads the same `--z-popup`; see [Theming › Popup layering](../basics/theming.md#popup-layering).

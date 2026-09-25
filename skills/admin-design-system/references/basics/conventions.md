@@ -25,7 +25,7 @@ Three sizes, named the same everywhere. `md` is the default and emits **no** cla
 | `size="md"` (or omit) | _no modifier_ |
 | `size="lg"`           | `btn-lg`      |
 
-`Select.Trigger` names its prop `triggerSize` instead — a native `<button>` already has a `size` attribute, so the union would collide.
+`Input` and `FileInput` name the prop `inputSize`, because `<input>` already has a numeric `size` attribute (its width in characters). `Textarea` and `Select.Trigger` take `size`; `textareaSize` and `triggerSize` are deprecated names for it.
 
 ## Tones
 

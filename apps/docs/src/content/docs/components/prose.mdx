@@ -28,6 +28,11 @@ import Callout from "../../../components/Callout.astro";
     See the full <a href="#">billing terms</a> or run
     <code>aortl billing refund &lt;invoice-id&gt;</code>.
   </p>
+  <p>Before refunding:</p>
+  <ul>
+    <li><input type="checkbox" checked disabled /> Confirm the charge with the customer</li>
+    <li><input type="checkbox" disabled /> Check the invoice has no open dispute</li>
+  </ul>
   <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
   <table>
     <thead>
@@ -66,6 +71,15 @@ import Callout from "../../../components/Callout.astro";
     See the full <a href="#">billing terms</a> or run{" "}
     <code>aortl billing refund &lt;invoice-id&gt;</code>.
   </p>
+  <p>Before refunding:</p>
+  <ul>
+    <li>
+      <input type="checkbox" checked disabled /> Confirm the charge with the customer
+    </li>
+    <li>
+      <input type="checkbox" disabled /> Check the invoice has no open dispute
+    </li>
+  </ul>
   <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
   <table>
     <thead>
@@ -115,9 +129,9 @@ Takes no props of its own — native `<div>` attributes only.
 
 ### Vanilla
 
-| Class   | Effect                                                                                                                                                                                                                                         |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, underlined links, `<code>` chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](../tables/) |
+| Class   | Effect                                                                                                                                                                                                                                                                                       |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](../tables/) |
 
 The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral, which leaves backend-rendered HTML unstyled. This class re-establishes it for one region, from the same semantic tokens, so it follows dark mode. First and last children keep their outer margins collapsed.
 

@@ -204,4 +204,4 @@
 
 ## Built from
 
-[Table](../components/tables.md), [Card](../components/cards.md), [PropertyList](../components/property-list.md) and [Badge](../components/badges.md) in a [Grid](../components/grid.md), whose utilities vanilla pages load from the [utilities bundle](../getting-started/vanilla.md#utilities-optional). Selection is yours to wire: mark the active row `selected` (`[data-selected]` in vanilla), put `aria-current="true"` on its link, and render that record in the detail pane. Below the `sm` breakpoint the pane stacks under the table.
+[Table](../components/tables.md), [Card](../components/cards.md), [PropertyList](../components/property-list.md) and [Badge](../components/badges.md) in a [Grid](../components/grid.md), whose utilities vanilla pages load from the [utilities bundle](../getting-started/vanilla.md#utilities-optional). Selection is yours to wire: put `aria-current="true"` on the active row's link, which also tints the row (use `selected` / `[data-selected]` for a row without a link), and render that record in the detail pane. Below the `sm` breakpoint the pane stacks under the table.

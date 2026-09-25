@@ -169,7 +169,7 @@
     <div class="card-header">
       <h3 class="card-title">
         Webhooks
-        <span class="badge badge-sm">2</span>
+        <span class="badge">2</span>
       </h3>
       <div class="card-toolbar">
         <button class="btn btn-sm" type="button">Add webhook</button>
@@ -197,7 +197,7 @@
 <Card
   title={
     <>
-      Webhooks <Badge size="sm">2</Badge>
+      Webhooks <Badge>2</Badge>
     </>
   }
   toolbar={<Button size="sm">Add webhook</Button>}

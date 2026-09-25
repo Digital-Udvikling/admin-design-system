@@ -88,6 +88,13 @@
     opacity: 1;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .switch-thumb,
+    input.switch::before {
+      transition: none;
+    }
+  }
+
   @media (forced-colors: active) {
     input.switch:checked,
     .switch[data-checked] {

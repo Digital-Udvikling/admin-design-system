@@ -49,8 +49,9 @@
     @apply border-danger;
   }
 
+  /* Wrapped rows use the vertical group's 0.5rem spacing. */
   .radio-group {
-    @apply inline-flex flex-wrap gap-4;
+    @apply inline-flex flex-wrap gap-x-4 gap-y-2;
   }
 
   .radio-group-vertical {

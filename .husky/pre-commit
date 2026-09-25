@@ -15,3 +15,9 @@ if git diff --cached --name-only \
     exit 1
   fi
 fi
+
+# Docs examples and Reference tables are checked against the React and CSS source.
+if git diff --cached --name-only \
+  | grep -qE '^(apps/docs/src/content/docs/|apps/docs/scripts/check-docs\.mjs$|apps/docs/plugins/example/|packages/admin-react/src/|packages/admin-css/src/components/)'; then
+  pnpm check-docs
+fi

@@ -1,13 +1,25 @@
-import type { ComponentProps, ReactNode } from "react";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Menu } from "./Menu";
 
-export type NavbarProps = ComponentProps<"header">;
+export interface NavbarProps extends ComponentProps<"header"> {
+  /**
+   * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
+   * to the navbar, retinting its stripe and any solid `<BrandTile>` inside. See
+   * [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
+   */
+  systemAccent?: string;
+}
 
-function NavbarRoot({ className, ...rest }: NavbarProps) {
-  return <header className={cn("navbar", className)} {...rest} />;
+function NavbarRoot({ systemAccent, className, style, ...rest }: NavbarProps) {
+  const rootStyle =
+    systemAccent !== undefined
+      ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
+      : style;
+
+  return <header className={cn("navbar", className)} style={rootStyle} {...rest} />;
 }
 
 export type NavbarBrandProps = ComponentProps<"div">;

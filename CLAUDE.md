@@ -43,7 +43,7 @@ pnpm lint            # oxlint (NOT eslint)
 pnpm lint:fix
 pnpm format          # oxfmt (NOT prettier)
 pnpm format:check
-pnpm check-docs      # links, anchors, Reference class names vs component CSS
+pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check
 pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm clean
 ```

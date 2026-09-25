@@ -130,7 +130,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 ```
 
 ```tsx
-<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+<Navbar systemAccent="var(--color-purple-600)">
   <Navbar.Brand>
     <BrandTile monogram="A" />
     Acme
@@ -180,7 +180,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 ```
 
 ```tsx
-<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+<Navbar systemAccent="var(--color-purple-600)">
   <Navbar.Brand>
     <BrandTile monogram="A" />
     Acme
@@ -228,7 +228,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 ```
 
 ```tsx
-<Navbar style={{ "--color-system-accent": "var(--color-green-600)" }}>
+<Navbar systemAccent="var(--color-green-600)">
   <Navbar.Brand>
     <BrandTile monogram="AO" />
     AO Retail
@@ -697,7 +697,7 @@ Two CSS variables on `.app-shell` set the rail width:
 
 ## Branding multiple systems
 
-The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Setting that variable [app-wide](../basics/theming.md#system-accent) retints both. To tag several systems in one app, set it per shell instead — `<AppShell systemAccent>` in React, an inline style in vanilla — and drop a [`<BrandTile>`](../components/brand-tile.md) into `<Navbar.Brand>`:
+The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Setting that variable [app-wide](../basics/theming.md#system-accent) retints both. To tag several systems in one app, set it per shell instead: `<AppShell systemAccent>` covers the navbar and footer, `<Navbar systemAccent>` the navbar alone, and in vanilla an inline style on either element does the same. Then drop a [`<BrandTile>`](../components/brand-tile.md) into `<Navbar.Brand>`:
 
 **Example**
 
@@ -711,7 +711,7 @@ The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the fo
 ```
 
 ```tsx
-<Navbar style={{ "--color-system-accent": "var(--color-purple-600)" }}>
+<Navbar systemAccent="var(--color-purple-600)">
   <Navbar.Brand>
     <BrandTile monogram="OR" />
     Orders
@@ -763,6 +763,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `AppShell`               | `mobileDrawerOpen`          | `boolean`                      | uncontrolled       |
 | `AppShell`               | `defaultMobileDrawerOpen`   | `boolean`                      | `false`            |
 | `AppShell`               | `onMobileDrawerOpenChange`  | `(open: boolean) => void`      | —                  |
+| `Navbar`                 | `systemAccent`              | `string` (CSS color)           | inherited          |
 | `Navbar.Item`            | `active`                    | `boolean`                      | `false`            |
 | `Navbar.Item`            | `icon`                      | component or element           | —                  |
 | `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required           |

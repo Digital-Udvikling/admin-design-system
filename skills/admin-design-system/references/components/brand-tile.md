@@ -32,8 +32,8 @@
 
 ```tsx
 <BrandTile monogram="OR" />
-<BrandTile monogram="OR" style={{ "--color-system-accent": "var(--color-purple-600)" }} />
-<BrandTile monogram="AO" style={{ "--color-system-accent": "var(--color-green-600)" }} />
+<BrandTile monogram="OR" systemAccent="var(--color-purple-600)" />
+<BrandTile monogram="AO" systemAccent="var(--color-green-600)" />
 ```
 
 ### Icon
@@ -53,9 +53,9 @@
 ```
 
 ```tsx
-<BrandTile icon={IconShoppingCart} style={{ "--color-system-accent": "var(--color-green-600)" }} />
-<BrandTile icon={IconChartBar} style={{ "--color-system-accent": "var(--color-orange-600)" }} />
-<BrandTile icon={IconPackage} style={{ "--color-system-accent": "var(--color-cyan-600)" }} />
+<BrandTile icon={IconShoppingCart} systemAccent="var(--color-green-600)" />
+<BrandTile icon={IconChartBar} systemAccent="var(--color-orange-600)" />
+<BrandTile icon={IconPackage} systemAccent="var(--color-cyan-600)" />
 ```
 
 ### Sizes
@@ -101,7 +101,7 @@
 <BrandTile
   monogram="OR"
   variant="soft"
-  style={{ "--color-system-accent": "var(--color-purple-600)" }}
+  systemAccent="var(--color-purple-600)"
 />
 <BrandTile icon={IconPackage} variant="info" />
 <BrandTile icon={IconShoppingCart} variant="success" />
@@ -126,14 +126,15 @@
 
 ### React
 
-| Prop       | Type                                                   | Default   |
-| ---------- | ------------------------------------------------------ | --------- |
-| `variant`  | `"solid" \| "soft" \| "info" \| "success" \| "danger"` | `"solid"` |
-| `size`     | `"md" \| "lg"`                                         | `"md"`    |
-| `monogram` | `string`                                               | —         |
-| `icon`     | [`IconProp`](../basics/conventions.md#icons)          | —         |
-| `src`      | `string`                                               | —         |
-| `alt`      | `string`                                               | `""`      |
+| Prop           | Type                                                   | Default   |
+| -------------- | ------------------------------------------------------ | --------- |
+| `variant`      | `"solid" \| "soft" \| "info" \| "success" \| "danger"` | `"solid"` |
+| `size`         | `"md" \| "lg"`                                         | `"md"`    |
+| `monogram`     | `string`                                               | —         |
+| `icon`         | [`IconProp`](../basics/conventions.md#icons)          | —         |
+| `src`          | `string`                                               | —         |
+| `alt`          | `string`                                               | `""`      |
+| `systemAccent` | `string` (CSS color)                                   | inherited |
 
 Content precedence is `src` > `icon` > `monogram`. Monogram and icon tiles are marked `aria-hidden`, since the brand name is next to them in the navbar; an image tile exposes `alt` instead. There is no `sm`. Plus native `<span>` attributes.
 

@@ -24,6 +24,26 @@ describe("Navbar", () => {
     expect(screen.getByRole("link", { name: "Users" })).toHaveAttribute("aria-current", "page");
   });
 
+  it("sets --color-system-accent from the systemAccent prop", () => {
+    render(<Navbar data-testid="nav" systemAccent="var(--color-purple-600)" />);
+    expect(screen.getByTestId("nav").style.getPropertyValue("--color-system-accent")).toBe(
+      "var(--color-purple-600)",
+    );
+  });
+
+  it("merges systemAccent with a caller-supplied style", () => {
+    render(
+      <Navbar
+        data-testid="nav"
+        systemAccent="var(--color-green-600)"
+        style={{ position: "sticky" }}
+      />,
+    );
+    const el = screen.getByTestId("nav");
+    expect(el.style.getPropertyValue("--color-system-accent")).toBe("var(--color-green-600)");
+    expect(el.style.position).toBe("sticky");
+  });
+
   describe("MobileToggle", () => {
     it("toggles the AppShell mobile drawer state when clicked", async () => {
       const user = userEvent.setup();

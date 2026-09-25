@@ -44,4 +44,15 @@ describe("Container", () => {
     expect(el).toHaveAdminClass("container");
     expect(el).toHaveClass("my-page");
   });
+
+  it("sets --container-max from the maxWidth prop, keeping a caller style", () => {
+    render(
+      <Container maxWidth="40rem" style={{ minHeight: "10rem" }} data-testid="region">
+        x
+      </Container>,
+    );
+    const el = screen.getByTestId("region");
+    expect(el.style.getPropertyValue("--container-max")).toBe("40rem");
+    expect(el.style.minHeight).toBe("10rem");
+  });
 });

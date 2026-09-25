@@ -223,7 +223,7 @@ Tests are excluded from the published build via `tsconfig.json` and `vite-plugin
 Add `apps/docs/src/content/docs/components/<name>.mdx`. Two sections, both mandatory:
 
 - **`## Examples`** — one `###` per variation, each holding a `:::example` with an `html` fence and a `tsx` fence. No prose under the headings, and no page-level intro paragraph.
-- **`## Reference`** — `### React` for props and parts, `### Vanilla` for **every** class the new CSS file defines. This is not optional: `pnpm check-docs` fails on a class the component CSS doesn't define, and reports every class that no Reference table mentions.
+- **`## Reference`** — `### React` for props and parts, `### Vanilla` for **every** class the new CSS file defines. This is not optional: `pnpm check-docs` fails on a class the component CSS doesn't define, a React prop the component doesn't declare, or a `tsx` example that doesn't type-check, and reports every class that no Reference table mentions.
 
 ```bash
 pnpm check-docs

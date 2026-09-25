@@ -67,4 +67,25 @@ describe("BrandTile", () => {
     render(<BrandTile src="/logo.png" data-testid="tile" />);
     expect(screen.getByTestId("tile").querySelector("img")).toHaveAttribute("alt", "");
   });
+
+  it("sets --color-system-accent from the systemAccent prop", () => {
+    render(<BrandTile monogram="OR" systemAccent="var(--color-purple-600)" data-testid="tile" />);
+    expect(screen.getByTestId("tile").style.getPropertyValue("--color-system-accent")).toBe(
+      "var(--color-purple-600)",
+    );
+  });
+
+  it("merges systemAccent with a caller-supplied style on image tiles", () => {
+    render(
+      <BrandTile
+        src="/logo.png"
+        systemAccent="var(--color-green-600)"
+        style={{ marginInlineEnd: "4px" }}
+        data-testid="tile"
+      />,
+    );
+    const el = screen.getByTestId("tile");
+    expect(el.style.getPropertyValue("--color-system-accent")).toBe("var(--color-green-600)");
+    expect(el.style.marginInlineEnd).toBe("4px");
+  });
 });

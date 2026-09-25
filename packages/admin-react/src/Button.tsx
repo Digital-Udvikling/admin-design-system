@@ -1,5 +1,5 @@
 import { Button as BaseButton } from "@base-ui/react/button";
-import type { ComponentProps } from "react";
+import { isValidElement, type ComponentProps } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
@@ -12,8 +12,8 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
-  /** Shows a spinner in place of the leading icon and disables interaction.
-   *  Sets `aria-busy="true"` and the native `disabled` attribute. */
+  /** Shows a spinner in place of the first icon and blocks activation.
+   *  Sets `aria-busy` and `aria-disabled` rather than `disabled`, so the button keeps focus. */
   loading?: boolean;
   /** Leading icon. Pass a component (`icon={IconPlus}`) or an element. */
   icon?: IconProp;
@@ -48,8 +48,11 @@ export function Button({
   iconTrailing,
   hotkey,
   className,
-  type = "button",
+  type,
   disabled,
+  focusableWhenDisabled,
+  nativeButton,
+  render,
   children,
   onClick,
   ref,
@@ -60,13 +63,22 @@ export function Button({
   });
 
   const iconOnly = children == null && (icon != null || iconTrailing != null);
+  // Base UI adds role="button" to every non-native element; an <a href> should stay a link.
+  const linkRender =
+    nativeButton === false &&
+    isValidElement<{ href?: unknown }>(render) &&
+    render.props.href != null;
 
   return (
     <BaseButton
       ref={setRef}
       onClick={onClick}
-      type={type}
+      type={nativeButton === false ? type : (type ?? "button")}
+      nativeButton={nativeButton}
+      render={render}
+      {...(linkRender ? { role: undefined } : null)}
       disabled={disabled || loading}
+      focusableWhenDisabled={focusableWhenDisabled ?? loading}
       aria-busy={loading || undefined}
       aria-keyshortcuts={ariaKeyShortcuts}
       className={cn(
@@ -82,7 +94,7 @@ export function Button({
       )}
       {...rest}
     >
-      {loading ? null : renderIcon(icon)}
+      {renderIcon(icon)}
       {children}
       {renderIcon(iconTrailing)}
       {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}

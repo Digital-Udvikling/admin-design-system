@@ -1,36 +1,55 @@
 @layer components {
   .btn {
+    --btn-hover: var(--color-surface-strong);
     @apply inline-flex items-center justify-center gap-2 px-4 py-2
-           rounded-lg font-medium text-sm leading-none
+           rounded-lg font-medium text-sm leading-none whitespace-nowrap
            border border-border
-           bg-surface-muted text-text hover:bg-surface-strong
+           bg-surface-muted text-text
            transition-colors duration-150
            cursor-pointer select-none
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+           disabled:opacity-50 disabled:pointer-events-none;
   }
 
-  /* Don't let a narrow container squish the glyph before the label wraps. */
+  /* Keep the glyph whole when a full-width label wraps. */
   .btn > :is(i, svg) {
     flex-shrink: 0;
   }
 
-  /* Variants — bare `.btn` is the low-emphasis default; most buttons need no variant class. */
+  /* Variants — bare `.btn` is the low-emphasis default; most buttons need no variant class.
+     Each sets `--btn-hover`, which the gated :hover rule below paints. */
   .btn-primary {
-    @apply bg-primary text-primary-content border-transparent hover:bg-primary-hover;
+    --btn-hover: var(--color-primary-hover);
+    @apply bg-primary text-primary-content border-transparent;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-text border-transparent hover:bg-surface-muted;
+    --btn-hover: var(--color-surface-hover);
+    @apply bg-transparent text-text border-transparent;
   }
 
   /* Fills with the page background so it sits flush instead of raised — mirrors `card-muted`. */
   .btn-muted {
-    @apply bg-surface hover:bg-surface-muted;
+    --btn-hover: var(--color-surface-hover);
+    @apply bg-surface;
   }
 
   .btn-danger {
-    @apply bg-danger text-danger-content border-transparent hover:opacity-90;
+    --btn-hover: var(--color-danger-hover);
+    @apply bg-danger text-danger-content border-transparent;
+  }
+
+  /* aria-disabled buttons keep pointer events (a tooltip can say why), so the
+     hover skips them here instead of relying on pointer-events: none. */
+  @media (hover: hover) {
+    .btn:hover:where(:not(:disabled, [aria-disabled="true"], [data-disabled])) {
+      background-color: var(--btn-hover);
+    }
+  }
+
+  /* Anchor-rendered and focusableWhenDisabled buttons carry these instead of :disabled. */
+  .btn:is([aria-disabled="true"], [data-disabled]) {
+    @apply opacity-50 cursor-not-allowed;
   }
 
   /* Toggle buttons — no class; aria-pressed is the state (data-pressed is Base
@@ -81,8 +100,10 @@
     @apply text-base px-5 py-2.5 gap-2.5;
   }
 
+  /* Labels don't wrap, except here and in btn-group-full-width: the width is
+     the container's, so a long label would otherwise overflow it. */
   .btn-full-width {
-    @apply w-full;
+    @apply w-full whitespace-normal;
   }
 
   /* Icon-only — equalises padding so the button reads as a square. Pair with `aria-label`. */
@@ -99,9 +120,9 @@
   }
 
   /* Spinner via ::before, `em`-sized so it tracks btn-sm / btn-lg. Pair with
-     the `disabled` attribute for keyboard a11y. */
+     `disabled`, or `aria-disabled` plus a guarded handler to keep focus. */
   .btn-loading {
-    @apply opacity-50 cursor-not-allowed pointer-events-none;
+    @apply opacity-50 pointer-events-none;
   }
 
   .btn-loading::before {
@@ -116,7 +137,9 @@
     animation: spinner-spin 0.6s linear infinite;
   }
 
-  /* Hide the leading icon while loading; trailing icons (e.g. a dropdown chevron) stay. */
+  /* The spinner replaces the first icon element. Text nodes don't count, so
+     with no leading icon that is a trailing one; wrap the label in a <span>
+     to keep it. */
   .btn-loading > :is(i, svg):first-child {
     display: none;
   }
@@ -128,6 +151,25 @@
 
     .btn:is([aria-pressed], [data-pressed])::before {
       transition: none;
+    }
+  }
+
+  /* The toggle thumb is a gradient, which forced colors drops; forced border
+     colors would paint the spinner as a uniform ring. */
+  @media (forced-colors: active) {
+    .btn-loading::before {
+      forced-color-adjust: none;
+    }
+
+    .btn:is([aria-pressed], [data-pressed])::before {
+      forced-color-adjust: none;
+      --btn-toggle-thumb: Canvas;
+      background-color: ButtonBorder;
+    }
+
+    .btn:is([aria-pressed="true"], [data-pressed])::before {
+      --btn-toggle-thumb: HighlightText;
+      background-color: Highlight;
     }
   }
 }

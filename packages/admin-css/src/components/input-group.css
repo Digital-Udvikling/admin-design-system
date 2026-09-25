@@ -18,13 +18,13 @@
   }
 
   .input-group > :first-child {
-    @apply rounded-l-lg;
+    @apply rounded-l-md;
   }
 
   /* Base UI Select and NumberField append a visually hidden input, so the visible
      control is the last child that isn't one. */
   .input-group > :nth-last-child(1 of :not(input[aria-hidden="true"], input[type="hidden"])) {
-    @apply rounded-r-lg;
+    @apply rounded-r-md;
   }
 
   /* Wrappers hand the group's corners to the bordered control inside; inherit works
@@ -40,13 +40,13 @@
   }
 
   .input-group > .menu:first-child > .menu-trigger {
-    @apply rounded-l-lg;
+    @apply rounded-l-md;
   }
 
   .input-group
     > .menu:nth-last-child(1 of :not(input[aria-hidden="true"], input[type="hidden"]))
     > .menu-trigger {
-    @apply rounded-r-lg;
+    @apply rounded-r-md;
   }
 
   .input-group > :not(:first-child),

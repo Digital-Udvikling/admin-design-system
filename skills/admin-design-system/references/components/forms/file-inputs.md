@@ -76,13 +76,13 @@ There are no status variants beyond `danger`, and no `info` / `success` / `warni
 
 ### Vanilla
 
-| Class               | Effect                                                                                                                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `file-input`        | `2rem` tall, bordered `0.5rem`-radius shell around a native picker; the full-height button gets `0.75rem` side padding, `text-sm` medium, a muted fill and a right border |
-| `file-input-ghost`  | Shell has no fill or border until hover; the button takes a full border and radius, like a `.btn`                                                                         |
-| `file-input-danger` | Danger border and focus outline                                                                                                                                           |
-| `file-input-sm`     | `1.625rem` tall, `text-xs`, tighter button padding                                                                                                                        |
-| `file-input-lg`     | `2.375rem` tall, `text-base`, looser button padding                                                                                                                       |
+| Class               | Effect                                                                                                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `file-input`        | `2rem` tall, bordered `0.375rem`-radius shell around a native picker; the full-height button gets `0.75rem` side padding, `text-sm` medium, a muted fill and a right border |
+| `file-input-ghost`  | Shell has no fill or border until hover; the button takes a full border and radius, like a `.btn`                                                                           |
+| `file-input-danger` | Danger border and focus outline                                                                                                                                             |
+| `file-input-sm`     | `1.625rem` tall, `text-xs`, tighter button padding                                                                                                                          |
+| `file-input-lg`     | `2.375rem` tall, `text-base`, looser button padding                                                                                                                         |
 
 There is no `file-input-bordered` or `file-input-md` — both are the unmodified `file-input`. The picker button is the browser's own, styled through `::file-selector-button`, so its label text is the browser's and can't be changed from CSS. The filename that follows it is also the browser's, which is why the shell clips its overflow rather than growing.
 

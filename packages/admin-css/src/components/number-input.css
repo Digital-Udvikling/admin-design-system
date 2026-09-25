@@ -7,7 +7,7 @@
   /* Connected group: − | input | +, mirroring .input-group's look. */
   .number-input {
     @apply inline-flex w-full h-8 items-stretch
-           rounded-lg border border-border bg-surface
+           rounded-md border border-border bg-surface
            transition-colors duration-150;
   }
   .number-input:hover {

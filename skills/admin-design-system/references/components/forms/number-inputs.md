@@ -241,15 +241,15 @@ Wraps [Base UI NumberField](https://base-ui.com/react/components/number-field), 
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                           |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `number-input`        | Connected − / field / + group: `2rem` tall, bordered `0.5rem`-radius shell, focus ring while the field has focus |
-| `number-input-field`  | Borderless field inside it: right-aligned tabular digits, native spinners hidden                                 |
-| `number-input-step`   | `2rem`-wide stepper button, divided from the field, hover tint, inset focus ring                                 |
-| `number-input-danger` | Danger border and focus ring                                                                                     |
-| `number-input-sm`     | `1.625rem` tall, `text-xs` field, `1.75rem` steppers                                                             |
-| `number-input-lg`     | `2.375rem` tall, `text-base` field, `2.25rem` steppers                                                           |
-| `number-input-root`   | `display: contents` — the React wrapper element, invisible to layout                                             |
+| Class                 | Effect                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `number-input`        | Connected − / field / + group: `2rem` tall, bordered `0.375rem`-radius shell, focus ring while the field has focus |
+| `number-input-field`  | Borderless field inside it: right-aligned tabular digits, native spinners hidden                                   |
+| `number-input-step`   | `2rem`-wide stepper button, divided from the field, hover tint, inset focus ring                                   |
+| `number-input-danger` | Danger border and focus ring                                                                                       |
+| `number-input-sm`     | `1.625rem` tall, `text-xs` field, `1.75rem` steppers                                                               |
+| `number-input-lg`     | `2.375rem` tall, `text-base` field, `2.25rem` steppers                                                             |
+| `number-input-root`   | `display: contents` — the React wrapper element, invisible to layout                                               |
 
 There is no `number-input-md` — it's the unmodified `number-input`. Step buttons in vanilla call the platform `stepUp()` / `stepDown()`, which also honour `min`, `max` and `step`; each needs its own `aria-label`, and the field needs one too unless a `<label>` is associated. `stepUp()` and `stepDown()` fire no `input` or `change` event, so dispatch `new Event("input", { bubbles: true })` on the field if something listens. The steppers take `tabindex="-1"`, as Base UI's do: the field's arrow keys already step, so a field is one Tab stop. Native spinners are hidden in both engines, so the visible steppers are the only affordance. Digits are right-aligned and tabular so a column of values lines up.
 

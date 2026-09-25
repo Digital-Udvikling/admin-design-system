@@ -190,32 +190,28 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   <div class="chart-stack">
     <div
       class="chart-segment"
-      style="--value: 60; --segment-color: var(--color-blue-500)"
+      style="--value: 60; --segment-color: var(--color-success)"
       title="Done: 60"
     ></div>
     <div
       class="chart-segment"
-      style="--value: 30; --segment-color: var(--color-orange-400)"
+      style="--value: 30; --segment-color: var(--color-warning)"
       title="Pending: 30"
     ></div>
     <div
       class="chart-segment"
-      style="--value: 10; --segment-color: var(--color-green-500)"
+      style="--value: 10; --segment-color: var(--color-danger)"
       title="Failed: 10"
     ></div>
   </div>
   <ul class="chart-legend">
-    <li class="chart-legend-item" style="--legend-color: var(--color-blue-500)" title="Done: 60">
+    <li class="chart-legend-item" style="--legend-color: var(--color-success)" title="Done: 60">
       Done
     </li>
-    <li
-      class="chart-legend-item"
-      style="--legend-color: var(--color-orange-400)"
-      title="Pending: 30"
-    >
+    <li class="chart-legend-item" style="--legend-color: var(--color-warning)" title="Pending: 30">
       Pending
     </li>
-    <li class="chart-legend-item" style="--legend-color: var(--color-green-500)" title="Failed: 10">
+    <li class="chart-legend-item" style="--legend-color: var(--color-danger)" title="Failed: 10">
       Failed
     </li>
   </ul>
@@ -226,9 +222,9 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
 <StackedBar
   legend
   data={[
-    { label: "Done", value: 60 },
-    { label: "Pending", value: 30 },
-    { label: "Failed", value: 10 },
+    { label: "Done", value: 60, color: "var(--color-success)" },
+    { label: "Pending", value: 30, color: "var(--color-warning)" },
+    { label: "Failed", value: 10, color: "var(--color-danger)" },
   ]}
 />
 ```
@@ -341,35 +337,105 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 ### Inline
 
-`inline` (`.chart-inline`) sizes the chart in `em` and aligns it to the text baseline.
+`inline` (`.chart-inline`) sizes the chart in `em` and centres it on the text line.
 
 **Example**
 
 ```html
-<div class="chart chart-inline" role="img" aria-label="Proportion bar. Used: 72, Free: 28.">
-  <div class="chart-stack">
-    <div
-      class="chart-segment"
-      style="--value: 72; --segment-color: var(--color-blue-500)"
-      title="Used: 72"
-    ></div>
-    <div
-      class="chart-segment"
-      style="--value: 28; --segment-color: var(--color-orange-400)"
-      title="Free: 28"
-    ></div>
-  </div>
-</div>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Disk</td>
+      <td>
+        72%
+        <div class="chart chart-inline" role="img" aria-label="Proportion bar. Used: 72, Free: 28.">
+          <div class="chart-stack">
+            <div
+              class="chart-segment"
+              style="--value: 72; --segment-color: var(--color-blue-500)"
+              title="Used: 72"
+            ></div>
+            <div
+              class="chart-segment"
+              style="--value: 28; --segment-color: var(--color-border)"
+              title="Free: 28"
+            ></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>CPU</td>
+      <td>
+        45%
+        <div
+          class="chart chart-bars chart-inline"
+          role="img"
+          aria-label="Bar chart. 45."
+          style="--chart-max: 100"
+        >
+          <div class="chart-bar" style="--value: 45">
+            <div class="chart-bar-track"><div class="chart-bar-fill" title="45"></div></div>
+            <span class="chart-bar-value">45</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Memory</td>
+      <td>
+        40%
+        <div class="chart chart-inline" role="img" aria-label="Donut chart. Used: 40, Free: 60.">
+          <div class="chart-donut-figure">
+            <div
+              class="chart-donut"
+              style="--donut-segments: var(--color-blue-500) 0deg 144deg, var(--color-border) 144deg 360deg"
+            ></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 ```
 
 ```tsx
-<StackedBar
-  inline
-  data={[
-    { label: "Used", value: 72 },
-    { label: "Free", value: 28 },
-  ]}
-/>
+<Table>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Disk</Table.Cell>
+      <Table.Cell>
+        72%{" "}
+        <StackedBar
+          inline
+          data={[
+            { label: "Used", value: 72 },
+            { label: "Free", value: 28, color: "var(--color-border)" },
+          ]}
+        />
+      </Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>CPU</Table.Cell>
+      <Table.Cell>
+        45% <BarChart inline max={100} data={[{ value: 45 }]} />
+      </Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Memory</Table.Cell>
+      <Table.Cell>
+        40%{" "}
+        <Donut
+          inline
+          data={[
+            { label: "Used", value: 40 },
+            { label: "Free", value: 60, color: "var(--color-border)" },
+          ]}
+        />
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
 ```
 
 ### Per-series colours
@@ -467,11 +533,11 @@ Each root gets `role="img"` and an `aria-label` built from the data (`"Bar chart
 | `chart`                                        | Root. Sets the defaults every chart reads and colours the series `info`         |
 | `chart-success` `chart-warning` `chart-danger` | Recolours a single series                                                       |
 | `chart-bars`                                   | Horizontal bar grid: label gutter, `1fr` track, trailing value column           |
-| `chart-bars-vertical`                          | Columns in a `--chart-height` box instead, labels beneath                       |
+| `chart-bars-vertical`                          | Columns in a `--chart-height` box, labels beneath; text ellipsizes              |
 | `chart-bar`                                    | One bar. Carries `--value`; a subgrid row, so columns align across bars         |
 | `chart-bar-label`                              | Category label, `text-xs` muted. Its column collapses when no bar has one       |
 | `chart-bar-track`                              | The bar's rail, which gives the fill a definite length to animate against       |
-| `chart-bar-fill`                               | `0.75rem` fill sized `--value / --chart-max`, `2px` radius, `200ms` transition  |
+| `chart-bar-fill`                               | `0.75rem`, `--value / --chart-max` clamped, `2px` radius, `200ms` transition    |
 | `chart-bar-value`                              | Trailing value, tabular figures. Hidden unless the root has `chart-values`      |
 | `chart-values`                                 | Shows the value column                                                          |
 | `chart-stack`                                  | Proportion bar: `0.75rem` pill on `surface-strong`, clipped                     |
@@ -479,23 +545,27 @@ Each root gets `role="img"` and an `aria-label` built from the data (`"Bar chart
 | `chart-donut-figure`                           | Square box sized `--chart-size`, centring the ring and its overlay              |
 | `chart-donut`                                  | Conic-gradient ring from `--donut-segments`, centre punched out by a mask       |
 | `chart-donut-pie`                              | Solid pie — sets the ring width to `50%`                                        |
-| `chart-donut-center`                           | Centred overlay label, `text-sm` semibold tabular                               |
-| `chart-legend`                                 | Wrapping `text-xs` muted list, marker-less                                      |
+| `chart-donut-center`                           | Centred overlay label, `text-sm` semibold tabular, `text` colour                |
+| `chart-legend`                                 | Wrapping `text-xs` muted list, marker-less, `--chart-legend-gap` from the chart |
 | `chart-legend-item`                            | One entry with a `0.625rem` swatch from `--legend-color`                        |
-| `chart-inline`                                 | Micro-viz for a table cell: `em`-relative, `6em` wide track                     |
+| `chart-inline`                                 | Micro-viz for a table cell: `em`-relative, `6em` track, centred on the line     |
 | `chart-sm` `chart-lg`                          | Steps `--chart-height` and `--chart-size` to `4rem` / `12rem`                   |
 | `--value`                                      | A bar's or segment's magnitude. Required on each                                |
 | `--chart-max`                                  | The 100% reference for bars. Defaults to `100`                                  |
 | `--chart-height`                               | Vertical bar box height: `8rem`, or `4rem` / `12rem` at `chart-sm` / `chart-lg` |
 | `--chart-size`                                 | Donut diameter, same scale as `--chart-height`                                  |
 | `--chart-gap`                                  | Space between bars, `0.25rem`                                                   |
+| `--chart-legend-gap`                           | Chart-to-legend space: `0.5rem` below, or `0.5em` beside when inline            |
 | `--bar-color`                                  | One bar's fill. Defaults to `currentColor`                                      |
 | `--segment-color`                              | One stack segment's fill                                                        |
 | `--legend-color`                               | One legend swatch's fill                                                        |
 | `--donut-segments`                             | The ring's pre-built cumulative `conic-gradient` stop string                    |
 | `--donut-thickness`                            | Ring width as a % of the diameter, `33%`. `50%` is a solid pie                  |
+| `--surface-current`                            | Enclosing container's fill; colours segment seams. Defaults to `surface`        |
 
 There is no `chart-info` or `chart-md` — both are the unmodified `chart`.
+
+`chart-bars` and a proportion bar are `100%` wide, so in a flex row they shrink their neighbours; give the root `flex: 1` to keep the neighbours at their own width. A root laid out as a flex row with the legend beside the chart needs `--chart-legend-gap: 0`.
 
 Values arrive as inline custom properties rather than `data-` attributes because CSS can't read an attribute as a number for `calc()`. That is also why `--donut-segments` is a pre-built stop string: CSS can't sum a variable-length list of siblings, so the cumulative percentages have to be computed before they reach the style attribute. The fill transitions the _resolved_ length, not `--value`, since an unregistered custom property doesn't animate; transitions are dropped under `prefers-reduced-motion: reduce`.
 

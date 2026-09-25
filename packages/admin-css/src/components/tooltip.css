@@ -7,11 +7,11 @@
   .tooltip {
     @apply inline-block max-w-xs px-2 py-1
            rounded-md
-           text-xs leading-snug font-medium
+           text-xs font-medium
            bg-text text-surface
            shadow-md
            pointer-events-none;
-    text-wrap: balance;
+    text-wrap: pretty;
     overflow-wrap: break-word;
   }
 

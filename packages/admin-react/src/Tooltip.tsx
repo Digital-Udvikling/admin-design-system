@@ -69,6 +69,10 @@ export interface TooltipProps extends Omit<TooltipRootProps, "children"> {
   align?: TooltipPopupProps["align"];
   sideOffset?: TooltipPopupProps["sideOffset"];
   size?: TooltipSize;
+  /** Open delay in ms. When unset, a surrounding `Tooltip.Provider`'s `delay` applies, else 600. */
+  delay?: TooltipTriggerProps["delay"];
+  /** Close delay in ms. When unset, a surrounding `Tooltip.Provider`'s `closeDelay` applies, else 0. */
+  closeDelay?: TooltipTriggerProps["closeDelay"];
   /** Per-slot class overrides for the popup. */
   classNames?: SlotClasses<"popup">;
   /** The trigger element. Must be a single React element so Base UI can merge trigger props/refs into it. */
@@ -81,13 +85,15 @@ function TooltipShorthand({
   align,
   sideOffset,
   size,
+  delay,
+  closeDelay,
   classNames,
   children,
   ...rootProps
 }: TooltipProps) {
   return (
     <TooltipRoot {...rootProps}>
-      <BaseTooltip.Trigger render={children} />
+      <BaseTooltip.Trigger render={children} delay={delay} closeDelay={closeDelay} />
       <TooltipPopup
         side={side}
         align={align}

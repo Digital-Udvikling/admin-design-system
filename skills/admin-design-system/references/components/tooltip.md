@@ -10,6 +10,7 @@
   - [Sizes](#sizes)
   - [Group delay (React only)](#group-delay-react-only)
   - [Rich content](#rich-content)
+  - [Disabled trigger](#disabled-trigger)
 - [Reference](#reference)
   - [React](#react)
   - [Vanilla](#vanilla)
@@ -148,6 +149,29 @@
 </Tooltip>
 ```
 
+### Disabled trigger
+
+A disabled button gets no pointer events, so `<Tooltip>` needs an `inline-flex` wrapper to take the hover; a plain inline `<span>` only covers the middle of the button. The vanilla `tooltip-wrap` already is one. A disabled button can't take focus either, so keyboard users never see this hint.
+
+**Example**
+
+```html
+<span class="tooltip-wrap">
+  <button type="button" class="btn btn-danger" disabled>Delete</button>
+  <span class="tooltip" role="tooltip">Needs the admin role</span>
+</span>
+```
+
+```tsx
+<Tooltip content="Needs the admin role">
+  <span style={{ display: "inline-flex" }}>
+    <Button variant="danger" disabled>
+      Delete
+    </Button>
+  </span>
+</Tooltip>
+```
+
 **Caution** — In browsers without CSS anchor positioning, an ancestor with non-visible `overflow` (`hidden`, `auto`, `scroll`, `clip`) clips the vanilla tooltip. The React popup is portaled.
 
 ## Reference
@@ -169,13 +193,15 @@
 | `Tooltip`          | `align`      | `"start" \| "center" \| "end"`                | `"center"`   |
 | `Tooltip`          | `sideOffset` | `number`                                      | `6`          |
 | `Tooltip`          | `size`       | `"sm" \| "md"`                                | `"md"`       |
+| `Tooltip`          | `delay`      | `number`                                      | `600`        |
+| `Tooltip`          | `closeDelay` | `number`                                      | `0`          |
 | `Tooltip`          | `classNames` | [slots](../basics/conventions.md#classnames) | —            |
 | `Tooltip.Provider` | `delay`      | `number`                                      | —            |
 | `Tooltip.Provider` | `closeDelay` | `number`                                      | —            |
 
 `Tooltip` is the shorthand: `content` plus a single child element, which must be one React element so Base UI can merge trigger props and refs into it. Reach for the parts when the shorthand isn't enough — `Root` / `Trigger` / `Popup` map onto [Base UI Tooltip](https://base-ui.com/react/components/tooltip), which owns the open state, hover and focus delays, dismissal, and collision handling that flips `side` when there's no room.
 
-`Tooltip.Provider` shares timing across a group: once one tooltip in a toolbar has opened, its neighbours open instantly until the pointer rests. `content` takes JSX, so a shortcut hint via [Kbd](kbd.md) needs no escape hatch. `classNames` covers `popup`.
+`Tooltip.Provider` shares timing across a group: once one tooltip in a toolbar has opened, its neighbours open instantly until the pointer rests. `delay` and `closeDelay` on `Tooltip` override the Provider's for that tooltip; left unset, the Provider's apply, then Base UI's `600` / `0`. The vanilla bubble opens after `200ms`. `content` takes JSX, so a shortcut hint via [Kbd](kbd.md) needs no escape hatch. `classNames` covers `popup`.
 
 A tooltip is not an accessible name. An icon-only trigger still needs its own `aria-label`.
 
@@ -183,14 +209,14 @@ Keep tooltip content to text; put links and controls in a [Menu](menus.md) or on
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tooltip`             | The bubble: inverted `text`-on-`surface` fill, `0.5rem`/`0.25rem` padding, `text-xs`, `20rem` max-width, balanced wrapping, long tokens break, click-through |
-| `tooltip-sm`          | Tighter padding                                                                                                                                              |
-| `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` and keyboard focus, positioned above and centred                                                                      |
-| `tooltip-wrap-bottom` | Below the trigger                                                                                                                                            |
-| `tooltip-wrap-left`   | Left of the trigger                                                                                                                                          |
-| `tooltip-wrap-right`  | Right of the trigger                                                                                                                                         |
+| Class                 | Effect                                                                                                                                    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `tooltip`             | The bubble: inverted `text`-on-`surface` fill, `0.5rem`/`0.25rem` padding, `text-xs`, `20rem` max-width, long tokens break, click-through |
+| `tooltip-sm`          | Tighter padding                                                                                                                           |
+| `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` and keyboard focus, positioned above and centred                                                   |
+| `tooltip-wrap-bottom` | Below the trigger                                                                                                                         |
+| `tooltip-wrap-left`   | Left of the trigger                                                                                                                       |
+| `tooltip-wrap-right`  | Right of the trigger                                                                                                                      |
 
 The vanilla path needs no JavaScript: the wrapper reveals the bubble after a `200ms` delay on hover and on keyboard focus (a `:focus-visible` descendant). A mouse click doesn't open it, as in Base UI. Write `role="tooltip"` on the bubble yourself.
 

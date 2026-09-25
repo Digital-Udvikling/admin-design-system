@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Button } from "./Button";
 import { Dialog } from "./Dialog";
 import { Tooltip } from "./Tooltip";
 import { adminSelector } from "./test-setup";
@@ -127,6 +128,54 @@ describe("Tooltip", () => {
       await user.hover(trigger);
       await screen.findByRole("tooltip");
       expect(onOpenChange).toHaveBeenCalledWith(true, expect.anything());
+    });
+
+    it("shorthand forwards delay to the trigger", async () => {
+      const user = userEvent.setup();
+      render(
+        <Tooltip content="Hint" delay={0}>
+          <button type="button">target</button>
+        </Tooltip>,
+      );
+      await user.hover(screen.getByRole("button", { name: "target" }));
+      // Well under Base UI's 600ms default, so only the forwarded 0 opens it in time.
+      expect(await screen.findByRole("tooltip", {}, { timeout: 100 })).toHaveTextContent("Hint");
+    });
+
+    it("shorthand delay overrides a Provider's; unset, the Provider's applies", async () => {
+      const user = userEvent.setup();
+      render(
+        <>
+          <Tooltip.Provider delay={5000}>
+            <Tooltip content="Own" delay={0}>
+              <button type="button">own</button>
+            </Tooltip>
+          </Tooltip.Provider>
+          <Tooltip.Provider delay={0}>
+            <Tooltip content="Group">
+              <button type="button">group</button>
+            </Tooltip>
+          </Tooltip.Provider>
+        </>,
+      );
+      await user.hover(screen.getByRole("button", { name: "own" }));
+      expect(await screen.findByText("Own", {}, { timeout: 100 })).toBeInTheDocument();
+      await user.unhover(screen.getByRole("button", { name: "own" }));
+      await user.hover(screen.getByRole("button", { name: "group" }));
+      expect(await screen.findByText("Group", {}, { timeout: 100 })).toBeInTheDocument();
+    });
+
+    it("opens on hover of a span wrapping a disabled Button", async () => {
+      const user = userEvent.setup();
+      render(
+        <Tooltip content="Needs admin role" delay={0}>
+          <span data-testid="wrap">
+            <Button disabled>Delete</Button>
+          </span>
+        </Tooltip>,
+      );
+      await user.hover(screen.getByTestId("wrap"));
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Needs admin role");
     });
 
     it("portals the popup into an ancestor <Dialog> instead of document.body", () => {

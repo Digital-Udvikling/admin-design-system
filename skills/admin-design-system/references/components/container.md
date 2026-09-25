@@ -6,7 +6,6 @@
 
 - [Examples](#examples)
   - [Basic](#basic)
-  - [Sizes](#sizes)
   - [Compact](#compact)
   - [Custom width](#custom-width)
   - [In an app shell](#in-an-app-shell)
@@ -47,44 +46,6 @@
   />
   <Card title="Activity" description="A second section, evenly spaced from the first." />
 </Container>
-```
-
-### Sizes
-
-A cap only takes effect once the viewport is wider than it, so in this narrow preview they all fill the available width.
-
-**Example**
-
-```html
-<div class="container container-sm">
-  <div class="card">
-    <div class="card-body"><h3 class="card-title">sm — 60rem</h3></div>
-  </div>
-</div>
-<div class="container container-lg">
-  <div class="card">
-    <div class="card-body"><h3 class="card-title">lg — 115rem</h3></div>
-  </div>
-</div>
-<div class="container container-fluid">
-  <div class="card">
-    <div class="card-body"><h3 class="card-title">fluid — no cap</h3></div>
-  </div>
-</div>
-```
-
-```tsx
-<>
-  <Container size="sm">
-    <Card title="sm — 60rem" />
-  </Container>
-  <Container size="lg">
-    <Card title="lg — 115rem" />
-  </Container>
-  <Container size="fluid">
-    <Card title="fluid — no cap" />
-  </Container>
-</>
 ```
 
 ### Compact
@@ -196,13 +157,13 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 
 ### Vanilla
 
-| Class / var         | Effect                                                                                                            |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `container`         | Centered column: `90rem` cap, `1.5rem` padding (`1rem` side padding under `48rem`), `1.5rem` gap between children |
-| `container-sm`      | `60rem` cap — forms, settings                                                                                     |
-| `container-lg`      | `115rem` cap — wide tables, dashboards                                                                            |
-| `container-fluid`   | No cap                                                                                                            |
-| `container-compact` | `1rem` gap and block padding                                                                                      |
-| `--container-max`   | The cap itself, `90rem` by default. Every preset above just sets this                                             |
+| Class / var         | Effect                                                                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `container`         | Centered column: `90rem` cap, `1rem` side padding (the navbar and footer gutter), `1.5rem` block padding, `1.5rem` gap between children |
+| `container-sm`      | `60rem` cap — forms, settings                                                                                                           |
+| `container-lg`      | `115rem` cap — wide tables, dashboards                                                                                                  |
+| `container-fluid`   | No cap                                                                                                                                  |
+| `container-compact` | `1rem` gap and block padding                                                                                                            |
+| `--container-max`   | The cap itself, `90rem` by default. Every preset above just sets this                                                                   |
 
 Children stack with the container's `gap`, so the space between cards comes from the container. Widths run wide for admin screens. Goes inside [`app-shell-main`](../modules/app-shell.md), which has no padding of its own.

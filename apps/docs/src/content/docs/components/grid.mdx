@@ -3,7 +3,7 @@ title: Grid
 description: Two-dimensional layouts with grid utilities.
 ---
 
-import { Card } from "@aortl/admin-react";
+import { Card, StatCard } from "@aortl/admin-react";
 
 ## Examples
 
@@ -41,43 +41,31 @@ import { Card } from "@aortl/admin-react";
 
 ```html
 <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  <div class="rounded border border-border p-4">
-    <p class="text-text-muted text-xs">Users</p>
-    <p class="text-2xl font-semibold">12,408</p>
+  <div class="card stat-card">
+    <p class="stat-card-label">Users</p>
+    <p class="stat-card-value">12,408</p>
   </div>
-  <div class="rounded border border-border p-4">
-    <p class="text-text-muted text-xs">Active now</p>
-    <p class="text-2xl font-semibold">342</p>
+  <div class="card stat-card">
+    <p class="stat-card-label">Active now</p>
+    <p class="stat-card-value">342</p>
   </div>
-  <div class="rounded border border-border p-4">
-    <p class="text-text-muted text-xs">Orders</p>
-    <p class="text-2xl font-semibold">128</p>
+  <div class="card stat-card">
+    <p class="stat-card-label">Orders</p>
+    <p class="stat-card-value">128</p>
   </div>
-  <div class="rounded border border-border p-4">
-    <p class="text-text-muted text-xs">Revenue</p>
-    <p class="text-2xl font-semibold">$8.4k</p>
+  <div class="card stat-card">
+    <p class="stat-card-label">Revenue</p>
+    <p class="stat-card-value">$8.4k</p>
   </div>
 </div>
 ```
 
 ```tsx
 <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  <div className="rounded border border-border p-4">
-    <p className="text-text-muted text-xs">Users</p>
-    <p className="text-2xl font-semibold">12,408</p>
-  </div>
-  <div className="rounded border border-border p-4">
-    <p className="text-text-muted text-xs">Active now</p>
-    <p className="text-2xl font-semibold">342</p>
-  </div>
-  <div className="rounded border border-border p-4">
-    <p className="text-text-muted text-xs">Orders</p>
-    <p className="text-2xl font-semibold">128</p>
-  </div>
-  <div className="rounded border border-border p-4">
-    <p className="text-text-muted text-xs">Revenue</p>
-    <p className="text-2xl font-semibold">$8.4k</p>
-  </div>
+  <StatCard label="Users" value="12,408" />
+  <StatCard label="Active now" value="342" />
+  <StatCard label="Orders" value="128" />
+  <StatCard label="Revenue" value="$8.4k" />
 </div>
 ```
 

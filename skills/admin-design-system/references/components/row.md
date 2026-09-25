@@ -9,6 +9,7 @@
   - [Alignment](#alignment)
   - [Distribution](#distribution)
   - [Grow to fill](#grow-to-fill)
+  - [Truncate](#truncate)
   - [Wrap](#wrap)
   - [Direction](#direction)
   - [Dividers](#dividers)
@@ -49,7 +50,7 @@
 
 ```tsx
 <div className="flex w-full items-center gap-2">
-  <IconCircleCheck size={16} style={{ color: "var(--color-success)" }} aria-hidden />
+  <IconCircleCheck size="1em" style={{ color: "var(--color-success)" }} aria-hidden />
   <span>Deploy finished</span>
   <Badge variant="success">live</Badge>
 </div>
@@ -102,6 +103,34 @@
 <div className="flex w-full gap-2">
   <Input type="search" placeholder="Search orders" className="flex-1" />
   <Button>Filter</Button>
+</div>
+```
+
+### Truncate
+
+**Example**
+
+```html
+<div class="flex w-full items-center gap-2">
+  <div class="min-w-0 flex-1">
+    <p class="truncate font-semibold">
+      https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
+    </p>
+    <p class="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
+  </div>
+  <button class="btn btn-sm">Edit</button>
+</div>
+```
+
+```tsx
+<div className="flex w-full items-center gap-2">
+  <div className="min-w-0 flex-1">
+    <p className="truncate font-semibold">
+      https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
+    </p>
+    <p className="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
+  </div>
+  <Button size="sm">Edit</Button>
 </div>
 ```
 
@@ -233,6 +262,9 @@ There is no `.row` class — see [Conventions › Layout](../basics/conventions.
 | `items-*`   | Cross-axis alignment: `center` is the usual one, plus `start`, `end`, `baseline` |
 | `justify-*` | Main-axis distribution: `between`, `end`, `center`, `around`                     |
 | `flex-1`    | One child absorbs the leftover space; the others keep their natural size         |
+| `min-w-0`   | Lets a flex child shrink below its content, so `truncate` inside it can clip     |
+| `shrink-0`  | Keeps a child at its natural size when the row runs out of space                 |
+| `truncate`  | Clips overflowing text to one line with an ellipsis                              |
 | `flex-wrap` | Overflowing children move to a new line                                          |
 | `divide-x`  | Hairline between children, no border class on each. Add `px-*` to the children   |
 | `order-*`   | Reorders children visually                                                       |

@@ -1,15 +1,20 @@
 @layer components {
   .checkbox {
+    --checkbox-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    --checkbox-dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
     @apply inline-flex items-center justify-center size-4 shrink-0
            rounded-sm border bg-surface
            cursor-pointer
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed;
+    /* Fills exactly one line box: pins to a wrapped label's first line, doesn't grow table rows. */
+    vertical-align: top;
+    margin-block: calc((1lh - 1rem) / 2);
   }
 
   .checkbox[data-unchecked] {
-    @apply border-border-strong hover:border-text-muted;
+    @apply border-text-muted hover:border-text;
   }
 
   .checkbox[data-checked],
@@ -25,11 +30,21 @@
     @apply inline-flex items-center justify-center size-3 text-primary-content;
   }
 
-  /* Native input variant — must render identically to the Base UI button rules
-     above (same checkmark polyline; indeterminate reads as checked). */
+  /* An empty indicator draws the glyph from the root's state; custom children replace it. */
+  .checkbox:is([data-checked], [data-indeterminate]) > .checkbox-indicator:empty {
+    background-color: currentColor;
+    -webkit-mask: var(--checkbox-check) center / contain no-repeat;
+    mask: var(--checkbox-check) center / contain no-repeat;
+  }
+
+  .checkbox[data-indeterminate] > .checkbox-indicator:empty {
+    -webkit-mask-image: var(--checkbox-dash);
+    mask-image: var(--checkbox-dash);
+  }
+
+  /* Native input variant — must render identically to the Base UI span rules above. */
   input.checkbox {
-    @apply appearance-none border-border-strong hover:border-text-muted;
-    --checkbox-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    @apply appearance-none border-text-muted hover:border-text;
   }
 
   input.checkbox:checked,
@@ -46,6 +61,11 @@
     mask: var(--checkbox-check) center / contain no-repeat;
   }
 
+  input.checkbox:indeterminate::after {
+    -webkit-mask-image: var(--checkbox-dash);
+    mask-image: var(--checkbox-dash);
+  }
+
   label:has(> .checkbox) {
     @apply inline-flex items-center gap-2 cursor-pointer;
     /* Long labels wrap beside the shrink-0 box instead of overflowing. */
@@ -53,8 +73,24 @@
     min-width: 0;
   }
 
-  label:has(> .checkbox:disabled),
-  label:has(> .checkbox[data-disabled]) {
-    @apply opacity-60 cursor-not-allowed;
+  /* Only the box pins to the first line; icons and kbd stay centred on it. */
+  label:has(> .checkbox) > .checkbox {
+    @apply self-start;
+  }
+
+  /* Dim the row once; the control inside must not compound it to 25%. */
+  label:has(> .checkbox:is(:disabled, [data-disabled])) {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  label:has(> .checkbox:is(:disabled, [data-disabled])) > .checkbox {
+    opacity: 1;
+  }
+
+  @media (forced-colors: active) {
+    input.checkbox:is(:checked, :indeterminate)::after,
+    .checkbox:is([data-checked], [data-indeterminate]) > .checkbox-indicator:empty {
+      background-color: CanvasText;
+    }
   }
 }

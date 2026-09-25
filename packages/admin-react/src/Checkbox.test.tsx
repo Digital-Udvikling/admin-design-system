@@ -10,6 +10,41 @@ describe("Checkbox", () => {
     expect(screen.getByRole("checkbox", { name: "x" })).toBeInTheDocument();
   });
 
+  describe("indicator", () => {
+    // The CSS draws the glyph on `.checkbox[data-*] > .checkbox-indicator:empty`.
+    it("default indicator is an empty direct child of the checked root", async () => {
+      const user = userEvent.setup();
+      render(<Checkbox aria-label="x" />);
+      const root = screen.getByRole("checkbox");
+      expect(root.querySelector("._ao-checkbox-indicator")).toBeNull();
+      await user.click(root);
+      const indicator = root.querySelector("._ao-checkbox-indicator");
+      expect(indicator).toBeEmptyDOMElement();
+      expect(indicator?.parentElement).toBe(root);
+      expect(root).toHaveAttribute("data-checked");
+    });
+
+    it("indeterminate marks the root so the indicator draws a dash", () => {
+      render(<Checkbox aria-label="x" indeterminate />);
+      const root = screen.getByRole("checkbox");
+      const indicator = root.querySelector("._ao-checkbox-indicator");
+      expect(indicator).toBeEmptyDOMElement();
+      expect(indicator?.parentElement).toBe(root);
+      expect(root).toHaveAttribute("data-indeterminate");
+    });
+
+    it("custom children replace the default indicator", () => {
+      render(
+        <Checkbox aria-label="x" defaultChecked>
+          <Checkbox.Indicator>
+            <span data-testid="glyph" />
+          </Checkbox.Indicator>
+        </Checkbox>,
+      );
+      expect(screen.getByTestId("glyph")).toBeInTheDocument();
+    });
+  });
+
   describe("interactions", () => {
     it("uncontrolled: clicking toggles aria-checked and fires onCheckedChange with new value", async () => {
       const user = userEvent.setup();

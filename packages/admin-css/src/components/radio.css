@@ -6,10 +6,13 @@
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed;
+    /* Fills exactly one line box: pins to a wrapped label's first line, doesn't grow table rows. */
+    vertical-align: top;
+    margin-block: calc((1lh - 1rem) / 2);
   }
 
   .radio[data-unchecked] {
-    @apply border-border-strong hover:border-text-muted;
+    @apply border-text-muted hover:border-text;
   }
 
   .radio[data-checked] {
@@ -27,7 +30,7 @@
   /* Mirrors the Base UI span variant above — the ::after dot must match
      .radio-indicator's size and colour. */
   input.radio {
-    @apply appearance-none border-border-strong hover:border-text-muted;
+    @apply appearance-none border-text-muted hover:border-text;
   }
 
   input.radio:checked {
@@ -55,8 +58,24 @@
     min-width: 0;
   }
 
-  label:has(> .radio:disabled),
-  label:has(> .radio[data-disabled]) {
-    @apply opacity-60 cursor-not-allowed;
+  /* Only the control pins to the first line; icons and kbd stay centred on it. */
+  label:has(> .radio) > .radio {
+    @apply self-start;
+  }
+
+  /* Dim the row once; the control inside must not compound it to 25%. */
+  label:has(> .radio:is(:disabled, [data-disabled])) {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  label:has(> .radio:is(:disabled, [data-disabled])) > .radio {
+    opacity: 1;
+  }
+
+  @media (forced-colors: active) {
+    input.radio:checked::after,
+    .radio-indicator {
+      background-color: CanvasText;
+    }
   }
 }

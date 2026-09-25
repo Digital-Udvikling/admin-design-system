@@ -63,7 +63,7 @@
            min-w-44 max-w-80 max-h-72 overflow-auto
            py-1
            bg-surface text-text
-           border border-border rounded-lg shadow-md;
+           border border-border-strong rounded-lg shadow-sm;
     --surface-current: var(--color-surface);
   }
 

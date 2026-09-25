@@ -99,8 +99,8 @@
     @apply inline-flex items-center justify-center size-4 shrink-0 text-text-muted;
   }
 
-  .sidebar-item[aria-current="page"] .sidebar-icon,
-  .sidebar-item[data-active] .sidebar-icon {
+  :is(.sidebar-item, .sidebar-subitem)[aria-current="page"] .sidebar-icon,
+  :is(.sidebar-item, .sidebar-subitem)[data-active] .sidebar-icon {
     @apply text-primary;
   }
 
@@ -156,6 +156,24 @@
 
   .sidebar-collapsible[open] > .sidebar-collapsible-trigger::after {
     rotate: 0deg;
+  }
+
+  /* A closed group or the collapsed rail hides the current sub-item, so its trigger marks the location. */
+  :is(
+      .sidebar-collapsible:not([open]),
+      .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+    ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
+    > .sidebar-collapsible-trigger {
+    @apply bg-primary-muted text-primary font-medium;
+  }
+
+  :is(
+      .sidebar-collapsible:not([open]),
+      .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+    ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
+    > .sidebar-collapsible-trigger
+    .sidebar-icon {
+    @apply text-primary;
   }
 
   /* pl-6 = icon + gap, so sub-item text lines up with the parent label. */
@@ -260,6 +278,13 @@
     display: none;
   }
 
+  /* The slide is decorative; the backdrop fade stays. */
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar-drawer {
+      transition: none;
+    }
+  }
+
   @media (forced-colors: active) {
     .sidebar-item:is([aria-current="page"], [data-active]),
     .sidebar-subitem:is([aria-current="page"], [data-active]) {
@@ -268,7 +293,7 @@
       color: HighlightText;
     }
 
-    .sidebar-item:is([aria-current="page"], [data-active]) .sidebar-icon {
+    :is(.sidebar-item, .sidebar-subitem):is([aria-current="page"], [data-active]) .sidebar-icon {
       color: inherit;
     }
 
@@ -276,6 +301,30 @@
     .sidebar-collapsible-trigger::after,
     .sidebar-collapse-toggle::before {
       background-color: CanvasText;
+    }
+
+    :is(
+        .sidebar-collapsible:not([open]),
+        .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+      ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
+      > .sidebar-collapsible-trigger {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    :is(
+        .sidebar-collapsible:not([open]),
+        .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+      ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
+      > .sidebar-collapsible-trigger
+      .sidebar-icon {
+      color: inherit;
+    }
+
+    .sidebar-collapsible:not([open]):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
+      > .sidebar-collapsible-trigger::after {
+      background-color: HighlightText;
     }
   }
 }

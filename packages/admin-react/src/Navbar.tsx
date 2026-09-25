@@ -1,6 +1,6 @@
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
-import { cn } from "./cn";
+import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Menu } from "./Menu";
 
@@ -58,13 +58,36 @@ function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemPr
 export interface NavbarDropdownProps extends Omit<ComponentProps<"details">, "title"> {
   /** Text shown in the trigger. */
   label: ReactNode;
+  /**
+   * Marks the trigger as the current section (`data-active`) when the current page isn't one
+   * of the menu's items. A `Menu.Item` with `aria-current="page"` marks it without this.
+   */
+  active?: boolean;
+  /** Leading icon in the trigger. */
+  icon?: IconProp;
+  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
+  classNames?: SlotClasses<"trigger" | "popup">;
 }
 
-function NavbarDropdown({ label, className, children, ...rest }: NavbarDropdownProps) {
+function NavbarDropdown({
+  label,
+  active,
+  icon,
+  className,
+  classNames,
+  children,
+  ...rest
+}: NavbarDropdownProps) {
   return (
     <Menu className={className} {...rest}>
-      <Menu.Trigger className={cn("navbar-item", undefined)}>{label}</Menu.Trigger>
-      <Menu.Popup>{children}</Menu.Popup>
+      <Menu.Trigger
+        className={cn("navbar-item", classNames?.trigger)}
+        data-active={active ? "" : undefined}
+      >
+        {renderIcon(icon)}
+        {label}
+      </Menu.Trigger>
+      <Menu.Popup className={classNames?.popup}>{children}</Menu.Popup>
     </Menu>
   );
 }

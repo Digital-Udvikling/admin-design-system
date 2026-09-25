@@ -46,6 +46,21 @@ describe("Sidebar", () => {
     expect(link.querySelector(adminSelector("sidebar-badge"))).toHaveTextContent("12");
   });
 
+  it("SubItem: wraps children in a label and forwards classNames.label", () => {
+    render(
+      <Sidebar>
+        <Sidebar.SubItem href="#cms" classNames={{ label: "x-label" }}>
+          CMS
+        </Sidebar.SubItem>
+      </Sidebar>,
+    );
+    const label = screen
+      .getByRole("link", { name: "CMS" })
+      .querySelector(adminSelector("sidebar-label"));
+    expect(label).toHaveTextContent("CMS");
+    expect(label).toHaveClass("x-label");
+  });
+
   it("Item: an empty badge renders no badge wrapper", () => {
     render(
       <Sidebar>

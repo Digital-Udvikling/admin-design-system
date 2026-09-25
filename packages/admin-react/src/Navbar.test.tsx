@@ -44,6 +44,40 @@ describe("Navbar", () => {
     expect(el.style.position).toBe("sticky");
   });
 
+  describe("Dropdown", () => {
+    it("marks an active trigger and renders its icon and slot classes", () => {
+      render(
+        <Navbar>
+          <Navbar.Items>
+            <Navbar.Dropdown
+              label="Reports"
+              active
+              icon={<svg data-testid="icon" aria-hidden />}
+              classNames={{ trigger: "x-trigger", popup: "x-popup" }}
+            >
+              <button type="button">Sales</button>
+            </Navbar.Dropdown>
+          </Navbar.Items>
+        </Navbar>,
+      );
+      const trigger = screen.getByText("Reports");
+      expect(trigger).toHaveAdminClass("navbar-item", "menu-trigger");
+      expect(trigger).toHaveClass("x-trigger");
+      expect(trigger).toHaveAttribute("data-active");
+      expect(trigger).toContainElement(screen.getByTestId("icon"));
+      expect(screen.getByRole("menu", { hidden: true })).toHaveClass("x-popup");
+    });
+
+    it("leaves data-active off by default", () => {
+      render(
+        <Navbar.Dropdown label="Reports">
+          <button type="button">Sales</button>
+        </Navbar.Dropdown>,
+      );
+      expect(screen.getByText("Reports")).not.toHaveAttribute("data-active");
+    });
+  });
+
   describe("MobileToggle", () => {
     it("toggles the AppShell mobile drawer state when clicked", async () => {
       const user = userEvent.setup();

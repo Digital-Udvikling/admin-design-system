@@ -83,13 +83,12 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
 
 :::
 
-Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row automatically.
+A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>` drops into the bottom row. Both are placed by structure, so `hasSidebar` is optional.
 
 :::example
 
 ```tsx
 <AppShell
-  hasSidebar
   systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
   style={{ minHeight: "20rem" }}
 >
@@ -177,7 +176,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar.
+`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar. A `menu-item` with `aria-current="page"` marks its trigger. For a page in the section that isn't one of the items, pass `active` (vanilla: `data-active` on the trigger).
 
 :::example
 
@@ -195,7 +194,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
     <details class="menu">
       <summary class="menu-trigger navbar-item">Products</summary>
       <div class="menu-popup" role="menu">
-        <button class="menu-item" type="button">Catalogue</button>
+        <a class="menu-item" href="#" aria-current="page">Catalogue</a>
         <button class="menu-item" type="button">Categories</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Imports</button>
@@ -214,7 +213,9 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
   <Navbar.Items>
     <Navbar.Item href="#">Dashboard</Navbar.Item>
     <Navbar.Dropdown label="Products">
-      <Menu.Item>Catalogue</Menu.Item>
+      <Menu.Item href="#" aria-current="page">
+        Catalogue
+      </Menu.Item>
       <Menu.Item>Categories</Menu.Item>
       <Menu.Separator />
       <Menu.Item>Imports</Menu.Item>
@@ -374,10 +375,18 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
         <span class="sidebar-label">Webshop</span>
       </summary>
       <div class="sidebar-collapsible-panel">
-        <a class="sidebar-subitem" href="#" aria-current="page">CMS</a>
-        <a class="sidebar-subitem" href="#">Kampagner</a>
-        <a class="sidebar-subitem" href="#">Søgeord</a>
-        <a class="sidebar-subitem" href="#">Redirects</a>
+        <a class="sidebar-subitem" href="#" aria-current="page">
+          <span class="sidebar-label">CMS</span>
+        </a>
+        <a class="sidebar-subitem" href="#">
+          <span class="sidebar-label">Kampagner</span>
+        </a>
+        <a class="sidebar-subitem" href="#">
+          <span class="sidebar-label">Søgeord</span>
+        </a>
+        <a class="sidebar-subitem" href="#">
+          <span class="sidebar-label">Redirects</span>
+        </a>
       </div>
     </details>
     <a class="sidebar-item" href="#">
@@ -479,7 +488,6 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 
 ```tsx
 <AppShell
-  hasSidebar
   systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
   style={{ minHeight: "24rem" }}
 >
@@ -546,7 +554,6 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 
 ```tsx
 <AppShell
-  hasSidebar
   systemAccent="light-dark(var(--color-green-600), var(--color-green-400))"
   style={{ minHeight: "32rem" }}
 >
@@ -701,7 +708,6 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 
 ```tsx
 <AppShell
-  hasSidebar
   systemAccent="light-dark(var(--color-blue-600), var(--color-blue-400))"
   style={{ minHeight: "30rem" }}
 >
@@ -861,6 +867,8 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Navbar.Item`            | `active`                    | `boolean`                      | `false`            |
 | `Navbar.Item`            | `icon`                      | component or element           | —                  |
 | `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required           |
+| `Navbar.Dropdown`        | `active`                    | `boolean`                      | `false`            |
+| `Navbar.Dropdown`        | `icon`                      | component or element           | —                  |
 | `Navbar.MobileToggle`    | `label`                     | `string`                       | `"Open menu"`      |
 | `Sidebar`                | `collapsed`                 | `boolean`                      | uncontrolled       |
 | `Sidebar`                | `defaultCollapsed`          | `boolean`                      | `false`            |
@@ -877,45 +885,45 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Sidebar.SubItem`        | `active` / `icon` / `badge` | as `Sidebar.Item`              | —                  |
 | `Sidebar.CollapseToggle` | `label`                     | `string`                       | `"Toggle sidebar"` |
 
-`active` writes `aria-current="page"`. Each part also takes the native attributes of its element, and `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../../basics/conventions/#classnames).
+`active` writes `aria-current="page"`, except on `Navbar.Dropdown`, where it sets `data-active` on the trigger. Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../../basics/conventions/#classnames).
 
 `<Navbar.MobileToggle>` and `<Sidebar>`'s drawer both read `<AppShell>`'s context, so the toggle is inert outside a shell. When the drawer opens, `<Sidebar>` **moves** its children into the drawer rather than duplicating them — state held in a sidebar child does not survive crossing that breakpoint.
 
 ### Vanilla
 
-| Class                         | Effect                                                                                                                                                                         |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `app-shell`                   | `min-height: 100vh` grid, one `minmax(0, 1fr)` column, rows `auto 1fr auto` as areas `header` / `main` / `footer`                                                              |
-| `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column                                                                                 |
-| `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid                                                                             |
-| `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                              |
-| `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                                                                                      |
-| `navbar-items`                | Flex row, `0.125rem` gap                                                                                                                                                       |
-| `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; `aria-current="page"` or `[data-active]` switches it to primary-on-muted                                                     |
-| `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                      |
-| `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                      |
-| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition                                                                     |
-| `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state                                                                      |
-| `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                    |
-| `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                               |
-| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                                                                                                 |
-| `sidebar-group-label`         | `text-xs` uppercase muted heading; hidden when collapsed                                                                                                                       |
-| `sidebar-item`                | `text-sm` row, `1.75rem` min height, `0.5rem` gap, inset focus ring; active state adds a primary-muted fill and medium weight                                                  |
-| `sidebar-icon`                | `1rem` muted glyph box — the one part that stays visible in the collapsed rail; turns primary when active                                                                      |
-| `sidebar-label`               | Truncating text on a `1.25rem` line that fills the row; visually hidden when collapsed, so it still names the link                                                             |
-| `sidebar-badge`               | `1.25rem` pill pushed to the row's trailing edge; hidden when collapsed                                                                                                        |
-| `sidebar-collapsible`         | `<details>` wrapper; height animates via `::details-content` and `interpolate-size: allow-keywords`                                                                            |
-| `sidebar-collapsible-trigger` | `<summary>` styled as an item, native marker removed; chevron points right when closed, down when open                                                                         |
-| `sidebar-collapsible-panel`   | Sub-item column indented `1.5rem`, so sub-item text lines up with the trigger's label; hidden when collapsed                                                                   |
-| `sidebar-subitem`             | Like `sidebar-item` at a `1.5rem` min height; takes an optional `sidebar-icon`                                                                                                 |
-| `sidebar-footer`              | Bottom column with a top border                                                                                                                                                |
-| `sidebar-collapse-toggle`     | `1.75rem` square `<label>` whose chevron flips direction when the inner `sidebar-toggle` is checked; centred in the collapsed rail                                             |
-| `sidebar-drawer`              | Fixed leading panel at `min(--app-shell-sidebar-w, 80vw)`, sliding in from fully off-screen; hides `sidebar-collapse-toggle` and a `sidebar-footer` that holds only the toggle |
-| `sidebar-drawer-backdrop`     | Fixed scrim over the page that fades in with the drawer                                                                                                                        |
-| `footer`                      | Wrapping `space-between` row, `text-xs` muted, 2px top stripe in `--color-system-accent`                                                                                       |
-| `footer-links`                | Wrapping row, `0.75rem` gap                                                                                                                                                    |
-| `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                                                                                         |
-| `footer-meta`                 | Muted text block                                                                                                                                                               |
+| Class                         | Effect                                                                                                                                                                                               |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app-shell`                   | `min-height: 100vh` grid, one `minmax(0, 1fr)` column, rows `auto 1fr auto` as areas `header` / `main` / `footer`                                                                                    |
+| `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column. A direct-child `sidebar` applies the same layout without the class                                   |
+| `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid                                                                                                   |
+| `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                                                    |
+| `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                                                                                                            |
+| `navbar-items`                | Flex row, `0.125rem` gap                                                                                                                                                                             |
+| `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; `aria-current="page"` or `[data-active]` switches it to primary-on-muted, as does a `menu-item[aria-current="page"]` in its menu in `navbar-items` |
+| `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                                            |
+| `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                                            |
+| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition                                                                                           |
+| `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state                                                                                            |
+| `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                                          |
+| `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                                                     |
+| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                                                                                                                       |
+| `sidebar-group-label`         | `text-xs` uppercase muted heading; hidden when collapsed                                                                                                                                             |
+| `sidebar-item`                | `text-sm` row, `1.75rem` min height, `0.5rem` gap, inset focus ring; active state adds a primary-muted fill and medium weight                                                                        |
+| `sidebar-icon`                | `1rem` muted glyph box — the one part that stays visible in the collapsed rail; turns primary when active                                                                                            |
+| `sidebar-label`               | Truncating text on a `1.25rem` line that fills the row; visually hidden when collapsed, so it still names the link                                                                                   |
+| `sidebar-badge`               | `1.25rem` pill pushed to the row's trailing edge; hidden when collapsed                                                                                                                              |
+| `sidebar-collapsible`         | `<details>` wrapper; height animates via `::details-content` and `interpolate-size: allow-keywords`                                                                                                  |
+| `sidebar-collapsible-trigger` | `<summary>` styled as an item, native marker removed; chevron points right when closed, down when open; takes the active fill while it hides the current sub-item (closed, or in the collapsed rail) |
+| `sidebar-collapsible-panel`   | Sub-item column indented `1.5rem`, so sub-item text lines up with the trigger's label; hidden when collapsed                                                                                         |
+| `sidebar-subitem`             | Like `sidebar-item` at a `1.5rem` min height; wrap the text in `sidebar-label` so it truncates, optional `sidebar-icon`                                                                              |
+| `sidebar-footer`              | Bottom column with a top border                                                                                                                                                                      |
+| `sidebar-collapse-toggle`     | `1.75rem` square `<label>` whose chevron flips direction when the inner `sidebar-toggle` is checked; centred in the collapsed rail                                                                   |
+| `sidebar-drawer`              | Fixed leading panel at `min(--app-shell-sidebar-w, 80vw)`, sliding in from fully off-screen; hides `sidebar-collapse-toggle` and a `sidebar-footer` that holds only the toggle                       |
+| `sidebar-drawer-backdrop`     | Fixed scrim over the page that fades in with the drawer                                                                                                                                              |
+| `footer`                      | Wrapping `space-between` row, `text-xs` muted, 2px top stripe in `--color-system-accent`                                                                                                             |
+| `footer-links`                | Wrapping row, `0.75rem` gap                                                                                                                                                                          |
+| `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                                                                                                               |
+| `footer-meta`                 | Muted text block                                                                                                                                                                                     |
 
 The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 

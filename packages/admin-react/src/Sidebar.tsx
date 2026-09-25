@@ -229,7 +229,7 @@ export interface SidebarSubItemProps extends ComponentProps<"a"> {
   icon?: IconProp;
   badge?: ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
-  classNames?: SlotClasses<"icon" | "badge">;
+  classNames?: SlotClasses<"icon" | "label" | "badge">;
 }
 
 function SidebarSubItem({
@@ -250,7 +250,9 @@ function SidebarSubItem({
       {icon != null ? (
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
-      {children}
+      {hasNode(children) ? (
+        <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+      ) : null}
       {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
     </a>
   );

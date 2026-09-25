@@ -28,7 +28,9 @@
     grid-area: footer;
   }
 
-  .app-shell-with-sidebar {
+  /* A direct-child .sidebar switches the layout on its own; :where() keeps the class's specificity. */
+  .app-shell-with-sidebar,
+  .app-shell:where(:has(> .sidebar)) {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
       "header header"
@@ -36,13 +38,14 @@
       "footer  footer";
   }
 
-  .app-shell-with-sidebar > .sidebar {
+  .app-shell > .sidebar {
     grid-area: sidebar;
   }
 
   /* Mobile: the sidebar lives in a Dialog drawer, so reclaim the column. */
   @media (width < 48rem) {
-    .app-shell-with-sidebar {
+    .app-shell-with-sidebar,
+    .app-shell:where(:has(> .sidebar)) {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
         "header"
@@ -50,7 +53,7 @@
         "footer";
     }
 
-    .app-shell-with-sidebar > .sidebar {
+    .app-shell > .sidebar {
       display: none;
     }
   }

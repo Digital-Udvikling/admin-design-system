@@ -15,6 +15,7 @@ export function useAppShell(): AppShellContextValue | null {
 }
 
 export interface AppShellProps extends ComponentProps<"div"> {
+  /** Adds `app-shell-with-sidebar`. Optional: a `<Sidebar>` rendered as a direct child switches the grid on its own. */
   hasSidebar?: boolean;
   mobileDrawerOpen?: boolean;
   defaultMobileDrawerOpen?: boolean;

@@ -91,6 +91,7 @@ Shorthand props like `title` and `actions` render inner elements a single `class
 | `Field`                  | `label`, `description`, `error`                                         |
 | `Input`, `PasswordInput` | `wrapper`, `action`                                                     |
 | `Item`                   | `media`, `content`, `title`, `description`, `actions`                   |
+| `Navbar.Dropdown`        | `trigger`, `popup`                                                      |
 | `NumberInput`            | `root`, `group`, `decrement`, `input`, `increment`                      |
 | `Pagination`             | `item`, `link`, `ellipsis`                                              |
 | `PropertyList`           | `title`, `items`                                                        |
@@ -98,7 +99,7 @@ Shorthand props like `title` and `actions` render inner elements a single `class
 | `PropertyList.Value`     | `copy`                                                                  |
 | `Sidebar`                | `drawer`, `drawerBackdrop`                                              |
 | `Sidebar.Item`           | `icon`, `label`, `badge`                                                |
-| `Sidebar.SubItem`        | `icon`, `badge`                                                         |
+| `Sidebar.SubItem`        | `icon`, `label`, `badge`                                                |
 | `Sidebar.Collapsible`    | `icon`, `label`, `trigger`, `panel`                                     |
 | `Sidebar.CollapseToggle` | `input`                                                                 |
 | `StatCard`               | `label`, `value`, `trend`, `detail`                                     |

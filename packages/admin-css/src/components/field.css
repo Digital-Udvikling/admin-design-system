@@ -38,12 +38,17 @@
     @apply items-start;
   }
 
+  /* Same label gap as a wrapping label: 0.5rem beside a checkbox or radio, 0.75rem beside a switch. */
+  .field-row:has(> :is(.checkbox, .radio)) {
+    @apply gap-x-2;
+  }
+
   .field-row > :is(.checkbox, .radio) {
     @apply mt-0.5;
   }
 
   .field-label {
-    @apply text-sm font-medium text-text leading-none;
+    @apply text-sm font-medium text-text leading-4;
   }
 
   /* A required control marks only its own field's label. Branch 1: top-level fields; branch 2:
@@ -84,11 +89,11 @@
   }
 
   .field-description {
-    @apply text-xs text-text-muted leading-relaxed;
+    @apply text-xs text-text-muted leading-4;
   }
 
   .field-error {
-    @apply text-xs text-danger leading-relaxed;
+    @apply text-xs text-danger leading-4;
   }
 
   /* Base UI sets data-invalid on the Field root when validation fails; vanilla sets it by hand.

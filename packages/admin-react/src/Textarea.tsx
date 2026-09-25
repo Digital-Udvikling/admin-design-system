@@ -7,6 +7,8 @@ export type TextareaSize = "sm" | "md" | "lg";
 
 export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> {
   variant?: TextareaVariant;
+  size?: TextareaSize;
+  /** @deprecated Use `size`; `size` wins when both are set. */
   textareaSize?: TextareaSize;
   /**
    * Height tracks content via CSS `field-sizing`; browsers without it keep a fixed, resizable
@@ -22,11 +24,13 @@ export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> 
  */
 export function Textarea({
   variant = "bordered",
-  textareaSize = "md",
+  size,
+  textareaSize,
   autoResize,
   className,
   ...rest
 }: TextareaProps) {
+  const resolvedSize = size ?? textareaSize ?? "md";
   return (
     <BaseField.Control
       // Field.Control is typed for <input>; render a <textarea> with Base UI's
@@ -36,7 +40,7 @@ export function Textarea({
         [
           "textarea",
           variant !== "bordered" && `textarea-${variant}`,
-          textareaSize !== "md" && `textarea-${textareaSize}`,
+          resolvedSize !== "md" && `textarea-${resolvedSize}`,
           autoResize && "textarea-autosize",
         ],
         className,

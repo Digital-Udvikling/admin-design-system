@@ -59,9 +59,9 @@
 ```
 
 ```tsx
-<Textarea textareaSize="sm" placeholder="Small" />
+<Textarea size="sm" placeholder="Small" />
 <Textarea placeholder="Medium" />
-<Textarea textareaSize="lg" placeholder="Large" />
+<Textarea size="lg" placeholder="Large" />
 ```
 
 ### Auto-resize
@@ -95,10 +95,11 @@
 | Prop           | Type                                                                    | Default      |
 | -------------- | ----------------------------------------------------------------------- | ------------ |
 | `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
-| `textareaSize` | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
+| `size`         | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
+| `textareaSize` | `"sm" \| "md" \| "lg"`                                                  | —            |
 | `autoResize`   | `boolean`                                                               | `false`      |
 
-The size prop is `textareaSize`, not `size`, because `<textarea>` has no native `size` but the type would still collide — see [Conventions › Sizes](../../basics/conventions.md#sizes).
+`textareaSize` is a deprecated alias of `size`; `size` wins when both are set.
 
 Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](fields.md) it gets the same id, label association and validity wiring as an `Input`, and works standalone outside one. Plus native `<textarea>` attributes.
 

@@ -16,6 +16,16 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-success");
   });
 
+  it("applies the size class from size, with textareaSize as a deprecated alias", () => {
+    const { rerender } = render(<Textarea aria-label="x" size="sm" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-sm");
+    rerender(<Textarea aria-label="x" textareaSize="lg" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-lg");
+    rerender(<Textarea aria-label="x" size="sm" textareaSize="lg" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea-sm");
+    expect(screen.getByLabelText("x")).not.toHaveAdminClass("textarea-lg");
+  });
+
   it("applies the autosize class only when autoResize is set", () => {
     const { rerender } = render(<Textarea aria-label="x" />);
     expect(screen.getByLabelText("x")).not.toHaveAdminClass("textarea-autosize");

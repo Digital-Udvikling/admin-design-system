@@ -20,8 +20,9 @@ export interface AppShellProps extends ComponentProps<"div"> {
   defaultMobileDrawerOpen?: boolean;
   onMobileDrawerOpenChange?: (open: boolean) => void;
   /**
-   * CSS color (e.g. `var(--color-purple-600)`) applied as `--color-system-accent`
-   * to the shell root. See [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
+   * CSS color applied as `--color-system-accent` to the shell root. Pair a light and
+   * a dark tone (e.g. `light-dark(var(--color-purple-600), var(--color-purple-400))`)
+   * so the brand-tile glyph keeps its contrast in dark mode. See [Theming › System accent](https://digital-udvikling.github.io/admin-design-system/basics/theming/#system-accent).
    */
   systemAccent?: string;
   children?: ReactNode;

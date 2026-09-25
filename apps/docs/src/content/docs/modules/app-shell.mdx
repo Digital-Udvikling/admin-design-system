@@ -52,10 +52,13 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
 :::example
 
 ```html
-<div class="app-shell" style="min-height: 16rem; --color-system-accent: var(--color-purple-600)">
+<div
+  class="app-shell"
+  style="min-height: 16rem; --color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
+>
   <header class="navbar">
     <div class="navbar-brand">
-      <span class="brand-tile" aria-hidden>A</span>
+      <span class="brand-tile" aria-hidden="true">A</span>
       Acme
     </div>
   </header>
@@ -64,7 +67,10 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
 ```
 
 ```tsx
-<AppShell systemAccent="var(--color-purple-600)" style={{ minHeight: "16rem" }}>
+<AppShell
+  systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
+  style={{ minHeight: "16rem" }}
+>
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
@@ -82,7 +88,11 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 :::example
 
 ```tsx
-<AppShell hasSidebar systemAccent="var(--color-purple-600)" style={{ minHeight: "20rem" }}>
+<AppShell
+  hasSidebar
+  systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
+  style={{ minHeight: "20rem" }}
+>
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
@@ -115,9 +125,12 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 :::example
 
 ```html
-<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+<header
+  class="navbar"
+  style="--color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
+>
   <div class="navbar-brand">
-    <span class="brand-tile" aria-hidden>A</span>
+    <span class="brand-tile" aria-hidden="true">A</span>
     Acme
   </div>
   <nav class="navbar-items">
@@ -138,7 +151,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 ```
 
 ```tsx
-<Navbar systemAccent="var(--color-purple-600)">
+<Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   <Navbar.Brand>
     <BrandTile monogram="A" />
     Acme
@@ -169,9 +182,12 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 :::example
 
 ```html
-<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+<header
+  class="navbar"
+  style="--color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
+>
   <div class="navbar-brand">
-    <span class="brand-tile" aria-hidden>A</span>
+    <span class="brand-tile" aria-hidden="true">A</span>
     Acme
   </div>
   <nav class="navbar-items">
@@ -190,7 +206,7 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
 ```
 
 ```tsx
-<Navbar systemAccent="var(--color-purple-600)">
+<Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   <Navbar.Brand>
     <BrandTile monogram="A" />
     Acme
@@ -216,9 +232,12 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 :::example
 
 ```html
-<header class="navbar" style="--color-system-accent: var(--color-green-600)">
+<header
+  class="navbar"
+  style="--color-system-accent: light-dark(var(--color-green-600), var(--color-green-400))"
+>
   <div class="navbar-brand">
-    <span class="brand-tile" aria-hidden>AO</span>
+    <span class="brand-tile" aria-hidden="true">AO</span>
     AO Retail
   </div>
   <div class="navbar-actions">
@@ -240,13 +259,20 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 ```
 
 ```tsx
-<Navbar systemAccent="var(--color-green-600)">
+<Navbar systemAccent="light-dark(var(--color-green-600), var(--color-green-400))">
   <Navbar.Brand>
     <BrandTile monogram="AO" />
     AO Retail
   </Navbar.Brand>
   <Navbar.Actions>
-    <Select defaultValue="billigvvs.dk">
+    <Select
+      defaultValue="billigvvs.dk"
+      items={{
+        "billigvvs.dk": "BilligVVS.dk",
+        "lavprisvvs.dk": "LavprisVVS.dk",
+        "elproffs.se": "ELproffs.se",
+      }}
+    >
       <Select.Trigger triggerSize="sm" aria-label="Shop">
         <Select.Value />
         <Select.Icon />
@@ -387,7 +413,7 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
 
 ### Click to collapse
 
-`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox; the rail responds to `.sidebar:has(.sidebar-toggle:checked)`. Pass each item's `icon` so it stays visible when collapsed.
+`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox; the rail responds to `.sidebar:has(.sidebar-toggle:checked)`. Pass each item's `icon` so it stays visible when collapsed, and wrap header text in `<Sidebar.Label>` so it hides with the item labels.
 
 React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChange` for controlled state.
 
@@ -395,6 +421,10 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
 
 ```html
 <aside class="sidebar" style="height: 20rem">
+  <div class="sidebar-header">
+    <span class="brand-tile" aria-hidden="true">AO</span>
+    <span class="sidebar-label">AO Retail</span>
+  </div>
   <nav class="sidebar-nav">
     <a class="sidebar-item" href="#" aria-current="page">
       <span class="sidebar-icon">
@@ -419,6 +449,10 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
 
 ```tsx
 <Sidebar style={{ height: "20rem" }}>
+  <Sidebar.Header>
+    <BrandTile monogram="AO" />
+    <Sidebar.Label>AO Retail</Sidebar.Label>
+  </Sidebar.Header>
   <Sidebar.Nav>
     <Sidebar.Item href="#" active icon={IconHome}>
       Dashboard
@@ -437,14 +471,18 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
 
 ### Mobile drawer
 
-Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a drawer. Esc, backdrop click, and link clicks all dismiss; focus is trapped while open. Override the drawer's accessible label via `<Sidebar drawerLabel="...">`.
+Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a drawer. Esc, backdrop click, and link clicks all dismiss; focus is trapped while open. The drawer hides `<Sidebar.CollapseToggle>`, and a `<Sidebar.Footer>` that holds only the toggle. Override the drawer's accessible label via `<Sidebar drawerLabel="...">`.
 
 `<AppShell>` accepts `mobileDrawerOpen` / `defaultMobileDrawerOpen` / `onMobileDrawerOpenChange` for controlled drawer state — useful when an external trigger (a route guard, a tutorial step) needs to open it.
 
 :::example
 
 ```tsx
-<AppShell hasSidebar systemAccent="var(--color-purple-600)" style={{ minHeight: "24rem" }}>
+<AppShell
+  hasSidebar
+  systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
+  style={{ minHeight: "24rem" }}
+>
   <Navbar>
     <Navbar.MobileToggle />
     <Navbar.Brand>
@@ -507,7 +545,11 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 :::example
 
 ```tsx
-<AppShell hasSidebar systemAccent="var(--color-green-600)" style={{ minHeight: "32rem" }}>
+<AppShell
+  hasSidebar
+  systemAccent="light-dark(var(--color-green-600), var(--color-green-400))"
+  style={{ minHeight: "32rem" }}
+>
   <Navbar>
     <Navbar.MobileToggle />
     <Navbar.Brand>
@@ -515,7 +557,15 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
       AO Retail
     </Navbar.Brand>
     <Navbar.Actions>
-      <Select defaultValue="billigvvs.dk">
+      <Select
+        defaultValue="billigvvs.dk"
+        items={{
+          "billigvvs.dk": "BilligVVS.dk",
+          "lavprisvvs.dk": "LavprisVVS.dk",
+          "elproffs.se": "ELproffs.se",
+          "vvskupp.no": "VVSkupp.no",
+        }}
+      >
         <Select.Trigger triggerSize="sm" aria-label="Shop">
           <Select.Value />
           <Select.Icon />
@@ -595,7 +645,10 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 :::example
 
 ```tsx
-<AppShell systemAccent="var(--color-orange-600)" style={{ minHeight: "28rem" }}>
+<AppShell
+  systemAccent="light-dark(var(--color-orange-600), var(--color-orange-400))"
+  style={{ minHeight: "28rem" }}
+>
   <Navbar>
     <Navbar.Brand>
       <BrandTile icon={IconChartBar} />
@@ -647,7 +700,11 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 :::example
 
 ```tsx
-<AppShell hasSidebar systemAccent="var(--color-blue-600)" style={{ minHeight: "30rem" }}>
+<AppShell
+  hasSidebar
+  systemAccent="light-dark(var(--color-blue-600), var(--color-blue-400))"
+  style={{ minHeight: "30rem" }}
+>
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
@@ -714,7 +771,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 
 ## Customization
 
-Two CSS variables on `.app-shell` set the rail width:
+Two CSS variables set the rail width. Set them on `:root`: a value on `.app-shell` sizes the rail, but the React mobile drawer portals outside the shell and keeps the default.
 
 | Variable                          | Default | What it controls                       |
 | --------------------------------- | ------- | -------------------------------------- |
@@ -722,28 +779,31 @@ Two CSS variables on `.app-shell` set the rail width:
 | `--app-shell-sidebar-w-collapsed` | `56px`  | Width of the icon rail when collapsed. |
 
 ```css
-.app-shell {
+:root {
   --app-shell-sidebar-w: 280px;
 }
 ```
 
 ## Branding multiple systems
 
-The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Setting that variable [app-wide](../../basics/theming/#system-accent) retints both. To tag several systems in one app, set it per shell instead: `<AppShell systemAccent>` covers the navbar and footer, `<Navbar systemAccent>` the navbar alone, and in vanilla an inline style on either element does the same. Then drop a [`<BrandTile>`](../../components/brand-tile/) into `<Navbar.Brand>`:
+The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the footer mirrors it with a matching top stripe. Setting that variable [app-wide](../../basics/theming/#system-accent) retints both. To tag several systems in one app, set it per shell instead: `<AppShell systemAccent>` covers the navbar and footer, `<Navbar systemAccent>` the navbar alone, and in vanilla an inline style on either element does the same. Pass a `light-dark()` pair (the `-600` tone for light, `-400` for dark) so the tile's glyph keeps its contrast in dark mode. Then drop a [`<BrandTile>`](../../components/brand-tile/) into `<Navbar.Brand>`:
 
 :::example
 
 ```html
-<header class="navbar" style="--color-system-accent: var(--color-purple-600)">
+<header
+  class="navbar"
+  style="--color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
+>
   <div class="navbar-brand">
-    <span class="brand-tile" aria-hidden>OR</span>
+    <span class="brand-tile" aria-hidden="true">OR</span>
     Orders
   </div>
 </header>
 ```
 
 ```tsx
-<Navbar systemAccent="var(--color-purple-600)">
+<Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   <Navbar.Brand>
     <BrandTile monogram="OR" />
     Orders
@@ -807,8 +867,10 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Sidebar`                | `onCollapsedChange`         | `(collapsed: boolean) => void` | —                  |
 | `Sidebar`                | `drawerLabel`               | `string`                       | `"Navigation"`     |
 | `Sidebar.Item`           | `active`                    | `boolean`                      | `false`            |
-| `Sidebar.Item`           | `icon` / `badge`            | component or element           | —                  |
-| `Sidebar.Collapsible`    | `icon` / `label`            | component or element           | —                  |
+| `Sidebar.Item`           | `icon`                      | component or element           | —                  |
+| `Sidebar.Item`           | `badge`                     | `ReactNode`                    | —                  |
+| `Sidebar.Collapsible`    | `icon`                      | component or element           | —                  |
+| `Sidebar.Collapsible`    | `label`                     | `ReactNode`                    | —                  |
 | `Sidebar.Collapsible`    | `trigger`                   | `ReactNode`                    | icon + label       |
 | `Sidebar.Collapsible`    | `open` / `defaultOpen`      | `boolean`                      | uncontrolled       |
 | `Sidebar.Collapsible`    | `onOpenChange`              | `(open: boolean) => void`      | —                  |
@@ -821,39 +883,39 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 
 ### Vanilla
 
-| Class                         | Effect                                                                                                     |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `app-shell`                   | `min-height: 100vh` grid, rows `auto 1fr auto` as areas `header` / `main` / `footer`                       |
-| `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column             |
-| `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid         |
-| `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`          |
-| `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                  |
-| `navbar-items`                | Flex row, `0.125rem` gap                                                                                   |
-| `navbar-item`                 | `text-sm` pill, fills on hover; `aria-current="page"` or `[data-active]` switches it to primary-on-muted   |
-| `navbar-actions`              | Flex row pushed right with `margin-left: auto`                                                             |
-| `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`  |
-| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition |
-| `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state  |
-| `sidebar-header`              | `3rem` row above the nav with a bottom border, for a logo or product switcher                              |
-| `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                           |
-| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                             |
-| `sidebar-group-label`         | `text-xs` uppercase muted heading; hidden when collapsed                                                   |
-| `sidebar-item`                | `text-sm` row with a `0.5rem` gap; active state adds a primary-muted fill and medium weight                |
-| `sidebar-icon`                | `1rem` muted glyph box — the one part that stays visible in the collapsed rail; turns primary when active  |
-| `sidebar-label`               | Truncating text that fills the row; hidden when collapsed                                                  |
-| `sidebar-badge`               | `1.25rem` pill pushed to the row's trailing edge; hidden when collapsed                                    |
-| `sidebar-collapsible`         | `<details>` wrapper; height animates via `::details-content` and `interpolate-size: allow-keywords`        |
-| `sidebar-collapsible-trigger` | `<summary>` styled as an item, native marker removed, CSS chevron rotating 45° when open                   |
-| `sidebar-collapsible-panel`   | Sub-item column indented `1rem`; hidden when collapsed                                                     |
-| `sidebar-subitem`             | Like `sidebar-item` with tighter vertical padding and no icon box                                          |
-| `sidebar-footer`              | Bottom slot with a top border                                                                              |
-| `sidebar-collapse-toggle`     | `1.75rem` square `<label>` whose CSS chevron flips direction when the inner `sidebar-toggle` is checked    |
-| `sidebar-drawer`              | Fixed leading panel at `min(--app-shell-sidebar-w, 80vw)`, sliding in from fully off-screen                |
-| `sidebar-drawer-backdrop`     | Fixed scrim over the page that fades in with the drawer                                                    |
-| `footer`                      | Wrapping `space-between` row, `text-xs` muted, 2px top stripe in `--color-system-accent`                   |
-| `footer-links`                | Wrapping row, `0.75rem` gap                                                                                |
-| `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                     |
-| `footer-meta`                 | Muted text block                                                                                           |
+| Class                         | Effect                                                                                                                                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app-shell`                   | `min-height: 100vh` grid, one `minmax(0, 1fr)` column, rows `auto 1fr auto` as areas `header` / `main` / `footer`                                                              |
+| `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column                                                                                 |
+| `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid                                                                             |
+| `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                              |
+| `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                                                                                      |
+| `navbar-items`                | Flex row, `0.125rem` gap                                                                                                                                                       |
+| `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; `aria-current="page"` or `[data-active]` switches it to primary-on-muted                                                     |
+| `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                      |
+| `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                      |
+| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition                                                                     |
+| `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state                                                                      |
+| `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                    |
+| `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                               |
+| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                                                                                                 |
+| `sidebar-group-label`         | `text-xs` uppercase muted heading; hidden when collapsed                                                                                                                       |
+| `sidebar-item`                | `text-sm` row, `1.75rem` min height, `0.5rem` gap, inset focus ring; active state adds a primary-muted fill and medium weight                                                  |
+| `sidebar-icon`                | `1rem` muted glyph box — the one part that stays visible in the collapsed rail; turns primary when active                                                                      |
+| `sidebar-label`               | Truncating text on a `1.25rem` line that fills the row; visually hidden when collapsed, so it still names the link                                                             |
+| `sidebar-badge`               | `1.25rem` pill pushed to the row's trailing edge; hidden when collapsed                                                                                                        |
+| `sidebar-collapsible`         | `<details>` wrapper; height animates via `::details-content` and `interpolate-size: allow-keywords`                                                                            |
+| `sidebar-collapsible-trigger` | `<summary>` styled as an item, native marker removed; chevron points right when closed, down when open                                                                         |
+| `sidebar-collapsible-panel`   | Sub-item column indented `1.5rem`, so sub-item text lines up with the trigger's label; hidden when collapsed                                                                   |
+| `sidebar-subitem`             | Like `sidebar-item` at a `1.5rem` min height; takes an optional `sidebar-icon`                                                                                                 |
+| `sidebar-footer`              | Bottom column with a top border                                                                                                                                                |
+| `sidebar-collapse-toggle`     | `1.75rem` square `<label>` whose chevron flips direction when the inner `sidebar-toggle` is checked; centred in the collapsed rail                                             |
+| `sidebar-drawer`              | Fixed leading panel at `min(--app-shell-sidebar-w, 80vw)`, sliding in from fully off-screen; hides `sidebar-collapse-toggle` and a `sidebar-footer` that holds only the toggle |
+| `sidebar-drawer-backdrop`     | Fixed scrim over the page that fades in with the drawer                                                                                                                        |
+| `footer`                      | Wrapping `space-between` row, `text-xs` muted, 2px top stripe in `--color-system-accent`                                                                                       |
+| `footer-links`                | Wrapping row, `0.75rem` gap                                                                                                                                                    |
+| `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                                                                                         |
+| `footer-meta`                 | Muted text block                                                                                                                                                               |
 
 The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 

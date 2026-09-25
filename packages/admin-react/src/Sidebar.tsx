@@ -4,6 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { PortalContainerContext } from "./portal-context";
 
 interface SidebarContextValue {
   collapsed?: boolean;
@@ -37,6 +38,7 @@ function SidebarRoot({
 }: SidebarProps) {
   const shell = useAppShell();
   const drawerOpen = shell?.mobileDrawerOpen ?? false;
+  const portalContainer = useContext(PortalContainerContext);
 
   return (
     <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
@@ -45,7 +47,7 @@ function SidebarRoot({
       </aside>
       {shell ? (
         <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
-          <BaseDialog.Portal>
+          <BaseDialog.Portal container={portalContainer ?? undefined}>
             <BaseDialog.Backdrop
               className={cn("sidebar-drawer-backdrop", classNames?.drawerBackdrop)}
             />
@@ -120,14 +122,17 @@ function SidebarItem({
       {icon != null ? (
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
-      {children !== undefined ? (
+      {hasSlot(children) ? (
         <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
       ) : null}
-      {badge !== undefined ? (
-        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
-      ) : null}
+      {hasSlot(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
     </a>
   );
+}
+
+/** Whether a shorthand slot has content: `null`, `undefined`, `false` and `""` render no wrapper. */
+function hasSlot(node: ReactNode): boolean {
+  return node != null && node !== false && node !== "";
 }
 
 export type SidebarIconProps = ComponentProps<"span">;
@@ -188,9 +193,7 @@ function SidebarCollapsible({
       {icon != null ? (
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
-      {label !== undefined ? (
-        <SidebarLabel className={classNames?.label}>{label}</SidebarLabel>
-      ) : null}
+      {hasSlot(label) ? <SidebarLabel className={classNames?.label}>{label}</SidebarLabel> : null}
     </>
   );
 
@@ -201,11 +204,23 @@ function SidebarCollapsible({
       onToggle={(event) => {
         const next = (event.currentTarget as HTMLDetailsElement).open;
         if (!isControlled) setInternalOpen(next);
-        onOpenChange?.(next);
+        // Skips the echo of a controlled `open` update; still reports toggles React didn't make.
+        if (next !== isOpen) onOpenChange?.(next);
       }}
       {...rest}
     >
-      <summary className={cn("sidebar-collapsible-trigger", classNames?.trigger)}>
+      <summary
+        className={cn("sidebar-collapsible-trigger", classNames?.trigger)}
+        // Controlled: cancel the native toggle so the DOM can't drift from `open`. Capture
+        // phase, since happy-dom toggles <details> before the click bubbles to React's root.
+        onClickCapture={(event) => {
+          if (!isControlled) return;
+          const nested = (event.target as Element).closest("a, button, input, select, textarea");
+          if (nested !== null && event.currentTarget.contains(nested)) return;
+          event.preventDefault();
+          onOpenChange?.(!isOpen);
+        }}
+      >
         {triggerContent}
       </summary>
       <div className={cn("sidebar-collapsible-panel", classNames?.panel)}>{children}</div>
@@ -240,9 +255,7 @@ function SidebarSubItem({
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
       {children}
-      {badge !== undefined ? (
-        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
-      ) : null}
+      {hasSlot(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
     </a>
   );
 }

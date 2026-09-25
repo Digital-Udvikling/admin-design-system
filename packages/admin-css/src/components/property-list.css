@@ -74,6 +74,11 @@
     @apply bg-surface-stripe;
   }
 
+  /* A placeholder dash, muted so filled rows stand out. */
+  .property-list-value-empty {
+    @apply text-text-muted;
+  }
+
   /* Collapse the section when every value rendered the auto em-dash. */
   .property-list-hide-if-empty:not(:has(.property-list-value:not(.property-list-value-empty))) {
     display: none;

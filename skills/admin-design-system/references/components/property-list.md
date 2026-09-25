@@ -96,7 +96,7 @@
 <section class="property-list">
   <dl class="property-list-items">
     <dt class="property-list-label">Lager (CL)</dt>
-    <dd class="property-list-value">248</dd>
+    <dd class="property-list-value property-list-value-numeric">248</dd>
     <dt class="property-list-label">Indkøbspris</dt>
     <dd class="property-list-value property-list-value-numeric">42,50 kr</dd>
     <dt class="property-list-label">Vejl. udsalgspris</dt>
@@ -107,7 +107,7 @@
 
 ```tsx
 <PropertyList>
-  <PropertyList.Item label="Lager (CL)" value="248" />
+  <PropertyList.Item label="Lager (CL)" value="248" numeric />
   <PropertyList.Item label="Indkøbspris" value="42,50 kr" numeric />
   <PropertyList.Item label="Vejl. udsalgspris" value="129,00 kr" numeric />
 </PropertyList>
@@ -150,7 +150,11 @@
       <span class="badge badge-success">A — Active</span>
     </dd>
     <dt class="property-list-label">Leverandør</dt>
-    <dd class="property-list-value"><a href="#">Acme A/S</a></dd>
+    <dd class="property-list-value"><a class="link" href="#">Acme A/S</a></dd>
+    <dt class="property-list-label">Oprettet</dt>
+    <dd class="property-list-value">
+      <span>af <a class="link" href="#">Jane Doe</a> den <strong>12. maj</strong></span>
+    </dd>
   </dl>
 </section>
 ```
@@ -158,7 +162,15 @@
 ```tsx
 <PropertyList>
   <PropertyList.Item label="Status" value={<Badge variant="success">A — Active</Badge>} />
-  <PropertyList.Item label="Leverandør" value={<a href="#">Acme A/S</a>} />
+  <PropertyList.Item label="Leverandør" value={<Link href="#">Acme A/S</Link>} />
+  <PropertyList.Item
+    label="Oprettet"
+    value={
+      <span>
+        af <Link href="#">Jane Doe</Link> den <strong>12. maj</strong>
+      </span>
+    }
+  />
 </PropertyList>
 ```
 
@@ -261,7 +273,7 @@ A `value` that is `null`, `undefined` or empty renders an em-dash and marks the 
 | `property-list-striped`          | Bands every second row with a translucent wash, keeping the `<dt>`/`<dd>` pair together |
 | `property-list-compact`          | `0.5rem`/`0.125rem` padding, `1.5rem` min-height                                        |
 | `property-list-value-numeric`    | Right-aligns the value, tabular figures                                                 |
-| `property-list-value-empty`      | Marks a dash cell so `property-list-hide-if-empty` can count it                         |
+| `property-list-value-empty`      | Mutes the dash and marks the cell so `property-list-hide-if-empty` can count it         |
 | `property-list-hide-if-empty`    | Hides the whole section when no value cell lacks `-empty`                               |
 | `property-list-copy`             | Copy button, pushed to the cell end; hidden until the row is hovered or focused         |
 | `property-list-copy-icon`        | The copy glyph, hidden while `[data-copied]` is set                                     |

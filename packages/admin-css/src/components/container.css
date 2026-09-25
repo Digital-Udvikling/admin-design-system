@@ -23,7 +23,7 @@
   }
 
   /* Reuses the shell breakpoint. */
-  @media (max-width: 48rem) {
+  @media (width < 48rem) {
     .container {
       @apply px-4;
     }

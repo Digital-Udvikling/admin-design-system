@@ -195,7 +195,7 @@
 <div class="flex w-full flex-wrap items-center gap-3">
   <span class="font-semibold">Orders</span>
   <span class="badge">128</span>
-  <input class="input flex-1" type="search" placeholder="Search" />
+  <input class="input input-sm min-w-32 flex-1" type="search" placeholder="Search" />
   <div class="flex gap-2">
     <button class="btn btn-sm"><i class="ti ti-filter" aria-hidden="true"></i> Filter</button>
     <button class="btn btn-primary btn-sm">
@@ -209,7 +209,7 @@
 <div className="flex w-full flex-wrap items-center gap-3">
   <span className="font-semibold">Orders</span>
   <Badge>128</Badge>
-  <Input type="search" placeholder="Search" className="flex-1" />
+  <Input inputSize="sm" type="search" placeholder="Search" className="min-w-32 flex-1" />
   <div className="flex gap-2">
     <Button size="sm" icon={IconFilter}>
       Filter

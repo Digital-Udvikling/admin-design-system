@@ -138,7 +138,7 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 <div class="app-shell" style="min-height: 16rem; --color-system-accent: var(--color-purple-600)">
   <header class="navbar">
     <div class="navbar-brand">
-      <span class="brand-tile" aria-hidden>A</span>
+      <span class="brand-tile" aria-hidden="true">A</span>
       Acme
     </div>
   </header>

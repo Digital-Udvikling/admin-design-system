@@ -3,9 +3,9 @@
   .dialog {
     @apply m-auto p-0
            bg-surface text-text
-           border border-border
-           rounded-xl
-           shadow-lg
+           border border-border-strong
+           rounded-lg
+           shadow-sm
            flex-col;
     --surface-current: var(--color-surface);
     width: calc(100% - 2rem);
@@ -91,12 +91,12 @@
 
   /* Subparts */
   .dialog-header {
-    @apply flex items-start gap-3 px-5 pt-5 pb-3;
+    @apply flex items-start gap-3 px-4 pt-4 pb-3;
   }
 
   /* Block flow, not flex, so links, <code> and <strong> wrap as one run of text. */
   .dialog-title {
-    @apply flex-1 text-lg font-semibold leading-tight m-0;
+    @apply flex-1 text-base font-semibold leading-tight m-0;
     /* Let a long title shrink and wrap rather than widen the header. */
     min-width: 0;
   }
@@ -121,7 +121,7 @@
   }
 
   .dialog-description {
-    @apply px-5 -mt-1 mb-3 text-sm text-text-muted;
+    @apply px-4 -mt-1 mb-3 text-sm text-text-muted;
   }
 
   /* flex-auto (basis auto), not flex-1 (basis 0): Safari collapses a basis-0 flex
@@ -129,7 +129,7 @@
      clipping short bodies. min-h-0 still lets tall content shrink and scroll here
      while the header/footer stay pinned. */
   .dialog-body {
-    @apply flex-auto min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
+    @apply flex-auto min-h-0 px-4 py-3 overflow-y-auto flex flex-col gap-3;
     overscroll-behavior: contain;
   }
 
@@ -144,21 +144,21 @@
      Trailing checks look at siblings, not :last-child, because popups portal
      in after the footer. */
   .dialog-description:first-child {
-    @apply mt-5;
+    @apply mt-4;
   }
 
   .dialog-body:first-child {
-    @apply pt-5;
+    @apply pt-4;
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
   }
 
   .dialog-description:not(:has(~ .dialog-body, ~ .dialog-footer)) {
-    @apply mb-5;
+    @apply mb-4;
   }
 
   .dialog-body:not(:has(~ .dialog-footer)) {
-    @apply pb-5;
+    @apply pb-4;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }
@@ -177,7 +177,7 @@
 
   .dialog-footer {
     @apply flex flex-wrap items-center justify-end gap-2
-           px-5 py-3
+           px-4 py-3
            border-t border-border
            bg-surface-muted;
     --surface-current: var(--color-surface-muted);
@@ -209,7 +209,7 @@
   /* Centres the 28px box on the title's first line without making the header
      taller. Without a title it keeps its full height to clear the description. */
   .dialog-title ~ .dialog-close {
-    margin-block: calc((1.125rem * 1.25 - 1.75rem) / 2);
+    margin-block: calc((1rem * 1.25 - 1.75rem) / 2);
   }
 
   /* Keep the fade, drop the lift and the drawer slides. */

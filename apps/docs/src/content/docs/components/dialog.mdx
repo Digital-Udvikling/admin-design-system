@@ -550,19 +550,19 @@ Plus native `<dialog>` attributes.
 
 ### Vanilla
 
-| Class                | Effect                                                                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `dialog`             | Centred modal: `32rem` max-width, `0.75rem` radius, large shadow, capped to the viewport, scrim backdrop, `150ms` fade and lift |
-| `dialog-sm`          | `24rem` max-width — confirms                                                                                                    |
-| `dialog-lg`          | `48rem` — longer forms                                                                                                          |
-| `dialog-auto`        | Shrinks to content, still capped to the viewport                                                                                |
-| `dialog-metabase`    | `1138px` wide with `2.75rem` gutters, so a full-width body child lands at `1048px`                                              |
-| `dialog-header`      | Title row: `1.25rem` side padding, `0.75rem` gap                                                                                |
-| `dialog-title`       | `text-lg` semibold; a leading icon sits on the first line with a `0.5rem` gap                                                   |
-| `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
-| `dialog-body`        | The scroll region: header and footer stay pinned, children keep their set height                                                |
-| `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping; a button wider than the row wraps its label                        |
-| `dialog-close`       | `1.75rem` square button with a `1rem` icon at the header's inline end, centred on the title's first line                        |
+| Class                | Effect                                                                                                                                        |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dialog`             | Centred modal: `32rem` max-width, `0.5rem` radius, strong border, small shadow, capped to the viewport, scrim backdrop, `150ms` fade and lift |
+| `dialog-sm`          | `24rem` max-width — confirms                                                                                                                  |
+| `dialog-lg`          | `48rem` — longer forms                                                                                                                        |
+| `dialog-auto`        | Shrinks to content, still capped to the viewport                                                                                              |
+| `dialog-metabase`    | `1138px` wide with `2.75rem` gutters, so a full-width body child lands at `1048px`                                                            |
+| `dialog-header`      | Title row: `1rem` side padding, `0.75rem` gap                                                                                                 |
+| `dialog-title`       | `text-base` semibold; a leading icon sits on the first line with a `0.5rem` gap                                                               |
+| `dialog-description` | `text-sm` muted, tucked under the header                                                                                                      |
+| `dialog-body`        | The scroll region: header and footer stay pinned, children keep their set height                                                              |
+| `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping; a button wider than the row wraps its label                                      |
+| `dialog-close`       | `1.75rem` square button with a `1rem` icon at the header's inline end, centred on the title's first line                                      |
 
 There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.
 

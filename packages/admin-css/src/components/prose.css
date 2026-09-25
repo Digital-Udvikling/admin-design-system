@@ -121,7 +121,7 @@
   }
   /* A wash, so the band still shows on a surface-muted card. */
   .prose :where(table:not(.table)) :where(thead th) {
-    @apply font-medium text-text-muted bg-surface-stripe border-b-border-strong;
+    @apply font-semibold text-text bg-surface-stripe border-b-border-strong;
   }
   /* Row headers, as in .table; otherwise vanilla gets the UA's bold and React the reset's 400. */
   .prose :where(table:not(.table)) :where(tbody th) {

@@ -78,13 +78,14 @@ IBM Plex Mono — fixed-width, for IDs, hashes, and code.
 
 ## Scale
 
-| Selector | Size            | Weight    | Line-height     | Use                            |
-| -------- | --------------- | --------- | --------------- | ------------------------------ |
-| `<h1>`   | 1.25rem (20px)  | 600       | `leading-tight` | Page title                     |
-| `<h2>`   | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
-| `<h3>`   | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
-| `<body>` | 0.875rem (14px) | 400       | 1.5             | Default text                   |
-| —        | 0.75rem (12px)  | 400 / 500 | 1rem (16px)     | Captions, hints, table meta    |
+| Selector                       | Size            | Weight    | Line-height     | Use                            |
+| ------------------------------ | --------------- | --------- | --------------- | ------------------------------ |
+| `<h1>`                         | 1.25rem (20px)  | 600       | `leading-tight` | Page title                     |
+| `<h2>`                         | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
+| `.card-title`, `.dialog-title` | 1rem (16px)     | 600       | `leading-tight` | Card and dialog title          |
+| `<h3>`                         | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
+| `<body>`                       | 0.875rem (14px) | 400       | 1.5             | Default text                   |
+| —                              | 0.75rem (12px)  | 400 / 500 | 1rem (16px)     | Captions, hints, table meta    |
 
 Heading sizes are applied at the element level. `h4`–`h6` have no defaults outside [Prose](../../components/prose/).
 
@@ -119,16 +120,16 @@ Regular (400), medium (500), and semibold (600).
 ```html
 <div>
   <p>Regular — body copy and long-form text.</p>
-  <p class="font-medium">Medium — labels, button text, table column headers, active states.</p>
-  <p class="font-semibold">Semibold — headings, KPI numbers.</p>
+  <p class="font-medium">Medium — labels, button text, active states.</p>
+  <p class="font-semibold">Semibold — headings, KPI numbers, table column headers.</p>
 </div>
 ```
 
 ```tsx
 <div>
   <p>Regular — body copy and long-form text.</p>
-  <p className="font-medium">Medium — labels, button text, table column headers, active states.</p>
-  <p className="font-semibold">Semibold — headings, KPI numbers.</p>
+  <p className="font-medium">Medium — labels, button text, active states.</p>
+  <p className="font-semibold">Semibold — headings, KPI numbers, table column headers.</p>
 </div>
 ```
 

@@ -10,7 +10,9 @@
   - [Required checkbox group](#required-checkbox-group)
   - [With validation](#with-validation)
   - [Inline label](#inline-label)
+  - [Inline with description](#inline-with-description)
   - [One error per validity key](#one-error-per-validity-key)
+  - [Disabled](#disabled)
 - [Reference](#reference)
   - [React](#react)
   - [Vanilla](#vanilla)
@@ -78,24 +80,27 @@
 
 ### With validation
 
+`error` is a message you supply, such as a server or form-library error. It is always shown and marks the field invalid.
+
 **Example**
 
 ```html
-<div class="field">
+<div class="field" data-invalid>
   <label class="field-label" for="username">Username</label>
-  <input id="username" class="input" required minlength="3" placeholder="At least 3 characters" />
-  <p class="field-error">Must be at least 3 characters.</p>
+  <input
+    id="username"
+    class="input"
+    value="admin"
+    aria-invalid="true"
+    aria-describedby="username-error"
+  />
+  <p id="username-error" class="field-error">This username is taken.</p>
 </div>
 ```
 
 ```tsx
-<Field
-  name="username"
-  label="Username"
-  error="Must be at least 3 characters."
-  validationMode="onChange"
->
-  <Input required minLength={3} placeholder="At least 3 characters" />
+<Field name="username" label="Username" error="This username is taken.">
+  <Input defaultValue="admin" />
 </Field>
 ```
 
@@ -116,22 +121,58 @@
 </Field>
 ```
 
-### One error per validity key
+### Inline with description
 
 **Example**
 
 ```html
-<div class="field">
+<div class="field field-row">
+  <input id="digest" type="checkbox" role="switch" class="switch" aria-describedby="digest-desc" />
+  <label class="field-label" for="digest">Weekly digest</label>
+  <p id="digest-desc" class="field-description">Sent every Monday at 08:00.</p>
+</div>
+<div class="field field-row" data-invalid>
+  <input
+    id="terms"
+    type="checkbox"
+    class="checkbox"
+    required
+    aria-invalid="true"
+    aria-describedby="terms-error"
+  />
+  <label class="field-label" for="terms">Accept the terms</label>
+  <p id="terms-error" class="field-error">Accept the terms to continue.</p>
+</div>
+```
+
+```tsx
+<Field inline label="Weekly digest" description="Sent every Monday at 08:00.">
+  <Switch />
+</Field>
+<Field inline label="Accept the terms" error="Accept the terms to continue.">
+  <Checkbox required />
+</Field>
+```
+
+### One error per validity key
+
+Messages that follow the control's own validity go in `Field.Container`; each `Field.Error` renders once validation fails, so the React preview starts without one.
+
+**Example**
+
+```html
+<div class="field" data-invalid>
   <label class="field-label" for="username-multi">Username</label>
   <input
     id="username-multi"
     class="input"
+    value="ab"
     required
     minlength="3"
-    placeholder="At least 3 characters"
+    aria-invalid="true"
+    aria-describedby="username-multi-error"
   />
-  <p class="field-error">Username is required.</p>
-  <p class="field-error">Must be at least 3 characters.</p>
+  <p id="username-multi-error" class="field-error">Must be at least 3 characters.</p>
 </div>
 ```
 
@@ -142,6 +183,30 @@
   <Field.Error match="valueMissing">Username is required.</Field.Error>
   <Field.Error match="tooShort">Must be at least 3 characters.</Field.Error>
 </Field.Container>
+```
+
+### Disabled
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="sku">SKU</label>
+  <input id="sku" class="input" value="AO-10432" disabled />
+</div>
+<div class="field field-row">
+  <input id="archive" type="checkbox" role="switch" class="switch" disabled />
+  <label class="field-label" for="archive">Auto-archive</label>
+</div>
+```
+
+```tsx
+<Field label="SKU" disabled>
+  <Input defaultValue="AO-10432" />
+</Field>
+<Field inline label="Auto-archive" disabled>
+  <Switch />
+</Field>
 ```
 
 ## Reference
@@ -165,27 +230,29 @@
 | `inline`      | `boolean`                                        | `false` |
 | `classNames`  | [slots](../../basics/conventions.md#classnames) | —       |
 
-Wraps [Base UI Field](https://base-ui.com/react/components/field), which earns the component its place: it generates the control's `id`, points the label's `for` at it, wires `aria-describedby` to both the description and the error, and mirrors the browser's `ValidityState` onto the root as `[data-invalid]` — the hook the CSS uses to redden every control inside. `name`, `validationMode` and `validate` come from there.
+Wraps [Base UI Field](https://base-ui.com/react/components/field), which earns the component its place: it generates the control's `id`, points the label's `for` at it, wires `aria-describedby` to both the description and the error, and mirrors the browser's `ValidityState` onto the root as `[data-invalid]` — the hook the CSS uses to redden every control inside. `name`, `invalid`, `disabled`, `validationMode` and `validate` come from there.
 
-`Field` with `label` / `description` / `error` covers the ordinary case, rendering the parts in the right order around `children`. `Field.Container` renders only the `.field` box and leaves you to place the parts, which an irregular layout calls for. It is also the form to use when each message ties to a specific `ValidityState` key through `Field.Error`'s `match`, since the `error` prop is one message shown for any failure. Both render the same element; only the amount of assembly differs. See the [`.Container` escape hatch](../../basics/conventions.md#container-escape-hatch).
+`Field` with `label` / `description` / `error` covers the ordinary case, rendering the parts in the right order around `children`; `null`, `false` and `""` render no part. `error` is always shown and sets `invalid`, unless you pass `invalid` yourself. `Field.Container` renders only the `.field` box and leaves you to place the parts, which an irregular layout calls for. It is also the form for messages that follow the control's own validity: `Field.Error` renders once validation fails, or for one `ValidityState` key through `match`. Both render the same element; only the amount of assembly differs. See the [`.Container` escape hatch](../../basics/conventions.md#container-escape-hatch).
 
-`required` sets the label's asterisk and validates nothing. Left unset, the asterisk follows the control's own `required`, on a label that is a direct child of the field. `true` adds it, for a control with no native `required` or a `Field.Label` wrapped in another element inside `Field.Container`; `false` removes it. `Field.Label` takes the same prop. `inline` puts the control before the label on one row, the layout for a switch or a lone checkbox. `classNames` covers `label`, `description`, `error`. Plus native `<div>` attributes.
+`required` sets the label's asterisk and validates nothing. Left unset, the asterisk follows the control's own `required`, on a label that is a direct child of the field. `true` adds it, for a control with no native `required` or a `Field.Label` wrapped in another element inside `Field.Container`; `false` removes it. `Field.Label` takes the same prop. `inline` puts the control before the label, with the description and error under the label, the layout for a switch or a lone checkbox. `classNames` covers `label`, `description`, `error`. Plus native `<div>` attributes.
 
 ### Vanilla
 
 | Class                     | Effect                                                                                                 |
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `field`                   | Vertical stack, `0.375rem` gap; long tokens break rather than overflow                                 |
-| `field-row`               | Lays the field out on one line instead, `0.75rem` gap                                                  |
+| `field-row`               | Control beside its label, `0.75rem` gap; description and error stack under the label                   |
 | `field-label`             | `text-sm` medium; red `*` appended when it is a direct child of a `field` holding a `required` control |
 | `field-description`       | `text-xs` muted                                                                                        |
 | `field-error`             | `text-xs` in the danger colour                                                                         |
 | `asteriskField`           | Danger-coloured `*`, for template generators that emit their own; the label gets no appended one       |
 | `[data-required]`         | On `field-label`: appends the red `*` even when the field holds no `required` control                  |
 | `[data-required="false"]` | On `field-label`: no appended `*`, even with a `required` control in the field                         |
+| `[data-invalid]`          | On `field`: danger border and focus ring on the contained control                                      |
+| `[data-disabled]`         | On `field-label`: dims to 50%, as it does beside the field's own disabled control                      |
 
 None of the wiring is automatic here: set `for` on the label, `id` on the control, and `aria-describedby` pointing at the description and the error. The asterisk is the exception. A `required` control marks the `field-label` that is a direct child of its own `field`, including a `field-row` label placed after it; a required control inside a nested `field` marks only that inner field. Set `[data-required]` for a control with no native `required` (such as a checkbox group), a label wrapped in another element, or a nested `field` holding both its own required control and a required sub-field. Set `[data-required="false"]` to leave a required field unmarked.
 
-`[data-invalid]` on the `field` reddens the border of a contained `input`, `textarea`, `select`, `file-input`, and unchecked `checkbox` or `radio`, and rings an unchecked `switch`. React sets it from validation; in vanilla, add it server-side alongside the `field-error` text.
+`[data-invalid]` on the `field` gives a contained `input`, `textarea`, `select`, `file-input` or `number-input` a danger border and focus ring, and an unchecked `checkbox`, `radio` or `switch` a danger border. React sets it from validation or the `error` prop. In vanilla, add it server-side with the `field-error` text, `aria-invalid="true"` on the control, and the error's `id` in the control's `aria-describedby`.
 
 Controls that belong inside a field: [Inputs](inputs.md), [Textareas](textareas.md), [Selects](selects.md), [Checkboxes](checkboxes.md), [Radios](radios.md), [Switches](switches.md), [File inputs](file-inputs.md), [Number inputs](number-inputs.md).

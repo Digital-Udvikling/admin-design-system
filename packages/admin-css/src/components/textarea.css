@@ -11,10 +11,12 @@
   }
 
   .textarea-ghost {
-    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
+    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
-  .textarea-danger {
+  /* data-invalid comes from Base UI's Field.Control. */
+  .textarea-danger,
+  .textarea:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
@@ -31,11 +33,16 @@
     @apply border-warning hover:border-warning focus-visible:outline-warning;
   }
 
-  /* Grow with content (Chromium 123+; fixed box elsewhere). Floor is the larger
-     of `min-h-*` and `rows`; cap with a consumer `max-height`. */
+  /* Grow with content; cap with a consumer `max-height`. Browsers without field-sizing keep the
+     fixed, resizable box. */
   .textarea-autosize {
     field-sizing: content;
-    resize: none;
+  }
+
+  @supports (field-sizing: content) {
+    .textarea-autosize {
+      resize: none;
+    }
   }
 
   .textarea-sm {
@@ -44,5 +51,19 @@
 
   .textarea-lg {
     @apply text-base px-4 py-2.5 min-h-24;
+  }
+
+  /* field-sizing: content drops `rows` from the intrinsic size, so rebuild the floor from it:
+     rows × line + vertical padding + border, never below the size's min-height. */
+  .textarea-autosize[rows] {
+    min-height: max(5rem, calc(attr(rows type(<number>)) * 1lh + 1rem + 2px));
+  }
+
+  .textarea-sm.textarea-autosize[rows] {
+    min-height: max(4rem, calc(attr(rows type(<number>)) * 1lh + 0.75rem + 2px));
+  }
+
+  .textarea-lg.textarea-autosize[rows] {
+    min-height: max(6rem, calc(attr(rows type(<number>)) * 1lh + 1.25rem + 2px));
   }
 }

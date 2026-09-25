@@ -107,13 +107,16 @@ Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](fi
 | Class                                                 | Effect                                                                                                          |
 | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `textarea`                                            | Full-width box, `0.75rem`/`0.5rem` padding, `0.5rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
-| `textarea-ghost`                                      | No fill or border until hover                                                                                   |
+| `textarea-ghost`                                      | No fill or border; a translucent wash on hover                                                                  |
 | `textarea-danger`                                     | Danger border and focus outline                                                                                 |
 | `textarea-info` `textarea-success` `textarea-warning` | Status border and focus outline                                                                                 |
 | `textarea-sm`                                         | `text-xs`, tighter padding, `4rem` min-height                                                                   |
 | `textarea-lg`                                         | `text-base`, looser padding, `6rem` min-height                                                                  |
-| `textarea-autosize`                                   | Height tracks content and manual resizing is off                                                                |
+| `textarea-autosize`                                   | Height tracks content, floored at `rows`; manual resizing is off                                                |
+| `[aria-invalid="true"]`                               | Same as `textarea-danger`                                                                                       |
 
 There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
 
-`textarea-autosize` is `field-sizing: content`, so growth needs no JavaScript. Its floor is whichever is larger, the class's `min-height` or the `rows` attribute; cap it with your own `max-height`. Chromium-only today — elsewhere the box stays fixed and resizable, which is the same as omitting the class.
+The danger look also applies to Base UI's `[data-invalid]`, to `:user-invalid` once the user has edited the value, and inside an invalid [Field](fields.md).
+
+`textarea-autosize` is `field-sizing: content`, so growth needs no JavaScript. Its floor is whichever is larger, the class's `min-height` or the `rows` attribute; cap it with your own `max-height`. Browsers without `field-sizing` keep the fixed, resizable box, the same as omitting the class.

@@ -22,5 +22,8 @@
     "@release-it/bumper": {
       "out": ["packages/admin-css/package.json", "packages/admin-react/package.json"]
     }
+  },
+  "hooks": {
+    "after:bump": "pnpm generate-skill"
   }
 }

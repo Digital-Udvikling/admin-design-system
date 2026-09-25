@@ -1,6 +1,6 @@
 # Selects
 
-> Compound Select with Trigger + Popup + Item.
+> Pick one value from a collapsed list.
 
 ## Contents
 
@@ -288,6 +288,8 @@ Without `items`, `Select.Value` shows the raw value instead of the label. `sideO
 Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
 
 Only the trigger responds to `variant` and `triggerSize`. The chevron, popup and items keep one fixed size.
+
+To keep every option visible, use [Radios](radios.md); for actions, [Menus](../menus.md); to switch views, [Tabs](../tabs.md).
 
 ### Vanilla
 

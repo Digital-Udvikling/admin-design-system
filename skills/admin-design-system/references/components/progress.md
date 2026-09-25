@@ -1,6 +1,6 @@
 # Progress
 
-> Styled native <progress> element.
+> Task progress bar, determinate or indeterminate.
 
 ## Examples
 
@@ -80,6 +80,8 @@
 | `size`    | `"sm" \| "md" \| "lg"`                         | `"md"`   |
 
 Omitting `value` (or passing `undefined`) gives an indeterminate bar. Plus native `<progress>` attributes.
+
+For an inline busy state, use a [Spinner](spinners.md).
 
 ### Vanilla
 

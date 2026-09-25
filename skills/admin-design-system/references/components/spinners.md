@@ -1,6 +1,6 @@
 # Spinners
 
-> Compact CSS-only loading indicator.
+> Inline busy state for work of unknown length.
 
 ## Examples
 

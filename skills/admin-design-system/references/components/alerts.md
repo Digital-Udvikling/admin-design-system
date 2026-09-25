@@ -174,6 +174,8 @@
 
 Plus native `<div>` attributes.
 
+There is no toast. Show a result inline: an alert next to the action, or a status in the affected row.
+
 ### Vanilla
 
 | Class                                                       | Effect                                                                              |

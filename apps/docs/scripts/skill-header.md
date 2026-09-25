@@ -85,7 +85,9 @@ No JS toggle needed.
 
 If the host application uses Tailwind v4 — check `package.json` for `tailwindcss` or look for `@import "tailwindcss"` in a CSS entry — reach for utility classes for spacing, flex/grid, and one-off layout: `flex items-center gap-2`, `grid grid-cols-3`, `mt-4`. The design system's semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) are wired through Tailwind, so utilities and component classes compose freely on the same element.
 
-For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package ships a second pre-built bundle, `@aortl/admin-css/admin.utilities.css`, containing a curated subset of Tailwind-grammar utilities (layout, flex/grid, spacing, sizing, typography, borders, semantic colors). Drop it in alongside `admin.css`. Semantic colors only (`bg-primary`, `text-danger`) — no raw Flexoki tones in utility form. The React package does not consume this bundle; in `@aortl/admin-react` contexts, prefer component props (`<Card>`, `<Button>`) and component composition over utility classes.
+With `@aortl/admin-react`, import `styles.css` into a cascade layer below `utilities` first: the scoped bundle is unlayered, so its reset (`:scope * { margin: 0; padding: 0 }`) beats every layered Tailwind utility inside `<AdminRoot>` and `mt-4` silently does nothing. See [React › With Tailwind](references/getting-started/react.md#with-tailwind).
+
+For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package ships a second pre-built bundle, `@aortl/admin-css/admin.utilities.css`, containing a curated subset of Tailwind-grammar utilities (layout, flex/grid, spacing, sizing, typography, borders, semantic colors). Drop it in alongside `admin.css`. Semantic colors only (`bg-primary`, `text-danger`) — no raw Flexoki tones in utility form. The React package does not consume this bundle: in `@aortl/admin-react` apps, style components through their props and use the host's Tailwind, if any, for layout around them.
 
 ### Keyboard shortcuts
 
@@ -105,22 +107,27 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 
 - **Missing `<AdminRoot>`.** `admin-react` components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root`. Without the wrapper everything renders unstyled. Mount one high in the tree.
 - **Mixing prefixed and bare class names.** A React app uses the scoped bundle (`_ao-btn`); a full-page vanilla app uses bare (`btn`). Don't write `btn` inside an `admin-react` tree, or `_ao-btn` outside one — pick the flavor (see Quick start) and stay in it.
-- **Hand-rolling spacing and layout.** Use `<Container>`, `<Row>`, `<Grid>`, or Tailwind utilities — not ad-hoc margins. Density is a system property, not a per-page decision.
+- **Hand-rolling spacing and layout.** Use `<Container>` for page sections and flex/grid utilities for rows and grids ([Row](references/components/row.md), [Grid](references/components/grid.md)); there are no `Row` or `Grid` components. Density is a system property, not a per-page decision.
 - **Reaching for raw Flexoki tones in component code.** Reference semantic tokens (`bg-primary`, `text-text-muted`, `border-border`); override those to reskin.
 - **Adding `framer-motion`, manual portals, or `requestAnimationFrame`.** Prefer the platform (see above); Base UI covers the genuinely stateful cases.
 - **Putting `required` on the `<Field>` instead of the control.** The asterisk comes from the control's own `required`, on a label that is a direct child of the field. `<Field required>` alone marks the label but validates nothing; use it for controls with no native `required`, and `<Field.Label required>` for a label wrapped in another element. `required={false}` removes the asterisk.
 
-## Contributing back
+- **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
+- **Reaching for a toast library.** There is no toast. Report the result inline: an `<Alert>` next to the action, or a status in the affected row.
 
-When building a non-trivial component or module that's likely to recur across admin tools — a richer table layout, a specific form pattern, a custom navbar variant — pause and consider whether it belongs upstream in [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system) rather than duplicated locally.
+## When nothing fits
 
-Good candidates:
+In a consumer repo you use the system; changing it is a separate task in a checkout of [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system).
 
-- Composes existing primitives but adds enough structure to be worth naming.
-- A teammate would plausibly want the same thing in another internal tool.
-- Fits the system's density-first philosophy.
+1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition.
+2. Prefer composition: a prop, `className` / `classNames`, `.Container`, or a documented class on your own element (a router `Link` with `navbar-item`, written `_ao-navbar-item` inside `<AdminRoot>`).
+3. Otherwise write the smallest local workaround, either a stand-in built from system primitives and semantic tokens or a narrow override of one system class, and mark it with a comment in the file's own syntax:
+   `aortl-gap: <component> — <what the system can't express> — #<issue> | unreported`
+   Run `rg aortl-gap` first and reuse an existing stand-in. Never use `!important` against the system, copy component CSS, or edit files under `node_modules`.
+4. Draft a "Design system gap" issue for the user to file; don't file it yourself. The repo is public, so describe the need generically, with no code, repo names, paths or URLs from private repos.
+5. List every new marker in your final reply.
 
-Sketch locally first, then propose upstream as a PR. The single-source-of-truth pattern (vanilla CSS classes mirrored in React) means each contribution lands in both flavors automatically.
+When `@aortl/*` or a pinned unpkg URL is bumped, run `rg aortl-gap` and remove workarounds the new version covers.
 
 ## How to use the references
 

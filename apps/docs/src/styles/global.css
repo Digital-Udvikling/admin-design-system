@@ -1,10 +1,12 @@
 /*
  * Pre-declare layer order so Tailwind's `components`/`utilities` land after
  * Starlight's layers — otherwise Starlight's append later and `starlight.reset`
- * overrides component sizing regardless of selector specificity.
+ * overrides component sizing regardless of selector specificity. `admin` holds
+ * the scoped bundle, below `utilities` as getting-started/react.mdx tells
+ * Tailwind hosts to set it up.
  */
 @layer theme, base, starlight.base, starlight.reset, starlight.core,
-  starlight.content, starlight.components, starlight.utils, components,
+  starlight.content, starlight.components, starlight.utils, admin, components,
   utilities;
 
 @import "tailwindcss";
@@ -25,9 +27,10 @@
 /*
  * Scoped `_ao-` bundle matching the React previews (each is wrapped in
  * `<AdminRoot>`). Built artifact, not source — the scoping only exists
- * post-wrap-scoped.
+ * post-wrap-scoped. Unlayered, its host reset would beat every utility in a
+ * React preview.
  */
-@import "@aortl/admin-css/admin.scoped.css";
+@import "@aortl/admin-css/admin.scoped.css" layer(admin);
 
 /*
  * AdminRoot deliberately owns its surface and forks color-scheme; inside

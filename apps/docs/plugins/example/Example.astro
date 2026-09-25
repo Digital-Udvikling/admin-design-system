@@ -118,6 +118,9 @@ const hasBoth = !!html && hasReact;
     overflow: hidden;
     background: var(--sl-color-bg);
   }
+  /* Font, size and color stand in for admin-css/base.css, which the docs skip so
+  Starlight keeps its body; without them vanilla previews inherit Starlight's
+  16px/28px gray text. */
   .example-preview {
     padding: 1.5rem;
     display: flex;
@@ -126,6 +129,10 @@ const hasBoth = !!html && hasReact;
     gap: 0.75rem;
     border-bottom: 1px solid var(--sl-color-hairline);
     background: var(--color-surface);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text);
   }
   /* The frame's `overflow: hidden` (needed for rounded corners) clips vanilla
   `.tooltip-wrap` tooltips — pad enough to contain one on any side. */

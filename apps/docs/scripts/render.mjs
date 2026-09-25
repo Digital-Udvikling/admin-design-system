@@ -242,13 +242,19 @@ const FRAME = `display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem
 const FRAME_SELECTOR = { vanilla: "#frame", react: "#root > ._ao-admin-root" };
 
 function cellHtml({ variant, theme, html, moduleIndex }) {
+  // The scoped bundle ships unlayered; layer it below utilities as the docs site
+  // does (global.css), or its host reset beats every utility in the React cell.
+  const scoped =
+    variant === "react"
+      ? `<style>@layer theme, base, admin, components, utilities; @import url("${fsUrl(join(CSS_DIST, "admin.scoped.css"))}") layer(admin);</style>`
+      : "";
   const links = [
-    TABLER_CSS,
-    join(CSS_DIST, variant === "vanilla" ? "admin.css" : "admin.scoped.css"),
-    join(CSS_DIST, "admin.utilities.css"),
-  ]
-    .map((f) => `<link rel="stylesheet" href="${fsUrl(f)}">`)
-    .join("\n");
+    scoped,
+    ...[TABLER_CSS, ...(variant === "vanilla" ? [join(CSS_DIST, "admin.css")] : [])].map(
+      (f) => `<link rel="stylesheet" href="${fsUrl(f)}">`,
+    ),
+    `<link rel="stylesheet" href="${fsUrl(join(CSS_DIST, "admin.utilities.css"))}">`,
+  ].join("\n");
   const frame = FRAME_SELECTOR[variant];
   const style = `body { margin: 0; } ${frame} { ${FRAME} } ${frame}:has(.tooltip-wrap) { padding: 3rem; }`;
   const body =

@@ -204,7 +204,8 @@ function ensureCss() {
   const newest = Math.max(...walk(join(CSS_PKG, "src"), ".css").map((f) => statSync(f).mtimeMs));
   if (newest <= oldest) return;
   console.error("render: admin-css source changed, rebuilding dist…");
-  for (const script of ["build:dev", "build:utilities", "build:scoped"]) {
+  // build:scoped also wraps admin.min.css, so a fresh checkout needs build:min first.
+  for (const script of ["build:dev", "build:min", "build:utilities", "build:scoped"]) {
     execFileSync("pnpm", ["run", script], { cwd: CSS_PKG, stdio: "ignore" });
   }
   // Tailwind leaves an unchanged output unwritten, which would keep it looking stale.

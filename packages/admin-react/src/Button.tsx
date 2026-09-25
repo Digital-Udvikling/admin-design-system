@@ -5,7 +5,7 @@ import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
 import { useHotkeyClick } from "./useHotkey";
 
-export type ButtonVariant = "default" | "primary" | "ghost" | "muted" | "danger";
+export type ButtonVariant = "default" | "primary" | "ghost" | "muted" | "danger" | "danger-ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends ComponentProps<typeof BaseButton> {

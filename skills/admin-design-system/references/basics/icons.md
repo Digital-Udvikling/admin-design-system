@@ -44,7 +44,7 @@ npm install @tabler/icons-webfont
 npm install @tabler/icons-react
 ```
 
-Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-hidden`. See [Conventions › Icons](conventions.md#icons) for the prop contract.
+Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-hidden`. See [Conventions › Icons](conventions.md#icons) for the prop contract. `@aortl/admin-react` exports the `IconProp` type and the `renderIcon` helper for components of your own that take an icon.
 
 ## Vanilla usage
 

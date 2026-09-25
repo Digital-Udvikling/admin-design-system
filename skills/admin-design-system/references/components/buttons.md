@@ -39,6 +39,7 @@
 <button class="btn btn-ghost">Ghost</button>
 <button class="btn btn-muted">Muted</button>
 <button class="btn btn-danger">Danger</button>
+<button class="btn btn-danger-ghost">Danger ghost</button>
 ```
 
 ```tsx
@@ -47,6 +48,7 @@
 <Button variant="ghost">Ghost</Button>
 <Button variant="muted">Muted</Button>
 <Button variant="danger">Danger</Button>
+<Button variant="danger-ghost">Danger ghost</Button>
 ```
 
 ### Sizes
@@ -402,20 +404,20 @@
 
 ### React
 
-| Component      | Prop              | Type                                                       | Default        |
-| -------------- | ----------------- | ---------------------------------------------------------- | -------------- |
-| `Button`       | `variant`         | `"default" \| "primary" \| "ghost" \| "muted" \| "danger"` | `"default"`    |
-| `Button`       | `size`            | `"sm" \| "md" \| "lg"`                                     | `"md"`         |
-| `Button`       | `fullWidth`       | `boolean`                                                  | `false`        |
-| `Button`       | `loading`         | `boolean`                                                  | `false`        |
-| `Button`       | `icon`            | [`IconProp`](../basics/conventions.md#icons)              | —              |
-| `Button`       | `iconTrailing`    | [`IconProp`](../basics/conventions.md#icons)              | —              |
-| `Button`       | `hotkey`          | `string \| readonly string[]`                              | —              |
-| `ToggleButton` | `pressed`         | `boolean`                                                  | —              |
-| `ToggleButton` | `defaultPressed`  | `boolean`                                                  | `false`        |
-| `ToggleButton` | `onPressedChange` | `(pressed: boolean) => void`                               | —              |
-| `ButtonGroup`  | `orientation`     | `"horizontal" \| "vertical"`                               | `"horizontal"` |
-| `ButtonGroup`  | `fullWidth`       | `boolean`                                                  | `false`        |
+| Component      | Prop              | Type                                                                         | Default        |
+| -------------- | ----------------- | ---------------------------------------------------------------------------- | -------------- |
+| `Button`       | `variant`         | `"default" \| "primary" \| "ghost" \| "muted" \| "danger" \| "danger-ghost"` | `"default"`    |
+| `Button`       | `size`            | `"sm" \| "md" \| "lg"`                                                       | `"md"`         |
+| `Button`       | `fullWidth`       | `boolean`                                                                    | `false`        |
+| `Button`       | `loading`         | `boolean`                                                                    | `false`        |
+| `Button`       | `icon`            | [`IconProp`](../basics/conventions.md#icons)                                | —              |
+| `Button`       | `iconTrailing`    | [`IconProp`](../basics/conventions.md#icons)                                | —              |
+| `Button`       | `hotkey`          | `string \| readonly string[]`                                                | —              |
+| `ToggleButton` | `pressed`         | `boolean`                                                                    | —              |
+| `ToggleButton` | `defaultPressed`  | `boolean`                                                                    | `false`        |
+| `ToggleButton` | `onPressedChange` | `(pressed: boolean) => void`                                                 | —              |
+| `ButtonGroup`  | `orientation`     | `"horizontal" \| "vertical"`                                                 | `"horizontal"` |
+| `ButtonGroup`  | `fullWidth`       | `boolean`                                                                    | `false`        |
 
 `type` defaults to `"button"`, so a button inside a form doesn't submit unless you say so. `loading` sets `aria-busy="true"` and `aria-disabled="true"` instead of `disabled`, so the button keeps focus while clicks and keys are blocked. `disabled` with `focusableWhenDisabled` also sets `aria-disabled` instead, so the dimmed button keeps focus and pointer events and a Tooltip can say why. The spinner replaces the first icon: the leading one, or the trailing one when there is no leading icon. A button with an icon and no children gets `btn-square` automatically.
 
@@ -434,6 +436,7 @@ An icon-only `Button` needs an `aria-label`; a Tooltip is not an accessible name
 | `btn-ghost`            | No fill or border until hover                                                                                                                        |
 | `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                                                                      |
 | `btn-danger`           | Danger fill, `danger-content` text                                                                                                                   |
+| `btn-danger-ghost`     | Danger text, transparent fill and border, `danger-muted` fill on hover; a secondary Delete beside the primary action                                 |
 | `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                                                                              |
 | `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                                                                            |
 | `btn-full-width`       | `width: 100%`; the label may wrap                                                                                                                    |

@@ -16,6 +16,13 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "go" })).toHaveAdminClass("btn-muted");
   });
 
+  it("maps the danger-ghost variant to btn-danger-ghost", () => {
+    render(<Button variant="danger-ghost">Delete</Button>);
+    const btn = screen.getByRole("button", { name: "Delete" });
+    expect(btn).toHaveAdminClass("btn-danger-ghost");
+    expect(btn).not.toHaveAdminClass("btn-danger");
+  });
+
   it("renders icon and iconTrailing component refs around children", () => {
     function IconLead(props: {
       size?: number | string;

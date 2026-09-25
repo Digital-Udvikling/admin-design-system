@@ -39,6 +39,13 @@
     @apply bg-danger text-danger-content border-transparent;
   }
 
+  /* Low-emphasis destructive action. The label uses danger-hover because
+     danger text is 4.4:1 on the dark surface, under AA. */
+  .btn-danger-ghost {
+    --btn-hover: var(--color-danger-muted);
+    @apply bg-transparent text-danger-hover border-transparent;
+  }
+
   /* aria-disabled buttons keep pointer events (a tooltip can say why), so the
      hover skips them here instead of relying on pointer-events: none. */
   @media (hover: hover) {

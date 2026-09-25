@@ -1,32 +1,37 @@
 @layer components {
   .file-input {
-    @apply inline-flex items-center w-full pr-3 text-sm leading-none
+    @apply inline-flex items-center w-full h-8 pr-3 text-sm leading-none
            bg-surface text-text
            border border-border hover:border-border-strong rounded-lg overflow-hidden
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed
-           file:px-3 file:py-2 file:mr-3
+           file:h-full file:px-3 file:py-0 file:mr-3
            file:text-sm file:font-medium file:leading-none
            file:bg-surface-muted file:text-text hover:file:bg-surface-strong
            file:border-0 file:border-r file:border-border
            file:cursor-pointer;
   }
 
+  /* No shell to divide, so the picker is bordered like a .btn; a muted fill alone vanishes
+     on surface-muted containers. */
   .file-input-ghost {
-    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
+    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent
+           file:border file:rounded-lg;
   }
 
-  .file-input-danger {
+  .file-input-danger,
+  .file-input:is([aria-invalid="true"], [data-invalid], :user-invalid),
+  .field[data-invalid] .file-input {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
   /* Sizes */
   .file-input-sm {
-    @apply text-xs file:text-xs file:px-2.5 file:py-1.5 file:mr-2.5;
+    @apply h-6.5 text-xs file:text-xs file:px-2.5 file:mr-2.5;
   }
 
   .file-input-lg {
-    @apply text-base file:text-base file:px-4 file:py-2.5 file:mr-4;
+    @apply h-9.5 text-base file:text-base file:px-4 file:mr-4;
   }
 }

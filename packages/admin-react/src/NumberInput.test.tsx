@@ -21,9 +21,37 @@ describe("NumberInput", () => {
     );
   });
 
+  it("applies the danger variant on the group", () => {
+    const { container } = render(<NumberInput variant="danger" inputAriaLabel="Q" />);
+    expect(container.querySelector(adminSelector("number-input"))).toHaveAdminClass(
+      "number-input-danger",
+    );
+  });
+
   it("forwards classNames to slots", () => {
     render(<NumberInput inputAriaLabel="Q" classNames={{ increment: "x-custom" }} />);
     expect(screen.getByRole("button", { name: "Increase" })).toHaveClass("x-custom");
+  });
+
+  it("puts className on the visible group and classNames.root on the root", () => {
+    const { container } = render(
+      <NumberInput
+        inputAriaLabel="Q"
+        className="max-w-32"
+        classNames={{ group: "x-group", root: "x-root" }}
+      />,
+    );
+    const group = container.querySelector(adminSelector("number-input"));
+    expect(group).toHaveClass("max-w-32", "x-group");
+    expect(container.querySelector(adminSelector("number-input-root"))).toHaveClass("x-root");
+    expect(container.querySelector(adminSelector("number-input-root"))).not.toHaveClass("max-w-32");
+  });
+
+  it("resolves a className function against the group state", () => {
+    const { container } = render(
+      <NumberInput inputAriaLabel="Q" disabled className={(s) => (s.disabled ? "is-off" : "")} />,
+    );
+    expect(container.querySelector(adminSelector("number-input"))).toHaveClass("is-off");
   });
 
   it("increments the value when the + button is clicked", async () => {

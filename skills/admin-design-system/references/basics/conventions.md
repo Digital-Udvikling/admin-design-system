@@ -91,7 +91,7 @@ Shorthand props like `title` and `actions` render inner elements a single `class
 | `Field`                  | `label`, `description`, `error`                                         |
 | `Input`, `PasswordInput` | `wrapper`, `action`                                                     |
 | `Item`                   | `media`, `content`, `title`, `description`, `actions`                   |
-| `NumberInput`            | `group`, `decrement`, `input`, `increment`                              |
+| `NumberInput`            | `root`, `group`, `decrement`, `input`, `increment`                      |
 | `Pagination`             | `item`, `link`, `ellipsis`                                              |
 | `PropertyList`           | `title`, `items`                                                        |
 | `PropertyList.Item`      | `label`, `copy`                                                         |

@@ -9,6 +9,8 @@
   - [Appended addon](#appended-addon)
   - [Both ends](#both-ends)
   - [With a button](#with-a-button)
+  - [With a select](#with-a-select)
+  - [Sizes](#sizes)
   - [With icon addons](#with-icon-addons)
 - [Reference](#reference)
   - [React](#react)
@@ -92,6 +94,78 @@
 </InputGroup>
 ```
 
+### With a select
+
+**Example**
+
+```html
+<div class="input-group">
+  <input class="input" type="number" placeholder="0.00" aria-label="Amount" />
+  <select class="select" aria-label="Currency">
+    <option>DKK</option>
+    <option>EUR</option>
+    <option>USD</option>
+  </select>
+</div>
+```
+
+```tsx
+<InputGroup>
+  <Input type="number" placeholder="0.00" aria-label="Amount" />
+  <Select defaultValue="DKK" items={{ DKK: "DKK", EUR: "EUR", USD: "USD" }}>
+    <Select.Trigger aria-label="Currency">
+      <Select.Value />
+      <Select.Icon />
+    </Select.Trigger>
+    <Select.Popup>
+      <Select.Item value="DKK">DKK</Select.Item>
+      <Select.Item value="EUR">EUR</Select.Item>
+      <Select.Item value="USD">USD</Select.Item>
+    </Select.Popup>
+  </Select>
+</InputGroup>
+```
+
+### Sizes
+
+**Example**
+
+```html
+<div class="input-group">
+  <span class="input-group-addon">https://</span>
+  <input class="input input-sm" type="text" placeholder="example.com" />
+  <button class="btn btn-sm" type="button">Check</button>
+</div>
+<div class="input-group">
+  <span class="input-group-addon">https://</span>
+  <input class="input" type="text" placeholder="example.com" />
+  <button class="btn" type="button">Check</button>
+</div>
+<div class="input-group">
+  <span class="input-group-addon">https://</span>
+  <input class="input input-lg" type="text" placeholder="example.com" />
+  <button class="btn btn-lg" type="button">Check</button>
+</div>
+```
+
+```tsx
+<InputGroup>
+  <InputGroup.Addon>https://</InputGroup.Addon>
+  <Input inputSize="sm" placeholder="example.com" />
+  <Button size="sm">Check</Button>
+</InputGroup>
+<InputGroup>
+  <InputGroup.Addon>https://</InputGroup.Addon>
+  <Input placeholder="example.com" />
+  <Button>Check</Button>
+</InputGroup>
+<InputGroup>
+  <InputGroup.Addon>https://</InputGroup.Addon>
+  <Input inputSize="lg" placeholder="example.com" />
+  <Button size="lg">Check</Button>
+</InputGroup>
+```
+
 ### With icon addons
 
 **Example**
@@ -143,15 +217,17 @@
 | `InputGroup`       | `<div>`  | `input-group`       |
 | `InputGroup.Addon` | `<span>` | `input-group-addon` |
 
-No props of its own — each part takes the native attributes of its element. Any child works: `Input`, `Button`, `Addon`, or your own element.
+No props of its own — each part takes the native attributes of its element. Any child works: `Input`, `Select`, `NumberInput`, `FileInput`, `Button`, `Addon`, or your own element.
 
 ### Vanilla
 
-| Class               | Effect                                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- |
-| `input-group`       | Joins its children into one flush row: square inner corners, `1px` overlap, focus lifted above the seam |
-| `input-group-addon` | Static segment: `0.75rem` side padding, `text-sm` muted on a muted fill, bordered, no wrapping          |
+| Class               | Effect                                                                                                                                                    |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `input-group`       | Joins its children into one flush row: square inner corners, `1px` overlap, hovered, invalid and focused children lifted above the seam                   |
+| `input-group-addon` | Static segment: `0.75rem` side padding, `text-sm` muted on a muted fill, bordered, no wrapping. `text-xs` beside `-sm` controls, `text-base` beside `-lg` |
 
-The seam rules target _every_ direct child, not a specific class, so an `input`, a `btn`, an addon, or anything else joins the row in source order. The first and last child keep their outer radius. A focused child is lifted above its neighbour's overlapping edge so the focus ring isn't clipped.
+The seam rules target _every_ direct child, not a specific class, so an `input`, a `select`, a `number-input`, a `btn`, an addon, or anything else joins the row in source order. The first and last child keep their outer radius; a trailing hidden `<input>` (`type="hidden"` or `aria-hidden="true"`, as Base UI renders after a Select) doesn't count as the last child. A hovered or invalid child is lifted above its neighbour's overlapping edge, and a focused one above both, so a coloured border or the focus ring isn't covered. The group is its own stacking context, so the lifts stay inside it; while a child `menu` is open, the group sits at `z-index: 30` so the popup clears what follows.
+
+Buttons, menus, selects and addons keep their content width on one line; the `input`, `input-icon`, `number-input` or `file-input` takes the remaining width unless it has a width of its own. A select with no field beside it keeps its full width. A React `Select.Trigger` sizes to its selected label; give it a width through `className` when option labels differ in length.
 
 An addon takes any content, including an icon — mark a decorative one `aria-hidden`. For a borderless glyph floating _inside_ the field instead, use [input icons](inputs.md#with-icons).

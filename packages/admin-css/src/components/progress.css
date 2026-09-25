@@ -90,4 +90,31 @@
       background-position: 0 0;
     }
   }
+
+  /* Forced colors paint the track and fill as Canvas and drop gradients: outline the
+     track, fill with Highlight, and opt the indeterminate gradient out. */
+  @media (forced-colors: active) {
+    .progress {
+      border: 1px solid CanvasText;
+    }
+
+    .progress::-webkit-progress-value {
+      background-color: Highlight;
+    }
+
+    .progress::-moz-progress-bar {
+      background-color: Highlight;
+    }
+
+    .progress:indeterminate {
+      forced-color-adjust: none;
+      background-color: Canvas;
+      background-image: linear-gradient(
+        90deg,
+        transparent 0 40%,
+        Highlight 40% 60%,
+        transparent 60%
+      );
+    }
+  }
 }

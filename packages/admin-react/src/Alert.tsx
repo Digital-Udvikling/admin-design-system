@@ -1,4 +1,11 @@
-import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
+import {
+  Children,
+  Fragment,
+  isValidElement,
+  type ComponentProps,
+  type MouseEventHandler,
+  type ReactNode,
+} from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
@@ -27,9 +34,9 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   variant: AlertVariant;
   /** Leading icon. Rendered as the first child so the CSS grid kicks in. */
   icon?: IconProp;
-  /** Renders as `<Alert.Title>`. */
+  /** Renders as `<Alert.Title>`. `null`, `false` and `""` render nothing. */
   title?: ReactNode;
-  /** Renders as `<Alert.Description>`. */
+  /** Renders as `<Alert.Description>`. `null`, `false` and `""` render nothing. */
   description?: ReactNode;
   /** Trailing action. Renders as `<Alert.Action>` after children so reading order matches. */
   action?: ReactNode;
@@ -39,6 +46,77 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   dismissLabel?: string;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"title" | "description" | "action" | "dismiss">;
+}
+
+const hasNode = (node: ReactNode) => node != null && node !== false && node !== "";
+
+// Must match the block list in alert.css's stacking-gap rule.
+const BLOCK_TAGS = new Set([
+  "p",
+  "div",
+  "ul",
+  "ol",
+  "dl",
+  "pre",
+  "table",
+  "form",
+  "blockquote",
+  "details",
+]);
+
+/** Children as a flat array, with fragments expanded so parts inside one are still found. */
+function flattenChildren(children: ReactNode): ReactNode[] {
+  return (
+    Children.map(children, (child) =>
+      isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+        ? flattenChildren(child.props.children)
+        : child,
+    ) ?? []
+  );
+}
+
+function isPart(node: ReactNode) {
+  return (
+    isValidElement(node) &&
+    (node.type === AlertTitle || node.type === AlertDescription || node.type === AlertAction)
+  );
+}
+
+/** A part or a host block element: each is its own text-column cell. */
+function isCell(node: ReactNode) {
+  return (
+    isPart(node) ||
+    (isValidElement(node) && typeof node.type === "string" && BLOCK_TAGS.has(node.type))
+  );
+}
+
+/**
+ * Wraps each run of consecutive children that are not cells (text, inline elements, components)
+ * in one `<div>`, because every direct child of a grid alert is its own cell and inline markup
+ * would otherwise split across rows. With `keepLead`, a leading host `<svg>`/`<i>` stays
+ * unwrapped so it takes the icon column.
+ */
+function groupText(items: ReactNode[], keepLead: boolean): ReactNode[] {
+  const out: ReactNode[] = [];
+  let run: ReactNode[] = [];
+  let runs = 0;
+  // Keyed by run ordinal, so a part toggling before a run doesn't remount the run's children.
+  const flush = () => {
+    if (run.length > 0) out.push(<div key={`text-${runs++}`}>{run}</div>);
+    run = [];
+  };
+  items.forEach((item, i) => {
+    const lead =
+      i === 0 && keepLead && isValidElement(item) && (item.type === "svg" || item.type === "i");
+    if (lead || isCell(item)) {
+      flush();
+      out.push(item);
+    } else {
+      run.push(item);
+    }
+  });
+  flush();
+  return out;
 }
 
 function AlertRoot({
@@ -56,21 +134,32 @@ function AlertRoot({
   ...rest
 }: AlertProps) {
   const defaultRole = variant === "danger" || variant === "warning" ? "alert" : "status";
+  const leading = renderIcon(icon);
+  const hasTitle = hasNode(title);
+  const hasDescription = hasNode(description);
+  const hasAction = hasNode(action);
+  const items = flattenChildren(children);
+  // Alone, children flow as-is; beside any other slot they need grouping.
+  const group =
+    leading != null ||
+    hasTitle ||
+    hasDescription ||
+    hasAction ||
+    onDismiss != null ||
+    items.some(isPart);
   return (
     <div
       role={role ?? defaultRole}
       className={cn(["alert", `alert-${variant}`], className)}
       {...rest}
     >
-      {renderIcon(icon)}
-      {title !== undefined ? <AlertTitle className={classNames?.title}>{title}</AlertTitle> : null}
-      {description !== undefined ? (
+      {leading}
+      {hasTitle ? <AlertTitle className={classNames?.title}>{title}</AlertTitle> : null}
+      {hasDescription ? (
         <AlertDescription className={classNames?.description}>{description}</AlertDescription>
       ) : null}
-      {children}
-      {action !== undefined ? (
-        <AlertAction className={classNames?.action}>{action}</AlertAction>
-      ) : null}
+      {group ? groupText(items, leading == null && !hasTitle && !hasDescription) : children}
+      {hasAction ? <AlertAction className={classNames?.action}>{action}</AlertAction> : null}
       {onDismiss ? (
         <button
           type="button"
@@ -90,9 +179,10 @@ function AlertTitle({ className, ...rest }: AlertTitleProps) {
   return <strong className={cn("alert-title", className)} {...rest} />;
 }
 
-export type AlertDescriptionProps = ComponentProps<"p">;
+/** A `<div>`, so block content such as a list of field errors nests validly. */
+export type AlertDescriptionProps = ComponentProps<"div">;
 function AlertDescription({ className, ...rest }: AlertDescriptionProps) {
-  return <p className={cn("alert-description", className)} {...rest} />;
+  return <div className={cn("alert-description", className)} {...rest} />;
 }
 
 export type AlertActionProps = ComponentProps<"div">;

@@ -1,6 +1,7 @@
 @layer components {
+  /* Block, not flex: inline markup (`<code>`, links) in the text must stay in one line box. */
   .alert {
-    @apply flex flex-col gap-1 w-full px-3 py-2 rounded-md border text-sm text-text;
+    @apply block w-full px-3 py-2 rounded-md border text-sm text-text;
     overflow-wrap: break-word;
   }
 
@@ -10,8 +11,7 @@
     /* `minmax(0, 1fr)` lets the text column shrink below its longest word. */
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: 0.5rem;
-    row-gap: 0.25rem;
-    align-items: center;
+    align-items: start;
   }
 
   /* A trailing action or dismiss switches to grid even without an icon. */
@@ -20,8 +20,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 0.5rem;
-    row-gap: 0.25rem;
-    align-items: center;
+    align-items: start;
   }
   /* Action + dismiss together need two trailing columns. */
   .alert:has(> .alert-action):has(> .alert-dismiss) {
@@ -35,45 +34,76 @@
     grid-template-columns: auto minmax(0, 1fr) auto auto;
   }
 
+  /* Centres the glyph on the first 1.25rem text line: (line − icon's own line box) / 2.
+     `line-height: 1` makes an SVG's `lh` equal its 1em box. */
   .alert > :is(i, svg):first-child {
     font-size: 1rem;
-    line-height: 1.25;
+    line-height: 1;
+    margin-block-start: calc((1.25rem - 1lh) / 2);
   }
 
-  /* Replaces the icon-gated explicit-rows rule — rows whenever anything spans them. */
+  /* Explicit rows so the icon and trailing controls can span title + description.
+     Spacing is a margin, not row-gap, so an empty second row adds no height. */
   .alert:has(> .alert-title):is(
       :has(> :is(i, svg):first-child),
       :has(> .alert-action),
       :has(> .alert-dismiss)
     ) {
     grid-template-rows: auto auto;
-    align-items: start;
   }
 
   .alert:has(> .alert-title) > :is(i, svg):first-child {
     grid-row: 1 / -1;
   }
 
-  /* The column-2 pin becomes icon-gated so title/description auto-place into
-     column 1 in an action-only grid. min-width stays unconditional. */
-  .alert > :is(.alert-title, .alert-description) {
+  /* In the grids every other child is a cell in the text column. Anonymous text runs
+     can't be pinned, so text with inline markup needs one wrapper element. Gated on
+     the grids so inline children in block mode (`.kbd`) keep their own min-width. */
+  .alert:is(:has(> .alert-action), :has(> .alert-dismiss))
+    > :not(:is(i, svg):first-child, .alert-action, .alert-dismiss) {
+    grid-column: 1;
     min-width: 0;
   }
-  .alert:has(> :is(i, svg):first-child) > :is(.alert-title, .alert-description) {
+  .alert:has(> :is(i, svg):first-child)
+    > :not(:is(i, svg):first-child, .alert-action, .alert-dismiss) {
     grid-column: 2;
+    min-width: 0;
   }
 
-  /* Trailing controls pin to the last column(s), spanning both rows, centered.
-     `-2` is the last column in the single-trailing grids; with both present the
-     dismiss keeps `-2` and the action shifts one column left to `-3`. */
+  /* Stacking gap between text-column blocks. Block elements only: a margin on an
+     inline-flex chip (`.kbd`, `.link`) in running text would grow its line box.
+     React's grouping in Alert.tsx passes the same tags through unwrapped. */
+  .alert
+    > :not(:is(i, svg):first-child, .alert-action, .alert-dismiss)
+    + :is(
+      p,
+      div,
+      ul,
+      ol,
+      dl,
+      pre,
+      table,
+      form,
+      blockquote,
+      details,
+      .alert-title,
+      .alert-description
+    ):not(.alert-action, .alert-dismiss) {
+    margin-block-start: 0.25rem;
+  }
+
+  /* Trailing controls pin to the last column(s) and span the rows. `-2` is the last
+     column in the single-trailing grids; with both present the dismiss keeps `-2`
+     and the action shifts one column left to `-3`. */
   .alert > :is(.alert-action, .alert-dismiss) {
     grid-row: 1 / -1;
     justify-self: end;
-    align-self: center;
   }
+  /* Centred on the text block; the icon and dismiss sit on line 1. */
   .alert > .alert-action {
     @apply font-medium whitespace-nowrap;
     grid-column: -2;
+    align-self: center;
   }
   .alert > .alert-dismiss {
     grid-column: -2;
@@ -82,30 +112,30 @@
     grid-column: -3;
   }
 
-  /* Solid status fills. Title and icon inherit the `-content` color from the
-     root, so no per-variant text rule is needed. */
+  /* Solid status fills. Title, icon and nested focus rings take the `-content`
+     color: the blue `--color-focus` is invisible on the info fill and under 3:1 on the rest. */
   .alert-info {
     @apply bg-info border-info text-info-content;
+    --color-focus: var(--color-info-content);
   }
 
   .alert-success {
     @apply bg-success border-success text-success-content;
+    --color-focus: var(--color-success-content);
   }
 
   .alert-warning {
     @apply bg-warning border-warning text-warning-content;
+    --color-focus: var(--color-warning-content);
   }
 
   .alert-danger {
     @apply bg-danger border-danger text-danger-content;
+    --color-focus: var(--color-danger-content);
   }
 
   .alert-title {
-    @apply font-medium;
-  }
-
-  .alert-description {
-    opacity: 0.85;
+    @apply block font-medium;
   }
 
   /* Dismiss button — currentColor hover wash works on the solid fills (where
@@ -124,6 +154,6 @@
   /* `.link`'s blue is illegible on the solid fills; inherit the variant's content
      color. Underline + weight carry the affordance. */
   .alert .link {
-    @apply text-current hover:text-current hover:opacity-85 focus-visible:outline-current;
+    @apply text-current hover:text-current hover:opacity-85;
   }
 }

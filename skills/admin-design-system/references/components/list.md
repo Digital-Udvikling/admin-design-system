@@ -8,6 +8,8 @@
   - [Settings rows](#settings-rows)
   - [With media](#with-media)
   - [Whole-row link](#whole-row-link)
+  - [Selected](#selected)
+  - [Variants](#variants)
   - [Sizes](#sizes)
 - [Reference](#reference)
   - [React](#react)
@@ -134,6 +136,73 @@
 </ItemGroup>
 ```
 
+### Selected
+
+**Example**
+
+```html
+<div class="item-group item-group-bordered">
+  <div class="item item-link" data-selected>
+    <div class="item-content">
+      <div class="item-title"><a href="#1041" aria-current="true">Order #1041</a></div>
+      <div class="item-description">Ada Lovelace · 3 items</div>
+    </div>
+  </div>
+  <div class="item item-link">
+    <div class="item-content">
+      <div class="item-title"><a href="#1042">Order #1042</a></div>
+      <div class="item-description">Grace Hopper · 1 item</div>
+    </div>
+  </div>
+</div>
+```
+
+```tsx
+<ItemGroup bordered>
+  <Item
+    asLink
+    selected
+    title={
+      <a href="#1041" aria-current="true">
+        Order #1041
+      </a>
+    }
+    description="Ada Lovelace · 3 items"
+  />
+  <Item asLink title={<a href="#1042">Order #1042</a>} description="Grace Hopper · 1 item" />
+</ItemGroup>
+```
+
+### Variants
+
+`item-group` divides default rows. Outline and muted rows stand alone.
+
+**Example**
+
+```html
+<div class="flex w-full flex-col gap-2">
+  <div class="item item-outline">
+    <div class="item-content">
+      <div class="item-title">Outline</div>
+      <div class="item-description">Bordered row.</div>
+    </div>
+  </div>
+  <div class="item item-muted">
+    <div class="item-content">
+      <div class="item-title">Muted</div>
+      <div class="item-description">Filled row.</div>
+    </div>
+  </div>
+</div>
+```
+
+```tsx
+<div className="flex w-full flex-col gap-2">
+  <Item variant="outline" title="Outline" description="Bordered row." />
+  <Item variant="muted" title="Muted" description="Filled row." />
+</div>
+```
+
 ### Sizes
 
 **Example**
@@ -141,22 +210,54 @@
 ```html
 <div class="item-group item-group-bordered">
   <div class="item item-sm">
-    <div class="item-content"><div class="item-title">Small</div></div>
+    <div class="item-media"><i class="ti ti-bell" aria-hidden="true"></i></div>
+    <div class="item-content">
+      <div class="item-title">Small</div>
+      <div class="item-description">Order alerts</div>
+    </div>
+    <div class="item-actions"><button class="btn btn-sm" type="button">Edit</button></div>
   </div>
   <div class="item">
-    <div class="item-content"><div class="item-title">Medium</div></div>
+    <div class="item-media"><i class="ti ti-bell" aria-hidden="true"></i></div>
+    <div class="item-content">
+      <div class="item-title">Medium</div>
+      <div class="item-description">Order alerts</div>
+    </div>
+    <div class="item-actions"><button class="btn btn-sm" type="button">Edit</button></div>
   </div>
   <div class="item item-lg">
-    <div class="item-content"><div class="item-title">Large</div></div>
+    <div class="item-media"><i class="ti ti-bell" aria-hidden="true"></i></div>
+    <div class="item-content">
+      <div class="item-title">Large</div>
+      <div class="item-description">Order alerts</div>
+    </div>
+    <div class="item-actions"><button class="btn btn-sm" type="button">Edit</button></div>
   </div>
 </div>
 ```
 
 ```tsx
 <ItemGroup bordered>
-  <Item size="sm" title="Small" />
-  <Item title="Medium" />
-  <Item size="lg" title="Large" />
+  <Item
+    size="sm"
+    icon={IconBell}
+    title="Small"
+    description="Order alerts"
+    actions={<Button size="sm">Edit</Button>}
+  />
+  <Item
+    icon={IconBell}
+    title="Medium"
+    description="Order alerts"
+    actions={<Button size="sm">Edit</Button>}
+  />
+  <Item
+    size="lg"
+    icon={IconBell}
+    title="Large"
+    description="Order alerts"
+    actions={<Button size="sm">Edit</Button>}
+  />
 </ItemGroup>
 ```
 
@@ -180,6 +281,7 @@
 | `Item`      | `variant`     | `"default" \| "outline" \| "muted"`           | `"default"` |
 | `Item`      | `size`        | `"sm" \| "md" \| "lg"`                        | `"md"`      |
 | `Item`      | `asLink`      | `boolean`                                     | `false`     |
+| `Item`      | `selected`    | `boolean`                                     | `false`     |
 | `Item`      | `media`       | `ReactNode`                                   | —           |
 | `Item`      | `icon`        | [`IconProp`](../basics/conventions.md#icons) | —           |
 | `Item`      | `title`       | `ReactNode`                                   | —           |
@@ -190,27 +292,29 @@
 
 `media` and `icon` share the leading slot and `media` wins. `classNames` covers `media`, `content`, `title`, `description`, `actions`. Children render between the content and the actions.
 
-`variant`, `size` and `asLink` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and stretches the `<a>` in `title` over it, but you supply the `<a>`. `ItemGroup` is a standalone export, not `Item.Group`.
+`variant`, `size`, `asLink` and `selected` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and stretches the `<a>` in `title` over it, but you supply the `<a>`. `selected` sets `[data-selected]`; put `aria-current="true"` on the row's link yourself. `ItemGroup` is a standalone export, not `Item.Group`.
+
+For list semantics pass `role="list"` to `ItemGroup` and `role="listitem"` to each `Item`.
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                                    |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                                            |
-| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem`                                            |
-| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink; long values such as emails and URLs wrap anywhere  |
-| `item-title`          | Primary line: medium weight, tight leading                                                                                |
-| `item-description`    | Secondary line: muted, snug leading                                                                                       |
-| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                          |
-| `item-outline`        | `1px` border, `0.5rem` radius                                                                                             |
-| `item-muted`          | Muted surface, `0.5rem` radius                                                                                            |
-| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                      |
-| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                         |
-| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                               |
-| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it |
-| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus  |
+| Class                 | Effect                                                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                                              |
+| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem` (`1rem` in `item-sm`, `1.5rem` in `item-lg`) |
+| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink; long values such as emails and URLs wrap anywhere    |
+| `item-title`          | Primary line: medium weight, tight leading                                                                                  |
+| `item-description`    | Secondary line: muted, snug leading                                                                                         |
+| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                            |
+| `item-outline`        | `1px` border, `0.5rem` radius                                                                                               |
+| `item-muted`          | Muted surface, `0.5rem` radius                                                                                              |
+| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                        |
+| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                           |
+| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                                 |
+| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it   |
+| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus    |
 
-There is no `item-md` or `item-default` — both are the unmodified `item`.
+There is no `item-md` or `item-default` — both are the unmodified `item`. `[data-selected]` on an `item` fills it with `primary-muted`, the same selection tint as table rows, and raises the description to `text`. For list semantics use `<ul class="item-group">` with `<li class="item">` rows.
 
 In an `item-link` row the stretched link can also be an `<a>` placed directly in `item-content`, or an `<a class="item-content">`. Other links, buttons and form controls in the row stay clickable above the overlay.
 

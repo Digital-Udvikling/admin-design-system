@@ -78,6 +78,20 @@ describe("AvatarGroup", () => {
     expect(screen.getByRole("img", { name: "+2 more" })).toBe(more);
   });
 
+  it("sizes child avatars from the group, letting an explicit size win", () => {
+    render(
+      <AvatarGroup max={2} size="sm">
+        <Avatar initials="AA" data-testid="a" />
+        <Avatar initials="BB" size="lg" data-testid="b" />
+        <Avatar initials="CC" />
+      </AvatarGroup>,
+    );
+    expect(screen.getByTestId("a")).toHaveAdminClass("avatar-sm");
+    expect(screen.getByTestId("b")).toHaveAdminClass("avatar-lg");
+    expect(screen.getByTestId("b")).not.toHaveAdminClass("avatar-sm");
+    expect(screen.getByRole("img", { name: "+1 more" })).toHaveAdminClass("avatar-sm");
+  });
+
   it("shows every avatar and no tile when the count is within max", () => {
     const { container } = render(
       <AvatarGroup max={5}>

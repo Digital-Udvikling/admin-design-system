@@ -11,6 +11,12 @@
   .item-media > :is(i, svg) {
     font-size: 1.25rem;
   }
+  .item-sm .item-media > :is(i, svg) {
+    font-size: 1rem;
+  }
+  .item-lg .item-media > :is(i, svg) {
+    font-size: 1.5rem;
+  }
   /* An icon takes the title's line box (leading-tight, 1.25em) and overhangs the padding.
      Beside a multi-line content column it pins to the first line; avatars stay centred. */
   .item-media:has(> :is(i, svg)) {
@@ -113,5 +119,33 @@
   }
   .item-link :is(.item-title a, .item-content > a, a.item-content):focus-visible {
     outline: none;
+  }
+
+  /* Programmatic selection, the same hook as table rows. Hover keeps the
+     selected fill. */
+  .item[data-selected] {
+    @apply bg-primary-muted;
+    --surface-current: var(--color-primary-muted);
+  }
+  /* text-muted on the tint is under 4.5:1 in both themes. */
+  .item[data-selected] .item-description {
+    @apply text-text;
+  }
+  .item-link[data-selected]:hover {
+    background-image: none;
+  }
+
+  @media (forced-colors: active) {
+    .item[data-selected] {
+      background-color: Highlight;
+    }
+    /* Opted out: the Canvas text backplate would hide HighlightText. */
+    .item[data-selected] :is(.item-media, .item-content) {
+      forced-color-adjust: none;
+      color: HighlightText;
+    }
+    .item[data-selected] :is(.item-title a, .item-content > a, .item-description) {
+      color: HighlightText;
+    }
   }
 }

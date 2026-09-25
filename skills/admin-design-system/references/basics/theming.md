@@ -110,7 +110,7 @@ Both layers are plain declarations on `:root`. Redefine the palette in your own 
 
 ## Container surface
 
-Filled containers publish their fill as `--surface-current`: cards and their tints, dialogs and their footer, menu and select popups, accordion items, muted list items, selected table rows, the navbar, sidebar and footer. Components that must paint the surface they sit on read it — timeline rings, avatar-group rings, stacked-bar seams, and the pinned column and sticky header of a table. Set it on your own filled container so those match:
+Filled containers publish their fill as `--surface-current`: cards and their tints, dialogs and their footer, menu and select popups, accordion items, muted and selected list items, selected table rows, the navbar, sidebar and footer. Components that must paint the surface they sit on read it — timeline rings, avatar-group rings, stacked-bar seams, and the pinned column and sticky header of a table. Set it on your own filled container so those match:
 
 ```css
 .my-panel {

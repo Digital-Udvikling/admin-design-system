@@ -10,6 +10,7 @@
   - [Square](#square)
   - [Image fallback](#image-fallback)
   - [Group](#group)
+  - [Group sizes](#group-sizes)
   - [Status](#status)
 - [Reference](#reference)
   - [React](#react)
@@ -112,6 +113,42 @@
 </AvatarGroup>
 ```
 
+### Group sizes
+
+**Example**
+
+```html
+<div class="avatar-group">
+  <span class="avatar avatar-sm">AL</span>
+  <span class="avatar avatar-sm">GH</span>
+  <span class="avatar avatar-sm">AT</span>
+  <span class="avatar avatar-sm avatar-more" role="img" aria-label="+2 more">+2</span>
+</div>
+<div class="avatar-group">
+  <span class="avatar avatar-lg">AL</span>
+  <span class="avatar avatar-lg">GH</span>
+  <span class="avatar avatar-lg">AT</span>
+  <span class="avatar avatar-lg avatar-more" role="img" aria-label="+2 more">+2</span>
+</div>
+```
+
+```tsx
+<AvatarGroup max={3} size="sm">
+  <Avatar initials="AL" />
+  <Avatar initials="GH" />
+  <Avatar initials="AT" />
+  <Avatar initials="KJ" />
+  <Avatar initials="ED" />
+</AvatarGroup>
+<AvatarGroup max={3} size="lg">
+  <Avatar initials="AL" />
+  <Avatar initials="GH" />
+  <Avatar initials="AT" />
+  <Avatar initials="KJ" />
+  <Avatar initials="ED" />
+</AvatarGroup>
+```
+
 ### Status
 
 **Example**
@@ -137,19 +174,19 @@
 
 ### React
 
-| Component     | Prop       | Type                   | Default    |
-| ------------- | ---------- | ---------------------- | ---------- |
-| `Avatar`      | `src`      | `string`               | —          |
-| `Avatar`      | `alt`      | `string`               | `""`       |
-| `Avatar`      | `initials` | `string`               | —          |
-| `Avatar`      | `size`     | `"sm" \| "md" \| "lg"` | `"md"`     |
-| `Avatar`      | `shape`    | `"circle" \| "square"` | `"circle"` |
-| `AvatarGroup` | `max`      | `number`               | —          |
-| `AvatarGroup` | `size`     | `"sm" \| "md" \| "lg"` | `"md"`     |
+| Component     | Prop       | Type                   | Default                           |
+| ------------- | ---------- | ---------------------- | --------------------------------- |
+| `Avatar`      | `src`      | `string`               | —                                 |
+| `Avatar`      | `alt`      | `string`               | `""`                              |
+| `Avatar`      | `initials` | `string`               | —                                 |
+| `Avatar`      | `size`     | `"sm" \| "md" \| "lg"` | `AvatarGroup` `size`, else `"md"` |
+| `Avatar`      | `shape`    | `"circle" \| "square"` | `"circle"`                        |
+| `AvatarGroup` | `max`      | `number`               | —                                 |
+| `AvatarGroup` | `size`     | `"sm" \| "md" \| "lg"` | `"md"`                            |
 
 `initials` wants 1–3 letters and is ignored when `children` is given. `alt` defaults to `""`, which suits an avatar beside a visible name; pass the person's name when the avatar stands alone. Wraps [Base UI Avatar](https://base-ui.com/react/components/avatar), which adds one thing the CSS can't: on an image _error_ it falls back to the initials, not just during loading.
 
-`AvatarGroup` keeps the first `max` children and collapses the remainder into a trailing `avatar-more` tile, `role="img"` labelled `+N more`. Its `size` only sizes that surplus tile — match it to the avatars inside, since the group doesn't resize its children.
+`AvatarGroup` keeps the first `max` children and collapses the remainder into a trailing `avatar-more` tile, `role="img"` labelled `+N more`. Its `size` sizes that tile and is the default `size` of the `Avatar`s inside; an explicit `size` on an `Avatar` wins.
 
 Plus native `<span>` attributes on `Avatar`, `<div>` on `AvatarGroup`.
 

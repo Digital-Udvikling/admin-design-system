@@ -15,17 +15,21 @@ export interface ItemContainerProps extends ComponentProps<"div"> {
    * controls stay clickable above it.
    */
   asLink?: boolean;
+  /** Selection highlight, as on `Table.Row`: sets `[data-selected]`. */
+  selected?: boolean;
 }
 /** The bare row primitive — just the `.item` shell, for layouts the default `<Item>` doesn't fit. */
 function ItemContainer({
   variant = "default",
   size = "md",
   asLink,
+  selected,
   className,
   ...rest
 }: ItemContainerProps) {
   return (
     <div
+      data-selected={selected || undefined}
       className={cn(
         [
           "item",

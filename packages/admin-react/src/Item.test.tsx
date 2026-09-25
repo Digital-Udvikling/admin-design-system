@@ -53,6 +53,14 @@ describe("Item", () => {
     );
   });
 
+  it("marks a selected row with data-selected", () => {
+    const { container, rerender } = render(<Item selected title="x" />);
+    const row = () => container.querySelector(adminSelector("item"));
+    expect(row()).toHaveAttribute("data-selected");
+    rerender(<Item title="x" />);
+    expect(row()).not.toHaveAttribute("data-selected");
+  });
+
   it("Item.Container renders the bare shell", () => {
     const { container } = render(<Item.Container>raw</Item.Container>);
     const root = container.querySelector(adminSelector("item"));

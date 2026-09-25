@@ -122,4 +122,6 @@ The global reset strips margins, list markers, and link styling from bare elemen
 
 Every descendant rule is wrapped in `:where()`, so a consumer's own `.prose a { … }` wins on specificity without `!important`.
 
+Anchors with `.btn` and `<pre class="code-block">` keep their own styling inside `.prose`.
+
 When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md).

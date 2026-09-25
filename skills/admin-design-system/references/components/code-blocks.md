@@ -33,7 +33,7 @@
 **Example**
 
 ```html
-<pre class="code-block code-block-nowrap" style="max-height: 200px">
+<pre class="code-block code-block-nowrap" style="max-height: 160px">
 2026-05-28T08:14:02.331Z INFO  worker.dispatch  job=q-2104 attempt=1 status=accepted
 2026-05-28T08:14:02.418Z INFO  worker.dispatch  job=q-2104 attempt=1 fetched 2384 rows in 87ms
 2026-05-28T08:14:02.422Z WARN  worker.dispatch  job=q-2104 row 1842 missing field "owner_email" — defaulting to operations@example.com
@@ -46,7 +46,7 @@
 ```
 
 ```tsx
-<CodeBlock nowrap style={{ maxHeight: 200 }}>
+<CodeBlock nowrap style={{ maxHeight: 160 }}>
   {`2026-05-28T08:14:02.331Z INFO  worker.dispatch  job=q-2104 attempt=1 status=accepted
 2026-05-28T08:14:02.418Z INFO  worker.dispatch  job=q-2104 attempt=1 fetched 2384 rows in 87ms
 2026-05-28T08:14:02.422Z WARN  worker.dispatch  job=q-2104 row 1842 missing field "owner_email" — defaulting to operations@example.com

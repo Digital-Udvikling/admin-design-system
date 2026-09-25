@@ -9,7 +9,7 @@
 - [Scale](#scale)
 - [Body and small text](#body-and-small-text)
 - [Weights](#weights)
-- [Monospace](#monospace)
+- [Monospace and figures](#monospace-and-figures)
 
 Body text is **14px**; the UI typeface is IBM Plex.
 
@@ -58,7 +58,7 @@ IBM Plex Sans — the UI typeface.
 </div>
 ```
 
-IBM Plex Mono — fixed-width, for IDs, hashes, and figures.
+IBM Plex Mono — fixed-width, for IDs, hashes, and code.
 
 **Example**
 
@@ -86,9 +86,9 @@ IBM Plex Mono — fixed-width, for IDs, hashes, and figures.
 | `<h2>`   | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
 | `<h3>`   | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
 | `<body>` | 0.875rem (14px) | 400       | 1.5             | Default text                   |
-| —        | 0.75rem (12px)  | 400 / 500 | 1.4             | Captions, hints, table meta    |
+| —        | 0.75rem (12px)  | 400 / 500 | 1rem (16px)     | Captions, hints, table meta    |
 
-Heading sizes are applied at the element level — no defaults for `h4`–`h6`.
+Heading sizes are applied at the element level. `h4`–`h6` have no defaults outside [Prose](../components/prose.md).
 
 ## Body and small text
 
@@ -97,15 +97,17 @@ Smaller text — captions, hints, secondary meta — uses `text-xs` (12px), ofte
 **Example**
 
 ```html
-<p>Customers are billed at the end of each calendar month.</p>
-<p class="text-xs text-text-muted">Last invoice generated 14 days ago.</p>
+<div>
+  <p>Customers are billed at the end of each calendar month.</p>
+  <p class="text-xs text-text-muted">Last invoice generated 14 days ago.</p>
+</div>
 ```
 
 ```tsx
-<p>Customers are billed at the end of each calendar month.</p>
-<p className="text-xs text-text-muted">
-  Last invoice generated 14 days ago.
-</p>
+<div>
+  <p>Customers are billed at the end of each calendar month.</p>
+  <p className="text-xs text-text-muted">Last invoice generated 14 days ago.</p>
+</div>
 ```
 
 ## Weights
@@ -115,35 +117,39 @@ Regular (400), medium (500), and semibold (600).
 **Example**
 
 ```html
-<p>Regular — body copy and long-form text.</p>
-<p class="font-medium">Medium — labels, button text, active states.</p>
-<p class="font-semibold">Semibold — headings, KPI numbers, table column headers.</p>
+<div>
+  <p>Regular — body copy and long-form text.</p>
+  <p class="font-medium">Medium — labels, button text, table column headers, active states.</p>
+  <p class="font-semibold">Semibold — headings, KPI numbers.</p>
+</div>
 ```
 
 ```tsx
-<p>Regular — body copy and long-form text.</p>
-<p className="font-medium">Medium — labels, button text, active states.</p>
-<p className="font-semibold">
-  Semibold — headings, KPI numbers, table column headers.
-</p>
+<div>
+  <p>Regular — body copy and long-form text.</p>
+  <p className="font-medium">Medium — labels, button text, table column headers, active states.</p>
+  <p className="font-semibold">Semibold — headings, KPI numbers.</p>
+</div>
 ```
 
-## Monospace
+## Monospace and figures
 
-Use `font-mono` for IDs, hashes, currency amounts, and figures that must align.
+Use `font-mono` for IDs, hashes, and code.
 
 **Example**
 
 ```html
 <p>
-  Order <span class="font-mono">#A7F31B-2014</span> was processed in
-  <span class="font-mono">142 ms</span>.
+  Order <span class="font-mono">#A7F31B-2014</span> was exported by build
+  <span class="font-mono">9f3c2e1</span>.
 </p>
 ```
 
 ```tsx
 <p>
-  Order <span className="font-mono">#A7F31B-2014</span> was processed in
-  <span className="font-mono">142 ms</span>.
+  Order <span className="font-mono">#A7F31B-2014</span> was exported by build{" "}
+  <span className="font-mono">9f3c2e1</span>.
 </p>
 ```
+
+Amounts and counts that must line up stay in the sans face: right-align them and add `tabular-nums`, as numeric table cells do. See [Tables](../components/tables.md#cell-alignment).

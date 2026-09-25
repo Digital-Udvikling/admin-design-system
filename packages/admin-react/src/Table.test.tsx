@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "./Checkbox";
 import { Table } from "./Table";
 
@@ -158,6 +158,52 @@ describe("Table", () => {
     expect(header).toHaveAttribute("scope", "row");
     expect(header).toHaveAdminClass("table-cell");
     expect(header).not.toHaveAdminClass("table-header-cell");
+  });
+
+  it("Table.HeaderCell sort renders a table-sort button and sets aria-sort only when sorted", async () => {
+    const user = userEvent.setup();
+    const onSort = vi.fn();
+    render(
+      <Table>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell sort="ascending" onSort={onSort}>
+              Name
+            </Table.HeaderCell>
+            <Table.HeaderCell sort="none">Created</Table.HeaderCell>
+            <Table.HeaderCell>Email</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+      </Table>,
+    );
+    const name = screen.getByRole("columnheader", { name: "Name" });
+    expect(name).toHaveAttribute("aria-sort", "ascending");
+    expect(screen.getByRole("columnheader", { name: "Created" })).not.toHaveAttribute("aria-sort");
+    expect(screen.getByRole("columnheader", { name: "Email" }).querySelector("button")).toBeNull();
+
+    const button = screen.getByRole("button", { name: "Name" });
+    expect(button).toHaveAdminClass("table-sort");
+    expect(button).toHaveAttribute("type", "button");
+    await user.click(button);
+    expect(onSort).toHaveBeenCalledTimes(1);
+  });
+
+  it("Table.Cell actions and Table.Scroll emit their classes", () => {
+    render(
+      <Table.Scroll data-testid="scroll">
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell actions data-testid="actions">
+                <button type="button">Approve</button>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </Table.Scroll>,
+    );
+    expect(screen.getByTestId("scroll")).toHaveAdminClass("table-scroll");
+    expect(screen.getByTestId("actions")).toHaveAdminClass("table-cell", "table-cell-actions");
   });
 
   it("Table.Row exposes selected and asLink hooks", () => {

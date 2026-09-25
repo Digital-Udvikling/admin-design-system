@@ -77,6 +77,25 @@
     line-height: 1;
   }
 
+  /* Trailing row-actions column: shrinks to its controls, and its block padding
+     is dropped (below the density rules) so a btn-sm fits a text row. */
+  .table-cell-actions {
+    @apply w-px text-right whitespace-nowrap;
+  }
+
+  /* Inline controls centre on the row instead of sitting on the text baseline. */
+  .table :where(td, th) > :is(.checkbox, .radio, .switch, .avatar),
+  .table-cell-actions > * {
+    vertical-align: middle;
+  }
+  /* A switch is exactly the default line-box height, so top alignment adds no slack. */
+  .table :where(td, th) > .switch {
+    vertical-align: top;
+  }
+  .table-cell-actions > * + * {
+    margin-inline-start: 0.25rem;
+  }
+
   /* Body row fill. Each row state sets --table-row-bg on the <tr> and the cells
      paint it; pinned cells layer it over the container fill. Later states win:
      stripe, hover, selection. Reset per row so a nested table doesn't inherit.
@@ -103,15 +122,16 @@
     --table-row-bg: var(--color-surface-hover);
   }
 
-  /* Selection: [data-selected] or a checked row checkbox (switches and Base UI's
-     hidden inputs excluded). */
+  /* Selection: [data-selected], a checked row checkbox (switches and Base UI's
+     hidden inputs excluded) or a current row link. */
   .table
     tbody
     tr:is(
       [data-selected],
       :has(
         input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
-        .checkbox[data-checked]
+        .checkbox[data-checked],
+        a[aria-current]:not([aria-current="false"])
       )
     ) {
     --table-row-bg: var(--color-primary-muted);
@@ -126,12 +146,14 @@
       [data-selected],
       :has(
         input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
-        .checkbox[data-checked]
+        .checkbox[data-checked],
+        a[aria-current]:not([aria-current="false"])
       )
     ):has(
       + tr[data-selected],
       + tr input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
-      + tr .checkbox[data-checked]
+      + tr .checkbox[data-checked],
+      + tr a[aria-current]:not([aria-current="false"])
     ) {
     --table-row-divider: var(--color-border-strong);
   }
@@ -148,7 +170,7 @@
     @apply px-4 py-3;
   }
 
-  /* Sticky header — requires a scrolling ancestor. The divider is an inset
+  /* Sticky header — requires a scrolling ancestor (see table-scroll). The divider is an inset
      shadow: a collapsed border belongs to the grid and scrolls away. */
   .table-sticky thead :where(th) {
     @apply sticky top-0 z-10;
@@ -207,9 +229,12 @@
     @apply px-2 py-1 text-xs;
   }
 
-  /* The gutter keeps its width at every density. */
+  /* Column classes win over the density modifiers. */
   .table :where(th, td).table-cell-gutter {
     @apply px-0;
+  }
+  .table :where(th, td).table-cell-actions {
+    @apply py-0;
   }
 
   /* Empty state — a centered, muted message row (author sets colspan). */
@@ -223,7 +248,7 @@
   }
 
   /* Pinned first column — sticky against horizontal scroll; requires an
-     overflow-x ancestor. The edge is an inset shadow because a collapsed
+     overflow-x ancestor (see table-scroll). The edge is an inset shadow because a collapsed
      border scrolls away with the grid. */
   .table-pin-col {
     --table-pin-edge: -1px;
@@ -254,6 +279,48 @@
       inset 0 -1px 0 var(--color-border-strong);
   }
 
+  /* Opt-in scroll region for wide tables, table-sticky and table-pin-col. The
+     table adds none itself: it would break compositions like <details><table>. */
+  .table-scroll {
+    @apply max-w-full overflow-auto overscroll-x-contain;
+  }
+
+  /* Sortable header: a text button in the header's type; the indicator follows
+     the cell's aria-sort. */
+  .table-sort {
+    --table-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l4 -4l4 4'/%3E%3Cpath d='M16 15l-4 4l-4 -4'/%3E%3C/svg%3E");
+    font: inherit;
+    color: inherit;
+    /* Top-aligned so the button fills the line box instead of growing the header row. */
+    vertical-align: top;
+    @apply inline-flex items-center gap-1 p-0 border-0 bg-transparent rounded-sm cursor-pointer
+           hover:text-text
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+  .table-sort::after {
+    content: "";
+    @apply size-[1em] shrink-0;
+    background-color: var(--color-text-muted);
+    mask: var(--table-sort-icon) center / contain no-repeat;
+  }
+  .table-sort:hover::after {
+    background-color: currentColor;
+  }
+  :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort {
+    --table-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+    @apply text-text;
+  }
+  :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
+    background-color: currentColor;
+  }
+  [aria-sort="ascending"] > .table-sort::after {
+    rotate: 180deg;
+  }
+  /* Label stays flush with right-aligned numbers; the indicator leads. */
+  [data-align="right"] > .table-sort {
+    @apply flex-row-reverse;
+  }
+
   /* Fills are forced to Canvas and a Highlight fill would sit under Canvas text
      backplates, so selection becomes an inset outline. */
   @media (forced-colors: active) {
@@ -263,11 +330,17 @@
         [data-selected],
         :has(
           input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
-          .checkbox[data-checked]
+          .checkbox[data-checked],
+          a[aria-current]:not([aria-current="false"])
         )
       ) {
       outline: 2px solid Highlight;
       outline-offset: -2px;
+    }
+    .table-sort::after,
+    .table-sort:hover::after,
+    :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
+      background-color: CanvasText;
     }
   }
 }

@@ -1,8 +1,9 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, MouseEventHandler } from "react";
 import { cn } from "./cn";
 
 export type TableAlign = "left" | "right" | "center";
 export type TableDensity = "compact" | "default" | "relaxed";
+export type TableSort = "ascending" | "descending" | "none";
 
 export interface TableProps extends ComponentProps<"table"> {
   striped?: boolean;
@@ -11,10 +12,10 @@ export interface TableProps extends ComponentProps<"table"> {
   density?: TableDensity;
   /** @deprecated Use `density="relaxed"`. Kept for the class-name contract. */
   relaxed?: boolean;
-  /** Pins `<thead>`; requires an overflowing ancestor (`overflow: auto` + `max-height` wrapper). */
+  /** Pins `<thead>`; requires a scrolling ancestor such as `Table.Scroll` with a `max-height`. */
   sticky?: boolean;
   /**
-   * Pins the first column against horizontal scroll; requires an overflow-x ancestor.
+   * Pins the first column against horizontal scroll; requires an overflow-x ancestor such as `Table.Scroll`.
    * Put an `asLink` row's link in a later column; the pinned cell stays outside the row's hit area.
    */
   pinCol?: boolean;
@@ -89,9 +90,25 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<"th">, "align"
   align?: TableAlign;
   /** Narrow first-column gutter, mirroring the body cell `gutter` so the column lines up. */
   gutter?: boolean;
+  /**
+   * Makes the column sortable: wraps the children in a `table-sort` button whose indicator
+   * shows this direction, and sets `aria-sort` unless `"none"`. Ordering the rows is yours.
+   */
+  sort?: TableSort;
+  /** Click handler for the `sort` button. */
+  onSort?: MouseEventHandler<HTMLButtonElement>;
 }
 /** Column header by default; `scope="row"` renders a row header styled as a body cell (`table-cell`). */
-function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHeaderCellProps) {
+function TableHeaderCell({
+  align,
+  gutter,
+  sort,
+  onSort,
+  className,
+  scope,
+  children,
+  ...rest
+}: TableHeaderCellProps) {
   return (
     <th
       className={cn(
@@ -100,8 +117,17 @@ function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHead
       )}
       data-align={align && align !== "left" ? align : undefined}
       scope={scope ?? "col"}
+      aria-sort={sort && sort !== "none" ? sort : undefined}
       {...rest}
-    />
+    >
+      {sort ? (
+        <button type="button" className={cn("table-sort", undefined)} onClick={onSort}>
+          {children}
+        </button>
+      ) : (
+        children
+      )}
+    </th>
   );
 }
 
@@ -111,12 +137,19 @@ export interface TableCellProps extends Omit<ComponentProps<"td">, "align"> {
   gutter?: boolean;
   /** `text-right` + `tabular-nums` for currency/totals columns. */
   numeric?: boolean;
+  /** Trailing row-actions column: shrinks to its controls, right-aligned, no block padding. */
+  actions?: boolean;
 }
-function TableCell({ align, gutter, numeric, className, ...rest }: TableCellProps) {
+function TableCell({ align, gutter, numeric, actions, className, ...rest }: TableCellProps) {
   return (
     <td
       className={cn(
-        ["table-cell", gutter && "table-cell-gutter", numeric && "table-cell-numeric"],
+        [
+          "table-cell",
+          gutter && "table-cell-gutter",
+          numeric && "table-cell-numeric",
+          actions && "table-cell-actions",
+        ],
         className,
       )}
       data-align={align && align !== "left" ? align : undefined}
@@ -140,6 +173,12 @@ function TableEmpty({ colSpan, className, children, ...rest }: TableEmptyProps) 
   );
 }
 
+export type TableScrollProps = ComponentProps<"div">;
+/** Scroll region for wide tables and the scrolling ancestor `sticky` and `pinCol` need; set `max-height` for `sticky`. */
+function TableScroll({ className, ...rest }: TableScrollProps) {
+  return <div className={cn("table-scroll", className)} {...rest} />;
+}
+
 export const Table = Object.assign(TableRoot, {
   Head: TableHead,
   Body: TableBody,
@@ -148,4 +187,5 @@ export const Table = Object.assign(TableRoot, {
   HeaderCell: TableHeaderCell,
   Cell: TableCell,
   Empty: TableEmpty,
+  Scroll: TableScroll,
 });

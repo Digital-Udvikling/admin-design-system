@@ -5,13 +5,11 @@ description: Native table with row selection, sticky headers, and row links.
 
 import { Badge, Button, Checkbox, Drawer, Field, Input, Table } from "@aortl/admin-react";
 import {
-  IconChevronUp,
   IconCircleCheck,
   IconCircleX,
   IconClock,
   IconFilter,
   IconPlus,
-  IconSelector,
   IconTrendingUp,
 } from "@tabler/icons-react";
 import Callout from "../../../components/Callout.astro";
@@ -229,14 +227,13 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
   <thead>
     <tr>
       <th aria-sort="ascending">
-        <button type="button" class="btn btn-ghost btn-sm">
-          Name <i class="ti ti-chevron-up" aria-hidden="true"></i>
-        </button>
+        <button type="button" class="table-sort">Name</button>
       </th>
       <th>
-        <button type="button" class="btn btn-ghost btn-sm">
-          Created <i class="ti ti-selector" aria-hidden="true"></i>
-        </button>
+        <button type="button" class="table-sort">Created</button>
+      </th>
+      <th data-align="right">
+        <button type="button" class="table-sort">Total</button>
       </th>
     </tr>
   </thead>
@@ -244,14 +241,17 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
     <tr>
       <td>Ada Lovelace</td>
       <td>2024-01-12</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
       <td>Alan Turing</td>
       <td>2024-03-04</td>
+      <td class="table-cell-numeric">$310.00</td>
     </tr>
     <tr>
       <td>Grace Hopper</td>
       <td>2024-05-21</td>
+      <td class="table-cell-numeric">$72.50</td>
     </tr>
   </tbody>
 </table>
@@ -261,15 +261,10 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
 <Table>
   <Table.Head>
     <Table.Row>
-      <Table.HeaderCell aria-sort="ascending">
-        <Button variant="ghost" size="sm" iconTrailing={IconChevronUp}>
-          Name
-        </Button>
-      </Table.HeaderCell>
-      <Table.HeaderCell>
-        <Button variant="ghost" size="sm" iconTrailing={IconSelector}>
-          Created
-        </Button>
+      <Table.HeaderCell sort="ascending">Name</Table.HeaderCell>
+      <Table.HeaderCell sort="none">Created</Table.HeaderCell>
+      <Table.HeaderCell sort="none" align="right">
+        Total
       </Table.HeaderCell>
     </Table.Row>
   </Table.Head>
@@ -277,14 +272,17 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
     <Table.Row>
       <Table.Cell>Ada Lovelace</Table.Cell>
       <Table.Cell>2024-01-12</Table.Cell>
+      <Table.Cell numeric>$129.00</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Alan Turing</Table.Cell>
       <Table.Cell>2024-03-04</Table.Cell>
+      <Table.Cell numeric>$310.00</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Grace Hopper</Table.Cell>
       <Table.Cell>2024-05-21</Table.Cell>
+      <Table.Cell numeric>$72.50</Table.Cell>
     </Table.Row>
   </Table.Body>
 </Table>
@@ -294,7 +292,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
 
 <Callout variant="warning">
 
-There is no sort component — the click handler and ordering are yours. Set `aria-sort` to `ascending` or `descending` on the sorted column **only**; leaving it on every column tells a screen reader they are all sorted.
+`table-sort` draws the indicator from the cell's `aria-sort`; the click handler and ordering are yours. Set `aria-sort` to `ascending` or `descending` on the sorted column **only**; leaving it on every column tells a screen reader they are all sorted. React's `sort` prop sets it for you and omits it for `"none"`.
 
 </Callout>
 
@@ -475,7 +473,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
 :::example
 
 ```html
-<div style="overflow: auto; max-height: 240px">
+<div class="table-scroll" style="max-height: 240px">
   <table class="table table-sticky">
     <thead>
       <tr>
@@ -530,7 +528,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
 ```
 
 ```tsx
-<div style={{ overflow: "auto", maxHeight: 240 }}>
+<Table.Scroll style={{ maxHeight: 240 }}>
   <Table sticky>
     <Table.Head>
       <Table.Row>
@@ -558,7 +556,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
       ))}
     </Table.Body>
   </Table>
-</div>
+</Table.Scroll>
 ```
 
 :::
@@ -568,7 +566,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
 :::example
 
 ```html
-<div style="overflow-x: auto; max-width: 360px">
+<div class="table-scroll" style="max-width: 360px">
   <table class="table table-pin-col">
     <thead>
       <tr>
@@ -600,7 +598,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
 ```
 
 ```tsx
-<div style={{ overflowX: "auto", maxWidth: 360 }}>
+<Table.Scroll style={{ maxWidth: 360 }}>
   <Table pinCol>
     <Table.Head>
       <Table.Row>
@@ -628,7 +626,7 @@ There is no sort component — the click handler and ordering are yours. Set `ar
       </Table.Row>
     </Table.Body>
   </Table>
-</div>
+</Table.Scroll>
 ```
 
 :::
@@ -936,19 +934,25 @@ Put a [Checkbox](../forms/checkboxes/) in the first cell. Wire the select-all he
       <td><a href="#1001">#1001</a></td>
       <td>Ada Lovelace</td>
       <td class="table-cell-numeric">$129.00</td>
-      <td><button type="button" class="btn btn-sm">Approve</button></td>
+      <td class="table-cell-actions">
+        <button type="button" class="btn btn-sm">Approve</button>
+      </td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1002">#1002</a></td>
       <td>Grace Hopper</td>
       <td class="table-cell-numeric">$72.50</td>
-      <td><button type="button" class="btn btn-sm">Approve</button></td>
+      <td class="table-cell-actions">
+        <button type="button" class="btn btn-sm">Approve</button>
+      </td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1003">#1003</a></td>
       <td>Alan Turing</td>
       <td class="table-cell-numeric">$310.00</td>
-      <td><button type="button" class="btn btn-sm">Approve</button></td>
+      <td class="table-cell-actions">
+        <button type="button" class="btn btn-sm">Approve</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -976,7 +980,7 @@ Put a [Checkbox](../forms/checkboxes/) in the first cell. Wire the select-all he
         </Table.Cell>
         <Table.Cell>{name}</Table.Cell>
         <Table.Cell numeric>{total}</Table.Cell>
-        <Table.Cell>
+        <Table.Cell actions>
           <Button size="sm">Approve</Button>
         </Table.Cell>
       </Table.Row>
@@ -1178,10 +1182,10 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
 
 <Callout variant="warning">
 
-A table never owns a scroll region. `sticky`, `pinCol`, and horizontal overflow on narrow viewports all need you to supply the scrolling ancestor:
+A table never owns a scroll region. `sticky`, `pinCol`, and horizontal overflow on narrow viewports all need a scrolling ancestor. Wrap the table in `table-scroll` (React `Table.Scroll`) and give it a `max-height` for `sticky`:
 
 ```html
-<div style="overflow: auto; max-height: 240px">
+<div class="table-scroll" style="max-height: 240px">
   <table class="table table-sticky">
     …
   </table>
@@ -1204,22 +1208,26 @@ A table never owns a scroll region. `sticky`, `pinCol`, and horizontal overflow 
 | `Table.HeaderCell` | `<th scope="col">`      | `table-header-cell`; `table-cell` when `scope="row"` |
 | `Table.Cell`       | `<td>`                  | `table-cell`                                         |
 | `Table.Empty`      | its own `<tr>` + `<td>` | `table-empty`                                        |
+| `Table.Scroll`     | `<div>`                 | `table-scroll`                                       |
 
-| Part                             | Prop       | Type                                  | Default     |
-| -------------------------------- | ---------- | ------------------------------------- | ----------- |
-| `Table`                          | `striped`  | `boolean`                             | `false`     |
-| `Table`                          | `bordered` | `boolean`                             | `false`     |
-| `Table`                          | `density`  | `"compact" \| "default" \| "relaxed"` | `"default"` |
-| `Table`                          | `relaxed`  | `boolean`                             | `false`     |
-| `Table`                          | `sticky`   | `boolean`                             | `false`     |
-| `Table`                          | `pinCol`   | `boolean`                             | `false`     |
-| `Table.Row`                      | `selected` | `boolean`                             | `false`     |
-| `Table.Row`                      | `asLink`   | `boolean`                             | `false`     |
-| `Table.Cell`, `Table.HeaderCell` | `align`    | `"left" \| "right" \| "center"`       | `"left"`    |
-| `Table.Cell`, `Table.HeaderCell` | `gutter`   | `boolean`                             | `false`     |
-| `Table.Cell`                     | `numeric`  | `boolean`                             | `false`     |
+| Part                             | Prop       | Type                                    | Default     |
+| -------------------------------- | ---------- | --------------------------------------- | ----------- |
+| `Table`                          | `striped`  | `boolean`                               | `false`     |
+| `Table`                          | `bordered` | `boolean`                               | `false`     |
+| `Table`                          | `density`  | `"compact" \| "default" \| "relaxed"`   | `"default"` |
+| `Table`                          | `relaxed`  | `boolean`                               | `false`     |
+| `Table`                          | `sticky`   | `boolean`                               | `false`     |
+| `Table`                          | `pinCol`   | `boolean`                               | `false`     |
+| `Table.Row`                      | `selected` | `boolean`                               | `false`     |
+| `Table.Row`                      | `asLink`   | `boolean`                               | `false`     |
+| `Table.Cell`, `Table.HeaderCell` | `align`    | `"left" \| "right" \| "center"`         | `"left"`    |
+| `Table.Cell`, `Table.HeaderCell` | `gutter`   | `boolean`                               | `false`     |
+| `Table.Cell`                     | `numeric`  | `boolean`                               | `false`     |
+| `Table.Cell`                     | `actions`  | `boolean`                               | `false`     |
+| `Table.HeaderCell`               | `sort`     | `"ascending" \| "descending" \| "none"` | —           |
+| `Table.HeaderCell`               | `onSort`   | `MouseEventHandler<HTMLButtonElement>`  | —           |
 
-`relaxed` is deprecated — use `density="relaxed"`. `sticky` needs a scrolling ancestor and `pinCol` an `overflow-x` one. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
+`relaxed` is deprecated — use `density="relaxed"`. `sticky` and `pinCol` need a scrolling ancestor such as `Table.Scroll`. `sort` wraps the header's children in a `table-sort` button that calls `onSort`; any value but `"none"` also sets `aria-sort`. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
 
 Plus each element's native attributes. `Table` takes no `classNames` — every part accepts `className`. `Table.Empty` renders its own `<tr>`, so drop it straight into `Table.Body`.
 
@@ -1238,12 +1246,15 @@ Plus each element's native attributes. `Table` takes no `classNames` — every p
 | `table-cell`         | Cell styling for markup that isn't a real `<td>`                                                                        |
 | `table-cell-numeric` | Right-aligns, uses tabular figures and doesn't wrap                                                                     |
 | `table-cell-gutter`  | `1.5rem` centered status column with muted text — colour the icon yourself when status carries meaning                  |
+| `table-cell-actions` | Trailing row-actions column: shrinks to its controls, right-aligned, no block padding                                   |
 | `table-empty`        | Centered muted message cell; set `colspan` to the column count                                                          |
 | `table-row-link`     | Row-filling hit area taken from the row's first `<a>`                                                                   |
+| `table-sort`         | Text button for a sortable header; its indicator follows the cell's `aria-sort`                                         |
+| `table-scroll`       | Scroll region for wide tables; the scrolling ancestor `table-sticky` and `table-pin-col` need                           |
 | `--surface-current`  | Fill painted under the pinned column and sticky header; containers such as `card` set it. Defaults to `--color-surface` |
 
 Modifiers compose — `striped` with `sticky` with `relaxed` is fine.
 
-Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, or `[data-selected]` on the `<tr>`; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
+Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, `[data-selected]` on the `<tr>`, or a link with `aria-current` in the row; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
 
 Striping, hover and selection are scoped to `<tbody>`, and `table-pin-col` pins `:first-child` — so the pinned column must literally be first, and a loose `<tr>` outside `<tbody>` won't stripe.

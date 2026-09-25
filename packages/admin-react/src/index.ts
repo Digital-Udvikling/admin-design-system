@@ -39,6 +39,7 @@ export {
   Input,
   PasswordInput,
   type InputProps,
+  type InputActionProps,
   type PasswordInputProps,
   type InputVariant,
   type InputSize,

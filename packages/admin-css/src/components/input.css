@@ -1,7 +1,9 @@
 @layer components {
+  /* Explicit height: Chromium floors an <input>'s inner editor at `line-height: normal`,
+     so padding can't match .btn. Not flex, or date/time glyphs sit mid-field. */
   .input {
-    @apply inline-flex items-center w-full px-3 py-2
-           rounded-lg text-sm leading-none
+    @apply inline-block w-full h-8 px-3 py-0
+           rounded-lg text-sm
            bg-surface text-text
            border border-border hover:border-border-strong
            transition-colors duration-150
@@ -11,10 +13,17 @@
   }
 
   .input-ghost {
-    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
+    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
   .input-danger {
+    @apply border-danger hover:border-danger focus-visible:outline-danger;
+  }
+
+  /* Separate from .input-danger so its :hover/:focus-visible stay (0,2,0); these
+     heavier selectors must beat the status variants below. */
+  .input:is([aria-invalid="true"], [data-invalid], :user-invalid),
+  .field[data-invalid] .input {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
@@ -33,11 +42,11 @@
 
   /* Sizes */
   .input-sm {
-    @apply text-xs px-2.5 py-1.5;
+    @apply h-6.5 px-2.5 text-xs;
   }
 
   .input-lg {
-    @apply text-base px-4 py-2.5;
+    @apply h-9.5 px-4 text-base;
   }
 
   /* Dark-mode glyph coloring comes free via the inherited `color-scheme`. */

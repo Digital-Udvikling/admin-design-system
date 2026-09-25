@@ -62,4 +62,10 @@
   .input-icon:has(> .input:disabled) > .input-action {
     @apply opacity-50 pointer-events-none;
   }
+
+  /* One × per field: the input-action replaces the native search cancel button. */
+  .input-icon:has(> .input-action) > .input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
 }

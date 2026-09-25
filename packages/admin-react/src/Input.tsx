@@ -24,7 +24,7 @@ export interface InputProps extends BaseInputProps {
   clearLabel?: string;
   /** Called after the clear button empties the field. */
   onClear?: () => void;
-  /** Custom interactive trailing control (style it `.input-action`), e.g. a reveal toggle. */
+  /** Custom interactive trailing control, usually an `Input.Action`. Replaces the clear button and `iconTrailing`. */
   action?: ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"wrapper" | "action">;
@@ -49,7 +49,22 @@ function ClearIcon() {
   );
 }
 
-export function Input({
+export interface InputActionProps extends ComponentProps<"button"> {
+  /** Glyph for the control. Pass a component (`icon={IconCopy}`) or an element. */
+  icon?: IconProp;
+}
+
+/** `.input-action` button for `Input`'s `action` slot; `type` defaults to `"button"`. Needs an `aria-label`. */
+function InputAction({ icon, type = "button", className, children, ...rest }: InputActionProps) {
+  return (
+    <button type={type} className={cn("input-action", className)} {...rest}>
+      {renderIcon(icon)}
+      {children}
+    </button>
+  );
+}
+
+function InputRoot({
   variant = "bordered",
   inputSize = "md",
   icon,
@@ -125,23 +140,25 @@ export function Input({
     />
   );
 
+  const hasAction = action != null && action !== false && action !== "";
+
   // Clearable inputs always wrap (a stable tree) so the field doesn't remount —
   // and lose focus — when the clear button appears on the first keystroke.
-  const wrap = icon != null || iconTrailing != null || action != null || clearable;
+  const wrap = icon != null || iconTrailing != null || hasAction || clearable;
   if (!wrap) return inputEl;
 
-  const trailing = showClear ? (
-    <button
-      type="button"
-      className={cn("input-action", classNames?.action)}
-      aria-label={clearLabel}
-      onClick={handleClear}
-    >
-      <ClearIcon />
-    </button>
-  ) : (
-    (action ?? renderIcon(iconTrailing))
-  );
+  let trailing: ReactNode = renderIcon(iconTrailing);
+  if (hasAction) trailing = action;
+  else if (showClear) {
+    trailing = (
+      <InputAction
+        className={classNames?.action}
+        aria-label={clearLabel}
+        onClick={handleClear}
+        icon={<ClearIcon />}
+      />
+    );
+  }
 
   return (
     <span className={cn("input-icon", classNames?.wrapper)}>
@@ -151,6 +168,10 @@ export function Input({
     </span>
   );
 }
+
+export const Input = Object.assign(InputRoot, {
+  Action: InputAction,
+});
 
 function EyeIcon() {
   return (
@@ -210,15 +231,13 @@ export function PasswordInput({
     <Input
       type={revealed ? "text" : "password"}
       action={
-        <button
-          type="button"
-          className={cn("input-action", classNames?.action)}
+        <InputAction
+          className={classNames?.action}
           aria-label={revealLabel}
           aria-pressed={revealed}
           onClick={() => setRevealed((v) => !v)}
-        >
-          {revealed ? <EyeOffIcon /> : <EyeIcon />}
-        </button>
+          icon={revealed ? <EyeOffIcon /> : <EyeIcon />}
+        />
       }
       classNames={classNames}
       {...rest}

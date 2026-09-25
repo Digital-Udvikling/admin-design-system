@@ -162,6 +162,48 @@ describe("Input", () => {
     });
   });
 
+  describe("action", () => {
+    it("Input.Action renders a type=button input-action with its icon", async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      render(
+        <Input
+          aria-label="x"
+          action={<Input.Action icon={StubIcon} aria-label="Copy" onClick={onClick} />}
+        />,
+      );
+      const button = screen.getByRole("button", { name: "Copy" });
+      expect(button).toHaveAdminClass("input-action");
+      expect(button).toHaveAttribute("type", "button");
+      expect(button).toContainElement(screen.getByTestId("icon"));
+      expect(screen.getByLabelText("x").parentElement).toHaveAdminClass("input-icon");
+      await user.click(button);
+      expect(onClick).toHaveBeenCalledOnce();
+    });
+
+    it("replaces the clear button while the field holds a value", async () => {
+      const user = userEvent.setup();
+      render(
+        <Input
+          aria-label="x"
+          clearable
+          defaultValue="seed"
+          action={<Input.Action icon={StubIcon} aria-label="Copy" />}
+        />,
+      );
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+      await user.type(screen.getByLabelText("x"), "more");
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    });
+
+    it.each([false, null, ""])("action=%j renders no wrapper", (empty) => {
+      render(<Input aria-label="x" action={empty} />);
+      expect(screen.getByLabelText("x").parentElement).not.toHaveAdminClass("input-icon");
+    });
+  });
+
   it("forwards classNames to slots", () => {
     render(<PasswordInput aria-label="pw" classNames={{ action: "x-custom" }} />);
     expect(screen.getByRole("button", { name: "Show password" })).toHaveClass("x-custom");

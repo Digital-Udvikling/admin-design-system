@@ -14,7 +14,7 @@
   /* The header band is a wash so it still shows on a surface-muted card. */
   .table :where(thead th),
   .table-header-cell {
-    @apply font-medium text-text-muted bg-surface-stripe border-b-border-strong whitespace-nowrap;
+    @apply font-semibold text-text bg-surface-stripe border-b-border-strong whitespace-nowrap;
   }
 
   /* Row headers (<th scope="row">) read as body cells, one weight up. */
@@ -297,7 +297,6 @@
     /* Top-aligned so the button fills the line box instead of growing the header row. */
     vertical-align: top;
     @apply inline-flex items-center gap-1 p-0 border-0 bg-transparent rounded-sm cursor-pointer
-           hover:text-text
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
   .table-sort::after {
@@ -311,7 +310,6 @@
   }
   :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort {
     --table-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
-    @apply text-text;
   }
   :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
     background-color: currentColor;

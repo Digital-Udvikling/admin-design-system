@@ -108,7 +108,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 - **Hand-rolling spacing and layout.** Use `<Container>`, `<Row>`, `<Grid>`, or Tailwind utilities — not ad-hoc margins. Density is a system property, not a per-page decision.
 - **Reaching for raw Flexoki tones in component code.** Reference semantic tokens (`bg-primary`, `text-text-muted`, `border-border`); override those to reskin.
 - **Adding `framer-motion`, manual portals, or `requestAnimationFrame`.** Prefer the platform (see above); Base UI covers the genuinely stateful cases.
-- **Assuming `<Field required>` propagates.** It does not set `required` on the control — set it on the control too.
+- **Putting `required` on the `<Field>` instead of the control.** The asterisk comes from the control's own `required`, on a label that is a direct child of the field. `<Field required>` alone marks the label but validates nothing; use it for controls with no native `required`, and `<Field.Label required>` for a label wrapped in another element. `required={false}` removes the asterisk.
 
 ## Contributing back
 

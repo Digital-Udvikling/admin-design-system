@@ -115,6 +115,18 @@ test("commas inside quoted attribute values are not mangled", () => {
   expect(output).not.toContain('[data-x="1, 2"]');
 });
 
+test("classes inside :where(), :has() and :not() arguments are prefixed", () => {
+  // field.css derives the required asterisk from these; an unprefixed `.field` never matches.
+  const input = `@layer components {
+    .field:where(:has(:required:not(.field .field :required))) > .field-label:not([data-required="false"], :has(.asteriskField))::after { content: " *"; }
+  }`;
+  const output = wrap(input);
+  expect(output).toContain(
+    '._ao-field:where(:has(:required:not(._ao-field ._ao-field :required))) > ._ao-field-label:not([data-required="false"], :has(._ao-asteriskField))::after',
+  );
+  expect(output).not.toMatch(/\.(field|asteriskField)\b/);
+});
+
 test("@keyframes selectors are not rewritten", () => {
   // Keyframe steps aren't element selectors; `:scope from` is invalid CSS.
   const input = `

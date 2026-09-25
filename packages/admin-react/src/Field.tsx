@@ -20,7 +20,10 @@ export interface FieldProps extends FieldContainerProps {
    * messages, use `<Field.Container>` and compose `<Field.Error>` directly.
    */
   error?: ReactNode;
-  /** Marks the label with a red asterisk via `data-required`. */
+  /**
+   * Label-only override of the red asterisk, which otherwise follows the control's own `required`.
+   * `true` adds it, for controls with no native `required`; `false` removes it. Validates nothing.
+   */
   required?: boolean;
   /** Inline layout (`.field-row`) — control beside its label; pairs with switches and single checkboxes. */
   inline?: boolean;
@@ -76,14 +79,18 @@ function FieldRoot({
 }
 
 export type FieldLabelProps = ComponentProps<typeof BaseField.Label> & {
-  /** Renders a red asterisk after the label text via `data-required`. */
+  /**
+   * Overrides the red asterisk via `data-required`: `true` adds it, `false` removes it. Unset, the
+   * asterisk follows a `required` control only when this label is a direct child of the field, so
+   * a label wrapped in another element needs `true`. Validates nothing.
+   */
   required?: boolean;
 };
 
 function FieldLabel({ className, required, ...rest }: FieldLabelProps) {
   return (
     <BaseField.Label
-      data-required={required ? "" : undefined}
+      data-required={required === undefined ? undefined : required ? "" : "false"}
       className={cn("field-label", className)}
       {...rest}
     />

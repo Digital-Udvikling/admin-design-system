@@ -14,7 +14,15 @@
     @apply text-sm font-medium text-text leading-none;
   }
 
-  .field-label[data-required]::after {
+  /* A required control marks only its own field's label. Branch 1: top-level fields; branch 2:
+     fields with no required sub-field; a nested field with both needs [data-required]. :where()
+     keeps specificity equal to the [data-required] branch, so one host override beats both. */
+  .field-label[data-required]:not([data-required="false"], :has(.asteriskField))::after,
+  .field:where(
+      :has(:required:not(.field .field :required)),
+      :has(:required):not(:has(.field :required))
+    )
+    > .field-label:not([data-required="false"], :has(.asteriskField))::after {
     content: " *";
     @apply text-danger;
   }

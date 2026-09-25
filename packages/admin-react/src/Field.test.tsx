@@ -36,7 +36,25 @@ describe("Field", () => {
           <Input required />
         </Field>,
       );
-      expect(screen.getByText("Email")).toHaveAttribute("data-required");
+      expect(screen.getByText("Email")).toHaveAttribute("data-required", "");
+    });
+
+    it("leaves data-required off when the prop is unset, so the CSS follows the control", () => {
+      render(
+        <Field label="Email">
+          <Input required />
+        </Field>,
+      );
+      expect(screen.getByText("Email")).not.toHaveAttribute("data-required");
+    });
+
+    it("renders data-required=false when the prop is false, the asterisk opt-out", () => {
+      render(
+        <Field label="Email" required={false}>
+          <Input required />
+        </Field>,
+      );
+      expect(screen.getByText("Email")).toHaveAttribute("data-required", "false");
     });
 
     it("forwards classNames to slots", () => {

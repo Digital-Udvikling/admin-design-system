@@ -24,6 +24,7 @@ export const DialogContext = createContext<DialogContextValue | null>(null);
  * Drives a native `<dialog>` from a controlled `open` prop, shared by `<Dialog>`
  * and `<Drawer>`: merges the consumer ref, calls `showModal()` / `close()` on
  * change, and reports closes (Esc, backdrop, form submit) via `onOpenChange`.
+ * On every open, however triggered, focuses the first `[data-autofocus]` descendant.
  * Returns `ref` for the portal container context, and the ids the mounted title
  * and description registered (`undefined` while none is mounted).
  */
@@ -60,8 +61,17 @@ export function useDialogElement(
     const el = ref.current;
     if (!el) return;
     const handleClose = () => onOpenChangeRef.current?.(false);
+    // Stands in for `autoFocus`, which React focuses at mount, while the dialog is still closed.
+    const handleToggle = (event: Event) => {
+      if (event.target !== el || (event as ToggleEvent).newState !== "open") return;
+      el.querySelector<HTMLElement>("[data-autofocus]")?.focus();
+    };
     el.addEventListener("close", handleClose);
-    return () => el.removeEventListener("close", handleClose);
+    el.addEventListener("toggle", handleToggle);
+    return () => {
+      el.removeEventListener("close", handleClose);
+      el.removeEventListener("toggle", handleToggle);
+    };
   }, []);
 
   const ctx: DialogContextValue = {

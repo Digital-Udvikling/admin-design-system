@@ -9,6 +9,9 @@
     max-width: none;
     max-height: none;
     border-radius: 0;
+    /* Only the edge facing the page is bordered; the others meet the viewport. */
+    border-width: 0;
+    border-inline-start-width: 1px;
     height: 100dvh;
     width: min(28rem, 100%);
     /* Default: anchored to the inline-end (right in LTR) edge. */
@@ -28,6 +31,8 @@
   .drawer-start {
     margin-inline-start: 0;
     margin-inline-end: auto;
+    border-inline-start-width: 0;
+    border-inline-end-width: 1px;
     transform: translateX(-100%);
   }
   @starting-style {
@@ -39,6 +44,8 @@
   /* Bottom sheet. fit-content, not auto: `auto` stretches between the modal's
      `inset-block: 0`, turning max-height into a fixed height. */
   .drawer-bottom {
+    border-width: 0;
+    border-block-start-width: 1px;
     width: 100%;
     height: fit-content;
     max-height: 85dvh;

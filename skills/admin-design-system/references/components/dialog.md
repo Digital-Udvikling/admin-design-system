@@ -43,20 +43,7 @@
       command="close"
       aria-label="Close"
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
+      <i class="ti ti-x" aria-hidden="true"></i>
     </button>
   </div>
   <p id="dialog-basic-desc" class="dialog-description">
@@ -222,20 +209,7 @@
       command="close"
       aria-label="Close"
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
+      <i class="ti ti-x" aria-hidden="true"></i>
     </button>
   </div>
   <div class="dialog-body">
@@ -279,26 +253,13 @@
         command="close"
         aria-label="Close"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
+        <i class="ti ti-x" aria-hidden="true"></i>
       </button>
     </div>
     <div class="dialog-body">
       <div class="field">
         <label class="field-label" for="dialog-form-name">Name</label>
-        <input id="dialog-form-name" class="input" name="name" required />
+        <input id="dialog-form-name" class="input" name="name" required autofocus />
       </div>
     </div>
     <div class="dialog-footer">
@@ -322,7 +283,7 @@
     <Dialog.Body>
       <Field>
         <Field.Label>Name</Field.Label>
-        <Input name="name" required />
+        <Input name="name" required data-autofocus />
       </Field>
     </Dialog.Body>
     <Dialog.Footer>
@@ -574,6 +535,8 @@ A `Dialog.Title` sets the dialog's `aria-labelledby` and a `Dialog.Description` 
 
 `size` and `closedby` live on the element, so they work on [`Dialog.Container`](../basics/conventions.md#container-escape-hatch) too — the form to use when the layout doesn't fit, most often to wrap everything in a `<form>`. `Dialog.Title` keeps its `icon` prop there.
 
+A descendant marked `data-autofocus` takes focus each time the dialog opens. React's `autoFocus` doesn't work here: it focuses at mount, while the dialog is still closed.
+
 Leave `open` off for the uncontrolled case, as the Invoker Commands pattern below does: no state, no effect, no ref. Pass `open` with `onOpenChange` when the open state belongs to React (a multi-step flow, an async submit, a deep-linked route): the wrapper bridges it to `showModal()` / `close()` and forwards the native `close` event back as `onOpenChange(false)`, so Esc and backdrop clicks stay in sync with your state.
 
 Plus native `<dialog>` attributes.
@@ -594,7 +557,7 @@ Plus native `<dialog>` attributes.
 | `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
 | `dialog-body`        | The scroll region: header and footer stay pinned, children keep their set height                                                |
 | `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping; a button wider than the row wraps its label                        |
-| `dialog-close`       | `1.75rem` square X button at the header's inline end, centred on the title's first line                                         |
+| `dialog-close`       | `1.75rem` square button with a `1rem` icon at the header's inline end, centred on the title's first line                        |
 
 There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.
 
@@ -603,6 +566,8 @@ A `<dialog>` takes no name from the heading inside it: give the title an `id` an
 Open it without JavaScript through the [Invoker Commands API](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor): a `<button commandfor="<dialog-id>" command="show-modal">`, and `command="close"` to dismiss. The `closedby` attribute picks the dismissal set. Without it a modal dialog closes on Esc only (`"closerequest"`); the React components default to `"any"`, which adds a backdrop click. Use `"closerequest"` for an irreversible action and `"none"` to require an explicit close.
 
 Wrap the contents in `<form method="dialog">` and any submit button inside closes the dialog, with the submitter's `value` landing on the dialog's `returnValue` — that's the whole pattern for a form dialog, no handler required.
+
+Opening a dialog focuses its first focusable element, usually the close button. Put `autofocus` on the field the operator types into.
 
 Write the close button's `aria-label` yourself. A dialog with a `dialog-body` doesn't clip, so [menu](menus.md) and [select](forms/selects.md) popups inside it can extend past its edges; without one, the whole dialog scrolls and clips them. Don't add `overflow: hidden` to the root to clip the footer's fill, which inherits the corner radius instead.
 

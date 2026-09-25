@@ -32,20 +32,7 @@
       command="close"
       aria-label="Close"
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
+      <i class="ti ti-x" aria-hidden="true"></i>
     </button>
   </div>
   <div class="dialog-body">
@@ -169,7 +156,7 @@
     <Drawer.Body>
       <Field>
         <Field.Label>Name</Field.Label>
-        <Input defaultValue="Ada Lovelace" />
+        <Input defaultValue="Ada Lovelace" data-autofocus />
       </Field>
       <Field>
         <Field.Label>Email</Field.Label>
@@ -213,7 +200,7 @@ A `Drawer` is a [Dialog](dialog.md) anchored to a screen edge, and it re-exports
 
 ### Vanilla
 
-Pair `drawer` with `dialog`: the drawer classes override the centring and radius, and inherit everything else, including the backdrop and the fade.
+Pair `drawer` with `dialog`: the drawer classes override the centring and radius, keep the border only on the edge facing the page, and inherit everything else, including the backdrop and the fade.
 
 | Class           | Effect                                                                                                      |
 | --------------- | ----------------------------------------------------------------------------------------------------------- |

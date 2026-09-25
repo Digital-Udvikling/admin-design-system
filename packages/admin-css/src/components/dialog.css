@@ -192,11 +192,13 @@
     white-space: normal;
   }
 
-  /* ms-auto pins the button to the header's end when there is no title. */
+  /* ms-auto pins the button to the header's end when there is no title.
+     font-size sizes a 1em icon (webfont or SVG) to 16px. */
   .dialog-close {
     @apply inline-flex items-center justify-center
            size-7 shrink-0 ms-auto
            rounded-md text-text-muted
+           text-base
            bg-transparent
            hover:bg-surface-strong hover:text-text
            cursor-pointer

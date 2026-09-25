@@ -210,6 +210,26 @@ describe("Dialog", () => {
       expect(close.parentElement?.children).toHaveLength(1);
     });
 
+    it("focuses the [data-autofocus] descendant when the dialog opens", async () => {
+      const user = userEvent.setup();
+      render(
+        <Dialog open title="Rename project">
+          <input aria-label="Name" data-autofocus />
+        </Dialog>,
+      );
+      // Where the browser's dialog focusing steps put focus: the first focusable.
+      await user.tab();
+      const close = screen.getByRole("button", { name: "Close" });
+      expect(close).toHaveFocus();
+      // happy-dom has no ToggleEvent; the handler only reads `newState`.
+      const toggle = (newState: string) =>
+        getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState }));
+      toggle("closed");
+      expect(close).toHaveFocus();
+      toggle("open");
+      expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
+    });
+
     it("forwards closedby to the dialog element with 'any' as default", () => {
       const { rerender } = render(<Dialog title="x" />);
       expect(getDialog()).toHaveAttribute("closedby", "any");

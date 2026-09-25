@@ -29,6 +29,18 @@ describe("Select", () => {
     expect(screen.getByRole("combobox", { name: "fruit" })).toBeInTheDocument();
   });
 
+  it("marks the value span so a long value truncates", () => {
+    render(
+      <Select defaultValue="apple">
+        <Select.Trigger aria-label="fruit">
+          <Select.Value data-testid="value" />
+          <Select.Icon />
+        </Select.Trigger>
+      </Select>,
+    );
+    expect(screen.getByTestId("value")).toHaveAdminClass("select-value");
+  });
+
   describe("interactions", () => {
     it("uncontrolled: opens popup, selects an item, closes popup, fires onValueChange", async () => {
       const user = userEvent.setup();
@@ -134,6 +146,41 @@ describe("Select", () => {
       const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
       expect(popup).not.toBeNull();
       expect(popup?.parentElement).toHaveAdminClass("popup-layer");
+    });
+
+    it("start-aligns the popup with the trigger by default", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <Select.Trigger aria-label="fruit">
+            <Select.Value placeholder="Pick" />
+          </Select.Trigger>
+          <Select.Popup>
+            <Select.Item value="apple">Apple</Select.Item>
+          </Select.Popup>
+        </Select>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement;
+      expect(popup.parentElement).toHaveAttribute("data-align", "start");
+    });
+
+    it("forwards side and align to the positioner", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <Select.Trigger aria-label="fruit">
+            <Select.Value placeholder="Pick" />
+          </Select.Trigger>
+          <Select.Popup side="top" align="end">
+            <Select.Item value="apple">Apple</Select.Item>
+          </Select.Popup>
+        </Select>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const positioner = document.querySelector(adminSelector("select-popup"))?.parentElement;
+      expect(positioner).toHaveAttribute("data-side", "top");
+      expect(positioner).toHaveAttribute("data-align", "end");
     });
 
     it("controlled: value prop drives the trigger via onValueChange round-trip", async () => {

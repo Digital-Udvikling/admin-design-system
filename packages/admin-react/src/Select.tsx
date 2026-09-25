@@ -42,8 +42,8 @@ function SelectTrigger({
 
 export type SelectValueProps = ComponentProps<typeof BaseSelect.Value>;
 
-function SelectValue(props: SelectValueProps) {
-  return <BaseSelect.Value {...props} />;
+function SelectValue({ className, ...rest }: SelectValueProps) {
+  return <BaseSelect.Value className={cn("select-value", className)} {...rest} />;
 }
 
 export type SelectIconProps = ComponentProps<typeof BaseSelect.Icon>;
@@ -56,11 +56,24 @@ function SelectIcon({ className, children, ...rest }: SelectIconProps) {
   );
 }
 
+type SelectPositionerProps = ComponentProps<typeof BaseSelect.Positioner>;
+
 export interface SelectPopupProps extends ComponentProps<typeof BaseSelect.Popup> {
+  side?: SelectPositionerProps["side"];
+  align?: SelectPositionerProps["align"];
   sideOffset?: number;
+  alignOffset?: SelectPositionerProps["alignOffset"];
 }
 
-function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPopupProps) {
+function SelectPopup({
+  className,
+  side,
+  align = "start",
+  sideOffset = 4,
+  alignOffset,
+  children,
+  ...rest
+}: SelectPopupProps) {
   const portalContainer = useContext(PortalContainerContext);
   return (
     <BaseSelect.Portal container={portalContainer ?? undefined}>
@@ -69,7 +82,10 @@ function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPop
           the macOS mode collapses the parent dialog's flex layout in <Dialog>. */}
       <BaseSelect.Positioner
         className={cn("popup-layer", undefined)}
+        side={side}
+        align={align}
         sideOffset={sideOffset}
+        alignOffset={alignOffset}
         alignItemWithTrigger={false}
       >
         <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>

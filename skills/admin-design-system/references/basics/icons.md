@@ -145,7 +145,7 @@ When an icon is the only content, give the surrounding element an accessible nam
 **Example**
 
 ```html
-<button class="btn btn-ghost" aria-label="Delete row">
+<button class="btn btn-ghost btn-square" aria-label="Delete row">
   <i class="ti ti-trash" aria-hidden="true"></i>
 </button>
 ```

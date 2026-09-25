@@ -117,7 +117,7 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
 
 ```html
 <div
-  class="chart chart-bars"
+  class="chart chart-bars chart-values"
   role="img"
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"
@@ -136,7 +136,7 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   </div>
 </div>
 <div
-  class="chart chart-bars chart-success"
+  class="chart chart-bars chart-success chart-values"
   role="img"
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"
@@ -155,7 +155,7 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   </div>
 </div>
 <div
-  class="chart chart-bars chart-danger"
+  class="chart chart-bars chart-danger chart-values"
   role="img"
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"

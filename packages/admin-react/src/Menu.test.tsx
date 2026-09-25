@@ -19,6 +19,29 @@ describe("Menu", () => {
     expect(screen.getByText("Actions")).toBeInTheDocument();
   });
 
+  it("styles the trigger as a button with variant, square without children", () => {
+    render(
+      <Menu>
+        <Menu.Trigger variant="primary" size="sm">
+          Actions
+        </Menu.Trigger>
+        <Menu.Trigger variant="default" aria-label="More" />
+        <Menu.Trigger>Plain</Menu.Trigger>
+      </Menu>,
+    );
+    expect(screen.getByText("Actions")).toHaveClass(
+      "_ao-menu-trigger",
+      "_ao-btn",
+      "_ao-btn-primary",
+      "_ao-btn-sm",
+    );
+    expect(screen.getByText("Actions")).not.toHaveClass("_ao-btn-square");
+    const square = screen.getByLabelText("More");
+    expect(square).toHaveClass("_ao-btn", "_ao-btn-square");
+    expect(square).not.toHaveClass("_ao-btn-default");
+    expect(screen.getByText("Plain")).not.toHaveClass("_ao-btn");
+  });
+
   describe("interactions", () => {
     it("opens on summary click and fires onClick on the item", async () => {
       const user = userEvent.setup();

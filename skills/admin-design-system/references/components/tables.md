@@ -414,17 +414,17 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
     <tr>
       <td>A-001</td>
       <td>Widget</td>
-      <td data-align="right">128</td>
+      <td class="table-cell-numeric">128</td>
     </tr>
     <tr>
       <td>A-002</td>
       <td>Gadget</td>
-      <td data-align="right">64</td>
+      <td class="table-cell-numeric">64</td>
     </tr>
     <tr>
       <td>A-003</td>
       <td>Sprocket</td>
-      <td data-align="right">32</td>
+      <td class="table-cell-numeric">32</td>
     </tr>
   </tbody>
 </table>
@@ -634,13 +634,13 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
   <tbody>
     <tr>
       <td>Widget</td>
-      <td data-align="right">3</td>
-      <td data-align="right">$129.00</td>
+      <td class="table-cell-numeric">3</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
       <td>Gadget</td>
-      <td data-align="right">12</td>
-      <td data-align="right">$1,344.50</td>
+      <td class="table-cell-numeric">12</td>
+      <td class="table-cell-numeric">$1,344.50</td>
     </tr>
   </tbody>
 </table>
@@ -691,13 +691,13 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
       </td>
       <td>#1001</td>
       <td>Ada Lovelace</td>
-      <td data-align="right">$129.00</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
       <td class="table-cell-gutter"><i class="ti ti-clock" aria-hidden="true"></i></td>
       <td>#1002</td>
       <td>Grace Hopper</td>
-      <td data-align="right">$72.50</td>
+      <td class="table-cell-numeric">$72.50</td>
     </tr>
     <tr>
       <td class="table-cell-gutter">
@@ -705,7 +705,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
       </td>
       <td>#1003</td>
       <td>Alan Turing</td>
-      <td data-align="right">$310.00</td>
+      <td class="table-cell-numeric">$310.00</td>
     </tr>
   </tbody>
 </table>
@@ -887,17 +887,17 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
     <tr class="table-row-link">
       <td><a href="#1001">#1001</a></td>
       <td>Ada Lovelace</td>
-      <td data-align="right">$129.00</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1002">#1002</a></td>
       <td>Grace Hopper</td>
-      <td data-align="right">$72.50</td>
+      <td class="table-cell-numeric">$72.50</td>
     </tr>
     <tr class="table-row-link">
       <td><a href="#1003">#1003</a></td>
       <td>Alan Turing</td>
-      <td data-align="right">$310.00</td>
+      <td class="table-cell-numeric">$310.00</td>
     </tr>
   </tbody>
 </table>
@@ -955,17 +955,17 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
   <tbody>
     <tr>
       <td>Widget</td>
-      <td data-align="right">$129.00</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
       <td>Gadget</td>
-      <td data-align="right">$72.50</td>
+      <td class="table-cell-numeric">$72.50</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <td>Total</td>
-      <td data-align="right">$201.50</td>
+      <td class="table-cell-numeric">$201.50</td>
     </tr>
   </tfoot>
 </table>
@@ -1011,21 +1011,21 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
   <tbody>
     <tr>
       <td>Widget</td>
-      <td data-align="right">$129.00</td>
+      <td class="table-cell-numeric">$129.00</td>
     </tr>
     <tr>
       <td>Gadget</td>
-      <td data-align="right">$72.50</td>
+      <td class="table-cell-numeric">$72.50</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <td>Subtotal</td>
-      <td data-align="right">$201.50</td>
+      <td class="table-cell-numeric">$201.50</td>
     </tr>
     <tr>
       <td>Tax</td>
-      <td data-align="right">$20.15</td>
+      <td class="table-cell-numeric">$20.15</td>
     </tr>
     <tr>
       <td>
@@ -1035,7 +1035,7 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
           +12%
         </span>
       </td>
-      <td data-align="right">$221.65</td>
+      <td class="table-cell-numeric">$221.65</td>
     </tr>
   </tfoot>
 </table>

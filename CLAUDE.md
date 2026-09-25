@@ -43,7 +43,7 @@ pnpm lint            # oxlint (NOT eslint)
 pnpm lint:fix
 pnpm format          # oxfmt (NOT prettier)
 pnpm format:check
-pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check
+pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check, vanilla/React class parity
 pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm render components/buttons.mdx:42   # PNG of an example: vanilla + React × light + dark (--help)
 pnpm clean
@@ -55,7 +55,7 @@ CI runs `lint`, `format:check`, `build`, the skill drift check (`generate-skill`
 
 ### Class names are the contract
 
-`admin-css` and `admin-react` share the same base class names — `btn`, `card`, `input`, etc. — defined in `packages/admin-css/src/components/*.css` via Tailwind `@apply`. **Both must change together** — a new CSS modifier needs a React prop, a new React prop needs a class.
+`admin-css` and `admin-react` share the same base class names — `btn`, `card`, `input`, etc. — defined in `packages/admin-css/src/components/*.css` via Tailwind `@apply`. **Both must change together** — a new CSS modifier needs a React prop, a new React prop needs a class. `check-docs` enforces it per example: each `tsx` fence is server-rendered and must use the same admin classes as its `html` fence, all `_ao-`-prefixed.
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
 

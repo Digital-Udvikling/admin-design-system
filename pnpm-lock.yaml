@@ -108,6 +108,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      happy-dom:
+        specifier: 20.9.0
+        version: 20.9.0
       playwright-core:
         specifier: 1.63.0
         version: 1.63.0

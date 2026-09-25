@@ -1,4 +1,5 @@
 import { useRef, type ComponentProps, type Ref } from "react";
+import type { ButtonSize, ButtonVariant } from "./Button";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Kbd } from "./Kbd";
@@ -10,10 +11,33 @@ function MenuRoot({ className, ...rest }: MenuProps) {
   return <details className={cn("menu", className)} {...rest} />;
 }
 
-export type MenuTriggerProps = ComponentProps<"summary">;
+export interface MenuTriggerProps extends ComponentProps<"summary"> {
+  /** Styles the trigger as a `<Button>` of this variant (`.btn`). Omit for the plain trigger. */
+  variant?: ButtonVariant;
+  /** Button size; applies only with `variant`. Without children the button is square. */
+  size?: ButtonSize;
+}
 
-function MenuTrigger({ className, ...rest }: MenuTriggerProps) {
-  return <summary className={cn("menu-trigger", className)} {...rest} />;
+function MenuTrigger({ variant, size = "md", className, children, ...rest }: MenuTriggerProps) {
+  return (
+    <summary
+      className={cn(
+        [
+          "menu-trigger",
+          variant !== undefined && [
+            "btn",
+            variant !== "default" && `btn-${variant}`,
+            size !== "md" && `btn-${size}`,
+            children == null && "btn-square",
+          ],
+        ],
+        className,
+      )}
+      {...rest}
+    >
+      {children}
+    </summary>
+  );
 }
 
 export type MenuPopupProps = ComponentProps<"div">;

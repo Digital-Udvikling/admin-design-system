@@ -64,28 +64,17 @@ describe("menu.css anchor-positioning escape hatch", () => {
     ).toContain("fixed");
   });
 
-  test(".menu-popup flips above the trigger via position-try-fallbacks", async () => {
+  test(".menu-popup flips above and toward the start edge via position-try-fallbacks", async () => {
     const { root } = await parse("components/menu.css");
     const popupRules = findRules(root, ".menu-popup");
-    const tryFallbacks = declValues(popupRules, "position-try-fallbacks");
-    expect(
-      tryFallbacks,
-      "expected `.menu-popup { position-try-fallbacks: --menu-popup-flip-up }`",
-    ).toContain("--menu-popup-flip-up");
-  });
-
-  test("@position-try --menu-popup-flip-up swaps top -> bottom: anchor(top)", async () => {
-    const { root } = await parse("components/menu.css");
-    let positionTry;
-    root.walkAtRules("position-try", (rule) => {
-      if (rule.params.trim() === "--menu-popup-flip-up") positionTry = rule;
-    });
-    expect(positionTry, "expected `@position-try --menu-popup-flip-up` block").toBeTruthy();
-    const decls = {};
-    positionTry.walkDecls((d) => {
-      decls[d.prop] = d.value;
-    });
-    expect(decls.bottom, "flip block should set `bottom: anchor(top)`").toBe("anchor(top)");
+    const options = declValues(popupRules, "position-try-fallbacks").flatMap((value) =>
+      value.split(",").map((option) => option.trim().replace(/\s+/g, " ")),
+    );
+    expect(options, "expected a flip-block fallback (no room below)").toContain("flip-block");
+    expect(options, "expected a flip-inline fallback (no room at the end)").toContain(
+      "flip-inline",
+    );
+    expect(options, "expected the combined corner fallback").toContain("flip-block flip-inline");
   });
 });
 

@@ -11,6 +11,7 @@
   - [Hotkey (React only)](#hotkey-react-only)
   - [Grouped items](#grouped-items)
   - [Button-styled trigger](#button-styled-trigger)
+  - [Icon-only trigger](#icon-only-trigger)
   - [Split button](#split-button)
 - [Reference](#reference)
   - [React](#react)
@@ -26,16 +27,16 @@
 <details class="menu">
   <summary class="menu-trigger">Open menu</summary>
   <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">
+    <button class="menu-item" type="button" role="menuitem">
       <i class="ti ti-pencil" aria-hidden="true"></i>
       Edit
     </button>
-    <button class="menu-item" type="button">
+    <button class="menu-item" type="button" role="menuitem">
       <i class="ti ti-copy" aria-hidden="true"></i>
       Duplicate
     </button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button">
+    <button class="menu-item" type="button" role="menuitem">
       <i class="ti ti-trash" aria-hidden="true"></i>
       Delete
     </button>
@@ -63,15 +64,15 @@
 <details class="menu">
   <summary class="menu-trigger">Actions</summary>
   <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">
+    <button class="menu-item" type="button" role="menuitem">
       <i class="ti ti-pencil" aria-hidden="true"></i>
       Edit
     </button>
-    <button class="menu-item" type="button" disabled>
+    <button class="menu-item" type="button" role="menuitem" disabled>
       <i class="ti ti-copy" aria-hidden="true"></i>
       Duplicate
     </button>
-    <a class="menu-item" href="#changelog" aria-disabled="true">
+    <a class="menu-item" role="menuitem" aria-disabled="true">
       <i class="ti ti-history" aria-hidden="true"></i>
       Changelog
     </a>
@@ -111,8 +112,8 @@
       Show ruler
     </button>
     <hr class="menu-separator" />
-    <div class="menu-group" role="group">
-      <div class="menu-group-label">Density</div>
+    <div class="menu-group" role="group" aria-labelledby="view-density">
+      <div class="menu-group-label" id="view-density">Density</div>
       <button class="menu-item" type="button" role="menuitemradio" aria-checked="true">
         <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
         Comfortable
@@ -176,21 +177,21 @@
 <details class="menu">
   <summary class="menu-trigger">Resources</summary>
   <div class="menu-popup" role="menu">
-    <div class="menu-group">
-      <div class="menu-group-label">Internal</div>
-      <a class="menu-item" href="#docs">
+    <div class="menu-group" role="group" aria-labelledby="resources-internal">
+      <div class="menu-group-label" id="resources-internal">Internal</div>
+      <a class="menu-item" href="#docs" role="menuitem">
         <i class="ti ti-book" aria-hidden="true"></i>
         Docs
       </a>
-      <a class="menu-item" href="#changelog">
+      <a class="menu-item" href="#changelog" role="menuitem">
         <i class="ti ti-history" aria-hidden="true"></i>
         Changelog
       </a>
     </div>
     <hr class="menu-separator" />
-    <div class="menu-group">
-      <div class="menu-group-label">External</div>
-      <a class="menu-item" href="#support">
+    <div class="menu-group" role="group" aria-labelledby="resources-external">
+      <div class="menu-group-label" id="resources-external">External</div>
+      <a class="menu-item" href="#support" role="menuitem">
         <i class="ti ti-lifebuoy" aria-hidden="true"></i>
         Support
       </a>
@@ -231,10 +232,10 @@
 <details class="menu">
   <summary class="menu-trigger btn btn-primary">Actions</summary>
   <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button">Approve</button>
-    <button class="menu-item" type="button">Reject</button>
+    <button class="menu-item" type="button" role="menuitem">Approve</button>
+    <button class="menu-item" type="button" role="menuitem">Reject</button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button">Send to review</button>
+    <button class="menu-item" type="button" role="menuitem">Send to review</button>
   </div>
 </details>
 ```
@@ -247,6 +248,45 @@
     <Menu.Item>Reject</Menu.Item>
     <Menu.Separator />
     <Menu.Item>Send to review</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+### Icon-only trigger
+
+**Example**
+
+```html
+<details class="menu">
+  <summary class="menu-trigger btn btn-ghost btn-sm btn-square" aria-label="Row actions">
+    <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+  </summary>
+  <div class="menu-popup" role="menu">
+    <button class="menu-item" type="button" role="menuitem">
+      <i class="ti ti-pencil" aria-hidden="true"></i>
+      Edit
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <i class="ti ti-copy" aria-hidden="true"></i>
+      Duplicate
+    </button>
+    <hr class="menu-separator" />
+    <button class="menu-item" type="button" role="menuitem">
+      <i class="ti ti-trash" aria-hidden="true"></i>
+      Delete
+    </button>
+  </div>
+</details>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger variant="ghost" size="sm" icon={IconDotsVertical} aria-label="Row actions" />
+  <Menu.Popup>
+    <Menu.Item icon={IconPencil}>Edit</Menu.Item>
+    <Menu.Item icon={IconCopy}>Duplicate</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item icon={IconTrash}>Delete</Menu.Item>
   </Menu.Popup>
 </Menu>
 ```
@@ -264,10 +304,10 @@
       aria-label="More save options"
     ></summary>
     <div class="menu-popup" role="menu">
-      <button class="menu-item" type="button">Save as draft</button>
-      <button class="menu-item" type="button">Save and publish</button>
+      <button class="menu-item" type="button" role="menuitem">Save as draft</button>
+      <button class="menu-item" type="button" role="menuitem">Save and publish</button>
       <hr class="menu-separator" />
-      <button class="menu-item" type="button">Save a copy…</button>
+      <button class="menu-item" type="button" role="menuitem">Save a copy…</button>
     </div>
   </details>
 </div>
@@ -288,7 +328,7 @@
 </ButtonGroup>
 ```
 
-**Caution** — A `<details>` menu has no light dismiss: clicking outside leaves it open. Closing means clicking the trigger again or moving focus away.
+**Caution** — A `<details>` menu has no light dismiss: clicking outside or moving focus away leaves it open. The React menu also closes when an item is activated and on Escape; the vanilla menu closes only from its trigger.
 
 ## Reference
 
@@ -308,13 +348,16 @@
 | -------------- | --------- | --------------------------------------------- | ------- |
 | `Menu.Trigger` | `variant` | `ButtonVariant`                               | —       |
 | `Menu.Trigger` | `size`    | `ButtonSize`                                  | `"md"`  |
+| `Menu.Trigger` | `icon`    | [`IconProp`](../basics/conventions.md#icons) | —       |
 | `Menu.Item`    | `icon`    | [`IconProp`](../basics/conventions.md#icons) | —       |
 | `Menu.Item`    | `hotkey`  | `string \| readonly string[]`                 | —       |
 | `Menu.Item`    | `checked` | `boolean`                                     | —       |
 
-`variant` styles the trigger as a [Button](buttons.md) of that variant, square when it has no children; `size` applies only alongside it.
+`variant` styles the trigger as a [Button](buttons.md) of that variant, square when it has no children; `size` applies only alongside it. `icon` renders a leading icon; with `variant` and no children the trigger is an icon-only square without the chevron, so give it an `aria-label`.
 
-Open state is the `<details>` element's, so there is no `open` prop to control and no JavaScript involved — pass the native `open` attribute for a menu that starts expanded. Each part takes the native attributes of its element.
+Open state is the `<details>` element's, so there is no `open` prop to control — pass the native `open` attribute for a menu that starts expanded. Activating an item closes the menu, except a checkable one; Escape closes it and focuses the trigger. Each part takes the native attributes of its element, and `Menu.Group` takes its accessible name from its `Menu.GroupLabel`.
+
+A closed `<details>` hides everything inside it. When an item's click opens a [Dialog](dialog.md) or [Drawer](drawer.md) rendered inside the menu, the menu stays open under it. A dialog that opens later, after an `await`, has to be rendered outside `<Menu>`; for a confirmation, use [`useConfirm()`](dialog.md).
 
 `href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work; without it the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled` — both dim, both stop activating, hotkeys included.
 
@@ -326,19 +369,19 @@ For a form value, use a [Select](forms/selects.md).
 
 ### Vanilla
 
-| Class                 | Effect                                                                                         |
-| --------------------- | ---------------------------------------------------------------------------------------------- |
-| `menu`                | Positioning context on a `<details>`                                                           |
-| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open      |
-| `menu-popup`          | Popup panel: `11rem` min-width, `18rem` max-height, scrolls, bordered surface with a shadow    |
-| `menu-item`           | Row: full width, `0.75rem`/`0.375rem` padding, `text-sm`, hover tint, `0.5rem` gap for an icon |
-| `menu-item-indicator` | `1rem` check gutter, always reserved; its glyph shows only when `aria-checked="true"`          |
-| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                         |
-| `menu-group`          | Column wrapper for a labelled set                                                              |
-| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                      |
+| Class                 | Effect                                                                                                           |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `menu`                | Positioning context on a `<details>`                                                                             |
+| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                        |
+| `menu-popup`          | Popup panel: `11rem` min-width, `18rem` max-height, scrolls, bordered surface with a shadow                      |
+| `menu-item`           | Row: full width, `0.75rem`/`0.375rem` padding, `text-sm`, hover wash, inset focus ring, `0.5rem` gap for an icon |
+| `menu-item-indicator` | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                             |
+| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                                           |
+| `menu-group`          | Column wrapper for a labelled set                                                                                |
+| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                                        |
 
-Open and close is the browser's, via `<details>`/`<summary>` — no JavaScript in either bundle. Write `role="menu"` on the popup and, for checkable items, `role="menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` yourself.
+Open and close is the browser's, via `<details>`/`<summary>`. Write the roles yourself: `role="menu"` on the popup, `role="menuitem"` on each item (`"menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` for checkable ones) and `role="group"` on a `menu-group`, named with `aria-labelledby` pointing at its `menu-group-label`. Items are reached with Tab in both bundles; there is no arrow-key navigation. A disabled anchor item takes `aria-disabled="true"` and no `href`, so neither a click nor Enter navigates.
 
-`menu-trigger` only styles behaviour and bows out of appearance when a `btn` class is present, so adding `btn btn-primary` to the `<summary>` gives a button-styled trigger with no override needed. An empty trigger centres its chevron, as the split-button pattern does — pair it with an `aria-label`, since the chevron is the only visible content. A `menu` inside a [`btn-group`](buttons.md#group) joins the strip's rounding and seams.
+`menu-trigger` only styles behaviour and bows out of appearance when a `btn` class is present, so adding `btn btn-primary` to the `<summary>` gives a button-styled trigger with no override needed. An empty trigger centres its chevron, as the split-button pattern does — pair it with an `aria-label`, since the chevron is the only visible content. A `btn-square` trigger that holds an icon drops the chevron and needs an `aria-label` too. A `menu` inside a [`btn-group`](buttons.md#group) joins the strip's rounding and seams.
 
-Where [anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) is available the popup is `position: fixed` and anchored to the trigger, so it escapes an ancestor's `overflow: hidden` — inside a `<dialog>`, for instance — and flips above the trigger when there's no room below. Without it, the popup falls back to absolute positioning and clips as usual.
+Where [anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) is available the popup is `position: fixed` and anchored to the trigger, so it escapes an ancestor's `overflow: hidden` — inside a `<dialog>`, for instance — flips above the trigger when there's no room below, and aligns to the trigger's right edge when there's no room to its right. Without it, the popup falls back to absolute positioning and clips as usual.

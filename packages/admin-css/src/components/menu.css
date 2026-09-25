@@ -6,6 +6,7 @@
 
   /* Behaviour only — visual classes (e.g. `btn btn-primary`) may stack on top. */
   .menu-trigger {
+    --menu-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
     @apply inline-flex items-center gap-1.5
            cursor-pointer select-none
            transition-colors duration-150
@@ -24,16 +25,23 @@
            hover:bg-surface-strong;
   }
 
-  /* em-sized so the chevron scales with btn-sm / btn-lg. */
+  /* em-sized so the chevron scales with btn-sm / btn-lg; the 1em box also
+     makes an empty `btn-square` trigger as square as an icon button. */
   .menu-trigger::after {
     content: "";
-    width: 0.5em;
-    height: 0.5em;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 150ms ease;
-    flex-shrink: 0;
+    flex: none;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask: var(--menu-chevron) center / contain no-repeat;
+    mask: var(--menu-chevron) center / contain no-repeat;
+    transition: rotate 150ms ease;
+  }
+
+  /* Muted like the select chevron; filled triggers keep their foreground.
+     :where() holds specificity at the base rule's so forced colors still win. */
+  .menu-trigger:where(:not(.btn-primary, .btn-danger))::after {
+    @apply bg-text-muted;
   }
 
   /* A text-less trigger (split-button dropdown half) centers its chevron. */
@@ -41,8 +49,13 @@
     @apply justify-center;
   }
 
+  /* Icon-only trigger (row-actions kebab): the icon is the affordance. */
+  .menu-trigger.btn-square:has(> :is(i, svg))::after {
+    display: none;
+  }
+
   .menu[open] > .menu-trigger::after {
-    transform: rotate(-135deg);
+    rotate: 180deg;
   }
 
   .menu-popup {
@@ -51,6 +64,7 @@
            py-1
            bg-surface text-text
            border border-border rounded-lg shadow-md;
+    --surface-current: var(--color-surface);
   }
 
   /* Anchor positioning makes the popup fixed so it escapes ancestor overflow
@@ -68,33 +82,32 @@
       position-anchor: --menu-trigger;
       top: anchor(bottom);
       left: anchor(left);
-      position-try-fallbacks: --menu-popup-flip-up;
+      /* flip-block also mirrors mt-1; flip-inline right-aligns to the trigger. */
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
     }
   }
 
-  @position-try --menu-popup-flip-up {
-    top: auto;
-    bottom: anchor(top);
-    margin-top: 0;
-    margin-bottom: 0.25rem;
-  }
-
   .menu-item {
-    @apply flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
+    /* `relative` confines a `table-row-link` / `item-link` hit-area overlay to its own row. */
+    @apply relative flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
            text-text bg-transparent
            border-0
            text-left no-underline
            cursor-pointer select-none
-           hover:bg-surface-muted
-           focus-visible:bg-surface-muted focus-visible:outline-none
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           hover:bg-surface-hover
+           focus-visible:bg-surface-hover
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus
+           disabled:opacity-50 disabled:pointer-events-none;
     /* The popup has no max-width — break long labels instead of growing it. */
     overflow-wrap: break-word;
     min-width: 0;
   }
 
-  .menu-item[aria-disabled="true"] {
-    @apply opacity-50 cursor-not-allowed;
+  .menu-item:is([aria-disabled="true"], [data-disabled]) {
+    @apply opacity-50 pointer-events-none;
   }
 
   .menu-trigger > :is(i, svg),
@@ -104,11 +117,12 @@
 
   /* Checkbox/radio items — a leading indicator column whose check shows only when
      aria-checked. In vanilla, set role=menuitemcheckbox/menuitemradio + aria-checked;
-     the gutter is always reserved so labels stay aligned across the group. */
+     the gutter is always reserved so labels stay aligned across the group.
+     1em, the size of a leading icon, so checkable and icon labels share one edge. */
   .menu-item-indicator {
     @apply inline-flex items-center justify-center shrink-0;
-    inline-size: 1rem;
-    block-size: 1rem;
+    inline-size: 1em;
+    block-size: 1em;
   }
   .menu-item-indicator > :is(i, svg) {
     opacity: 0;
@@ -127,5 +141,19 @@
 
   .menu-group-label {
     @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
+  }
+
+  /* Forced colors repaint backgrounds as Canvas, which erases the masked
+     chevron, the separator line and the hover wash. */
+  @media (forced-colors: active) {
+    .menu-trigger::after,
+    .menu-separator {
+      background-color: CanvasText;
+    }
+    .menu-item:hover {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
   }
 }

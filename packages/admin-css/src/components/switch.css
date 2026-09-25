@@ -21,13 +21,14 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
+  /* Off thumb is paper in both modes — it reads on the border-strong track either way. */
   .switch-thumb {
     @apply size-4 rounded-full bg-paper shadow-sm
            transition-transform duration-150;
   }
 
   .switch[data-checked] .switch-thumb {
-    @apply translate-x-4;
+    @apply translate-x-4 bg-primary-content;
   }
 
   /* Native input variant. */
@@ -39,6 +40,7 @@
     @apply bg-primary;
   }
 
+  /* Off thumb is paper in both modes — it reads on the border-strong track either way. */
   input.switch::before {
     content: "";
     @apply size-4 rounded-full bg-paper shadow-sm
@@ -46,7 +48,7 @@
   }
 
   input.switch:checked::before {
-    @apply translate-x-4;
+    @apply translate-x-4 bg-primary-content;
   }
 
   /* Switches are wider than checkboxes/radios, so the label gap is larger. */

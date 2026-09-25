@@ -378,24 +378,24 @@
 | `Card.Description` | `<p>`   | `card-description` |
 | `Card.Actions`     | `<div>` | `card-actions`     |
 
-| Part         | Prop          | Type                                                                                | Default     |
-| ------------ | ------------- | ----------------------------------------------------------------------------------- | ----------- |
-| `Card`       | `variant`     | `"default" \| "muted" \| "primary" \| "info" \| "success" \| "warning" \| "danger"` | `"default"` |
-| `Card`       | `bordered`    | `boolean`                                                                           | `false`     |
-| `Card`       | `compact`     | `boolean`                                                                           | `false`     |
-| `Card`       | `scroll`      | `boolean`                                                                           | `false`     |
-| `Card`       | `media`       | `ReactNode`                                                                         | —           |
-| `Card`       | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
-| `Card`       | `title`       | `ReactNode`                                                                         | —           |
-| `Card`       | `description` | `ReactNode`                                                                         | —           |
-| `Card`       | `toolbar`     | `ReactNode`                                                                         | —           |
-| `Card`       | `actions`     | `ReactNode`                                                                         | —           |
-| `Card`       | `classNames`  | [slots](../basics/conventions.md#classnames)                                       | —           |
-| `Card.Title` | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
+| Part             | Prop          | Type                                                                                | Default     |
+| ---------------- | ------------- | ----------------------------------------------------------------------------------- | ----------- |
+| `Card`           | `variant`     | `"default" \| "muted" \| "primary" \| "info" \| "success" \| "warning" \| "danger"` | `"default"` |
+| `Card`           | `bordered`    | `boolean`                                                                           | `false`     |
+| `Card`           | `compact`     | `boolean`                                                                           | `false`     |
+| `Card`           | `media`       | `ReactNode`                                                                         | —           |
+| `Card`           | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
+| `Card`           | `title`       | `ReactNode`                                                                         | —           |
+| `Card`           | `description` | `ReactNode`                                                                         | —           |
+| `Card`           | `toolbar`     | `ReactNode`                                                                         | —           |
+| `Card`           | `actions`     | `ReactNode`                                                                         | —           |
+| `Card`           | `classNames`  | [slots](../basics/conventions.md#classnames)                                       | —           |
+| `Card.Container` | `scroll`      | `boolean`                                                                           | `false`     |
+| `Card.Title`     | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
 
 `Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
 
-`variant`, `bordered`, `compact` and `scroll` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies, a custom divider, a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand.
+`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies, a custom divider, a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body.
 
 `toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
 

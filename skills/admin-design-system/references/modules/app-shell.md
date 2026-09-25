@@ -391,8 +391,7 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
   </nav>
   <div class="sidebar-footer">
     <label class="sidebar-collapse-toggle">
-      <input type="checkbox" class="sidebar-toggle" />
-      <span class="sr-only">Toggle sidebar</span>
+      <input type="checkbox" class="sidebar-toggle" aria-label="Toggle sidebar" />
     </label>
   </div>
 </aside>
@@ -823,6 +822,6 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 
 The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 
-The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest. Write `aria-current="page"` yourself.
+The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest. Write `aria-current="page"` and the toggle's `aria-label` yourself.
 
 The mobile drawer is the one piece with no vanilla equivalent — `sidebar-drawer` and `sidebar-drawer-backdrop` are styled for Base UI's `[data-starting-style]` / `[data-ending-style]` transition hooks. In vanilla, either leave the sidebar visible at every width or build the drawer from a [`<dialog class="drawer">`](../components/drawer.md) and toggle it yourself.

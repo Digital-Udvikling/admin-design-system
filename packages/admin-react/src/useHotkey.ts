@@ -43,7 +43,7 @@ export function useHotkey(
       ariaKeyShortcuts: toAriaKeyShortcuts(parsed),
       primaryChord: cans[0],
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyId is the stable proxy for keys, which changes identity with every inline array
   }, [keyId]);
 
   useEffect(() => {

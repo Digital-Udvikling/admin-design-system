@@ -98,9 +98,7 @@ function DrawerRoot({
             <Dialog.Title icon={icon} className={classNames?.title}>
               {title}
             </Dialog.Title>
-          ) : (
-            <span className={cn("flex-1", undefined)} />
-          )}
+          ) : null}
           {dismissible ? (
             <Dialog.CloseButton aria-label={closeLabel} className={classNames?.close} />
           ) : null}

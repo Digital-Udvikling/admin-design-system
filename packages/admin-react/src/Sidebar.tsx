@@ -282,7 +282,6 @@ function SidebarCollapseToggle({
           : { defaultChecked: ctx?.defaultCollapsed })}
         onChange={(event) => ctx?.onCollapsedChange?.(event.currentTarget.checked)}
       />
-      <span className={cn("sr-only", undefined)}>{label}</span>
       {children}
     </label>
   );

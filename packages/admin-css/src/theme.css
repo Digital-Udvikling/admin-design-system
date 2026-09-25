@@ -6,6 +6,11 @@
  * (--color-primary) or the palette tone underneath it.
  */
 
+/* Tailwind's `container` utility shares container.css's class name and would
+   override it in builds that generate utilities (the docs, Tailwind consumers).
+   Here because theme.css, unlike components/index.css, is never layer-wrapped. */
+@source not inline("container");
+
 @theme static {
   /* Wipe Tailwind's default palette — Flexoki is the single source of truth. */
   --color-*: initial;

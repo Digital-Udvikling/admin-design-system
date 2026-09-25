@@ -1,8 +1,6 @@
 @layer theme, base, components, utilities;
 
-@import "tailwindcss";
-
-@source "../../admin-react/src/**/*.{ts,tsx}";
+@import "tailwindcss" source(none);
 
 @import "./fonts.css";
 @import "./theme.css";

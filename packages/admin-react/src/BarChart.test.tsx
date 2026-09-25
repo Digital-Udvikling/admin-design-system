@@ -73,6 +73,22 @@ describe("BarChart", () => {
     expect(bars[1]).toHaveAttribute("style", expect.stringContaining("--bar-color"));
   });
 
+  it("puts the datum title on the bar row, not the fill", () => {
+    const { container } = render(<BarChart data={[{ label: "Wed", value: 0 }]} />);
+    expect(container.querySelector(adminSelector("chart-bar"))).toHaveAttribute("title", "Wed: 0");
+    expect(container.querySelector(adminSelector("chart-bar-fill"))).not.toHaveAttribute("title");
+  });
+
+  it("lets a consumer title override the datum title", () => {
+    const { container } = render(
+      <BarChart.Bar datum={{ label: "Wed", value: 0 }} title="Wednesday: no runs" />,
+    );
+    expect(container.querySelector(adminSelector("chart-bar"))).toHaveAttribute(
+      "title",
+      "Wednesday: no runs",
+    );
+  });
+
   it("lets a consumer override the aria-label", () => {
     const { container } = render(<BarChart data={[{ value: 1 }]} aria-label="custom" />);
     expect(container.querySelector(adminSelector("chart"))).toHaveAttribute("aria-label", "custom");

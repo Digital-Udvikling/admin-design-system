@@ -119,10 +119,12 @@
     text-overflow: ellipsis;
   }
 
+  /* The bottom hairline is a baseline, so a zero value reads as zero, not missing. */
   .chart-bars-vertical .chart-bar-track {
     order: 1;
     flex: 1 1 auto;
     min-block-size: 0;
+    border-block-end: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -131,6 +133,8 @@
   .chart-bars-vertical .chart-bar-fill {
     inline-size: 100%;
     block-size: clamp(0%, calc(var(--value) / var(--chart-max) * 100%), 100%);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
   }
 
   .chart-bars-vertical .chart-bar-label {
@@ -152,7 +156,7 @@
     block-size: 0.75rem;
     border-radius: 9999px;
     overflow: hidden;
-    background: var(--color-surface-strong);
+    background: var(--color-border);
   }
 
   .chart-segment {

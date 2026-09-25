@@ -31,19 +31,19 @@
   aria-label="Bar chart. Mon: 80, Tue: 52, Wed: 95."
   style="--chart-max: 95"
 >
-  <div class="chart-bar" style="--value: 80">
+  <div class="chart-bar" style="--value: 80" title="Mon: 80">
     <span class="chart-bar-label">Mon</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Mon: 80"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">80</span>
   </div>
-  <div class="chart-bar" style="--value: 52">
+  <div class="chart-bar" style="--value: 52" title="Tue: 52">
     <span class="chart-bar-label">Tue</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Tue: 52"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">52</span>
   </div>
-  <div class="chart-bar" style="--value: 95">
+  <div class="chart-bar" style="--value: 95" title="Wed: 95">
     <span class="chart-bar-label">Wed</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Wed: 95"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">95</span>
   </div>
 </div>
@@ -73,24 +73,24 @@
   aria-label="Bar chart. Mon: 80, Tue: 52, Wed: 95, Thu: 70."
   style="--chart-max: 95"
 >
-  <div class="chart-bar" style="--value: 80">
+  <div class="chart-bar" style="--value: 80" title="Mon: 80">
     <span class="chart-bar-value">80</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Mon: 80"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-label">Mon</span>
   </div>
-  <div class="chart-bar" style="--value: 52">
+  <div class="chart-bar" style="--value: 52" title="Tue: 52">
     <span class="chart-bar-value">52</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Tue: 52"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-label">Tue</span>
   </div>
-  <div class="chart-bar" style="--value: 95">
+  <div class="chart-bar" style="--value: 95" title="Wed: 95">
     <span class="chart-bar-value">95</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Wed: 95"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-label">Wed</span>
   </div>
-  <div class="chart-bar" style="--value: 70">
+  <div class="chart-bar" style="--value: 70" title="Thu: 70">
     <span class="chart-bar-value">70</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="Thu: 70"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-label">Thu</span>
   </div>
 </div>
@@ -122,16 +122,16 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"
 >
-  <div class="chart-bar" style="--value: 40">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="40"></div></div>
+  <div class="chart-bar" style="--value: 40" title="40">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">40</span>
   </div>
-  <div class="chart-bar" style="--value: 70">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="70"></div></div>
+  <div class="chart-bar" style="--value: 70" title="70">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">70</span>
   </div>
-  <div class="chart-bar" style="--value: 55">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="55"></div></div>
+  <div class="chart-bar" style="--value: 55" title="55">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">55</span>
   </div>
 </div>
@@ -141,16 +141,16 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"
 >
-  <div class="chart-bar" style="--value: 40">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="40"></div></div>
+  <div class="chart-bar" style="--value: 40" title="40">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">40</span>
   </div>
-  <div class="chart-bar" style="--value: 70">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="70"></div></div>
+  <div class="chart-bar" style="--value: 70" title="70">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">70</span>
   </div>
-  <div class="chart-bar" style="--value: 55">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="55"></div></div>
+  <div class="chart-bar" style="--value: 55" title="55">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">55</span>
   </div>
 </div>
@@ -160,16 +160,16 @@ A single-series chart defaults to `info` (`currentColor`, no class). `variant` r
   aria-label="Bar chart. 40, 70, 55."
   style="--chart-max: 70"
 >
-  <div class="chart-bar" style="--value: 40">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="40"></div></div>
+  <div class="chart-bar" style="--value: 40" title="40">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">40</span>
   </div>
-  <div class="chart-bar" style="--value: 70">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="70"></div></div>
+  <div class="chart-bar" style="--value: 70" title="70">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">70</span>
   </div>
-  <div class="chart-bar" style="--value: 55">
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="55"></div></div>
+  <div class="chart-bar" style="--value: 55" title="55">
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">55</span>
   </div>
 </div>
@@ -374,8 +374,8 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
           aria-label="Bar chart. 45."
           style="--chart-max: 100"
         >
-          <div class="chart-bar" style="--value: 45">
-            <div class="chart-bar-track"><div class="chart-bar-fill" title="45"></div></div>
+          <div class="chart-bar" style="--value: 45" title="45">
+            <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
             <span class="chart-bar-value">45</span>
           </div>
         </div>
@@ -449,19 +449,19 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
   aria-label="Bar chart. A: 30, B: 50, C: 20."
   style="--chart-max: 50"
 >
-  <div class="chart-bar" style="--value: 30; --bar-color: var(--color-blue-500)">
+  <div class="chart-bar" style="--value: 30; --bar-color: var(--color-blue-500)" title="A: 30">
     <span class="chart-bar-label">A</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="A: 30"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">30</span>
   </div>
-  <div class="chart-bar" style="--value: 50; --bar-color: var(--color-green-500)">
+  <div class="chart-bar" style="--value: 50; --bar-color: var(--color-green-500)" title="B: 50">
     <span class="chart-bar-label">B</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="B: 50"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">50</span>
   </div>
-  <div class="chart-bar" style="--value: 20; --bar-color: var(--color-orange-400)">
+  <div class="chart-bar" style="--value: 20; --bar-color: var(--color-orange-400)" title="C: 20">
     <span class="chart-bar-label">C</span>
-    <div class="chart-bar-track"><div class="chart-bar-fill" title="C: 20"></div></div>
+    <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">20</span>
   </div>
 </div>
@@ -522,7 +522,7 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 A `ChartDatum` is `{ value, label?, color? }`. `value` is the magnitude — normalised against the chart max for bars, summed for a donut or stack. `label` renders the category and feeds the generated `aria-label`; `color` overrides that datum's colour. `thickness` is ignored when `pie` is set.
 
-Each root gets `role="img"` and an `aria-label` built from the data (`"Bar chart. Mon: 80, Tue: 52."`); pass your own `aria-label` to replace it. Bars and segments also carry a native `title` for a hover read-out. Plus native `<div>` attributes.
+Each root gets `role="img"` and an `aria-label` built from the data (`"Bar chart. Mon: 80, Tue: 52."`); pass your own `aria-label` to replace it. Each bar row and segment also carries a native `title` for a hover read-out. Plus native `<div>` attributes.
 
 `BarChart.Container` and the per-part components are the escape hatch for composing bars by hand — see the [`.Container` convention](../basics/conventions.md#container-escape-hatch).
 
@@ -533,14 +533,14 @@ Each root gets `role="img"` and an `aria-label` built from the data (`"Bar chart
 | `chart`                                        | Root. Sets the defaults every chart reads and colours the series `info`         |
 | `chart-success` `chart-warning` `chart-danger` | Recolours a single series                                                       |
 | `chart-bars`                                   | Horizontal bar grid: label gutter, `1fr` track, trailing value column           |
-| `chart-bars-vertical`                          | Columns in a `--chart-height` box, labels beneath; text ellipsizes              |
-| `chart-bar`                                    | One bar. Carries `--value`; a subgrid row, so columns align across bars         |
+| `chart-bars-vertical`                          | Columns in a `--chart-height` box on a `border` baseline; text ellipsizes       |
+| `chart-bar`                                    | One bar. Carries `--value` and `title`; subgrid columns align across bars       |
 | `chart-bar-label`                              | Category label, `text-xs` muted. Its column collapses when no bar has one       |
 | `chart-bar-track`                              | The bar's rail, which gives the fill a definite length to animate against       |
 | `chart-bar-fill`                               | `0.75rem`, `--value / --chart-max` clamped, `2px` radius, `200ms` transition    |
 | `chart-bar-value`                              | Trailing value, tabular figures. Hidden unless the root has `chart-values`      |
 | `chart-values`                                 | Shows the value column                                                          |
-| `chart-stack`                                  | Proportion bar: `0.75rem` pill on `surface-strong`, clipped                     |
+| `chart-stack`                                  | Proportion bar: `0.75rem` pill on a `border` track, clipped                     |
 | `chart-segment`                                | One share, `flex-grow: var(--value)`, hairline-separated from the previous      |
 | `chart-donut-figure`                           | Square box sized `--chart-size`, centring the ring and its overlay              |
 | `chart-donut`                                  | Conic-gradient ring from `--donut-segments`, centre punched out by a mask       |
@@ -584,6 +584,6 @@ var(--color-red-400)
 
 The donut's centre label has to be a _sibling_ overlay inside `chart-donut-figure`, never a child of the ring — `mask` clips the whole subtree.
 
-Write `role="img"` and the `aria-label` yourself in vanilla, and add a `title` on each bar or segment for the hover read-out.
+Write `role="img"` and the `aria-label` yourself in vanilla, and add a `title` on each `chart-bar` or `chart-segment` for the hover read-out. On the `chart-bar` row it covers the label, track and value, so a short or zero bar still has a hover target.
 
 These are primitives: no axes, ticks, gridlines, or tooltips. Reach for a real charting library when the chart is the analysis rather than a glance.

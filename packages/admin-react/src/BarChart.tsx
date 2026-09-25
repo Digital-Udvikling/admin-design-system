@@ -68,7 +68,8 @@ export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
 
 /**
  * One bar. The value cell always renders (CSS hides it without `.chart-values`);
- * fill stays `currentColor` — single-series bars never cycle SERIES.
+ * fill stays `currentColor` — single-series bars never cycle SERIES. The datum
+ * `title` sits on the row, so label, track and value all show it on hover.
  */
 function Bar({ datum, value, label, color, className, style, ...rest }: BarProps) {
   const v = datum?.value ?? value ?? 0;
@@ -78,10 +79,15 @@ function Bar({ datum, value, label, color, className, style, ...rest }: BarProps
   if (barColor !== undefined) vars["--bar-color"] = barColor;
   const title = datum !== undefined ? datumTitle(datum) : undefined;
   return (
-    <div className={cn("chart-bar", className)} style={mergeStyle(vars, style)} {...rest}>
+    <div
+      className={cn("chart-bar", className)}
+      style={mergeStyle(vars, style)}
+      title={title}
+      {...rest}
+    >
       {lab !== undefined ? <span className={cn("chart-bar-label", undefined)}>{lab}</span> : null}
       <div className={cn("chart-bar-track", undefined)}>
-        <div className={cn("chart-bar-fill", undefined)} title={title} />
+        <div className={cn("chart-bar-fill", undefined)} />
       </div>
       <span className={cn("chart-bar-value", undefined)}>{v}</span>
     </div>

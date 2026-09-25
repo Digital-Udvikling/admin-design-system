@@ -167,15 +167,21 @@
   --color-surface-muted: light-dark(var(--color-base-50), var(--color-base-950));
   --color-surface-strong: light-dark(var(--color-base-100), var(--color-base-900));
 
+  /* Translucent ink washes for hover/highlight and zebra bands. Opaque fills
+     vanish on a container of the same tone (surface-muted rows in a
+     surface-muted card); a wash composites over whatever it sits on. */
+  --color-surface-hover: color-mix(in oklab, var(--color-text) 6%, transparent);
+  --color-surface-stripe: color-mix(in oklab, var(--color-text) 3%, transparent);
+
   --color-text: light-dark(var(--color-black), var(--color-base-200));
-  --color-text-muted: light-dark(var(--color-base-600), var(--color-base-500));
+  --color-text-muted: light-dark(var(--color-base-600), var(--color-base-400));
 
   --color-border: light-dark(var(--color-base-150), var(--color-base-850));
   --color-border-strong: light-dark(var(--color-base-300), var(--color-base-700));
 
-  /* <pre>-style output blocks (logs, JSON). One step darker than
-     `surface-strong` in light mode so the block carves out from chrome. */
-  --color-code-surface: light-dark(var(--color-base-150), var(--color-base-950));
+  /* <pre>-style output blocks (logs, JSON). One step past `surface-strong` in
+     both modes so the block carves out from chrome and surface-muted cards. */
+  --color-code-surface: light-dark(var(--color-base-150), var(--color-base-850));
   --color-code-text: light-dark(var(--color-base-800), var(--color-base-200));
 
   /* Dimming layer behind `<dialog>` and the mobile sidebar drawer — one
@@ -193,8 +199,10 @@
 
   /* Separate tokens so link text and focus rings can be retinted
      independently of the `info` status color, even though all start blue. */
-  --color-link: light-dark(var(--color-blue-600), var(--color-blue-400));
-  --color-link-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
+  /* Dark link is one step past the accent-400 rule: blue-400 text is 4.38:1 on
+     a surface-muted card. */
+  --color-link: light-dark(var(--color-blue-600), var(--color-blue-300));
+  --color-link-hover: light-dark(var(--color-blue-700), var(--color-blue-200));
   --color-focus: light-dark(var(--color-blue-600), var(--color-blue-400));
 
   /* Per-app brand signal. Defaults to neutral gray so an un-branded shell
@@ -221,8 +229,10 @@
   --color-danger-muted: light-dark(var(--color-red-50), var(--color-red-950));
   --color-danger-content: light-dark(var(--color-paper), var(--color-black));
 
-  --color-success: light-dark(var(--color-green-600), var(--color-green-400));
-  --color-success-hover: light-dark(var(--color-green-700), var(--color-green-300));
+  /* Light success is one step darker than the accent-600 rule: green-600 is
+     3.81:1 on success-muted and 4.51:1 under paper text. */
+  --color-success: light-dark(var(--color-green-700), var(--color-green-400));
+  --color-success-hover: light-dark(var(--color-green-800), var(--color-green-300));
   --color-success-muted: light-dark(var(--color-green-50), var(--color-green-950));
   --color-success-content: light-dark(var(--color-paper), var(--color-black));
 

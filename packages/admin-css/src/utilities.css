@@ -120,7 +120,7 @@
 
 /* Foundation semantic colors — kept in sync with theme.css */
 @source inline(
-  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,text,text-muted,border,border-strong}"
+  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,surface-hover,surface-stripe,text,text-muted,border,border-strong}"
 );
 
 /* Accent semantic colors — kept in sync with theme.css */

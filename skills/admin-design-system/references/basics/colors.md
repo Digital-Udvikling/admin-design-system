@@ -36,11 +36,13 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 - Base — `--color-text`
 - Muted — `--color-text-muted`
 
-**Surface** — Page and component backgrounds, lightest to strongest.
+**Surface** — Page and component backgrounds, lightest to strongest. Hover and Stripe are translucent washes over whatever surface is below.
 
 - Base — `--color-surface`
 - Muted — `--color-surface-muted`
 - Strong — `--color-surface-strong`
+- Hover — `--color-surface-hover`
+- Stripe — `--color-surface-stripe`
 
 **Code** — Neutral surface and text for <pre>-style output blocks — logs, JSON, LLM output.
 

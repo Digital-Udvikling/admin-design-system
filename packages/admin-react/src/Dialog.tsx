@@ -1,8 +1,12 @@
-import { useContext, type ComponentProps, type ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
-import { DialogContext, useDialogElement, useDialogLabelId } from "./dialog-internal";
+import {
+  DialogCloseButtonBase,
+  DialogContainer,
+  DialogDescription,
+  DialogTitleBase,
+} from "./Dialog.client";
 import { renderIcon, type IconProp } from "./icon";
-import { PortalContainerContext } from "./portal-context";
 import { hasNode } from "./slot";
 
 export type DialogSize = "sm" | "md" | "lg" | "auto" | "metabase";
@@ -38,47 +42,6 @@ export interface DialogContainerProps extends Omit<ComponentProps<"dialog">, "op
   closedby?: DialogClosedBy;
 }
 
-/**
- * The bare `<dialog>` primitive — for layouts the default `<Dialog>` doesn't fit.
- * A `Dialog.Title` / `Dialog.Description` inside names and describes it unless
- * `aria-label`, `aria-labelledby` or `aria-describedby` is passed.
- */
-function DialogContainer({
-  open,
-  onOpenChange,
-  size = "md",
-  closedby = "any",
-  className,
-  children,
-  ref: consumerRef,
-  "aria-labelledby": labelledBy,
-  "aria-describedby": describedBy,
-  ...rest
-}: DialogContainerProps) {
-  const { setRef, ctx, ref, titleId, descriptionId } = useDialogElement(
-    open,
-    onOpenChange,
-    consumerRef,
-  );
-
-  return (
-    <DialogContext.Provider value={ctx}>
-      <PortalContainerContext.Provider value={ref}>
-        <dialog
-          ref={setRef}
-          className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
-          closedby={closedby}
-          aria-labelledby={labelledBy ?? (rest["aria-label"] === undefined ? titleId : undefined)}
-          aria-describedby={describedBy ?? descriptionId}
-          {...rest}
-        >
-          {children}
-        </dialog>
-      </PortalContainerContext.Provider>
-    </DialogContext.Provider>
-  );
-}
-
 export type DialogHeaderProps = ComponentProps<"div">;
 
 function DialogHeader({ className, ...rest }: DialogHeaderProps) {
@@ -90,22 +53,16 @@ export interface DialogTitleProps extends ComponentProps<"h2"> {
   icon?: IconProp;
 }
 
-function DialogTitle({ icon, id, className, children, ...rest }: DialogTitleProps) {
-  const resolvedId = useDialogLabelId("title", id);
+function DialogTitle({ icon, children, ...rest }: DialogTitleProps) {
   return (
-    <h2 id={resolvedId} className={cn("dialog-title", className)} {...rest}>
+    <DialogTitleBase {...rest}>
       {renderIcon(icon)}
       {children}
-    </h2>
+    </DialogTitleBase>
   );
 }
 
 export type DialogDescriptionProps = ComponentProps<"p">;
-
-function DialogDescription({ id, className, ...rest }: DialogDescriptionProps) {
-  const resolvedId = useDialogLabelId("description", id);
-  return <p id={resolvedId} className={cn("dialog-description", className)} {...rest} />;
-}
 
 export type DialogBodyProps = ComponentProps<"div">;
 
@@ -124,29 +81,11 @@ export interface DialogCloseButtonProps extends ComponentProps<"button"> {
   icon?: IconProp;
 }
 
-function DialogCloseButton({
-  icon,
-  className,
-  children,
-  onClick,
-  type = "button",
-  "aria-label": ariaLabel = "Close",
-  ...rest
-}: DialogCloseButtonProps) {
-  const ctx = useContext(DialogContext);
+function DialogCloseButton({ icon, children, ...rest }: DialogCloseButtonProps) {
   return (
-    <button
-      type={type}
-      className={cn("dialog-close", className)}
-      aria-label={ariaLabel}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) ctx?.close();
-      }}
-      {...rest}
-    >
+    <DialogCloseButtonBase {...rest}>
       {children ?? (icon !== undefined ? renderIcon(icon) : <DefaultCloseIcon />)}
-    </button>
+    </DialogCloseButtonBase>
   );
 }
 

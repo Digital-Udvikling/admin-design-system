@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
 import { Children, createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";

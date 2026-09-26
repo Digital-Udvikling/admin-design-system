@@ -1,7 +1,33 @@
-import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
+import { isAbsolute, resolve } from "node:path";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import dts from "vite-plugin-dts";
+
+const USE_CLIENT = /^\s*["']use client["'];?/;
+
+/**
+ * Fails the build unless every "use client" source module is the entry of its own
+ * output file and that file keeps the directive. Next.js reads the directive per
+ * file, and bundlers strip it or merge modules by default, so a tooling change could
+ * otherwise ship a broken RSC boundary.
+ */
+function assertUseClient(): Plugin {
+  return {
+    name: "admin:assert-use-client",
+    generateBundle(_options, bundle) {
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== "chunk") continue;
+        for (const id of chunk.moduleIds) {
+          if (!isAbsolute(id) || !USE_CLIENT.test(readFileSync(id, "utf8"))) continue;
+          if (id !== chunk.facadeModuleId || !USE_CLIENT.test(chunk.code)) {
+            this.error(`${chunk.fileName} dropped the "use client" directive of ${id}`);
+          }
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
@@ -12,12 +38,14 @@ export default defineConfig({
       include: ["src"],
       exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test-setup.ts"],
     }),
+    assertUseClient(),
   ],
   build: {
     lib: {
       entry: resolve(import.meta.dirname, "src/index.ts"),
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "mjs" : "cjs"}`,
+      // One file per source module, so each keeps its own "use client" boundary.
+      fileName: (format, name) => `${name}.${format === "es" ? "mjs" : "cjs"}`,
     },
     rollupOptions: {
       external: (id) =>
@@ -28,10 +56,8 @@ export default defineConfig({
         id === "clsx" ||
         id.startsWith("@base-ui/react"),
       output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
+        preserveModules: true,
+        preserveModulesRoot: "src",
       },
     },
     sourcemap: true,

@@ -1,9 +1,7 @@
-import { Button as BaseButton } from "@base-ui/react/button";
-import { isValidElement, type ComponentProps } from "react";
-import { cn } from "./cn";
+import type { Button as BaseButton } from "@base-ui/react/button";
+import type { ComponentProps } from "react";
+import { ButtonBase } from "./Button.client";
 import { renderIcon, type IconProp } from "./icon";
-import { Kbd } from "./Kbd";
-import { useHotkeyClick } from "./useHotkey";
 
 export type ButtonVariant = "default" | "primary" | "ghost" | "muted" | "danger" | "danger-ghost";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -39,65 +37,12 @@ export interface ButtonProps extends ComponentProps<typeof BaseButton> {
     | `--${string}`;
 }
 
-export function Button({
-  variant = "default",
-  size = "md",
-  fullWidth,
-  loading,
-  icon,
-  iconTrailing,
-  hotkey,
-  className,
-  type,
-  disabled,
-  focusableWhenDisabled,
-  nativeButton,
-  render,
-  children,
-  onClick,
-  ref,
-  ...rest
-}: ButtonProps) {
-  const { ariaKeyShortcuts, primaryChord, setRef } = useHotkeyClick(hotkey, ref, {
-    enabled: !disabled && !loading,
-  });
-
-  const iconOnly = children == null && (icon != null || iconTrailing != null);
-  // Base UI adds role="button" to every non-native element; an <a href> should stay a link.
-  const linkRender =
-    nativeButton === false &&
-    isValidElement<{ href?: unknown }>(render) &&
-    render.props.href != null;
-
+export function Button({ icon, iconTrailing, children, ...rest }: ButtonProps) {
   return (
-    <BaseButton
-      ref={setRef}
-      onClick={onClick}
-      type={nativeButton === false ? type : (type ?? "button")}
-      nativeButton={nativeButton}
-      render={render}
-      {...(linkRender ? { role: undefined } : null)}
-      disabled={disabled || loading}
-      focusableWhenDisabled={focusableWhenDisabled ?? loading}
-      aria-busy={loading || undefined}
-      aria-keyshortcuts={ariaKeyShortcuts}
-      className={cn(
-        [
-          "btn",
-          variant !== "default" && `btn-${variant}`,
-          size !== "md" && `btn-${size}`,
-          fullWidth && "btn-full-width",
-          loading && "btn-loading",
-          iconOnly && "btn-square",
-        ],
-        className,
-      )}
-      {...rest}
-    >
+    <ButtonBase square={children == null && (icon != null || iconTrailing != null)} {...rest}>
       {renderIcon(icon)}
       {children}
       {renderIcon(iconTrailing)}
-      {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}
-    </BaseButton>
+    </ButtonBase>
   );
 }

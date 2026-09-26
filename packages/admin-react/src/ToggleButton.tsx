@@ -1,10 +1,8 @@
-import { Toggle as BaseToggle } from "@base-ui/react/toggle";
+import type { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import type { ComponentProps } from "react";
 import type { ButtonSize, ButtonVariant } from "./Button";
-import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
-import { Kbd } from "./Kbd";
-import { useHotkeyClick } from "./useHotkey";
+import { ToggleButtonBase } from "./ToggleButton.client";
 
 export interface ToggleButtonProps extends ComponentProps<typeof BaseToggle> {
   variant?: ButtonVariant;
@@ -26,43 +24,12 @@ export interface ToggleButtonProps extends ComponentProps<typeof BaseToggle> {
  * A two-state button styled like `Button`; `aria-pressed` carries the state,
  * which CSS renders as a leading mini switch. Composes with `ButtonGroup`.
  */
-export function ToggleButton({
-  variant = "default",
-  size = "md",
-  fullWidth,
-  icon,
-  iconTrailing,
-  hotkey,
-  className,
-  disabled,
-  children,
-  ref,
-  ...rest
-}: ToggleButtonProps) {
-  const { ariaKeyShortcuts, primaryChord, setRef } = useHotkeyClick(hotkey, ref, {
-    enabled: !disabled,
-  });
-
+export function ToggleButton({ icon, iconTrailing, children, ...rest }: ToggleButtonProps) {
   return (
-    <BaseToggle
-      ref={setRef}
-      disabled={disabled}
-      aria-keyshortcuts={ariaKeyShortcuts}
-      className={cn(
-        [
-          "btn",
-          variant !== "default" && `btn-${variant}`,
-          size !== "md" && `btn-${size}`,
-          fullWidth && "btn-full-width",
-        ],
-        className,
-      )}
-      {...rest}
-    >
+    <ToggleButtonBase {...rest}>
       {renderIcon(icon)}
       {children}
       {renderIcon(iconTrailing)}
-      {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}
-    </BaseToggle>
+    </ToggleButtonBase>
   );
 }

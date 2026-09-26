@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `.prose` styles a raw `<kbd>` as the key chip, and GFM task lists, whose checkbox replaces the bullet and hangs in the bullet gutter so wrapped lines line up with the first. (css)
 - Vanilla tab panels match `data-value` `1` to `12` (was `1` to `6`). (css)
 - A `.sidebar` placed directly in a `<dialog class="dialog drawer">` fills the drawer at the sidebar rail width (capped at 80vw) and hides its collapse toggle, so a vanilla app shell can open its nav as a drawer with invoker commands below 48rem, where a direct-child sidebar is hidden. (css)
+- `"use client"` directives on the modules that need the client, so the package works in React Server Components (Next.js App Router). Importing any export from a Server Component used to fail with `createContext is not a function`, so every page rendering a component had to be a Client Component. Stateless components now render as Server Components, and compound parts (`Select.Trigger`, `Sidebar.Item`) and component-reference icons (`<Button icon={IconPlus}>`) work from a Server Component too. `Pagination`'s default buttons still need a Client Component parent; a `renderItem` that returns links works from a server page. The package now ships one file per module so each keeps its directive; entry points are unchanged. (react)
 
 ### Changed
 

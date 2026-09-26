@@ -1,18 +1,8 @@
-import { createContext, useContext, useMemo, useState } from "react";
-import type { CSSProperties, ComponentProps, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
+import { AppShellRoot } from "./AppShell.client";
 import { cn } from "./cn";
 
-interface AppShellContextValue {
-  mobileDrawerOpen: boolean;
-  setMobileDrawerOpen: (open: boolean) => void;
-  hasSidebar: boolean;
-}
-
-const AppShellContext = createContext<AppShellContextValue | null>(null);
-
-export function useAppShell(): AppShellContextValue | null {
-  return useContext(AppShellContext);
-}
+export { useAppShell } from "./AppShell.client";
 
 export interface AppShellProps extends ComponentProps<"div"> {
   /** Adds `app-shell-with-sidebar`. Optional: a `<Sidebar>` rendered as a direct child switches the grid on its own. */
@@ -29,57 +19,14 @@ export interface AppShellProps extends ComponentProps<"div"> {
   children?: ReactNode;
 }
 
-function AppShellRoot({
-  hasSidebar = false,
-  mobileDrawerOpen,
-  defaultMobileDrawerOpen = false,
-  onMobileDrawerOpenChange,
-  systemAccent,
-  className,
-  style,
-  children,
-  ...rest
-}: AppShellProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultMobileDrawerOpen);
-  const isControlled = mobileDrawerOpen !== undefined;
-  const open = isControlled ? mobileDrawerOpen : uncontrolledOpen;
-
-  const value = useMemo<AppShellContextValue>(
-    () => ({
-      mobileDrawerOpen: open,
-      setMobileDrawerOpen: (next) => {
-        if (!isControlled) setUncontrolledOpen(next);
-        onMobileDrawerOpenChange?.(next);
-      },
-      hasSidebar,
-    }),
-    [open, isControlled, onMobileDrawerOpenChange, hasSidebar],
-  );
-
-  const rootStyle =
-    systemAccent !== undefined
-      ? ({ ...style, "--color-system-accent": systemAccent } as CSSProperties)
-      : style;
-
-  return (
-    <AppShellContext.Provider value={value}>
-      <div
-        className={cn(["app-shell", hasSidebar && "app-shell-with-sidebar"], className)}
-        style={rootStyle}
-        {...rest}
-      >
-        {children}
-      </div>
-    </AppShellContext.Provider>
-  );
-}
-
 export type AppShellMainProps = ComponentProps<"main">;
 
 function AppShellMain({ className, ...rest }: AppShellMainProps) {
   return <main className={cn("app-shell-main", className)} {...rest} />;
 }
 
+// Assembled here, not in the "use client" module: a Server Component importing from there
+// gets an opaque reference without the dot-notation parts.
 export const AppShell = Object.assign(AppShellRoot, {
   Main: AppShellMain,
 });

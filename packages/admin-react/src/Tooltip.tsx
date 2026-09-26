@@ -1,7 +1,7 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
-import { useContext, type ComponentProps, type ReactElement, type ReactNode } from "react";
-import { cn, type SlotClasses } from "./cn";
-import { PortalContainerContext } from "./portal-context";
+import type { ComponentProps, ReactElement, ReactNode } from "react";
+import type { SlotClasses } from "./cn";
+import { TooltipPopup } from "./Tooltip.client";
 
 export type TooltipProviderProps = ComponentProps<typeof BaseTooltip.Provider>;
 
@@ -30,37 +30,6 @@ export interface TooltipPopupProps extends ComponentProps<typeof BaseTooltip.Pop
   side?: TooltipPositionerProps["side"];
   align?: TooltipPositionerProps["align"];
   sideOffset?: TooltipPositionerProps["sideOffset"];
-}
-
-function TooltipPopup({
-  size = "md",
-  side = "top",
-  align = "center",
-  sideOffset = 6,
-  role = "tooltip",
-  className,
-  children,
-  ...rest
-}: TooltipPopupProps) {
-  const portalContainer = useContext(PortalContainerContext);
-  return (
-    <BaseTooltip.Portal container={portalContainer ?? undefined}>
-      <BaseTooltip.Positioner
-        className={cn("popup-layer", undefined)}
-        sideOffset={sideOffset}
-        side={side}
-        align={align}
-      >
-        <BaseTooltip.Popup
-          role={role}
-          className={cn(["tooltip", size !== "md" && `tooltip-${size}`], className)}
-          {...rest}
-        >
-          {children}
-        </BaseTooltip.Popup>
-      </BaseTooltip.Positioner>
-    </BaseTooltip.Portal>
-  );
 }
 
 export interface TooltipProps extends Omit<TooltipRootProps, "children"> {

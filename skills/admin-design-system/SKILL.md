@@ -67,6 +67,10 @@ Component references render at `size="1em"` with `aria-hidden`, so the glyph inh
 
 Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
 
+### Server Components
+
+Every `@aortl/admin-react` component renders in a React Server Component (Next.js App Router), including compound parts and `icon={IconPlus}`. Pass event handlers (`onClick`, `onOpenChange`, `onPageChange`) and call the hooks (`useConfirm`, `useHotkey`, `useAppShell`) only from a Client Component. `Pagination`'s default buttons need one too; from a server page, pass a `renderItem` that returns links.
+
 ### Tokens (two layers)
 
 1. **Flexoki palette tones** — absolute colors (`--color-blue-600`, `--color-base-50`). Identical in light/dark.

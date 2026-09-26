@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useMemo, useRef, type Ref } from "react";
 import { canonicalize, parseKeys, toAriaKeyShortcuts } from "./hotkey-parse";
 import { register, type HotkeyEntry, type HotkeyHandler } from "./hotkey-registry";

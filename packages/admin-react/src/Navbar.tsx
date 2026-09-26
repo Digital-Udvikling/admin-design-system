@@ -1,8 +1,8 @@
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
-import { useAppShell } from "./AppShell";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { Menu } from "./Menu";
+import { NavbarMobileToggle } from "./Navbar.client";
 
 export interface NavbarProps extends ComponentProps<"header"> {
   /**
@@ -104,27 +104,6 @@ export interface NavbarMobileToggleProps extends Omit<
 > {
   /** Accessible label for the toggle. Default: "Open menu". */
   label?: string;
-}
-
-function NavbarMobileToggle({
-  label = "Open menu",
-  className,
-  type = "button",
-  ...rest
-}: NavbarMobileToggleProps) {
-  const shell = useAppShell();
-  const open = shell?.mobileDrawerOpen ?? false;
-
-  return (
-    <button
-      type={type}
-      aria-label={label}
-      aria-expanded={open}
-      onClick={() => shell?.setMobileDrawerOpen(!open)}
-      className={cn("navbar-mobile-toggle", className)}
-      {...rest}
-    />
-  );
 }
 
 export const Navbar = Object.assign(NavbarRoot, {

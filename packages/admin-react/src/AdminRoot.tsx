@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useRef, type CSSProperties, type ComponentProps } from "react";
 import { cn } from "./cn";
 import { PortalContainerContext } from "./portal-context";

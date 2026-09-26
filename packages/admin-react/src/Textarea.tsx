@@ -33,9 +33,11 @@ export function Textarea({
   const resolvedSize = size ?? textareaSize ?? "md";
   return (
     <BaseField.Control
-      // Field.Control is typed for <input>; render a <textarea> with Base UI's
-      // merged props so it still registers with the surrounding Field.
-      render={(props) => <textarea {...props} />}
+      // Field.Control is typed for <input>; Base UI merges its props into this
+      // <textarea> so it still registers with the surrounding Field. The element
+      // form (not a function) keeps Textarea usable from Server Components.
+      // eslint-disable-next-line jsx-a11y/control-has-associated-label -- labelled via the merged Field props
+      render={<textarea />}
       className={cn(
         [
           "textarea",

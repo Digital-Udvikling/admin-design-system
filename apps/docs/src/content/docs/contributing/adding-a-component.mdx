@@ -129,6 +129,15 @@ Export the component and every public type from `packages/admin-react/src/index.
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 ```
 
+### Server Components
+
+Every export must be importable from a React Server Component. Leave a module without a directive unless it calls a hook, creates a context, or creates a function prop: an event handler on any element, or a render function passed to Base UI. Put that part in `<Name>.client.tsx` with `"use client"`, and keep two things out of it:
+
+- Compound assembly (`Object.assign`). A Server Component importing from a `"use client"` module gets an opaque reference, so parts attached there are `undefined`. When the root is itself a client component, the directive-free module attaches the parts to the imported root.
+- `renderIcon`. A component reference can't be passed into a client component, so render the icon in the directive-free module and pass the element down.
+
+The usual shape is `Button.tsx` (types and icon rendering, no directive) rendering `ButtonBase` from `Button.client.tsx` (`"use client"`, the hotkey hook). `Select.tsx` holds every part except the popup, which reads the portal context and lives in `Select.client.tsx`. `Pagination` is the one exception: its handlers only wrap the consumer's `onPageChange`, and a server parent renders links through `renderItem`. `src/server-components.test.ts` checks these rules.
+
 ### Default-omit the default variant and size
 
 Skip the class when the value is the default, since the default look already lives in the base class. So `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all render the same DOM as the bare `.badge` vanilla markup.

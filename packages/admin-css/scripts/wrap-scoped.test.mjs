@@ -142,6 +142,18 @@ test("@keyframes selectors are not rewritten", () => {
   expect(output).not.toContain(":scope to");
 });
 
+test("top-level @position-try is hoisted out of @scope", () => {
+  const output = wrap(`
+    @position-try --menu-fit { max-block-size: 100%; }
+    .menu-popup { position-try-fallbacks: --menu-fit; }
+  `);
+  const root = postcss.parse(output);
+  expect(root.nodes.some((n) => n.type === "atrule" && n.name === "position-try")).toBe(true);
+  getScope(output).walkAtRules("position-try", () => {
+    throw new Error("@position-try left inside @scope");
+  });
+});
+
 test("native CSS nesting is flattened — no `&` survives, hover targets the element not the scope root", () => {
   // The scoped bundle is embedded into host apps that re-process it. Native `&`
   // nesting left inside @scope gets mis-lowered to a bare `:scope` by some

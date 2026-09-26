@@ -3,7 +3,7 @@
  * Build the scoped variant of admin.css: every rule wrapped in
  * `@scope (._ao-admin-root)`, admin class names prefixed `_ao-` so they can't
  * collide with host classes. Globals that can't be scoped (`@property`,
- * `@font-face`, `@keyframes`, `@charset`, `@import`) are hoisted above the
+ * `@font-face`, `@keyframes`, `@charset`, `@import`, `@position-try`) are hoisted above the
  * scope. `@layer` is dropped and blocks are flattened in declared order —
  * layered rules always lose to unlayered host rules of any specificity, so
  * the bundle ships unlayered. Cascade invariants are locked in by
@@ -30,6 +30,7 @@ const HOIST_ATRULES = new Set([
   "-moz-keyframes",
   "charset",
   "import",
+  "position-try",
 ]);
 
 const SELECTOR_REWRITES = new Map([

@@ -74,10 +74,15 @@
     margin-block-start: 0.25rem;
     position-anchor: --menu-trigger;
     position-area: block-end span-inline-end;
+    /* The --menu-fit tries shrink the popup into the roomier side; without them a
+       popup that fits neither side is shifted into the viewport over its trigger. */
     position-try-fallbacks:
       flip-block,
       flip-inline,
-      flip-block flip-inline;
+      flip-block flip-inline,
+      --menu-fit,
+      --menu-fit flip-block;
+    position-try-order: most-block-size;
     /* A trigger wider than 11rem (full-width bulk actions) widens the popup to match. */
     min-width: max(11rem, anchor-size(width));
     transition-property: opacity, translate, display, overlay;
@@ -190,12 +195,6 @@
      chevron, the separator line, the hover wash and the current-page fill. */
   @media (forced-colors: active) {
     .menu-trigger::after,
-    /* Filter menus: a `<label class="menu-item">` whose native checkbox or radio takes
-     the indicator column; the control already fills one line box, so a row stays 28px. */
-  .menu-item > :is(.checkbox, .radio):first-child {
-      align-self: flex-start;
-    }
-
     .menu-separator {
       background-color: CanvasText;
     }
@@ -206,4 +205,12 @@
       color: HighlightText;
     }
   }
+}
+
+/* Outside the layer: a try rule is global by name, and wrap-scoped.mjs hoists it
+   out of @scope. 100% is the space between the trigger and the viewport edge;
+   0.5rem covers the 0.25rem gap to the trigger plus the same gap to the edge.
+   18rem repeats the popup's max-h-72, which a try rule's max-block-size replaces. */
+@position-try --menu-fit {
+  max-block-size: min(18rem, calc(100% - 0.5rem));
 }

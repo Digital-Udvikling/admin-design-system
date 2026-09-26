@@ -74,6 +74,8 @@ Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><
 
 Override semantic tokens to reskin the system; never reference Flexoki tones directly from component code.
 
+Hover and zebra fills use the translucent `surface-hover` / `surface-stripe` washes, so they show on any container. A custom filled container sets `--surface-current` to its fill so timeline rings, avatar-group rings and pinned or sticky table cells paint the same surface; see [Theming › Container surface](references/basics/theming.md).
+
 ### Dark mode
 
 Driven entirely by CSS `color-scheme` and `[data-theme]`:

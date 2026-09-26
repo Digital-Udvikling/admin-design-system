@@ -171,7 +171,10 @@
      vanish on a container of the same tone (surface-muted rows in a
      surface-muted card); a wash composites over whatever it sits on. */
   --color-surface-hover: color-mix(in oklab, var(--color-text) 6%, transparent);
-  --color-surface-stripe: color-mix(in oklab, var(--color-text) 3%, transparent);
+  --color-surface-stripe: light-dark(
+    color-mix(in oklab, var(--color-black) 3%, transparent),
+    color-mix(in oklab, var(--color-base-200) 5%, transparent)
+  );
 
   --color-text: light-dark(var(--color-black), var(--color-base-200));
   --color-text-muted: light-dark(var(--color-base-600), var(--color-base-400));
@@ -209,8 +212,8 @@
      reads as chrome; override at :root (or inline on .app-shell) to brand a
      whole app. -hover/-muted derive via color-mix toward --color-text /
      --color-surface (themselves light-dark() pairs), so one override
-     propagates and stays mode-aware. Bright accents may need a manual
-     -content override for contrast. */
+     propagates and stays mode-aware. -content steps from paper to black at
+     OKLCH L 0.58 (0.168 is --color-black's L), so bright accents stay legible. */
   --color-system-accent: light-dark(var(--color-base-600), var(--color-base-400));
   --color-system-accent-hover: color-mix(
     in oklch,
@@ -222,7 +225,9 @@
     var(--color-system-accent) 12%,
     var(--color-surface)
   );
-  --color-system-accent-content: light-dark(var(--color-paper), var(--color-black));
+  --color-system-accent-content: oklch(
+    from var(--color-system-accent) clamp(0.168, (0.58 - l) * 1000, 1) 0 0
+  );
 
   --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
   --color-danger-hover: light-dark(var(--color-red-700), var(--color-red-300));

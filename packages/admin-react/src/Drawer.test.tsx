@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Drawer } from "./Drawer";
 
@@ -84,5 +86,48 @@ describe("Drawer", () => {
       </Drawer>,
     );
     expect(screen.getByText("Filters")).toHaveClass("x-custom");
+  });
+
+  describe("open state", () => {
+    const getDrawer = () => document.querySelector("dialog") as HTMLDialogElement;
+
+    it("opens and closes as the open prop changes", () => {
+      const { rerender } = render(<Drawer open={false} title="Filters" />);
+      expect(getDrawer()).not.toHaveAttribute("open");
+      rerender(<Drawer open title="Filters" />);
+      expect(getDrawer()).toHaveAttribute("open");
+      rerender(<Drawer open={false} title="Filters" />);
+      expect(getDrawer()).not.toHaveAttribute("open");
+    });
+
+    it("round-trips through onOpenChange: the close button closes a controlled drawer", async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      function Controlled() {
+        const [open, setOpen] = useState(true);
+        return (
+          <Drawer
+            open={open}
+            onOpenChange={(next) => {
+              onOpenChange(next);
+              setOpen(next);
+            }}
+            title="Filters"
+          />
+        );
+      }
+      render(<Controlled />);
+      expect(getDrawer()).toHaveAttribute("open");
+      await user.click(screen.getByRole("button", { name: "Close" }));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(getDrawer()).not.toHaveAttribute("open");
+    });
+
+    it("a native close (Escape) reports onOpenChange(false)", () => {
+      const onOpenChange = vi.fn();
+      render(<Drawer open onOpenChange={onOpenChange} title="Filters" />);
+      getDrawer().close();
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
   });
 });

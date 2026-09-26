@@ -9,6 +9,19 @@ describe("FileInput", () => {
     expect(screen.getByLabelText("Upload file")).toBeInTheDocument();
   });
 
+  it("applies the size modifier from size", () => {
+    render(
+      <>
+        <FileInput aria-label="sm" size="sm" />
+        <FileInput aria-label="md" />
+        <FileInput aria-label="lg" size="lg" />
+      </>,
+    );
+    expect(screen.getByLabelText("sm")).toHaveAdminClass("file-input-sm");
+    expect(screen.getByLabelText("lg")).toHaveAdminClass("file-input-lg");
+    expect(screen.getByLabelText("md")).not.toHaveAdminClass("file-input-md");
+  });
+
   describe("interactions", () => {
     it("accepts uploaded files", async () => {
       const user = userEvent.setup();

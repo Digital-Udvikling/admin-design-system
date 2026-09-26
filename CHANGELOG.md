@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
 - `StatusDot`, a standalone `indicator-dot`: `aria-hidden` beside its status text, or `role="status"` when given an `aria-label`. (both)
 - `delay` and `closeDelay` on `Tooltip`; when unset, the enclosing `Tooltip.Provider`'s values apply. (react)
+- `number-input-ghost` / `<NumberInput variant="ghost">`, and `aria-invalid` on `NumberInput`. (both)
+- `Input.Action`, a `type="button"` `.input-action` with an `icon` prop for the `Input` `action` slot. (react)
 
 ### Changed
 
@@ -25,6 +27,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
 - The neutral `badge` has a `border` edge, badges keep their content width in flex columns and grids, and a badge in a `btn` doesn't make it taller. (css)
 - The vanilla tooltip sizes to its content up to 20rem, is `display: none` while hidden, opens on keyboard focus but not on click, and paints on `--z-popup`. Where anchor positioning is supported it escapes overflow clipping and flips to stay in the viewport. (css)
+- `.input-action` meets the WCAG 2.5.8 minimum target size, date and time inputs put the picker glyph at the trailing edge, and an `Input` `action` replaces the clear button. (both)
+- `NumberInput`'s `ref`, `className` and `style` apply to the visible `number-input` group; `classNames.root` targets the Base UI Root. (react)
+- An `indicator` around a form control fills the width like the bare control; set a narrower width on the `indicator`. (css)
 
 ### Removed
 

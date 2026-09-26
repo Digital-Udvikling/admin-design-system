@@ -15,9 +15,17 @@ describe("Input", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
-  it("applies the status variant class", () => {
-    render(<Input aria-label="x" variant="warning" />);
-    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-warning");
+  it("applies the ghost variant class", () => {
+    render(<Input aria-label="x" variant="ghost" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-ghost");
+  });
+
+  it("maps size to the size class and omits the native size attribute", () => {
+    const { rerender } = render(<Input aria-label="x" size="sm" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-sm");
+    expect(screen.getByLabelText("x")).not.toHaveAttribute("size");
+    rerender(<Input aria-label="x" />);
+    expect(screen.getByLabelText("x")).not.toHaveAdminClass("input-md");
   });
 
   describe("interactions", () => {
@@ -159,6 +167,48 @@ describe("Input", () => {
     it("does not show the clear button when disabled", async () => {
       render(<Input aria-label="x" clearable disabled defaultValue="locked" />);
       expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    });
+  });
+
+  describe("action", () => {
+    it("Input.Action renders a type=button input-action with its icon", async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      render(
+        <Input
+          aria-label="x"
+          action={<Input.Action icon={StubIcon} aria-label="Copy" onClick={onClick} />}
+        />,
+      );
+      const button = screen.getByRole("button", { name: "Copy" });
+      expect(button).toHaveAdminClass("input-action");
+      expect(button).toHaveAttribute("type", "button");
+      expect(button).toContainElement(screen.getByTestId("icon"));
+      expect(screen.getByLabelText("x").parentElement).toHaveAdminClass("input-icon");
+      await user.click(button);
+      expect(onClick).toHaveBeenCalledOnce();
+    });
+
+    it("replaces the clear button while the field holds a value", async () => {
+      const user = userEvent.setup();
+      render(
+        <Input
+          aria-label="x"
+          clearable
+          defaultValue="seed"
+          action={<Input.Action icon={StubIcon} aria-label="Copy" />}
+        />,
+      );
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+      await user.type(screen.getByLabelText("x"), "more");
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    });
+
+    it.each([false, null, ""])("action=%j renders no wrapper", (empty) => {
+      render(<Input aria-label="x" action={empty} />);
+      expect(screen.getByLabelText("x").parentElement).not.toHaveAdminClass("input-icon");
     });
   });
 

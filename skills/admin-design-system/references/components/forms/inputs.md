@@ -6,14 +6,16 @@
 
 - [Examples](#examples)
   - [Variants](#variants)
-  - [Status variants](#status-variants)
+  - [Invalid](#invalid)
   - [Sizes](#sizes)
   - [Disabled](#disabled)
   - [With icons](#with-icons)
   - [Clearable](#clearable)
   - [Password](#password)
+  - [Custom action](#custom-action)
   - [Types](#types)
   - [Date and time](#date-and-time)
+  - [Date range](#date-range)
 - [Reference](#reference)
   - [React](#react)
   - [Vanilla](#vanilla)
@@ -27,29 +29,25 @@
 ```html
 <input class="input" placeholder="Bordered (default)" />
 <input class="input input-ghost" placeholder="Ghost" />
-<input class="input input-danger" placeholder="Danger" value="invalid" />
 ```
 
 ```tsx
 <Input placeholder="Bordered (default)" />
 <Input variant="ghost" placeholder="Ghost" />
-<Input variant="danger" defaultValue="invalid" />
 ```
 
-### Status variants
+### Invalid
 
 **Example**
 
 ```html
-<input class="input input-info" value="Info" />
-<input class="input input-success" value="Success" />
-<input class="input input-warning" value="Warning" />
+<input class="input" aria-label="Email" aria-invalid="true" value="not-an-email" />
+<input class="input input-ghost" aria-label="SKU" aria-invalid="true" value="??" />
 ```
 
 ```tsx
-<Input variant="info" defaultValue="Info" />
-<Input variant="success" defaultValue="Success" />
-<Input variant="warning" defaultValue="Warning" />
+<Input aria-label="Email" aria-invalid defaultValue="not-an-email" />
+<Input variant="ghost" aria-label="SKU" aria-invalid defaultValue="??" />
 ```
 
 ### Sizes
@@ -63,9 +61,9 @@
 ```
 
 ```tsx
-<Input inputSize="sm" placeholder="Small" />
+<Input size="sm" placeholder="Small" />
 <Input placeholder="Medium" />
-<Input inputSize="lg" placeholder="Large" />
+<Input size="lg" placeholder="Large" />
 ```
 
 ### Disabled
@@ -73,11 +71,11 @@
 **Example**
 
 ```html
-<input class="input" disabled value="Disabled" />
+<input class="input" disabled aria-label="Name" value="Disabled" />
 ```
 
 ```tsx
-<Input disabled defaultValue="Disabled" />
+<Input disabled aria-label="Name" defaultValue="Disabled" />
 ```
 
 ### With icons
@@ -85,18 +83,18 @@
 **Example**
 
 ```html
-<label class="input-icon">
+<span class="input-icon">
   <i class="ti ti-search" aria-hidden="true"></i>
   <input class="input" type="search" placeholder="Search…" />
-</label>
-<label class="input-icon">
+</span>
+<span class="input-icon">
   <input class="input" type="email" placeholder="you@example.com" />
   <i class="ti ti-mail" aria-hidden="true"></i>
-</label>
-<label class="input-icon">
+</span>
+<span class="input-icon">
   <i class="ti ti-search" aria-hidden="true"></i>
   <input class="input input-ghost" type="search" placeholder="Filter rows…" />
-</label>
+</span>
 ```
 
 ```tsx
@@ -110,21 +108,21 @@
 **Example**
 
 ```html
-<label class="input-icon">
-  <input class="input" type="search" value="report" />
+<span class="input-icon">
+  <input class="input" type="search" aria-label="Search" value="report" />
   <button
     type="button"
     class="input-action"
     aria-label="Clear"
-    onclick="const i = this.previousElementSibling; i.value = ''; i.focus();"
+    onclick="const i = this.previousElementSibling; i.value = ''; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus();"
   >
     <i class="ti ti-x" aria-hidden="true"></i>
   </button>
-</label>
+</span>
 ```
 
 ```tsx
-<Input type="search" defaultValue="report" clearable />
+<Input type="search" aria-label="Search" defaultValue="report" clearable />
 ```
 
 ### Password
@@ -132,22 +130,55 @@
 **Example**
 
 ```html
-<label class="input-icon">
-  <input class="input" type="password" value="hunter2" />
+<span class="input-icon">
+  <input class="input" type="password" aria-label="Password" value="hunter2" />
   <button
     type="button"
     class="input-action"
     aria-label="Show password"
     aria-pressed="false"
-    onclick="const i = this.parentElement.querySelector('input'); const shown = i.type === 'text'; i.type = shown ? 'password' : 'text'; this.setAttribute('aria-pressed', String(!shown)); i.focus();"
+    onclick="const i = this.parentElement.querySelector('input'); const shown = i.type === 'text'; i.type = shown ? 'password' : 'text'; this.setAttribute('aria-pressed', String(!shown)); this.firstElementChild.className = shown ? 'ti ti-eye' : 'ti ti-eye-off'; i.focus();"
   >
     <i class="ti ti-eye" aria-hidden="true"></i>
   </button>
-</label>
+</span>
 ```
 
 ```tsx
-<PasswordInput defaultValue="hunter2" />
+<PasswordInput aria-label="Password" defaultValue="hunter2" />
+```
+
+### Custom action
+
+**Example**
+
+```html
+<span class="input-icon">
+  <input class="input" readonly value="sk_live_4f9a2c" aria-label="API key" />
+  <button
+    type="button"
+    class="input-action"
+    aria-label="Copy"
+    onclick="navigator.clipboard.writeText(this.previousElementSibling.value);"
+  >
+    <i class="ti ti-copy" aria-hidden="true"></i>
+  </button>
+</span>
+```
+
+```tsx
+<Input
+  readOnly
+  defaultValue="sk_live_4f9a2c"
+  aria-label="API key"
+  action={
+    <Input.Action
+      icon={IconCopy}
+      aria-label="Copy"
+      onClick={() => navigator.clipboard.writeText("sk_live_4f9a2c")}
+    />
+  }
+/>
 ```
 
 ### Types
@@ -177,41 +208,70 @@
 **Example**
 
 ```html
-<input class="input" type="date" />
-<input class="input" type="time" />
-<input class="input" type="datetime-local" />
-<input class="input" type="month" />
-<input class="input" type="week" />
+<input class="input" type="date" aria-label="Date" />
+<input class="input" type="time" aria-label="Time" />
+<input class="input" type="datetime-local" aria-label="Date and time" />
+<input class="input" type="month" aria-label="Month" />
+<input class="input" type="week" aria-label="Week" />
 ```
 
 ```tsx
-<Input type="date" />
-<Input type="time" />
-<Input type="datetime-local" />
-<Input type="month" />
-<Input type="week" />
+<Input type="date" aria-label="Date" />
+<Input type="time" aria-label="Time" />
+<Input type="datetime-local" aria-label="Date and time" />
+<Input type="month" aria-label="Month" />
+<Input type="week" aria-label="Week" />
+```
+
+### Date range
+
+The native picker enforces `min` and `max`. A typed date outside them matches `:user-invalid`, so the input turns danger once the user leaves it; there is no custom picker.
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="delivery-date">Delivery date</label>
+  <input
+    id="delivery-date"
+    class="input"
+    type="date"
+    name="delivery"
+    min="2026-10-01"
+    max="2026-12-31"
+    aria-describedby="delivery-date-desc"
+  />
+  <p id="delivery-date-desc" class="field-description">October to December 2026.</p>
+</div>
+```
+
+```tsx
+<Field name="delivery" label="Delivery date" description="October to December 2026.">
+  <Input type="date" min="2026-10-01" max="2026-12-31" />
+</Field>
 ```
 
 ## Reference
 
 ### React
 
-| Component       | Prop           | Type                                                                    | Default           |
-| --------------- | -------------- | ----------------------------------------------------------------------- | ----------------- |
-| `Input`         | `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"`      |
-| `Input`         | `inputSize`    | `"sm" \| "md" \| "lg"`                                                  | `"md"`            |
-| `Input`         | `icon`         | [`IconProp`](../../basics/conventions.md#icons)                        | —                 |
-| `Input`         | `iconTrailing` | [`IconProp`](../../basics/conventions.md#icons)                        | —                 |
-| `Input`         | `clearable`    | `boolean`                                                               | `false`           |
-| `Input`         | `clearLabel`   | `string`                                                                | `"Clear"`         |
-| `Input`         | `onClear`      | `() => void`                                                            | —                 |
-| `Input`         | `action`       | `ReactNode`                                                             | —                 |
-| `Input`         | `classNames`   | [slots](../../basics/conventions.md#classnames)                        | —                 |
-| `PasswordInput` | `revealLabel`  | `string`                                                                | `"Show password"` |
+| Component       | Prop           | Type                                             | Default           |
+| --------------- | -------------- | ------------------------------------------------ | ----------------- |
+| `Input`         | `variant`      | `"bordered" \| "ghost"`                          | `"bordered"`      |
+| `Input`         | `size`         | `"sm" \| "md" \| "lg"`                           | `"md"`            |
+| `Input`         | `icon`         | [`IconProp`](../../basics/conventions.md#icons) | —                 |
+| `Input`         | `iconTrailing` | [`IconProp`](../../basics/conventions.md#icons) | —                 |
+| `Input`         | `clearable`    | `boolean`                                        | `false`           |
+| `Input`         | `clearLabel`   | `string`                                         | `"Clear"`         |
+| `Input`         | `onClear`      | `() => void`                                     | —                 |
+| `Input`         | `action`       | `ReactNode`                                      | —                 |
+| `Input`         | `classNames`   | [slots](../../basics/conventions.md#classnames) | —                 |
+| `Input.Action`  | `icon`         | [`IconProp`](../../basics/conventions.md#icons) | —                 |
+| `PasswordInput` | `revealLabel`  | `string`                                         | `"Show password"` |
 
-The size prop is `inputSize` because `<input>` has a native `size` attribute — see [Conventions › Sizes](../../basics/conventions.md#sizes). `type` defaults to `"text"`.
+`size` replaces the native `size` attribute; see [Conventions › Sizes](../../basics/conventions.md#sizes). `type` defaults to `"text"`.
 
-Any of `icon`, `iconTrailing`, `clearable` or `action` wraps the input in an `input-icon` label; without them the `<input>` is rendered bare. `classNames` covers `wrapper` and `action`. `clearable` shows the × only while the field holds a value and is neither disabled nor read-only; clearing sets the value through the native setter and dispatches a real `input` event, so controlled components and form libraries both see the change, then calls `onClear`. `action` replaces the clear button with your own control — style it `input-action`.
+Any of `icon`, `iconTrailing`, `clearable` or `action` wraps the input in an `input-icon` span; without them the `<input>` is rendered bare. When wrapped, `className` and `style` still reach the `<input>`; set width on `classNames.wrapper` (`classNames={{ wrapper: "flex-1" }}`), or the glyphs stay at the wrapper's edges. `classNames` covers `wrapper` and `action`. `clearable` shows the × only while the field holds a value and is neither disabled nor read-only; clearing sets the value through the native setter and dispatches a real `input` event, so controlled components and form libraries both see the change, then calls `onClear`. `action` replaces the clear button and the trailing icon with your own control. Build it with `Input.Action`, a `type="button"` `input-action` that renders `icon` plus any children and passes other props to the `<button>`; give it an `aria-label`.
 
 `PasswordInput` is `Input` with a built-in reveal toggle that flips `type` between `password` and `text`, keeps focus, and tracks state in `aria-pressed`. It accepts every `Input` prop except `type` and the clear-button set.
 
@@ -219,20 +279,20 @@ Wraps [Base UI Input](https://base-ui.com/react/components/input), so inside a [
 
 ### Vanilla
 
-| Class                                        | Effect                                                                                     |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `input`                                      | Full-width field, `0.75rem`/`0.5rem` padding, `0.5rem` radius, `text-sm`, bordered surface |
-| `input-ghost`                                | No fill or border until hover                                                              |
-| `input-danger`                               | Danger border and focus outline                                                            |
-| `input-info` `input-success` `input-warning` | Status border and focus outline                                                            |
-| `input-sm`                                   | `text-xs`, `0.625rem`/`0.375rem` padding                                                   |
-| `input-lg`                                   | `text-base`, `1rem`/`0.625rem` padding                                                     |
-| `input-icon`                                 | Wrapper that floats icons over a contained `input` and pads the field to clear them        |
-| `input-action`                               | `1.25rem` interactive trailing control (clear, reveal) with a `currentColor` hover wash    |
+| Class          | Effect                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `input`        | Full-width field, `2rem` tall, `0.75rem` inline padding, `0.375rem` radius, `text-sm`, bordered surface |
+| `input-ghost`  | No fill or border until hover                                                                           |
+| `input-sm`     | `text-xs`, `1.625rem` tall, `0.625rem` inline padding                                                   |
+| `input-lg`     | `text-base`, `2.375rem` tall, `1rem` inline padding                                                     |
+| `input-icon`   | Wrapper that floats icons over a contained `input` and pads the field to clear them                     |
+| `input-action` | `1.25rem` interactive trailing control (clear, reveal) with a `currentColor` hover wash                 |
 
-There is no `input-bordered` or `input-md` — both are the unmodified `input`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+There is no `input-bordered` or `input-md` — both are the unmodified `input`. Heights match `btn` and `select` at each size.
 
-`input-icon` is position-driven, so no modifier picks a side: an `<i>`/`<svg>` _before_ the `input` is leading, one _after_ it is trailing, and the wrapper reads the contained `input-sm` / `input-lg` to match its own text size and padding. Decorative glyphs are `pointer-events: none` so clicks reach the field; an `input-action` button stays clickable. A disabled input dims both. The wrapper is usually a `<label>`, which also makes the icon a click target for focusing the field.
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an `input` a danger border and focus outline.
+
+`input-icon` is position-driven, so no modifier picks a side: an `<i>`/`<svg>` _before_ the `input` is leading, one _after_ it is trailing, and the wrapper reads the contained `input-sm` / `input-lg` to match its own text size and padding. Decorative glyphs are `pointer-events: none` so clicks reach the field; an `input-action` button stays clickable. A disabled input dims both. Use a `<span>` wrapper: a `<label>` around an `input-action` puts the button's `aria-label` into the field's accessible name. With an `input-action` present, the native search cancel button is hidden.
 
 Both `input-action` behaviours — clearing and password reveal — need a line of your own JS in vanilla; the button styling ships in both bundles. Native date and time pickers follow the document's `color-scheme` in dark mode, and the calendar glyph is dimmed to `0.6` until hover.
 

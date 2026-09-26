@@ -11,9 +11,18 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
-  it("applies the status variant class", () => {
-    render(<Textarea aria-label="x" variant="success" />);
-    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-success");
+  it("applies the ghost variant class", () => {
+    render(<Textarea aria-label="x" variant="ghost" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-ghost");
+  });
+
+  it("applies the size class from size", () => {
+    const { rerender } = render(<Textarea aria-label="x" size="sm" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-sm");
+    rerender(<Textarea aria-label="x" size="lg" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-lg");
+    rerender(<Textarea aria-label="x" />);
+    expect(screen.getByLabelText("x")).not.toHaveAdminClass("textarea-md");
   });
 
   it("applies the autosize class only when autoResize is set", () => {

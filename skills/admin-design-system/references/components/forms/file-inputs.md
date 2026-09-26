@@ -9,15 +9,25 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" />
-<input type="file" class="file-input file-input-ghost" />
-<input type="file" class="file-input file-input-danger" />
+<input type="file" class="file-input" aria-label="Bordered" />
+<input type="file" class="file-input file-input-ghost" aria-label="Ghost" />
 ```
 
 ```tsx
-<FileInput />
-<FileInput variant="ghost" />
-<FileInput variant="danger" />
+<FileInput aria-label="Bordered" />
+<FileInput variant="ghost" aria-label="Ghost" />
+```
+
+### Invalid
+
+**Example**
+
+```html
+<input type="file" class="file-input" aria-label="Invoice" aria-invalid="true" />
+```
+
+```tsx
+<FileInput aria-label="Invoice" aria-invalid />
 ```
 
 ### Sizes
@@ -25,15 +35,15 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-sm" />
-<input type="file" class="file-input" />
-<input type="file" class="file-input file-input-lg" />
+<input type="file" class="file-input file-input-sm" aria-label="Small" />
+<input type="file" class="file-input" aria-label="Medium" />
+<input type="file" class="file-input file-input-lg" aria-label="Large" />
 ```
 
 ```tsx
-<FileInput inputSize="sm" />
-<FileInput />
-<FileInput inputSize="lg" />
+<FileInput size="sm" aria-label="Small" />
+<FileInput aria-label="Medium" />
+<FileInput size="lg" aria-label="Large" />
 ```
 
 ### Restricting file types
@@ -41,11 +51,11 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" accept="image/*" multiple />
+<input type="file" class="file-input" accept="image/*" multiple aria-label="Images" />
 ```
 
 ```tsx
-<FileInput accept="image/*" multiple />
+<FileInput accept="image/*" multiple aria-label="Images" />
 ```
 
 ### Disabled
@@ -53,34 +63,35 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" disabled />
+<input type="file" class="file-input" disabled aria-label="Attachment" />
 ```
 
 ```tsx
-<FileInput disabled />
+<FileInput disabled aria-label="Attachment" />
 ```
 
 ## Reference
 
 ### React
 
-| Prop        | Type                                | Default      |
-| ----------- | ----------------------------------- | ------------ |
-| `variant`   | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
-| `inputSize` | `"sm" \| "md" \| "lg"`              | `"md"`       |
+| Prop      | Type                    | Default      |
+| --------- | ----------------------- | ------------ |
+| `variant` | `"bordered" \| "ghost"` | `"bordered"` |
+| `size`    | `"sm" \| "md" \| "lg"`  | `"md"`       |
 
-The size prop is `inputSize` because `<input>` has a native `size` attribute — see [Conventions › Sizes](../../basics/conventions.md#sizes). `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
+The native `size` attribute doesn't apply to file inputs. `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
 
-There are no status variants beyond `danger`, and no `info` / `success` / `warning`, unlike [Inputs](inputs.md). For a label, description and validation, wrap it in a [Field](fields.md).
+For a label, description and validation, wrap it in a [Field](fields.md).
 
 ### Vanilla
 
-| Class               | Effect                                                                                                                                               |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `file-input`        | Bordered `0.5rem`-radius shell around a native picker; the button gets `0.75rem`/`0.5rem` padding, `text-sm` medium, a muted fill and a right border |
-| `file-input-ghost`  | Shell has no fill or border until hover                                                                                                              |
-| `file-input-danger` | Danger border and focus outline                                                                                                                      |
-| `file-input-sm`     | `text-xs`, tighter button padding                                                                                                                    |
-| `file-input-lg`     | `text-base`, looser button padding                                                                                                                   |
+| Class              | Effect                                                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `file-input`       | `2rem` tall, bordered `0.375rem`-radius shell around a native picker; the full-height button gets `0.75rem` side padding, `text-sm` medium, a muted fill and a right border |
+| `file-input-ghost` | Shell has no fill or border until hover; the button takes a full border and radius, like a `.btn`                                                                           |
+| `file-input-sm`    | `1.625rem` tall, `text-xs`, tighter button padding                                                                                                                          |
+| `file-input-lg`    | `2.375rem` tall, `text-base`, looser button padding                                                                                                                         |
 
 There is no `file-input-bordered` or `file-input-md` — both are the unmodified `file-input`. The picker button is the browser's own, styled through `::file-selector-button`, so its label text is the browser's and can't be changed from CSS. The filename that follows it is also the browser's, which is why the shell clips its overflow rather than growing.
+
+An input with `aria-invalid="true"` or `data-invalid`, one that matches `:user-invalid`, and one inside a `.field[data-invalid]` get a danger border and focus outline.

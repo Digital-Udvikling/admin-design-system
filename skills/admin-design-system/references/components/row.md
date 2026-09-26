@@ -113,7 +113,10 @@
 ```html
 <div class="flex w-full items-center gap-2">
   <div class="min-w-0 flex-1">
-    <p class="truncate font-semibold">
+    <p
+      class="truncate font-semibold"
+      title="https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61"
+    >
       https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
     </p>
     <p class="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
@@ -125,7 +128,10 @@
 ```tsx
 <div className="flex w-full items-center gap-2">
   <div className="min-w-0 flex-1">
-    <p className="truncate font-semibold">
+    <p
+      className="truncate font-semibold"
+      title="https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61"
+    >
       https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
     </p>
     <p className="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
@@ -252,7 +258,7 @@
 
 ## Reference
 
-There is no `.row` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The class names are identical in both bundles, so the two tabs above differ only in `class` vs `className`.
+There is no `.row` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The utility class names are identical in both bundles, and admin components in the React tabs render the same classes as the HTML tabs.
 
 | Utility     | Effect                                                                           |
 | ----------- | -------------------------------------------------------------------------------- |

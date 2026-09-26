@@ -49,7 +49,7 @@ React components whose shorthand props render inner elements expose a `className
 <StatCard label="Errors" value="37" classNames={{ value: "text-danger" }} />
 ```
 
-Available on the shorthand/opinionated components: `Alert`, `Card`, `Dialog`, `Drawer`, `Field`, `Input` / `PasswordInput`, `Item`, `NumberInput`, `Pagination`, `PropertyList` (+ `.Item` / `.Value`), `Sidebar.Item` / `SubItem` / `Collapsible` / `CollapseToggle` (+ `Sidebar` drawer), `StatCard`, `Timeline.Item`, `Tooltip`. Leaves (`Button`, `Badge`) and pure compound components (`Table`, `Tabs`, `Select`, `Accordion`) don't need it — take `className` on the element or on each composed part. Vanilla CSS has no equivalent; write the classes on the elements directly.
+Available on the shorthand/opinionated components: `Alert`, `Card`, `Dialog`, `Drawer`, `Field`, `Input` / `PasswordInput`, `Item`, `Navbar.Dropdown`, `NumberInput`, `Pagination`, `PropertyList` (+ `.Item` / `.Value`), `Sidebar.Item` / `SubItem` / `Collapsible` / `CollapseToggle` (+ `Sidebar` drawer), `StatCard`, `Timeline.Item`, `Tooltip`. Leaves (`Button`, `Badge`) and pure compound components (`Table`, `Tabs`, `Select`, `Accordion`) don't need it — take `className` on the element or on each composed part. Vanilla CSS has no equivalent; write the classes on the elements directly.
 
 ### Icons
 
@@ -61,7 +61,7 @@ import { IconPlus } from "@tabler/icons-react";
 <Button icon={IconPlus}>Add</Button>;
 ```
 
-Component references render at `size="1em"` with `aria-hidden`, so the glyph inherits the host `font-size`. Pass JSX (`icon={<IconPlus size={20} />}`) to override that. Most leaf and shorthand components accept `icon` — among them `Button`, `Badge`, `Link`, `Input`, `Item`, `Card` / `Card.Title`, `Alert`, `Menu.Item`, `Navbar.Item`, `Dialog`, `Drawer`, `StatCard`, `Timeline.Item`, `Breadcrumbs.Item`, `Indicator`, `BrandTile`, and `Sidebar.Item` / `SubItem` / `Collapsible`. A trailing `iconTrailing` slot is on `Button`, `Input`, and `Link`. Prefer the prop over passing icon JSX as children; check the component's reference page if unsure.
+Component references render at `size="1em"` with `aria-hidden`, so the glyph inherits the host `font-size`. Pass JSX (`icon={<IconPlus size={20} />}`) to override that. Most leaf and shorthand components accept `icon` — among them `Button`, `Badge`, `Link`, `Input` / `Input.Action`, `Item`, `Card` / `Card.Title`, `Alert`, `Menu.Trigger` / `Menu.Item`, `Select.Trigger`, `Accordion.Summary`, `Navbar.Item` / `Navbar.Dropdown`, `Dialog`, `Drawer`, `StatCard`, `Timeline.Item`, `Breadcrumbs.Item`, `Indicator`, `BrandTile`, and `Sidebar.Item` / `SubItem` / `Collapsible`. A trailing `iconTrailing` slot is on `Button`, `Input`, and `Link`. Prefer the prop over passing icon JSX as children; check the component's reference page if unsure.
 
 Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
 

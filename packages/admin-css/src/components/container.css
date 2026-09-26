@@ -1,7 +1,7 @@
 @layer components {
   /* Goes inside the bare `.app-shell-main` (no padding of its own); override
-     `--container-max` per-instance to deviate from the presets. `px-4` is the
-     navbar/footer gutter, so page content lines up with the brand. */
+     `--container-max` per-instance to deviate from the presets. `px-4` matches
+     the navbar/footer gutter. */
   .container {
     @apply flex flex-col gap-6 w-full mx-auto px-4 py-6;
     max-width: var(--container-max, 90rem);

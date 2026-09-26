@@ -199,7 +199,7 @@
 
 ## Reference
 
-There is no `.grid` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The class names are identical in both bundles, so the two tabs above differ only in `class` vs `className`.
+There is no `.grid` class — see [Conventions › Layout](../basics/conventions.md#layout) for where the utilities come from. The utility class names are identical in both bundles, and admin components in the React tabs render the same classes as the HTML tabs.
 
 | Utility             | Effect                                                                                                                        |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |

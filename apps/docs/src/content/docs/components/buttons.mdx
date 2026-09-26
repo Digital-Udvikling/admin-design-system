@@ -4,7 +4,7 @@ description: Trigger an action, submit a form, or toggle a state.
 ---
 
 import { Badge as StarlightBadge } from "@astrojs/starlight/components";
-import { Button, ButtonGroup, Indicator, ToggleButton } from "@aortl/admin-react";
+import { Button, ButtonGroup, Indicator, ToggleButton, Tooltip } from "@aortl/admin-react";
 import {
   IconPlus,
   IconTrash,
@@ -29,6 +29,7 @@ import Callout from "../../../components/Callout.astro";
 <button class="btn btn-ghost">Ghost</button>
 <button class="btn btn-muted">Muted</button>
 <button class="btn btn-danger">Danger</button>
+<button class="btn btn-danger-ghost">Danger ghost</button>
 ```
 
 ```tsx
@@ -37,6 +38,7 @@ import Callout from "../../../components/Callout.astro";
 <Button variant="ghost">Ghost</Button>
 <Button variant="muted">Muted</Button>
 <Button variant="danger">Danger</Button>
+<Button variant="danger-ghost">Danger ghost</Button>
 ```
 
 :::
@@ -125,7 +127,7 @@ import Callout from "../../../components/Callout.astro";
 
 <Callout variant="warning">
 
-`disabled` does nothing on an `<a>`. Omit the link or render plain text instead of styling a non-interactive link as disabled.
+`disabled` does nothing on an `<a>`, and `aria-disabled="true"` only dims it: the link still navigates. Omit the link or render plain text instead. A React `Button` rendered as a link does block the click when `disabled` is set.
 
 </Callout>
 
@@ -391,53 +393,99 @@ A group is presentational — each child stays independently focusable, and noth
 
 :::
 
+### Group, with tooltips
+
+:::example
+
+```html
+<div class="btn-group">
+  <span class="tooltip-wrap">
+    <button class="btn btn-square" type="button" aria-label="Edit">
+      <i class="ti ti-pencil" aria-hidden="true"></i>
+    </button>
+    <span class="tooltip" role="tooltip">Edit</span>
+  </span>
+  <span class="tooltip-wrap">
+    <button class="btn btn-square" type="button" aria-label="Duplicate">
+      <i class="ti ti-copy" aria-hidden="true"></i>
+    </button>
+    <span class="tooltip" role="tooltip">Duplicate</span>
+  </span>
+  <span class="tooltip-wrap">
+    <button class="btn btn-square" type="button" aria-label="Archive">
+      <i class="ti ti-archive" aria-hidden="true"></i>
+    </button>
+    <span class="tooltip" role="tooltip">Archive</span>
+  </span>
+</div>
+```
+
+```tsx
+<ButtonGroup>
+  <Tooltip content="Edit">
+    <Button icon={IconPencil} aria-label="Edit" />
+  </Tooltip>
+  <Tooltip content="Duplicate">
+    <Button icon={IconCopy} aria-label="Duplicate" />
+  </Tooltip>
+  <Tooltip content="Archive">
+    <Button icon={IconArchive} aria-label="Archive" />
+  </Tooltip>
+</ButtonGroup>
+```
+
+:::
+
 ## Reference
 
 ### React
 
-| Component      | Prop              | Type                                                       | Default        |
-| -------------- | ----------------- | ---------------------------------------------------------- | -------------- |
-| `Button`       | `variant`         | `"default" \| "primary" \| "ghost" \| "muted" \| "danger"` | `"default"`    |
-| `Button`       | `size`            | `"sm" \| "md" \| "lg"`                                     | `"md"`         |
-| `Button`       | `fullWidth`       | `boolean`                                                  | `false`        |
-| `Button`       | `loading`         | `boolean`                                                  | `false`        |
-| `Button`       | `icon`            | [`IconProp`](../../basics/conventions/#icons)              | —              |
-| `Button`       | `iconTrailing`    | [`IconProp`](../../basics/conventions/#icons)              | —              |
-| `Button`       | `hotkey`          | `string \| readonly string[]`                              | —              |
-| `ToggleButton` | `pressed`         | `boolean`                                                  | —              |
-| `ToggleButton` | `defaultPressed`  | `boolean`                                                  | `false`        |
-| `ToggleButton` | `onPressedChange` | `(pressed: boolean) => void`                               | —              |
-| `ButtonGroup`  | `orientation`     | `"horizontal" \| "vertical"`                               | `"horizontal"` |
-| `ButtonGroup`  | `fullWidth`       | `boolean`                                                  | `false`        |
+| Component      | Prop              | Type                                                                         | Default        |
+| -------------- | ----------------- | ---------------------------------------------------------------------------- | -------------- |
+| `Button`       | `variant`         | `"default" \| "primary" \| "ghost" \| "muted" \| "danger" \| "danger-ghost"` | `"default"`    |
+| `Button`       | `size`            | `"sm" \| "md" \| "lg"`                                                       | `"md"`         |
+| `Button`       | `fullWidth`       | `boolean`                                                                    | `false`        |
+| `Button`       | `loading`         | `boolean`                                                                    | `false`        |
+| `Button`       | `icon`            | [`IconProp`](../../basics/conventions/#icons)                                | —              |
+| `Button`       | `iconTrailing`    | [`IconProp`](../../basics/conventions/#icons)                                | —              |
+| `Button`       | `hotkey`          | `string \| readonly string[]`                                                | —              |
+| `ToggleButton` | `pressed`         | `boolean`                                                                    | —              |
+| `ToggleButton` | `defaultPressed`  | `boolean`                                                                    | `false`        |
+| `ToggleButton` | `onPressedChange` | `(pressed: boolean) => void`                                                 | —              |
+| `ButtonGroup`  | `orientation`     | `"horizontal" \| "vertical"`                                                 | `"horizontal"` |
+| `ButtonGroup`  | `fullWidth`       | `boolean`                                                                    | `false`        |
 
-`type` defaults to `"button"`, so a button inside a form doesn't submit unless you say so. `loading` implies `disabled` and `aria-busy="true"`, and suppresses the leading icon while keeping a trailing one. A button with an icon and no children gets `btn-square` automatically.
+`type` defaults to `"button"`, so a button inside a form doesn't submit unless you say so. `loading` sets `aria-busy="true"` and `aria-disabled="true"` instead of `disabled`, so the button keeps focus while clicks and keys are blocked. `disabled` with `focusableWhenDisabled` also sets `aria-disabled` instead, so the dimmed button keeps focus and pointer events and a Tooltip can say why. The spinner replaces the first icon: the leading one, or the trailing one when there is no leading icon. A button with an icon and no children gets `btn-square` automatically.
 
 `hotkey` dispatches a native click on the rendered element, so `onClick` fires, `type="submit"` submits, and `render={<a href>}` navigates; it also sets `aria-keyshortcuts` and renders a trailing [Kbd](../kbd/) chip. Pass an array for alternatives — only the first is shown. On a `ToggleButton` it flips the pressed state. For bindings not tied to a control, see [Conventions › Hotkeys](../../basics/conventions/#hotkeys).
 
-`ToggleButton` takes every `Button` prop except `loading`, plus Base UI's pressed state; it wraps [Base UI Toggle](https://base-ui.com/react/components/toggle). An icon-only `ToggleButton` doesn't get `btn-square`: the leading mini switch sits beside the icon, so the button can't be square. `Button` wraps [Base UI Button](https://base-ui.com/react/components/button), so `render` and `nativeButton` come from there — pass both to render an anchor. Plus native `<button>` attributes, and `<div>` on `ButtonGroup`, which also defaults `role="group"`.
+`ToggleButton` takes every `Button` prop except `loading`, plus Base UI's pressed state; it wraps [Base UI Toggle](https://base-ui.com/react/components/toggle). An icon-only `ToggleButton` doesn't get `btn-square`: the leading mini switch sits beside the icon, so the button can't be square. `Button` wraps [Base UI Button](https://base-ui.com/react/components/button), so `render` and `nativeButton` come from there; pass both to render an anchor. An anchor element with an `href` keeps its link role and gets no `type`; for a render function or a router link without `href`, pass `role={undefined}` to drop Base UI's `role="button"`. Plus native `<button>` attributes, and `<div>` on `ButtonGroup`, which also defaults `role="group"`.
 
 An icon-only `Button` needs an `aria-label`; a Tooltip is not an accessible name.
 
 ### Vanilla
 
-| Class                  | Effect                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------- |
-| `btn`                  | `1rem`/`0.5rem` padding, `0.5rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap  |
-| `btn-primary`          | Brand fill, `primary-content` text, no border colour                                              |
-| `btn-ghost`            | No fill or border until hover                                                                     |
-| `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                   |
-| `btn-danger`           | Danger fill, `danger-content` text                                                                |
-| `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                           |
-| `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                         |
-| `btn-full-width`       | `width: 100%`                                                                                     |
-| `btn-square`           | Equalises the side padding for an icon-only button                                                |
-| `btn-loading`          | Dims, blocks pointer events, and paints a `1em` spinner via `::before`, hiding a leading icon     |
-| `btn-group`            | Joins its `btn` children into one strip: square inner corners, `1px` overlap, `currentColor` seam |
-| `btn-group-vertical`   | Stacks the strip instead, labels aligned to the start                                             |
-| `btn-group-full-width` | Stretches the group; horizontal members split the row evenly                                      |
+| Class                  | Effect                                                                                                                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `btn`                  | `1rem`/`0.5rem` padding, `0.375rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap, label doesn't wrap                               |
+| `btn-primary`          | Brand fill, `primary-content` text, no border colour                                                                                                 |
+| `btn-ghost`            | No fill or border until hover                                                                                                                        |
+| `btn-muted`            | Fills with the page surface so it sits flush with the page                                                                                           |
+| `btn-danger`           | Danger fill, `danger-content` text                                                                                                                   |
+| `btn-danger-ghost`     | Danger text, transparent fill and border, `danger-muted` fill on hover; a secondary Delete beside the primary action                                 |
+| `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                                                                              |
+| `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                                                                            |
+| `btn-full-width`       | `width: 100%`; the label may wrap                                                                                                                    |
+| `btn-square`           | Equalises the side padding for an icon-only button                                                                                                   |
+| `btn-loading`          | Dims, blocks pointer events, and paints a `1em` spinner via `::before` in place of the first icon element                                            |
+| `btn-group`            | Joins its `btn` children into one strip: square inner corners, `1px` overlap, `currentColor` seam; horizontal labels wrap when the strip is squeezed |
+| `btn-group-vertical`   | Stacks the strip instead, labels aligned to the start                                                                                                |
+| `btn-group-full-width` | Stretches the group; horizontal `btn` members split the row evenly; labels may wrap                                                                  |
 
 There is no `btn-default` or `btn-md` — both are the unmodified `btn`. The classes work on `<a>` as well as `<button>`.
 
-`aria-pressed` is the toggle state, with no class involved: any `btn` carrying the attribute grows a leading mini switch, and `"true"` slides it across and adds the selected wash. Flip the attribute yourself. `btn-loading` doesn't disable the button for keyboard users — pair it with the `disabled` attribute. `btn-square` needs an `aria-label`, since there's no text to name it. Both spinners slow rather than stop under `prefers-reduced-motion: reduce`.
+No class carries the toggle state: any `btn` with `aria-pressed` grows a leading mini switch, and `"true"` slides it across and adds the selected wash. Flip the attribute yourself. `btn-square` needs an `aria-label`, since there's no text to name it. Both spinners slow rather than stop under `prefers-reduced-motion: reduce`.
 
-Group members can be a `btn`, an [`indicator`](../indicator/) wrapping one, or a `menu` for a split button — the seam and rounding rules drill through those wrappers. A badge on a middle member overhangs its neighbour, so set the indicator offset to `0` for a flush square corner.
+`btn-loading` doesn't block keyboard activation: pair it with `disabled`, or with `aria-disabled="true"` to keep focus on the button. Its spinner hides the first `<i>`/`<svg>` child; text nodes don't count, so with no leading icon it hides a trailing one unless the label is wrapped in a `<span>`. `aria-disabled="true"` or `data-disabled` dims a `btn` like `:disabled`, with no hover fill, but keeps focus and pointer events so a tooltip can say why; block the activation yourself.
+
+Group members can be a `btn`, an [`indicator`](../indicator/) or [`tooltip-wrap`](../tooltip/) wrapping one, or a `menu` for a split button — the seam and rounding rules drill through those wrappers. In a full-width row, a text-less split trigger keeps its own width and the other members share the rest. A badge on a middle member overhangs its neighbour, so set the indicator offset to `0` for a flush square corner.

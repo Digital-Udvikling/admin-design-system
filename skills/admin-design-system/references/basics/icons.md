@@ -24,7 +24,7 @@ Drops in without a bundler. Pin a version (e.g. `@3.44.0`) for production:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css"
 />
 ```
 
@@ -44,7 +44,7 @@ npm install @tabler/icons-webfont
 npm install @tabler/icons-react
 ```
 
-Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-hidden`. See [Conventions › Icons](conventions.md#icons) for the prop contract.
+Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-hidden`. See [Conventions › Icons](conventions.md#icons) for the prop contract. `@aortl/admin-react` exports the `IconProp` type and the `renderIcon` helper for components of your own that take an icon.
 
 ## Vanilla usage
 
@@ -59,14 +59,14 @@ Pass the component to any `icon` prop; the wrapper sizes it and marks it `aria-h
 ```
 
 ```tsx
-<IconHome />
-<IconSearch />
-<IconSettings />
-<IconUser />
-<IconTrash />
+<IconHome size="1em" />
+<IconSearch size="1em" />
+<IconSettings size="1em" />
+<IconUser size="1em" />
+<IconTrash size="1em" />
 ```
 
-Icons inherit `color` and `font-size` from their parent.
+Webfont icons inherit `color` and `font-size` from their parent. React icons inherit `color`; pass `size="1em"` to inherit the size too.
 
 **Example**
 
@@ -121,13 +121,13 @@ Components forward standard SVG props plus:
 
 ## Sizing
 
-Tabler's natural size is `24`; admin chrome uses smaller sizes:
+Inside a component, leave the size unset: the `icon` prop renders at `1em` and the webfont inherits `font-size`, so a button icon is 12/14/16px at `sm`/`md`/`lg`. Standalone React icons default to Tabler's `24`:
 
-| Context                                      | Size |
-| -------------------------------------------- | ---- |
-| Inline next to text (button label, menu row) | `16` |
-| Icon-only button or large action             | `20` |
-| Dense table rows or compact toolbars         | `14` |
+| Context                                      | Size                  |
+| -------------------------------------------- | --------------------- |
+| Inside a component (button, menu row, badge) | Unset (`1em` of host) |
+| Standalone, beside body text                 | `16`                  |
+| Standalone, large action                     | `20`                  |
 
 ## Accessibility
 

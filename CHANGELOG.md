@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
+- `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
+- `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
 
 ### Changed
 
@@ -16,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
 - Dark `--color-danger`, `--color-info`, `--color-link` and `--color-text-muted` and light `--color-success` move one step to meet 4.5:1 text contrast on cards and tints, dark `--color-code-surface` is base-850 so code blocks show inside cards, and `--color-system-accent-content` picks white or black from the accent's lightness. (css)
+- Buttons use the `rounded-md` radius, labels don't wrap except in full-width buttons and rows too narrow for them, and `btn-danger` keeps its red fill on hover. (css)
 - `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
 
 ### Removed
@@ -27,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `admin.utilities.css`, and a Tailwind build that imports `theme.css`, ship no `table` and `table-cell` display utilities, which collided with the table component's class names. (css)
 - The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
 - Hotkey chips in `Kbd`, `Button`, `ToggleButton` and `Menu.Item` hydrate without a mismatch on Apple devices: they render the server's `Ctrl`, `Shift` and `Alt` labels and switch to `⌘`, `⇧` and `⌥` after hydration. (react)
+- A `loading` `Button` sets `aria-disabled` and keeps keyboard focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
 
 ## [0.21.0] - 2026-09-25
 

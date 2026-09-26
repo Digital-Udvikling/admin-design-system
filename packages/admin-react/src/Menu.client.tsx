@@ -1,47 +1,46 @@
 "use client";
 
-import { createContext, useContext, useId, type MouseEvent, type ReactNode, type Ref } from "react";
+import { Menu as BaseMenu } from "@base-ui/react/menu";
+import { useContext, useEffect, useState, type MouseEvent, type ReactNode, type Ref } from "react";
 import { cn } from "./cn";
 import { Kbd } from "./Kbd";
-import type {
-  MenuGroupLabelProps,
-  MenuGroupProps,
-  MenuItemAsButton,
-  MenuItemAsLink,
-  MenuProps,
-} from "./Menu";
+import type { MenuItemAsButton, MenuItemAsLink, MenuPopupProps } from "./Menu";
+import { PortalContainerContext } from "./portal-context";
 import { useHotkeyClick } from "./useHotkey";
 
-function focusTrigger(details: HTMLDetailsElement) {
-  details.querySelector<HTMLElement>(":scope > summary")?.focus();
-}
-
-/** Close `details` if open; focus inside it moves to the trigger so keyboard users aren't dropped on `<body>`. */
-function closeMenu(details: HTMLDetailsElement | null) {
-  if (details === null || !details.open) return;
-  const hadFocus = details.contains(document.activeElement);
-  details.open = false;
-  if (hadFocus) focusTrigger(details);
-}
-
-export function MenuRoot({ className, onKeyDown, ...rest }: MenuProps) {
+export function MenuPopup({
+  side,
+  align = "start",
+  sideOffset = 4,
+  alignOffset,
+  className,
+  children,
+  ...rest
+}: MenuPopupProps) {
+  const portalContainer = useContext(PortalContainerContext);
+  // The kept-mounted portal resolves its container in a layout effect, before an ancestor's
+  // ref is attached; read the element after commit instead. `null` makes Base UI wait for it.
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+  useEffect(() => setContainer(portalContainer?.current ?? null), [portalContainer]);
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- delegated Escape for the focusable trigger and items inside
-    <details
-      className={cn("menu", className)}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        // defaultPrevented: the consumer or a nested menu already handled this Escape.
-        if (event.key !== "Escape" || event.defaultPrevented || !event.currentTarget.open) return;
-        // An Escape inside a dialog that an item opened belongs to that dialog.
-        const dialog = event.target instanceof Element ? event.target.closest("dialog") : null;
-        if (dialog !== null && event.currentTarget.contains(dialog)) return;
-        // Consumed, so an enclosing <dialog> or outer menu stays open.
-        event.preventDefault();
-        closeMenu(event.currentTarget);
-      }}
-      {...rest}
-    />
+    // keepMounted: closed items stay in the DOM so their hotkeys keep working, as they did
+    // inside a closed <details>. Base UI skips positioning work while the popup is closed.
+    <BaseMenu.Portal container={portalContainer === null ? undefined : container} keepMounted>
+      <BaseMenu.Positioner
+        className={cn("popup-layer", undefined)}
+        side={side}
+        align={align}
+        sideOffset={sideOffset}
+        alignOffset={alignOffset}
+      >
+        <BaseMenu.Popup
+          className={cn(["menu-popup", align === "end" && "menu-popup-end"], className)}
+          {...rest}
+        >
+          {children}
+        </BaseMenu.Popup>
+      </BaseMenu.Positioner>
+    </BaseMenu.Portal>
   );
 }
 
@@ -51,9 +50,6 @@ export type MenuItemBaseProps =
   | (Omit<MenuItemAsLink, "icon"> & { leading?: ReactNode });
 
 export function MenuItemBase(props: MenuItemBaseProps) {
-  const hotkey = props.hotkey;
-  const checked = props.checked;
-
   // Anchors have no native `disabled`, hence the `aria-disabled` branch.
   const ariaDisabled = props["aria-disabled"];
   const isDisabled =
@@ -63,114 +59,104 @@ export function MenuItemBase(props: MenuItemBaseProps) {
 
   // React 19 passes `ref` as a prop; merge it so a consumer ref can't detach the hotkey target.
   const { ariaKeyShortcuts, primaryChord, setRef } = useHotkeyClick<HTMLElement>(
-    hotkey,
+    props.hotkey,
     props.ref as Ref<HTMLElement> | undefined,
     { enabled: !isDisabled },
   );
 
-  const defaultRole = checked !== undefined ? "menuitemcheckbox" : "menuitem";
-
-  const activate = <E extends HTMLElement>(
-    event: MouseEvent<E>,
-    onClick: ((event: MouseEvent<E>) => void) | undefined,
-  ) => {
-    // `aria-disabled` elements still receive clicks — without this, an anchor would navigate.
-    if (isDisabled) {
-      event.preventDefault();
-      return;
-    }
-    // Checkable items stay open so several toggles fit in one visit.
-    const details = checked === undefined ? event.currentTarget.closest("details") : null;
-    // Trigger first, so a dialog this click opens restores focus there, not to a hidden item.
-    if (details?.contains(document.activeElement)) focusTrigger(details);
-    onClick?.(event);
-    if (details === null) return;
-    // After React commits: a Dialog or Drawer rendered inside the menu would open hidden in a closed <details>.
-    setTimeout(() => {
-      if (details.querySelector("dialog[open]") === null) closeMenu(details);
-    }, 0);
-  };
+  const content = (
+    <>
+      {props.leading}
+      {props.children}
+      {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}
+    </>
+  );
 
   if (props.href !== undefined) {
     const {
       className,
-      role,
-      leading,
-      checked: _checked,
+      leading: _leading,
       danger,
-      children,
+      children: _children,
       hotkey: _hk,
       ref: _ref,
+      closeOnClick = true,
       onClick,
       ...rest
     } = props;
     return (
-      // <a href> is natively keyboard-activable, so these a11y rules are false positives.
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-      <a
+      <BaseMenu.LinkItem
         ref={setRef}
-        role={role ?? defaultRole}
-        aria-checked={checked}
         aria-keyshortcuts={ariaKeyShortcuts}
+        closeOnClick={closeOnClick}
         className={cn(["menu-item", danger && "menu-item-danger"], className)}
-        onClick={(event) => activate(event, onClick)}
+        onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+          // `aria-disabled` elements still receive clicks — without this, the anchor would navigate.
+          if (isDisabled) {
+            event.preventDefault();
+            return;
+          }
+          onClick?.(event);
+        }}
         {...rest}
       >
-        {leading}
-        {children}
-        {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}
-      </a>
+        {content}
+      </BaseMenu.LinkItem>
     );
   }
+
   const {
     className,
     type = "button",
-    role,
-    leading,
-    checked: _checked,
+    leading: _leading,
     danger,
-    children,
+    children: _children,
     hotkey: _hk,
     ref: _ref,
+    disabled,
+    closeOnClick,
     onClick,
+    checked,
+    defaultChecked,
+    onCheckedChange,
     ...rest
   } = props;
+  const itemClassName = cn(["menu-item", danger && "menu-item-danger"], className);
+  // Native attributes (form, name, value, aria-*) ride on the rendered <button>.
+  const render = <button type={type} {...rest} />;
+
+  if (checked !== undefined || defaultChecked !== undefined) {
+    return (
+      <BaseMenu.CheckboxItem
+        ref={setRef}
+        render={render}
+        nativeButton
+        aria-keyshortcuts={ariaKeyShortcuts}
+        disabled={disabled}
+        closeOnClick={closeOnClick}
+        checked={checked}
+        defaultChecked={defaultChecked}
+        onCheckedChange={onCheckedChange}
+        onClick={onClick}
+        className={itemClassName}
+      >
+        {content}
+      </BaseMenu.CheckboxItem>
+    );
+  }
+
   return (
-    <button
+    <BaseMenu.Item
       ref={setRef}
-      type={type}
-      role={role ?? defaultRole}
-      aria-checked={checked}
+      render={render}
+      nativeButton
       aria-keyshortcuts={ariaKeyShortcuts}
-      className={cn(["menu-item", danger && "menu-item-danger"], className)}
-      onClick={(event) => activate(event, onClick)}
-      {...rest}
+      disabled={disabled}
+      closeOnClick={closeOnClick}
+      onClick={onClick}
+      className={itemClassName}
     >
-      {leading}
-      {children}
-      {primaryChord !== undefined ? <Kbd keys={primaryChord} /> : null}
-    </button>
+      {content}
+    </BaseMenu.Item>
   );
-}
-
-// The enclosing group's label id, so Menu.GroupLabel names its Menu.Group.
-const MenuGroupLabelIdContext = createContext<string | undefined>(undefined);
-
-export function MenuGroup({ className, role = "group", ...rest }: MenuGroupProps) {
-  const labelId = useId();
-  return (
-    <MenuGroupLabelIdContext.Provider value={labelId}>
-      <div
-        role={role}
-        aria-labelledby={labelId}
-        className={cn("menu-group", className)}
-        {...rest}
-      />
-    </MenuGroupLabelIdContext.Provider>
-  );
-}
-
-export function MenuGroupLabel({ className, id, ...rest }: MenuGroupLabelProps) {
-  const groupLabelId = useContext(MenuGroupLabelIdContext);
-  return <div id={id ?? groupLabelId} className={cn("menu-group-label", className)} {...rest} />;
 }

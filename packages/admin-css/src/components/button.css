@@ -60,15 +60,16 @@
   }
 
   /* Toggle buttons — no class; aria-pressed is the state (data-pressed is Base
-     UI's mirror). After the variants so a pressed ghost/muted wins the tie. */
-  .btn:is([aria-pressed="true"], [data-pressed]) {
+     UI's mirror, which a Base UI menu trigger also sets while open, hence
+     :not([aria-haspopup])). After the variants so a pressed ghost/muted wins the tie. */
+  .btn:is([aria-pressed="true"], [data-pressed]:not([aria-haspopup])) {
     @apply bg-primary-muted text-primary;
   }
 
   /* Leading mini switch — .switch shrunk to the label's em box; the thumb is
      a background circle so the slide is one background-position. Drawn in
      both states so an off toggle still reads as a toggle. */
-  .btn:is([aria-pressed], [data-pressed])::before {
+  .btn:is([aria-pressed], [data-pressed]:not([aria-haspopup]))::before {
     /* Off thumb is paper in both modes — it reads on the border-strong track either way. */
     --btn-toggle-thumb: var(--color-paper);
     content: "";
@@ -90,7 +91,7 @@
       background-position 150ms;
   }
 
-  .btn:is([aria-pressed="true"], [data-pressed])::before {
+  .btn:is([aria-pressed="true"], [data-pressed]:not([aria-haspopup]))::before {
     /* Thumb is primary-content, not paper — paper would vanish on the
        dark-mode paper track. */
     --btn-toggle-thumb: var(--color-primary-content);
@@ -156,7 +157,7 @@
       animation-duration: 2s;
     }
 
-    .btn:is([aria-pressed], [data-pressed])::before {
+    .btn:is([aria-pressed], [data-pressed]:not([aria-haspopup]))::before {
       transition: none;
     }
   }
@@ -168,13 +169,13 @@
       forced-color-adjust: none;
     }
 
-    .btn:is([aria-pressed], [data-pressed])::before {
+    .btn:is([aria-pressed], [data-pressed]:not([aria-haspopup]))::before {
       forced-color-adjust: none;
       --btn-toggle-thumb: Canvas;
       background-color: ButtonBorder;
     }
 
-    .btn:is([aria-pressed="true"], [data-pressed])::before {
+    .btn:is([aria-pressed="true"], [data-pressed]:not([aria-haspopup]))::before {
       --btn-toggle-thumb: HighlightText;
       background-color: Highlight;
     }

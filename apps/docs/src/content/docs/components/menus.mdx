@@ -17,7 +17,6 @@ import {
   IconSearch,
   IconDotsVertical,
 } from "@tabler/icons-react";
-import Callout from "../../../components/Callout.astro";
 
 ## Examples
 
@@ -26,24 +25,24 @@ import Callout from "../../../components/Callout.astro";
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger">Open menu</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button" role="menuitem">
+<div class="menu">
+  <button type="button" class="menu-trigger" popovertarget="menu-basic">Open menu</button>
+  <div class="menu-popup" id="menu-basic" popover>
+    <button class="menu-item" type="button">
       <i class="ti ti-pencil" aria-hidden="true"></i>
       Edit
     </button>
-    <button class="menu-item" type="button" role="menuitem">
+    <button class="menu-item" type="button">
       <i class="ti ti-copy" aria-hidden="true"></i>
       Duplicate
     </button>
     <hr class="menu-separator" />
-    <button class="menu-item menu-item-danger" type="button" role="menuitem">
+    <button class="menu-item menu-item-danger" type="button">
       <i class="ti ti-trash" aria-hidden="true"></i>
       Delete
     </button>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
@@ -67,23 +66,23 @@ import Callout from "../../../components/Callout.astro";
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger">Actions</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button" role="menuitem">
+<div class="menu">
+  <button type="button" class="menu-trigger" popovertarget="menu-disabled">Actions</button>
+  <div class="menu-popup" id="menu-disabled" popover>
+    <button class="menu-item" type="button">
       <i class="ti ti-pencil" aria-hidden="true"></i>
       Edit
     </button>
-    <button class="menu-item" type="button" role="menuitem" disabled>
+    <button class="menu-item" type="button" disabled>
       <i class="ti ti-copy" aria-hidden="true"></i>
       Duplicate
     </button>
-    <a class="menu-item" role="menuitem" aria-disabled="true">
+    <a class="menu-item" aria-disabled="true">
       <i class="ti ti-history" aria-hidden="true"></i>
       Changelog
     </a>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
@@ -105,54 +104,85 @@ import Callout from "../../../components/Callout.astro";
 
 ### Checkbox and radio items
 
+In vanilla, checkable rows are native checkboxes and radios in a `<label class="menu-item">`.
+
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger">View</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">
-      <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+<div class="menu">
+  <button type="button" class="menu-trigger" popovertarget="menu-view">View</button>
+  <div class="menu-popup" id="menu-view" popover>
+    <label class="menu-item">
+      <input type="checkbox" class="checkbox" name="grid" checked />
       Show grid
-    </button>
-    <button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="false">
-      <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+    </label>
+    <label class="menu-item">
+      <input type="checkbox" class="checkbox" name="ruler" />
       Show ruler
-    </button>
+    </label>
     <hr class="menu-separator" />
     <div class="menu-group" role="group" aria-labelledby="view-density">
       <div class="menu-group-label" id="view-density">Density</div>
-      <button class="menu-item" type="button" role="menuitemradio" aria-checked="true">
-        <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+      <label class="menu-item">
+        <input type="radio" class="radio" name="density" value="comfortable" checked />
         Comfortable
-      </button>
-      <button class="menu-item" type="button" role="menuitemradio" aria-checked="false">
-        <span class="menu-item-indicator"><i class="ti ti-check" aria-hidden="true"></i></span>
+      </label>
+      <label class="menu-item">
+        <input type="radio" class="radio" name="density" value="compact" />
         Compact
-      </button>
+      </label>
     </div>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
 <Menu>
   <Menu.Trigger>View</Menu.Trigger>
   <Menu.Popup>
-    <Menu.Item checked>Show grid</Menu.Item>
-    <Menu.Item checked={false}>Show ruler</Menu.Item>
+    <Menu.Item defaultChecked>Show grid</Menu.Item>
+    <Menu.Item defaultChecked={false}>Show ruler</Menu.Item>
     <Menu.Separator />
-    <Menu.Group>
+    <Menu.RadioGroup defaultValue="comfortable">
       <Menu.GroupLabel>Density</Menu.GroupLabel>
-      <Menu.Item role="menuitemradio" checked>
-        Comfortable
-      </Menu.Item>
-      <Menu.Item role="menuitemradio" checked={false}>
-        Compact
-      </Menu.Item>
-    </Menu.Group>
+      <Menu.RadioItem value="comfortable">Comfortable</Menu.RadioItem>
+      <Menu.RadioItem value="compact">Compact</Menu.RadioItem>
+    </Menu.RadioGroup>
   </Menu.Popup>
 </Menu>
+```
+
+:::
+
+### Filter menu
+
+A GET form around the rows submits the choice without JS, and `menu-actions` holds its buttons. In React, use checkable `Menu.Item`s and apply the choice from your own state.
+
+:::example
+
+```html
+<form class="menu" method="get">
+  <button type="button" class="menu-trigger btn" popovertarget="menu-status-filter">Status</button>
+  <div class="menu-popup" id="menu-status-filter" popover>
+    <label class="menu-item">
+      <input type="checkbox" class="checkbox" name="status" value="open" checked />
+      Open
+    </label>
+    <label class="menu-item">
+      <input type="checkbox" class="checkbox" name="status" value="pending" checked />
+      Pending
+    </label>
+    <label class="menu-item">
+      <input type="checkbox" class="checkbox" name="status" value="closed" />
+      Closed
+    </label>
+    <hr class="menu-separator" />
+    <div class="menu-actions">
+      <button type="reset" class="btn btn-ghost btn-sm">Reset</button>
+      <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+    </div>
+  </div>
+</form>
 ```
 
 :::
@@ -186,16 +216,16 @@ import Callout from "../../../components/Callout.astro";
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger">Resources</summary>
-  <div class="menu-popup" role="menu">
+<div class="menu">
+  <button type="button" class="menu-trigger" popovertarget="menu-resources">Resources</button>
+  <div class="menu-popup" id="menu-resources" popover>
     <div class="menu-group" role="group" aria-labelledby="resources-internal">
       <div class="menu-group-label" id="resources-internal">Internal</div>
-      <a class="menu-item" href="#docs" role="menuitem">
+      <a class="menu-item" href="#docs">
         <i class="ti ti-book" aria-hidden="true"></i>
         Docs
       </a>
-      <a class="menu-item" href="#changelog" role="menuitem">
+      <a class="menu-item" href="#changelog">
         <i class="ti ti-history" aria-hidden="true"></i>
         Changelog
       </a>
@@ -203,13 +233,13 @@ import Callout from "../../../components/Callout.astro";
     <hr class="menu-separator" />
     <div class="menu-group" role="group" aria-labelledby="resources-external">
       <div class="menu-group-label" id="resources-external">External</div>
-      <a class="menu-item" href="#support" role="menuitem">
+      <a class="menu-item" href="#support">
         <i class="ti ti-lifebuoy" aria-hidden="true"></i>
         Support
       </a>
     </div>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
@@ -243,15 +273,17 @@ import Callout from "../../../components/Callout.astro";
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger btn btn-primary">Actions</summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button" role="menuitem">Approve</button>
-    <button class="menu-item" type="button" role="menuitem">Reject</button>
+<div class="menu">
+  <button type="button" class="menu-trigger btn btn-primary" popovertarget="menu-actions">
+    Actions
+  </button>
+  <div class="menu-popup" id="menu-actions" popover>
+    <button class="menu-item" type="button">Approve</button>
+    <button class="menu-item" type="button">Reject</button>
     <hr class="menu-separator" />
-    <button class="menu-item" type="button" role="menuitem">Send to review</button>
+    <button class="menu-item" type="button">Send to review</button>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
@@ -273,26 +305,31 @@ import Callout from "../../../components/Callout.astro";
 :::example
 
 ```html
-<details class="menu">
-  <summary class="menu-trigger btn btn-ghost btn-sm btn-square" aria-label="Row actions">
+<div class="menu">
+  <button
+    type="button"
+    class="menu-trigger btn btn-ghost btn-sm btn-square"
+    aria-label="Row actions"
+    popovertarget="menu-row-actions"
+  >
     <i class="ti ti-dots-vertical" aria-hidden="true"></i>
-  </summary>
-  <div class="menu-popup" role="menu">
-    <button class="menu-item" type="button" role="menuitem">
+  </button>
+  <div class="menu-popup" id="menu-row-actions" popover>
+    <button class="menu-item" type="button">
       <i class="ti ti-pencil" aria-hidden="true"></i>
       Edit
     </button>
-    <button class="menu-item" type="button" role="menuitem">
+    <button class="menu-item" type="button">
       <i class="ti ti-copy" aria-hidden="true"></i>
       Duplicate
     </button>
     <hr class="menu-separator" />
-    <button class="menu-item menu-item-danger" type="button" role="menuitem">
+    <button class="menu-item menu-item-danger" type="button">
       <i class="ti ti-trash" aria-hidden="true"></i>
       Delete
     </button>
   </div>
-</details>
+</div>
 ```
 
 ```tsx
@@ -311,6 +348,34 @@ import Callout from "../../../components/Callout.astro";
 
 :::
 
+### End-aligned
+
+:::example
+
+```html
+<div class="menu">
+  <button type="button" class="menu-trigger btn" popovertarget="menu-account">Account</button>
+  <div class="menu-popup menu-popup-end" id="menu-account" popover>
+    <a class="menu-item" href="#profile">Profile</a>
+    <hr class="menu-separator" />
+    <a class="menu-item" href="#sign-out">Sign out</a>
+  </div>
+</div>
+```
+
+```tsx
+<Menu>
+  <Menu.Trigger variant="default">Account</Menu.Trigger>
+  <Menu.Popup align="end">
+    <Menu.Item href="#profile">Profile</Menu.Item>
+    <Menu.Separator />
+    <Menu.Item href="#sign-out">Sign out</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+:::
+
 ### Split button
 
 :::example
@@ -318,18 +383,20 @@ import Callout from "../../../components/Callout.astro";
 ```html
 <div class="btn-group">
   <button class="btn btn-primary" type="button">Save</button>
-  <details class="menu">
-    <summary
+  <div class="menu">
+    <button
+      type="button"
       class="menu-trigger btn btn-primary btn-square"
       aria-label="More save options"
-    ></summary>
-    <div class="menu-popup" role="menu">
-      <button class="menu-item" type="button" role="menuitem">Save as draft</button>
-      <button class="menu-item" type="button" role="menuitem">Save and publish</button>
+      popovertarget="menu-save-options"
+    ></button>
+    <div class="menu-popup" id="menu-save-options" popover>
+      <button class="menu-item" type="button">Save as draft</button>
+      <button class="menu-item" type="button">Save and publish</button>
       <hr class="menu-separator" />
-      <button class="menu-item" type="button" role="menuitem">Save a copy…</button>
+      <button class="menu-item" type="button">Save a copy…</button>
     </div>
-  </details>
+  </div>
 </div>
 ```
 
@@ -350,67 +417,82 @@ import Callout from "../../../components/Callout.astro";
 
 :::
 
-<Callout variant="warning">
-
-A `<details>` menu has no light dismiss: clicking outside or moving focus away leaves it open. The React menu also closes when an item is activated and on Escape; the vanilla menu closes only from its trigger.
-
-</Callout>
-
 ## Reference
 
 ### React
 
-| Part              | Renders                             | Class              |
-| ----------------- | ----------------------------------- | ------------------ |
-| `Menu`            | `<details>`                         | `menu`             |
-| `Menu.Trigger`    | `<summary>`                         | `menu-trigger`     |
-| `Menu.Popup`      | `<div>`                             | `menu-popup`       |
-| `Menu.Item`       | `<button>`, or `<a>` with an `href` | `menu-item`        |
-| `Menu.Separator`  | `<hr>`                              | `menu-separator`   |
-| `Menu.Group`      | `<div>`                             | `menu-group`       |
-| `Menu.GroupLabel` | `<div>`                             | `menu-group-label` |
+| Part              | Renders                             | Class                          |
+| ----------------- | ----------------------------------- | ------------------------------ |
+| `Menu`            | `<div>` around a Base UI Menu root  | `menu`                         |
+| `Menu.Trigger`    | `<button>`                          | `menu-trigger`                 |
+| `Menu.Popup`      | `<div>`, portaled                   | `menu-popup`, `menu-popup-end` |
+| `Menu.Item`       | `<button>`, or `<a>` with an `href` | `menu-item`                    |
+| `Menu.RadioGroup` | `<div>`                             | `menu-group`                   |
+| `Menu.RadioItem`  | `<button>`                          | `menu-item`                    |
+| `Menu.Separator`  | `<hr>`                              | `menu-separator`               |
+| `Menu.Group`      | `<div>`                             | `menu-group`                   |
+| `Menu.GroupLabel` | `<div>`                             | `menu-group-label`             |
+| `Menu.Actions`    | `<div>`                             | `menu-actions`                 |
 
-| Part           | Prop      | Type                                          | Default |
-| -------------- | --------- | --------------------------------------------- | ------- |
-| `Menu.Trigger` | `variant` | `ButtonVariant`                               | —       |
-| `Menu.Trigger` | `size`    | `ButtonSize`                                  | `"md"`  |
-| `Menu.Trigger` | `icon`    | [`IconProp`](../../basics/conventions/#icons) | —       |
-| `Menu.Item`    | `icon`    | [`IconProp`](../../basics/conventions/#icons) | —       |
-| `Menu.Item`    | `hotkey`  | `string \| readonly string[]`                 | —       |
-| `Menu.Item`    | `checked` | `boolean`                                     | —       |
-| `Menu.Item`    | `danger`  | `boolean`                                     | `false` |
+| Part              | Prop              | Type                                          | Default                        |
+| ----------------- | ----------------- | --------------------------------------------- | ------------------------------ |
+| `Menu`            | `open`            | `boolean`                                     | —                              |
+| `Menu`            | `defaultOpen`     | `boolean`                                     | `false`                        |
+| `Menu`            | `onOpenChange`    | `(open: boolean) => void`                     | —                              |
+| `Menu`            | `modal`           | `boolean`                                     | `false`                        |
+| `Menu.Trigger`    | `variant`         | `ButtonVariant`                               | —                              |
+| `Menu.Trigger`    | `size`            | `ButtonSize`                                  | `"md"`                         |
+| `Menu.Trigger`    | `icon`            | [`IconProp`](../../basics/conventions/#icons) | —                              |
+| `Menu.Popup`      | `side`            | `"top" \| "bottom" \| "left" \| "right"`      | `"bottom"`                     |
+| `Menu.Popup`      | `align`           | `"start" \| "center" \| "end"`                | `"start"`                      |
+| `Menu.Popup`      | `sideOffset`      | `number`                                      | `4`                            |
+| `Menu.Popup`      | `alignOffset`     | `number`                                      | —                              |
+| `Menu.Item`       | `icon`            | [`IconProp`](../../basics/conventions/#icons) | —                              |
+| `Menu.Item`       | `hotkey`          | `string \| readonly string[]`                 | —                              |
+| `Menu.Item`       | `danger`          | `boolean`                                     | `false`                        |
+| `Menu.Item`       | `checked`         | `boolean`                                     | —                              |
+| `Menu.Item`       | `defaultChecked`  | `boolean`                                     | —                              |
+| `Menu.Item`       | `onCheckedChange` | `(checked: boolean) => void`                  | —                              |
+| `Menu.Item`       | `closeOnClick`    | `boolean`                                     | `true`, `false` when checkable |
+| `Menu.RadioGroup` | `value`           | `string`                                      | —                              |
+| `Menu.RadioGroup` | `defaultValue`    | `string`                                      | —                              |
+| `Menu.RadioGroup` | `onValueChange`   | `(value: string) => void`                     | —                              |
+| `Menu.RadioItem`  | `value`           | `string`                                      | —                              |
+| `Menu.RadioItem`  | `closeOnClick`    | `boolean`                                     | `false`                        |
+
+The menu is a [Base UI Menu](https://base-ui.com/react/components/menu): arrow keys move between items, typing jumps to a matching item, Escape and a click outside close it, and focus returns to the trigger.
 
 `variant` styles the trigger as a [Button](../buttons/) of that variant, square when it has no children; `size` applies only alongside it. `icon` renders a leading icon; with `variant` and no children the trigger is an icon-only square without the chevron, so give it an `aria-label`.
 
-Open state is the `<details>` element's, so there is no `open` prop to control — pass the native `open` attribute for a menu that starts expanded. Activating an item closes the menu, except a checkable one; Escape closes it and focuses the trigger. Each part takes the native attributes of its element, and `Menu.Group` takes its accessible name from its `Menu.GroupLabel`.
+The popup portals into the enclosing [`AdminRoot`](../../getting-started/react/), or into a `Dialog` it sits in. Its items stay mounted while it is closed, so `hotkey` works with the menu closed. A `Dialog` or `Drawer` that an item opens goes outside `<Menu>`, driven by the item's `onClick`; one rendered inside the popup is hidden with it. For a confirmation, use [`useConfirm()`](../dialog/).
 
-A closed `<details>` hides everything inside it. When an item's click opens a [Dialog](../dialog/) or [Drawer](../drawer/) rendered inside the menu, the menu stays open under it. A dialog that opens later, after an `await`, has to be rendered outside `<Menu>`; for a confirmation, use [`useConfirm()`](../dialog/).
+`href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work; without it the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled`. Both dim and stop activating, hotkeys included.
 
-`href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work; without it the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled` — both dim, both stop activating, hotkeys included.
+`checked` or `defaultChecked` makes an item checkable (`menuitemcheckbox`) with a leading check; `false` still reserves the gutter, so labels stay aligned down the group. For single-select, put `Menu.RadioItem`s in a `Menu.RadioGroup`, which takes its name from a `Menu.GroupLabel` inside it like `Menu.Group`.
 
-`checked` turns an item into a checkable one and renders the leading check; `checked={false}` still reserves the gutter, so labels stay aligned down the group. Set `role="menuitemradio"` for single-select. You hold the state itself.
-
-`hotkey` dispatches a click on the item and right-pins a [Kbd](../kbd/) chip, on both the button and anchor branches — see [Conventions › Hotkeys](../../basics/conventions/#hotkeys).
+`hotkey` dispatches a click on the item and right-pins a [Kbd](../kbd/) chip, on both the button and anchor branches. See [Conventions › Hotkeys](../../basics/conventions/#hotkeys).
 
 For a form value, use a [Select](../forms/selects/).
 
 ### Vanilla
 
-| Class                   | Effect                                                                                                                                          |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `menu`                  | Positioning context on a `<details>`                                                                                                            |
-| `menu-trigger`          | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                                                       |
-| `menu-popup`            | Popup panel: `11rem` min-width (the trigger's width when wider), `20rem` max-width, `18rem` max-height, scrolls, bordered surface with a shadow |
-| `menu-item`             | Row: full width, `0.75rem`/`0.25rem` padding, `text-sm` on a `1.25rem` line, hover wash, inset focus ring, `0.5rem` gap for an icon             |
-| `menu-item-danger`      | Destructive item: danger label and icon, danger-tinted hover                                                                                    |
-| `menu-item-indicator`   | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                                                            |
-| `[aria-current="page"]` | On `menu-item`: primary-muted fill, primary text, medium weight                                                                                 |
-| `menu-separator`        | `1px` divider with `0.25rem` of margin                                                                                                          |
-| `menu-group`            | Column wrapper for a labelled set                                                                                                               |
-| `menu-group-label`      | Group heading: `text-xs` uppercase, muted                                                                                                       |
+| Class                   | Effect                                                                                                                                                           |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `menu`                  | Wrapper around the trigger and popup; scopes the anchor name                                                                                                     |
+| `menu-trigger`          | Trigger `<button>`: pointer cursor, trailing chevron that rotates while the popup is open                                                                        |
+| `menu-popup`            | Popup panel on a `[popover]`: `11rem` min-width (the trigger's width when wider), `20rem` max-width, `18rem` max-height, scrolls, bordered surface with a shadow |
+| `menu-popup-end`        | Aligns the popup to the trigger's end edge                                                                                                                       |
+| `menu-item`             | Row: full width, `0.75rem`/`0.25rem` padding, `text-sm` on a `1.25rem` line, hover wash, inset focus ring, `0.5rem` gap for an icon, checkbox or radio           |
+| `menu-item-danger`      | Destructive item: danger label and icon, danger-tinted hover                                                                                                     |
+| `menu-item-indicator`   | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                                                                             |
+| `[aria-current="page"]` | On `menu-item`: primary-muted fill, primary text, medium weight                                                                                                  |
+| `menu-separator`        | `1px` divider with `0.25rem` of margin                                                                                                                           |
+| `menu-group`            | Column wrapper for a labelled set                                                                                                                                |
+| `menu-group-label`      | Group heading: `text-xs` uppercase, muted                                                                                                                        |
+| `menu-actions`          | Right-aligned button row, for a filter menu's Reset and Apply                                                                                                    |
 
-Open and close is the browser's, via `<details>`/`<summary>`. Write the roles yourself: `role="menu"` on the popup, `role="menuitem"` on each item (`"menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` for checkable ones) and `role="group"` on a `menu-group`, named with `aria-labelledby` pointing at its `menu-group-label`. Items are reached with Tab in both bundles; there is no arrow-key navigation. A disabled anchor item takes `aria-disabled="true"` and no `href`, so neither a click nor Enter navigates.
+The popup is a `popover="auto"` element opened by the trigger's `popovertarget`, which needs a unique `id` per menu. The browser opens and closes it: Escape and a click outside close it, and it renders in the top layer, so a `<dialog>` or an `overflow: hidden` ancestor doesn't clip it. It is anchored to the trigger inside its `.menu` and flips above the trigger, or to its end edge, when there's no room.
 
-`menu-trigger` only styles behaviour and bows out of appearance when a `btn` class is present, so adding `btn btn-primary` to the `<summary>` gives a button-styled trigger with no override needed. An empty trigger centres its chevron, as the split-button pattern does — pair it with an `aria-label`, since the chevron is the only visible content. A `btn-square` trigger that holds an icon drops the chevron and needs an `aria-label` too. A `menu` inside a [`btn-group`](../buttons/#group) joins the strip's rounding and seams.
+The vanilla menu is a disclosure: a button that shows a list of links and buttons, reached with Tab, with no menu roles and no arrow-key navigation. Give a `menu-group` `role="group"` and `aria-labelledby` pointing at its `menu-group-label`. A link item navigates; a button item leaves the popup open unless it opens a modal `<dialog>` (via `commandfor`), which closes it, or it carries `popovertarget="<id>" popovertargetaction="hide"`. Checkable rows are native checkboxes and radios inside a `<label class="menu-item">`; `menu-item-indicator` is for rows your own script marks with `aria-checked`. A disabled anchor item takes `aria-disabled="true"` and no `href`, so neither a click nor Enter navigates.
 
-Where [anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) is available the popup is `position: fixed` and anchored to the trigger, so it escapes an ancestor's `overflow: hidden` — inside a `<dialog>`, for instance — flips above the trigger when there's no room below, and aligns to the trigger's right edge when there's no room to its right. Without it, the popup falls back to absolute positioning and clips as usual.
+`menu-trigger` only styles behaviour and bows out of appearance when a `btn` class is present, so adding `btn btn-primary` to the trigger gives a button-styled trigger with no override needed. An empty trigger centres its chevron, as the split-button pattern does — pair it with an `aria-label`, since the chevron is the only visible content. A `btn-square` trigger that holds an icon drops the chevron and needs an `aria-label` too. A `menu` inside a [`btn-group`](../buttons/#group) joins the strip's rounding and seams.

@@ -1,12 +1,40 @@
-import type { ComponentProps } from "react";
+import { Menu as BaseMenu } from "@base-ui/react/menu";
+import type { ComponentProps, MouseEvent, ReactNode } from "react";
 import type { ButtonSize, ButtonVariant } from "./Button";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
-import { MenuGroup, MenuGroupLabel, MenuItemBase, MenuRoot } from "./Menu.client";
+import { MenuItemBase, MenuPopup } from "./Menu.client";
 
-export type MenuProps = ComponentProps<"details">;
+export interface MenuProps extends ComponentProps<"div"> {
+  /** Controlled open state. */
+  open?: boolean;
+  /** Initial open state when uncontrolled. Default: `false`. */
+  defaultOpen?: boolean;
+  /** Called when the menu opens or closes. */
+  onOpenChange?: (open: boolean) => void;
+  /** Lock page scroll and block pointer events outside while open. Default: `false`. */
+  modal?: boolean;
+}
 
-export interface MenuTriggerProps extends ComponentProps<"summary"> {
+// Base UI's Root renders no element; the `.menu` wrapper carries the class the
+// vanilla bundle styles (btn-group seams, navbar current-page marking).
+function MenuRoot({
+  open,
+  defaultOpen,
+  onOpenChange,
+  modal = false,
+  className,
+  ...rest
+}: MenuProps) {
+  return (
+    <BaseMenu.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal={modal}>
+      <div className={cn("menu", className)} {...rest} />
+    </BaseMenu.Root>
+  );
+}
+
+export interface MenuTriggerProps extends Omit<ComponentProps<"button">, "className"> {
+  className?: string;
   /** Styles the trigger as a `<Button>` of this variant (`.btn`). Omit for the plain trigger. */
   variant?: ButtonVariant;
   /** Button size; applies only with `variant`. Without children the button is square. */
@@ -24,7 +52,7 @@ function MenuTrigger({
   ...rest
 }: MenuTriggerProps) {
   return (
-    <summary
+    <BaseMenu.Trigger
       className={cn(
         [
           "menu-trigger",
@@ -41,29 +69,52 @@ function MenuTrigger({
     >
       {renderIcon(icon)}
       {children}
-    </summary>
+    </BaseMenu.Trigger>
   );
 }
 
-export type MenuPopupProps = ComponentProps<"div">;
+type MenuPositionerProps = ComponentProps<typeof BaseMenu.Positioner>;
 
-function MenuPopup({ className, role = "menu", ...rest }: MenuPopupProps) {
-  return <div role={role} className={cn("menu-popup", className)} {...rest} />;
+export interface MenuPopupProps extends Omit<ComponentProps<"div">, "className"> {
+  className?: string;
+  /** Side of the trigger the popup opens on. Default: `"bottom"`. */
+  side?: MenuPositionerProps["side"];
+  /** Edge of the trigger the popup lines up with; `"end"` adds `menu-popup-end`. Default: `"start"`. */
+  align?: MenuPositionerProps["align"];
+  /** Gap between trigger and popup, in px. Default: `4`. */
+  sideOffset?: number;
+  alignOffset?: MenuPositionerProps["alignOffset"];
 }
 
 interface MenuItemExtras {
-  /** Keyboard shortcut (`useHotkey` syntax) — synthesizes a click; shown right-pinned in the row. */
+  /** Keyboard shortcut (`useHotkey` syntax) — synthesizes a click, also while the menu is closed; shown right-pinned in the row. */
   hotkey?: string | readonly string[];
-  /** Leading icon. Replaced by the check indicator when `checked` is set. */
+  /** Leading icon. Replaced by the check indicator on a checkable item. */
   icon?: IconProp;
-  /** Render as a checkable item: shows a leading check when `true`, reserves the gutter when `false`. Set `role="menuitemradio"` for single-select groups. */
-  checked?: boolean;
   /** Destructive action (`.menu-item-danger`): danger-colored label and icon. */
   danger?: boolean;
+  /** Close the menu when the item is activated. Default: `true`, `false` for a checkable item. */
+  closeOnClick?: boolean;
 }
 
-export type MenuItemAsButton = ComponentProps<"button"> & MenuItemExtras & { href?: undefined };
-export type MenuItemAsLink = ComponentProps<"a"> & MenuItemExtras & { href: string };
+export type MenuItemAsButton = Omit<
+  ComponentProps<"button">,
+  "onClick" | "defaultChecked" | "className"
+> &
+  MenuItemExtras & {
+    href?: undefined;
+    className?: string;
+    onClick?: (event: MouseEvent<HTMLElement>) => void;
+    /** Controlled checked state; makes the item checkable (`menuitemcheckbox`) with a leading check. */
+    checked?: boolean;
+    /** Initial checked state of an uncontrolled checkable item. */
+    defaultChecked?: boolean;
+    /** Called when a checkable item is toggled. */
+    onCheckedChange?: (checked: boolean) => void;
+  };
+
+export type MenuItemAsLink = Omit<ComponentProps<"a">, "className"> &
+  MenuItemExtras & { href: string; className?: string };
 
 export type MenuItemProps = MenuItemAsButton | MenuItemAsLink;
 
@@ -95,22 +146,105 @@ function MenuItemIndicator() {
   );
 }
 
+function isCheckable(props: MenuItemProps): boolean {
+  return (
+    props.href === undefined && (props.checked !== undefined || props.defaultChecked !== undefined)
+  );
+}
+
+function MenuItem({ icon, ...rest }: MenuItemProps) {
+  return (
+    <MenuItemBase
+      leading={isCheckable(rest) ? <MenuItemIndicator /> : renderIcon(icon)}
+      {...rest}
+    />
+  );
+}
+
+export type MenuRadioGroupProps = Omit<ComponentProps<"div">, "defaultValue" | "className"> & {
+  className?: string;
+  /** Controlled selected value. */
+  value?: string;
+  /** Initial selected value when uncontrolled. */
+  defaultValue?: string;
+  /** Called with the picked item's `value`. */
+  onValueChange?: (value: string) => void;
+};
+
+// Rendered as a Menu.Group so a Menu.GroupLabel inside names it.
+function MenuRadioGroup({ className, ...rest }: MenuRadioGroupProps) {
+  return (
+    <BaseMenu.RadioGroup
+      render={<BaseMenu.Group />}
+      className={cn("menu-group", className)}
+      {...rest}
+    />
+  );
+}
+
+export type MenuRadioItemProps = Omit<ComponentProps<"button">, "value" | "className"> & {
+  className?: string;
+  /** Value reported to the enclosing `Menu.RadioGroup`. */
+  value: string;
+  /** Close the menu when the item is picked. Default: `false`. */
+  closeOnClick?: boolean;
+};
+
+function MenuRadioItem({
+  value,
+  disabled,
+  closeOnClick,
+  className,
+  children,
+  type = "button",
+  ...rest
+}: MenuRadioItemProps) {
+  return (
+    <BaseMenu.RadioItem
+      render={<button type={type} {...rest} />}
+      nativeButton
+      value={value}
+      disabled={disabled}
+      closeOnClick={closeOnClick}
+      className={cn("menu-item", className)}
+    >
+      <MenuItemIndicator />
+      {children}
+    </BaseMenu.RadioItem>
+  );
+}
+
 export type MenuSeparatorProps = ComponentProps<"hr">;
 
 function MenuSeparator({ className, ...rest }: MenuSeparatorProps) {
   return <hr className={cn("menu-separator", className)} {...rest} />;
 }
 
-export type MenuGroupProps = ComponentProps<"div">;
-export type MenuGroupLabelProps = ComponentProps<"div">;
+export type MenuGroupProps = Omit<ComponentProps<"div">, "className"> & { className?: string };
+export type MenuGroupLabelProps = Omit<ComponentProps<"div">, "className"> & { className?: string };
 
-function MenuItem({ icon, ...rest }: MenuItemProps) {
-  return (
-    <MenuItemBase
-      leading={rest.checked !== undefined ? <MenuItemIndicator /> : renderIcon(icon)}
-      {...rest}
-    />
-  );
+function MenuGroup({ className, ...rest }: MenuGroupProps) {
+  return <BaseMenu.Group className={cn("menu-group", className)} {...rest} />;
+}
+
+function MenuGroupLabel({ className, ...rest }: MenuGroupLabelProps) {
+  return <BaseMenu.GroupLabel className={cn("menu-group-label", className)} {...rest} />;
+}
+
+export type MenuActionsProps = ComponentProps<"div">;
+
+function MenuActions({ className, ...rest }: MenuActionsProps) {
+  return <div className={cn("menu-actions", className)} {...rest} />;
+}
+
+/** Whether `node` holds an element with `aria-current` set, e.g. the current page's `Menu.Item`. */
+export function containsCurrent(node: ReactNode): boolean {
+  if (Array.isArray(node)) return node.some(containsCurrent);
+  if (node === null || typeof node !== "object" || !("props" in node)) return false;
+  const props = node.props as { "aria-current"?: unknown; children?: ReactNode };
+  const current = props["aria-current"];
+  if (current !== undefined && current !== false && current !== "false") return true;
+  return containsCurrent(props.children);
 }
 
 // Assembled here, not in the "use client" module: a Server Component importing from there
@@ -119,7 +253,10 @@ export const Menu = Object.assign(MenuRoot, {
   Trigger: MenuTrigger,
   Popup: MenuPopup,
   Item: MenuItem,
+  RadioGroup: MenuRadioGroup,
+  RadioItem: MenuRadioItem,
   Separator: MenuSeparator,
   Group: MenuGroup,
   GroupLabel: MenuGroupLabel,
+  Actions: MenuActions,
 });

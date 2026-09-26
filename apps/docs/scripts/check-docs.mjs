@@ -457,8 +457,9 @@ const VANILLA_ONLY = new Map([
   ["field-error", "Field.Error renders once validation fails, never on the server"],
   ["asteriskField", "template-generator hook for server-rendered forms"],
 ]);
-// Vanilla subtrees whose React counterpart only mounts on interaction.
-const VANILLA_SKIP = ".tooltip";
+// Vanilla subtrees whose React counterpart only mounts on interaction or after
+// hydration: Base UI portals the menu popup client-side.
+const VANILLA_SKIP = ".tooltip, .menu-popup";
 
 const parityStart = performance.now();
 const pairs = examples.filter((e) => e.html !== undefined && e.tsx !== undefined);

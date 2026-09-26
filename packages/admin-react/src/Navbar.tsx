@@ -1,7 +1,7 @@
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
-import { Menu } from "./Menu";
+import { containsCurrent, Menu, type MenuPopupProps, type MenuProps } from "./Menu";
 import { NavbarMobileToggle } from "./Navbar.client";
 
 export interface NavbarProps extends ComponentProps<"header"> {
@@ -55,16 +55,18 @@ function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemPr
   );
 }
 
-export interface NavbarDropdownProps extends Omit<ComponentProps<"details">, "title"> {
+export interface NavbarDropdownProps extends Omit<MenuProps, "title"> {
   /** Text shown in the trigger. */
   label: ReactNode;
   /**
-   * Marks the trigger as the current section (`data-active`) when the current page isn't one
-   * of the menu's items. A `Menu.Item` with `aria-current="page"` marks it without this.
+   * Marks the trigger as the current section (`data-active`). Default: whether an item among
+   * the children has `aria-current` set; pass `true` for a page in the section that isn't one of them.
    */
   active?: boolean;
   /** Leading icon in the trigger. */
   icon?: IconProp;
+  /** Edge of the trigger the popup lines up with; use `"end"` in `Navbar.Actions`. Default: `"start"`. */
+  align?: MenuPopupProps["align"];
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"trigger" | "popup">;
 }
@@ -73,6 +75,7 @@ function NavbarDropdown({
   label,
   active,
   icon,
+  align,
   className,
   classNames,
   children,
@@ -82,12 +85,14 @@ function NavbarDropdown({
     <Menu className={className} {...rest}>
       <Menu.Trigger
         className={cn("navbar-item", classNames?.trigger)}
-        data-active={active ? "" : undefined}
+        data-active={(active ?? containsCurrent(children)) ? "" : undefined}
       >
         {renderIcon(icon)}
         {label}
       </Menu.Trigger>
-      <Menu.Popup className={classNames?.popup}>{children}</Menu.Popup>
+      <Menu.Popup align={align} className={classNames?.popup}>
+        {children}
+      </Menu.Popup>
     </Menu>
   );
 }

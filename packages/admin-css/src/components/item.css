@@ -108,9 +108,9 @@
     position: relative;
     z-index: 1;
   }
-  /* Raised controls share z-1 across rows; lift the row whose menu or tooltip
-     is open above the rows after it. */
-  .item-link:has(.menu[open], .tooltip-wrap:hover, .tooltip-wrap:focus-within) {
+  /* Raised controls share z-1 across rows; lift the row whose tooltip is open
+     above the rows after it. Menu popups sit in the top layer or a portal. */
+  .item-link:has(.tooltip-wrap:hover, .tooltip-wrap:focus-within) {
     z-index: 2;
   }
   /* Ring the row for keyboard focus on the primary link only; other controls

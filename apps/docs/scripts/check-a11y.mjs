@@ -110,6 +110,12 @@ const IGNORED = [
     selector: "output:is(.spinner, ._ao-spinner) *, :is(.spinner, ._ao-spinner)",
     reason: "the spinner is a drawn ring, not text; its colour is its whole content",
   },
+  {
+    rule: "aria-hidden-focus",
+    selector: "[data-base-ui-focus-guard]",
+    reason:
+      "Base UI's focus guards around a non-modal popup take focus only to hand it on to the trigger or popup",
+  },
 ];
 
 // ---------------------------------------------------------------- in-page helpers

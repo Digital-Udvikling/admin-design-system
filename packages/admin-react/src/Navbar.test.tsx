@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
+import { Menu } from "./Menu";
 import { Navbar } from "./Navbar";
 
 describe("Navbar", () => {
@@ -75,6 +76,40 @@ describe("Navbar", () => {
         </Navbar.Dropdown>,
       );
       expect(screen.getByText("Reports")).not.toHaveAttribute("data-active");
+    });
+
+    it("marks the trigger when an item, also inside a group, is the current page", () => {
+      render(
+        <Navbar.Dropdown label="Products">
+          <Menu.Group>
+            <Menu.GroupLabel>Catalogue</Menu.GroupLabel>
+            <Menu.Item href="#items" aria-current="page">
+              Items
+            </Menu.Item>
+          </Menu.Group>
+        </Navbar.Dropdown>,
+      );
+      expect(screen.getByText("Products")).toHaveAttribute("data-active");
+    });
+
+    it("lets active={false} override a current item", () => {
+      render(
+        <Navbar.Dropdown label="Products" active={false}>
+          <Menu.Item href="#items" aria-current="page">
+            Items
+          </Menu.Item>
+        </Navbar.Dropdown>,
+      );
+      expect(screen.getByText("Products")).not.toHaveAttribute("data-active");
+    });
+
+    it("forwards align to the popup", () => {
+      render(
+        <Navbar.Dropdown label="Account" align="end" defaultOpen>
+          <Menu.Item>Sign out</Menu.Item>
+        </Navbar.Dropdown>,
+      );
+      expect(screen.getByRole("menu")).toHaveAdminClass("menu-popup-end");
     });
   });
 

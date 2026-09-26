@@ -5,9 +5,9 @@
     @apply inline-flex w-full isolate;
   }
 
-  /* An open menu's popup, or a showing vanilla tooltip, has to clear what follows the group.
-     :has() can't nest, so the tooltip's focus test is a descendant match. */
-  .input-group:has(> .menu[open], > .tooltip-wrap:hover, > .tooltip-wrap :focus-visible) {
+  /* A showing vanilla tooltip has to clear what follows the group. :has() can't nest,
+     so the focus test is a descendant match. Menu popups sit in the top layer or a portal. */
+  .input-group:has(> .tooltip-wrap:hover, > .tooltip-wrap :focus-visible) {
     @apply relative z-30;
   }
 
@@ -34,7 +34,7 @@
     border-radius: inherit;
   }
 
-  /* <details> slots its summary, so inherit can't reach .menu-trigger; set its corners here. */
+  /* The trigger sits inside the .menu wrapper; set its corners here. */
   .input-group > .menu > .menu-trigger {
     @apply rounded-none;
   }

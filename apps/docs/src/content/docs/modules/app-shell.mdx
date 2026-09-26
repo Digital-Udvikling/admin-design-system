@@ -176,7 +176,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar. A `menu-item` with `aria-current="page"` is filled in the open menu and marks its trigger. For a page in the section that isn't one of the items, pass `active` (vanilla: `data-active` on the trigger).
+`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar. A `menu-item` with `aria-current="page"` is filled in the open menu and marks its trigger. For a page in the section that isn't one of the items, pass `active` (vanilla: `data-active` on the trigger). In `Navbar.Actions`, pass `align="end"`; the vanilla popup there aligns to the trigger's end edge without a class.
 
 :::example
 
@@ -191,15 +191,17 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
   </div>
   <nav class="navbar-items">
     <a class="navbar-item" href="#">Dashboard</a>
-    <details class="menu">
-      <summary class="menu-trigger navbar-item">Products</summary>
-      <div class="menu-popup">
+    <div class="menu">
+      <button type="button" class="menu-trigger navbar-item" popovertarget="navbar-products">
+        Products
+      </button>
+      <div class="menu-popup" id="navbar-products" popover>
         <a class="menu-item" href="#" aria-current="page">Catalogue</a>
         <button class="menu-item" type="button">Categories</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Imports</button>
       </div>
-    </details>
+    </div>
   </nav>
 </header>
 ```
@@ -247,14 +249,16 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
       <option value="lavprisvvs.dk">LavprisVVS.dk</option>
       <option value="elproffs.se">ELproffs.se</option>
     </select>
-    <details class="menu">
-      <summary class="menu-trigger navbar-item">Nickolaj</summary>
-      <div class="menu-popup">
+    <div class="menu">
+      <button type="button" class="menu-trigger navbar-item" popovertarget="navbar-account">
+        Nickolaj
+      </button>
+      <div class="menu-popup" id="navbar-account" popover>
         <button class="menu-item" type="button">Profile</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Sign out</button>
       </div>
-    </details>
+    </div>
   </div>
 </header>
 ```
@@ -290,7 +294,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
         </Select.Item>
       </Select.Popup>
     </Select>
-    <Navbar.Dropdown label="Nickolaj">
+    <Navbar.Dropdown label="Nickolaj" align="end">
       <Menu.Item>Profile</Menu.Item>
       <Menu.Separator />
       <Menu.Item>Sign out</Menu.Item>
@@ -592,7 +596,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
           </Select.Item>
         </Select.Popup>
       </Select>
-      <Navbar.Dropdown label="Nickolaj">
+      <Navbar.Dropdown label="Nickolaj" align="end">
         <Menu.Item>Profile</Menu.Item>
         <Menu.Separator />
         <Menu.Item>Sign out</Menu.Item>
@@ -679,7 +683,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
       <Navbar.Item href="#">Settings</Navbar.Item>
     </Navbar.Items>
     <Navbar.Actions>
-      <Navbar.Dropdown label="Nickolaj">
+      <Navbar.Dropdown label="Nickolaj" align="end">
         <Menu.Item>Profile</Menu.Item>
         <Menu.Separator />
         <Menu.Item>Sign out</Menu.Item>
@@ -827,63 +831,64 @@ For the derived tokens (`-hover`, `-muted`, `-content`) and the bright-accent co
 
 Four independent compounds. `<AppShell>` supplies only the grid and the mobile-drawer wiring — `<Navbar>`, `<Sidebar>` and `<Footer>` each work standalone.
 
-| Part                     | Renders              | Class                                       |
-| ------------------------ | -------------------- | ------------------------------------------- |
-| `AppShell`               | `<div>`              | `app-shell`                                 |
-| `AppShell.Main`          | `<main>`             | `app-shell-main`                            |
-| `Navbar`                 | `<header>`           | `navbar`                                    |
-| `Navbar.Brand`           | `<div>`              | `navbar-brand`                              |
-| `Navbar.Items`           | `<nav>`              | `navbar-items`                              |
-| `Navbar.Item`            | `<a>`                | `navbar-item`                               |
-| `Navbar.Dropdown`        | `<details>` (`Menu`) | `menu`, with `navbar-item` on the trigger   |
-| `Navbar.Actions`         | `<div>`              | `navbar-actions`                            |
-| `Navbar.MobileToggle`    | `<button>`           | `navbar-mobile-toggle`                      |
-| `Sidebar`                | `<aside>`            | `sidebar`                                   |
-| `Sidebar.Header`         | `<div>`              | `sidebar-header`                            |
-| `Sidebar.Nav`            | `<nav>`              | `sidebar-nav`                               |
-| `Sidebar.Group`          | `<div>`              | `sidebar-group`                             |
-| `Sidebar.GroupLabel`     | `<div>`              | `sidebar-group-label`                       |
-| `Sidebar.Item`           | `<a>`                | `sidebar-item`                              |
-| `Sidebar.Icon`           | `<span>`             | `sidebar-icon`                              |
-| `Sidebar.Label`          | `<span>`             | `sidebar-label`                             |
-| `Sidebar.Badge`          | `<span>`             | `sidebar-badge`                             |
-| `Sidebar.Collapsible`    | `<details>`          | `sidebar-collapsible`                       |
-| `Sidebar.SubItem`        | `<a>`                | `sidebar-subitem`                           |
-| `Sidebar.Footer`         | `<div>`              | `sidebar-footer`                            |
-| `Sidebar.CollapseToggle` | `<label>`            | `sidebar-collapse-toggle`, `sidebar-toggle` |
-| `Footer`                 | `<footer>`           | `footer`                                    |
-| `Footer.Links`           | `<div>`              | `footer-links`                              |
-| `Footer.Link`            | `<a>`                | `footer-link`                               |
-| `Footer.Meta`            | `<div>`              | `footer-meta`                               |
+| Part                     | Renders          | Class                                       |
+| ------------------------ | ---------------- | ------------------------------------------- |
+| `AppShell`               | `<div>`          | `app-shell`                                 |
+| `AppShell.Main`          | `<main>`         | `app-shell-main`                            |
+| `Navbar`                 | `<header>`       | `navbar`                                    |
+| `Navbar.Brand`           | `<div>`          | `navbar-brand`                              |
+| `Navbar.Items`           | `<nav>`          | `navbar-items`                              |
+| `Navbar.Item`            | `<a>`            | `navbar-item`                               |
+| `Navbar.Dropdown`        | `<div>` (`Menu`) | `menu`, with `navbar-item` on the trigger   |
+| `Navbar.Actions`         | `<div>`          | `navbar-actions`                            |
+| `Navbar.MobileToggle`    | `<button>`       | `navbar-mobile-toggle`                      |
+| `Sidebar`                | `<aside>`        | `sidebar`                                   |
+| `Sidebar.Header`         | `<div>`          | `sidebar-header`                            |
+| `Sidebar.Nav`            | `<nav>`          | `sidebar-nav`                               |
+| `Sidebar.Group`          | `<div>`          | `sidebar-group`                             |
+| `Sidebar.GroupLabel`     | `<div>`          | `sidebar-group-label`                       |
+| `Sidebar.Item`           | `<a>`            | `sidebar-item`                              |
+| `Sidebar.Icon`           | `<span>`         | `sidebar-icon`                              |
+| `Sidebar.Label`          | `<span>`         | `sidebar-label`                             |
+| `Sidebar.Badge`          | `<span>`         | `sidebar-badge`                             |
+| `Sidebar.Collapsible`    | `<details>`      | `sidebar-collapsible`                       |
+| `Sidebar.SubItem`        | `<a>`            | `sidebar-subitem`                           |
+| `Sidebar.Footer`         | `<div>`          | `sidebar-footer`                            |
+| `Sidebar.CollapseToggle` | `<label>`        | `sidebar-collapse-toggle`, `sidebar-toggle` |
+| `Footer`                 | `<footer>`       | `footer`                                    |
+| `Footer.Links`           | `<div>`          | `footer-links`                              |
+| `Footer.Link`            | `<a>`            | `footer-link`                               |
+| `Footer.Meta`            | `<div>`          | `footer-meta`                               |
 
-| Part                     | Prop                        | Type                           | Default            |
-| ------------------------ | --------------------------- | ------------------------------ | ------------------ |
-| `AppShell`               | `hasSidebar`                | `boolean`                      | `false`            |
-| `AppShell`               | `systemAccent`              | `string` (CSS color)           | inherited          |
-| `AppShell`               | `mobileDrawerOpen`          | `boolean`                      | uncontrolled       |
-| `AppShell`               | `defaultMobileDrawerOpen`   | `boolean`                      | `false`            |
-| `AppShell`               | `onMobileDrawerOpenChange`  | `(open: boolean) => void`      | —                  |
-| `Navbar`                 | `systemAccent`              | `string` (CSS color)           | inherited          |
-| `Navbar.Item`            | `active`                    | `boolean`                      | `false`            |
-| `Navbar.Item`            | `icon`                      | component or element           | —                  |
-| `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required           |
-| `Navbar.Dropdown`        | `active`                    | `boolean`                      | `false`            |
-| `Navbar.Dropdown`        | `icon`                      | component or element           | —                  |
-| `Navbar.MobileToggle`    | `label`                     | `string`                       | `"Open menu"`      |
-| `Sidebar`                | `collapsed`                 | `boolean`                      | uncontrolled       |
-| `Sidebar`                | `defaultCollapsed`          | `boolean`                      | `false`            |
-| `Sidebar`                | `onCollapsedChange`         | `(collapsed: boolean) => void` | —                  |
-| `Sidebar`                | `drawerLabel`               | `string`                       | `"Navigation"`     |
-| `Sidebar.Item`           | `active`                    | `boolean`                      | `false`            |
-| `Sidebar.Item`           | `icon`                      | component or element           | —                  |
-| `Sidebar.Item`           | `badge`                     | `ReactNode`                    | —                  |
-| `Sidebar.Collapsible`    | `icon`                      | component or element           | —                  |
-| `Sidebar.Collapsible`    | `label`                     | `ReactNode`                    | —                  |
-| `Sidebar.Collapsible`    | `trigger`                   | `ReactNode`                    | icon + label       |
-| `Sidebar.Collapsible`    | `open` / `defaultOpen`      | `boolean`                      | uncontrolled       |
-| `Sidebar.Collapsible`    | `onOpenChange`              | `(open: boolean) => void`      | —                  |
-| `Sidebar.SubItem`        | `active` / `icon` / `badge` | as `Sidebar.Item`              | —                  |
-| `Sidebar.CollapseToggle` | `label`                     | `string`                       | `"Toggle sidebar"` |
+| Part                     | Prop                        | Type                           | Default                  |
+| ------------------------ | --------------------------- | ------------------------------ | ------------------------ |
+| `AppShell`               | `hasSidebar`                | `boolean`                      | `false`                  |
+| `AppShell`               | `systemAccent`              | `string` (CSS color)           | inherited                |
+| `AppShell`               | `mobileDrawerOpen`          | `boolean`                      | uncontrolled             |
+| `AppShell`               | `defaultMobileDrawerOpen`   | `boolean`                      | `false`                  |
+| `AppShell`               | `onMobileDrawerOpenChange`  | `(open: boolean) => void`      | —                        |
+| `Navbar`                 | `systemAccent`              | `string` (CSS color)           | inherited                |
+| `Navbar.Item`            | `active`                    | `boolean`                      | `false`                  |
+| `Navbar.Item`            | `icon`                      | component or element           | —                        |
+| `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required                 |
+| `Navbar.Dropdown`        | `active`                    | `boolean`                      | an item's `aria-current` |
+| `Navbar.Dropdown`        | `icon`                      | component or element           | —                        |
+| `Navbar.Dropdown`        | `align`                     | `"start" \| "center" \| "end"` | `"start"`                |
+| `Navbar.MobileToggle`    | `label`                     | `string`                       | `"Open menu"`            |
+| `Sidebar`                | `collapsed`                 | `boolean`                      | uncontrolled             |
+| `Sidebar`                | `defaultCollapsed`          | `boolean`                      | `false`                  |
+| `Sidebar`                | `onCollapsedChange`         | `(collapsed: boolean) => void` | —                        |
+| `Sidebar`                | `drawerLabel`               | `string`                       | `"Navigation"`           |
+| `Sidebar.Item`           | `active`                    | `boolean`                      | `false`                  |
+| `Sidebar.Item`           | `icon`                      | component or element           | —                        |
+| `Sidebar.Item`           | `badge`                     | `ReactNode`                    | —                        |
+| `Sidebar.Collapsible`    | `icon`                      | component or element           | —                        |
+| `Sidebar.Collapsible`    | `label`                     | `ReactNode`                    | —                        |
+| `Sidebar.Collapsible`    | `trigger`                   | `ReactNode`                    | icon + label             |
+| `Sidebar.Collapsible`    | `open` / `defaultOpen`      | `boolean`                      | uncontrolled             |
+| `Sidebar.Collapsible`    | `onOpenChange`              | `(open: boolean) => void`      | —                        |
+| `Sidebar.SubItem`        | `active` / `icon` / `badge` | as `Sidebar.Item`              | —                        |
+| `Sidebar.CollapseToggle` | `label`                     | `string`                       | `"Toggle sidebar"`       |
 
 `active` writes `aria-current="page"`, except on `Navbar.Dropdown`, where it sets `data-active` on the trigger. Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../../basics/conventions/#classnames).
 

@@ -10,8 +10,8 @@
     @apply rounded-none relative focus-visible:z-10;
   }
 
-  /* Split buttons: a <details class="menu"> sits in the strip; inline-flex
-     stretches its <summary> to match sibling .btn heights. */
+  /* Split buttons: a `.menu` wrapper sits in the strip; inline-flex
+     stretches its trigger to match sibling .btn heights. */
   .btn-group > .menu {
     @apply relative;
     display: inline-flex;

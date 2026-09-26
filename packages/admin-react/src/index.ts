@@ -204,6 +204,9 @@ export {
   type MenuSeparatorProps,
   type MenuGroupProps,
   type MenuGroupLabelProps,
+  type MenuRadioGroupProps,
+  type MenuRadioItemProps,
+  type MenuActionsProps,
 } from "./Menu";
 export {
   Navbar,

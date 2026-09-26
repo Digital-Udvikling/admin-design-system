@@ -44,17 +44,9 @@
     @apply flex items-center gap-2 ml-auto;
   }
 
-  /* Menus in the actions slot align to the trigger's right edge so the popup stays on screen. */
-  .navbar-actions .menu-popup {
-    left: auto;
-    right: 0;
-  }
-
-  @supports (anchor-name: --x) {
-    .navbar-actions .menu-popup {
-      left: auto;
-      right: anchor(right);
-    }
+  /* Menus in the actions slot align to the trigger's end edge so the popup stays on screen. */
+  .navbar-actions .menu-popup[popover] {
+    position-area: block-end span-inline-start;
   }
 
   /* Hamburger — three lines from one element + two box-shadow strokes. */

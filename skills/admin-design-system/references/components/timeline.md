@@ -169,7 +169,7 @@
 ```
 
 ```tsx
-<Timeline horizontal numbered>
+<Timeline orientation="horizontal" numbered>
   <Timeline.Item status="success" marker="1" title="Cart" />
   <Timeline.Item status="current" marker="2" title="Shipping" />
   <Timeline.Item marker="3" title="Payment" />
@@ -186,17 +186,17 @@
 | `Timeline`      | `<ol>`  | `timeline`      |
 | `Timeline.Item` | `<li>`  | `timeline-item` |
 
-| Part            | Prop          | Type                                                                     | Default     |
-| --------------- | ------------- | ------------------------------------------------------------------------ | ----------- |
-| `Timeline`      | `numbered`    | `boolean`                                                                | `false`     |
-| `Timeline`      | `horizontal`  | `boolean`                                                                | `false`     |
-| `Timeline.Item` | `status`      | `"default" \| "info" \| "success" \| "warning" \| "danger" \| "current"` | `"default"` |
-| `Timeline.Item` | `icon`        | [`IconProp`](../basics/conventions.md#icons)                            | —           |
-| `Timeline.Item` | `marker`      | `ReactNode`                                                              | —           |
-| `Timeline.Item` | `title`       | `ReactNode`                                                              | —           |
-| `Timeline.Item` | `time`        | `ReactNode`                                                              | —           |
-| `Timeline.Item` | `description` | `ReactNode`                                                              | —           |
-| `Timeline.Item` | `classNames`  | [slots](../basics/conventions.md#classnames)                            | —           |
+| Part            | Prop          | Type                                                                     | Default      |
+| --------------- | ------------- | ------------------------------------------------------------------------ | ------------ |
+| `Timeline`      | `numbered`    | `boolean`                                                                | `false`      |
+| `Timeline`      | `orientation` | `"vertical" \| "horizontal"`                                             | `"vertical"` |
+| `Timeline.Item` | `status`      | `"default" \| "info" \| "success" \| "warning" \| "danger" \| "current"` | `"default"`  |
+| `Timeline.Item` | `icon`        | [`IconProp`](../basics/conventions.md#icons)                            | —            |
+| `Timeline.Item` | `marker`      | `ReactNode`                                                              | —            |
+| `Timeline.Item` | `title`       | `ReactNode`                                                              | —            |
+| `Timeline.Item` | `time`        | `ReactNode`                                                              | —            |
+| `Timeline.Item` | `description` | `ReactNode`                                                              | —            |
+| `Timeline.Item` | `classNames`  | [slots](../basics/conventions.md#classnames)                            | —            |
 
 The indicator is a dot by default; `icon` replaces it with a glyph, and `marker` — which wins over `icon` — replaces it with the numbered variant's filled marker. `status` colours the dot, icon or marker: `success` for a done step, `danger` for a failed one, `current` in the primary ink. `current` also sets `aria-current="step"`; set it yourself on the vanilla `<li>`. `classNames` reaches the indicator, dot, marker, content, title, time and description slots.
 

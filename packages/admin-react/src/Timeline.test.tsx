@@ -47,7 +47,7 @@ describe("Timeline", () => {
 
   it("renders the horizontal variant", () => {
     const { container } = render(
-      <Timeline horizontal>
+      <Timeline orientation="horizontal">
         <Timeline.Item title="Step" />
       </Timeline>,
     );

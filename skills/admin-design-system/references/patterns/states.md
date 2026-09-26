@@ -58,7 +58,7 @@
     <tr>
       <th>Order</th>
       <th>Customer</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -75,7 +75,7 @@
     <Table.Row>
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -146,7 +146,7 @@ For a page whose whole subject is empty, centre the message in the content area.
     <tr>
       <th>Order</th>
       <th>Customer</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -165,7 +165,7 @@ For a page whose whole subject is empty, centre the message in the content area.
     <Table.Row>
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>

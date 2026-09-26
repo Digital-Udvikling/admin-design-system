@@ -48,8 +48,8 @@
   }
 
   /* `data-align` serves both hand-written markup and React's `align` prop. */
-  .table :where(th, td)[data-align="right"] {
-    @apply text-right;
+  .table :where(th, td)[data-align="end"] {
+    @apply text-end;
   }
   .table :where(th, td)[data-align="center"] {
     @apply text-center;
@@ -335,7 +335,7 @@
     rotate: 180deg;
   }
   /* Label stays flush with right-aligned numbers; the indicator leads. */
-  [data-align="right"] > .table-sort {
+  [data-align="end"] > .table-sort {
     @apply flex-row-reverse;
   }
 

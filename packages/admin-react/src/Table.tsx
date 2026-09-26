@@ -1,7 +1,7 @@
 import type { ComponentProps, MouseEventHandler } from "react";
 import { cn } from "./cn";
 
-export type TableAlign = "left" | "right" | "center";
+export type TableAlign = "start" | "center" | "end";
 export type TableDensity = "compact" | "default" | "relaxed";
 export type TableSort = "ascending" | "descending" | "none";
 
@@ -111,7 +111,7 @@ function TableHeaderCell({
         [scope === "row" ? "table-cell" : "table-header-cell", gutter && "table-cell-gutter"],
         className,
       )}
-      data-align={align && align !== "left" ? align : undefined}
+      data-align={align && align !== "start" ? align : undefined}
       scope={scope ?? "col"}
       aria-sort={sort && sort !== "none" ? sort : undefined}
       {...rest}
@@ -148,7 +148,7 @@ function TableCell({ align, gutter, numeric, actions, className, ...rest }: Tabl
         ],
         className,
       )}
-      data-align={align && align !== "left" ? align : undefined}
+      data-align={align && align !== "start" ? align : undefined}
       {...rest}
     />
   );

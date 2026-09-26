@@ -127,7 +127,7 @@ describe("Table", () => {
             <Table.Cell gutter data-testid="gutter">
               !
             </Table.Cell>
-            <Table.Cell align="right" numeric data-testid="numeric">
+            <Table.Cell align="end" numeric data-testid="numeric">
               42
             </Table.Cell>
             <Table.Cell align="center" data-testid="center">
@@ -139,7 +139,7 @@ describe("Table", () => {
     );
     expect(screen.getByTestId("gutter")).toHaveAdminClass("table-cell", "table-cell-gutter");
     expect(screen.getByTestId("numeric")).toHaveAdminClass("table-cell", "table-cell-numeric");
-    expect(screen.getByTestId("numeric")).toHaveAttribute("data-align", "right");
+    expect(screen.getByTestId("numeric")).toHaveAttribute("data-align", "end");
     expect(screen.getByTestId("center")).toHaveAttribute("data-align", "center");
   });
 

@@ -79,26 +79,18 @@
     margin-left: 0;
     transform: translateX(-50%);
   }
-  .tooltip-wrap-left > .tooltip {
-    top: 50%;
-    right: 100%;
-    bottom: auto;
-    left: auto;
-    margin-top: 0;
-    margin-right: calc(var(--spacing) * 1.5);
-    margin-bottom: 0;
-    margin-left: 0;
+  .tooltip-wrap-start > .tooltip {
+    inset-block: 50% auto;
+    inset-inline: auto 100%;
+    margin: 0;
+    margin-inline-end: calc(var(--spacing) * 1.5);
     transform: translateY(-50%);
   }
-  .tooltip-wrap-right > .tooltip {
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    left: 100%;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: calc(var(--spacing) * 1.5);
+  .tooltip-wrap-end > .tooltip {
+    inset-block: 50% auto;
+    inset-inline: 100% auto;
+    margin: 0;
+    margin-inline-start: calc(var(--spacing) * 1.5);
     transform: translateY(-50%);
   }
 
@@ -122,14 +114,16 @@
       position-area: bottom;
       margin: calc(var(--spacing) * 1.5) 0 0;
     }
-    .tooltip-wrap-left > .tooltip {
-      position-area: left;
-      margin: 0 calc(var(--spacing) * 1.5) 0 0;
+    .tooltip-wrap-start > .tooltip {
+      position-area: inline-start;
+      margin: 0;
+      margin-inline-end: calc(var(--spacing) * 1.5);
       position-try-fallbacks: flip-inline;
     }
-    .tooltip-wrap-right > .tooltip {
-      position-area: right;
-      margin: 0 0 0 calc(var(--spacing) * 1.5);
+    .tooltip-wrap-end > .tooltip {
+      position-area: inline-end;
+      margin: 0;
+      margin-inline-start: calc(var(--spacing) * 1.5);
       position-try-fallbacks: flip-inline;
     }
   }

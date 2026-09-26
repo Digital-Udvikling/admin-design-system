@@ -8,14 +8,18 @@ export type TimelineStatus = "default" | "info" | "success" | "warning" | "dange
 export interface TimelineProps extends ComponentProps<"ol"> {
   /** Turn the rail into a numbered step list. */
   numbered?: boolean;
-  /** Lay items out as side-by-side columns instead of a vertical rail. */
-  horizontal?: boolean;
+  /** `horizontal` lays items out as side-by-side columns instead of a vertical rail. */
+  orientation?: "vertical" | "horizontal";
 }
-function TimelineRoot({ numbered, horizontal, className, ...rest }: TimelineProps) {
+function TimelineRoot({ numbered, orientation = "vertical", className, ...rest }: TimelineProps) {
   return (
     <ol
       className={cn(
-        ["timeline", numbered && "timeline-numbered", horizontal && "timeline-horizontal"],
+        [
+          "timeline",
+          numbered && "timeline-numbered",
+          orientation === "horizontal" && "timeline-horizontal",
+        ],
         className,
       )}
       {...rest}

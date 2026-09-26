@@ -232,7 +232,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
       <th>
         <button type="button" class="table-sort">Created</button>
       </th>
-      <th data-align="right">
+      <th data-align="end">
         <button type="button" class="table-sort">Total</button>
       </th>
     </tr>
@@ -263,7 +263,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
     <Table.Row>
       <Table.HeaderCell sort="ascending">Name</Table.HeaderCell>
       <Table.HeaderCell sort="none">Created</Table.HeaderCell>
-      <Table.HeaderCell sort="none" align="right">
+      <Table.HeaderCell sort="none" align="end">
         Total
       </Table.HeaderCell>
     </Table.Row>
@@ -414,7 +414,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
     <tr>
       <th>SKU</th>
       <th>Name</th>
-      <th data-align="right">Qty</th>
+      <th data-align="end">Qty</th>
     </tr>
   </thead>
   <tbody>
@@ -443,7 +443,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
     <Table.Row>
       <Table.HeaderCell>SKU</Table.HeaderCell>
       <Table.HeaderCell>Name</Table.HeaderCell>
-      <Table.HeaderCell align="right">Qty</Table.HeaderCell>
+      <Table.HeaderCell align="end">Qty</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -640,8 +640,8 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
   <thead>
     <tr>
       <th>Item</th>
-      <th data-align="right">Qty</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Qty</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -664,8 +664,8 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](.
   <Table.Head>
     <Table.Row>
       <Table.HeaderCell>Item</Table.HeaderCell>
-      <Table.HeaderCell align="right">Qty</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Qty</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -698,7 +698,7 @@ When the icon is the only carrier of status, give it `role="img"` and an `aria-l
       <th class="table-cell-gutter" aria-label="Status"></th>
       <th>Order</th>
       <th>Customer</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -747,7 +747,7 @@ When the icon is the only carrier of status, give it `role="img"` and an `aria-l
       <Table.HeaderCell gutter aria-label="Status" />
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -925,7 +925,7 @@ Put a [Checkbox](../forms/checkboxes/) in the first cell. Wire the select-all he
     <tr>
       <th>Order</th>
       <th>Customer</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
       <th aria-label="Actions"></th>
     </tr>
   </thead>
@@ -964,7 +964,7 @@ Put a [Checkbox](../forms/checkboxes/) in the first cell. Wire the select-all he
     <Table.Row>
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
       <Table.HeaderCell aria-label="Actions" />
     </Table.Row>
   </Table.Head>
@@ -1006,7 +1006,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
   <thead>
     <tr>
       <th>Item</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -1033,7 +1033,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
   <Table.Head>
     <Table.Row>
       <Table.HeaderCell>Item</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -1064,7 +1064,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
   <thead>
     <tr>
       <th>Item</th>
-      <th data-align="right">Amount</th>
+      <th data-align="end">Amount</th>
     </tr>
   </thead>
   <tbody>
@@ -1105,7 +1105,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
   <Table.Head>
     <Table.Row>
       <Table.HeaderCell>Item</Table.HeaderCell>
-      <Table.HeaderCell align="right">Amount</Table.HeaderCell>
+      <Table.HeaderCell align="end">Amount</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -1152,7 +1152,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
     <tr>
       <th>Order</th>
       <th>Customer</th>
-      <th data-align="right">Total</th>
+      <th data-align="end">Total</th>
     </tr>
   </thead>
   <tbody>
@@ -1169,7 +1169,7 @@ The row-filling hit area is a `::before` on the row's first `<a>` in document or
     <Table.Row>
       <Table.HeaderCell>Order</Table.HeaderCell>
       <Table.HeaderCell>Customer</Table.HeaderCell>
-      <Table.HeaderCell align="right">Total</Table.HeaderCell>
+      <Table.HeaderCell align="end">Total</Table.HeaderCell>
     </Table.Row>
   </Table.Head>
   <Table.Body>
@@ -1219,14 +1219,14 @@ A table never owns a scroll region. `sticky`, `pinCol`, and horizontal overflow 
 | `Table`                          | `pinCol`   | `boolean`                               | `false`     |
 | `Table.Row`                      | `selected` | `boolean`                               | `false`     |
 | `Table.Row`                      | `asLink`   | `boolean`                               | `false`     |
-| `Table.Cell`, `Table.HeaderCell` | `align`    | `"left" \| "right" \| "center"`         | `"left"`    |
+| `Table.Cell`, `Table.HeaderCell` | `align`    | `"start" \| "center" \| "end"`          | `"start"`   |
 | `Table.Cell`, `Table.HeaderCell` | `gutter`   | `boolean`                               | `false`     |
 | `Table.Cell`                     | `numeric`  | `boolean`                               | `false`     |
 | `Table.Cell`                     | `actions`  | `boolean`                               | `false`     |
 | `Table.HeaderCell`               | `sort`     | `"ascending" \| "descending" \| "none"` | —           |
 | `Table.HeaderCell`               | `onSort`   | `MouseEventHandler<HTMLButtonElement>`  | —           |
 
-`sticky` and `pinCol` need a scrolling ancestor such as `Table.Scroll`, a `<section>` with `tabIndex={0}` that requires `aria-label` or `aria-labelledby`. `sort` wraps the header's children in a `table-sort` button that calls `onSort`; any value but `"none"` also sets `aria-sort`. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
+`sticky` and `pinCol` need a scrolling ancestor such as `Table.Scroll`, a `<section>` with `tabIndex={0}` that requires `aria-label` or `aria-labelledby`. `sort` wraps the header's children in a `table-sort` button that calls `onSort`; any value but `"none"` also sets `aria-sort`. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="start"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
 
 Plus each element's native attributes. `Table` takes no `classNames` — every part accepts `className`. `Table.Empty` renders its own `<tr>`, so drop it straight into `Table.Body`.
 
@@ -1256,6 +1256,6 @@ Modifiers compose — `striped` with `sticky` with `relaxed` is fine.
 
 A `table` that is a direct child of a `card` (in React, a `Card.Container`), or of a `table-scroll` there, pads its first and last cells to the card's `1rem` inset, `0.75rem` under `card-compact`, so the columns line up with the card title.
 
-Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, `[data-selected]` on the `<tr>`, or a link with `aria-current` in the row; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
+Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="end"]` or `[data-align="center"]` on a cell aligns it; start is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, `[data-selected]` on the `<tr>`, or a link with `aria-current` in the row; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
 
 Striping, hover and selection are scoped to `<tbody>`, and `table-pin-col` pins `:first-child` — so the pinned column must literally be first, and a loose `<tr>` outside `<tbody>` won't stripe.

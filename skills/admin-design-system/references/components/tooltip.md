@@ -45,17 +45,17 @@
   <button type="button" class="btn">Top (default)</button>
   <span class="tooltip" role="tooltip">Top</span>
 </span>
-<span class="tooltip-wrap tooltip-wrap-right">
-  <button type="button" class="btn">Right</button>
-  <span class="tooltip" role="tooltip">Right</span>
+<span class="tooltip-wrap tooltip-wrap-end">
+  <button type="button" class="btn">End</button>
+  <span class="tooltip" role="tooltip">End</span>
 </span>
 <span class="tooltip-wrap tooltip-wrap-bottom">
   <button type="button" class="btn">Bottom</button>
   <span class="tooltip" role="tooltip">Bottom</span>
 </span>
-<span class="tooltip-wrap tooltip-wrap-left">
-  <button type="button" class="btn">Left</button>
-  <span class="tooltip" role="tooltip">Left</span>
+<span class="tooltip-wrap tooltip-wrap-start">
+  <button type="button" class="btn">Start</button>
+  <span class="tooltip" role="tooltip">Start</span>
 </span>
 ```
 
@@ -64,14 +64,14 @@
   <Tooltip content="Top" side="top">
     <Button>Top (default)</Button>
   </Tooltip>
-  <Tooltip content="Right" side="right">
-    <Button>Right</Button>
+  <Tooltip content="End" side="inline-end">
+    <Button>End</Button>
   </Tooltip>
   <Tooltip content="Bottom" side="bottom">
     <Button>Bottom</Button>
   </Tooltip>
-  <Tooltip content="Left" side="left">
-    <Button>Left</Button>
+  <Tooltip content="Start" side="inline-start">
+    <Button>Start</Button>
   </Tooltip>
 </>
 ```
@@ -215,8 +215,8 @@ Keep tooltip content to text; put links and controls in a [Menu](menus.md) or on
 | `tooltip-sm`          | Tighter padding                                                                                                                           |
 | `tooltip-wrap`        | Reveals a nested `tooltip` on `:hover` and keyboard focus, positioned above and centred                                                   |
 | `tooltip-wrap-bottom` | Below the trigger                                                                                                                         |
-| `tooltip-wrap-left`   | Left of the trigger                                                                                                                       |
-| `tooltip-wrap-right`  | Right of the trigger                                                                                                                      |
+| `tooltip-wrap-start`  | Before the trigger on the inline axis (left in LTR)                                                                                       |
+| `tooltip-wrap-end`    | After the trigger on the inline axis (right in LTR)                                                                                       |
 
 The vanilla path needs no JavaScript: the wrapper reveals the bubble after a `200ms` delay on hover and on keyboard focus (a `:focus-visible` descendant). A mouse click doesn't open it, as in Base UI. Write `role="tooltip"` on the bubble yourself.
 

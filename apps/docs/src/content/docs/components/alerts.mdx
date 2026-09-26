@@ -98,6 +98,27 @@ import {
 
 :::
 
+### With inline markup
+
+:::example
+
+```html
+<div class="alert alert-info" role="status">
+  <i class="ti ti-info-circle" aria-hidden="true"></i>
+  <div>
+    Deploy <code>v1.2.0</code> finished. See the <a href="#" class="link">release notes</a>.
+  </div>
+</div>
+```
+
+```tsx
+<Alert variant="info" icon={IconInfoCircle}>
+  Deploy <code>v1.2.0</code> finished. See the <Link href="#">release notes</Link>.
+</Alert>
+```
+
+:::
+
 ### With a trailing action
 
 :::example
@@ -153,7 +174,7 @@ import {
 | ------------------- | ---------- | ------------------- |
 | `Alert`             | `<div>`    | `alert`             |
 | `Alert.Title`       | `<strong>` | `alert-title`       |
-| `Alert.Description` | `<p>`      | `alert-description` |
+| `Alert.Description` | `<div>`    | `alert-description` |
 | `Alert.Action`      | `<div>`    | `alert-action`      |
 
 | Prop           | Type                                           | Default      |
@@ -169,11 +190,11 @@ import {
 
 `variant` is required — there is no neutral alert. It also picks the `role`: `"alert"` for `warning` and `danger`, which interrupts a screen reader, `"status"` for `info` and `success`, which waits for a pause. Pass `role` to override.
 
-`title`, `description` and `action` are shorthand for the matching parts; use the parts directly to interleave them with other children. `onDismiss` renders the × button and takes its accessible name from `dismissLabel` — the alert stays stateless, so the handler is what hides or removes it. `classNames` covers `title`, `description`, `action`, `dismiss`.
+`title`, `description` and `action` are shorthand for the matching parts; use the parts directly to interleave them with other children. `null`, `false` and `""` render nothing. Beside any other slot, parts and block elements (`<p>`, `<div>`, `<ul>`, …) stay direct children and each run of other children renders in one `<div>`, so an icon component passed as a child renders inline; pass it to `icon`. `onDismiss` renders the × button and takes its accessible name from `dismissLabel`; the alert is stateless, so the handler hides or removes it. `classNames` covers `title`, `description`, `action`, `dismiss`.
 
 Plus native `<div>` attributes.
 
-There is no toast. Show a result inline: an alert next to the action, or a status in the affected row.
+There is no toast. Show a result inline: an alert next to the action, or a status in the affected row. See [Flash messages](../../patterns/flash-messages/).
 
 ### Vanilla
 
@@ -181,15 +202,15 @@ There is no toast. Show a result inline: an alert next to the action, or a statu
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `alert`                                                     | Full-width bordered block, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm` |
 | `alert-info` `alert-success` `alert-warning` `alert-danger` | Solid status fill with matching border and `-content` text                          |
-| `alert-title`                                               | Medium weight                                                                       |
-| `alert-description`                                         | `0.85` opacity against the fill                                                     |
-| `alert-action`                                              | Trailing control, pinned to the end column, vertically centred, no wrapping         |
-| `alert-dismiss`                                             | `1.25rem` square × button with a `currentColor` hover wash                          |
+| `alert-title`                                               | Medium weight, own line                                                             |
+| `alert-description`                                         | Body text, `0.25rem` below the title                                                |
+| `alert-action`                                              | Trailing control, pinned to the end column, centred on the text, no wrapping        |
+| `alert-dismiss`                                             | `1.25rem` square × button on the first line, `currentColor` hover wash              |
 
 Write the `role` yourself: `role="alert"` for warning and danger, `role="status"` otherwise.
 
-The layout is `:has()`-driven, so structure alone switches it. A leading `<i>`/`<svg>` as the _first_ child turns the block into an icon + text grid; an `alert-action` or `alert-dismiss` adds a trailing column, and both together add two. A title alongside any of these splits the text into two rows with the icon spanning both. Nothing needs a wrapper class.
+The layout is `:has()`-driven. A leading `<i>`/`<svg>` as the _first_ child turns the block into an icon + text grid; an `alert-action` or `alert-dismiss` adds a trailing column, and both together add two. In the grid, every other direct child is a cell in the text column, so text that contains `<code>` or a link goes in one element: `alert-description` or a plain `<div>`. Block children stack `0.25rem` apart, but bare text right after an `alert-title` sits flush against it, so body text goes in `alert-description`. The icon and dismiss align to the first line of text and `alert-action` centres on the text block. In an alert without a title, a `btn` action sits on the first line and overhangs the padding instead of making the alert taller; prefer `btn-sm`, since a default `btn` comes within `2px` of the edge. Nothing needs a wrapper class.
 
-`alert-action` can go on the link itself or on a wrapper around it. A `link` inside an alert inherits the variant's content colour, since the link blue is illegible on a solid fill — the underline carries the affordance instead. The dismiss button's `aria-label` is yours to write.
+`alert-action` can go on the link itself or on a wrapper around it. A `link` inside an alert inherits the variant's content colour, since link blue is illegible on a solid fill; the underline marks the link. Focus rings on the fills take the content colour for the same reason. The dismiss button's `aria-label` is yours to write.
 
 For single-field validation, use [Fields](../forms/fields/). For a docs-style note rather than an app alert, this component is the wrong shape — it's built to be loud.

@@ -96,7 +96,7 @@
 
 ```tsx
 <Card title="Recent orders">
-  <Spinner label="Loading orders" />
+  <Spinner aria-label="Loading orders" />
 </Card>
 ```
 
@@ -134,7 +134,7 @@
   </Table.Head>
   <Table.Body>
     <Table.Empty colSpan={3}>
-      <Spinner label="Loading orders" />
+      <Spinner aria-label="Loading orders" />
     </Table.Empty>
   </Table.Body>
 </Table>

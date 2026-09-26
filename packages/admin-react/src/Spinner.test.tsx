@@ -11,7 +11,7 @@ describe("Spinner", () => {
   });
 
   it("accepts a custom label and size modifier", () => {
-    render(<Spinner size="lg" label="Saving" />);
+    render(<Spinner size="lg" aria-label="Saving" />);
     const el = screen.getByRole("status");
     expect(el).toHaveAttribute("aria-label", "Saving");
     expect(el).toHaveAdminClass("spinner-lg");

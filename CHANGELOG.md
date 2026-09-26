@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** `item-outline` / `Item variant="outline"` is `item-bordered` / `variant="bordered"`. (both)
 - **Breaking:** `BrandTile` takes `variant` `accent`, `info`, `success`, `warning` (`brand-tile-warning`) or `danger`, and a `soft` boolean. `brand-tile-info`, `-success` and `-danger` are solid; add `brand-tile-soft` for the tint. The tile derives its muted and content colours from the `--color-system-accent` in scope. (both)
 - **Breaking:** `Avatar` takes `square` instead of `shape`, and the `AvatarShape` type is removed. (react)
+- **Breaking:** `alert` is a block instead of a flex column: inline markup flows as one paragraph and the icon and dismiss align to the first line. Put body text after an `alert-title` in `alert-description`; `Alert.Description` renders a `<div>`. (both)
 - **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
@@ -55,6 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `card-title`, `stat-card-label`, `stat-card-trend`, `dialog-title` and `accordion-summary` lay out as text: inline markup wraps with the words and children get no flex gap, so in JSX put `{" "}` before a trailing element. (css)
 - `avatar-group` overlaps scale with the avatar size and take their ring from `--surface-current`, `AvatarGroup` `size` sets its avatars' default size, and the `+N` tile has `role="img"`. `Avatar` `alt` defaults to `""`. (both)
 - `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
+- `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
 
 ### Removed
 

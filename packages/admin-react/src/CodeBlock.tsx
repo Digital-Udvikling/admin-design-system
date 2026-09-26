@@ -10,7 +10,15 @@ export interface CodeBlockProps extends ComponentProps<"pre"> {
  * Styled `<pre>` for logs, JSON dumps, terminal output, raw model output.
  * Theme-following surface via `--color-code-surface` / `--color-code-text`.
  * No syntax highlighting — layer Shiki/Prism on a nested `<code>` if needed.
+ * Focusable (`tabIndex={0}`), so an overflowing block scrolls by keyboard.
  */
 export function CodeBlock({ nowrap, className, ...rest }: CodeBlockProps) {
-  return <pre className={cn(["code-block", nowrap && "code-block-nowrap"], className)} {...rest} />;
+  return (
+    <pre
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- keyboard scrolling (WCAG 2.1.1)
+      tabIndex={0}
+      className={cn(["code-block", nowrap && "code-block-nowrap"], className)}
+      {...rest}
+    />
+  );
 }

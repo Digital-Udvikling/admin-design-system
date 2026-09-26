@@ -66,12 +66,18 @@
     @apply flex shrink-0 items-center gap-1 ml-auto -my-1 min-h-7;
   }
 
-  /* Icon-only small buttons, also as a menu trigger or in a tooltip-wrap, are a 28px square
-     (the size of .dialog-close); labelled buttons and other controls keep their size.
+  /* Icon-only small buttons, also as a menu trigger or in a tooltip-wrap, are a fixed square:
+     26px like the rest of the sm row, 28px when borderless (the size of .dialog-close).
+     Labelled buttons and other controls keep their size.
      Child combinators keep the popup's menu-item icons at 1em. */
   .card-toolbar > .btn-sm.btn-square,
   .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square {
-    @apply size-7 p-0;
+    @apply size-6.5 p-0;
+  }
+
+  .card-toolbar > .btn-sm.btn-square:is(.btn-ghost, .btn-danger-ghost),
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square:is(.btn-ghost, .btn-danger-ghost) {
+    @apply size-7;
   }
 
   /* No line box around the trigger: an SVG-only summary would sit on the baseline and
@@ -83,7 +89,7 @@
   .card-toolbar > :is(i, svg),
   .card-toolbar > .btn-sm.btn-square > :is(i, svg),
   .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square > :is(i, svg) {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   .card-description {
@@ -111,6 +117,11 @@
     @apply pt-0;
   }
 
+  /* 6px inside the 8px card, like controls and alerts, so the corners stay concentric. */
+  .card-body > .item-group-bordered {
+    --item-group-radius: var(--radius-md);
+  }
+
   .card-compact .card-body {
     @apply p-3 gap-2;
   }
@@ -124,7 +135,7 @@
     @apply border-border-strong;
   }
 
-  /* Fills with the page background so the panel sits flush instead of raised. */
+  /* Fills with the page background so the panel sits flush with it. */
   .card-muted {
     @apply bg-surface;
     --surface-current: var(--color-surface);

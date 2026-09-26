@@ -72,13 +72,14 @@
   /* The end rows round themselves instead of the group clipping, so vanilla
      tooltips and menus can overflow it. */
   .item-group-bordered {
-    @apply border border-border rounded-lg;
+    --item-group-radius: var(--radius-lg);
+    @apply border border-border rounded-(--item-group-radius);
   }
   .item-group-bordered > .item:first-child {
-    @apply rounded-t-[calc(var(--radius-lg)-1px)];
+    @apply rounded-t-[calc(var(--item-group-radius)-1px)];
   }
   .item-group-bordered > .item:last-child {
-    @apply rounded-b-[calc(var(--radius-lg)-1px)];
+    @apply rounded-b-[calc(var(--item-group-radius)-1px)];
   }
 
   /* Clickable row. The primary link (the <a> in item-title, or an <a> content

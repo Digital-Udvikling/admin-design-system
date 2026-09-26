@@ -298,21 +298,21 @@ For list semantics pass `role="list"` to `ItemGroup` and `role="listitem"` to ea
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                                      |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                                              |
-| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem` (`1rem` in `item-sm`, `1.5rem` in `item-lg`) |
-| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink; long values such as emails and URLs wrap anywhere    |
-| `item-title`          | Primary line: medium weight, tight leading                                                                                  |
-| `item-description`    | Secondary line: muted, snug leading                                                                                         |
-| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                            |
-| `item-outline`        | `1px` border, `0.5rem` radius                                                                                               |
-| `item-muted`          | Muted surface, `0.5rem` radius                                                                                              |
-| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                        |
-| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                           |
-| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                                 |
-| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it   |
-| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus    |
+| Class                 | Effect                                                                                                                                                           |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `item`                | Flex row, `0.75rem` gap, `0.75rem`/`0.5rem` padding, `text-sm`                                                                                                   |
+| `item-media`          | Leading slot, muted, never shrinks; a child `<i>`/`<svg>` renders at `1.25rem` (`1rem` in `item-sm`, `1.5rem` in `item-lg`)                                      |
+| `item-content`        | Text column, `0.125rem` gap, takes the remaining width and may shrink; long values such as emails and URLs wrap anywhere                                         |
+| `item-title`          | Primary line: medium weight, tight leading                                                                                                                       |
+| `item-description`    | Secondary line: muted, snug leading                                                                                                                              |
+| `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                                                                 |
+| `item-outline`        | `1px` border, `0.5rem` radius                                                                                                                                    |
+| `item-muted`          | Muted surface, `0.5rem` radius                                                                                                                                   |
+| `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                                                             |
+| `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                                                                |
+| `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                                                                      |
+| `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius (`0.375rem` directly in a `card-body`); the end rows round to match, so tooltips and menus can overflow it |
+| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus                                         |
 
 There is no `item-md` or `item-default` — both are the unmodified `item`. `[data-selected]` on an `item` fills it with `primary-muted`, the same selection tint as table rows, and raises the description to `text`; two adjacent selected items keep a strong divider. Unlike a table row, an item isn't tinted by an `aria-current` link alone. For list semantics use `<ul class="item-group">` with `<li class="item">` rows.
 

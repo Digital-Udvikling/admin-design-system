@@ -28,7 +28,7 @@
     @apply bg-transparent text-text border-transparent;
   }
 
-  /* Fills with the page background so it sits flush instead of raised — mirrors `card-muted`. */
+  /* Fills with the page background so it sits flush with it, like `card-muted`. */
   .btn-muted {
     --btn-hover: var(--color-surface-hover);
     @apply bg-surface;

@@ -14,6 +14,7 @@
   - [Media](#media)
   - [Per-slot styling (React only)](#per-slot-styling-react-only)
   - [Two bodies, composed](#two-bodies-composed)
+  - [Linked card](#linked-card)
   - [Scroll region](#scroll-region)
 - [Reference](#reference)
   - [React](#react)
@@ -96,18 +97,13 @@
 <div class="card card-compact card-bordered">
   <div class="card-body">
     <h3 class="card-title">Flat & dense</h3>
-    <p class="card-description">Less padding, stronger border, no shadow.</p>
+    <p class="card-description">Less padding, stronger border.</p>
   </div>
 </div>
 ```
 
 ```tsx
-<Card
-  compact
-  bordered
-  title="Flat & dense"
-  description="Less padding, stronger border, no shadow."
-/>
+<Card compact bordered title="Flat & dense" description="Less padding, stronger border." />
 ```
 
 ### Color variants
@@ -284,10 +280,11 @@
 
 ```html
 <div class="card card-bordered">
-  <div class="card-body" style="border-bottom: 1px solid var(--color-border)">
+  <div class="card-body">
     <h3 class="card-title">Connected</h3>
     <p class="card-description">Last sync 3 minutes ago.</p>
   </div>
+  <hr class="separator" />
   <div class="card-body">
     <div class="card-actions">
       <button class="btn btn-ghost btn-sm">Re-sync now</button>
@@ -299,10 +296,11 @@
 
 ```tsx
 <Card.Container bordered>
-  <Card.Body style={{ borderBottom: "1px solid var(--color-border)" }}>
+  <Card.Body>
     <Card.Title>Connected</Card.Title>
     <Card.Description>Last sync 3 minutes ago.</Card.Description>
   </Card.Body>
+  <Separator />
   <Card.Body>
     <Card.Actions>
       <Button variant="ghost" size="sm">
@@ -316,6 +314,30 @@
 </Card.Container>
 ```
 
+### Linked card
+
+A card that is a link gets a strong border on hover. In React, render `Card.Container` onto your router's link with `render`.
+
+**Example**
+
+```html
+<a class="card" href="#order-1042">
+  <div class="card-body">
+    <h3 class="card-title">Order 1042</h3>
+    <p class="card-description">Shipped 12 Sep · 3 items</p>
+  </div>
+</a>
+```
+
+```tsx
+<Card.Container render={<a href="#order-1042" />}>
+  <Card.Body>
+    <Card.Title>Order 1042</Card.Title>
+    <Card.Description>Shipped 12 Sep · 3 items</Card.Description>
+  </Card.Body>
+</Card.Container>
+```
+
 ### Scroll region
 
 **Example**
@@ -325,7 +347,7 @@
   <div class="card-header">
     <h3 class="card-title">Activity</h3>
   </div>
-  <div class="card-body">
+  <div class="card-body" role="region" tabindex="0" aria-label="Activity">
     <p>Order #1024 placed</p>
     <p>Order #1023 refunded</p>
     <p>Order #1022 shipped</p>
@@ -345,7 +367,7 @@
   <Card.Header>
     <Card.Title>Activity</Card.Title>
   </Card.Header>
-  <Card.Body>
+  <Card.Body role="region" tabIndex={0} aria-label="Activity">
     <p>Order #1024 placed</p>
     <p>Order #1023 refunded</p>
     <p>Order #1022 shipped</p>
@@ -391,32 +413,39 @@
 | `Card`           | `actions`     | `ReactNode`                                                                         | —           |
 | `Card`           | `classNames`  | [slots](../basics/conventions.md#classnames)                                       | —           |
 | `Card.Container` | `scroll`      | `boolean`                                                                           | `false`     |
+| `Card.Container` | `render`      | `ReactElement`                                                                      | —           |
 | `Card.Title`     | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
 
-`Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
+`Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. A shorthand prop that is `null`, `false` or `""` renders nothing, so `actions={canEdit && <Button />}` leaves no empty row; `icon` needs a `title`. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
 
-`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies, a custom divider, a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body.
+`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too. Use it when the layout doesn't fit one body: two bodies split by a [separator](separator.md#splitting-card-sections), a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body. Give the scrolling `Card.Body` `role="region"`, `tabIndex={0}` and an `aria-label` so it scrolls by keyboard.
+
+`render` on `Card.Container` renders the card onto your own element, such as a router link that makes the whole card clickable (see [Conventions › `render`](../basics/conventions.md#render)). Keep buttons out of a linked card.
 
 `toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
 
 ### Vanilla
 
-| Class                                                   | Effect                                                                                                        |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.75rem` radius, extra-small shadow                        |
-| `card-body`                                             | Content region: `1.25rem` padding, `0.75rem` gap                                                              |
-| `card-title`                                            | `text-lg` semibold row, `0.5rem` gap for a leading icon                                                       |
-| `card-header`                                           | Title row that can hold a trailing toolbar                                                                    |
-| `card-toolbar`                                          | Trailing controls pushed to the row end; icons render at `1.25rem`                                            |
-| `card-description`                                      | `text-sm` muted                                                                                               |
-| `card-actions`                                          | Wrapping button row pinned to the bottom of the body, `0.5rem` gap                                            |
-| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                              |
-| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                 |
-| `card-bordered`                                         | No shadow, stronger border                                                                                    |
-| `card-muted`                                            | Fills with the page surface so the panel sits flush rather than raised                                        |
-| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent                                              |
-| `card-warning`                                          | Tinted warning surface and border — title keeps the default colour                                            |
-| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body |
+| Class                                                   | Effect                                                                                                                                                                           |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.5rem` radius                                                                                                                |
+| `card-body`                                             | Content region: `1rem` padding, `0.75rem` gap                                                                                                                                    |
+| `card-title`                                            | `text-base` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                                                  |
+| `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                                                    |
+| `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1rem` icon                                 |
+| `card-description`                                      | `text-sm` muted; `0.5rem` below a `card-title` or `card-header`                                                                                                                  |
+| `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                                                         |
+| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                                                 |
+| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                                                    |
+| `card-bordered`                                         | Stronger border; accent-tinted on the colour variants                                                                                                                            |
+| `card-muted`                                            | Fills with the page surface so the panel sits flush with the page                                                                                                                |
+| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour                                                                                 |
+| `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                                                                                      |
+| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body; give the body `role="region"`, `tabindex="0"` and an `aria-label` |
+
+`card-title` lays out as text, so links, `<strong>` and badges wrap with the words. In JSX, put `{" "}` between the text and a trailing element. An `<i>` or `<svg>` that is the title's first element child hangs before the text as the leading icon, even when text comes first in the markup; wrap a trailing icon in a `<span>` to keep it after the text.
+
+`card-toolbar` resizes a `btn-sm btn-square` that is a direct child, a `menu` trigger or the button in a `tooltip-wrap`: it becomes a `26px` square with a `1rem` icon, or `28px` as a borderless `btn-ghost` or `btn-danger-ghost`, the size of `dialog-close`. Labelled buttons and triggers, badges and inputs keep their own size, and icons in a menu's popup keep theirs.
 
 There is no `card-default` — it's the unmodified `card`. `card-warning` is the one variant whose title isn't accented: yellow on the muted yellow surface fails contrast, as noted in [Conventions › Tones](../basics/conventions.md#tones).
 

@@ -42,7 +42,7 @@ import { IconCircleCheck, IconFilter, IconPlus } from "@tabler/icons-react";
 
 ```tsx
 <div className="flex w-full items-center gap-2">
-  <IconCircleCheck size={16} style={{ color: "var(--color-success)" }} aria-hidden />
+  <IconCircleCheck size="1em" style={{ color: "var(--color-success)" }} aria-hidden />
   <span>Deploy finished</span>
   <Badge variant="success">live</Badge>
 </div>
@@ -99,6 +99,42 @@ import { IconCircleCheck, IconFilter, IconPlus } from "@tabler/icons-react";
 <div className="flex w-full gap-2">
   <Input type="search" placeholder="Search orders" className="flex-1" />
   <Button>Filter</Button>
+</div>
+```
+
+:::
+
+### Truncate
+
+:::example
+
+```html
+<div class="flex w-full items-center gap-2">
+  <div class="min-w-0 flex-1">
+    <p
+      class="truncate font-semibold"
+      title="https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61"
+    >
+      https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
+    </p>
+    <p class="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
+  </div>
+  <button class="btn btn-sm">Edit</button>
+</div>
+```
+
+```tsx
+<div className="flex w-full items-center gap-2">
+  <div className="min-w-0 flex-1">
+    <p
+      className="truncate font-semibold"
+      title="https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61"
+    >
+      https://hooks.example.com/v1/integrations/orders/fulfilment/8f14e45f-ceea-467f-a0d2-9f1e7c3b2a61
+    </p>
+    <p className="truncate text-xs text-text-muted">Last delivery 2 min ago</p>
+  </div>
+  <Button size="sm">Edit</Button>
 </div>
 ```
 
@@ -200,7 +236,7 @@ import { IconCircleCheck, IconFilter, IconPlus } from "@tabler/icons-react";
 <div class="flex w-full flex-wrap items-center gap-3">
   <span class="font-semibold">Orders</span>
   <span class="badge">128</span>
-  <input class="input flex-1" type="search" placeholder="Search" />
+  <input class="input input-sm min-w-32 flex-1" type="search" placeholder="Search" />
   <div class="flex gap-2">
     <button class="btn btn-sm"><i class="ti ti-filter" aria-hidden="true"></i> Filter</button>
     <button class="btn btn-primary btn-sm">
@@ -214,7 +250,7 @@ import { IconCircleCheck, IconFilter, IconPlus } from "@tabler/icons-react";
 <div className="flex w-full flex-wrap items-center gap-3">
   <span className="font-semibold">Orders</span>
   <Badge>128</Badge>
-  <Input type="search" placeholder="Search" className="flex-1" />
+  <Input size="sm" type="search" placeholder="Search" className="min-w-32 flex-1" />
   <div className="flex gap-2">
     <Button size="sm" icon={IconFilter}>
       Filter
@@ -230,7 +266,7 @@ import { IconCircleCheck, IconFilter, IconPlus } from "@tabler/icons-react";
 
 ## Reference
 
-There is no `.row` class — see [Conventions › Layout](../../basics/conventions/#layout) for where the utilities come from. The class names are identical in both bundles, so the two tabs above differ only in `class` vs `className`.
+There is no `.row` class — see [Conventions › Layout](../../basics/conventions/#layout) for where the utilities come from. The utility class names are identical in both bundles, and admin components in the React tabs render the same classes as the HTML tabs.
 
 | Utility     | Effect                                                                           |
 | ----------- | -------------------------------------------------------------------------------- |
@@ -240,6 +276,9 @@ There is no `.row` class — see [Conventions › Layout](../../basics/conventio
 | `items-*`   | Cross-axis alignment: `center` is the usual one, plus `start`, `end`, `baseline` |
 | `justify-*` | Main-axis distribution: `between`, `end`, `center`, `around`                     |
 | `flex-1`    | One child absorbs the leftover space; the others keep their natural size         |
+| `min-w-0`   | Lets a flex child shrink below its content, so `truncate` inside it can clip     |
+| `shrink-0`  | Keeps a child at its natural size when the row runs out of space                 |
+| `truncate`  | Clips overflowing text to one line with an ellipsis                              |
 | `flex-wrap` | Overflowing children move to a new line                                          |
 | `divide-x`  | Hairline between children, no border class on each. Add `px-*` to the children   |
 | `order-*`   | Reorders children visually                                                       |

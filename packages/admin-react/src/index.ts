@@ -120,8 +120,8 @@ export {
   StatCard,
   type StatCardProps,
   type StatCardTrend,
-  type TrendDirection,
-  type TrendIntent,
+  type StatCardTrendDirection,
+  type StatCardTrendIntent,
 } from "./StatCard";
 export {
   Timeline,

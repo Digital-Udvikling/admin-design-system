@@ -46,6 +46,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Form controls use the `rounded-md` radius. Input groups square joined corners regardless of stylesheet order, keep the outer radius on a React `Select` or `NumberInput` at the group's end, and form their own stacking context, so a focused control doesn't paint over a sticky table header. (css)
 - Dialogs and drawers have a `border-strong` edge, a small shadow and tighter insets, `.drawer` is bordered only on the edge facing the page, `.dialog-auto` shrinks to its content, and dialogs fade out on close. (both)
 - Accordion summary rows are denser with a `1em` `text-muted` chevron, and content in a closed item can't be focused, read by screen readers or matched by find-in-page. (css)
+- Cards are flat with a smaller radius and `1rem` padding, `card-title` is `text-base`, and `card-toolbar` enlarges only bare icons and icon-only buttons. (css)
+- `card-title`, `stat-card-label`, `stat-card-trend`, `dialog-title` and `accordion-summary` lay out as text: inline markup wraps with the words and children get no flex gap, so in JSX put `{" "}` before a trailing element. (css)
 
 ### Removed
 

@@ -3,95 +3,214 @@
     @apply flex flex-col
            bg-surface-muted text-text
            border border-border
-           rounded-xl
-           shadow-xs;
+           rounded-lg;
+    --surface-current: var(--color-surface-muted);
     /* min-width: 0 lets the card shrink inside a flex/grid track instead of forcing it wide. */
     overflow-wrap: break-word;
     min-width: 0;
   }
 
-  .card-body {
-    @apply flex flex-col gap-3 p-5;
+  /* A card that is itself a link (`<a class="card">`, React `render`): a strong edge on hover. */
+  .card:any-link {
+    @apply transition-colors duration-150
+           hover:border-border-strong
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
+  .card-body {
+    @apply flex flex-col gap-3 p-4;
+  }
+
+  /* The last body fills a stretched card so `card-actions` (mt-auto) reaches the bottom.
+     Only media may follow it: a header body above a table or list keeps its height. */
+  .card > .card-body:not(:has(~ :not(.card-media))) {
+    flex-grow: 1;
+  }
+
+  /* Block flow, not flex, so links, <strong> and badges wrap as one run of text. */
   .card-title {
-    @apply flex items-center gap-2 text-lg font-semibold leading-tight;
+    @apply text-base font-semibold leading-tight;
     /* Let a long title wrap instead of widening the card. */
     min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .card-title:has(> :is(i, svg):first-child) {
+    padding-inline-start: calc(1em + 0.5rem);
+  }
+
+  /* Floated into the padding so it sits on the first line and markup whitespace
+     can't shift the text; 0.125em centres 1em in the 1.25 line box. */
+  .card-title > :is(i, svg):first-child {
+    float: inline-start;
+    margin-inline-start: calc(-1em - 0.5rem);
+    margin-block-start: 0.125em;
+  }
+
+  /* Preflight makes <svg> a block; in title text it flows inline like the webfont <i>,
+     and -0.125em puts it where the webfont glyph sits on the line. */
+  .card-title svg {
+    display: inline-block;
+    vertical-align: -0.125em;
+  }
+
+  /* Top-aligned and moved to the line centre, so a badge doesn't grow the title as baseline would. */
+  .card-title > .badge {
+    vertical-align: top;
+    translate: 0 calc(1rem * 1.25 / 2 - 50%);
+    /* With the markup space, 8px like a gap-2 header row. */
+    margin-inline-start: 0.25rem;
   }
 
   .card-header {
-    @apply flex items-center gap-2;
+    @apply flex items-start gap-2;
   }
 
-  /* -mt-0.5 nudges the controls up to the optical centre — the bold title type
-     sits high in its line box. */
+  /* A 28px row that -my-1 shrinks to 20px of layout: items-center centres any
+     control on the title's first line without making the header taller. */
   .card-toolbar {
-    @apply flex items-center gap-1 ml-auto -mt-0.5;
+    @apply flex shrink-0 items-center gap-1 ml-auto -my-1 min-h-7;
   }
 
-  /* font-size enlarges both icon flavours identically — the Tabler webfont and
-     React's `size="1em"` SVG. */
-  .card-toolbar :is(i, svg) {
-    font-size: 1.25rem;
+  /* Icon-only small buttons (bare, menu trigger, tooltip-wrap) are a fixed square: 26px like
+     the sm row, 28px borderless like .dialog-close. Child combinators spare menu-item icons. */
+  .card-toolbar > .btn-sm.btn-square,
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square {
+    @apply size-6.5 p-0;
+  }
+
+  .card-toolbar > .btn-sm.btn-square:is(.btn-ghost, .btn-danger-ghost),
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square:is(.btn-ghost, .btn-danger-ghost) {
+    @apply size-7;
+  }
+
+  /* No line box: an SVG-only trigger would sit on the baseline with strut height under it. */
+  .card-toolbar > .menu {
+    display: flex;
+  }
+
+  .card-toolbar > :is(i, svg),
+  .card-toolbar > .btn-sm.btn-square > :is(i, svg),
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square > :is(i, svg) {
+    font-size: 1rem;
   }
 
   .card-description {
     @apply text-sm text-text-muted;
   }
 
+  /* 8px, closer than the body gap. After a header it also clears the toolbar overhang, so
+     descriptions stay level across cards with and without toolbars. */
+  :is(.card-title, .card-header) + .card-description {
+    @apply -mt-1;
+  }
+
   .card-actions {
     @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
+  }
+
+  /* A button wider than the row wraps its label; shorter ones still move to the next line whole. */
+  .card-actions > .btn {
+    white-space: normal;
+  }
+
+  /* pt-2 separates actions from content above; a footer body has none. */
+  .card-actions:first-child {
+    @apply pt-0;
+  }
+
+  /* 6px inside the 8px card, like controls and alerts, so the corners stay concentric. */
+  .card-body > .item-group-bordered {
+    --_item-group-radius: var(--radius-md);
   }
 
   .card-compact .card-body {
     @apply p-3 gap-2;
   }
 
-  .card-bordered {
-    @apply shadow-none border-border-strong;
+  /* The compact body gap is already 8px. */
+  .card-compact :is(.card-title, .card-header) + .card-description {
+    @apply mt-0;
   }
 
-  /* Fills with the page background so the panel sits flush instead of raised. */
+  .card-bordered {
+    @apply border-border-strong;
+  }
+
+  /* Takes the page background. */
   .card-muted {
     @apply bg-surface;
+    --surface-current: var(--color-surface);
   }
 
   /* Color variants — tinted surface + accent title, mirroring Alert. */
   .card-primary {
     @apply bg-primary-muted border-primary-muted;
+    --surface-current: var(--color-primary-muted);
   }
 
   .card-info {
     @apply bg-info-muted border-info-muted;
+    --surface-current: var(--color-info-muted);
   }
 
   .card-success {
     @apply bg-success-muted border-success-muted;
+    --surface-current: var(--color-success-muted);
   }
 
   .card-warning {
     @apply bg-warning-muted border-warning-muted;
+    --surface-current: var(--color-warning-muted);
   }
 
   .card-danger {
     @apply bg-danger-muted border-danger-muted;
+    --surface-current: var(--color-danger-muted);
+  }
+
+  /* `bordered` on a tint draws an accent edge instead of the fill colour. */
+  .card-bordered.card-primary {
+    border-color: color-mix(in oklab, var(--color-primary) 25%, var(--color-primary-muted));
+  }
+
+  .card-bordered.card-info {
+    border-color: color-mix(in oklab, var(--color-info) 40%, var(--color-info-muted));
+  }
+
+  .card-bordered.card-success {
+    border-color: color-mix(in oklab, var(--color-success) 40%, var(--color-success-muted));
+  }
+
+  .card-bordered.card-warning {
+    border-color: color-mix(in oklab, var(--color-warning) 40%, var(--color-warning-muted));
+  }
+
+  .card-bordered.card-danger {
+    border-color: color-mix(in oklab, var(--color-danger) 40%, var(--color-danger-muted));
+  }
+
+  /* Muted text drops below 4.5:1 on the tints; size and weight carry the hierarchy. */
+  .card:is(.card-primary, .card-info, .card-success, .card-warning, .card-danger)
+    :is(.card-description, .chart-legend, .chart-bar-label, .chart-bar-value) {
+    @apply text-text;
   }
 
   .card-primary .card-title {
     @apply text-primary;
   }
 
+  /* 15% text keeps the accent at 4.5:1 on its own tint in both modes. */
   .card-info .card-title {
-    @apply text-info;
+    color: color-mix(in oklab, var(--color-info) 85%, var(--color-text));
   }
 
   .card-success .card-title {
-    @apply text-success;
+    color: color-mix(in oklab, var(--color-success) 85%, var(--color-text));
   }
 
   .card-danger .card-title {
-    @apply text-danger;
+    color: color-mix(in oklab, var(--color-danger) 85%, var(--color-text));
   }
 
   /* No `.card-warning .card-title` rule — the yellow-400 accent fails AA on
@@ -118,7 +237,7 @@
      Direct-child header/actions gain padding + a divider since inside
      .card-body they carry none. */
   .card-scroll > .card-header {
-    @apply shrink-0 px-5 py-3 border-b border-border;
+    @apply shrink-0 px-4 py-3 border-b border-border;
   }
   .card-scroll > .card-body {
     @apply flex-1 min-h-0 overflow-y-auto;
@@ -129,7 +248,7 @@
     border-bottom-right-radius: inherit;
   }
   .card-scroll > .card-actions {
-    @apply shrink-0 px-5 py-3 border-t border-border;
+    @apply shrink-0 px-4 py-3 border-t border-border;
   }
   .card-compact.card-scroll > :is(.card-header, .card-actions) {
     @apply px-3 py-2;

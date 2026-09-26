@@ -1,6 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
+import { hasNode } from "./slot";
 
 export type CardVariant =
   | "default"
@@ -18,6 +20,8 @@ export interface CardContainerProps extends ComponentProps<"div"> {
   compact?: boolean;
   /** Pins direct-child header/actions and scrolls the body. Set the height yourself. */
   scroll?: boolean;
+  /** Element to render in place of the `<div>`; a router link makes the whole card clickable. */
+  render?: RenderElement;
 }
 
 /**
@@ -29,24 +33,23 @@ function CardContainer({
   bordered,
   compact,
   scroll,
+  render,
   className,
   ...rest
 }: CardContainerProps) {
-  return (
-    <div
-      className={cn(
-        [
-          "card",
-          variant !== "default" && `card-${variant}`,
-          bordered && "card-bordered",
-          compact && "card-compact",
-          scroll && "card-scroll",
-        ],
-        className,
-      )}
-      {...rest}
-    />
-  );
+  return renderAs("div", render, {
+    className: cn(
+      [
+        "card",
+        variant !== "default" && `card-${variant}`,
+        bordered && "card-bordered",
+        compact && "card-compact",
+        scroll && "card-scroll",
+      ],
+      className,
+    ),
+    ...rest,
+  });
 }
 
 export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
@@ -56,7 +59,7 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
   compact?: boolean;
   /** Full-bleed media rendered as `<Card.Media>` above the body. */
   media?: ReactNode;
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Card.Title>`. */
   title?: ReactNode;
@@ -92,8 +95,8 @@ function CardRoot({
   children,
   ...rest
 }: CardProps) {
-  const hasTitle = icon !== undefined || title !== undefined;
-  const titleEl = hasTitle ? (
+  // An icon alone would be an empty heading, so the title row needs a title.
+  const titleEl = hasNode(title) ? (
     <CardTitle icon={icon} className={classNames?.title}>
       {title}
     </CardTitle>
@@ -106,9 +109,9 @@ function CardRoot({
       className={className}
       {...rest}
     >
-      {media !== undefined ? <CardMedia className={classNames?.media}>{media}</CardMedia> : null}
+      {hasNode(media) ? <CardMedia className={classNames?.media}>{media}</CardMedia> : null}
       <CardBody className={classNames?.body}>
-        {toolbar !== undefined ? (
+        {hasNode(toolbar) ? (
           <CardHeader className={classNames?.header}>
             {titleEl}
             <CardToolbar className={classNames?.toolbar}>{toolbar}</CardToolbar>
@@ -116,11 +119,11 @@ function CardRoot({
         ) : (
           titleEl
         )}
-        {description !== undefined ? (
+        {hasNode(description) ? (
           <CardDescription className={classNames?.description}>{description}</CardDescription>
         ) : null}
         {children}
-        {actions !== undefined ? (
+        {hasNode(actions) ? (
           <CardActions className={classNames?.actions}>{actions}</CardActions>
         ) : null}
       </CardBody>

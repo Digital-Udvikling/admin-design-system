@@ -32,7 +32,7 @@ import { AdminRoot, Button, Card, Input } from "@aortl/admin-react";
 export function SignIn() {
   return (
     <AdminRoot>
-      <Card>
+      <Card.Container>
         <Card.Body>
           <Card.Title>Sign in</Card.Title>
           <Input placeholder="Email" />
@@ -42,7 +42,7 @@ export function SignIn() {
             <Button variant="ghost">Cancel</Button>
           </Card.Actions>
         </Card.Body>
-      </Card>
+      </Card.Container>
     </AdminRoot>
   );
 }

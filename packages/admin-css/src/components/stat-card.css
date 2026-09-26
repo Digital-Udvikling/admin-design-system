@@ -5,16 +5,31 @@
     @apply gap-1 p-4;
   }
 
+  /* Block flow, not flex, so mixed inline content wraps as one run of text. */
   .stat-card-label {
-    @apply flex items-center gap-2 text-sm text-text-muted font-medium;
+    @apply text-sm text-text-muted font-medium;
+    overflow-wrap: anywhere;
   }
 
-  .stat-card-label > :is(i, svg) {
-    flex-shrink: 0;
+  .stat-card-label:has(> :is(i, svg):first-child) {
+    padding-inline-start: calc(1em + 0.5rem);
+  }
+
+  /* Hanging icon, as on `.card-title`: centred on the first 1.25rem line. */
+  .stat-card-label > :is(i, svg):first-child {
+    float: inline-start;
+    margin-inline-start: calc(-1em - 0.5rem);
+    margin-block-start: calc((1.25rem - 1em) / 2);
+  }
+
+  /* Inline like the webfont <i>, as on `.card-title`: preflight makes <svg> a block. */
+  .stat-card-label svg {
+    display: inline-block;
+    vertical-align: -0.125em;
   }
 
   .stat-card-value {
-    @apply text-2xl font-bold tabular-nums leading-tight;
+    @apply text-2xl font-semibold tabular-nums leading-tight;
   }
 
   .stat-card-detail {
@@ -23,12 +38,18 @@
 
   /* Trend delta — caret drawn from borders (no icon dependency) plus a value.
      `data-trend` rotates the caret; `data-intent` colors it, kept independent
-     because up is not always good (a rising error rate is bad). */
+     because up is not always good (a rising error rate is bad). The caret
+     hangs in the padding like the label icon, centred on the first 1.25rem line. */
   .stat-card-trend {
-    @apply inline-flex items-center gap-1 text-sm font-medium tabular-nums text-text-muted;
+    @apply text-sm font-medium tabular-nums text-text-muted;
+    padding-inline-start: calc(0.6em + 0.25rem);
+    overflow-wrap: anywhere;
   }
   .stat-card-trend::before {
     content: "";
+    float: inline-start;
+    margin-inline-start: calc(-0.6em - 0.25rem);
+    margin-block-start: calc((1.25rem - 0.42em) / 2);
     width: 0;
     height: 0;
     border-inline: 0.3em solid transparent;
@@ -40,6 +61,7 @@
   }
   .stat-card-trend[data-trend="flat"]::before {
     width: 0.55em;
+    margin-block-start: calc((1.25rem - 0.16em) / 2);
     border-inline: 0;
     border-block-end: 0;
     border-block-start: 0.16em solid currentColor;
@@ -57,6 +79,16 @@
   /* `.card-compact` targets `.card-body`; with no body, step the root instead. */
   .card-compact.stat-card {
     @apply p-3 gap-0.5;
+  }
+
+  /* Muted text drops below 4.5:1 on the tints; size and weight carry the hierarchy. */
+  .card:is(.card-primary, .card-info, .card-success, .card-warning, .card-danger)
+    :is(
+      .stat-card-label,
+      .stat-card-detail,
+      .stat-card-trend:not([data-intent="positive"], [data-intent="negative"])
+    ) {
+    @apply text-text;
   }
 
   /* Tint the value to the card variant's accent. `warning` is skipped like

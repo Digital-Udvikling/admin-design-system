@@ -1,11 +1,15 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import { AdminRoot } from "./AdminRoot";
 import { Dialog } from "./Dialog";
 import { Select } from "./Select";
 import { adminSelector } from "./test-setup";
+
+function StubIcon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+  return <svg data-testid="icon" {...props} />;
+}
 
 describe("Select", () => {
   it("renders trigger and subparts", () => {
@@ -27,6 +31,74 @@ describe("Select", () => {
       </Select>,
     );
     expect(screen.getByRole("combobox", { name: "fruit" })).toBeInTheDocument();
+  });
+
+  it("marks the value span so a long value truncates", () => {
+    render(
+      <Select defaultValue="apple">
+        <Select.Trigger aria-label="fruit">
+          <Select.Value data-testid="value" />
+          <Select.Icon />
+        </Select.Trigger>
+      </Select>,
+    );
+    expect(screen.getByTestId("value")).toHaveAdminClass("select-value");
+  });
+
+  it("maps size to the size class", () => {
+    render(
+      <Select>
+        <Select.Trigger aria-label="sm" size="sm" />
+        <Select.Trigger aria-label="md" />
+        <Select.Trigger aria-label="lg" size="lg" />
+      </Select>,
+    );
+    expect(screen.getByRole("combobox", { name: "sm" })).toHaveAdminClass("select-sm");
+    expect(screen.getByRole("combobox", { name: "lg" })).toHaveAdminClass("select-lg");
+    expect(screen.getByRole("combobox", { name: "md" })).not.toHaveAdminClass("select-md");
+  });
+
+  it("renders the icon prop before the value, aria-hidden", () => {
+    render(
+      <Select>
+        <Select.Trigger aria-label="shop" icon={StubIcon}>
+          <Select.Value placeholder="Pick" />
+          <Select.Icon />
+        </Select.Trigger>
+      </Select>,
+    );
+    const trigger = screen.getByRole("combobox", { name: "shop" });
+    const icon = screen.getByTestId("icon");
+    expect(trigger.firstElementChild).toBe(icon);
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon.nextElementSibling).toHaveAdminClass("select-value");
+  });
+
+  it("types onValueChange from the value", () => {
+    type Status = "open" | "closed";
+    function StatusSelect({ status }: { status: Status }) {
+      return (
+        <Select
+          value={status}
+          onValueChange={(next) => expectTypeOf(next).toEqualTypeOf<Status | null>()}
+        >
+          <Select.Trigger aria-label="status" />
+        </Select>
+      );
+    }
+    render(<StatusSelect status="open" />);
+    // @ts-expect-error -- a handler for another value type must not type-check
+    render(<Select value="open" onValueChange={(next: number) => next} />);
+    render(
+      <Select<Status, true>
+        multiple
+        defaultValue={["open"]}
+        onValueChange={(next) => expectTypeOf(next).toEqualTypeOf<Status[]>()}
+      >
+        <Select.Trigger aria-label="statuses" />
+      </Select>,
+    );
+    expect(screen.getByRole("combobox", { name: "status" })).toBeInTheDocument();
   });
 
   describe("interactions", () => {
@@ -134,6 +206,41 @@ describe("Select", () => {
       const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement | null;
       expect(popup).not.toBeNull();
       expect(popup?.parentElement).toHaveAdminClass("popup-layer");
+    });
+
+    it("start-aligns the popup with the trigger by default", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <Select.Trigger aria-label="fruit">
+            <Select.Value placeholder="Pick" />
+          </Select.Trigger>
+          <Select.Popup>
+            <Select.Item value="apple">Apple</Select.Item>
+          </Select.Popup>
+        </Select>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const popup = document.querySelector(adminSelector("select-popup")) as HTMLElement;
+      expect(popup.parentElement).toHaveAttribute("data-align", "start");
+    });
+
+    it("forwards side and align to the positioner", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <Select.Trigger aria-label="fruit">
+            <Select.Value placeholder="Pick" />
+          </Select.Trigger>
+          <Select.Popup side="top" align="end">
+            <Select.Item value="apple">Apple</Select.Item>
+          </Select.Popup>
+        </Select>,
+      );
+      await user.click(screen.getByRole("combobox", { name: "fruit" }));
+      const positioner = document.querySelector(adminSelector("select-popup"))?.parentElement;
+      expect(positioner).toHaveAttribute("data-side", "top");
+      expect(positioner).toHaveAttribute("data-align", "end");
     });
 
     it("controlled: value prop drives the trigger via onValueChange round-trip", async () => {

@@ -132,15 +132,14 @@
     @apply w-full;
   }
 
-  /* Members take their width from the row, like btn-full-width, so labels wrap. */
+  /* A squeezed horizontal strip wraps its labels instead of overflowing; full-width members
+     take their width from the row, like btn-full-width. */
+  .btn-group:not(.btn-group-vertical) > .btn,
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap) > .btn,
+  .btn-group:not(.btn-group-vertical) > .menu > .menu-trigger,
   .btn-group-full-width > .btn,
   .btn-group-full-width > :is(.indicator, .tooltip-wrap) > .btn,
   .btn-group-full-width > .menu > .menu-trigger {
     @apply whitespace-normal;
-  }
-
-  /* Above the focus-raised (z-10) neighbours, which would otherwise cover it. */
-  .btn-group > .tooltip-wrap > .tooltip {
-    @apply z-20;
   }
 }

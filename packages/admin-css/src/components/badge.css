@@ -1,16 +1,22 @@
 @layer components {
-  /* `w-fit` stops a flex-column or grid parent from stretching the pill. */
+  /* `w-fit` stops a flex-column or grid parent from stretching the pill. The border keeps
+     the neutral pill visible on a stripe or card fill that matches surface-strong. */
   .badge {
     @apply inline-flex items-center justify-center gap-1
            w-fit px-2 h-5 rounded-full
            text-xs font-medium leading-none whitespace-nowrap
-           border border-transparent
+           border border-border
            bg-surface-strong text-text;
   }
 
   /* Keep a status dot or leading glyph round when the label is long. */
   .badge > :is(i, svg) {
     flex-shrink: 0;
+  }
+
+  /* Overhangs the button's padding instead of growing it past its line box. */
+  .btn > .badge {
+    margin-block: -0.25rem;
   }
 
   /* Variants — solid status fills matching the alert palette; bare `.badge` is the neutral look. */
@@ -32,7 +38,7 @@
 
   /* Solid neutral — high-contrast ink fill (counts on tabs, etc.) */
   .badge-primary {
-    @apply bg-primary text-primary-content;
+    @apply bg-primary text-primary-content border-primary;
   }
 
   /* Soft — composable modifier, pairs with a variant class; bare `.badge` is already the soft neutral.

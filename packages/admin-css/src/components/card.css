@@ -53,6 +53,8 @@
   .card-title > .badge {
     vertical-align: top;
     translate: 0 calc(1.125rem * 1.25 / 2 - 50%);
+    /* With the markup space, 8px like a gap-2 header row. */
+    margin-inline-start: 0.25rem;
   }
 
   .card-header {
@@ -65,15 +67,23 @@
     @apply flex shrink-0 items-center gap-1 ml-auto -my-1 min-h-7;
   }
 
-  /* Icon-only small buttons, and a chevron-only menu trigger, are a 28px square
-     (the size of .dialog-close); labelled buttons and nested controls keep their size. */
+  /* Icon-only small buttons, also as a menu trigger or in a tooltip-wrap, are a 28px square
+     (the size of .dialog-close); labelled buttons and other controls keep their size.
+     Child combinators keep the popup's menu-item icons at 1em. */
   .card-toolbar > .btn-sm.btn-square,
-  .card-toolbar > .menu > .btn-sm.btn-square:empty {
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square {
     @apply size-7 p-0;
   }
 
+  /* No line box around the trigger: an SVG-only summary would sit on the baseline and
+     the strut would add height under it. */
+  .card-toolbar > .menu {
+    display: flex;
+  }
+
   .card-toolbar > :is(i, svg),
-  .card-toolbar > .btn-sm.btn-square > :is(i, svg) {
+  .card-toolbar > .btn-sm.btn-square > :is(i, svg),
+  .card-toolbar > :is(.menu, .tooltip-wrap) > .btn-sm.btn-square > :is(i, svg) {
     font-size: 1.25rem;
   }
 
@@ -83,6 +93,11 @@
 
   .card-actions {
     @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
+  }
+
+  /* A button wider than the row wraps its label; shorter ones still move to the next line whole. */
+  .card-actions > .btn {
+    white-space: normal;
   }
 
   /* pt-2 separates actions from content above; a footer body has none. */
@@ -153,7 +168,7 @@
 
   /* Muted text drops below 4.5:1 on the tints; size and weight carry the hierarchy. */
   .card:is(.card-primary, .card-info, .card-success, .card-warning, .card-danger)
-    .card-description {
+    :is(.card-description, .chart-legend, .chart-bar-label, .chart-bar-value) {
     @apply text-text;
   }
 

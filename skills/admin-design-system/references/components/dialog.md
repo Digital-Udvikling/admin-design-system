@@ -593,7 +593,7 @@ Plus native `<dialog>` attributes.
 | `dialog-title`       | `text-lg` semibold; a leading icon sits on the first line with a `0.5rem` gap                                                   |
 | `dialog-description` | `text-sm` muted, tucked under the header                                                                                        |
 | `dialog-body`        | The scroll region: header and footer stay pinned, children keep their set height                                                |
-| `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping                                                                     |
+| `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping; a button wider than the row wraps its label                        |
 | `dialog-close`       | `1.75rem` square X button at the header's inline end, centred on the title's first line                                         |
 
 There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.

@@ -104,8 +104,7 @@
   }
 
   /* Selection: [data-selected] or a checked row checkbox (switches and Base UI's
-     hidden inputs excluded). The strong divider keeps adjacent selected rows
-     apart, since primary-muted equals border in light mode. */
+     hidden inputs excluded). */
   .table
     tbody
     tr:is(
@@ -116,6 +115,24 @@
       )
     ) {
     --table-row-bg: var(--color-primary-muted);
+    --surface-current: var(--color-primary-muted);
+  }
+
+  /* A strong divider only between two selected rows: primary-muted equals border in light
+     mode. :has() can't nest, so the next row's tests are relative descendant matches. */
+  .table
+    tbody
+    tr:is(
+      [data-selected],
+      :has(
+        input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+        .checkbox[data-checked]
+      )
+    ):has(
+      + tr[data-selected],
+      + tr input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+      + tr .checkbox[data-checked]
+    ) {
     --table-row-divider: var(--color-border-strong);
   }
 
@@ -147,12 +164,13 @@
   }
 
   /* Whole-row link: the row's first <a> in document order (no earlier sibling of
-     it or of an ancestor holds a link) stretches an ::after over the row. */
+     it or of an ancestor holds a link) stretches a ::before over the row; ::after
+     stays free for link-external's arrow. */
   .table-row-link {
     @apply relative cursor-pointer;
   }
   .table-row-link
-    a:not(.table-row-link :is(a, :has(a)) ~ a, .table-row-link :is(a, :has(a)) ~ * a)::after {
+    a:not(.table-row-link :is(a, :has(a)) ~ a, .table-row-link :is(a, :has(a)) ~ * a)::before {
     content: "";
     @apply absolute inset-0;
   }
@@ -178,7 +196,7 @@
     a:not(
       .table-row-link :is(a, :has(a)) ~ a,
       .table-row-link :is(a, :has(a)) ~ * a
-    ):focus-visible::after {
+    ):focus-visible::before {
     @apply outline-2 -outline-offset-2 outline-focus;
   }
 

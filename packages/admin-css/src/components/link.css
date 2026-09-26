@@ -5,8 +5,14 @@
            rounded-sm transition-colors duration-150
            hover:text-link-hover
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
-    /* `anywhere` also lowers min-content, so a URL can't widen a flex row or table column. */
+    /* `anywhere` also lowers min-content, so a URL can't widen a flex row. */
     overflow-wrap: anywhere;
+  }
+
+  /* Auto-layout table columns size to whole tokens (table.css); a link in a cell breaks
+     only when the cell is constrained. */
+  :where(.table td, .table th, .table-cell) .link {
+    overflow-wrap: break-word;
   }
 
   /* Baseline-aligned so the label sits on the surrounding text's baseline, not the icon's edge. */

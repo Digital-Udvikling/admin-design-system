@@ -401,26 +401,26 @@
 
 ### Vanilla
 
-| Class                                                   | Effect                                                                                                        |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.75rem` radius, extra-small shadow                        |
-| `card-body`                                             | Content region: `1.25rem` padding, `0.75rem` gap                                                              |
-| `card-title`                                            | `text-lg` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                 |
-| `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                 |
-| `card-toolbar`                                          | Trailing controls at the row end; direct-child bare icons and `btn-sm btn-square` get a `1.25rem` icon        |
-| `card-description`                                      | `text-sm` muted                                                                                               |
-| `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card                                   |
-| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                              |
-| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                 |
-| `card-bordered`                                         | No shadow, stronger border; accent-tinted on the colour variants                                              |
-| `card-muted`                                            | Fills with the page surface so the panel sits flush rather than raised                                        |
-| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour              |
-| `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                   |
-| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body |
+| Class                                                   | Effect                                                                                                                                              |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.75rem` radius, extra-small shadow                                                              |
+| `card-body`                                             | Content region: `1.25rem` padding, `0.75rem` gap                                                                                                    |
+| `card-title`                                            | `text-lg` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                       |
+| `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                       |
+| `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1.25rem` icon |
+| `card-description`                                      | `text-sm` muted                                                                                                                                     |
+| `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                            |
+| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                    |
+| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                       |
+| `card-bordered`                                         | No shadow, stronger border; accent-tinted on the colour variants                                                                                    |
+| `card-muted`                                            | Fills with the page surface so the panel sits flush rather than raised                                                                              |
+| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour                                                    |
+| `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                                                         |
+| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body                                       |
 
 `card-title` lays out as text, so links, `<strong>` and badges wrap with the words. In JSX, put `{" "}` between the text and a trailing element. An `<i>` or `<svg>` that is the title's first element child hangs before the text as the leading icon, even when text comes first in the markup; wrap a trailing icon in a `<span>` to keep it after the text.
 
-`card-toolbar` resizes only its direct children: a `btn-sm btn-square` becomes a `28px` square with a `1.25rem` icon, and an empty (chevron-only) `btn-sm btn-square` menu trigger a `28px` square. Labelled buttons, badges, inputs and menu triggers with content keep their own size.
+`card-toolbar` resizes a `btn-sm btn-square` that is a direct child, a `menu` trigger or the button in a `tooltip-wrap`: it becomes a `28px` square with a `1.25rem` icon. Labelled buttons and triggers, badges and inputs keep their own size, and icons in a menu's popup keep theirs.
 
 There is no `card-default` — it's the unmodified `card`. `card-warning` is the one variant whose title isn't accented: yellow on the muted yellow surface fails contrast, as noted in [Conventions › Tones](../basics/conventions.md#tones).
 

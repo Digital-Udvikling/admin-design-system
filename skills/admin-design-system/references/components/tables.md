@@ -962,7 +962,7 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
 </Table>
 ```
 
-**Caution** — The row-filling hit area is an `::after` on the row's first `<a>` in document order, so a row-actions menu or other control with links goes after the row link. Buttons, form controls and later links in the row sit above it and stay clickable. Keyboard focus on that link rings the row. With `table-pin-col`, put the link in a later column; the pinned cell stays outside the row's hit area.
+**Caution** — The row-filling hit area is a `::before` on the row's first `<a>` in document order, so a row-actions menu or other control with links goes after the row link. Buttons, form controls and later links in the row sit above it and stay clickable. Keyboard focus on that link rings the row. With `table-pin-col`, put the link in a later column; the pinned cell stays outside the row's hit area.
 
 ### Footer row
 

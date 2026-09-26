@@ -463,21 +463,21 @@ An icon-only `Button` needs an `aria-label`; a Tooltip is not an accessible name
 
 ### Vanilla
 
-| Class                  | Effect                                                                                                               |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `btn`                  | `1rem`/`0.5rem` padding, `0.5rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap, label doesn't wrap |
-| `btn-primary`          | Brand fill, `primary-content` text, no border colour                                                                 |
-| `btn-ghost`            | No fill or border until hover                                                                                        |
-| `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                                      |
-| `btn-danger`           | Danger fill, `danger-content` text                                                                                   |
-| `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                                              |
-| `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                                            |
-| `btn-full-width`       | `width: 100%`; the label may wrap                                                                                    |
-| `btn-square`           | Equalises the side padding for an icon-only button                                                                   |
-| `btn-loading`          | Dims, blocks pointer events, and paints a `1em` spinner via `::before` in place of the first icon element            |
-| `btn-group`            | Joins its `btn` children into one strip: square inner corners, `1px` overlap, `currentColor` seam                    |
-| `btn-group-vertical`   | Stacks the strip instead, labels aligned to the start                                                                |
-| `btn-group-full-width` | Stretches the group; horizontal `btn` members split the row evenly; labels may wrap                                  |
+| Class                  | Effect                                                                                                                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `btn`                  | `1rem`/`0.5rem` padding, `0.5rem` radius, `text-sm` medium, bordered muted surface, `0.5rem` gap, label doesn't wrap                                 |
+| `btn-primary`          | Brand fill, `primary-content` text, no border colour                                                                                                 |
+| `btn-ghost`            | No fill or border until hover                                                                                                                        |
+| `btn-muted`            | Fills with the page surface so it sits flush rather than raised                                                                                      |
+| `btn-danger`           | Danger fill, `danger-content` text                                                                                                                   |
+| `btn-sm`               | `text-xs`, `0.75rem`/`0.375rem` padding                                                                                                              |
+| `btn-lg`               | `text-base`, `1.25rem`/`0.625rem` padding                                                                                                            |
+| `btn-full-width`       | `width: 100%`; the label may wrap                                                                                                                    |
+| `btn-square`           | Equalises the side padding for an icon-only button                                                                                                   |
+| `btn-loading`          | Dims, blocks pointer events, and paints a `1em` spinner via `::before` in place of the first icon element                                            |
+| `btn-group`            | Joins its `btn` children into one strip: square inner corners, `1px` overlap, `currentColor` seam; horizontal labels wrap when the strip is squeezed |
+| `btn-group-vertical`   | Stacks the strip instead, labels aligned to the start                                                                                                |
+| `btn-group-full-width` | Stretches the group; horizontal `btn` members split the row evenly; labels may wrap                                                                  |
 
 There is no `btn-default` or `btn-md` — both are the unmodified `btn`. The classes work on `<a>` as well as `<button>`.
 

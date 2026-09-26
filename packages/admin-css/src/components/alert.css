@@ -112,6 +112,17 @@
     grid-column: -3;
   }
 
+  /* Without a title, a btn action sits on the first line and overhangs the padding
+     instead of growing the row: 26px btn-sm and 32px btn both take the 20px line. */
+  .alert:not(:has(> .alert-title)) > .alert-action:is(.btn, :has(> .btn)) {
+    align-self: start;
+    margin-block: -0.1875rem;
+  }
+  .alert:not(:has(> .alert-title))
+    > .alert-action:is(.btn:not(.btn-sm, .btn-lg), :has(> .btn:not(.btn-sm, .btn-lg))) {
+    margin-block: -0.375rem;
+  }
+
   /* Solid status fills. Title, icon and nested focus rings take the `-content`
      color: the blue `--color-focus` is invisible on the info fill and under 3:1 on the rest. */
   .alert-info {

@@ -208,7 +208,7 @@
 | `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                         |
 | `item-group`          | Vertical stack that divides its direct `item` children with a bottom border                                               |
 | `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it |
-| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::after`, tints on hover, rings when that link has keyboard focus   |
+| `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus  |
 
 There is no `item-md` or `item-default` — both are the unmodified `item`.
 

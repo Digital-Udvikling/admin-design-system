@@ -266,6 +266,6 @@ There are no sub-parts, so `classNames` — covering `label`, `value`, `trend`, 
 
 `stat-card-trend` reads two attributes: `data-trend` (`up` / `down` / `flat`) rotates the caret, and `data-intent` (`positive` / `negative` / `neutral`) colours it. The caret is drawn from borders, so no icon set is involved. It is decorative: keep the sign or direction in the value text for screen readers.
 
-The value picks up the accent under `card-primary`, `card-info`, `card-success` and `card-danger` — but not `card-warning`, per [Conventions › Tones](../basics/conventions.md#tones). On every tinted variant the label, detail and neutral trend switch from muted to the full text colour, since muted text fails contrast on the tints. A tinted surface signals status, so it stops meaning anything if every tile has one.
+The value picks up the accent under `card-primary`, `card-info`, `card-success` and `card-danger` — but not `card-warning`, per [Conventions › Tones](../basics/conventions.md#tones). On every tinted variant the label, detail, neutral trend and a chart's bar labels, values and legend switch from muted to the full text colour, since muted text fails contrast on the tints. A tinted surface signals status, so it stops meaning anything if every tile has one.
 
 Grid layout is yours: the tile bakes in no wrapper. For free-form tiles use [Cards](cards.md); for label/value pairs, a [Property list](property-list.md).

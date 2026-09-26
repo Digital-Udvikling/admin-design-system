@@ -121,7 +121,7 @@
   }
 
   .dialog-description {
-    @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
+    @apply px-5 -mt-1 mb-3 text-sm text-text-muted;
   }
 
   /* flex-auto (basis auto), not flex-1 (basis 0): Safari collapses a basis-0 flex
@@ -185,6 +185,11 @@
        use `overflow: hidden` on `.dialog` for this; it clips popups. */
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
+  }
+
+  /* A button wider than the row wraps its label; shorter ones still move to the next line whole. */
+  .dialog-footer > .btn {
+    white-space: normal;
   }
 
   /* ms-auto pins the button to the header's end when there is no title. */

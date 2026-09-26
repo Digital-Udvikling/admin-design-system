@@ -100,8 +100,8 @@
     @apply text-base px-5 py-2.5 gap-2.5;
   }
 
-  /* Labels don't wrap, except here and in btn-group-full-width: the width is
-     the container's, so a long label would otherwise overflow it. */
+  /* Labels don't wrap, except where the container sets the width (here, a horizontal
+     btn-group, card-actions, dialog-footer), so a long label would otherwise overflow it. */
   .btn-full-width {
     @apply w-full whitespace-normal;
   }

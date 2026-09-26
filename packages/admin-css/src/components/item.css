@@ -11,6 +11,14 @@
   .item-media > :is(i, svg) {
     font-size: 1.25rem;
   }
+  /* An icon takes the title's line box (leading-tight, 1.25em) and overhangs the padding.
+     Beside a multi-line content column it pins to the first line; avatars stay centred. */
+  .item-media:has(> :is(i, svg)) {
+    height: 1.25em;
+  }
+  .item-media:has(> :is(i, svg)):has(~ .item-content > :nth-child(2)) {
+    align-self: flex-start;
+  }
 
   /* min-w-0 + overflow-wrap let long values (emails, URLs, IDs) wrap inside the
      column instead of running under the actions. */
@@ -68,8 +76,8 @@
   }
 
   /* Clickable row. The primary link (the <a> in item-title, or an <a> content
-     column) stretches over the row via ::after; the actions slot and every
-     other control sit above it. */
+     column) stretches over the row via ::before (::after stays free for
+     link-external's arrow); the actions slot and every other control sit above it. */
   .item-link {
     @apply relative cursor-pointer;
   }
@@ -77,7 +85,7 @@
   .item-link:hover {
     background-image: linear-gradient(var(--color-surface-hover), var(--color-surface-hover));
   }
-  .item-link :is(.item-title a, .item-content > a, a.item-content)::after {
+  .item-link :is(.item-title a, .item-content > a, a.item-content)::before {
     content: "";
     @apply absolute inset-0;
   }

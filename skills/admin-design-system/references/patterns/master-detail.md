@@ -32,7 +32,7 @@
           <td>Ada Lovelace</td>
           <td data-align="right">$129.00</td>
         </tr>
-        <tr class="table-row-link" data-selected>
+        <tr class="table-row-link">
           <td><a href="#1002" aria-current="true">#1002</a></td>
           <td>Grace Hopper</td>
           <td data-align="right">$72.50</td>
@@ -93,7 +93,7 @@
           <Table.Cell>Ada Lovelace</Table.Cell>
           <Table.Cell align="right">$129.00</Table.Cell>
         </Table.Row>
-        <Table.Row asLink selected>
+        <Table.Row asLink>
           <Table.Cell>
             <a href="#1002" aria-current="true">
               #1002

@@ -229,8 +229,11 @@
     from var(--color-system-accent) clamp(0.168, (0.58 - l) * 1000, 1) 0 0
   );
 
-  --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
-  --color-danger-hover: light-dark(var(--color-red-700), var(--color-red-300));
+  /* Dark danger and info are one step past the accent-400 rule, like the link:
+     red-400 is 4.43:1 on the page (text and under black content) and blue-400
+     4.38:1 on a surface-muted card. */
+  --color-danger: light-dark(var(--color-red-600), var(--color-red-300));
+  --color-danger-hover: light-dark(var(--color-red-700), var(--color-red-200));
   --color-danger-muted: light-dark(var(--color-red-50), var(--color-red-950));
   --color-danger-content: light-dark(var(--color-paper), var(--color-black));
 
@@ -247,8 +250,8 @@
   --color-warning-muted: light-dark(var(--color-yellow-50), var(--color-yellow-950));
   --color-warning-content: var(--color-black);
 
-  --color-info: light-dark(var(--color-blue-600), var(--color-blue-400));
-  --color-info-hover: light-dark(var(--color-blue-700), var(--color-blue-300));
+  --color-info: light-dark(var(--color-blue-600), var(--color-blue-300));
+  --color-info-hover: light-dark(var(--color-blue-700), var(--color-blue-200));
   --color-info-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
   --color-info-content: light-dark(var(--color-paper), var(--color-black));
 }

@@ -7,6 +7,7 @@
 - [Examples](#examples)
   - [Default](#default)
   - [Variants](#variants)
+  - [Invalid](#invalid)
   - [Sizes](#sizes)
   - [Groups](#groups)
   - [Leading icon (React only)](#leading-icon-react-only)
@@ -67,9 +68,6 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 <select class="select select-ghost" aria-label="Ghost">
   <option>Ghost</option>
 </select>
-<select class="select select-danger" aria-label="Danger">
-  <option>Danger</option>
-</select>
 ```
 
 ```tsx
@@ -91,13 +89,26 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
     <Select.Item value="x">Ghost</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x" items={{ x: "Danger" }}>
-  <Select.Trigger variant="danger" aria-label="Danger">
+```
+
+### Invalid
+
+**Example**
+
+```html
+<select class="select" aria-label="Warehouse" aria-invalid="true">
+  <option>Choose a warehouse</option>
+</select>
+```
+
+```tsx
+<Select items={{ x: "Choose a warehouse" }} defaultValue="x">
+  <Select.Trigger aria-label="Warehouse" aria-invalid>
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
   <Select.Popup>
-    <Select.Item value="x">Danger</Select.Item>
+    <Select.Item value="x">Choose a warehouse</Select.Item>
   </Select.Popup>
 </Select>
 ```
@@ -300,7 +311,7 @@ A native `<select>` can't hold an icon.
 | Part             | Prop          | Type                                              | Default      |
 | ---------------- | ------------- | ------------------------------------------------- | ------------ |
 | `Select`         | `items`       | `Record<string, ReactNode>` or `{label, value}[]` | —            |
-| `Select.Trigger` | `variant`     | `"bordered" \| "ghost" \| "danger"`               | `"bordered"` |
+| `Select.Trigger` | `variant`     | `"bordered" \| "ghost"`                           | `"bordered"` |
 | `Select.Trigger` | `size`        | `"sm" \| "md" \| "lg"`                            | `"md"`       |
 | `Select.Trigger` | `icon`        | [`IconProp`](../../basics/conventions.md#icons)  | —            |
 | `Select.Popup`   | `side`        | `"top" \| "bottom" \| "left" \| "right"`          | `"bottom"`   |
@@ -318,20 +329,20 @@ To keep every option visible, use [Radios](radios.md); to filter a long list as 
 
 ### Vanilla
 
-| Class / var             | Effect                                                                                                                           |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `select`                | On a native `<select>`: `0.75rem`/`0.5rem` padding, `text-sm`, bordered surface, and a custom chevron                            |
-| `select-ghost`          | Transparent fill and border until hover                                                                                          |
-| `select-danger`         | Danger border and focus outline; `[aria-invalid="true"]`, `[data-invalid]`, `:user-invalid` and an invalid `.field` get the same |
-| `select-sm`             | `text-xs`, tighter padding, smaller chevron                                                                                      |
-| `select-lg`             | `text-base`, looser padding                                                                                                      |
-| `select-value`          | React value span; truncates a long value with an ellipsis                                                                        |
-| `select-icon`           | React chevron slot, `1em` square, pushed to the trigger end; rotates 180° while the popup is open                                |
-| `select-popup`          | React popup: min-width tracks the trigger, `20rem` max width (the trigger's width when wider), `18rem` max height, scrolls       |
-| `select-item`           | React option row; states via `[data-highlighted]`, `[data-selected]`, `[data-disabled]`; inset ring on keyboard focus            |
-| `select-item-indicator` | React checkmark slot, pushed to the row end                                                                                      |
-| `select-group-label`    | React group heading: uppercase, muted, `text-xs`                                                                                 |
-| `popup-layer`           | Applied to the React positioner so portaled popups paint above host chrome                                                       |
-| `--z-popup`             | Read by `popup-layer`, defaults to `1000`. Set it on any ancestor to re-layer                                                    |
+| Class / var             | Effect                                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `select`                | On a native `<select>`: `0.75rem`/`0.5rem` padding, `text-sm`, bordered surface, and a custom chevron                      |
+| `select-ghost`          | Transparent fill and border until hover                                                                                    |
+| `[aria-invalid="true"]` | Danger border and focus outline; `[data-invalid]`, `:user-invalid` and an invalid `.field` get the same                    |
+| `select-sm`             | `text-xs`, tighter padding, smaller chevron                                                                                |
+| `select-lg`             | `text-base`, looser padding                                                                                                |
+| `select-value`          | React value span; truncates a long value with an ellipsis                                                                  |
+| `select-icon`           | React chevron slot, `1em` square, pushed to the trigger end; rotates 180° while the popup is open                          |
+| `select-popup`          | React popup: min-width tracks the trigger, `20rem` max width (the trigger's width when wider), `18rem` max height, scrolls |
+| `select-item`           | React option row; states via `[data-highlighted]`, `[data-selected]`, `[data-disabled]`; inset ring on keyboard focus      |
+| `select-item-indicator` | React checkmark slot, pushed to the row end                                                                                |
+| `select-group-label`    | React group heading: uppercase, muted, `text-xs`                                                                           |
+| `popup-layer`           | Applied to the React positioner so portaled popups paint above host chrome                                                 |
+| `--z-popup`             | Read by `popup-layer`, defaults to `1000`. Set it on any ancestor to re-layer                                              |
 
 Use `<optgroup>` for groups. A selected `<option value="">` renders muted, like the React placeholder. The native chevron is a background image whose stroke matches the default `text-muted` in light and dark mode; a data URI can't read CSS variables, so it doesn't follow token overrides. The six React-only classes above ship in both bundles but have no native equivalent to attach to.

@@ -88,30 +88,12 @@
 
   .input-group
     > :is(
-      .input-danger,
-      .input-info,
-      .input-success,
-      .input-warning,
-      .select-danger,
-      .file-input-danger,
-      .number-input-danger,
       [aria-invalid="true"],
       [data-invalid],
       :user-invalid,
-      :has(
-        > :is(
-          .input-danger,
-          .input-info,
-          .input-success,
-          .input-warning,
-          [aria-invalid="true"],
-          [data-invalid],
-          :user-invalid
-        )
-      )
+      :has(> :is([aria-invalid="true"], [data-invalid], :user-invalid))
     ),
-  :where(.input-group > .number-input-root)
-    > .number-input:is(.number-input-danger, [data-invalid]),
+  :where(.input-group > .number-input-root) > .number-input[data-invalid],
   :where(.field[data-invalid])
     .input-group
     > :is(.input, .select, .file-input, .number-input, .input-icon),

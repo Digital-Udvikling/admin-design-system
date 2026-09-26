@@ -18,7 +18,7 @@ function ComboboxRoot<Value, Multiple extends boolean | undefined = false>(
   return <BaseCombobox.Root {...props} />;
 }
 
-export type ComboboxControlVariant = "bordered" | "ghost" | "danger";
+export type ComboboxControlVariant = "bordered" | "ghost";
 export type ComboboxControlSize = "sm" | "md" | "lg";
 
 export interface ComboboxControlProps extends ComponentProps<typeof BaseCombobox.InputGroup> {

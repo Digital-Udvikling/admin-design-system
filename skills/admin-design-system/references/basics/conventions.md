@@ -26,6 +26,8 @@ What holds across the whole library. Component pages list their own props and cl
 
 Position and direction props (`side`, `align`, `orientation`) take the values Base UI and ARIA use.
 
+Invalid is a state, not a variant. Form controls take `variant="bordered"` or `"ghost"`; `aria-invalid="true"`, `:user-invalid` and an invalid [Field](../components/forms/fields.md) turn either one danger.
+
 ## Sizes
 
 Three sizes, named the same everywhere. `md` is the default and emits **no** class — `sm` and `lg` add `<base>-sm` / `<base>-lg`.

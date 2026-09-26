@@ -15,31 +15,29 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 ```html
 <input class="input" placeholder="Bordered (default)" />
 <input class="input input-ghost" placeholder="Ghost" />
-<input class="input input-danger" aria-label="Danger" value="invalid" />
 ```
 
 ```tsx
 <Input placeholder="Bordered (default)" />
 <Input variant="ghost" placeholder="Ghost" />
-<Input variant="danger" aria-label="Danger" defaultValue="invalid" />
 ```
 
 :::
 
-### Status variants
+### Invalid
+
+Invalid is a state, not a variant: `aria-invalid="true"`, `data-invalid`, `:user-invalid` or an enclosing invalid [Field](../fields/) turn any variant danger.
 
 :::example
 
 ```html
-<input class="input input-info" aria-label="Info" value="Info" />
-<input class="input input-success" aria-label="Success" value="Success" />
-<input class="input input-warning" aria-label="Warning" value="Warning" />
+<input class="input" aria-label="Email" aria-invalid="true" value="not-an-email" />
+<input class="input input-ghost" aria-label="SKU" aria-invalid="true" value="??" />
 ```
 
 ```tsx
-<Input variant="info" aria-label="Info" defaultValue="Info" />
-<Input variant="success" aria-label="Success" defaultValue="Success" />
-<Input variant="warning" aria-label="Warning" defaultValue="Warning" />
+<Input aria-label="Email" aria-invalid defaultValue="not-an-email" />
+<Input variant="ghost" aria-label="SKU" aria-invalid defaultValue="??" />
 ```
 
 :::
@@ -267,19 +265,19 @@ The native picker enforces `min` and `max`. A typed date outside them fails `:us
 
 ### React
 
-| Component       | Prop           | Type                                                                    | Default           |
-| --------------- | -------------- | ----------------------------------------------------------------------- | ----------------- |
-| `Input`         | `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"`      |
-| `Input`         | `size`         | `"sm" \| "md" \| "lg"`                                                  | `"md"`            |
-| `Input`         | `icon`         | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
-| `Input`         | `iconTrailing` | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
-| `Input`         | `clearable`    | `boolean`                                                               | `false`           |
-| `Input`         | `clearLabel`   | `string`                                                                | `"Clear"`         |
-| `Input`         | `onClear`      | `() => void`                                                            | —                 |
-| `Input`         | `action`       | `ReactNode`                                                             | —                 |
-| `Input`         | `classNames`   | [slots](../../../basics/conventions/#classnames)                        | —                 |
-| `Input.Action`  | `icon`         | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
-| `PasswordInput` | `revealLabel`  | `string`                                                                | `"Show password"` |
+| Component       | Prop           | Type                                             | Default           |
+| --------------- | -------------- | ------------------------------------------------ | ----------------- |
+| `Input`         | `variant`      | `"bordered" \| "ghost"`                          | `"bordered"`      |
+| `Input`         | `size`         | `"sm" \| "md" \| "lg"`                           | `"md"`            |
+| `Input`         | `icon`         | [`IconProp`](../../../basics/conventions/#icons) | —                 |
+| `Input`         | `iconTrailing` | [`IconProp`](../../../basics/conventions/#icons) | —                 |
+| `Input`         | `clearable`    | `boolean`                                        | `false`           |
+| `Input`         | `clearLabel`   | `string`                                         | `"Clear"`         |
+| `Input`         | `onClear`      | `() => void`                                     | —                 |
+| `Input`         | `action`       | `ReactNode`                                      | —                 |
+| `Input`         | `classNames`   | [slots](../../../basics/conventions/#classnames) | —                 |
+| `Input.Action`  | `icon`         | [`IconProp`](../../../basics/conventions/#icons) | —                 |
+| `PasswordInput` | `revealLabel`  | `string`                                         | `"Show password"` |
 
 `size` replaces the native `size` attribute; see [Conventions › Sizes](../../../basics/conventions/#sizes). `type` defaults to `"text"`.
 
@@ -291,20 +289,18 @@ Wraps [Base UI Input](https://base-ui.com/react/components/input), so inside a [
 
 ### Vanilla
 
-| Class                                        | Effect                                                                                                  |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `input`                                      | Full-width field, `2rem` tall, `0.75rem` inline padding, `0.375rem` radius, `text-sm`, bordered surface |
-| `input-ghost`                                | No fill or border until hover                                                                           |
-| `input-danger`                               | Danger border and focus outline                                                                         |
-| `input-info` `input-success` `input-warning` | Status border and focus outline                                                                         |
-| `input-sm`                                   | `text-xs`, `1.625rem` tall, `0.625rem` inline padding                                                   |
-| `input-lg`                                   | `text-base`, `2.375rem` tall, `1rem` inline padding                                                     |
-| `input-icon`                                 | Wrapper that floats icons over a contained `input` and pads the field to clear them                     |
-| `input-action`                               | `1.25rem` interactive trailing control (clear, reveal) with a `currentColor` hover wash                 |
+| Class          | Effect                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `input`        | Full-width field, `2rem` tall, `0.75rem` inline padding, `0.375rem` radius, `text-sm`, bordered surface |
+| `input-ghost`  | No fill or border until hover                                                                           |
+| `input-sm`     | `text-xs`, `1.625rem` tall, `0.625rem` inline padding                                                   |
+| `input-lg`     | `text-base`, `2.375rem` tall, `1rem` inline padding                                                     |
+| `input-icon`   | Wrapper that floats icons over a contained `input` and pads the field to clear them                     |
+| `input-action` | `1.25rem` interactive trailing control (clear, reveal) with a `currentColor` hover wash                 |
 
-There is no `input-bordered` or `input-md` — both are the unmodified `input`. Heights match `btn` and `select` at each size. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+There is no `input-bordered` or `input-md` — both are the unmodified `input`. Heights match `btn` and `select` at each size.
 
-`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an `input` the `input-danger` look.
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an `input` a danger border and focus outline.
 
 `input-icon` is position-driven, so no modifier picks a side: an `<i>`/`<svg>` _before_ the `input` is leading, one _after_ it is trailing, and the wrapper reads the contained `input-sm` / `input-lg` to match its own text size and padding. Decorative glyphs are `pointer-events: none` so clicks reach the field; an `input-action` button stays clickable. A disabled input dims both. Use a `<span>` wrapper: a `<label>` around an `input-action` puts the button's `aria-label` into the field's accessible name. With an `input-action` present, the native search cancel button is hidden.
 

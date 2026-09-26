@@ -44,6 +44,8 @@ Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (op
 
 React props follow the same split: `variant` picks one of a set of mutually exclusive looks (usually a tone), `size` is `sm` / `md` / `lg`, a boolean prop sets one modifier that combines with the others (`compact`, `bordered`, `soft`, `square`), and any other enum is for a modifier with three or more levels (`density` on `Table`).
 
+Invalid is a state, not a variant: form controls take `variant` `bordered` or `ghost` only. Mark a control invalid with `aria-invalid="true"` or an invalid `Field` (`error` / `invalid`); `:user-invalid` covers native constraints. There is no `input-danger`.
+
 ### Router links (`render`)
 
 To render a link-like component as your router's link, pass the link element as `render`: `<Sidebar.Item active render={<NextLink href="/orders" />}>Orders</Sidebar.Item>`. The component's classes, `aria-current` and children land on your element. `Navbar.Item`, `Sidebar.Item` / `SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container`, `Item` and `Menu.Item` take it; `Button` also needs `nativeButton={false}`. Never copy `_ao-` classes onto your own link instead.

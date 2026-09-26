@@ -21,11 +21,16 @@ describe("NumberInput", () => {
     );
   });
 
-  it("applies the danger variant on the group", () => {
-    const { container } = render(<NumberInput variant="danger" inputAriaLabel="Q" />);
+  it("applies the ghost variant on the group", () => {
+    const { container } = render(<NumberInput variant="ghost" inputAriaLabel="Q" />);
     expect(container.querySelector(adminSelector("number-input"))).toHaveAdminClass(
-      "number-input-danger",
+      "number-input-ghost",
     );
+  });
+
+  it("puts aria-invalid on the field", () => {
+    render(<NumberInput aria-invalid inputAriaLabel="Q" />);
+    expect(screen.getByLabelText("Q")).toHaveAttribute("aria-invalid", "true");
   });
 
   it("forwards ref to the visible group", () => {

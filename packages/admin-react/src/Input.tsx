@@ -7,7 +7,7 @@ import { InputBase, PasswordInputBase } from "./Input.client";
 
 export type { InputActionProps } from "./InputAction";
 
-export type InputVariant = "bordered" | "ghost" | "danger" | "info" | "success" | "warning";
+export type InputVariant = "bordered" | "ghost";
 export type InputSize = "sm" | "md" | "lg";
 
 type BaseInputProps = Omit<ComponentProps<typeof BaseInput>, "size">;

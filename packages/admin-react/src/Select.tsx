@@ -19,7 +19,7 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>(
   return <BaseSelect.Root {...props} />;
 }
 
-export type SelectTriggerVariant = "bordered" | "ghost" | "danger";
+export type SelectTriggerVariant = "bordered" | "ghost";
 export type SelectTriggerSize = "sm" | "md" | "lg";
 
 type BaseSelectTriggerProps = Omit<ComponentProps<typeof BaseSelect.Trigger>, "size">;

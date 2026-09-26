@@ -2,18 +2,6 @@
 
 > Multi-line text input.
 
-## Contents
-
-- [Examples](#examples)
-  - [Variants](#variants)
-  - [Status variants](#status-variants)
-  - [Sizes](#sizes)
-  - [Auto-resize](#auto-resize)
-  - [Disabled](#disabled)
-- [Reference](#reference)
-  - [React](#react)
-  - [Vanilla](#vanilla)
-
 ## Examples
 
 ### Variants
@@ -23,29 +11,23 @@
 ```html
 <textarea class="textarea" placeholder="Bordered (default)"></textarea>
 <textarea class="textarea textarea-ghost" placeholder="Ghost"></textarea>
-<textarea class="textarea textarea-danger" aria-label="Danger">invalid</textarea>
 ```
 
 ```tsx
 <Textarea placeholder="Bordered (default)" />
 <Textarea variant="ghost" placeholder="Ghost" />
-<Textarea variant="danger" aria-label="Danger" defaultValue="invalid" />
 ```
 
-### Status variants
+### Invalid
 
 **Example**
 
 ```html
-<textarea class="textarea textarea-info" aria-label="Info">Info</textarea>
-<textarea class="textarea textarea-success" aria-label="Success">Success</textarea>
-<textarea class="textarea textarea-warning" aria-label="Warning">Warning</textarea>
+<textarea class="textarea" aria-label="Notes" aria-invalid="true">too short</textarea>
 ```
 
 ```tsx
-<Textarea variant="info" aria-label="Info" defaultValue="Info" />
-<Textarea variant="success" aria-label="Success" defaultValue="Success" />
-<Textarea variant="warning" aria-label="Warning" defaultValue="Warning" />
+<Textarea aria-label="Notes" aria-invalid defaultValue="too short" />
 ```
 
 ### Sizes
@@ -92,28 +74,26 @@
 
 ### React
 
-| Prop         | Type                                                                    | Default      |
-| ------------ | ----------------------------------------------------------------------- | ------------ |
-| `variant`    | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
-| `size`       | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
-| `autoResize` | `boolean`                                                               | `false`      |
+| Prop         | Type                    | Default      |
+| ------------ | ----------------------- | ------------ |
+| `variant`    | `"bordered" \| "ghost"` | `"bordered"` |
+| `size`       | `"sm" \| "md" \| "lg"`  | `"md"`       |
+| `autoResize` | `boolean`               | `false`      |
 
 Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](fields.md) it gets the same id, label association and validity wiring as an `Input`, and works standalone outside one. Plus native `<textarea>` attributes.
 
 ### Vanilla
 
-| Class                                                 | Effect                                                                                                            |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `textarea`                                            | Full-width box, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
-| `textarea-ghost`                                      | No fill or border; a translucent wash on hover                                                                    |
-| `textarea-danger`                                     | Danger border and focus outline                                                                                   |
-| `textarea-info` `textarea-success` `textarea-warning` | Status border and focus outline                                                                                   |
-| `textarea-sm`                                         | `text-xs`, tighter padding, `4rem` min-height                                                                     |
-| `textarea-lg`                                         | `text-base`, looser padding, `6rem` min-height                                                                    |
-| `textarea-autosize`                                   | Height tracks content, floored at `rows`; manual resizing is off                                                  |
-| `[aria-invalid="true"]`                               | Same as `textarea-danger`                                                                                         |
+| Class                   | Effect                                                                                                            |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `textarea`              | Full-width box, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
+| `textarea-ghost`        | No fill or border; a translucent wash on hover                                                                    |
+| `textarea-sm`           | `text-xs`, tighter padding, `4rem` min-height                                                                     |
+| `textarea-lg`           | `text-base`, looser padding, `6rem` min-height                                                                    |
+| `textarea-autosize`     | Height tracks content, floored at `rows`; manual resizing is off                                                  |
+| `[aria-invalid="true"]` | Danger border and focus outline                                                                                   |
 
-There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`.
 
 The danger look also applies to Base UI's `[data-invalid]`, to `:user-invalid` once the user has edited the value, and inside an invalid [Field](fields.md).
 

@@ -7,6 +7,7 @@
 - [Examples](#examples)
   - [Basic](#basic)
   - [Step and range](#step-and-range)
+  - [Ghost](#ghost)
   - [Sizes](#sizes)
   - [Invalid](#invalid)
   - [Formatting (React only)](#formatting-react-only)
@@ -95,6 +96,38 @@
 <NumberInput defaultValue={50} min={0} max={100} step={5} inputAriaLabel="Threshold" />
 ```
 
+### Ghost
+
+**Example**
+
+```html
+<div class="number-input number-input-ghost">
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Decrease"
+    onclick="this.parentElement.querySelector('input').stepDown()"
+  >
+    <i class="ti ti-minus" aria-hidden="true"></i>
+  </button>
+  <input class="number-input-field" type="number" value="3" aria-label="Quantity" />
+  <button
+    type="button"
+    class="number-input-step"
+    tabindex="-1"
+    aria-label="Increase"
+    onclick="this.parentElement.querySelector('input').stepUp()"
+  >
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</div>
+```
+
+```tsx
+<NumberInput variant="ghost" defaultValue={3} inputAriaLabel="Quantity" />
+```
+
 ### Sizes
 
 **Example**
@@ -176,7 +209,7 @@
 **Example**
 
 ```html
-<div class="number-input number-input-danger">
+<div class="number-input">
   <button
     type="button"
     class="number-input-step"
@@ -186,7 +219,13 @@
   >
     <i class="ti ti-minus" aria-hidden="true"></i>
   </button>
-  <input class="number-input-field" type="number" value="12" aria-label="Quantity" />
+  <input
+    class="number-input-field"
+    type="number"
+    value="12"
+    aria-label="Quantity"
+    aria-invalid="true"
+  />
   <button
     type="button"
     class="number-input-step"
@@ -200,7 +239,7 @@
 ```
 
 ```tsx
-<NumberInput variant="danger" defaultValue={12} inputAriaLabel="Quantity" />
+<NumberInput aria-invalid defaultValue={12} inputAriaLabel="Quantity" />
 ```
 
 ### Formatting (React only)
@@ -223,10 +262,11 @@
 
 | Prop             | Type                                             | Default      |
 | ---------------- | ------------------------------------------------ | ------------ |
-| `variant`        | `"bordered" \| "danger"`                         | `"bordered"` |
+| `variant`        | `"bordered" \| "ghost"`                          | `"bordered"` |
 | `size`           | `"sm" \| "md" \| "lg"`                           | `"md"`       |
 | `placeholder`    | `string`                                         | —            |
 | `inputAriaLabel` | `string`                                         | —            |
+| `aria-invalid`   | `boolean`                                        | —            |
 | `decrementLabel` | `string`                                         | `"Decrease"` |
 | `incrementLabel` | `string`                                         | `"Increase"` |
 | `decrementIcon`  | `ReactNode`                                      | `−` glyph    |
@@ -241,16 +281,16 @@ Wraps [Base UI NumberField](https://base-ui.com/react/components/number-field), 
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                             |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `number-input`        | Connected − / field / + group: `2rem` tall, bordered `0.375rem`-radius shell, focus ring while the field has focus |
-| `number-input-field`  | Borderless field inside it: right-aligned tabular digits, native spinners hidden                                   |
-| `number-input-step`   | `2rem`-wide stepper button, divided from the field, hover tint, inset focus ring                                   |
-| `number-input-danger` | Danger border and focus ring                                                                                       |
-| `number-input-sm`     | `1.625rem` tall, `text-xs` field, `1.75rem` steppers                                                               |
-| `number-input-lg`     | `2.375rem` tall, `text-base` field, `2.25rem` steppers                                                             |
-| `number-input-root`   | `display: contents` — the React wrapper element, invisible to layout                                               |
+| Class                | Effect                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `number-input`       | Connected − / field / + group: `2rem` tall, bordered `0.375rem`-radius shell, focus ring while the field has focus |
+| `number-input-field` | Borderless field inside it: right-aligned tabular digits, native spinners hidden                                   |
+| `number-input-step`  | `2rem`-wide stepper button, divided from the field, hover tint, inset focus ring                                   |
+| `number-input-ghost` | No fill or border until hover                                                                                      |
+| `number-input-sm`    | `1.625rem` tall, `text-xs` field, `1.75rem` steppers                                                               |
+| `number-input-lg`    | `2.375rem` tall, `text-base` field, `2.25rem` steppers                                                             |
+| `number-input-root`  | `display: contents` — the React wrapper element, invisible to layout                                               |
 
 There is no `number-input-md` — it's the unmodified `number-input`. Step buttons in vanilla call the platform `stepUp()` / `stepDown()`, which also honour `min`, `max` and `step`; each needs its own `aria-label`, and the field needs one too unless a `<label>` is associated. `stepUp()` and `stepDown()` fire no `input` or `change` event, so dispatch `new Event("input", { bubbles: true })` on the field if something listens. The steppers take `tabindex="-1"`, as Base UI's do: the field's arrow keys already step, so a field is one Tab stop. Native spinners are hidden in both engines, so the visible steppers are the only affordance. Digits are right-aligned and tabular so a column of values lines up.
 
-The danger look also applies without the modifier: to a group with `data-invalid`, a group whose field has `aria-invalid="true"` or matches `:user-invalid`, and a group inside a `.field[data-invalid]`.
+A group with `data-invalid`, a group whose field has `aria-invalid="true"` or matches `:user-invalid`, and a group inside a `.field[data-invalid]` get a danger border and focus ring.

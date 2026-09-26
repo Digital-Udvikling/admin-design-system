@@ -2,7 +2,7 @@ import { NumberField } from "@base-ui/react/number-field";
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 
-export type NumberInputVariant = "bordered" | "danger";
+export type NumberInputVariant = "bordered" | "ghost";
 export type NumberInputSize = "sm" | "md" | "lg";
 
 function joinClasses(...parts: Array<string | undefined>): string | undefined {
@@ -57,6 +57,8 @@ export interface NumberInputProps extends ComponentProps<typeof NumberField.Root
   placeholder?: string;
   /** aria-label for the field when there's no associated `<label>`. */
   inputAriaLabel?: string;
+  /** Set on the field, which turns the group danger. Inside a `Field`, its validity applies instead. */
+  "aria-invalid"?: boolean | "true" | "false";
   /** aria-label for the decrement button. Default `"Decrease"`. */
   decrementLabel?: string;
   /** aria-label for the increment button. Default `"Increase"`. */
@@ -78,6 +80,7 @@ export function NumberInput({
   classNames,
   placeholder,
   inputAriaLabel,
+  "aria-invalid": ariaInvalid,
   decrementLabel = "Decrease",
   incrementLabel = "Increase",
   decrementIcon,
@@ -118,6 +121,7 @@ export function NumberInput({
           className={cn("number-input-field", classNames?.input)}
           placeholder={placeholder}
           aria-label={inputAriaLabel}
+          aria-invalid={ariaInvalid}
         />
         <NumberField.Increment
           className={cn("number-input-step", classNames?.increment)}

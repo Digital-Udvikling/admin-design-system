@@ -25,7 +25,6 @@
     border-color: inherit;
   }
 
-  .file-input-danger,
   .file-input:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }

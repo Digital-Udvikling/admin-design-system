@@ -26,12 +26,10 @@
     @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
-  .select-danger,
   .select:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 
-  .select-danger[data-popup-open],
   .select:is([aria-invalid="true"], [data-invalid])[data-popup-open] {
     @apply outline-danger;
   }

@@ -11,9 +11,9 @@ describe("Textarea", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
-  it("applies the status variant class", () => {
-    render(<Textarea aria-label="x" variant="success" />);
-    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-success");
+  it("applies the ghost variant class", () => {
+    render(<Textarea aria-label="x" variant="ghost" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("textarea", "textarea-ghost");
   });
 
   it("applies the size class from size", () => {

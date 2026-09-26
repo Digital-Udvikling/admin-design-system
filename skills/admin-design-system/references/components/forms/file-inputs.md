@@ -11,13 +11,23 @@
 ```html
 <input type="file" class="file-input" aria-label="Bordered" />
 <input type="file" class="file-input file-input-ghost" aria-label="Ghost" />
-<input type="file" class="file-input file-input-danger" aria-label="Danger" />
 ```
 
 ```tsx
 <FileInput aria-label="Bordered" />
 <FileInput variant="ghost" aria-label="Ghost" />
-<FileInput variant="danger" aria-label="Danger" />
+```
+
+### Invalid
+
+**Example**
+
+```html
+<input type="file" class="file-input" aria-label="Invoice" aria-invalid="true" />
+```
+
+```tsx
+<FileInput aria-label="Invoice" aria-invalid />
 ```
 
 ### Sizes
@@ -64,25 +74,24 @@
 
 ### React
 
-| Prop      | Type                                | Default      |
-| --------- | ----------------------------------- | ------------ |
-| `variant` | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
-| `size`    | `"sm" \| "md" \| "lg"`              | `"md"`       |
+| Prop      | Type                    | Default      |
+| --------- | ----------------------- | ------------ |
+| `variant` | `"bordered" \| "ghost"` | `"bordered"` |
+| `size`    | `"sm" \| "md" \| "lg"`  | `"md"`       |
 
 The native `size` attribute doesn't apply to file inputs. `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
 
-There are no status variants beyond `danger`, and no `info` / `success` / `warning`, unlike [Inputs](inputs.md). For a label, description and validation, wrap it in a [Field](fields.md).
+For a label, description and validation, wrap it in a [Field](fields.md).
 
 ### Vanilla
 
-| Class               | Effect                                                                                                                                                                      |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `file-input`        | `2rem` tall, bordered `0.375rem`-radius shell around a native picker; the full-height button gets `0.75rem` side padding, `text-sm` medium, a muted fill and a right border |
-| `file-input-ghost`  | Shell has no fill or border until hover; the button takes a full border and radius, like a `.btn`                                                                           |
-| `file-input-danger` | Danger border and focus outline                                                                                                                                             |
-| `file-input-sm`     | `1.625rem` tall, `text-xs`, tighter button padding                                                                                                                          |
-| `file-input-lg`     | `2.375rem` tall, `text-base`, looser button padding                                                                                                                         |
+| Class              | Effect                                                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `file-input`       | `2rem` tall, bordered `0.375rem`-radius shell around a native picker; the full-height button gets `0.75rem` side padding, `text-sm` medium, a muted fill and a right border |
+| `file-input-ghost` | Shell has no fill or border until hover; the button takes a full border and radius, like a `.btn`                                                                           |
+| `file-input-sm`    | `1.625rem` tall, `text-xs`, tighter button padding                                                                                                                          |
+| `file-input-lg`    | `2.375rem` tall, `text-base`, looser button padding                                                                                                                         |
 
 There is no `file-input-bordered` or `file-input-md` — both are the unmodified `file-input`. The picker button is the browser's own, styled through `::file-selector-button`, so its label text is the browser's and can't be changed from CSS. The filename that follows it is also the browser's, which is why the shell clips its overflow rather than growing.
 
-The danger look also applies without the modifier: to an input with `aria-invalid="true"` or `data-invalid`, one that matches `:user-invalid`, and one inside a `.field[data-invalid]`.
+An input with `aria-invalid="true"` or `data-invalid`, one that matches `:user-invalid`, and one inside a `.field[data-invalid]` get a danger border and focus outline.

@@ -15,9 +15,9 @@ describe("Input", () => {
     expect(screen.getByLabelText("x")).toBeInTheDocument();
   });
 
-  it("applies the status variant class", () => {
-    render(<Input aria-label="x" variant="warning" />);
-    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-warning");
+  it("applies the ghost variant class", () => {
+    render(<Input aria-label="x" variant="ghost" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-ghost");
   });
 
   it("maps size to the size class and omits the native size attribute", () => {

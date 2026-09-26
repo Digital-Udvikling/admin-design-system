@@ -15,22 +15,8 @@
   }
 
   /* data-invalid comes from Base UI's Field.Control. */
-  .textarea-danger,
   .textarea:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
-  }
-
-  /* Status variants color border + outline only — warning's yellow fails AA as text. */
-  .textarea-info {
-    @apply border-info hover:border-info focus-visible:outline-info;
-  }
-
-  .textarea-success {
-    @apply border-success hover:border-success focus-visible:outline-success;
-  }
-
-  .textarea-warning {
-    @apply border-warning hover:border-warning focus-visible:outline-warning;
   }
 
   /* Grow with content; cap with a consumer `max-height`. Browsers without field-sizing keep the

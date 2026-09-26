@@ -16,27 +16,8 @@
     @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
-  .input-danger {
-    @apply border-danger hover:border-danger focus-visible:outline-danger;
-  }
-
-  /* Separate from .input-danger so its :hover/:focus-visible stay (0,2,0); these
-     heavier selectors must beat the status variants below. */
   .input:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
-  }
-
-  /* Status variants tint border + outline only — warning's yellow fails AA as text. */
-  .input-info {
-    @apply border-info hover:border-info focus-visible:outline-info;
-  }
-
-  .input-success {
-    @apply border-success hover:border-success focus-visible:outline-success;
-  }
-
-  .input-warning {
-    @apply border-warning hover:border-warning focus-visible:outline-warning;
   }
 
   /* Sizes */

@@ -19,10 +19,16 @@
     @apply outline-2 outline-offset-2 outline-focus;
   }
 
-  /* Invalid: the modifier, Base UI's data-invalid or an invalid native field. After the focus
-     rule at equal specificity, so the ring turns danger too. */
+  .number-input-ghost {
+    @apply bg-transparent border-transparent;
+  }
+  .number-input-ghost:hover {
+    @apply bg-surface-hover border-transparent;
+  }
+
+  /* Invalid: Base UI's data-invalid or an invalid native field. After the focus rule at equal
+     specificity, so the ring turns danger too. */
   .number-input:is(
-    .number-input-danger,
     [data-invalid],
     :has(> .number-input-field:is([aria-invalid="true"], :user-invalid))
   ) {

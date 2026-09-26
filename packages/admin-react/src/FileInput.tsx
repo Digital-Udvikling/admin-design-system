@@ -2,7 +2,7 @@ import { Input as BaseInput } from "@base-ui/react/input";
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
 
-export type FileInputVariant = "bordered" | "ghost" | "danger";
+export type FileInputVariant = "bordered" | "ghost";
 export type FileInputSize = "sm" | "md" | "lg";
 
 type BaseInputProps = Omit<ComponentProps<typeof BaseInput>, "size" | "type">;

@@ -19,7 +19,6 @@
     @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
-  .combobox-danger,
   .combobox:is([data-invalid], :has(.combobox-input:is([aria-invalid="true"], :user-invalid))) {
     @apply border-danger hover:border-danger outline-danger;
   }

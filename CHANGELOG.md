@@ -18,8 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `usePrompt()`, a promise-based `window.prompt` that resolves the entered string, or `null` on Cancel, Esc or unmount. It shares `useConfirm()`'s host and queue in `<AdminRoot>`. (react)
 - `Dialog` and `Drawer` focus the first descendant marked `data-autofocus` each time they open. (react)
 - Vanilla tab panels match `data-value` `1` to `12`. (css)
+- `CopyButton` writes `value` to the clipboard and announces `copiedLabel` in a polite live region; `useCopy()` returns `{ copied, copy }` for your own trigger. (react)
 - `selected` on `Item` and `Item.Container` (`[data-selected]` on `.item`) applies the selected-row tint. (both)
 - A `.card`, `.badge` or `.item` that is itself a link gets a focus ring and a hover state. (css)
+- `.prose` styles `<kbd>` as a key chip and GFM task lists with the checkbox in the bullet gutter. (css)
 
 ### Changed
 
@@ -57,6 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `avatar-group` overlaps scale with the avatar size and take their ring from `--surface-current`, `AvatarGroup` `size` sets its avatars' default size, and the `+N` tile has `role="img"`. `Avatar` `alt` defaults to `""`. (both)
 - `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
 - `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
+- `.prose` markdown tables match `.table`, the block after a heading drops its top margin, `a.btn` keeps its button styling, and table cells respect markdown's column `align`. (css)
 
 ### Removed
 

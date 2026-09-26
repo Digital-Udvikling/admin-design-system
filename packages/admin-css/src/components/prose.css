@@ -28,6 +28,10 @@
   .prose :where(h5, h6) {
     @apply text-xs uppercase tracking-wide text-text-muted;
   }
+  /* Lets the heading's mb-2 set the gap instead of collapsing into the next block's my-3. */
+  .prose :where(h1, h2, h3, h4, h5, h6) + :where(*) {
+    margin-top: 0;
+  }
 
   .prose :where(ul) {
     @apply list-disc ps-5;
@@ -45,22 +49,46 @@
   .prose :where(li > ul, li > ol) {
     @apply my-1;
   }
+  /* GFM task lists (tight and loose): the checkbox hangs in the bullet's
+     1.25rem gutter (14px box, 2px margin, the space GFM emits), so wrapped lines
+     align with the first. */
+  .prose
+    :where(
+      li:has(
+        > input[type="checkbox"]:first-child,
+        > p:first-child > input[type="checkbox"]:first-child
+      )
+    ) {
+    list-style: none;
+  }
+  .prose
+    :where(
+      li > input[type="checkbox"]:first-child,
+      li > p:first-child > input[type="checkbox"]:first-child
+    ) {
+    @apply size-3.5;
+    margin-block: 0;
+    margin-inline: -1.25rem 0.125rem;
+    vertical-align: -0.1875rem;
+  }
 
   /* Links — the .link treatment without needing the class on every anchor. */
-  .prose :where(a) {
+  .prose :where(a:not(.btn)) {
     @apply rounded-sm text-link underline underline-offset-2
            hover:text-link-hover
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
+  /* Clone so a chip that wraps keeps its border and padding on both fragments. */
   .prose :where(code) {
     @apply rounded border border-border bg-code-surface px-1 py-0.5
-           font-mono text-code-text;
+           font-mono text-code-text box-decoration-clone;
     font-size: 0.85em;
   }
 
-  /* Mirrors .code-block; nested <code> sheds the chip so highlighter tokens show. */
-  .prose :where(pre) {
+  /* Mirrors .code-block (which keeps its own wrapping); nested <code> sheds the
+     chip so highlighter tokens show. */
+  .prose :where(pre:not(.code-block)) {
     @apply rounded-lg bg-code-surface p-3 font-mono text-sm text-code-text;
     white-space: pre;
     overflow-x: auto;
@@ -78,15 +106,29 @@
     @apply my-6 border-0 border-t border-border;
   }
 
-  /* Tables — adopt the .table look for markdown's simple grids. */
-  .prose :where(table) {
+  /* Tables — the .table look, top-aligned and wrapping since prose cells run to several
+     lines. A .table keeps its own rules. */
+  .prose :where(table:not(.table)) {
     @apply w-full border-collapse text-sm;
   }
-  .prose :where(th, td) {
-    @apply border-b border-border px-3 py-2 text-start align-top;
+  .prose :where(table:not(.table)) :where(th, td) {
+    @apply border-b border-border px-3 py-1.5 align-top;
   }
-  .prose :where(thead th) {
-    @apply font-semibold text-text-muted;
+  /* Author CSS beats the `align` hint markdown emits for `| --: |` columns. */
+  .prose :where(table:not(.table)) :where(th:not([align]), td:not([align])) {
+    @apply text-start;
+  }
+  /* A wash, so the band still shows on a surface-muted card. */
+  .prose :where(table:not(.table)) :where(thead th) {
+    @apply font-semibold text-text bg-surface-stripe border-b-border-strong;
+  }
+  /* Row headers, as in .table; otherwise vanilla gets the UA's bold and React the reset's 400. */
+  .prose :where(table:not(.table)) :where(tbody th) {
+    @apply font-medium;
+  }
+  /* tbody/tfoot only, so a header-only table keeps its divider. */
+  .prose :where(table:not(.table) > :is(tbody, tfoot):last-child > tr:last-child > :is(td, th)) {
+    @apply border-b-0;
   }
 
   .prose :where(img) {

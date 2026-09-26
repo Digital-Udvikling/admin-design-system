@@ -120,6 +120,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 
 - **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
 - **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
+- **A hand-rolled copy button.** React has [`<CopyButton value>`](references/components/copy-button.md) and `useCopy()`, which announce the copy to screen readers; a property list value takes `copyable`.
 
 ## When nothing fits
 
@@ -177,6 +178,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Charts](references/components/charts.md) — Pure-CSS bar, proportion, and donut primitives.
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
+- [Copy button](references/components/copy-button.md) — Write a value to the clipboard from a button.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native dialog element.
 - [Drawers](references/components/drawer.md) — Edge-anchored panel built on the native dialog element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.

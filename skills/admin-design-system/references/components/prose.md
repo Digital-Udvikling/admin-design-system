@@ -33,6 +33,11 @@
     See the full <a href="#">billing terms</a> or run
     <code>aortl billing refund &lt;invoice-id&gt;</code>.
   </p>
+  <p>Before refunding:</p>
+  <ul>
+    <li><input type="checkbox" checked disabled /> Confirm the charge with the customer</li>
+    <li><input type="checkbox" disabled /> Check the invoice has no open dispute</li>
+  </ul>
   <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
   <table>
     <thead>
@@ -71,6 +76,15 @@
     See the full <a href="#">billing terms</a> or run{" "}
     <code>aortl billing refund &lt;invoice-id&gt;</code>.
   </p>
+  <p>Before refunding:</p>
+  <ul>
+    <li>
+      <input type="checkbox" checked disabled /> Confirm the charge with the customer
+    </li>
+    <li>
+      <input type="checkbox" disabled /> Check the invoice has no open dispute
+    </li>
+  </ul>
   <blockquote>Disputes opened with the card issuer freeze the invoice until resolved.</blockquote>
   <table>
     <thead>
@@ -114,12 +128,14 @@ Takes no props of its own — native `<div>` attributes only.
 
 ### Vanilla
 
-| Class   | Effect                                                                                                                                                                                                                                         |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, underlined links, `<code>` chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](tables.md) |
+| Class   | Effect                                                                                                                                                                                                                                                                                                          |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, `<kbd>` key chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](tables.md) |
 
 The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral, which leaves backend-rendered HTML unstyled. This class re-establishes it for one region, from the same semantic tokens, so it follows dark mode. First and last children keep their outer margins collapsed.
 
 Every descendant rule is wrapped in `:where()`, so a consumer's own `.prose a { … }` wins on specificity without `!important`.
+
+Anchors with `.btn`, `<pre class="code-block">` and `<table class="table">` keep their own styling inside `.prose`.
 
 When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md).

@@ -118,6 +118,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 
 - **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
 - **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
+- **A hand-rolled copy button.** React has [`<CopyButton value>`](references/components/copy-button.md) and `useCopy()`, which announce the copy to screen readers; a property list value takes `copyable`.
 
 ## When nothing fits
 

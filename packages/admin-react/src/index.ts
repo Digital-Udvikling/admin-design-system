@@ -34,6 +34,7 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from ".
 export { renderIcon, type IconProp, type IconComponent, type IconRenderProps } from "./icon";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
+export { CopyButton, type CopyButtonProps } from "./CopyButton";
 export {
   Breadcrumbs,
   type BreadcrumbsProps,
@@ -233,6 +234,7 @@ export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
 export type { HotkeyHandler } from "./hotkey-registry";
+export { useCopy, type UseCopyOptions, type UseCopyResult } from "./useCopy";
 export {
   useConfirm,
   usePrompt,

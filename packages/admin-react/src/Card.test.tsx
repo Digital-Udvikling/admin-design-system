@@ -120,4 +120,38 @@ describe("Card", () => {
     const root = screen.getByText("Activity").closest(adminSelector("card"));
     expect(root).toHaveAdminClass("card-scroll");
   });
+
+  it("renders no slot wrapper for null, false or empty shorthand props", () => {
+    const canEdit = false;
+    const { container } = render(
+      <Card
+        media={null}
+        title={null}
+        toolbar={false}
+        description=""
+        actions={canEdit && <button type="button">Edit</button>}
+      >
+        body content
+      </Card>,
+    );
+    for (const slot of [
+      "card-media",
+      "card-header",
+      "card-title",
+      "card-description",
+      "card-actions",
+    ]) {
+      expect(container.querySelector(adminSelector(slot))).toBeNull();
+    }
+    expect(screen.queryByRole("heading")).toBeNull();
+  });
+
+  it("renders no heading for an icon without a title", () => {
+    function StarIcon() {
+      return <svg data-testid="star-icon" />;
+    }
+    render(<Card icon={StarIcon}>body content</Card>);
+    expect(screen.queryByRole("heading")).toBeNull();
+    expect(screen.queryByTestId("star-icon")).toBeNull();
+  });
 });

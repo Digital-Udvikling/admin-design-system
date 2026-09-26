@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type CardVariant =
   | "default"
@@ -56,7 +57,7 @@ export interface CardProps extends Omit<ComponentProps<"div">, "title"> {
   compact?: boolean;
   /** Full-bleed media rendered as `<Card.Media>` above the body. */
   media?: ReactNode;
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Card.Title>`. */
   title?: ReactNode;
@@ -92,8 +93,8 @@ function CardRoot({
   children,
   ...rest
 }: CardProps) {
-  const hasTitle = icon !== undefined || title !== undefined;
-  const titleEl = hasTitle ? (
+  // An icon alone would be an empty heading, so the title row needs a title.
+  const titleEl = hasNode(title) ? (
     <CardTitle icon={icon} className={classNames?.title}>
       {title}
     </CardTitle>
@@ -106,9 +107,9 @@ function CardRoot({
       className={className}
       {...rest}
     >
-      {media !== undefined ? <CardMedia className={classNames?.media}>{media}</CardMedia> : null}
+      {hasNode(media) ? <CardMedia className={classNames?.media}>{media}</CardMedia> : null}
       <CardBody className={classNames?.body}>
-        {toolbar !== undefined ? (
+        {hasNode(toolbar) ? (
           <CardHeader className={classNames?.header}>
             {titleEl}
             <CardToolbar className={classNames?.toolbar}>{toolbar}</CardToolbar>
@@ -116,11 +117,11 @@ function CardRoot({
         ) : (
           titleEl
         )}
-        {description !== undefined ? (
+        {hasNode(description) ? (
           <CardDescription className={classNames?.description}>{description}</CardDescription>
         ) : null}
         {children}
-        {actions !== undefined ? (
+        {hasNode(actions) ? (
           <CardActions className={classNames?.actions}>{actions}</CardActions>
         ) : null}
       </CardBody>

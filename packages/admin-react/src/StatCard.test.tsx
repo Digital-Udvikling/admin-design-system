@@ -72,4 +72,21 @@ describe("StatCard", () => {
     expect(trend).toHaveAttribute("data-trend", "down");
     expect(trend).toHaveAttribute("data-intent", "positive");
   });
+
+  it("renders no slot element for null or false slots", () => {
+    function StarIcon() {
+      return <svg data-testid="star-icon" />;
+    }
+    const { container } = render(
+      <StatCard icon={StarIcon} label={null} value="42" detail={false} />,
+    );
+    expect(container.querySelector(adminSelector("stat-card-label"))).toBeNull();
+    expect(container.querySelector(adminSelector("stat-card-detail"))).toBeNull();
+    expect(screen.queryByTestId("star-icon")).toBeNull();
+  });
+
+  it("renders a zero value", () => {
+    render(<StatCard label="Failed jobs" value={0} />);
+    expect(screen.getByText("0")).toHaveAdminClass("stat-card-value");
+  });
 });

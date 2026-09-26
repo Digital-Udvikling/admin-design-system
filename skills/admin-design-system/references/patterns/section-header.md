@@ -197,8 +197,7 @@
 <Card
   title={
     <>
-      Webhooks
-      <Badge size="sm">2</Badge>
+      Webhooks <Badge size="sm">2</Badge>
     </>
   }
   toolbar={<Button size="sm">Add webhook</Button>}

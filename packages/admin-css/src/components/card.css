@@ -5,6 +5,7 @@
            border border-border
            rounded-xl
            shadow-xs;
+    --surface-current: var(--color-surface-muted);
     /* min-width: 0 lets the card shrink inside a flex/grid track instead of forcing it wide. */
     overflow-wrap: break-word;
     min-width: 0;
@@ -14,25 +15,65 @@
     @apply flex flex-col gap-3 p-5;
   }
 
+  /* The last body fills a stretched card so `card-actions` (mt-auto) reaches the bottom.
+     Only media may follow it: a header body above a table or list keeps its height. */
+  .card > .card-body:not(:has(~ :not(.card-media))) {
+    flex-grow: 1;
+  }
+
+  /* Block flow, not flex, so links, <strong> and badges wrap as one run of text. */
   .card-title {
-    @apply flex items-center gap-2 text-lg font-semibold leading-tight;
+    @apply text-lg font-semibold leading-tight;
     /* Let a long title wrap instead of widening the card. */
     min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .card-title:has(> :is(i, svg):first-child) {
+    padding-inline-start: calc(1em + 0.5rem);
+  }
+
+  /* Floated into the padding so it sits on the first line and markup whitespace
+     can't shift the text; 0.125em centres 1em in the 1.25 line box. */
+  .card-title > :is(i, svg):first-child {
+    float: inline-start;
+    margin-inline-start: calc(-1em - 0.5rem);
+    margin-block-start: 0.125em;
+  }
+
+  /* Preflight makes <svg> a block; in title text it flows inline like the webfont <i>,
+     and -0.125em puts it where the webfont glyph sits on the line. */
+  .card-title svg {
+    display: inline-block;
+    vertical-align: -0.125em;
+  }
+
+  /* Top-aligned, then moved to the centre of the title line (font size x leading),
+     so a badge that fits the line doesn't grow the title the way baseline alignment does. */
+  .card-title > .badge {
+    vertical-align: top;
+    translate: 0 calc(1.125rem * 1.25 / 2 - 50%);
   }
 
   .card-header {
-    @apply flex items-center gap-2;
+    @apply flex items-start gap-2;
   }
 
-  /* -mt-0.5 nudges the controls up to the optical centre — the bold title type
-     sits high in its line box. */
+  /* A 28px row that -my-1 shrinks to 20px of layout: items-center centres any
+     control on the title's first line without making the header taller. */
   .card-toolbar {
-    @apply flex items-center gap-1 ml-auto -mt-0.5;
+    @apply flex shrink-0 items-center gap-1 ml-auto -my-1 min-h-7;
   }
 
-  /* font-size enlarges both icon flavours identically — the Tabler webfont and
-     React's `size="1em"` SVG. */
-  .card-toolbar :is(i, svg) {
+  /* Icon-only small buttons, and a chevron-only menu trigger, are a 28px square
+     (the size of .dialog-close); labelled buttons and nested controls keep their size. */
+  .card-toolbar > .btn-sm.btn-square,
+  .card-toolbar > .menu > .btn-sm.btn-square:empty {
+    @apply size-7 p-0;
+  }
+
+  .card-toolbar > :is(i, svg),
+  .card-toolbar > .btn-sm.btn-square > :is(i, svg) {
     font-size: 1.25rem;
   }
 
@@ -42,6 +83,11 @@
 
   .card-actions {
     @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
+  }
+
+  /* pt-2 separates actions from content above; a footer body has none. */
+  .card-actions:first-child {
+    @apply pt-0;
   }
 
   .card-compact .card-body {
@@ -55,43 +101,77 @@
   /* Fills with the page background so the panel sits flush instead of raised. */
   .card-muted {
     @apply bg-surface;
+    --surface-current: var(--color-surface);
   }
 
   /* Color variants — tinted surface + accent title, mirroring Alert. */
   .card-primary {
     @apply bg-primary-muted border-primary-muted;
+    --surface-current: var(--color-primary-muted);
   }
 
   .card-info {
     @apply bg-info-muted border-info-muted;
+    --surface-current: var(--color-info-muted);
   }
 
   .card-success {
     @apply bg-success-muted border-success-muted;
+    --surface-current: var(--color-success-muted);
   }
 
   .card-warning {
     @apply bg-warning-muted border-warning-muted;
+    --surface-current: var(--color-warning-muted);
   }
 
   .card-danger {
     @apply bg-danger-muted border-danger-muted;
+    --surface-current: var(--color-danger-muted);
+  }
+
+  /* `bordered` on a tint draws an accent edge instead of the fill colour. */
+  .card-bordered.card-primary {
+    border-color: color-mix(in oklab, var(--color-primary) 25%, var(--color-primary-muted));
+  }
+
+  .card-bordered.card-info {
+    border-color: color-mix(in oklab, var(--color-info) 40%, var(--color-info-muted));
+  }
+
+  .card-bordered.card-success {
+    border-color: color-mix(in oklab, var(--color-success) 40%, var(--color-success-muted));
+  }
+
+  .card-bordered.card-warning {
+    border-color: color-mix(in oklab, var(--color-warning) 40%, var(--color-warning-muted));
+  }
+
+  .card-bordered.card-danger {
+    border-color: color-mix(in oklab, var(--color-danger) 40%, var(--color-danger-muted));
+  }
+
+  /* Muted text drops below 4.5:1 on the tints; size and weight carry the hierarchy. */
+  .card:is(.card-primary, .card-info, .card-success, .card-warning, .card-danger)
+    .card-description {
+    @apply text-text;
   }
 
   .card-primary .card-title {
     @apply text-primary;
   }
 
+  /* 15% text keeps the accent at 4.5:1 on its own tint in both modes. */
   .card-info .card-title {
-    @apply text-info;
+    color: color-mix(in oklab, var(--color-info) 85%, var(--color-text));
   }
 
   .card-success .card-title {
-    @apply text-success;
+    color: color-mix(in oklab, var(--color-success) 85%, var(--color-text));
   }
 
   .card-danger .card-title {
-    @apply text-danger;
+    color: color-mix(in oklab, var(--color-danger) 85%, var(--color-text));
   }
 
   /* No `.card-warning .card-title` rule — the yellow-400 accent fails AA on

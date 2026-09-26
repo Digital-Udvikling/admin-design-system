@@ -25,14 +25,14 @@
 
 ```html
 <div class="card stat-card">
-  <p class="stat-card-label">Total Generations</p>
+  <p class="stat-card-label">Total generations</p>
   <p class="stat-card-value">1,234</p>
   <p class="stat-card-detail">42 completed / 12 pending</p>
 </div>
 ```
 
 ```tsx
-<StatCard label="Total Generations" value="1,234" detail="42 completed / 12 pending" />
+<StatCard label="Total generations" value="1,234" detail="42 completed / 12 pending" />
 ```
 
 ### With icon
@@ -75,7 +75,7 @@
 **Example**
 
 ```html
-<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+<div class="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
   <div class="card stat-card card-success">
     <p class="stat-card-label">Uptime</p>
     <p class="stat-card-value">99.98%</p>
@@ -100,7 +100,7 @@
 ```
 
 ```tsx
-<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+<div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
   <StatCard variant="success" label="Uptime" value="99.98%" detail="last 30 days" />
   <StatCard variant="danger" label="Failed jobs" value="37" detail="+29 vs yesterday" />
   <StatCard variant="warning" label="Queue depth" value="1,204" detail="approaching limit" />
@@ -113,14 +113,14 @@
 **Example**
 
 ```html
-<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+<div class="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
   <div class="card stat-card">
     <p class="stat-card-label">
       <i class="ti ti-users" aria-hidden="true"></i>
       Users
     </p>
     <p class="stat-card-value">12,408</p>
-    <p class="stat-card-detail">+1,204 this week</p>
+    <p class="stat-card-trend" data-trend="up" data-intent="positive">+1,204 this week</p>
   </div>
   <div class="card stat-card">
     <p class="stat-card-label">
@@ -144,17 +144,27 @@
       Revenue
     </p>
     <p class="stat-card-value">$8.4k</p>
-    <p class="stat-card-detail">+8% vs target</p>
+    <p class="stat-card-trend" data-trend="up" data-intent="positive">+8% vs target</p>
   </div>
 </div>
 ```
 
 ```tsx
-<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-  <StatCard icon={IconUsers} label="Users" value="12,408" detail="+1,204 this week" />
+<div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
+  <StatCard
+    icon={IconUsers}
+    label="Users"
+    value="12,408"
+    trend={{ direction: "up", value: "+1,204 this week" }}
+  />
   <StatCard icon={IconActivity} label="Active now" value="342" detail="peak 412" />
   <StatCard icon={IconShoppingBag} label="Orders" value="128" detail="14 pending" />
-  <StatCard icon={IconCash} label="Revenue" value="$8.4k" detail="+8% vs target" />
+  <StatCard
+    icon={IconCash}
+    label="Revenue"
+    value="$8.4k"
+    trend={{ direction: "up", value: "+8% vs target" }}
+  />
 </div>
 ```
 
@@ -203,18 +213,16 @@
 
 ```html
 <div class="card stat-card">
-  <p class="stat-card-label">Error rate</p>
-  <p class="stat-card-value">0.42%</p>
-  <p class="stat-card-detail">last 24 hours</p>
-  <span class="badge badge-success badge-sm">↓ 0.18 vs prior period</span>
+  <p class="stat-card-label">Queue depth</p>
+  <p class="stat-card-value">1,204</p>
+  <p class="stat-card-detail">of 2,000 limit</p>
+  <progress class="progress" value="1204" max="2000" aria-label="Queue depth"></progress>
 </div>
 ```
 
 ```tsx
-<StatCard label="Error rate" value="0.42%" detail="last 24 hours">
-  <Badge variant="success" size="sm">
-    ↓ 0.18 vs prior period
-  </Badge>
+<StatCard label="Queue depth" value="1,204" detail="of 2,000 limit">
+  <Progress value={1204} max={2000} aria-label="Queue depth" />
 </StatCard>
 ```
 
@@ -236,24 +244,28 @@
 
 `trend` is `{ value, direction?, intent? }`: `direction` is `"up"` (default), `"down"` or `"flat"` and rotates the caret; `intent` is `"positive"`, `"negative"` or `"neutral"` and colours it. They're independent because a falling error rate is good — omit `intent` and it follows direction (`up` → positive).
 
-`variant`, `compact` and `bordered` are the [Card](cards.md) modifiers, and the component emits both classes, so a stat card inherits every card surface. Children render below the detail line, which is where a sparkline goes.
+`variant`, `compact` and `bordered` are the [Card](cards.md) modifiers, and the component emits both classes, so a stat card inherits every card surface. Children render below the detail line: a progress bar or a sparkline.
+
+`label`, `value` and `detail` render nothing when `null`, `false` or `""`; `0` renders. `icon` needs a `label`.
 
 There are no sub-parts, so `classNames` — covering `label`, `value`, `trend`, `detail` — is the only way to reach the inner elements. Plus native `<div>` attributes.
 
 ### Vanilla
 
-| Class              | Effect                                                                          |
-| ------------------ | ------------------------------------------------------------------------------- |
-| `stat-card`        | Flat tile padding: `1rem`, `0.25rem` gap. Pair with `card`, with no `card-body` |
-| `stat-card-label`  | `text-sm` muted medium row, `0.5rem` gap for a leading icon                     |
-| `stat-card-value`  | `text-2xl` bold, tabular figures so digits don't shift between values           |
-| `stat-card-detail` | `text-sm` muted                                                                 |
-| `stat-card-trend`  | Delta line with a CSS caret, `text-sm` medium, tabular figures                  |
+| Class              | Effect                                                                            |
+| ------------------ | --------------------------------------------------------------------------------- |
+| `stat-card`        | Flat tile padding: `1rem`, `0.25rem` gap. Pair with `card`, with no `card-body`   |
+| `stat-card-label`  | `text-sm` muted medium text; a leading icon hangs on the first line, `0.5rem` gap |
+| `stat-card-value`  | `text-2xl` semibold, tabular figures so digits don't shift between values         |
+| `stat-card-detail` | `text-sm` muted                                                                   |
+| `stat-card-trend`  | Delta line with a CSS caret, `text-sm` medium, tabular figures                    |
 
 `stat-card` is a modifier on `card`, not a standalone component — it replaces the `card-body` rather than sitting inside one, which is why `card-compact` steps the root here instead of a body.
 
-`stat-card-trend` reads two attributes: `data-trend` (`up` / `down` / `flat`) rotates the caret, and `data-intent` (`positive` / `negative` / `neutral`) colours it. The caret is drawn from borders, so no icon set is involved.
+`stat-card-label` lays out as text, like `card-title`. An `<i>` or `<svg>` that is its first element child hangs before the text as the leading icon, even when text comes first in the markup; wrap a trailing icon in a `<span>` to keep it after the text. In JSX, put `{" "}` between the text and a trailing element.
 
-The value picks up the accent under `card-primary`, `card-info`, `card-success` and `card-danger` — but not `card-warning`, per [Conventions › Tones](../basics/conventions.md#tones). A tinted surface signals status, so it stops meaning anything if every tile has one.
+`stat-card-trend` reads two attributes: `data-trend` (`up` / `down` / `flat`) rotates the caret, and `data-intent` (`positive` / `negative` / `neutral`) colours it. The caret is drawn from borders, so no icon set is involved. It is decorative: keep the sign or direction in the value text for screen readers.
+
+The value picks up the accent under `card-primary`, `card-info`, `card-success` and `card-danger` — but not `card-warning`, per [Conventions › Tones](../basics/conventions.md#tones). On every tinted variant the label, detail and neutral trend switch from muted to the full text colour, since muted text fails contrast on the tints. A tinted surface signals status, so it stops meaning anything if every tile has one.
 
 Grid layout is yours: the tile bakes in no wrapper. For free-form tiles use [Cards](cards.md); for label/value pairs, a [Property list](property-list.md).

@@ -2,6 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import type { CardVariant } from "./Card";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type TrendDirection = "up" | "down" | "flat";
 export type TrendIntent = "positive" | "negative" | "neutral";
@@ -24,7 +25,7 @@ function trendIntent(direction: TrendDirection): TrendIntent {
 export interface StatCardProps extends ComponentProps<"div"> {
   /** Tinted surface + matching border, shared with `<Card>`. The value picks up the accent (except `warning`). Defaults to the neutral surface. */
   variant?: CardVariant;
-  /** Small annotation above the value (e.g. "Total Generations"). */
+  /** Small annotation above the value (e.g. "Total generations"). */
   label?: ReactNode;
   /** The headline metric. Rendered with `tabular-nums` so digits don't shift between values. */
   value?: ReactNode;
@@ -60,7 +61,7 @@ export function StatCard({
   ...rest
 }: StatCardProps) {
   // Vanilla-bundle parity: an icon alone never emits a label-less row.
-  const hasLabel = label !== undefined;
+  const hasLabel = hasNode(label);
   return (
     <div
       className={cn(
@@ -81,10 +82,8 @@ export function StatCard({
           {label}
         </p>
       ) : null}
-      {value !== undefined ? (
-        <p className={cn("stat-card-value", classNames?.value)}>{value}</p>
-      ) : null}
-      {trend !== undefined ? (
+      {hasNode(value) ? <p className={cn("stat-card-value", classNames?.value)}>{value}</p> : null}
+      {trend && hasNode(trend.value) ? (
         <p
           className={cn("stat-card-trend", classNames?.trend)}
           data-trend={trend.direction ?? "up"}
@@ -93,7 +92,7 @@ export function StatCard({
           {trend.value}
         </p>
       ) : null}
-      {detail !== undefined ? (
+      {hasNode(detail) ? (
         <p className={cn("stat-card-detail", classNames?.detail)}>{detail}</p>
       ) : null}
       {children}

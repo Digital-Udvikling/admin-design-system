@@ -314,7 +314,7 @@ Every part also takes its Base UI props — `value` / `defaultValue` / `onValueC
 
 Only the trigger responds to `variant` and `size`. The chevron and `icon` are `1em`, so they scale with the trigger text; the popup and items keep one size. A long value truncates with an ellipsis.
 
-To keep every option visible, use [Radios](radios.md); for actions, [Menus](../menus.md); to switch views, [Tabs](../tabs.md).
+To keep every option visible, use [Radios](radios.md); to filter a long list as you type, [Combobox](combobox.md); for actions, [Menus](../menus.md); to switch views, [Tabs](../tabs.md).
 
 ### Vanilla
 

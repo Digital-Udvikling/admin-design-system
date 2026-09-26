@@ -79,6 +79,7 @@
       > .input-icon > .input:is(:disabled, [data-disabled]),
       > .number-input > .number-input-field:disabled,
       > .number-input-root > .number-input > .number-input-field:disabled,
+      > .combobox[data-disabled],
       > .input-group > :is(.input, .select, .file-input):is(:disabled, [data-disabled]),
       > .input-group > .input-icon > .input:is(:disabled, [data-disabled]),
       > .input-group > .number-input > .number-input-field:disabled,
@@ -100,7 +101,7 @@
      The one owner of the field-driven state: (0,3,0) beats the controls' hover and ring rules
      (number-input's focus ring ties and loses on import order), and outline-color covers
      :focus-visible, number-input's :focus-within and an open select. */
-  .field[data-invalid] :is(.input, .textarea, .select, .file-input, .number-input) {
+  .field[data-invalid] :is(.input, .textarea, .select, .combobox, .file-input, .number-input) {
     @apply border-danger outline-danger;
   }
 

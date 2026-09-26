@@ -1,0 +1,248 @@
+# Combobox
+
+> Type to filter a list, then pick one or more values.
+
+## Contents
+
+- [Examples](#examples)
+  - [Default (React only)](#default-react-only)
+  - [Multiple (React only)](#multiple-react-only)
+  - [Sizes (React only)](#sizes-react-only)
+  - [Server search](#server-search)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
+
+`Combobox` wraps Base UI's [Combobox](https://base-ui.com/react/components/combobox). Filtering needs JavaScript, so the examples are React only; the `combobox-*` classes ship in both bundles for a vanilla page that wires its own script (see [Vanilla](#vanilla)). For a multi-choice filter without JavaScript, use the [filter menu](../../patterns/filter-menu.md).
+
+## Examples
+
+### Default (React only)
+
+**Example**
+
+```tsx
+<Field label="Supplier" className="max-w-xs">
+  <Combobox items={["Aarhus Flise", "Bygma", "Davidsen", "Stark", "XL-Byg"]}>
+    <Combobox.Control>
+      <Combobox.Input placeholder="Search suppliers" />
+      <Combobox.Clear />
+      <Combobox.Trigger />
+    </Combobox.Control>
+    <Combobox.Popup>
+      <Combobox.Empty>No supplier matches.</Combobox.Empty>
+      <Combobox.List>
+        {(supplier: string) => (
+          <Combobox.Item key={supplier} value={supplier}>
+            {supplier}
+            <Combobox.ItemIndicator />
+          </Combobox.Item>
+        )}
+      </Combobox.List>
+    </Combobox.Popup>
+  </Combobox>
+</Field>
+```
+
+### Multiple (React only)
+
+With `multiple`, selected values render as chips in `Combobox.Chips`. `Combobox.Value` passes the array to its render function. Backspace in an empty input removes the last chip, and ← / → move focus between chips.
+
+**Example**
+
+```tsx
+<Field label="Labels" className="max-w-sm">
+  <Combobox
+    items={["Backorder", "Damaged", "Express", "Gift", "Oversized", "Return"]}
+    multiple
+    defaultValue={["Express", "Gift"]}
+  >
+    <Combobox.Control>
+      <Combobox.Chips>
+        <Combobox.Value>
+          {(labels: string[]) => (
+            <>
+              {labels.map((label) => (
+                <Combobox.Chip key={label}>
+                  {label}
+                  <Combobox.ChipRemove aria-label={`Remove ${label}`} />
+                </Combobox.Chip>
+              ))}
+              <Combobox.Input placeholder={labels.length === 0 ? "Add labels" : undefined} />
+            </>
+          )}
+        </Combobox.Value>
+      </Combobox.Chips>
+      <Combobox.Trigger />
+    </Combobox.Control>
+    <Combobox.Popup>
+      <Combobox.Empty>No label matches.</Combobox.Empty>
+      <Combobox.List>
+        {(label: string) => (
+          <Combobox.Item key={label} value={label}>
+            {label}
+            <Combobox.ItemIndicator />
+          </Combobox.Item>
+        )}
+      </Combobox.List>
+    </Combobox.Popup>
+  </Combobox>
+</Field>
+```
+
+### Sizes (React only)
+
+**Example**
+
+```tsx
+<div className="flex flex-col gap-2 max-w-xs">
+  {(["sm", "md", "lg"] as const).map((size) => (
+    <Combobox key={size} items={["Open", "Pending", "Closed"]}>
+      <Combobox.Control size={size}>
+        <Combobox.Input aria-label={`Status (${size})`} placeholder={`Size ${size}`} />
+        <Combobox.Trigger />
+      </Combobox.Control>
+      <Combobox.Popup>
+        <Combobox.List>
+          {(status: string) => (
+            <Combobox.Item key={status} value={status}>
+              {status}
+            </Combobox.Item>
+          )}
+        </Combobox.List>
+      </Combobox.Popup>
+    </Combobox>
+  ))}
+</div>
+```
+
+### Server search
+
+Pass `filter={null}` and control `inputValue` to fetch matches yourself. `Combobox.Status` announces the loading state to screen readers.
+
+```tsx
+import { useState } from "react";
+import { Combobox, Field } from "@aortl/admin-react";
+
+function CustomerSearch() {
+  const [query, setQuery] = useState("");
+  const { data: customers = [], isFetching } = useCustomers(query); // your fetch hook
+
+  return (
+    <Field label="Customer">
+      <Combobox
+        items={customers}
+        filter={null}
+        inputValue={query}
+        onInputValueChange={setQuery}
+        itemToStringLabel={(customer: Customer) => customer.name}
+      >
+        <Combobox.Control>
+          <Combobox.Input placeholder="Name or customer number" />
+        </Combobox.Control>
+        <Combobox.Popup>
+          <Combobox.Status>{isFetching ? "Searching…" : null}</Combobox.Status>
+          <Combobox.Empty>{isFetching ? null : "No customer matches."}</Combobox.Empty>
+          <Combobox.List>
+            {(customer: Customer) => (
+              <Combobox.Item key={customer.id} value={customer}>
+                {customer.name}
+              </Combobox.Item>
+            )}
+          </Combobox.List>
+        </Combobox.Popup>
+      </Combobox>
+    </Field>
+  );
+}
+```
+
+## Reference
+
+### React
+
+| Part                     | Renders                        | Class                           |
+| ------------------------ | ------------------------------ | ------------------------------- |
+| `Combobox`               | nothing — provides context     | —                               |
+| `Combobox.Control`       | `<div>`                        | `combobox`                      |
+| `Combobox.Input`         | `<input>`                      | `combobox-input`                |
+| `Combobox.Trigger`       | `<button>`, chevron by default | `combobox-trigger`              |
+| `Combobox.Clear`         | `<button>`, × by default       | `combobox-clear`                |
+| `Combobox.Value`         | nothing — renders its function | —                               |
+| `Combobox.Chips`         | `<div>`                        | `combobox-chips`                |
+| `Combobox.Chip`          | `<div>`                        | `badge`, `combobox-chip`        |
+| `Combobox.ChipRemove`    | `<button>`, × by default       | `badge-remove`                  |
+| `Combobox.Popup`         | portal → positioner → `<div>`  | `popup-layer`, `combobox-popup` |
+| `Combobox.List`          | `<div>`                        | —                               |
+| `Combobox.Item`          | `<div>`                        | `combobox-item`                 |
+| `Combobox.ItemIndicator` | `<span>`, checkmark by default | `combobox-item-indicator`       |
+| `Combobox.Empty`         | `<div>`                        | `combobox-empty`                |
+| `Combobox.Status`        | `<div role="status">`          | `combobox-status`               |
+| `Combobox.Group`         | `<div>`                        | —                               |
+| `Combobox.GroupLabel`    | `<div>`                        | `combobox-group-label`          |
+
+| Part                  | Prop          | Type                                     | Default          |
+| --------------------- | ------------- | ---------------------------------------- | ---------------- |
+| `Combobox`            | `items`       | `Value[]`                                | —                |
+| `Combobox`            | `multiple`    | `boolean`                                | `false`          |
+| `Combobox.Control`    | `variant`     | `"bordered" \| "ghost" \| "danger"`      | `"bordered"`     |
+| `Combobox.Control`    | `size`        | `"sm" \| "md" \| "lg"`                   | `"md"`           |
+| `Combobox.Trigger`    | `aria-label`  | `string`                                 | `"Show options"` |
+| `Combobox.Clear`      | `aria-label`  | `string`                                 | `"Clear"`        |
+| `Combobox.ChipRemove` | `aria-label`  | `string`                                 | `"Remove"`       |
+| `Combobox.Popup`      | `side`        | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`       |
+| `Combobox.Popup`      | `align`       | `"start" \| "center" \| "end"`           | `"start"`        |
+| `Combobox.Popup`      | `sideOffset`  | `number`                                 | `4`              |
+| `Combobox.Popup`      | `alignOffset` | `number`                                 | `0`              |
+
+Every part also takes its Base UI props: `value` / `defaultValue` / `onValueChange`, `inputValue` / `onInputValueChange`, `filter`, `itemToStringLabel`, `name`, `required` and `disabled` on the root, and `value` on `Item`. `Combobox` is generic over the value: `onValueChange` receives the type of `value` or `defaultValue` (an array with `multiple`). `items` doesn't carry the type, so pass `<Combobox<Customer>>` when neither is set. Object items render their `label` field, or pass `itemToStringLabel`. `items` can also be groups (`{ value, items }[]`); render each with `Combobox.Group` inside `Combobox.List`.
+
+`Combobox.List` takes a render function that runs for each item that passes the filter. Give `Combobox.ChipRemove` an `aria-label` that names its value. The popup anchors to `Combobox.Control`. Inside a [Field](fields.md), the input takes the field's label and the control shows the field's invalid state.
+
+Use [Select](selects.md) when the list is short enough to scan without typing.
+
+### Vanilla
+
+| Class                     | Effect                                                                                                                  |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `combobox`                | The bordered box: input height (32px), `text-sm`; ring while the input has focus or `[data-popup-open]` is set          |
+| `combobox-ghost`          | Transparent fill and border until hover                                                                                 |
+| `combobox-danger`         | Danger border and ring; `[data-invalid]`, an `aria-invalid` or `:user-invalid` input and an invalid `.field` get it too |
+| `combobox-sm`             | 26px, `text-xs`                                                                                                         |
+| `combobox-lg`             | 38px, `text-base`                                                                                                       |
+| `combobox-input`          | Borderless input that fills the box                                                                                     |
+| `combobox-trigger`        | Chevron button, `1em`, muted; rotates 180° while `.combobox[data-popup-open]`                                           |
+| `combobox-clear`          | × button, `1em`, muted                                                                                                  |
+| `combobox-chips`          | Wrapping row for chips and the input; the box grows by whole rows                                                       |
+| `combobox-chip`           | On a `.badge`: focus ring; `badge-sm` size inside `combobox-sm`                                                         |
+| `combobox-popup`          | Same as `select-popup`                                                                                                  |
+| `combobox-item`           | Same as `select-item`; states via `[data-highlighted]`, `[data-selected]`, `[data-disabled]`                            |
+| `combobox-item-indicator` | Same as `select-item-indicator`                                                                                         |
+| `combobox-group-label`    | Same as `select-group-label`                                                                                            |
+| `combobox-empty`          | Muted row; hidden while empty                                                                                           |
+| `combobox-status`         | Muted row; hidden while empty                                                                                           |
+
+The markup your script manages. It shows, positions and filters the popup and sets `aria-expanded`, `aria-activedescendant`, `[data-highlighted]` and `[data-selected]`:
+
+```html
+<div class="field">
+  <label class="field-label" for="supplier">Supplier</label>
+  <div class="combobox">
+    <input
+      id="supplier"
+      class="combobox-input"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="supplier-list"
+      aria-autocomplete="list"
+    />
+    <button type="button" class="combobox-trigger" tabindex="-1" aria-label="Show suppliers">
+      <i class="ti ti-chevron-down" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="combobox-popup" id="supplier-list" role="listbox" hidden>
+    <div class="combobox-item" role="option" id="supplier-1">Bygma</div>
+    <div class="combobox-item" role="option" id="supplier-2">Stark</div>
+  </div>
+</div>
+```

@@ -116,6 +116,12 @@ const IGNORED = [
     reason:
       "Base UI's focus guards around a non-modal popup take focus only to hand it on to the trigger or popup",
   },
+  {
+    rule: "aria-hidden-focus",
+    selector: "[data-base-ui-inert], [data-base-ui-inert] *",
+    reason:
+      "an open combobox popup hides the rest of the page from assistive tech; focus stays in its input and Tab dismisses it",
+  },
 ];
 
 // ---------------------------------------------------------------- in-page helpers

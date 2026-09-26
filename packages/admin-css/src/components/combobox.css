@@ -1,0 +1,112 @@
+@layer components {
+  /* The bordered box: an input plus trailing clear/trigger buttons, or chips that wrap.
+     Heights match .input and .select (26/32/38px); the popup, items and group labels
+     share select.css. */
+  .combobox {
+    @apply flex items-center gap-2 w-full min-w-0 h-8 px-3
+           rounded-md text-sm
+           bg-surface text-text
+           border border-border hover:border-border-strong
+           transition-colors duration-150;
+  }
+
+  .combobox:has(.combobox-input:focus-visible),
+  .combobox[data-popup-open] {
+    @apply outline-2 outline-offset-2 outline-focus;
+  }
+
+  .combobox-ghost {
+    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
+  }
+
+  .combobox-danger,
+  .combobox:is([data-invalid], :has(.combobox-input:is([aria-invalid="true"], :user-invalid))) {
+    @apply border-danger hover:border-danger outline-danger;
+  }
+
+  .combobox[data-disabled],
+  .combobox:has(.combobox-input:disabled) {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .combobox-sm {
+    @apply h-6.5 px-2.5 gap-1.5 text-xs;
+  }
+
+  .combobox-lg {
+    @apply h-9.5 px-4 text-base;
+  }
+
+  .combobox-input {
+    @apply flex-1 min-w-0 h-full p-0
+           bg-transparent border-0 outline-none
+           placeholder:text-text-muted
+           disabled:cursor-not-allowed;
+    font: inherit;
+    color: inherit;
+  }
+
+  /* tabindex=-1 from Base UI: the input keeps focus, so these never take a ring. */
+  .combobox-trigger,
+  .combobox-clear {
+    @apply inline-flex items-center justify-center shrink-0 size-[1em] p-0
+           bg-transparent border-0 text-text-muted hover:text-text cursor-pointer
+           transition-[color,rotate] duration-150;
+  }
+
+  .combobox[data-popup-open] .combobox-trigger {
+    rotate: 180deg;
+  }
+
+  /* Multiple: chips and the input wrap inside the box, which grows by whole rows.
+     Block padding keeps a one-row box at the single-line height. */
+  .combobox:has(> .combobox-chips) {
+    @apply h-auto min-h-8 py-[5px] ps-1.5;
+  }
+
+  .combobox-sm:has(> .combobox-chips) {
+    @apply min-h-6.5 py-[4px] ps-1;
+  }
+
+  .combobox-lg:has(> .combobox-chips) {
+    @apply min-h-9.5 py-[8px] ps-2;
+  }
+
+  .combobox-chips {
+    @apply flex flex-wrap items-center gap-1 flex-1 min-w-0;
+  }
+
+  .combobox-chips > .combobox-input {
+    @apply h-5 ps-1;
+    flex: 1 0 4rem;
+  }
+
+  .combobox-sm .combobox-chips > .combobox-input {
+    @apply h-4;
+  }
+
+  /* A chip is a neutral .badge; Base UI moves real focus onto it with ←/→. */
+  .combobox-chip {
+    @apply max-w-full focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus;
+  }
+
+  /* badge-sm's box, so chips fit the 26px control. */
+  .combobox-sm .combobox-chip {
+    @apply h-4 px-1.5 text-[0.625rem] gap-0.5;
+  }
+
+  .combobox-sm .combobox-chip .badge-remove {
+    @apply size-3 -mr-0.5;
+  }
+
+  .combobox-empty,
+  .combobox-status {
+    @apply px-3 py-1 text-sm leading-5 text-text-muted;
+  }
+
+  /* Both render with no children while there's nothing to say. */
+  .combobox-empty:empty,
+  .combobox-status:empty {
+    display: none;
+  }
+}

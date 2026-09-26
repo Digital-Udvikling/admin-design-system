@@ -40,6 +40,8 @@ Both packages share base names. The unscoped vanilla bundle renders `<Button var
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
+Form controls take `variant` `bordered` or `ghost` only; invalid is a state. Mark a control invalid with `aria-invalid="true"` or an invalid `Field` (`error` / `invalid`); `:user-invalid` covers native constraints. There is no `input-danger`.
+
 ### Targeting inner elements (`classNames`)
 
 React components whose shorthand props render inner elements expose a `classNames` prop — an object mapping slot names to classes. `className` styles the root; `classNames={{ slot: "…" }}` reaches the inner slots. Slot classes pass through verbatim (no `_ao-` prefix), exactly like `className`, and slot names autocomplete from the component's types.

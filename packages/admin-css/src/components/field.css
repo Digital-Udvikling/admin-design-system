@@ -6,12 +6,49 @@
     overflow-wrap: break-word;
   }
 
+  /* The 20px line box matches the switch track, so a toggle sits on the first line of a wrapped
+     label and a control's 1lh equals the label line. */
   .field-row {
-    @apply flex-row items-center gap-3;
+    @apply flex-row items-center gap-3 leading-5;
+  }
+
+  /* With a message, two columns by DOM order: control, then label, the message under the label.
+     Base UI's hidden input is position: fixed, so it takes no cell. */
+  .field-row:has(> .field-description, > .field-error) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    justify-items: start;
+    @apply gap-y-1;
+  }
+
+  .field-row > :is(.field-description, .field-error) {
+    grid-column: 2;
+  }
+
+  .field-row > .field-label {
+    @apply leading-5;
+  }
+
+  /* Beside a shrink-0 toggle the label may shrink, so long tokens wrap instead of overflowing. */
+  .field-row > :is(.checkbox, .radio, .switch) ~ .field-label {
+    @apply min-w-0;
+  }
+
+  .field-row:has(> :is(.checkbox, .radio, .switch)) {
+    @apply items-start;
+  }
+
+  /* Same label gap as a wrapping label: 0.5rem beside a checkbox or radio, 0.75rem beside a switch. */
+  .field-row:has(> :is(.checkbox, .radio)) {
+    @apply gap-x-2;
+  }
+
+  .field-row > :is(.checkbox, .radio) {
+    @apply mt-0.5;
   }
 
   .field-label {
-    @apply text-sm font-medium text-text leading-none;
+    @apply text-sm font-medium text-text leading-4;
   }
 
   /* A required control marks only its own field's label. Branch 1: top-level fields; branch 2:
@@ -31,28 +68,50 @@
     @apply text-danger;
   }
 
+  /* The control dims itself; the label dims once beside it. Base UI sets data-disabled on a
+     disabled Field's label; the :has() branch covers a field's own disabled control. */
+  .field-label[data-disabled],
+  .field:has(
+      > :is(.input, .textarea, .select, .file-input, .checkbox, .radio, .switch):is(
+          :disabled,
+          [data-disabled]
+        ),
+      > .input-icon > .input:is(:disabled, [data-disabled]),
+      > .number-input > .number-input-field:disabled,
+      > .number-input-root > .number-input > .number-input-field:disabled,
+      > .input-group > :is(.input, .select, .file-input):is(:disabled, [data-disabled]),
+      > .input-group > .input-icon > .input:is(:disabled, [data-disabled]),
+      > .input-group > .number-input > .number-input-field:disabled,
+      > .input-group > .number-input-root > .number-input > .number-input-field:disabled
+    )
+    > .field-label {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
   .field-description {
-    @apply text-xs text-text-muted leading-relaxed;
+    @apply text-xs text-text-muted leading-4;
   }
 
   .field-error {
-    @apply text-xs text-danger leading-relaxed;
+    @apply text-xs text-danger leading-4;
   }
 
-  /* Base UI sets data-invalid on the Field root when validation fails. */
-  .field[data-invalid] .input,
-  .field[data-invalid] .textarea,
-  .field[data-invalid] .select,
-  .field[data-invalid] .file-input {
+  /* data-invalid comes from Base UI or is set by hand. The one owner of field-driven state:
+     (0,3,0) beats the controls' hover and ring rules (number-input's ring ties and loses on import
+     order); outline-color also covers :focus-within and an open select. */
+  .field[data-invalid] :is(.input, .textarea, .select, .file-input, .number-input) {
+    @apply border-danger outline-danger;
+  }
+
+  .field[data-invalid]
+    :is(
+      .checkbox[data-unchecked],
+      input.checkbox:not(:checked, :indeterminate),
+      .radio[data-unchecked],
+      input.radio:not(:checked),
+      .switch[data-unchecked],
+      input.switch:not(:checked)
+    ) {
     @apply border-danger;
-  }
-
-  .field[data-invalid] .checkbox[data-unchecked],
-  .field[data-invalid] .radio[data-unchecked] {
-    @apply border-danger;
-  }
-
-  .field[data-invalid] .switch[data-unchecked] {
-    @apply ring-1 ring-danger;
   }
 }

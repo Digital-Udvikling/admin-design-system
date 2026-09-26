@@ -18,8 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
+- **Breaking:** Form controls take `variant` `bordered` or `ghost`; invalid is a state. `input-` and `textarea-` `danger`/`info`/`success`/`warning`, `select-danger` and `file-input-danger` are removed with their `variant` values. Controls, checkboxes, radios and switches show the danger style from `aria-invalid`, `data-invalid`, an invalid `.field`, or `:user-invalid` once edited. (both)
 - **Breaking:** Every sized control takes `size`: `inputSize` on `Input` and `FileInput`, `triggerSize` on `Select.Trigger` and `textareaSize` on `Textarea` are removed. `Input` does not accept the native `size` attribute; set a width in CSS. (react)
 - **Breaking:** `.input`, `.number-input` and React `Select.Trigger` match the `.btn` height at each size, and `.input` has a fixed height, so pair controls of one size, such as `input-sm` with `btn-sm`. (both)
+- **Breaking:** `<Field error>` marks the field invalid unless `invalid` is passed. For client-side validity with `validationMode`, compose `Field.Error` inside `Field.Container`. (react)
 - **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
@@ -29,6 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
 - The neutral `badge` has a `border` edge, badges keep their content width in flex columns and grids, and a badge in a `btn` doesn't make it taller. (css)
 - The vanilla tooltip sizes to its content up to 20rem, is `display: none` while hidden, opens on keyboard focus but not on click, and paints on `--z-popup`. Where anchor positioning is supported it escapes overflow clipping and flips to stay in the viewport. (css)
+- Checkbox, radio and switch take one line box and align with the first line of a wrapping label, an indeterminate checkbox draws a dash, unchecked borders meet 3:1 contrast, and a disabled control dims once with its label. (both)
+- A `field-row` with a description or error is a two-column grid with the message under the label, a `field-label` dims when its control is disabled, and `textarea-autosize` honours `rows` as its minimum height. (css)
 - `Select.Trigger` lays out like the native `.select`: a leading icon before the value, an ellipsis on a long value (`select-value`) and a `1em` chevron. Wrap a custom chevron in `Select.Icon`. `Select.Popup` aligns to the trigger's start edge and takes `side`, `align` and `alignOffset`. (both)
 - `Select` is generic over its value, so `onValueChange` receives the item type (`Value[]` with `multiple`) instead of `unknown`. (react)
 - `.input-action` meets the WCAG 2.5.8 minimum target size, date and time inputs put the picker glyph at the trailing edge, and an `Input` `action` replaces the clear button. (both)

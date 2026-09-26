@@ -32,7 +32,7 @@ Defaults to a neutral gray. A `light-dark()` pair keeps the tile legible in both
 | ------------------------------- | ---------------------------------------- | ----------------------------------- |
 | `--color-system-accent`         | Navbar + footer stripe, `.brand-tile` bg | The value you set                   |
 | `--color-system-accent-hover`   | Reserved for hover states                | 12% mix toward `--color-text`       |
-| `--color-system-accent-muted`   | Reserved for subtle backgrounds          | 12% accent over `--color-surface`   |
+| `--color-system-accent-muted`   | `.brand-tile-soft` fill                  | 12% accent over `--color-surface`   |
 | `--color-system-accent-content` | Tile / icon foreground                   | Paper or black, by accent lightness |
 
 `.brand-tile` re-derives `-muted` and `-content` from the accent it inherits, so an accent set on a subtree (`.app-shell`, `.navbar`, the tile itself) reaches the tile's fill and glyph. Overriding `-content` directly doesn't reach the tile.
@@ -110,7 +110,7 @@ Both layers are plain declarations on `:root`. Redefine the palette in your own 
 
 ## Container surface
 
-Filled containers publish their fill as `--surface-current`: cards and their tints, dialogs and their footer, menu and select popups, the navbar, sidebar and footer. Components that must paint the surface they sit on read it — timeline rings, avatar-group rings, stacked-bar seams, and the pinned column and sticky header of a table. Set it on your own filled container so those match:
+Filled containers publish their fill as `--surface-current`: cards and their tints, dialogs and their footer, menu and select popups, accordion items, muted list items, selected table rows, the navbar, sidebar and footer. Components that must paint the surface they sit on read it — timeline rings, avatar-group rings, stacked-bar seams, and the pinned column and sticky header of a table. Set it on your own filled container so those match:
 
 ```css
 .my-panel {

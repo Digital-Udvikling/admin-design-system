@@ -135,7 +135,10 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 **Example**
 
 ```html
-<div class="app-shell" style="min-height: 16rem; --color-system-accent: var(--color-purple-600)">
+<div
+  class="app-shell"
+  style="min-height: 16rem; --color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
+>
   <header class="navbar">
     <div class="navbar-brand">
       <span class="brand-tile" aria-hidden="true">A</span>
@@ -158,7 +161,10 @@ A cap only takes effect once the viewport is wider than it, so in this narrow pr
 ```
 
 ```tsx
-<AppShell systemAccent="var(--color-purple-600)" style={{ minHeight: "16rem" }}>
+<AppShell
+  systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
+  style={{ minHeight: "16rem" }}
+>
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />

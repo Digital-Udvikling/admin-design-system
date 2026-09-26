@@ -22,7 +22,7 @@ import { AdminRoot, Button, Card, Input } from "@aortl/admin-react";
 export function SignIn() {
   return (
     <AdminRoot>
-      <Card>
+      <Card.Container>
         <Card.Body>
           <Card.Title>Sign in</Card.Title>
           <Input placeholder="Email" />
@@ -32,7 +32,7 @@ export function SignIn() {
             <Button variant="ghost">Cancel</Button>
           </Card.Actions>
         </Card.Body>
-      </Card>
+      </Card.Container>
     </AdminRoot>
   );
 }
@@ -66,7 +66,7 @@ Beyond the standard `<div>` attributes — all forwarded, including `style` and 
 | `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline — see [Theming › System accent](../../basics/theming/#system-accent).            |
 
 ```tsx
-<AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
+<AdminRoot theme="dark" systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   {/* ... */}
 </AdminRoot>
 ```

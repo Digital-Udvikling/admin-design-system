@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
 - `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
 - `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
+- `delay` and `closeDelay` on `Tooltip`; when unset, the enclosing `Tooltip.Provider`'s values apply. (react)
 
 ### Changed
 
@@ -20,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Dark `--color-danger`, `--color-info`, `--color-link` and `--color-text-muted` and light `--color-success` move one step to meet 4.5:1 text contrast on cards and tints, dark `--color-code-surface` is base-850 so code blocks show inside cards, and `--color-system-accent-content` picks white or black from the accent's lightness. (css)
 - Buttons use the `rounded-md` radius, labels don't wrap except in full-width buttons and rows too narrow for them, and `btn-danger` keeps its red fill on hover. (css)
 - `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
+- The vanilla tooltip sizes to its content up to 20rem, is `display: none` while hidden, opens on keyboard focus but not on click, and paints on `--z-popup`. Where anchor positioning is supported it escapes overflow clipping and flips to stay in the viewport. (css)
 
 ### Removed
 

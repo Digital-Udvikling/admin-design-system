@@ -450,9 +450,9 @@ const REACT_ONLY = new Map([
 const VANILLA_ONLY = new Map([
   ["tab-input", "CSS-only tabs switch panels with radio inputs"],
   ["tooltip-wrap", "CSS-only tooltip anchor; React's Tooltip is a Base UI popup"],
-  ["tooltip-wrap-right", "CSS-only tooltip anchor"],
+  ["tooltip-wrap-end", "CSS-only tooltip anchor"],
   ["tooltip-wrap-bottom", "CSS-only tooltip anchor"],
-  ["tooltip-wrap-left", "CSS-only tooltip anchor"],
+  ["tooltip-wrap-start", "CSS-only tooltip anchor"],
   ["field-error", "Field.Error renders once validation fails, never on the server"],
   ["asteriskField", "template-generator hook for server-rendered forms"],
 ]);

@@ -1,0 +1,135 @@
+# Filter menu
+
+> Filter a list by several values of one field.
+
+## Contents
+
+- [Examples](#examples)
+  - [Vanilla](#vanilla)
+  - [React menu (React only)](#react-menu-react-only)
+  - [Searchable (React only)](#searchable-react-only)
+- [Built from](#built-from)
+
+Use a filter menu for a short, fixed set of values (statuses, types, warehouses). For a long or open-ended list (suppliers, customers), use a [Combobox](../components/forms/combobox.md) with `multiple`.
+
+## Examples
+
+### Vanilla
+
+The menu sits in a GET form, so Apply submits the checked values as query parameters without JavaScript. Render `checked` from the current query. `type="reset"` then restores the applied filter, and the trigger shows how many values are applied.
+
+**Example**
+
+```html
+<form class="row" method="get" action="">
+  <div class="menu">
+    <button type="button" class="menu-trigger btn btn-sm" popovertarget="filter-status">
+      Status
+      <span class="badge badge-sm">2</span>
+    </button>
+    <div class="menu-popup" id="filter-status" popover>
+      <label class="menu-item">
+        <input type="checkbox" class="checkbox" name="status" value="open" checked />
+        Open
+      </label>
+      <label class="menu-item">
+        <input type="checkbox" class="checkbox" name="status" value="pending" checked />
+        Pending
+      </label>
+      <label class="menu-item">
+        <input type="checkbox" class="checkbox" name="status" value="closed" />
+        Closed
+      </label>
+      <hr class="menu-separator" />
+      <div class="menu-actions">
+        <button type="reset" class="btn btn-ghost btn-sm">Reset</button>
+        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+      </div>
+    </div>
+  </div>
+  <div class="menu">
+    <button type="button" class="menu-trigger btn btn-sm" popovertarget="filter-warehouse">
+      Warehouse
+    </button>
+    <div class="menu-popup" id="filter-warehouse" popover>
+      <label class="menu-item">
+        <input type="checkbox" class="checkbox" name="warehouse" value="aarhus" />
+        Aarhus
+      </label>
+      <label class="menu-item">
+        <input type="checkbox" class="checkbox" name="warehouse" value="odense" />
+        Odense
+      </label>
+      <hr class="menu-separator" />
+      <div class="menu-actions">
+        <button type="reset" class="btn btn-ghost btn-sm">Reset</button>
+        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+      </div>
+    </div>
+  </div>
+</form>
+```
+
+### React menu (React only)
+
+Checkable `Menu.Item`s toggle without closing the menu. Keep the checked set in state and filter as it changes, or apply it from a button.
+
+**Example**
+
+```tsx
+<Menu>
+  <Menu.Trigger variant="default" size="sm">
+    Status
+  </Menu.Trigger>
+  <Menu.Popup>
+    <Menu.Item defaultChecked>Open</Menu.Item>
+    <Menu.Item defaultChecked>Pending</Menu.Item>
+    <Menu.Item defaultChecked={false}>Closed</Menu.Item>
+  </Menu.Popup>
+</Menu>
+```
+
+### Searchable (React only)
+
+**Example**
+
+```tsx
+<Combobox
+  items={["Aarhus Flise", "Bygma", "Davidsen", "Stark", "XL-Byg"]}
+  multiple
+  defaultValue={["Bygma"]}
+>
+  <Combobox.Control size="sm" className="max-w-xs">
+    <Combobox.Chips>
+      <Combobox.Value>
+        {(suppliers: string[]) => (
+          <>
+            {suppliers.map((supplier) => (
+              <Combobox.Chip key={supplier}>
+                {supplier}
+                <Combobox.ChipRemove aria-label={`Remove ${supplier}`} />
+              </Combobox.Chip>
+            ))}
+            <Combobox.Input aria-label="Suppliers" placeholder="Supplier" />
+          </>
+        )}
+      </Combobox.Value>
+    </Combobox.Chips>
+  </Combobox.Control>
+  <Combobox.Popup>
+    <Combobox.Empty>No supplier matches.</Combobox.Empty>
+    <Combobox.List>
+      {(supplier: string) => (
+        <Combobox.Item key={supplier} value={supplier}>
+          {supplier}
+          <Combobox.ItemIndicator />
+        </Combobox.Item>
+      )}
+    </Combobox.List>
+  </Combobox.Popup>
+</Combobox>
+```
+
+## Built from
+
+[Menus](../components/menus.md) with `label.menu-item` rows holding a [checkbox](../components/forms/checkboxes.md) and `menu-actions` for the buttons, a [Badge](../components/badges.md) for the count, and a [Row](../components/row.md) to line up several filters. The searchable variant is a [Combobox](../components/forms/combobox.md).

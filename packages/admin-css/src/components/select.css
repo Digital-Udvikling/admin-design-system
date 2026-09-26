@@ -92,7 +92,9 @@
     @apply rotate-180;
   }
 
-  .select-popup {
+  /* Shared with the React combobox popup. */
+  .select-popup,
+  .combobox-popup {
     --surface-current: var(--color-surface);
     @apply min-w-[var(--anchor-width)] max-h-72 overflow-auto
            py-1 outline-none
@@ -104,16 +106,20 @@
   }
 
   .select-popup[data-starting-style],
-  .select-popup[data-ending-style] {
+  .select-popup[data-ending-style],
+  .combobox-popup[data-starting-style],
+  .combobox-popup[data-ending-style] {
     @apply opacity-0;
   }
 
-  .select-popup[data-starting-style] {
+  .select-popup[data-starting-style],
+  .combobox-popup[data-starting-style] {
     @apply -translate-y-1;
   }
 
   /* Base UI moves real focus onto items, so :focus-visible marks the keyboard cursor. */
-  .select-item {
+  .select-item,
+  .combobox-item {
     @apply flex items-center gap-2 px-3 py-1 text-sm leading-5
            cursor-pointer select-none
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
@@ -122,28 +128,34 @@
     min-width: 0;
   }
 
-  .select-item[data-highlighted] {
+  .select-item[data-highlighted],
+  .combobox-item[data-highlighted] {
     @apply bg-surface-hover;
   }
 
-  .select-item[data-selected] {
+  .select-item[data-selected],
+  .combobox-item[data-selected] {
     @apply font-medium;
   }
 
-  .select-item[data-disabled] {
+  .select-item[data-disabled],
+  .combobox-item[data-disabled] {
     @apply opacity-50 cursor-not-allowed;
   }
 
-  .select-item-indicator {
+  .select-item-indicator,
+  .combobox-item-indicator {
     @apply inline-flex items-center justify-center size-4 ml-auto text-primary;
   }
 
-  .select-group-label {
+  .select-group-label,
+  .combobox-group-label {
     @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
   }
 
   @media (forced-colors: active) {
-    .select-item[data-highlighted] {
+    .select-item[data-highlighted],
+    .combobox-item[data-highlighted] {
       background-color: Highlight;
       color: HighlightText;
     }

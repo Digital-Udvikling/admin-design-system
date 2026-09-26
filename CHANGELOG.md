@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `table-cell-actions` / `Table.Cell actions`, a trailing row-actions column, and `table-scroll` / `Table.Scroll`, a keyboard-scrollable `<section>` for wide tables that needs `aria-label` or `aria-labelledby` and hosts `table-sticky` and `table-pin-col`. (both)
 - `--chart-legend-gap` sets the space between a chart and its legend. (css)
 - `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
+- `Combobox` and the `combobox-*` classes: type to filter `items` and pick one value, or several as removable chips with `multiple`. `Combobox.Empty` and `Combobox.Status` cover no-match and loading, and `inputValue` with `filter={null}` supports server search. (both)
 - `Menu.Actions` (`menu-actions`) for a filter menu's Reset and Apply, `closeOnClick` and `danger` (`menu-item-danger`) on `Menu.Item`, `menu-popup-end` (`Menu.Popup align="end"`), and `icon` on `Menu.Trigger`; an icon-only `btn-square` trigger drops the chevron. (both)
 
 ### Changed

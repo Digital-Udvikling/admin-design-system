@@ -119,6 +119,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 - **Putting `required` on the `<Field>` instead of the control.** The asterisk comes from the control's own `required`, on a label that is a direct child of the field. `<Field required>` alone marks the label but validates nothing; use it for controls with no native `required`, and `<Field.Label required>` for a label wrapped in another element. `required={false}` removes the asterisk.
 
 - **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
+- **Pulling in Select2, react-select or a hand-rolled searchable select.** React has [Combobox](references/components/forms/combobox.md), with `multiple` for chips. A vanilla page filters by a few values with the [filter menu](references/patterns/filter-menu.md), a GET form of checkbox rows in a popover menu, and needs no JavaScript.
 - **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
 - **A hand-rolled copy button.** React has [`<CopyButton value>`](references/components/copy-button.md) and `useCopy()`, which announce the copy to screen readers; a property list value takes `copyable`.
 - **A bare `<span>` styled as a status dot.** Use `indicator-dot` / [`<StatusDot>`](references/components/indicator.md) next to the status text.
@@ -185,6 +186,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Drawers](references/components/drawer.md) — Edge-anchored panel built on the native dialog element.
 - [Forms](references/components/forms/index.md) — Input controls and composition primitives.
 - [Forms: Checkboxes](references/components/forms/checkboxes.md) — Independent on/off toggles.
+- [Forms: Combobox](references/components/forms/combobox.md) — Type to filter a list, then pick one or more values.
 - [Forms: Fields](references/components/forms/fields.md) — Accessibility wiring (label, description, validation) around inputs.
 - [Forms: File inputs](references/components/forms/file-inputs.md) — File picker styled to match other inputs.
 - [Forms: Input groups](references/components/forms/input-groups.md) — Combine inputs, addons, and buttons into a flush row.
@@ -217,6 +219,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 - [Confirm before submit](references/patterns/confirm.md) — Ask before a destructive action runs.
 - [Empty, loading and error states](references/patterns/states.md) — Fill a panel or table while its data is missing.
+- [Filter menu](references/patterns/filter-menu.md) — Filter a list by several values of one field.
 - [Flash messages](references/patterns/flash-messages.md) — Report the result of an action after it runs.
 - [Master-detail](references/patterns/master-detail.md) — Pick a row and show its record beside the list.
 - [Section header](references/patterns/section-header.md) — Title a list or table with a count and actions.

@@ -84,6 +84,7 @@ export {
   getPaginationItems,
   type PaginationProps,
   type PaginationItem,
+  type PaginationItemProps,
 } from "./Pagination";
 export { Textarea, type TextareaProps, type TextareaVariant, type TextareaSize } from "./Textarea";
 export { Checkbox, type CheckboxProps, type CheckboxIndicatorProps } from "./Checkbox";

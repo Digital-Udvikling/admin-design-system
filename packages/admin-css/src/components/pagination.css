@@ -4,18 +4,19 @@
     @apply inline-flex items-center gap-1 m-0 p-0 list-none;
   }
 
-  .page-item {
+  .pagination-item {
     @apply inline-flex;
   }
 
-  .page-link {
+  /* px-1.5 keeps 16px icons and 2-digit pages on the 2rem minimum, so the row doesn't shift while paging. */
+  .pagination-link {
     @apply inline-flex items-center justify-center
-           min-w-8 h-8 px-2
+           min-w-8 h-8 px-1.5
            rounded-md
            text-sm font-medium leading-none
            text-text bg-transparent
            border border-transparent
-           hover:bg-surface-muted
+           hover:bg-surface-hover
            cursor-pointer select-none no-underline
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
@@ -23,18 +24,29 @@
   }
 
   /* Same surface as a sidebar's active item. */
-  .page-link.active,
-  .page-link[aria-current="page"] {
+  .pagination-link[aria-current="page"] {
     @apply bg-primary-muted text-primary border-primary-muted;
   }
 
-  .page-link[aria-disabled="true"] {
+  .pagination-link:is([aria-disabled="true"], [data-disabled]) {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
   }
 
-  .page-ellipsis {
+  .pagination-ellipsis {
     @apply inline-flex items-center justify-center
-           min-w-8 h-8 px-2
+           min-w-8 h-8 px-1.5
            text-sm text-text-muted select-none;
+  }
+
+  /* Forced colors drops the fill; `none` so the link's text backplate doesn't defeat HighlightText.
+     `none` also unforces the focus ring, so it gets a system colour back. */
+  @media (forced-colors: active) {
+    .pagination-link[aria-current="page"] {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      border-color: Highlight;
+      color: HighlightText;
+      outline-color: CanvasText;
+    }
   }
 }

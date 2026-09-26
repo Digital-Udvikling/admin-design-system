@@ -54,14 +54,47 @@ describe("Pagination", () => {
     expect(onPageChange).toHaveBeenCalledWith(5);
   });
 
-  it("disables previous on page 1", async () => {
+  it("marks previous aria-disabled on page 1 and ignores activation", async () => {
     const user = userEvent.setup();
     const onPageChange = vi.fn();
     render(<Pagination page={1} total={5} onPageChange={onPageChange} />);
     const prev = screen.getByRole("button", { name: "Previous page" });
-    expect(prev).toBeDisabled();
+    expect(prev).toHaveAttribute("aria-disabled", "true");
+    expect(prev).not.toBeDisabled();
     await user.click(prev);
+    prev.focus();
+    await user.keyboard("{Enter}");
     expect(onPageChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps focus on previous when paging back to page 1", async () => {
+    const user = userEvent.setup();
+
+    function Controlled() {
+      const [page, setPage] = useState(2);
+      return <Pagination page={page} total={5} onPageChange={setPage} />;
+    }
+
+    render(<Controlled />);
+    const prev = screen.getByRole("button", { name: "Previous page" });
+    prev.focus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page");
+    // happy-dom keeps focus on a disabled button, so `not.toBeDisabled` is the real guard.
+    expect(prev).toHaveAttribute("aria-disabled", "true");
+    expect(prev).not.toBeDisabled();
+    expect(prev).toHaveFocus();
+  });
+
+  it("sizes the built-in chevrons and custom icons to 1em", () => {
+    function Icon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+      return <svg data-testid="icon" width={props.size} height={props.size} />;
+    }
+    render(<Pagination page={2} total={3} onPageChange={() => {}} previousIcon={Icon} />);
+    const chevron = screen.getByRole("button", { name: "Next page" }).querySelector("svg");
+    expect(chevron).toHaveAttribute("width", "1em");
+    expect(chevron).toHaveAttribute("height", "1em");
+    expect(screen.getByTestId("icon")).toHaveAttribute("width", "1em");
   });
 
   it("renders ellipses for large totals", () => {
@@ -112,5 +145,44 @@ describe("Pagination", () => {
     expect(screen.getByTestId("link-1")).toHaveAttribute("href", "?page=1");
     expect(screen.getByTestId("link-2")).toHaveAttribute("href", "?page=2");
     expect(screen.getByTestId("link-3")).toHaveAttribute("href", "?page=3");
+  });
+
+  it("passes renderItem the default classes, ARIA and content to spread", () => {
+    render(
+      <Pagination
+        page={1}
+        total={10}
+        onPageChange={() => {}}
+        classNames={{ link: "x-link" }}
+        renderItem={(item, { children, ...props }) =>
+          item.type === "ellipsis" ? (
+            <span data-testid="ellipsis" {...props}>
+              {children}
+            </span>
+          ) : (
+            <a {...props} href={`?p=${item.page}`}>
+              {children}
+            </a>
+          )
+        }
+      />,
+    );
+    const current = screen.getByRole("link", { name: "Page 1" });
+    expect(current).toHaveAdminClass("pagination-link");
+    expect(current).not.toHaveAdminClass("active");
+    expect(current).toHaveClass("x-link");
+    expect(current).toHaveAttribute("aria-current", "page");
+    expect(current).toHaveTextContent("1");
+
+    const prev = screen.getByRole("link", { name: "Previous page" });
+    expect(prev).toHaveAdminClass("pagination-link");
+    expect(prev).toHaveAttribute("aria-disabled", "true");
+    expect(prev.querySelector("svg")).not.toBeNull();
+    expect(screen.getByRole("link", { name: "Next page" })).not.toHaveAttribute("aria-disabled");
+
+    const ellipsis = screen.getByTestId("ellipsis");
+    expect(ellipsis).toHaveAdminClass("pagination-ellipsis");
+    expect(ellipsis).toHaveAttribute("aria-hidden", "true");
+    expect(ellipsis).toHaveTextContent("…");
   });
 });

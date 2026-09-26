@@ -15,6 +15,7 @@
   - [Custom action](#custom-action)
   - [Types](#types)
   - [Date and time](#date-and-time)
+  - [Date range](#date-range)
 - [Reference](#reference)
   - [React](#react)
   - [Vanilla](#vanilla)
@@ -224,6 +225,34 @@
 <Input type="datetime-local" aria-label="Date and time" />
 <Input type="month" aria-label="Month" />
 <Input type="week" aria-label="Week" />
+```
+
+### Date range
+
+The native picker enforces `min` and `max`. A typed date outside them fails `:user-invalid`, so the input turns danger once the user leaves it; there is no custom picker.
+
+**Example**
+
+```html
+<div class="field">
+  <label class="field-label" for="delivery-date">Delivery date</label>
+  <input
+    id="delivery-date"
+    class="input"
+    type="date"
+    name="delivery"
+    min="2026-10-01"
+    max="2026-12-31"
+    aria-describedby="delivery-date-desc"
+  />
+  <p id="delivery-date-desc" class="field-description">October to December 2026.</p>
+</div>
+```
+
+```tsx
+<Field name="delivery" label="Delivery date" description="October to December 2026.">
+  <Input type="date" min="2026-10-01" max="2026-12-31" />
+</Field>
 ```
 
 ## Reference

@@ -100,7 +100,7 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, externals everything; then `cp ../admin-css/dist/admin.css ./dist/admin.css` for the `./styles.css` subpath export) → `docs`.
 
-`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.**
+`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.** The scoped bundle for React previews is also compiled from source: `customCss` imports `@aortl/admin-css/src/admin.css?scoped`, and `apps/docs/plugins/admin-scoped.mjs` runs `wrap()` on Tailwind's output and puts it in `@layer admin`. So `pnpm dev` and the docs build never read `admin-css/dist`.
 
 ### Tests
 

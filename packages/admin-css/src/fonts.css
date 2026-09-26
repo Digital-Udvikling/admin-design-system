@@ -1,5 +1,6 @@
 /*
- * IBM Plex Sans + Mono from Google's CDN (latin + latin-ext only).
+ * IBM Plex Sans + Mono (latin + latin-ext only), shipped beside the CSS in
+ * fonts/ so no page makes a third-party request. SIL OFL 1.1, see fonts/OFL.txt.
  * `font-display: swap` paints text immediately; the metric-matched fallback
  * faces below occupy Plex's exact box, so the swap changes glyph shapes
  * without layout shift. Opt out by overriding `--font-sans` / `--font-mono`.
@@ -10,8 +11,7 @@
   font-style: normal;
   font-weight: 400 600;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxQKYbABA.woff2)
-    format("woff2");
+  src: url(./fonts/plex-sans-latin-ext.woff2) format("woff2");
   unicode-range:
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
     U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
@@ -22,8 +22,7 @@
   font-style: normal;
   font-weight: 400 600;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2)
-    format("woff2");
+  src: url(./fonts/plex-sans-latin.woff2) format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -34,8 +33,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1iEq129k.woff2)
-    format("woff2");
+  src: url(./fonts/plex-mono-400-latin-ext.woff2) format("woff2");
   unicode-range:
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
     U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
@@ -46,8 +44,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2)
-    format("woff2");
+  src: url(./fonts/plex-mono-400-latin.woff2) format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -57,8 +54,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwl5FgtIU.woff2)
-    format("woff2");
+  src: url(./fonts/plex-mono-500-latin-ext.woff2) format("woff2");
   unicode-range:
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
     U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
@@ -69,11 +65,31 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2)
-    format("woff2");
+  src: url(./fonts/plex-mono-500-latin.woff2) format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Google's latin subset ships ↑ ↓ but not ← →, which Plex Mono also has; these
+   faces stop kbd arrows falling back to another font. Inlined to skip a request. */
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(data:font/woff2;base64,d09GMgABAAAAAATAABAAAAAACPQAAARpAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGx4cLgZgAEQIQAmCcxEQCoIMgXgLCgABNgIkAwoEIAWDOgcgDIM0G7wHyAQeKK/6V0laY1YGYu9sdw+VrIh8SNf8W21/8MyrcYT76lL9tp4CfBzQTDBItVfOeIiitdtPxjMelIAHQKMomxRRH+Zf3oQA4igQF4hQZGIBPwa8KRYLpB3KOk6tY3XO5pOH9pCxZ+ORfWR0DhEuNjRL3I0HNEezWM14tE+so0+0+wNavCfg0XRs0J9G2x+kqxf76dGhSSneRJr3GuL/X8EQIn0D4iEENUOLci6JnhPKIlGZIaoFmAZNbj/+5rQ07zbv3Yk0KYt9/dnBzw6QSWw62fQRop1VDHGMQ4RxqGCUOZa4v5QQ6yJBjOIVu/GKabziIF7NIEGLkqB9Q4KCunFFYMZ6WYg7bSViVxWhwlsE0Nevq1eIOinDO0Ou2FCv0OoUosasV+h1MuLq5ZE5q9SWjnRGtzgyInds3OIa5RG5Y+OWOat0q2M3Spd5a6d0WbBMN2jn75Ru2rLVtnvqFcYcpGFwbFjlrtHkLiFf+F+9wlM3jjfoFTPWrOVeCOW7wZCdb5oy7L45Y7lvhvJN265XeHdZJWX47M6c/eI+o7eG1/hnWDNvucF8F9txCltKTfeC4+Q7pbY0S/GmwFcAQZNCaHP18rASF2bqQxdKzXz1a0rNUtPON+1QvSJQNz5vhUP5pmnXI9DxE0cKnliM5C9nxZ8oK0Rtx+OKiqkdaIgH/60MIzk53pfs3ZToSVjfvzCRuZxIwlLG5GLf0uaB5emshQSRuJg9tTS4KBNyEj7uffr+p3u+qo0tLuZq6z0zoZn1Hi13cTH23nvZR++INYgWU0alD/ATSE3rVhgpCj5AQdhS0Jh/C0gasBXiEwUpCuMThUhR+D5pao6SQDIpqWndvPJ5Qx6M2jougftIr/gDH9N4NyUwvWZ9ct9v/oD+w9ruT/t02lv4+T0Ft/7/9/9ntRvGek4doAYx/Uooaq5m/f/v//9qNyhBYncLzUKSQSG1dxviT2rYiZdIFbekVX+J3lx+tiVGI8B5V/G3IYA3jy+ANJL4SABvF48CGdRwAHnIYhXyUkGbMkkUvd2jRzjCAXpopJHDbOYQOznAEYPZwGG6e2hgP4fYTiPTRJhglCEmmWEPWzkhvrKffeynnjm2sp2j7GEjh1hiK4dGi7qqJS000DpOLyW9lHhJCam+V5pG75ojChOupVzJug9w8qzq7Xcg2l99E810IseICJSHpOYGJCvYwx4MEKsPF9xbOXzO8mNsZQsN/0yhEo0doe+Nh22FgqmWny4Vj1YrfkqVFuNvtIbopJZi0l/+RO0bJBKknWqKSKtc4A0EaxinlxqyemzSmGUlbVSQg6TODhYlbx1FKDcYoIWajydBv4cZhmilfI5NXhqppIhsEphNPpqpoJRMUpiknymCkr5sxKYANZSQRzrxzKY47uE4axmiiuGMZ5wBmoJESVIyvloFf8NlUYKkIY5GSYmwIzAIQTgAT2tTSLWD8AbJGCMBPAVPw/twgL2fLMYGclSHi2QOkQxHhSCfAg==)
+    format("woff2");
+  unicode-range: U+2190, U+2192;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(data:font/woff2;base64,d09GMgABAAAAAATkABAAAAAACQQAAASLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGx4cLgZgAEQIRAmCcxEQCoIMgXgLCgABNgIkAwoEIAWDGgcgDINgG8wHyAQe+Nys95NAoa5JRRUYoSZJXUZo1401O4pes3v6w7qe3W4m/P/7uTq7fRqilri6mL743ZuoIyIhUxKROvEETaxxyIsFw7HFGdlY8cE8gAAiyZYGCI9vcBIXGkIwHA75HrmSRxWj09cuCuyTvL9ydIrk3guUgzXFFL/iACWomJzHH88TiwyJJpdbiXK6HYqKCeqDKKd7ae3AefGJ/iFdvIBu3KWJ/38BTYikZcT9KCiaEuKTOmqBVhhJTpZQwKBRm3Lham/pxh3GXQfh0y3hrz49++kZOs55bRo+/Jh0M8k4N7OIxaOU0s08BxzxPxAdbiVanMAp9nCKEZziLE5FI1oJEa18TbQkf1Dpl7hHzSeFuM2SInydxJNzDjfq0mKVRFTqunfHY4vlKolSKRHlBv8utVL32WqRb9wssPSgHjyxHtR9+vbKuq0VSYPHzYKNoFWj20yYO9LeSdOwe60s+9CGZbVXSbQltJo/aCGi707W7tJC/39VEkelH7+gFo+aY6Z9pSfL7vVYWYahe+0XRk37BU+WYVlVEuchd+i697Kd9OOqIwLOcsHjWmDMhGn3ZtlYwWBpSoFhXxkMZgULLPkhyQuiWwH0BiXiEVst8kpx5Whz8coCI0v7NwVGgWFlGZanSuKu9E+YXk+WYVhVCFRcRBKPIxwm7reL4ErlYok0f2Cm3NxGQXz0NdW0uLioiDjnaowjemlssjNlJobo6eSuqdHptfGZntTJaBEzldY9PTGlR6dHvzV4eeDy9p9aP/Gf+E41HQ3zDaZD/c5/8pOPP0rbu+IT/8nvVNPRMN/QojoR/DhtNTkkr6cLd0Jim0SLl/ABErymhJqsc0B8tyURH0uIl2gfS0S8JOLj2roQ0cQRn5DYxtO4UHGgVdTWhRDEEZ/QpI7QOtmfeJnCKwHv64lLcZ2/udzq91unPulU2W/gZ3dmn/v/+/8fVq7R9nl0MwTLwhxTPamY/3////fKNczAOSeFYqITRzbDn9TEn5Szg5NKiVwzoj7BckkXm2lAc/OZWT40KWRKeQpWhVgepZBp5hTua/1WB6mYVieFNKZiafx2zz3iiDO0U0MNh6wRYIczHHGGag5fu081pwmwRQ0j+BjkBP0MMco+G1woOZ/mFKepGrTBOjucxwHTwMBUpmenTj3VNISkY7JPT2+wjHpc3kJvnxUC0wR6ny676lsHOM0ZLroKbl2ROcDeWupoQV+AoZADcqManT5e3jfOUeNhKbXB4UXw/IWx+l2k1Ur4Ooa+4UVHkghW8FcNiUGpECFiURL184cbqCaXNBK/7IqK54mjlhLySCWmNoDnEfhop1IVBhDFsuSQ4KzSQyOlgjZJw+IEbZSSSSY56KeTWgpJI4878dBCxaKTIijFIJskosgkFx3UUkwa8aTlppuGbYSND0eSTzapxP+qLI5GEeQsJj1vAwMSfRRLEalyjNSpo4TsJcYSIh43ERUSXkSmsjMZcRSiN4Yz0AMPsjRwHjmvj+VI6lQOcAYegAfhfdNp0jVX0NAvk6kctpHMPswEiYu1DwAAAA==)
+    format("woff2");
+  unicode-range: U+2190, U+2192;
 }
 
 /* Metric-matched fallbacks — override numbers computed with @capsizecss/core

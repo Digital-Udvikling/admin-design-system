@@ -54,7 +54,7 @@ The scoped bundle ships unlayered so it wins over a host page's own CSS. In a Ta
 @layer theme, base, admin, components, utilities;
 @import "tailwindcss";
 @import "@aortl/admin-react/styles.css" layer(admin);
-@import "@aortl/admin-css/src/theme.css";
+@import "@aortl/admin-css/theme.css";
 ```
 
 Admin styles still beat Tailwind's preflight, and your utilities beat admin styles. Skip this when embedding in a page whose unlayered CSS would then override the components. `theme.css` registers the design tokens for utilities like `bg-primary`; see [Tailwind](tailwind.md).

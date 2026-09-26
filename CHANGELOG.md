@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
+- The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
+
 ## [0.21.0] - 2026-09-25
 
 ### Added

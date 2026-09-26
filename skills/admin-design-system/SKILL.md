@@ -75,7 +75,7 @@ Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><
 
 ### Server Components
 
-Every `@aortl/admin-react` component renders in a React Server Component (Next.js App Router), including compound parts and `icon={IconPlus}`. Pass event handlers (`onClick`, `onOpenChange`, `onPageChange`) and call the hooks (`useConfirm`, `useHotkey`, `useAppShell`) only from a Client Component. `Pagination`'s default buttons need one too; from a server page, pass a `renderItem` that returns links.
+Every `@aortl/admin-react` component renders in a React Server Component (Next.js App Router), including compound parts and `icon={IconPlus}`. Pass event handlers (`onClick`, `onOpenChange`, `onPageChange`) and call the hooks (`useConfirm`, `usePrompt`, `useHotkey`, `useAppShell`) only from a Client Component. `Pagination`'s default buttons need one too; from a server page, pass a `renderItem` that returns links.
 
 ### Tokens (two layers)
 
@@ -128,13 +128,14 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 
 - **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
 - **Pulling in Select2, react-select or a hand-rolled searchable select.** React has [Combobox](references/components/forms/combobox.md), with `multiple` for chips. A vanilla page filters by a few values with the [filter menu](references/patterns/filter-menu.md), a GET form of checkbox rows in a popover menu, and needs no JavaScript.
-- **Reaching for a toast library.** There is no toast. Report the result inline: an `<Alert>` next to the action, or a status in the affected row.
+- **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
+- **`window.confirm()`, `window.prompt()` or a hand-rolled confirm script.** React has `useConfirm()` and `usePrompt()` ([Dialog](references/components/dialog.md)). A vanilla page puts the POST form inside a `<dialog>` opened with `commandfor` ([confirm before submit](references/patterns/confirm.md)), which needs no JavaScript.
 
 ## When nothing fits
 
 In a consumer repo you use the system; changing it is a separate task in a checkout of [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system).
 
-1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers and master-detail.
+1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers, master-detail, confirmations and flash messages.
 2. Prefer composition: a prop, `className` / `classNames`, `.Container`, `render` onto your own element (a router link), or in vanilla a documented class on your own element.
 3. Otherwise write the smallest local workaround, either a stand-in built from system primitives and semantic tokens or a narrow override of one system class, and mark it with a comment in the file's own syntax:
    `aortl-gap: <component> — <what the system can't express> — #<issue> | unreported`
@@ -221,8 +222,10 @@ Read references **on demand** — do not pre-load. The index below lists every a
 
 ### Patterns
 
+- [Confirm before submit](references/patterns/confirm.md) — Ask before a destructive action runs.
 - [Empty, loading and error states](references/patterns/states.md) — Fill a panel or table while its data is missing.
 - [Filter menu](references/patterns/filter-menu.md) — Filter a list by several values of one field.
+- [Flash messages](references/patterns/flash-messages.md) — Report the result of an action after it runs.
 - [Master-detail](references/patterns/master-detail.md) — Pick a row and show its record beside the list.
 - [Section header](references/patterns/section-header.md) — Title a list or table with a count and actions.
 

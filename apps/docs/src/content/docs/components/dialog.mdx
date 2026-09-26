@@ -299,6 +299,8 @@ import { useState } from "react";
 
 ### Destructive, no light dismiss
 
+The form inside the dialog posts the action, so Delete needs no script. Cancel closes the dialog without submitting.
+
 :::example
 
 ```html
@@ -313,23 +315,23 @@ import { useState } from "react";
   aria-labelledby="dialog-destroy-title"
   aria-describedby="dialog-destroy-desc"
 >
-  <div class="dialog-header">
-    <h2 id="dialog-destroy-title" class="dialog-title">
-      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-      Delete project?
-    </h2>
-  </div>
-  <p id="dialog-destroy-desc" class="dialog-description">
-    This permanently removes all data. This cannot be undone.
-  </p>
-  <div class="dialog-footer">
-    <button type="button" class="btn btn-ghost" commandfor="dialog-destroy" command="close">
-      Cancel
-    </button>
-    <button type="button" class="btn btn-danger" commandfor="dialog-destroy" command="close">
-      Delete
-    </button>
-  </div>
+  <form method="post" action="/projects/billing/delete">
+    <div class="dialog-header">
+      <h2 id="dialog-destroy-title" class="dialog-title">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+        Delete project?
+      </h2>
+    </div>
+    <p id="dialog-destroy-desc" class="dialog-description">
+      This permanently removes all data. This cannot be undone.
+    </p>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-ghost" commandfor="dialog-destroy" command="close">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+  </form>
 </dialog>
 ```
 
@@ -337,26 +339,24 @@ import { useState } from "react";
 <Button variant="danger" commandfor="dialog-destroy-r" command="show-modal">
   Delete project
 </Button>
-<Dialog
-  id="dialog-destroy-r"
-  size="sm"
-  closedby="closerequest"
-  role="alertdialog"
-  dismissible={false}
-  icon={IconAlertTriangle}
-  title="Delete project?"
-  description="This permanently removes all data. This cannot be undone."
-  actions={
-    <>
+<Dialog.Container id="dialog-destroy-r" size="sm" closedby="closerequest" role="alertdialog">
+  <form method="post" action="/projects/billing/delete">
+    <Dialog.Header>
+      <Dialog.Title icon={IconAlertTriangle}>Delete project?</Dialog.Title>
+    </Dialog.Header>
+    <Dialog.Description>
+      This permanently removes all data. This cannot be undone.
+    </Dialog.Description>
+    <Dialog.Footer>
       <Button variant="ghost" commandfor="dialog-destroy-r" command="close">
         Cancel
       </Button>
-      <Button variant="danger" commandfor="dialog-destroy-r" command="close">
+      <Button type="submit" variant="danger">
         Delete
       </Button>
-    </>
-  }
-/>
+    </Dialog.Footer>
+  </form>
+</Dialog.Container>
 ```
 
 :::

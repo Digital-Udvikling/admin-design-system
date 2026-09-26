@@ -156,7 +156,12 @@ export function splitModuleFence(code) {
   const lines = code.split("\n");
   for (let i = lines.length - 2; i > 0; i--) {
     if (lines[i]?.trim() === "" && lines[i + 1]?.startsWith("<")) {
-      return { declarations: lines.slice(0, i).join("\n"), jsx: lines.slice(i + 1).join("\n") };
+      // oxfmt ends the trailing JSX statement with `;`, which would render as text.
+      const jsx = lines
+        .slice(i + 1)
+        .join("\n")
+        .replace(/;\s*$/, "");
+      return { declarations: lines.slice(0, i).join("\n"), jsx };
     }
   }
   return null;

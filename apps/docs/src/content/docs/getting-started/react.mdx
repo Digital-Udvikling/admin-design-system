@@ -56,7 +56,7 @@ Admin styles still beat Tailwind's preflight, and your utilities beat admin styl
 Two things that example is doing:
 
 - `<AdminRoot>` is required. Components emit `_ao-`-prefixed class names that only match inside `@scope (._ao-admin-root)`, and `<AdminRoot>` is the `<div>` that opens that scope. Mount it once near the top of your tree: at the app root for a full-page admin app, or around each embedded admin surface inside a host app. It also publishes itself as the portal container, so `Select` and `Tooltip` popups land inside the scope instead of on `document.body`.
-- It renders in a React Server Component: a server page can use any component, compound parts (`Select.Trigger`) and icon props (`icon={IconPlus}`) included. Event handlers (`onClick`, `onOpenChange`, `onPageChange`) and the hooks (`useConfirm`, `useHotkey`, `useAppShell`) need a Client Component. So do `Pagination`'s default buttons; a server page passes a `renderItem` that returns links.
+- It renders in a React Server Component: a server page can use any component, compound parts (`Select.Trigger`) and icon props (`icon={IconPlus}`) included. Event handlers (`onClick`, `onOpenChange`, `onPageChange`) and the hooks (`useConfirm`, `usePrompt`, `useHotkey`, `useAppShell`) need a Client Component. So do `Pagination`'s default buttons; a server page passes a `renderItem` that returns links.
 
 ## `<AdminRoot>` props
 

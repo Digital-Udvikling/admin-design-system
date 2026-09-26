@@ -7,8 +7,11 @@
 - [Examples](#examples)
   - [Empty panel](#empty-panel)
   - [Empty table](#empty-table)
+  - [Empty page](#empty-page)
   - [Loading panel](#loading-panel)
   - [Loading table](#loading-table)
+  - [Loading page](#loading-page)
+  - [Loading value](#loading-value)
   - [Failed fetch](#failed-fetch)
 - [Built from](#built-from)
 
@@ -81,6 +84,39 @@
 </Table>
 ```
 
+### Empty page
+
+For a page whose whole subject is empty, centre the message in the content area.
+
+**Example**
+
+```html
+<div class="flex w-full flex-col items-center gap-2 py-12 text-center">
+  <i class="ti ti-inbox text-2xl text-text-muted" aria-hidden="true"></i>
+  <h2 class="text-base font-semibold">No purchase orders yet</h2>
+  <p class="max-w-sm text-sm text-text-muted">
+    Orders appear here once a buyer sends the first one to a supplier.
+  </p>
+  <button class="btn btn-primary btn-sm" type="button">
+    <i class="ti ti-plus" aria-hidden="true"></i>
+    New purchase order
+  </button>
+</div>
+```
+
+```tsx
+<div className="flex w-full flex-col items-center gap-2 py-12 text-center">
+  <IconInbox size="1em" className="text-2xl text-text-muted" aria-hidden />
+  <h2 className="text-base font-semibold">No purchase orders yet</h2>
+  <p className="max-w-sm text-sm text-text-muted">
+    Orders appear here once a buyer sends the first one to a supplier.
+  </p>
+  <Button variant="primary" size="sm" icon={IconPlus}>
+    New purchase order
+  </Button>
+</div>
+```
+
 ### Loading panel
 
 **Example**
@@ -140,6 +176,55 @@
 </Table>
 ```
 
+### Loading page
+
+A route-level loading state, such as the body of a Next.js `loading.tsx`, keeps the page chrome and centres a spinner with visible text.
+
+**Example**
+
+```html
+<div class="flex w-full items-center justify-center gap-2 py-12 text-sm text-text-muted">
+  <output class="spinner" aria-label="Loading purchase orders"></output>
+  Loading purchase orders…
+</div>
+```
+
+```tsx
+<div className="flex w-full items-center justify-center gap-2 py-12 text-sm text-text-muted">
+  <Spinner label="Loading purchase orders" />
+  Loading purchase orders…
+</div>
+```
+
+### Loading value
+
+A value fetched separately from the rest of the record gets a small spinner in its place.
+
+**Example**
+
+```html
+<section class="property-list">
+  <dl class="property-list-items">
+    <dt class="property-list-label">Item number</dt>
+    <dd class="property-list-value">SUP-00123</dd>
+    <dt class="property-list-label">Current price</dt>
+    <dd class="property-list-value">
+      <output class="spinner spinner-sm" aria-label="Loading current price"></output>
+    </dd>
+  </dl>
+</section>
+```
+
+```tsx
+<PropertyList>
+  <PropertyList.Item label="Item number" value="SUP-00123" />
+  <PropertyList.Item
+    label="Current price"
+    value={<Spinner size="sm" label="Loading current price" />}
+  />
+</PropertyList>
+```
+
 ### Failed fetch
 
 **Example**
@@ -181,4 +266,4 @@
 
 ## Built from
 
-[Card](../components/cards.md), [Table](../components/tables.md), [Spinner](../components/spinners.md), [Alert](../components/alerts.md) and [Button](../components/buttons.md). Keep the panel title and table header in place across the states and swap only the body.
+[Card](../components/cards.md), [Table](../components/tables.md), [PropertyList](../components/property-list.md), [Spinner](../components/spinners.md), [Alert](../components/alerts.md), [Button](../components/buttons.md) and the `flex` utilities from [Row](../components/row.md). Keep the panel title and table header in place across the states and swap only the body.

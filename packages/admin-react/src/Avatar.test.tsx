@@ -25,7 +25,7 @@ describe("Avatar", () => {
   });
 
   it("applies size and shape modifier classes", () => {
-    render(<Avatar initials="OR" size="lg" shape="square" data-testid="avatar" />);
+    render(<Avatar initials="OR" size="lg" square data-testid="avatar" />);
     const el = screen.getByTestId("avatar");
     expect(el).toHaveAdminClass("avatar-lg");
     expect(el).toHaveAdminClass("avatar-square");

@@ -123,8 +123,9 @@
 | `Breadcrumbs.Item` | `href`       | `string`                                      | —              |
 | `Breadcrumbs.Item` | `current`    | `boolean`                                     | `false`        |
 | `Breadcrumbs.Item` | `icon`       | [`IconProp`](../basics/conventions.md#icons) | —              |
+| `Breadcrumbs.Item` | `render`     | `ReactElement`                                | —              |
 
-The root inserts a `Separator` between every pair of children, so you never write one by hand — pass `separator` to change the glyph. Omitting `href` renders a `<span>`, correct for the last entry; `current` adds `aria-current="page"` independently, so set both on an entry that is a link and the current page. `Item` takes the native attributes of whichever element it renders.
+The root inserts a `Separator` between every pair of children, so you never write one by hand — pass `separator` to change the glyph. Omitting `href` renders a `<span>`, correct for the last entry; `render` renders the link onto your own element, such as a router link (see [Conventions › `render`](../basics/conventions.md#render)). `current` adds `aria-current="page"` independently, so set both on an entry that is a link and the current page. `Item` takes the native attributes of whichever element it renders.
 
 ### Vanilla
 

@@ -5,7 +5,6 @@ import { Children, createContext, useContext, type ComponentProps, type ReactNod
 import { cn } from "./cn";
 
 export type AvatarSize = "sm" | "md" | "lg";
-export type AvatarShape = "circle" | "square";
 
 const AvatarGroupSizeContext = createContext<AvatarSize | undefined>(undefined);
 
@@ -17,7 +16,8 @@ export interface AvatarProps extends ComponentProps<"span"> {
   initials?: string;
   /** Defaults to the enclosing `AvatarGroup`'s `size`, else `"md"`. */
   size?: AvatarSize;
-  shape?: AvatarShape;
+  /** Rounded square (`avatar-square`) instead of a circle. */
+  square?: boolean;
 }
 
 /**
@@ -30,7 +30,7 @@ export function Avatar({
   alt = "",
   initials,
   size: sizeProp,
-  shape = "circle",
+  square = false,
   className,
   children,
   ...rest
@@ -41,7 +41,7 @@ export function Avatar({
   return (
     <BaseAvatar.Root
       className={cn(
-        ["avatar", size !== "md" && `avatar-${size}`, shape === "square" && "avatar-square"],
+        ["avatar", size !== "md" && `avatar-${size}`, square && "avatar-square"],
         className,
       )}
       {...rest}

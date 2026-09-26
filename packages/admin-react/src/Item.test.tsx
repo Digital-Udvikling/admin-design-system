@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Item, ItemGroup } from "./Item";
-import { adminSelector } from "./test-setup";
+import { adminSelector, RouterLink } from "./test-setup";
 
 describe("Item", () => {
   it("renders media, title, description, and actions from shorthand", () => {
@@ -79,5 +79,17 @@ describe("Item", () => {
       "item-group",
       "item-group-bordered",
     );
+  });
+
+  it("render: Item.Container renders as a router link", () => {
+    render(
+      <Item.Container selected render={<RouterLink href="/users/12" />}>
+        <Item.Content>Ada</Item.Content>
+      </Item.Container>,
+    );
+    const link = screen.getByRole("link", { name: "Ada" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAdminClass("item");
+    expect(link).toHaveAttribute("data-selected", "true");
   });
 });

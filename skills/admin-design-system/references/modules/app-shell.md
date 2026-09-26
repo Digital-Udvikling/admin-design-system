@@ -836,6 +836,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Navbar`                 | `systemAccent`              | `string` (CSS color)           | inherited                |
 | `Navbar.Item`            | `active`                    | `boolean`                      | `false`                  |
 | `Navbar.Item`            | `icon`                      | component or element           | —                        |
+| `Navbar.Item`            | `render`                    | `ReactElement`                 | —                        |
 | `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required                 |
 | `Navbar.Dropdown`        | `active`                    | `boolean`                      | an item's `aria-current` |
 | `Navbar.Dropdown`        | `icon`                      | component or element           | —                        |
@@ -848,15 +849,17 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Sidebar.Item`           | `active`                    | `boolean`                      | `false`                  |
 | `Sidebar.Item`           | `icon`                      | component or element           | —                        |
 | `Sidebar.Item`           | `badge`                     | `ReactNode`                    | —                        |
+| `Sidebar.Item`           | `render`                    | `ReactElement`                 | —                        |
 | `Sidebar.Collapsible`    | `icon`                      | component or element           | —                        |
 | `Sidebar.Collapsible`    | `label`                     | `ReactNode`                    | —                        |
 | `Sidebar.Collapsible`    | `trigger`                   | `ReactNode`                    | icon + label             |
 | `Sidebar.Collapsible`    | `open` / `defaultOpen`      | `boolean`                      | uncontrolled             |
 | `Sidebar.Collapsible`    | `onOpenChange`              | `(open: boolean) => void`      | —                        |
 | `Sidebar.SubItem`        | `active` / `icon` / `badge` | as `Sidebar.Item`              | —                        |
+| `Sidebar.SubItem`        | `render`                    | `ReactElement`                 | —                        |
 | `Sidebar.CollapseToggle` | `label`                     | `string`                       | `"Toggle sidebar"`       |
 
-`active` writes `aria-current="page"`, except on `Navbar.Dropdown`, where it sets `data-active` on the trigger. Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
+`active` writes `aria-current="page"`, except on `Navbar.Dropdown`, where it sets `data-active` on the trigger. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `active` (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
 
 `<Navbar.MobileToggle>` and `<Sidebar>`'s drawer both read `<AppShell>`'s context, so the toggle is inert outside a shell. When the drawer opens, `<Sidebar>` **moves** its children into the drawer rather than duplicating them — state held in a sidebar child does not survive crossing that breakpoint.
 

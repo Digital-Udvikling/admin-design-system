@@ -1,6 +1,7 @@
 import { Children, Fragment, isValidElement, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 
 export interface BreadcrumbsProps extends ComponentProps<"nav"> {
   /** Custom separator between items. Defaults to "/" from CSS. */
@@ -34,32 +35,46 @@ type BreadcrumbItemAsLink = ComponentProps<"a"> & {
   href: string;
   current?: boolean;
   icon?: IconProp;
+  render?: undefined;
+};
+type BreadcrumbItemAsRender = ComponentProps<"a"> & {
+  current?: boolean;
+  icon?: IconProp;
+  /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
+  render: RenderElement;
 };
 type BreadcrumbItemAsSpan = ComponentProps<"span"> & {
   href?: undefined;
   current?: boolean;
   icon?: IconProp;
+  render?: undefined;
 };
 
-export type BreadcrumbItemProps = BreadcrumbItemAsLink | BreadcrumbItemAsSpan;
+export type BreadcrumbItemProps =
+  | BreadcrumbItemAsLink
+  | BreadcrumbItemAsRender
+  | BreadcrumbItemAsSpan;
 
 function BreadcrumbItem(props: BreadcrumbItemProps) {
-  if (props.href !== undefined) {
-    const { className, current, icon, children, ...rest } = props;
+  if (props.href !== undefined || props.render !== undefined) {
+    const { className, current, icon, render, children, ...rest } = props;
     return (
       <li>
-        <a
-          className={cn("breadcrumb-item", className)}
-          aria-current={current ? "page" : undefined}
-          {...rest}
-        >
-          {renderIcon(icon)}
-          {children}
-        </a>
+        {renderAs("a", render, {
+          className: cn("breadcrumb-item", className),
+          "aria-current": current ? "page" : undefined,
+          ...rest,
+          children: (
+            <>
+              {renderIcon(icon)}
+              {children}
+            </>
+          ),
+        })}
       </li>
     );
   }
-  const { className, current, icon, children, ...rest } = props;
+  const { className, current, icon, render: _render, children, ...rest } = props;
   return (
     <li>
       <span

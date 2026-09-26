@@ -282,6 +282,7 @@
 | `Item`      | `size`        | `"sm" \| "md" \| "lg"`                        | `"md"`      |
 | `Item`      | `asLink`      | `boolean`                                     | `false`     |
 | `Item`      | `selected`    | `boolean`                                     | `false`     |
+| `Item`      | `render`      | `ReactElement`                                | —           |
 | `Item`      | `media`       | `ReactNode`                                   | —           |
 | `Item`      | `icon`        | [`IconProp`](../basics/conventions.md#icons) | —           |
 | `Item`      | `title`       | `ReactNode`                                   | —           |
@@ -292,7 +293,7 @@
 
 `media` and `icon` share the leading slot and `media` wins. `classNames` covers `media`, `content`, `title`, `description`, `actions`. Children render between the content and the actions.
 
-`variant`, `size`, `asLink` and `selected` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and stretches the `<a>` in `title` over it, but you supply the `<a>`. `selected` sets `[data-selected]`; put `aria-current="true"` on the row's link yourself. `ItemGroup` is a standalone export, not `Item.Group`.
+`variant`, `size`, `asLink`, `selected` and `render` live on the row, so they work on both `Item` and [`Item.Container`](../basics/conventions.md#container-escape-hatch). `asLink` styles the row and stretches the `<a>` in `title` over it, but you supply the `<a>`. `selected` sets `[data-selected]`; put `aria-current="true"` on the row's link yourself. `render` renders the whole row onto your own element, such as a router link, with a hover wash like `asLink`; use it only for rows without actions, and `asLink` otherwise (see [Conventions › `render`](../basics/conventions.md#render)). `ItemGroup` is a standalone export, not `Item.Group`.
 
 For list semantics pass `role="list"` to `ItemGroup` and `role="listitem"` to each `Item`.
 

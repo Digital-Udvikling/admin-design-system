@@ -431,6 +431,7 @@ A GET form around the rows submits the choice without JS, and `menu-actions` hol
 | `Menu.Item`       | `icon`            | [`IconProp`](../basics/conventions.md#icons) | —                              |
 | `Menu.Item`       | `hotkey`          | `string \| readonly string[]`                 | —                              |
 | `Menu.Item`       | `danger`          | `boolean`                                     | `false`                        |
+| `Menu.Item`       | `render`          | `ReactElement`                                | —                              |
 | `Menu.Item`       | `checked`         | `boolean`                                     | —                              |
 | `Menu.Item`       | `defaultChecked`  | `boolean`                                     | —                              |
 | `Menu.Item`       | `onCheckedChange` | `(checked: boolean) => void`                  | —                              |
@@ -447,7 +448,7 @@ The menu is a [Base UI Menu](https://base-ui.com/react/components/menu): arrow k
 
 The popup portals into the enclosing [`AdminRoot`](../getting-started/react.md), or into a `Dialog` it sits in. Its items stay mounted while it is closed, so `hotkey` works with the menu closed. A `Dialog` or `Drawer` that an item opens goes outside `<Menu>`, driven by the item's `onClick`; one rendered inside the popup is hidden with it. For a confirmation, use [`useConfirm()`](dialog.md).
 
-`href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work; without it the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled`. Both dim and stop activating, hotkeys included.
+`href` on an item renders a real `<a>`, so right-click "open in new tab" and copy-URL work, and `render` renders the link item onto your own element, such as a router link (see [Conventions › `render`](../basics/conventions.md#render)); without either the item is a `<button>`. Disable a button item with the native `disabled` attribute and an anchor item with `aria-disabled="true"`, since an `<a>` has no `disabled`. Both dim and stop activating, hotkeys included.
 
 `checked` or `defaultChecked` makes an item checkable (`menuitemcheckbox`) with a leading check; `false` still reserves the gutter, so labels stay aligned down the group. For single-select, put `Menu.RadioItem`s in a `Menu.RadioGroup`, which takes its name from a `Menu.GroupLabel` inside it like `Menu.Group`.
 

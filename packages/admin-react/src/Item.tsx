@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 import { hasNode } from "./slot";
 
 export type ItemVariant = "default" | "outline" | "muted";
@@ -17,6 +18,11 @@ export interface ItemContainerProps extends ComponentProps<"div"> {
   asLink?: boolean;
   /** Selection highlight, as on `Table.Row`: sets `[data-selected]`. */
   selected?: boolean;
+  /**
+   * Element to render in place of the `<div>`, such as a router link that makes the whole row
+   * clickable: `render={<NextLink href="/users/12" />}`. For a row with actions, use `asLink` instead.
+   */
+  render?: RenderElement;
 }
 /** The bare row primitive — just the `.item` shell, for layouts the default `<Item>` doesn't fit. */
 function ItemContainer({
@@ -24,24 +30,23 @@ function ItemContainer({
   size = "md",
   asLink,
   selected,
+  render,
   className,
   ...rest
 }: ItemContainerProps) {
-  return (
-    <div
-      data-selected={selected || undefined}
-      className={cn(
-        [
-          "item",
-          variant !== "default" && `item-${variant}`,
-          size !== "md" && `item-${size}`,
-          asLink && "item-link",
-        ],
-        className,
-      )}
-      {...rest}
-    />
-  );
+  return renderAs("div", render, {
+    "data-selected": selected || undefined,
+    className: cn(
+      [
+        "item",
+        variant !== "default" && `item-${variant}`,
+        size !== "md" && `item-${size}`,
+        asLink && "item-link",
+      ],
+      className,
+    ),
+    ...rest,
+  });
 }
 
 export type ItemMediaProps = ComponentProps<"div">;

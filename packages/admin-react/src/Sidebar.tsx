@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 import { SidebarCollapseToggle, SidebarCollapsibleBase, SidebarRoot } from "./Sidebar.client";
 import { hasNode } from "./slot";
 
@@ -42,6 +43,8 @@ function SidebarGroupLabel({ className, ...rest }: SidebarGroupLabelProps) {
 
 export interface SidebarItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
+  render?: RenderElement;
   /** Leading icon. Rendered inside `<Sidebar.Icon>`. */
   icon?: IconProp;
   /** Trailing badge. Rendered inside `<Sidebar.Badge>`. */
@@ -54,26 +57,28 @@ function SidebarItem({
   active,
   icon,
   badge,
+  render,
   className,
   classNames,
   children,
   ...rest
 }: SidebarItemProps) {
-  return (
-    <a
-      className={cn("sidebar-item", className)}
-      aria-current={active ? "page" : undefined}
-      {...rest}
-    >
-      {icon != null ? (
-        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
-      ) : null}
-      {hasNode(children) ? (
-        <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
-      ) : null}
-      {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
-    </a>
-  );
+  return renderAs("a", render, {
+    className: cn("sidebar-item", className),
+    "aria-current": active ? "page" : undefined,
+    ...rest,
+    children: (
+      <>
+        {icon != null ? (
+          <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+        ) : null}
+        {hasNode(children) ? (
+          <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+        ) : null}
+        {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      </>
+    ),
+  });
 }
 
 export type SidebarIconProps = ComponentProps<"span">;
@@ -142,6 +147,8 @@ function SidebarCollapsible({
 
 export interface SidebarSubItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
+  render?: RenderElement;
   icon?: IconProp;
   badge?: ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
@@ -152,26 +159,28 @@ function SidebarSubItem({
   active,
   icon,
   badge,
+  render,
   className,
   classNames,
   children,
   ...rest
 }: SidebarSubItemProps) {
-  return (
-    <a
-      className={cn("sidebar-subitem", className)}
-      aria-current={active ? "page" : undefined}
-      {...rest}
-    >
-      {icon != null ? (
-        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
-      ) : null}
-      {hasNode(children) ? (
-        <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
-      ) : null}
-      {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
-    </a>
-  );
+  return renderAs("a", render, {
+    className: cn("sidebar-subitem", className),
+    "aria-current": active ? "page" : undefined,
+    ...rest,
+    children: (
+      <>
+        {icon != null ? (
+          <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+        ) : null}
+        {hasNode(children) ? (
+          <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+        ) : null}
+        {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      </>
+    ),
+  });
 }
 
 export type SidebarFooterProps = ComponentProps<"div">;

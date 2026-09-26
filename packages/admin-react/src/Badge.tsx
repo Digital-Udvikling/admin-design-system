@@ -1,6 +1,7 @@
 import type { ComponentProps, MouseEventHandler } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 
 export type BadgeVariant = "neutral" | "info" | "success" | "warning" | "danger" | "primary";
 export type BadgeSize = "sm" | "md" | "lg";
@@ -35,6 +36,8 @@ export interface BadgeProps extends ComponentProps<"span"> {
   onRemove?: MouseEventHandler<HTMLButtonElement>;
   /** aria-label for the remove button. Default: "Remove". */
   removeLabel?: string;
+  /** Element to render in place of the `<span>`, such as a router link: `render={<NextLink href="/orders?status=open" />}`. Don't combine with `onRemove`: a button can't sit inside a link. */
+  render?: RenderElement;
 }
 
 export function Badge({
@@ -44,35 +47,37 @@ export function Badge({
   soft = false,
   onRemove,
   removeLabel = "Remove",
+  render,
   className,
   children,
   ...rest
 }: BadgeProps) {
-  return (
-    <span
-      className={cn(
-        [
-          "badge",
-          variant !== "neutral" && `badge-${variant}`,
-          size !== "md" && `badge-${size}`,
-          soft && "badge-soft",
-        ],
-        className,
-      )}
-      {...rest}
-    >
-      {renderIcon(icon)}
-      {children}
-      {onRemove ? (
-        <button
-          type="button"
-          className={cn("badge-remove", undefined)}
-          aria-label={removeLabel}
-          onClick={onRemove}
-        >
-          <RemoveIcon />
-        </button>
-      ) : null}
-    </span>
-  );
+  return renderAs("span", render, {
+    className: cn(
+      [
+        "badge",
+        variant !== "neutral" && `badge-${variant}`,
+        size !== "md" && `badge-${size}`,
+        soft && "badge-soft",
+      ],
+      className,
+    ),
+    ...rest,
+    children: (
+      <>
+        {renderIcon(icon)}
+        {children}
+        {onRemove ? (
+          <button
+            type="button"
+            className={cn("badge-remove", undefined)}
+            aria-label={removeLabel}
+            onClick={onRemove}
+          >
+            <RemoveIcon />
+          </button>
+        ) : null}
+      </>
+    ),
+  });
 }

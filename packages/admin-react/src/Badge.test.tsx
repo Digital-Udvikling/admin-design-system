@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Badge } from "./Badge";
+import { RouterLink } from "./test-setup";
 
 describe("Badge", () => {
   it("renders", () => {
@@ -67,5 +68,16 @@ describe("Badge", () => {
       </Badge>,
     );
     expect(screen.getByRole("button", { name: "Remove Digital salg" })).toBeInTheDocument();
+  });
+
+  it("render: a badge renders as a router link", () => {
+    render(
+      <Badge variant="info" render={<RouterLink href="/orders?status=open" />}>
+        Open
+      </Badge>,
+    );
+    const link = screen.getByRole("link", { name: "Open" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAdminClass("badge", "badge-info");
   });
 });

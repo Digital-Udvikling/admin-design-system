@@ -9,6 +9,12 @@
            bg-surface-strong text-text;
   }
 
+  /* A badge that is itself a link (a filter chip, React `render`): underline on hover. */
+  .badge:any-link {
+    @apply hover:underline
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+
   /* Keep a status dot or leading glyph round when the label is long. */
   .badge > :is(i, svg) {
     flex-shrink: 0;

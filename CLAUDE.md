@@ -62,6 +62,8 @@ CI runs `lint`, `format:check`, `build`, `check-package`, the skill drift check 
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
 
+React props mirror it: `variant` for mutually exclusive looks (usually a tone), `size` for `sm`/`md`/`lg`, a boolean for one combinable modifier (`compact`, `bordered`, `soft`, `square`), and another enum only for a modifier with three or more levels (`Table` `density`). Position props (`side`, `align`, `orientation`) use Base UI / ARIA values. Link-like components take an element-only `render` (via the directive-free `renderAs` in `src/render.ts`) so consumers pass a router link; merge refs with `mergeRefs` from `src/merge-refs.ts`.
+
 Two output forms ship from one source:
 
 - **Unscoped, unprefixed** (`@aortl/admin-css/admin.css`) — class names are bare (`.btn`, `.card`). For full-page admin apps that own the document. Hand-written HTML uses these names directly.

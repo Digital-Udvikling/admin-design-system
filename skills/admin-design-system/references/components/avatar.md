@@ -64,8 +64,8 @@
 ```
 
 ```tsx
-<Avatar initials="OR" shape="square" />
-<Avatar src="https://i.pravatar.cc/64?img=5" alt="Grace Hopper" size="lg" shape="square" />
+<Avatar initials="OR" square />
+<Avatar src="https://i.pravatar.cc/64?img=5" alt="Grace Hopper" size="lg" square />
 ```
 
 ### Image fallback
@@ -184,7 +184,7 @@
 | `Avatar`      | `alt`      | `string`               | `""`                              |
 | `Avatar`      | `initials` | `string`               | —                                 |
 | `Avatar`      | `size`     | `"sm" \| "md" \| "lg"` | `AvatarGroup` `size`, else `"md"` |
-| `Avatar`      | `shape`    | `"circle" \| "square"` | `"circle"`                        |
+| `Avatar`      | `square`   | `boolean`              | `false`                           |
 | `AvatarGroup` | `max`      | `number`               | —                                 |
 | `AvatarGroup` | `size`     | `"sm" \| "md" \| "lg"` | `"md"`                            |
 

@@ -59,8 +59,9 @@
 | `external`     | `boolean`                                     | `false` |
 | `icon`         | [`IconProp`](../basics/conventions.md#icons) | —       |
 | `iconTrailing` | [`IconProp`](../basics/conventions.md#icons) | —       |
+| `render`       | `ReactElement`                                | —       |
 
-`external` adds the trailing ↗ and defaults `target="_blank"` + `rel="noopener noreferrer"`; passing either prop explicitly wins. It's independent of `iconTrailing`, so setting both renders two trailing markers. Plus native `<a>` attributes — `href` included, which this component does not supply.
+`external` adds the trailing ↗ and defaults `target="_blank"` + `rel="noopener noreferrer"`; passing either prop explicitly wins. It's independent of `iconTrailing`, so setting both renders two trailing markers. `render` puts the link styling on your own element, such as a router link (see [Conventions › `render`](../basics/conventions.md#render)). Plus native `<a>` attributes — `href` included, which this component does not supply.
 
 ### Vanilla
 

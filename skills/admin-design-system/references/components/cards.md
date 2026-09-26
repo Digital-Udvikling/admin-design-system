@@ -14,6 +14,7 @@
   - [Media](#media)
   - [Per-slot styling (React only)](#per-slot-styling-react-only)
   - [Two bodies, composed](#two-bodies-composed)
+  - [Linked card](#linked-card)
   - [Scroll region](#scroll-region)
 - [Reference](#reference)
   - [React](#react)
@@ -313,6 +314,30 @@
 </Card.Container>
 ```
 
+### Linked card
+
+A card that is a link gets a strong border on hover. In React, render `Card.Container` onto your router's link with `render`.
+
+**Example**
+
+```html
+<a class="card" href="#order-1042">
+  <div class="card-body">
+    <h3 class="card-title">Order 1042</h3>
+    <p class="card-description">Shipped 12 Sep · 3 items</p>
+  </div>
+</a>
+```
+
+```tsx
+<Card.Container render={<a href="#order-1042" />}>
+  <Card.Body>
+    <Card.Title>Order 1042</Card.Title>
+    <Card.Description>Shipped 12 Sep · 3 items</Card.Description>
+  </Card.Body>
+</Card.Container>
+```
+
 ### Scroll region
 
 **Example**
@@ -388,11 +413,14 @@
 | `Card`           | `actions`     | `ReactNode`                                                                         | —           |
 | `Card`           | `classNames`  | [slots](../basics/conventions.md#classnames)                                       | —           |
 | `Card.Container` | `scroll`      | `boolean`                                                                           | `false`     |
+| `Card.Container` | `render`      | `ReactElement`                                                                      | —           |
 | `Card.Title`     | `icon`        | [`IconProp`](../basics/conventions.md#icons)                                       | —           |
 
 `Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. A shorthand prop that is `null`, `false` or `""` renders nothing, so `actions={canEdit && <Button />}` leaves no empty row; `icon` needs a `title`. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
 
 `variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies split by a [separator](separator.md#splitting-card-sections), a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body. Give the scrolling `Card.Body` `role="region"`, `tabIndex={0}` and an `aria-label` so it scrolls by keyboard.
+
+`render` on `Card.Container` renders the card onto your own element, such as a router link that makes the whole card clickable; a card that is a link gets a strong border on hover in both bundles (see [Conventions › `render`](../basics/conventions.md#render)). Keep buttons out of a linked card.
 
 `toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
 

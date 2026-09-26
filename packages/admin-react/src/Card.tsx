@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 import { hasNode } from "./slot";
 
 export type CardVariant =
@@ -19,6 +20,8 @@ export interface CardContainerProps extends ComponentProps<"div"> {
   compact?: boolean;
   /** Pins direct-child header/actions and scrolls the body. Set the height yourself. */
   scroll?: boolean;
+  /** Element to render in place of the `<div>`, such as a router link that makes the whole card clickable: `render={<NextLink href="/orders/1042" />}`. */
+  render?: RenderElement;
 }
 
 /**
@@ -30,24 +33,23 @@ function CardContainer({
   bordered,
   compact,
   scroll,
+  render,
   className,
   ...rest
 }: CardContainerProps) {
-  return (
-    <div
-      className={cn(
-        [
-          "card",
-          variant !== "default" && `card-${variant}`,
-          bordered && "card-bordered",
-          compact && "card-compact",
-          scroll && "card-scroll",
-        ],
-        className,
-      )}
-      {...rest}
-    />
-  );
+  return renderAs("div", render, {
+    className: cn(
+      [
+        "card",
+        variant !== "default" && `card-${variant}`,
+        bordered && "card-bordered",
+        compact && "card-compact",
+        scroll && "card-scroll",
+      ],
+      className,
+    ),
+    ...rest,
+  });
 }
 
 export interface CardProps extends Omit<ComponentProps<"div">, "title"> {

@@ -1,6 +1,7 @@
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
 import { containsCurrent, Menu, type MenuPopupProps, type MenuProps } from "./Menu";
 import { NavbarMobileToggle } from "./Navbar.client";
 
@@ -38,21 +39,24 @@ function NavbarItems({ className, ...rest }: NavbarItemsProps) {
 
 export interface NavbarItemProps extends ComponentProps<"a"> {
   active?: boolean;
+  /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
+  render?: RenderElement;
   /** Leading icon. */
   icon?: IconProp;
 }
 
-function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemProps) {
-  return (
-    <a
-      className={cn("navbar-item", className)}
-      aria-current={active ? "page" : undefined}
-      {...rest}
-    >
-      {renderIcon(icon)}
-      {children}
-    </a>
-  );
+function NavbarItem({ active, icon, render, className, children, ...rest }: NavbarItemProps) {
+  return renderAs("a", render, {
+    className: cn("navbar-item", className),
+    "aria-current": active ? "page" : undefined,
+    ...rest,
+    children: (
+      <>
+        {renderIcon(icon)}
+        {children}
+      </>
+    ),
+  });
 }
 
 export interface NavbarDropdownProps extends Omit<MenuProps, "title"> {

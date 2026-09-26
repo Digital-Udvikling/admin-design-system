@@ -3,6 +3,7 @@ import type { ComponentProps, MouseEvent, ReactNode } from "react";
 import type { ButtonSize, ButtonVariant } from "./Button";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import type { RenderElement } from "./render";
 import { MenuItemBase, MenuPopup } from "./Menu.client";
 
 export interface MenuProps extends ComponentProps<"div"> {
@@ -103,6 +104,7 @@ export type MenuItemAsButton = Omit<
 > &
   MenuItemExtras & {
     href?: undefined;
+    render?: undefined;
     className?: string;
     onClick?: (event: MouseEvent<HTMLElement>) => void;
     /** Controlled checked state; makes the item checkable (`menuitemcheckbox`) with a leading check. */
@@ -113,8 +115,9 @@ export type MenuItemAsButton = Omit<
     onCheckedChange?: (checked: boolean) => void;
   };
 
+/** A link item: set `href`, or `render` for a router link (`render={<NextLink href="/orders" />}`). */
 export type MenuItemAsLink = Omit<ComponentProps<"a">, "className"> &
-  MenuItemExtras & { href: string; className?: string };
+  MenuItemExtras & { href?: string; render?: RenderElement; className?: string };
 
 export type MenuItemProps = MenuItemAsButton | MenuItemAsLink;
 
@@ -147,9 +150,9 @@ function MenuItemIndicator() {
 }
 
 function isCheckable(props: MenuItemProps): boolean {
-  return (
-    props.href === undefined && (props.checked !== undefined || props.defaultChecked !== undefined)
-  );
+  if (props.href !== undefined || props.render !== undefined) return false;
+  const { checked, defaultChecked } = props as MenuItemAsButton;
+  return checked !== undefined || defaultChecked !== undefined;
 }
 
 function MenuItem({ icon, ...rest }: MenuItemProps) {

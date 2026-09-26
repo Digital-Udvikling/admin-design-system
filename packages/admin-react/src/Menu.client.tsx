@@ -49,6 +49,12 @@ export type MenuItemBaseProps =
   | (Omit<MenuItemAsButton, "icon"> & { leading?: ReactNode })
   | (Omit<MenuItemAsLink, "icon"> & { leading?: ReactNode });
 
+type MenuItemBaseLinkProps = Omit<MenuItemAsLink, "icon"> & { leading?: ReactNode };
+
+function isLinkItem(props: MenuItemBaseProps): props is MenuItemBaseLinkProps {
+  return props.href !== undefined || props.render !== undefined;
+}
+
 export function MenuItemBase(props: MenuItemBaseProps) {
   // Anchors have no native `disabled`, hence the `aria-disabled` branch.
   const ariaDisabled = props["aria-disabled"];
@@ -72,7 +78,7 @@ export function MenuItemBase(props: MenuItemBaseProps) {
     </>
   );
 
-  if (props.href !== undefined) {
+  if (isLinkItem(props)) {
     const {
       className,
       leading: _leading,

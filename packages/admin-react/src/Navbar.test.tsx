@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
 import { Menu } from "./Menu";
 import { Navbar } from "./Navbar";
+import { RouterLink } from "./test-setup";
 
 describe("Navbar", () => {
   it("renders brand, items, and actions", () => {
@@ -131,5 +132,23 @@ describe("Navbar", () => {
       await user.click(toggle);
       expect(toggle).toHaveAttribute("aria-expanded", "false");
     });
+  });
+
+  it("render: puts the item classes and aria-current on a router link", () => {
+    render(
+      <Navbar.Item
+        active
+        icon={() => <svg data-testid="icon" />}
+        render={<RouterLink href="/orders" />}
+      >
+        Orders
+      </Navbar.Item>,
+    );
+    const link = screen.getByRole("link", { name: "Orders" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAttribute("href", "/orders");
+    expect(link).toHaveAdminClass("navbar-item");
+    expect(link).toHaveAttribute("aria-current", "page");
+    expect(link).toContainElement(screen.getByTestId("icon"));
   });
 });

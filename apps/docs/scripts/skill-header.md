@@ -40,6 +40,12 @@ Both packages share base names. The unscoped vanilla bundle renders `<Button var
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
+React props follow the same split: `variant` picks one of a set of mutually exclusive looks (usually a tone), `size` is `sm` / `md` / `lg`, a boolean prop sets one modifier that combines with the others (`compact`, `bordered`, `soft`, `square`), and any other enum is for a modifier with three or more levels (`density` on `Table`).
+
+### Router links (`render`)
+
+To render a link-like component as your router's link, pass the link element as `render`: `<Sidebar.Item active render={<NextLink href="/orders" />}>Orders</Sidebar.Item>`. The component's classes, `aria-current` and children land on your element. `Navbar.Item`, `Sidebar.Item` / `SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container`, `Item` and `Menu.Item` take it; `Button` also needs `nativeButton={false}`. Never copy `_ao-` classes onto your own link instead.
+
 ### Targeting inner elements (`classNames`)
 
 React components whose shorthand props render inner elements expose a `classNames` prop — an object mapping slot names to classes. `className` styles the root; `classNames={{ slot: "…" }}` reaches the inner slots. Slot classes pass through verbatim (no `_ao-` prefix), exactly like `className`, and slot names autocomplete from the component's types.
@@ -126,7 +132,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 In a consumer repo you use the system; changing it is a separate task in a checkout of [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system).
 
 1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers and master-detail.
-2. Prefer composition: a prop, `className` / `classNames`, `.Container`, or a documented class on your own element (a router `Link` with `navbar-item`, written `_ao-navbar-item` inside `<AdminRoot>`).
+2. Prefer composition: a prop, `className` / `classNames`, `.Container`, `render` onto your own element (a router link), or in vanilla a documented class on your own element.
 3. Otherwise write the smallest local workaround, either a stand-in built from system primitives and semantic tokens or a narrow override of one system class, and mark it with a comment in the file's own syntax:
    `aortl-gap: <component> — <what the system can't express> — #<issue> | unreported`
    Run `rg aortl-gap` first and reuse an existing stand-in. Never use `!important` against the system, copy component CSS, or edit files under `node_modules`.

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AdminRoot } from "./AdminRoot";
 import { __resetRegistry } from "./hotkey-registry";
 import { Menu } from "./Menu";
+import { RouterLink } from "./test-setup";
 
 function pressChord(init: KeyboardEventInit) {
   act(() => {
@@ -257,6 +258,25 @@ describe("Menu", () => {
       expect(link).toHaveAttribute("href", "#docs");
       await user.click(link);
       await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
+    });
+
+    it("renders a link item onto a router link with render", async () => {
+      const user = userEvent.setup();
+      render(
+        <Menu>
+          <Menu.Trigger>Resources</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item render={<RouterLink href="/docs" />} danger>
+              Docs
+            </Menu.Item>
+          </Menu.Popup>
+        </Menu>,
+      );
+      await user.click(screen.getByRole("button", { name: "Resources" }));
+      const link = screen.getByRole("menuitem", { name: "Docs" });
+      expect(link).toHaveAttribute("data-router");
+      expect(link).toHaveAttribute("href", "/docs");
+      expect(link).toHaveAdminClass("menu-item", "menu-item-danger");
     });
 
     it("ignores clicks on an aria-disabled link item", async () => {

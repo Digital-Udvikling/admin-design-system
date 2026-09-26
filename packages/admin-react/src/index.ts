@@ -24,7 +24,6 @@ export {
   type AvatarProps,
   type AvatarGroupProps,
   type AvatarSize,
-  type AvatarShape,
 } from "./Avatar";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { renderIcon, type IconProp, type IconComponent, type IconRenderProps } from "./icon";

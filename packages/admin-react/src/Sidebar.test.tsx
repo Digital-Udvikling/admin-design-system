@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { AdminRoot } from "./AdminRoot";
 import { AppShell } from "./AppShell";
 import { Sidebar } from "./Sidebar";
-import { adminSelector } from "./test-setup";
+import { adminSelector, RouterLink } from "./test-setup";
 
 describe("Sidebar", () => {
   it("renders header, nav, items, and footer", () => {
@@ -247,5 +247,24 @@ describe("Sidebar", () => {
       expect(summary.closest("details")).not.toHaveAttribute("open");
       expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
     });
+  });
+
+  it("render: Item and SubItem render onto a router link", () => {
+    render(
+      <>
+        <Sidebar.Item active badge="3" render={<RouterLink href="/orders" />}>
+          Orders
+        </Sidebar.Item>
+        <Sidebar.SubItem render={<RouterLink href="/orders/open" />}>Open</Sidebar.SubItem>
+      </>,
+    );
+    const item = screen.getByRole("link", { name: /Orders/ });
+    expect(item).toHaveAttribute("data-router");
+    expect(item).toHaveAdminClass("sidebar-item");
+    expect(item).toHaveAttribute("aria-current", "page");
+    expect(item.querySelector(adminSelector("sidebar-badge"))).toHaveTextContent("3");
+    const sub = screen.getByRole("link", { name: "Open" });
+    expect(sub).toHaveAttribute("data-router");
+    expect(sub).toHaveAdminClass("sidebar-subitem");
   });
 });

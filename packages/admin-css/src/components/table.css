@@ -61,9 +61,10 @@
   }
 
   /* Status-icon gutter. Block-level children centre exactly on the cell and add
-     no line box, whether a Tabler webfont <i>, a React SVG or a checkbox. */
+     no line box, whether a Tabler webfont <i>, a React SVG or a checkbox. min-width
+     keeps an overflowing auto-layout table from squeezing it to the control's width. */
   .table-cell-gutter {
-    @apply w-6 text-center text-text-muted;
+    @apply w-6 min-w-6 text-center text-text-muted;
   }
   .table-cell-gutter > :is(i, svg, .checkbox) {
     display: flex;
@@ -238,6 +239,21 @@
   }
   .table :where(th, td).table-cell-actions {
     @apply py-0;
+  }
+
+  /* A table directly in a card, or in its table-scroll, puts its edge cells on the card's
+     inset; the gutter's px-0 gives way so a selection checkbox lines up with the title. */
+  :is(.card > .table, .card > .table-scroll > .table) > * > tr > :first-child {
+    padding-inline-start: 1rem;
+  }
+  :is(.card > .table, .card > .table-scroll > .table) > * > tr > :last-child {
+    padding-inline-end: 1rem;
+  }
+  :is(.card-compact > .table, .card-compact > .table-scroll > .table) > * > tr > :first-child {
+    padding-inline-start: 0.75rem;
+  }
+  :is(.card-compact > .table, .card-compact > .table-scroll > .table) > * > tr > :last-child {
+    padding-inline-end: 0.75rem;
   }
 
   /* Empty state — a centered, muted message row (author sets colspan). */

@@ -1255,6 +1255,8 @@ Plus each element's native attributes. `Table` takes no `classNames` — every p
 
 Modifiers compose — `striped` with `sticky` with `relaxed` is fine.
 
+A `table` that is a direct child of a `card` (in React, a `Card.Container`), or of a `table-scroll` there, pads its first and last cells to the card's `1rem` inset, `0.75rem` under `card-compact`, so the columns line up with the card title.
+
 Plain `<th>` and `<td>` need no class: descendant selectors style them, and `<tfoot>` rows are semibold with a strong top divider on the first automatically. `[data-align="right"]` or `[data-align="center"]` on a cell aligns it; left is the default. The row tint responds to `input[type="checkbox"]:checked`, `.checkbox[data-checked]`, `[data-selected]` on the `<tr>`, or a link with `aria-current` in the row; a switch in the row doesn't tint it. A `<th scope="row">` in `<tbody>` styles as a body cell in medium weight.
 
 Striping, hover and selection are scoped to `<tbody>`, and `table-pin-col` pins `:first-child` — so the pinned column must literally be first, and a loose `<tr>` outside `<tbody>` won't stripe.

@@ -1,20 +1,12 @@
-import { Dialog as BaseDialog } from "@base-ui/react/dialog";
-import { createContext, useContext, useState } from "react";
 import type { ComponentProps, ReactNode } from "react";
-import { useAppShell } from "./AppShell";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
-
-interface SidebarContextValue {
-  collapsed?: boolean;
-  defaultCollapsed?: boolean;
-  onCollapsedChange?: (collapsed: boolean) => void;
-}
-
-const SidebarContext = createContext<SidebarContextValue | null>(null);
+import { renderAs, type RenderElement } from "./render";
+import { SidebarCollapseToggle, SidebarCollapsibleBase, SidebarRoot } from "./Sidebar.client";
+import { hasNode } from "./slot";
 
 export interface SidebarProps extends Omit<ComponentProps<"aside">, "onChange"> {
-  /** Controlled collapsed state. Pair with `onCollapsedChange`. */
+  /** Controlled collapsed state, set as `data-collapsed` on the root. Pair with `onCollapsedChange`. */
   collapsed?: boolean;
   /** Uncontrolled initial state. */
   defaultCollapsed?: boolean;
@@ -23,49 +15,6 @@ export interface SidebarProps extends Omit<ComponentProps<"aside">, "onChange"> 
   drawerLabel?: string;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"drawer" | "drawerBackdrop">;
-}
-
-function SidebarRoot({
-  collapsed,
-  defaultCollapsed,
-  onCollapsedChange,
-  drawerLabel = "Navigation",
-  className,
-  classNames,
-  children,
-  ...rest
-}: SidebarProps) {
-  const shell = useAppShell();
-  const drawerOpen = shell?.mobileDrawerOpen ?? false;
-
-  return (
-    <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
-      <aside className={cn("sidebar", className)} {...rest}>
-        {drawerOpen ? null : children}
-      </aside>
-      {shell ? (
-        <BaseDialog.Root open={drawerOpen} onOpenChange={(open) => shell.setMobileDrawerOpen(open)}>
-          <BaseDialog.Portal>
-            <BaseDialog.Backdrop
-              className={cn("sidebar-drawer-backdrop", classNames?.drawerBackdrop)}
-            />
-            <BaseDialog.Popup
-              className={cn("sidebar-drawer", classNames?.drawer)}
-              aria-label={drawerLabel}
-              onClick={(event) => {
-                const target = event.target as HTMLElement;
-                if (target.closest("a, [data-drawer-close]")) {
-                  shell.setMobileDrawerOpen(false);
-                }
-              }}
-            >
-              {children}
-            </BaseDialog.Popup>
-          </BaseDialog.Portal>
-        </BaseDialog.Root>
-      ) : null}
-    </SidebarContext.Provider>
-  );
 }
 
 export type SidebarHeaderProps = ComponentProps<"div">;
@@ -93,7 +42,10 @@ function SidebarGroupLabel({ className, ...rest }: SidebarGroupLabelProps) {
 }
 
 export interface SidebarItemProps extends ComponentProps<"a"> {
-  active?: boolean;
+  /** Marks the current page: sets `aria-current="page"`. */
+  current?: boolean;
+  /** Element rendered in place of the `<a>`, such as a router link. */
+  render?: RenderElement;
   /** Leading icon. Rendered inside `<Sidebar.Icon>`. */
   icon?: IconProp;
   /** Trailing badge. Rendered inside `<Sidebar.Badge>`. */
@@ -103,31 +55,31 @@ export interface SidebarItemProps extends ComponentProps<"a"> {
 }
 
 function SidebarItem({
-  active,
+  current,
   icon,
   badge,
+  render,
   className,
   classNames,
   children,
   ...rest
 }: SidebarItemProps) {
-  return (
-    <a
-      className={cn("sidebar-item", className)}
-      aria-current={active ? "page" : undefined}
-      {...rest}
-    >
-      {icon != null ? (
-        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
-      ) : null}
-      {children !== undefined ? (
-        <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
-      ) : null}
-      {badge !== undefined ? (
-        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
-      ) : null}
-    </a>
-  );
+  return renderAs("a", render, {
+    className: cn("sidebar-item", className),
+    "aria-current": current ? "page" : undefined,
+    ...rest,
+    children: (
+      <>
+        {icon != null ? (
+          <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+        ) : null}
+        {hasNode(children) ? (
+          <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+        ) : null}
+        {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      </>
+    ),
+  });
 }
 
 export type SidebarIconProps = ComponentProps<"span">;
@@ -171,80 +123,66 @@ function SidebarCollapsible({
   icon,
   label,
   trigger,
-  children,
-  className,
   classNames,
-  open,
-  defaultOpen,
-  onOpenChange,
   ...rest
 }: SidebarCollapsibleProps) {
-  const isControlled = open !== undefined;
-  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
-  const isOpen = isControlled ? open : internalOpen;
-
-  const triggerContent = trigger ?? (
-    <>
-      {icon != null ? (
-        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
-      ) : null}
-      {label !== undefined ? (
-        <SidebarLabel className={classNames?.label}>{label}</SidebarLabel>
-      ) : null}
-    </>
-  );
-
   return (
-    <details
-      className={cn("sidebar-collapsible", className)}
-      open={isOpen}
-      onToggle={(event) => {
-        const next = (event.currentTarget as HTMLDetailsElement).open;
-        if (!isControlled) setInternalOpen(next);
-        onOpenChange?.(next);
-      }}
+    <SidebarCollapsibleBase
+      trigger={
+        trigger ?? (
+          <>
+            {icon != null ? (
+              <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+            ) : null}
+            {hasNode(label) ? (
+              <SidebarLabel className={classNames?.label}>{label}</SidebarLabel>
+            ) : null}
+          </>
+        )
+      }
+      classNames={classNames}
       {...rest}
-    >
-      <summary className={cn("sidebar-collapsible-trigger", classNames?.trigger)}>
-        {triggerContent}
-      </summary>
-      <div className={cn("sidebar-collapsible-panel", classNames?.panel)}>{children}</div>
-    </details>
+    />
   );
 }
 
 export interface SidebarSubItemProps extends ComponentProps<"a"> {
-  active?: boolean;
+  /** Marks the current page: sets `aria-current="page"`. */
+  current?: boolean;
+  /** Element rendered in place of the `<a>`, such as a router link. */
+  render?: RenderElement;
   icon?: IconProp;
   badge?: ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
-  classNames?: SlotClasses<"icon" | "badge">;
+  classNames?: SlotClasses<"icon" | "label" | "badge">;
 }
 
 function SidebarSubItem({
-  active,
+  current,
   icon,
   badge,
+  render,
   className,
   classNames,
   children,
   ...rest
 }: SidebarSubItemProps) {
-  return (
-    <a
-      className={cn("sidebar-subitem", className)}
-      aria-current={active ? "page" : undefined}
-      {...rest}
-    >
-      {icon != null ? (
-        <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
-      ) : null}
-      {children}
-      {badge !== undefined ? (
-        <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge>
-      ) : null}
-    </a>
-  );
+  return renderAs("a", render, {
+    className: cn("sidebar-subitem", className),
+    "aria-current": current ? "page" : undefined,
+    ...rest,
+    children: (
+      <>
+        {icon != null ? (
+          <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
+        ) : null}
+        {hasNode(children) ? (
+          <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
+        ) : null}
+        {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      </>
+    ),
+  });
 }
 
 export type SidebarFooterProps = ComponentProps<"div">;
@@ -254,39 +192,13 @@ function SidebarFooter({ className, ...rest }: SidebarFooterProps) {
 }
 
 export interface SidebarCollapseToggleProps extends Omit<ComponentProps<"label">, "htmlFor"> {
-  /** Accessible label for the checkbox. Default: "Toggle sidebar". */
-  label?: string;
+  /** Accessible name of the checkbox (not the `<label>`). Default: "Toggle sidebar". */
+  "aria-label"?: string;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"input">;
 }
 
-function SidebarCollapseToggle({
-  label = "Toggle sidebar",
-  className,
-  classNames,
-  children,
-  ...rest
-}: SidebarCollapseToggleProps) {
-  const ctx = useContext(SidebarContext);
-  const controlledChecked = ctx?.collapsed;
-  const isControlled = controlledChecked !== undefined;
-
-  return (
-    <label className={cn("sidebar-collapse-toggle", className)} {...rest}>
-      <input
-        type="checkbox"
-        className={cn("sidebar-toggle", classNames?.input)}
-        aria-label={label}
-        {...(isControlled
-          ? { checked: controlledChecked }
-          : { defaultChecked: ctx?.defaultCollapsed })}
-        onChange={(event) => ctx?.onCollapsedChange?.(event.currentTarget.checked)}
-      />
-      {children}
-    </label>
-  );
-}
-
+// Assembled outside the "use client" module, which a server import sees as an opaque reference.
 export const Sidebar = Object.assign(SidebarRoot, {
   Header: SidebarHeader,
   Nav: SidebarNav,

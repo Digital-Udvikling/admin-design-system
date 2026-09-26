@@ -6,6 +6,7 @@
            bg-surface-muted text-text-muted
            border-t-2 border-system-accent
            text-xs;
+    --surface-current: var(--color-surface-muted);
   }
 
   .footer-links {

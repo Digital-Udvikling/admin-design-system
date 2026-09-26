@@ -271,11 +271,24 @@
     @apply -translate-x-full;
   }
 
-  /* The drawer isn't a `.sidebar`, so the collapse toggle does nothing there; a footer
-     holding only the toggle goes with it. */
+  /* A drawer has no rail to collapse to, so the collapse toggle goes, and so does a
+     footer holding only it. */
   .sidebar-drawer .sidebar-collapse-toggle,
-  .sidebar-drawer .sidebar-footer:not(:has(> :not(.sidebar-collapse-toggle))) {
+  .sidebar-drawer .sidebar-footer:not(:has(> :not(.sidebar-collapse-toggle))),
+  .drawer > .sidebar .sidebar-collapse-toggle,
+  .drawer > .sidebar > .sidebar-footer:not(:has(> :not(.sidebar-collapse-toggle))) {
     display: none;
+  }
+
+  /* Vanilla mobile drawer: a sidebar directly in a <dialog class="drawer"> fills it at
+     the drawer width the React drawer uses; the dialog draws the edge. */
+  .drawer:has(> .sidebar) {
+    width: min(var(--app-shell-sidebar-w, 240px), 80vw);
+  }
+  .drawer > .sidebar {
+    flex: 1;
+    width: auto;
+    border-inline-end-width: 0;
   }
 
   /* The slide is decorative; the backdrop fade stays. */

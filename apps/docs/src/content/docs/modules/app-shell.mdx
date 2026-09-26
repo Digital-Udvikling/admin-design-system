@@ -176,7 +176,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 
 ### Dropdowns
 
-`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar. A `menu-item` with `aria-current="page"` marks its trigger. For a page in the section that isn't one of the items, pass `active` (vanilla: `data-active` on the trigger).
+`<Navbar.Dropdown>` is a [`<Menu>`](../../components/menus/) styled to fit the navbar. A `menu-item` with `aria-current="page"` is filled in the open menu and marks its trigger. For a page in the section that isn't one of the items, pass `active` (vanilla: `data-active` on the trigger).
 
 :::example
 
@@ -274,7 +274,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
         "elproffs.se": "ELproffs.se",
       }}
     >
-      <Select.Trigger triggerSize="sm" aria-label="Shop">
+      <Select.Trigger size="sm" aria-label="Shop">
         <Select.Value />
         <Select.Icon />
       </Select.Trigger>
@@ -480,7 +480,7 @@ React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChang
 
 ### Mobile drawer
 
-Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a drawer. Esc, backdrop click, and link clicks all dismiss; focus is trapped while open. The drawer hides `<Sidebar.CollapseToggle>`, and a `<Sidebar.Footer>` that holds only the toggle. Override the drawer's accessible label via `<Sidebar drawerLabel="...">`.
+Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a drawer. Esc, backdrop click, and link clicks all dismiss; focus is trapped while open. The drawer hides `<Sidebar.CollapseToggle>`, and a `<Sidebar.Footer>` that holds only the toggle. Override the drawer's accessible label via `<Sidebar drawerLabel="...">`. In vanilla the drawer is a `<dialog>`; see [Vanilla](#vanilla).
 
 `<AppShell>` accepts `mobileDrawerOpen` / `defaultMobileDrawerOpen` / `onMobileDrawerOpenChange` for controlled drawer state — useful when an external trigger (a route guard, a tutorial step) needs to open it.
 
@@ -573,7 +573,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
           "vvskupp.no": "VVSkupp.no",
         }}
       >
-        <Select.Trigger triggerSize="sm" aria-label="Shop">
+        <Select.Trigger size="sm" aria-label="Shop">
           <Select.Value />
           <Select.Icon />
         </Select.Trigger>
@@ -899,10 +899,10 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                                                    |
 | `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                                                                                                            |
 | `navbar-items`                | Flex row, `0.125rem` gap                                                                                                                                                                             |
-| `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; `aria-current="page"` or `[data-active]` switches it to primary-on-muted, as does a `menu-item[aria-current="page"]` in its menu in `navbar-items` |
+| `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; primary-on-muted with `aria-current="page"`, `[data-active]` or a `menu-item[aria-current="page"]` (filled too) in its menu in `navbar-items`      |
 | `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                                            |
 | `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                                            |
-| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition                                                                                           |
+| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition; a direct `drawer` child fills it at rail width and hides `sidebar-collapse-toggle`       |
 | `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state                                                                                            |
 | `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                                          |
 | `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                                                     |
@@ -929,4 +929,29 @@ The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sideb
 
 The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest. Write `aria-current="page"` and the toggle's `aria-label` yourself.
 
-The mobile drawer is the one piece with no vanilla equivalent — `sidebar-drawer` and `sidebar-drawer-backdrop` are styled for Base UI's `[data-starting-style]` / `[data-ending-style]` transition hooks. In vanilla, either leave the sidebar visible at every width or build the drawer from a [`<dialog class="drawer">`](../../components/drawer/) and toggle it yourself.
+Below `48rem` a direct-child `sidebar` is hidden. `sidebar-drawer` and `sidebar-drawer-backdrop` are the React drawer, styled for Base UI's `[data-starting-style]` / `[data-ending-style]` transition hooks. In vanilla, put a copy of the sidebar in a [`<dialog class="dialog drawer drawer-start">`](../../components/drawer/) and open it from `navbar-mobile-toggle` with invoker commands; a `sidebar` directly inside a `drawer` fills it at the rail width, capped at `80vw`:
+
+```html
+<button
+  class="navbar-mobile-toggle"
+  type="button"
+  aria-label="Open menu"
+  commandfor="nav-drawer"
+  command="show-modal"
+></button>
+
+<dialog id="nav-drawer" class="dialog drawer drawer-start" closedby="any" aria-label="Navigation">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-item" href="#" aria-current="page">
+        <i class="sidebar-icon ti ti-home" aria-hidden="true"></i>
+        <span class="sidebar-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" href="#">
+        <i class="sidebar-icon ti ti-receipt" aria-hidden="true"></i>
+        <span class="sidebar-label">Orders</span>
+      </a>
+    </nav>
+  </aside>
+</dialog>
+```

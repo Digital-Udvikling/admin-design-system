@@ -1,29 +1,109 @@
 @layer components {
+  /* isolate keeps the seam z-index lifts below from painting over a sticky header or a
+     pinned table column outside the group. */
   .input-group {
-    @apply inline-flex w-full;
+    @apply inline-flex w-full isolate;
   }
 
-  /* Equal-specificity override of `.input`'s radius — works only because
-     input-group.css imports after input.css. */
-  .input-group > * {
+  /* A showing vanilla tooltip has to clear what follows the group. :has() can't nest,
+     so the focus test is a descendant match. Menu popups sit in the top layer or a portal. */
+  .input-group:has(> .tooltip-wrap:hover, > .tooltip-wrap :focus-visible) {
+    @apply relative z-30;
+  }
+
+  /* :nth-child(n) lifts the reset to (0,2,0) so it beats every single-class control's
+     radius whatever the import order. */
+  .input-group > :nth-child(n) {
     @apply rounded-none;
   }
 
   .input-group > :first-child {
-    @apply rounded-l-lg;
+    @apply rounded-l-md;
   }
 
-  .input-group > :last-child {
-    @apply rounded-r-lg;
+  /* Base UI Select and NumberField append a visually hidden input, so the visible
+     control is the last child that isn't one. */
+  .input-group > :nth-last-child(1 of :not(input[aria-hidden="true"], input[type="hidden"])) {
+    @apply rounded-r-md;
   }
 
-  .input-group > :not(:first-child) {
+  /* Wrappers hand the group's corners to the bordered control inside; inherit works
+     through React NumberInput's display: contents root. */
+  .input-group > :is(.input-icon, .number-input-root) > :is(.input, .number-input),
+  .input-group > :is(.tooltip-wrap, .indicator) > :is(.btn, .input, .select) {
+    border-radius: inherit;
+  }
+
+  /* The trigger sits inside the .menu wrapper; set its corners here. */
+  .input-group > .menu > .menu-trigger {
+    @apply rounded-none;
+  }
+
+  .input-group > .menu:first-child > .menu-trigger {
+    @apply rounded-l-md;
+  }
+
+  .input-group
+    > .menu:nth-last-child(1 of :not(input[aria-hidden="true"], input[type="hidden"]))
+    > .menu-trigger {
+    @apply rounded-r-md;
+  }
+
+  .input-group > :not(:first-child),
+  .input-group > .number-input-root:not(:first-child) > .number-input {
     margin-left: -1px;
   }
 
-  /* Lift above the neighbour's overlapping edge so the focus ring isn't clipped. */
+  /* Fixed segments keep one line at their content width; the field takes the rest. nowrap
+     stays off .menu itself, since white-space would inherit into its popup. */
+  .input-group > :is(.btn, .input-group-addon, .menu) {
+    flex: none;
+  }
+
+  .input-group > .btn,
+  .input-group > .menu > .menu-trigger {
+    white-space: nowrap;
+  }
+
+  .input-group:has(> :is(.input, .input-icon, .number-input, .number-input-root, .file-input))
+    > .select {
+    flex: none;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  /* Fields are w-full and shrink into the remaining width; no flex-grow, so a width the
+     consumer sets holds. */
+  .input-group > :is(.input, .input-icon, .number-input, .file-input),
+  .input-group > .number-input-root > .number-input {
+    min-width: 0;
+  }
+
+  /* Overlapping 1px edges: a hovered or invalid border paints over its neighbour's, and
+     focus sits above both so the ring isn't clipped. All three are (0,2,0); order decides. */
+  .input-group > :where(.input, .select, .file-input, .number-input, .input-icon):hover,
+  :where(.input-group > .number-input-root) > .number-input:hover {
+    @apply relative z-1;
+  }
+
+  .input-group
+    > :is(
+      [aria-invalid="true"],
+      [data-invalid],
+      :user-invalid,
+      :has(> :is([aria-invalid="true"], [data-invalid], :user-invalid))
+    ),
+  :where(.input-group > .number-input-root) > .number-input[data-invalid],
+  :where(.field[data-invalid])
+    .input-group
+    > :is(.input, .select, .file-input, .number-input, .input-icon),
+  :where(.field[data-invalid]) .input-group > :where(.number-input-root) > .number-input {
+    @apply relative z-2;
+  }
+
   .input-group > :focus,
-  .input-group > :focus-within {
+  .input-group > :focus-within,
+  :where(.input-group > .number-input-root) > .number-input:focus-within {
     @apply relative z-10;
   }
 
@@ -31,5 +111,16 @@
     @apply inline-flex items-center px-3 text-sm leading-none whitespace-nowrap
            bg-surface-muted text-text-muted
            border border-border;
+  }
+
+  /* The addon follows the size of the controls it joins, like .input-icon. */
+  .input-group:has(:is(.input-sm, .select-sm, .file-input-sm, .number-input-sm, .btn-sm))
+    > .input-group-addon {
+    @apply px-2.5 text-xs;
+  }
+
+  .input-group:has(:is(.input-lg, .select-lg, .file-input-lg, .number-input-lg, .btn-lg))
+    > .input-group-addon {
+    @apply px-4 text-base;
   }
 }

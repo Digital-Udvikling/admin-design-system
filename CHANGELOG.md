@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `.input-action` meets the WCAG 2.5.8 minimum target size, date and time inputs put the picker glyph at the trailing edge, and an `Input` `action` replaces the clear button. (both)
 - `NumberInput`'s `ref`, `className` and `style` apply to the visible `number-input` group; `classNames.root` targets the Base UI Root. (react)
 - An `indicator` around a form control fills the width like the bare control; set a narrower width on the `indicator`. (css)
+- Form controls use the `rounded-md` radius. Input groups square joined corners regardless of stylesheet order, keep the outer radius on a React `Select` or `NumberInput` at the group's end, and form their own stacking context, so a focused control doesn't paint over a sticky table header. (css)
 
 ### Removed
 

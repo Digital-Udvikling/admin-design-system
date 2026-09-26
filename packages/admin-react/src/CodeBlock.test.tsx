@@ -9,6 +9,7 @@ describe("CodeBlock", () => {
     expect(el.tagName).toBe("PRE");
     expect(el).toHaveAdminClass("code-block");
     expect(el).not.toHaveAdminClass("code-block-nowrap");
+    expect(el).toHaveAttribute("tabindex", "0");
   });
 
   it("applies nowrap modifier", () => {

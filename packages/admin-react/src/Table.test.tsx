@@ -190,7 +190,7 @@ describe("Table", () => {
 
   it("Table.Cell actions and Table.Scroll emit their classes", () => {
     render(
-      <Table.Scroll data-testid="scroll">
+      <Table.Scroll aria-label="Approvals" data-testid="scroll">
         <Table>
           <Table.Body>
             <Table.Row>
@@ -204,6 +204,18 @@ describe("Table", () => {
     );
     expect(screen.getByTestId("scroll")).toHaveAdminClass("table-scroll");
     expect(screen.getByTestId("actions")).toHaveAdminClass("table-cell", "table-cell-actions");
+  });
+
+  it("Table.Scroll is a named, focusable region", () => {
+    render(
+      <Table.Scroll aria-label="Orders">
+        <Table />
+      </Table.Scroll>,
+    );
+    const region = screen.getByRole("region", { name: "Orders" });
+    expect(region).toHaveAttribute("tabindex", "0");
+    // @ts-expect-error -- a scroll region needs aria-label or aria-labelledby
+    void (<Table.Scroll />);
   });
 
   it("Table.Row exposes selected and asLink hooks", () => {

@@ -25,7 +25,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Status">
   <option value="">Select a status…</option>
   <option value="open">Open</option>
   <option value="in-progress">In progress</option>
@@ -35,7 +35,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 ```tsx
 <Select name="status" items={{ open: "Open", "in-progress": "In progress", closed: "Closed" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Status">
     <Select.Value placeholder="Select a status…" />
     <Select.Icon />
   </Select.Trigger>
@@ -61,20 +61,20 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Bordered">
   <option>Bordered</option>
 </select>
-<select class="select select-ghost">
+<select class="select select-ghost" aria-label="Ghost">
   <option>Ghost</option>
 </select>
-<select class="select select-danger">
+<select class="select select-danger" aria-label="Danger">
   <option>Danger</option>
 </select>
 ```
 
 ```tsx
 <Select defaultValue="x" items={{ x: "Bordered" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Bordered">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -83,7 +83,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Ghost" }}>
-  <Select.Trigger variant="ghost">
+  <Select.Trigger variant="ghost" aria-label="Ghost">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -92,7 +92,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Danger" }}>
-  <Select.Trigger variant="danger">
+  <Select.Trigger variant="danger" aria-label="Danger">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -107,20 +107,20 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select select-sm">
+<select class="select select-sm" aria-label="Small">
   <option>Small</option>
 </select>
-<select class="select">
+<select class="select" aria-label="Medium">
   <option>Medium</option>
 </select>
-<select class="select select-lg">
+<select class="select select-lg" aria-label="Large">
   <option>Large</option>
 </select>
 ```
 
 ```tsx
 <Select defaultValue="x" items={{ x: "Small" }}>
-  <Select.Trigger size="sm">
+  <Select.Trigger size="sm" aria-label="Small">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -129,7 +129,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Medium" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Medium">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -138,7 +138,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Large" }}>
-  <Select.Trigger size="lg">
+  <Select.Trigger size="lg" aria-label="Large">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -153,7 +153,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Produce">
   <option value="">Pick one…</option>
   <optgroup label="Fruit">
     <option>Apple</option>
@@ -168,7 +168,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 ```tsx
 <Select items={{ apple: "Apple", banana: "Banana", carrot: "Carrot", daikon: "Daikon" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Produce">
     <Select.Value placeholder="Pick one…" />
     <Select.Icon />
   </Select.Trigger>
@@ -223,14 +223,14 @@ A native `<select>` can't hold an icon.
 **Example**
 
 ```html
-<select class="select" disabled>
+<select class="select" disabled aria-label="Status">
   <option>Disabled</option>
 </select>
 ```
 
 ```tsx
 <Select disabled defaultValue="x" items={{ x: "Disabled" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Status">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>

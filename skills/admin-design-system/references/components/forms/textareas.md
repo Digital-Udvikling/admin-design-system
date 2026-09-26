@@ -23,13 +23,13 @@
 ```html
 <textarea class="textarea" placeholder="Bordered (default)"></textarea>
 <textarea class="textarea textarea-ghost" placeholder="Ghost"></textarea>
-<textarea class="textarea textarea-danger" placeholder="Danger">invalid</textarea>
+<textarea class="textarea textarea-danger" aria-label="Danger">invalid</textarea>
 ```
 
 ```tsx
 <Textarea placeholder="Bordered (default)" />
 <Textarea variant="ghost" placeholder="Ghost" />
-<Textarea variant="danger" defaultValue="invalid" />
+<Textarea variant="danger" aria-label="Danger" defaultValue="invalid" />
 ```
 
 ### Status variants
@@ -37,15 +37,15 @@
 **Example**
 
 ```html
-<textarea class="textarea textarea-info">Info</textarea>
-<textarea class="textarea textarea-success">Success</textarea>
-<textarea class="textarea textarea-warning">Warning</textarea>
+<textarea class="textarea textarea-info" aria-label="Info">Info</textarea>
+<textarea class="textarea textarea-success" aria-label="Success">Success</textarea>
+<textarea class="textarea textarea-warning" aria-label="Warning">Warning</textarea>
 ```
 
 ```tsx
-<Textarea variant="info" defaultValue="Info" />
-<Textarea variant="success" defaultValue="Success" />
-<Textarea variant="warning" defaultValue="Warning" />
+<Textarea variant="info" aria-label="Info" defaultValue="Info" />
+<Textarea variant="success" aria-label="Success" defaultValue="Success" />
+<Textarea variant="warning" aria-label="Warning" defaultValue="Warning" />
 ```
 
 ### Sizes
@@ -81,11 +81,11 @@
 **Example**
 
 ```html
-<textarea class="textarea" disabled>Disabled</textarea>
+<textarea class="textarea" disabled aria-label="Notes">Disabled</textarea>
 ```
 
 ```tsx
-<Textarea disabled defaultValue="Disabled" />
+<Textarea disabled aria-label="Notes" defaultValue="Disabled" />
 ```
 
 ## Reference

@@ -155,7 +155,11 @@
 
 ```html
 <div class="indicator">
-  <span class="indicator-item indicator-dot indicator-dot-success" aria-label="Online"></span>
+  <span
+    class="indicator-item indicator-dot indicator-dot-success"
+    role="status"
+    aria-label="Online"
+  ></span>
   <span class="avatar avatar-lg">
     <img src="https://i.pravatar.cc/64?img=12" alt="Ada Lovelace" />
   </span>

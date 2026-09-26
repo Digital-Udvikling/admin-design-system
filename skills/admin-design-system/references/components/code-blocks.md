@@ -9,7 +9,7 @@
 **Example**
 
 ```html
-<pre class="code-block">
+<pre class="code-block" tabindex="0">
 {
   "status": "ok",
   "uptime": 384721,
@@ -33,7 +33,7 @@
 **Example**
 
 ```html
-<pre class="code-block code-block-nowrap" style="max-height: 160px">
+<pre class="code-block code-block-nowrap" tabindex="0" style="max-height: 160px">
 2026-05-28T08:14:02.331Z INFO  worker.dispatch  job=q-2104 attempt=1 status=accepted
 2026-05-28T08:14:02.418Z INFO  worker.dispatch  job=q-2104 attempt=1 fetched 2384 rows in 87ms
 2026-05-28T08:14:02.422Z WARN  worker.dispatch  job=q-2104 row 1842 missing field "owner_email" — defaulting to operations@example.com
@@ -61,7 +61,10 @@
 ### With syntax highlighting
 
 ```html
-<pre class="code-block"><code class="language-json">{ "highlighted": true }</code></pre>
+<pre
+  class="code-block"
+  tabindex="0"
+><code class="language-json">{ "highlighted": true }</code></pre>
 ```
 
 ## Reference
@@ -72,7 +75,7 @@
 | -------- | --------- | ------- |
 | `nowrap` | `boolean` | `false` |
 
-Plus native `<pre>` attributes.
+`CodeBlock` renders `tabIndex={0}`, so a block that overflows scrolls by keyboard; pass `tabIndex={-1}` to take it out of the tab order. Plus native `<pre>` attributes.
 
 ### Vanilla
 
@@ -81,6 +84,6 @@ Plus native `<pre>` attributes.
 | `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono, `0.5rem` radius, long lines wrapped |
 | `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                  |
 
-Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. The root already has `overflow: auto`, so an inline `max-height` is all a log viewer needs to clamp vertical growth. There is no syntax highlighting — layer Shiki or Prism on a nested `<code>`, which this class leaves alone so the highlighter's token colours show through.
+Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. The root already has `overflow: auto`, so an inline `max-height` is all a log viewer needs to clamp vertical growth. Add `tabindex="0"` so a block that overflows scrolls by keyboard. There is no syntax highlighting — layer Shiki or Prism on a nested `<code>`, which this class leaves alone so the highlighter's token colours show through.
 
 For inline keyboard chips, use [Kbd](kbd.md).

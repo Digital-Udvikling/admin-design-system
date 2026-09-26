@@ -173,10 +173,19 @@ function TableEmpty({ colSpan, className, children, ...rest }: TableEmptyProps) 
   );
 }
 
-export type TableScrollProps = ComponentProps<"div">;
-/** Scroll region for wide tables and the scrolling ancestor `sticky` and `pinCol` need; set `max-height` for `sticky`. */
+/** A name is required: the region is focusable so keyboard users can scroll it, and a screen reader announces it. */
+export type TableScrollProps = ComponentProps<"section"> &
+  ({ "aria-label": string } | { "aria-labelledby": string });
+/**
+ * Scroll region for wide tables and the scrolling ancestor `sticky` and `pinCol` need; set
+ * `max-height` for `sticky`. Renders a named `<section>` (a region) with `tabIndex={0}`, so it
+ * scrolls by keyboard when it holds nothing focusable.
+ */
 function TableScroll({ className, ...rest }: TableScrollProps) {
-  return <div className={cn("table-scroll", className)} {...rest} />;
+  return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scroll container must be focusable to scroll by keyboard (WCAG 2.1.1)
+    <section tabIndex={0} className={cn("table-scroll", className)} {...rest} />
+  );
 }
 
 export const Table = Object.assign(TableRoot, {

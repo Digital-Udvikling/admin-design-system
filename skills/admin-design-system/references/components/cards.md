@@ -322,7 +322,7 @@
   <div class="card-header">
     <h3 class="card-title">Activity</h3>
   </div>
-  <div class="card-body">
+  <div class="card-body" role="region" tabindex="0" aria-label="Activity">
     <p>Order #1024 placed</p>
     <p>Order #1023 refunded</p>
     <p>Order #1022 shipped</p>
@@ -342,7 +342,7 @@
   <Card.Header>
     <Card.Title>Activity</Card.Title>
   </Card.Header>
-  <Card.Body>
+  <Card.Body role="region" tabIndex={0} aria-label="Activity">
     <p>Order #1024 placed</p>
     <p>Order #1023 refunded</p>
     <p>Order #1022 shipped</p>
@@ -392,28 +392,28 @@
 
 `Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. A shorthand prop that is `null`, `false` or `""` renders nothing, so `actions={canEdit && <Button />}` leaves no empty row; `icon` needs a `title`. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
 
-`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies split by a [separator](separator.md#splitting-card-sections), a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body.
+`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies split by a [separator](separator.md#splitting-card-sections), a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body. Give the scrolling `Card.Body` `role="region"`, `tabIndex={0}` and an `aria-label` so it scrolls by keyboard.
 
 `toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
 
 ### Vanilla
 
-| Class                                                   | Effect                                                                                                                                           |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.5rem` radius                                                                                |
-| `card-body`                                             | Content region: `1rem` padding, `0.75rem` gap                                                                                                    |
-| `card-title`                                            | `text-base` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                  |
-| `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                    |
-| `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1rem` icon |
-| `card-description`                                      | `text-sm` muted; `0.5rem` below a `card-title` or `card-header`                                                                                  |
-| `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                         |
-| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                 |
-| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                    |
-| `card-bordered`                                         | Stronger border; accent-tinted on the colour variants                                                                                            |
-| `card-muted`                                            | Fills with the page surface so the panel sits flush with the page                                                                                |
-| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour                                                 |
-| `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                                                      |
-| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body                                    |
+| Class                                                   | Effect                                                                                                                                                                           |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.5rem` radius                                                                                                                |
+| `card-body`                                             | Content region: `1rem` padding, `0.75rem` gap                                                                                                                                    |
+| `card-title`                                            | `text-base` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                                                  |
+| `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                                                    |
+| `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1rem` icon                                 |
+| `card-description`                                      | `text-sm` muted; `0.5rem` below a `card-title` or `card-header`                                                                                                                  |
+| `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                                                         |
+| `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                                                 |
+| `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                                                    |
+| `card-bordered`                                         | Stronger border; accent-tinted on the colour variants                                                                                                                            |
+| `card-muted`                                            | Fills with the page surface so the panel sits flush with the page                                                                                                                |
+| `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour                                                                                 |
+| `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                                                                                      |
+| `card-scroll`                                           | Pins a direct-child `card-header` and `card-actions`, giving each padding and a divider, and scrolls the body; give the body `role="region"`, `tabindex="0"` and an `aria-label` |
 
 `card-title` lays out as text, so links, `<strong>` and badges wrap with the words. In JSX, put `{" "}` between the text and a trailing element. An `<i>` or `<svg>` that is the title's first element child hangs before the text as the leading icon, even when text comes first in the markup; wrap a trailing icon in a `<span>` to keep it after the text.
 

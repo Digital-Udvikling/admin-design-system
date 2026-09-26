@@ -9,12 +9,13 @@
 **Example**
 
 ```html
-<input type="checkbox" class="checkbox" /> <input type="checkbox" class="checkbox" checked />
+<input type="checkbox" class="checkbox" aria-label="Unchecked" />
+<input type="checkbox" class="checkbox" aria-label="Checked" checked />
 ```
 
 ```tsx
-<Checkbox />
-<Checkbox defaultChecked />
+<Checkbox aria-label="Unchecked" />
+<Checkbox aria-label="Checked" defaultChecked />
 ```
 
 ### With a label
@@ -40,13 +41,13 @@
 **Example**
 
 ```html
-<input type="checkbox" class="checkbox" disabled />
-<input type="checkbox" class="checkbox" disabled checked />
+<input type="checkbox" class="checkbox" aria-label="Disabled" disabled />
+<input type="checkbox" class="checkbox" aria-label="Disabled, checked" disabled checked />
 ```
 
 ```tsx
-<Checkbox disabled />
-<Checkbox disabled defaultChecked />
+<Checkbox aria-label="Disabled" disabled />
+<Checkbox aria-label="Disabled, checked" disabled defaultChecked />
 ```
 
 ### Indeterminate
@@ -54,14 +55,14 @@
 **Example**
 
 ```html
-<input type="checkbox" class="checkbox" id="indeterm" />
+<input type="checkbox" class="checkbox" id="indeterm" aria-label="Select all" />
 <script>
   document.getElementById("indeterm").indeterminate = true;
 </script>
 ```
 
 ```tsx
-<Checkbox indeterminate />
+<Checkbox aria-label="Select all" indeterminate />
 ```
 
 ## Reference

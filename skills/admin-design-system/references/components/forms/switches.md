@@ -9,13 +9,13 @@
 **Example**
 
 ```html
-<input type="checkbox" role="switch" class="switch" />
-<input type="checkbox" role="switch" class="switch" checked />
+<input type="checkbox" role="switch" class="switch" aria-label="Off" />
+<input type="checkbox" role="switch" class="switch" aria-label="On" checked />
 ```
 
 ```tsx
-<Switch />
-<Switch defaultChecked />
+<Switch aria-label="Off" />
+<Switch aria-label="On" defaultChecked />
 ```
 
 ### With a label
@@ -41,13 +41,13 @@
 **Example**
 
 ```html
-<input type="checkbox" role="switch" class="switch" disabled />
-<input type="checkbox" role="switch" class="switch" disabled checked />
+<input type="checkbox" role="switch" class="switch" aria-label="Disabled" disabled />
+<input type="checkbox" role="switch" class="switch" aria-label="Disabled, on" disabled checked />
 ```
 
 ```tsx
-<Switch disabled />
-<Switch disabled defaultChecked />
+<Switch aria-label="Disabled" disabled />
+<Switch aria-label="Disabled, on" disabled defaultChecked />
 ```
 
 ## Reference

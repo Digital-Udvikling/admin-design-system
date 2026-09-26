@@ -9,15 +9,15 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" />
-<input type="file" class="file-input file-input-ghost" />
-<input type="file" class="file-input file-input-danger" />
+<input type="file" class="file-input" aria-label="Bordered" />
+<input type="file" class="file-input file-input-ghost" aria-label="Ghost" />
+<input type="file" class="file-input file-input-danger" aria-label="Danger" />
 ```
 
 ```tsx
-<FileInput />
-<FileInput variant="ghost" />
-<FileInput variant="danger" />
+<FileInput aria-label="Bordered" />
+<FileInput variant="ghost" aria-label="Ghost" />
+<FileInput variant="danger" aria-label="Danger" />
 ```
 
 ### Sizes
@@ -25,15 +25,15 @@
 **Example**
 
 ```html
-<input type="file" class="file-input file-input-sm" />
-<input type="file" class="file-input" />
-<input type="file" class="file-input file-input-lg" />
+<input type="file" class="file-input file-input-sm" aria-label="Small" />
+<input type="file" class="file-input" aria-label="Medium" />
+<input type="file" class="file-input file-input-lg" aria-label="Large" />
 ```
 
 ```tsx
-<FileInput size="sm" />
-<FileInput />
-<FileInput size="lg" />
+<FileInput size="sm" aria-label="Small" />
+<FileInput aria-label="Medium" />
+<FileInput size="lg" aria-label="Large" />
 ```
 
 ### Restricting file types
@@ -41,11 +41,11 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" accept="image/*" multiple />
+<input type="file" class="file-input" accept="image/*" multiple aria-label="Images" />
 ```
 
 ```tsx
-<FileInput accept="image/*" multiple />
+<FileInput accept="image/*" multiple aria-label="Images" />
 ```
 
 ### Disabled
@@ -53,11 +53,11 @@
 **Example**
 
 ```html
-<input type="file" class="file-input" disabled />
+<input type="file" class="file-input" disabled aria-label="Attachment" />
 ```
 
 ```tsx
-<FileInput disabled />
+<FileInput disabled aria-label="Attachment" />
 ```
 
 ## Reference

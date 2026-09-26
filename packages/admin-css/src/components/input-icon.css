@@ -29,8 +29,13 @@
   }
 
   /* Trailing slot — a glyph or an interactive `.input-action` button after the input. */
-  .input-icon > .input ~ :where(i, svg, .input-action) {
+  .input-icon > .input ~ :where(i, svg) {
     right: var(--input-icon-inset);
+  }
+
+  /* 2px outside the glyph inset, so its 24px box keeps the glyph where a 20px one had it. */
+  .input-icon > .input ~ .input-action {
+    right: calc(var(--input-icon-inset) - 2px);
   }
 
   .input-icon:has(> :where(i, svg):first-child) > .input {
@@ -45,12 +50,13 @@
     @apply opacity-50;
   }
 
-  /* Interactive trailing control (clear, password reveal). Positioned like the
-     trailing glyph but clickable, with a currentColor hover wash. */
+  /* Interactive trailing control (clear, password reveal): positioned like the
+     trailing glyph but clickable, with a currentColor hover wash. 24px is the
+     WCAG 2.5.8 minimum target. */
   .input-action {
     @apply absolute top-1/2 -translate-y-1/2
            inline-flex items-center justify-center
-           size-5 rounded
+           size-6 rounded
            text-text-muted cursor-pointer
            bg-transparent border-0
            hover:text-text

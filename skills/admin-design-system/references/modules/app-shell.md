@@ -183,7 +183,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
     <a class="navbar-item" href="#">Dashboard</a>
     <details class="menu">
       <summary class="menu-trigger navbar-item">Products</summary>
-      <div class="menu-popup" role="menu">
+      <div class="menu-popup">
         <a class="menu-item" href="#" aria-current="page">Catalogue</a>
         <button class="menu-item" type="button">Categories</button>
         <hr class="menu-separator" />
@@ -237,7 +237,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
     </select>
     <details class="menu">
       <summary class="menu-trigger navbar-item">Nickolaj</summary>
-      <div class="menu-popup" role="menu">
+      <div class="menu-popup">
         <button class="menu-item" type="button">Profile</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Sign out</button>

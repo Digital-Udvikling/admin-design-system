@@ -15,13 +15,13 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 ```html
 <input class="input" placeholder="Bordered (default)" />
 <input class="input input-ghost" placeholder="Ghost" />
-<input class="input input-danger" placeholder="Danger" value="invalid" />
+<input class="input input-danger" aria-label="Danger" value="invalid" />
 ```
 
 ```tsx
 <Input placeholder="Bordered (default)" />
 <Input variant="ghost" placeholder="Ghost" />
-<Input variant="danger" defaultValue="invalid" />
+<Input variant="danger" aria-label="Danger" defaultValue="invalid" />
 ```
 
 :::
@@ -31,15 +31,15 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 :::example
 
 ```html
-<input class="input input-info" value="Info" />
-<input class="input input-success" value="Success" />
-<input class="input input-warning" value="Warning" />
+<input class="input input-info" aria-label="Info" value="Info" />
+<input class="input input-success" aria-label="Success" value="Success" />
+<input class="input input-warning" aria-label="Warning" value="Warning" />
 ```
 
 ```tsx
-<Input variant="info" defaultValue="Info" />
-<Input variant="success" defaultValue="Success" />
-<Input variant="warning" defaultValue="Warning" />
+<Input variant="info" aria-label="Info" defaultValue="Info" />
+<Input variant="success" aria-label="Success" defaultValue="Success" />
+<Input variant="warning" aria-label="Warning" defaultValue="Warning" />
 ```
 
 :::
@@ -67,11 +67,11 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 :::example
 
 ```html
-<input class="input" disabled value="Disabled" />
+<input class="input" disabled aria-label="Name" value="Disabled" />
 ```
 
 ```tsx
-<Input disabled defaultValue="Disabled" />
+<Input disabled aria-label="Name" defaultValue="Disabled" />
 ```
 
 :::
@@ -109,7 +109,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 
 ```html
 <span class="input-icon">
-  <input class="input" type="search" value="report" />
+  <input class="input" type="search" aria-label="Search" value="report" />
   <button
     type="button"
     class="input-action"
@@ -122,7 +122,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 ```
 
 ```tsx
-<Input type="search" defaultValue="report" clearable />
+<Input type="search" aria-label="Search" defaultValue="report" clearable />
 ```
 
 :::
@@ -133,7 +133,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 
 ```html
 <span class="input-icon">
-  <input class="input" type="password" value="hunter2" />
+  <input class="input" type="password" aria-label="Password" value="hunter2" />
   <button
     type="button"
     class="input-action"
@@ -147,7 +147,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 ```
 
 ```tsx
-<PasswordInput defaultValue="hunter2" />
+<PasswordInput aria-label="Password" defaultValue="hunter2" />
 ```
 
 :::
@@ -216,19 +216,19 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 :::example
 
 ```html
-<input class="input" type="date" />
-<input class="input" type="time" />
-<input class="input" type="datetime-local" />
-<input class="input" type="month" />
-<input class="input" type="week" />
+<input class="input" type="date" aria-label="Date" />
+<input class="input" type="time" aria-label="Time" />
+<input class="input" type="datetime-local" aria-label="Date and time" />
+<input class="input" type="month" aria-label="Month" />
+<input class="input" type="week" aria-label="Week" />
 ```
 
 ```tsx
-<Input type="date" />
-<Input type="time" />
-<Input type="datetime-local" />
-<Input type="month" />
-<Input type="week" />
+<Input type="date" aria-label="Date" />
+<Input type="time" aria-label="Time" />
+<Input type="datetime-local" aria-label="Date and time" />
+<Input type="month" aria-label="Month" />
+<Input type="week" aria-label="Week" />
 ```
 
 :::

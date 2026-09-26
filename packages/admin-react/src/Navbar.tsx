@@ -112,8 +112,8 @@ export interface NavbarMobileToggleProps extends Omit<
   ComponentProps<"button">,
   "onClick" | "children"
 > {
-  /** Accessible label for the toggle. Default: "Open menu". */
-  label?: string;
+  /** Accessible name. Default: "Open menu". */
+  "aria-label"?: string;
 }
 
 export const Navbar = Object.assign(NavbarRoot, {

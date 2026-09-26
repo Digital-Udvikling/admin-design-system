@@ -192,8 +192,8 @@ function SidebarFooter({ className, ...rest }: SidebarFooterProps) {
 }
 
 export interface SidebarCollapseToggleProps extends Omit<ComponentProps<"label">, "htmlFor"> {
-  /** Accessible label for the checkbox. Default: "Toggle sidebar". */
-  label?: string;
+  /** Accessible name of the checkbox (not the `<label>`). Default: "Toggle sidebar". */
+  "aria-label"?: string;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"input">;
 }

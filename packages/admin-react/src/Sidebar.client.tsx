@@ -118,7 +118,7 @@ export function SidebarCollapsibleBase({
 }
 
 export function SidebarCollapseToggle({
-  label = "Toggle sidebar",
+  "aria-label": ariaLabel = "Toggle sidebar",
   className,
   classNames,
   children,
@@ -131,7 +131,7 @@ export function SidebarCollapseToggle({
       <input
         type="checkbox"
         className={cn("sidebar-toggle", classNames?.input)}
-        aria-label={label}
+        aria-label={ariaLabel}
         // Outside a Sidebar the checkbox holds the state itself, as in vanilla markup.
         {...(ctx
           ? {

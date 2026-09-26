@@ -293,7 +293,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 
 ### Mobile toggle
 
-`<Navbar.MobileToggle>` is hidden at ≥ 48rem (Tailwind `md`) and flips `<AppShell>`'s mobile drawer state — it's a no-op outside `<AppShell>`. The default `aria-label` is `"Open menu"`; override via `label`.
+`<Navbar.MobileToggle>` is hidden at ≥ 48rem (Tailwind `md`) and flips `<AppShell>`'s mobile drawer state — it's a no-op outside `<AppShell>`. Its `aria-label` defaults to `"Open menu"`.
 
 **Example**
 
@@ -841,7 +841,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Navbar.Dropdown`        | `active`                     | `boolean`                      | an item's `aria-current` |
 | `Navbar.Dropdown`        | `icon`                       | component or element           | —                        |
 | `Navbar.Dropdown`        | `align`                      | `"start" \| "center" \| "end"` | `"start"`                |
-| `Navbar.MobileToggle`    | `label`                      | `string`                       | `"Open menu"`            |
+| `Navbar.MobileToggle`    | `aria-label`                 | `string`                       | `"Open menu"`            |
 | `Sidebar`                | `collapsed`                  | `boolean`                      | uncontrolled             |
 | `Sidebar`                | `defaultCollapsed`           | `boolean`                      | `false`                  |
 | `Sidebar`                | `onCollapsedChange`          | `(collapsed: boolean) => void` | —                        |
@@ -857,7 +857,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Sidebar.Collapsible`    | `onOpenChange`               | `(open: boolean) => void`      | —                        |
 | `Sidebar.SubItem`        | `current` / `icon` / `badge` | as `Sidebar.Item`              | —                        |
 | `Sidebar.SubItem`        | `render`                     | `ReactElement`                 | —                        |
-| `Sidebar.CollapseToggle` | `label`                      | `string`                       | `"Toggle sidebar"`       |
+| `Sidebar.CollapseToggle` | `aria-label`                 | `string`                       | `"Toggle sidebar"`       |
 
 `current` writes `aria-current="page"`. `active` on `Navbar.Dropdown` sets `data-active` on the trigger, for a section that holds the current page. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `current` (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
 

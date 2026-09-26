@@ -132,7 +132,7 @@ For a page whose whole subject is empty, centre the message in the content area.
 
 ```tsx
 <Card title="Recent orders">
-  <Spinner label="Loading orders" />
+  <Spinner aria-label="Loading orders" />
 </Card>
 ```
 
@@ -170,7 +170,7 @@ For a page whose whole subject is empty, centre the message in the content area.
   </Table.Head>
   <Table.Body>
     <Table.Empty colSpan={3}>
-      <Spinner label="Loading orders" />
+      <Spinner aria-label="Loading orders" />
     </Table.Empty>
   </Table.Body>
 </Table>
@@ -191,7 +191,7 @@ A route-level loading state, such as the body of a Next.js `loading.tsx`, keeps 
 
 ```tsx
 <div className="flex w-full items-center justify-center gap-2 py-12 text-sm text-text-muted">
-  <Spinner label="Loading purchase orders" />
+  <Spinner aria-label="Loading purchase orders" />
   Loading purchase orders…
 </div>
 ```
@@ -220,7 +220,7 @@ A value fetched separately from the rest of the record gets a small spinner in i
   <PropertyList.Item label="Item number" value="SUP-00123" />
   <PropertyList.Item
     label="Current price"
-    value={<Spinner size="sm" label="Loading current price" />}
+    value={<Spinner size="sm" aria-label="Loading current price" />}
   />
 </PropertyList>
 ```

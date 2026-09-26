@@ -46,19 +46,19 @@
 ```
 
 ```tsx
-<Spinner label="Indlæser" />
+<Spinner aria-label="Indlæser" />
 ```
 
 ## Reference
 
 ### React
 
-| Prop    | Type                   | Default     |
-| ------- | ---------------------- | ----------- |
-| `size`  | `"sm" \| "md" \| "lg"` | `"md"`      |
-| `label` | `string`               | `"Loading"` |
+| Prop         | Type                   | Default     |
+| ------------ | ---------------------- | ----------- |
+| `size`       | `"sm" \| "md" \| "lg"` | `"md"`      |
+| `aria-label` | `string`               | `"Loading"` |
 
-Renders `<output>` (implicit `role="status"`) with `label` as its `aria-label`. The label names the spinner but is not announced when it mounts, since a live region announces changes to its content. Put visible text next to it, and to announce a result, change the text inside a status region that is already on the page. Plus native `<output>` attributes.
+Renders `<output>` (implicit `role="status"`) with an `aria-label`, `"Loading"` unless you pass one. The name labels the spinner but is not announced when it mounts, since a live region announces changes to its content. Put visible text next to it, and to announce a result, change the text inside a status region that is already on the page. Plus native `<output>` attributes.
 
 For a button, use its `loading` prop instead — see [Buttons › Loading](buttons.md#loading).
 

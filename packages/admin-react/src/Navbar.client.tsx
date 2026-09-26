@@ -5,7 +5,7 @@ import { cn } from "./cn";
 import type { NavbarMobileToggleProps } from "./Navbar";
 
 export function NavbarMobileToggle({
-  label = "Open menu",
+  "aria-label": ariaLabel = "Open menu",
   className,
   type = "button",
   ...rest
@@ -16,7 +16,7 @@ export function NavbarMobileToggle({
   return (
     <button
       type={type}
-      aria-label={label}
+      aria-label={ariaLabel}
       aria-expanded={open}
       onClick={() => shell?.setMobileDrawerOpen(!open)}
       className={cn("navbar-mobile-toggle", className)}

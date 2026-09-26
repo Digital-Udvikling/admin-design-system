@@ -3,20 +3,20 @@
      and focus outline; icons float above it, :has() padding clears them. */
   .input-icon {
     @apply relative inline-flex w-full items-center text-sm text-text-muted;
-    --input-icon-inset: calc(var(--spacing) * 3); /* matches .input px-3 */
-    --input-icon-pad: calc(var(--spacing) * 9);
+    --_input-icon-inset: calc(var(--spacing) * 3); /* matches .input px-3 */
+    --_input-icon-pad: calc(var(--spacing) * 9);
   }
 
   .input-icon:has(> .input-sm) {
     @apply text-xs;
-    --input-icon-inset: calc(var(--spacing) * 2.5);
-    --input-icon-pad: calc(var(--spacing) * 8);
+    --_input-icon-inset: calc(var(--spacing) * 2.5);
+    --_input-icon-pad: calc(var(--spacing) * 8);
   }
 
   .input-icon:has(> .input-lg) {
     @apply text-base;
-    --input-icon-inset: calc(var(--spacing) * 4);
-    --input-icon-pad: calc(var(--spacing) * 10);
+    --_input-icon-inset: calc(var(--spacing) * 4);
+    --_input-icon-pad: calc(var(--spacing) * 10);
   }
 
   /* Decorative glyphs pass clicks through; an interactive trailing button doesn't. */
@@ -25,25 +25,25 @@
   }
 
   .input-icon > :where(i, svg):first-child {
-    left: var(--input-icon-inset);
+    left: var(--_input-icon-inset);
   }
 
   /* Trailing slot — a glyph or an interactive `.input-action` button after the input. */
   .input-icon > .input ~ :where(i, svg) {
-    right: var(--input-icon-inset);
+    right: var(--_input-icon-inset);
   }
 
   /* 2px outside the glyph inset, so its 24px box keeps the glyph where a 20px one had it. */
   .input-icon > .input ~ .input-action {
-    right: calc(var(--input-icon-inset) - 2px);
+    right: calc(var(--_input-icon-inset) - 2px);
   }
 
   .input-icon:has(> :where(i, svg):first-child) > .input {
-    padding-left: var(--input-icon-pad);
+    padding-left: var(--_input-icon-pad);
   }
 
   .input-icon:has(> .input ~ :where(i, svg, .input-action)) > .input {
-    padding-right: var(--input-icon-pad);
+    padding-right: var(--_input-icon-pad);
   }
 
   .input-icon:has(> .input:disabled) > :where(i, svg) {

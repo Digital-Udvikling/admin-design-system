@@ -3,11 +3,11 @@
    * Pure-CSS charts driven by inline custom properties — not data-*
    * attributes (CSS can't read an attribute as a number for calc()).
    * Contract: bars — container `--chart-max` (default 100), each bar
-   * `--value`; stack — each segment `--value` (flex-grow ratios, no max);
+   * `--chart-value`; stack — each segment `--chart-value` (flex-grow ratios, no max);
    * donut — `--donut-segments` holds a pre-built cumulative conic-gradient
    * stop string (CSS can't sum a variable-length sibling list).
    * Single-series colour rides currentColor; multi-series is set inline via
-   * `--bar-color` / `--segment-color` / `--legend-color`.
+   * `--chart-bar-color` / `--chart-segment-color` / `--chart-legend-color`.
    */
   .chart {
     --chart-max: 100;
@@ -63,10 +63,10 @@
 
   .chart-bar-fill {
     block-size: 0.75rem;
-    inline-size: clamp(0%, calc(var(--value) / var(--chart-max) * 100%), 100%);
-    background: var(--bar-color, currentColor);
+    inline-size: clamp(0%, calc(var(--chart-value) / var(--chart-max) * 100%), 100%);
+    background: var(--chart-bar-color, currentColor);
     border-radius: 2px;
-    /* Transition the resolved length, not --value (unregistered — won't
+    /* Transition the resolved length, not --chart-value (unregistered — won't
        animate); both axes so the vertical fill animates too. */
     transition:
       inline-size 200ms ease,
@@ -132,7 +132,7 @@
 
   .chart-bars-vertical .chart-bar-fill {
     inline-size: 100%;
-    block-size: clamp(0%, calc(var(--value) / var(--chart-max) * 100%), 100%);
+    block-size: clamp(0%, calc(var(--chart-value) / var(--chart-max) * 100%), 100%);
     border-end-start-radius: 0;
     border-end-end-radius: 0;
   }
@@ -160,9 +160,9 @@
   }
 
   .chart-segment {
-    flex: var(--value) 1 0;
+    flex: var(--chart-value) 1 0;
     min-inline-size: 0;
-    background: var(--segment-color, currentColor);
+    background: var(--chart-segment-color, currentColor);
     transition: flex-grow 200ms ease;
   }
   .chart-segment + .chart-segment {
@@ -237,7 +237,7 @@
     inline-size: 0.625rem;
     block-size: 0.625rem;
     border-radius: 2px;
-    background: var(--legend-color, currentColor);
+    background: var(--chart-legend-color, currentColor);
     flex-shrink: 0;
   }
 

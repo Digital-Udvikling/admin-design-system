@@ -23,11 +23,11 @@ export interface StackedBarSegmentProps extends Omit<ComponentProps<"div">, "col
   index?: number;
   /** Raw value when composing without a datum. */
   value?: number;
-  /** Explicit segment colour (`--segment-color`). */
+  /** Explicit segment colour (`--chart-segment-color`). */
   color?: string;
 }
 
-/** One proportion segment, sized by `flex: var(--value)`; SERIES-cycle colours by default. */
+/** One proportion segment, sized by `flex: var(--chart-value)`; SERIES-cycle colours by default. */
 function Segment({
   datum,
   index = 0,
@@ -39,8 +39,8 @@ function Segment({
 }: StackedBarSegmentProps) {
   const v = datum?.value ?? value ?? 0;
   const segColor = datum !== undefined ? seriesColor(datum, index) : color;
-  const vars: Record<string, string | number> = { "--value": v };
-  if (segColor !== undefined) vars["--segment-color"] = segColor;
+  const vars: Record<string, string | number> = { "--chart-value": v };
+  if (segColor !== undefined) vars["--chart-segment-color"] = segColor;
   const title = datum !== undefined ? datumTitle(datum) : undefined;
   return (
     <div

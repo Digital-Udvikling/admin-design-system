@@ -126,7 +126,7 @@
 
   /* 6px inside the 8px card, like controls and alerts, so the corners stay concentric. */
   .card-body > .item-group-bordered {
-    --item-group-radius: var(--radius-md);
+    --_item-group-radius: var(--radius-md);
   }
 
   .card-compact .card-body {

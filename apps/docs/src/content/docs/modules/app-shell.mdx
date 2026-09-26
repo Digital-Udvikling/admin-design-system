@@ -783,14 +783,14 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 
 Two CSS variables set the rail width. Set them on `:root`: a value on `.app-shell` sizes the rail, but the React mobile drawer portals outside the shell and keeps the default.
 
-| Variable                          | Default | What it controls                       |
-| --------------------------------- | ------- | -------------------------------------- |
-| `--app-shell-sidebar-w`           | `240px` | Expanded sidebar / drawer width.       |
-| `--app-shell-sidebar-w-collapsed` | `56px`  | Width of the icon rail when collapsed. |
+| Variable                    | Default | What it controls                       |
+| --------------------------- | ------- | -------------------------------------- |
+| `--sidebar-width`           | `240px` | Expanded sidebar / drawer width.       |
+| `--sidebar-width-collapsed` | `56px`  | Width of the icon rail when collapsed. |
 
 ```css
 :root {
-  --app-shell-sidebar-w: 280px;
+  --sidebar-width: 280px;
 }
 ```
 
@@ -910,7 +910,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; primary-on-muted with `aria-current="page"`, `[data-active]` or a `menu-item[aria-current="page"]` (filled too) in its menu in `navbar-items`      |
 | `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                                            |
 | `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                                            |
-| `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition; a direct `drawer` child fills it at rail width and hides `sidebar-collapse-toggle`       |
+| `sidebar`                     | Column flex rail at `--sidebar-width` (`240px`), muted surface, right border, 150ms width transition; a direct `drawer` child fills it at rail width and hides `sidebar-collapse-toggle`             |
 | `sidebar-toggle`              | 1px visually-hidden checkbox; checked, it collapses the rail like `data-collapsed` on the `sidebar`                                                                                                  |
 | `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                                          |
 | `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                                                     |
@@ -926,7 +926,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `sidebar-subitem`             | Like `sidebar-item` at a `1.5rem` min height; wrap the text in `sidebar-label` so it truncates, optional `sidebar-icon`                                                                              |
 | `sidebar-footer`              | Bottom column with a top border                                                                                                                                                                      |
 | `sidebar-collapse-toggle`     | `1.75rem` square `<label>` whose chevron flips direction when the inner `sidebar-toggle` is checked; centred in the collapsed rail                                                                   |
-| `sidebar-drawer`              | Fixed leading panel at `min(--app-shell-sidebar-w, 80vw)`, sliding in from fully off-screen; hides `sidebar-collapse-toggle` and a `sidebar-footer` that holds only the toggle                       |
+| `sidebar-drawer`              | Fixed leading panel at `min(--sidebar-width, 80vw)`, sliding in from fully off-screen; hides `sidebar-collapse-toggle` and a `sidebar-footer` that holds only the toggle                             |
 | `sidebar-drawer-backdrop`     | Fixed scrim over the page that fades in with the drawer                                                                                                                                              |
 | `footer`                      | Wrapping `space-between` row, `text-xs` muted, 2px top stripe in `--color-system-accent`                                                                                                             |
 | `footer-links`                | Wrapping row, `0.75rem` gap                                                                                                                                                                          |

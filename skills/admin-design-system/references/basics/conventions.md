@@ -7,6 +7,7 @@
 - [Prop shapes](#prop-shapes)
 - [Sizes](#sizes)
 - [Tones](#tones)
+- [Custom properties](#custom-properties)
 - [Icons](#icons)
 - [className](#classname)
 - [classNames](#classnames)
@@ -45,6 +46,10 @@ On `Input`, `size` replaces the native `size` attribute (the width in characters
 The status vocabulary is `info`, `success`, `warning` and `danger`, plus `primary` for brand emphasis and `neutral` as the unmodified default. Not every component offers all of them; each component's `Reference` lists its own set.
 
 **Caution** — On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text colour rather than taking the accent — accent-on-tint fails contrast, most visibly for yellow. Each component's `Reference` says which.
+
+## Custom properties
+
+A component's knobs are named after it (`--chart-value`, `--sidebar-width`, `--indicator-offset`) and listed in its `Reference`. `--surface-current` and `--z-popup` are the two globals; see [Theming](theming.md). A property that starts with `--_` (`--_btn-hover`) is internal and can change in any release; don't set it.
 
 ## Icons
 

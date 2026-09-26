@@ -43,6 +43,10 @@ On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text
 
 </Callout>
 
+## Custom properties
+
+A component's knobs are named after it (`--chart-value`, `--sidebar-width`, `--indicator-offset`) and listed in its `Reference`. `--surface-current` and `--z-popup` are the two globals; see [Theming](../theming/). A property that starts with `--_` (`--_btn-hover`) is internal and can change in any release; don't set it.
+
 ## Icons
 
 Components that host an icon take an `icon` prop (and `iconTrailing` where a trailing slot exists). It accepts a **component reference**, rendered at `size="1em"` with `aria-hidden` so SVGs inherit the host `font-size` and match the Tabler webfont:

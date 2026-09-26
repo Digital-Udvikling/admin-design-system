@@ -4,7 +4,8 @@
 //   2. every `#anchor` on such a link exists in the built HTML
 //   3. every class and custom property named in a `## Reference` → `### Vanilla`
 //      table is defined in packages/admin-css/src/components/
-//   4. coverage report: component classes no Reference table mentions yet
+//   4. coverage report: component classes no Reference table mentions yet, and
+//      public custom properties (not `--_*`, not tokens) no page mentions
 //   5. every `:::example` tsx fence type-checks, built into the same preview
 //      module the site renders, against packages/admin-react/src
 //   6. every prop in a `## Reference` → `### React` table exists on the props
@@ -556,6 +557,25 @@ if (render !== null) {
 const parityLine = `Parity: ${parityChecked}/${pairs.length} vanilla/React example pairs compared (${Math.round(performance.now() - parityStart)} ms).`;
 
 // ---------------------------------------------------------------- coverage
+
+// Knobs are API unless `--_`-prefixed (private, which the scan skips), so each
+// needs a mention somewhere in the docs. Tokens are covered by the Colors page;
+// `--spacing` is Tailwind's and `--anchor-width` Base UI's.
+const EXTERNAL_VARS =
+  /^--(?:color|font|tw|text|radius|shadow|default|leading|tracking|ease)-|^--(?:spacing|anchor-width)$/;
+const mentionedVars = new Set();
+for (const abs of mdxFiles) {
+  for (const m of readFileSync(abs, "utf8").matchAll(/`(--[a-z][a-z0-9-]*)/g))
+    mentionedVars.add(m[1]);
+}
+const undocumentedVars = [...cssVars]
+  .filter((v) => !EXTERNAL_VARS.test(v) && !mentionedVars.has(v))
+  .sort();
+if (strictCoverage && undocumentedVars.length > 0) {
+  errors.push(
+    `custom properties documented on no page (document them, or prefix --_ to make them private): ${undocumentedVars.join(", ")}`,
+  );
+}
 
 const uncovered = [...cssClasses].filter((c) => !documented.has(c)).sort();
 const coverage = cssClasses.size === 0 ? 1 : documented.size / cssClasses.size;

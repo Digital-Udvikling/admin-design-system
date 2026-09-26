@@ -46,59 +46,59 @@
 
   .indicator-item {
     @apply absolute z-[1] whitespace-nowrap;
-    top: var(--indicator-top, 0);
-    bottom: var(--indicator-bottom, auto);
-    inset-inline-start: var(--indicator-start, auto);
-    inset-inline-end: var(--indicator-end, 0);
+    top: var(--_indicator-top, 0);
+    bottom: var(--_indicator-bottom, auto);
+    inset-inline-start: var(--_indicator-start, auto);
+    inset-inline-end: var(--_indicator-end, 0);
     /* The first translate half-overlaps the corner; the second pulls back
        toward the anchor centre by `--indicator-offset`, direction set
        per-modifier. */
-    transform: translate(var(--indicator-tx, 50%), var(--indicator-ty, -50%))
+    transform: translate(var(--_indicator-tx, 50%), var(--_indicator-ty, -50%))
       translate(
-        var(--indicator-offset-x, calc(-1 * var(--indicator-offset, 0px))),
-        var(--indicator-offset-y, var(--indicator-offset, 0px))
+        var(--_indicator-offset-x, calc(-1 * var(--indicator-offset, 0px))),
+        var(--_indicator-offset-y, var(--indicator-offset, 0px))
       );
   }
 
   /* Horizontal */
   .indicator-start {
-    --indicator-start: 0;
-    --indicator-end: auto;
-    --indicator-tx: -50%;
-    --indicator-offset-x: var(--indicator-offset, 0px);
+    --_indicator-start: 0;
+    --_indicator-end: auto;
+    --_indicator-tx: -50%;
+    --_indicator-offset-x: var(--indicator-offset, 0px);
   }
   /* `center` and `middle` sit on a straight edge, so both drop the corner pull-in. */
   .indicator-center {
-    --indicator-start: 50%;
-    --indicator-end: auto;
-    --indicator-tx: -50%;
+    --_indicator-start: 50%;
+    --_indicator-end: auto;
+    --_indicator-tx: -50%;
     --indicator-offset: 0px;
   }
   .indicator-end {
-    --indicator-start: auto;
-    --indicator-end: 0;
-    --indicator-tx: 50%;
-    --indicator-offset-x: calc(-1 * var(--indicator-offset, 0px));
+    --_indicator-start: auto;
+    --_indicator-end: 0;
+    --_indicator-tx: 50%;
+    --_indicator-offset-x: calc(-1 * var(--indicator-offset, 0px));
   }
 
   /* Vertical */
   .indicator-top {
-    --indicator-top: 0;
-    --indicator-bottom: auto;
-    --indicator-ty: -50%;
-    --indicator-offset-y: var(--indicator-offset, 0px);
+    --_indicator-top: 0;
+    --_indicator-bottom: auto;
+    --_indicator-ty: -50%;
+    --_indicator-offset-y: var(--indicator-offset, 0px);
   }
   .indicator-middle {
-    --indicator-top: 50%;
-    --indicator-bottom: auto;
-    --indicator-ty: -50%;
+    --_indicator-top: 50%;
+    --_indicator-bottom: auto;
+    --_indicator-ty: -50%;
     --indicator-offset: 0px;
   }
   .indicator-bottom {
-    --indicator-top: auto;
-    --indicator-bottom: 0;
-    --indicator-ty: 50%;
-    --indicator-offset-y: calc(-1 * var(--indicator-offset, 0px));
+    --_indicator-top: auto;
+    --_indicator-bottom: 0;
+    --_indicator-ty: 50%;
+    --_indicator-offset-y: calc(-1 * var(--indicator-offset, 0px));
   }
 
   /* Status dot — an empty `.badge` is still a pill; a dot must be round. */

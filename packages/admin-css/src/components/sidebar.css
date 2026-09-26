@@ -4,7 +4,7 @@
            bg-surface-muted text-text
            border-r border-border;
     --surface-current: var(--color-surface-muted);
-    width: var(--app-shell-sidebar-w, 240px);
+    width: var(--sidebar-width, 240px);
     transition: width 150ms ease;
   }
 
@@ -21,7 +21,7 @@
   }
 
   .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) {
-    width: var(--app-shell-sidebar-w-collapsed, 56px);
+    width: var(--sidebar-width-collapsed, 56px);
   }
 
   .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-group-label,
@@ -122,7 +122,7 @@
 
   .sidebar-collapsible-trigger,
   .sidebar-collapse-toggle {
-    --sidebar-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+    --_sidebar-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
   }
 
   .sidebar-collapsible-trigger {
@@ -148,8 +148,8 @@
     height: 0.875rem;
     color: var(--color-text-muted);
     background-color: currentColor;
-    -webkit-mask: var(--sidebar-chevron) center / contain no-repeat;
-    mask: var(--sidebar-chevron) center / contain no-repeat;
+    -webkit-mask: var(--_sidebar-chevron) center / contain no-repeat;
+    mask: var(--_sidebar-chevron) center / contain no-repeat;
     rotate: -90deg;
     transition: rotate 150ms ease;
   }
@@ -237,8 +237,8 @@
     width: 1rem;
     height: 1rem;
     background-color: currentColor;
-    -webkit-mask: var(--sidebar-chevron) center / contain no-repeat;
-    mask: var(--sidebar-chevron) center / contain no-repeat;
+    -webkit-mask: var(--_sidebar-chevron) center / contain no-repeat;
+    mask: var(--_sidebar-chevron) center / contain no-repeat;
     rotate: 90deg;
     transition: rotate 150ms ease;
   }
@@ -263,7 +263,7 @@
            bg-surface-muted text-text border-r border-border-strong shadow-sm
            transition-transform duration-150;
     --surface-current: var(--color-surface-muted);
-    width: min(var(--app-shell-sidebar-w, 240px), 80vw);
+    width: min(var(--sidebar-width, 240px), 80vw);
   }
 
   .sidebar-drawer[data-starting-style],
@@ -283,7 +283,7 @@
   /* Vanilla mobile drawer: a sidebar directly in a <dialog class="drawer"> fills it at
      the drawer width the React drawer uses; the dialog draws the edge. */
   .drawer:has(> .sidebar) {
-    width: min(var(--app-shell-sidebar-w, 240px), 80vw);
+    width: min(var(--sidebar-width, 240px), 80vw);
   }
   .drawer > .sidebar {
     flex: 1;

@@ -62,7 +62,7 @@ export interface BarChartBarProps extends Omit<ComponentProps<"div">, "color"> {
   value?: number;
   /** Category label when composing without a datum. */
   label?: string;
-  /** Explicit bar colour (`--bar-color`). Overrides the single-series fill. */
+  /** Explicit bar colour (`--chart-bar-color`). Overrides the single-series fill. */
   color?: string;
 }
 
@@ -75,8 +75,8 @@ function Bar({ datum, value, label, color, className, style, ...rest }: BarChart
   const v = datum?.value ?? value ?? 0;
   const lab = datum?.label ?? label;
   const barColor = datum?.color ?? color;
-  const vars: Record<string, string | number> = { "--value": v };
-  if (barColor !== undefined) vars["--bar-color"] = barColor;
+  const vars: Record<string, string | number> = { "--chart-value": v };
+  if (barColor !== undefined) vars["--chart-bar-color"] = barColor;
   const title = datum !== undefined ? datumTitle(datum) : undefined;
   return (
     <div

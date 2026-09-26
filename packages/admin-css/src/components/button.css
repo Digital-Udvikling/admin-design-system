@@ -1,6 +1,6 @@
 @layer components {
   .btn {
-    --btn-hover: var(--color-surface-strong);
+    --_btn-hover: var(--color-surface-strong);
     @apply inline-flex items-center justify-center gap-2 px-4 py-2
            rounded-md font-medium text-sm leading-none whitespace-nowrap
            border border-border
@@ -17,32 +17,32 @@
   }
 
   /* Variants — bare `.btn` is the low-emphasis default; most buttons need no variant class.
-     Each sets `--btn-hover`, which the gated :hover rule below paints. */
+     Each sets `--_btn-hover`, which the gated :hover rule below paints. */
   .btn-primary {
-    --btn-hover: var(--color-primary-hover);
+    --_btn-hover: var(--color-primary-hover);
     @apply bg-primary text-primary-content border-transparent;
   }
 
   .btn-ghost {
-    --btn-hover: var(--color-surface-hover);
+    --_btn-hover: var(--color-surface-hover);
     @apply bg-transparent text-text border-transparent;
   }
 
   /* Fills with the page background so it sits flush with it, like `card-muted`. */
   .btn-muted {
-    --btn-hover: var(--color-surface-hover);
+    --_btn-hover: var(--color-surface-hover);
     @apply bg-surface;
   }
 
   .btn-danger {
-    --btn-hover: var(--color-danger-hover);
+    --_btn-hover: var(--color-danger-hover);
     @apply bg-danger text-danger-content border-transparent;
   }
 
   /* Low-emphasis destructive action. The label uses danger-hover because
      danger text is 4.4:1 on the dark surface, under AA. */
   .btn-danger-ghost {
-    --btn-hover: var(--color-danger-muted);
+    --_btn-hover: var(--color-danger-muted);
     @apply bg-transparent text-danger-hover border-transparent;
   }
 
@@ -50,7 +50,7 @@
      hover skips them here instead of relying on pointer-events: none. */
   @media (hover: hover) {
     .btn:hover:where(:not(:disabled, [aria-disabled="true"], [data-disabled])) {
-      background-color: var(--btn-hover);
+      background-color: var(--_btn-hover);
     }
   }
 
@@ -71,7 +71,7 @@
      both states so an off toggle still reads as a toggle. */
   .btn:is([aria-pressed], [data-pressed]:not([aria-haspopup]))::before {
     /* Off thumb is paper in both modes — it reads on the border-strong track either way. */
-    --btn-toggle-thumb: var(--color-paper);
+    --_btn-toggle-thumb: var(--color-paper);
     content: "";
     flex-shrink: 0;
     inline-size: 1.75em;
@@ -80,7 +80,7 @@
     background-color: var(--color-border-strong);
     background-image: radial-gradient(
       circle closest-side,
-      var(--btn-toggle-thumb) calc(100% - 0.5px),
+      var(--_btn-toggle-thumb) calc(100% - 0.5px),
       transparent
     );
     background-size: calc(1em - 4px) calc(1em - 4px);
@@ -94,7 +94,7 @@
   .btn:is([aria-pressed="true"], [data-pressed]:not([aria-haspopup]))::before {
     /* Thumb is primary-content, not paper — paper would vanish on the
        dark-mode paper track. */
-    --btn-toggle-thumb: var(--color-primary-content);
+    --_btn-toggle-thumb: var(--color-primary-content);
     background-color: var(--color-primary);
     background-position: calc(100% - 2px) 50%;
   }
@@ -171,12 +171,12 @@
 
     .btn:is([aria-pressed], [data-pressed]:not([aria-haspopup]))::before {
       forced-color-adjust: none;
-      --btn-toggle-thumb: Canvas;
+      --_btn-toggle-thumb: Canvas;
       background-color: ButtonBorder;
     }
 
     .btn:is([aria-pressed="true"], [data-pressed]:not([aria-haspopup]))::before {
-      --btn-toggle-thumb: HighlightText;
+      --_btn-toggle-thumb: HighlightText;
       background-color: Highlight;
     }
   }

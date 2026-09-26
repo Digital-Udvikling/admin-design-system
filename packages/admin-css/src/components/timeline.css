@@ -14,8 +14,8 @@
     padding-bottom: 1rem;
     position: relative;
     /* Reset, so a timeline nested in a status item doesn't inherit its accent. */
-    --timeline-accent: initial;
-    --timeline-accent-content: initial;
+    --_timeline-accent: initial;
+    --_timeline-accent-content: initial;
   }
   .timeline-item:last-child {
     padding-bottom: 0;
@@ -51,12 +51,12 @@
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 9999px;
-    background-color: var(--timeline-accent, var(--color-border-strong));
+    background-color: var(--_timeline-accent, var(--color-border-strong));
     box-shadow: 0 0 0 3px var(--surface-current, var(--color-surface));
   }
   .timeline-indicator > :is(i, svg) {
     font-size: 1rem;
-    color: var(--timeline-accent, var(--color-text-muted));
+    color: var(--_timeline-accent, var(--color-text-muted));
     background-color: var(--surface-current, var(--color-surface));
     border-radius: 9999px;
     box-shadow: 0 0 0 2px var(--surface-current, var(--color-surface));
@@ -84,24 +84,24 @@
 
   /* Status accent, read by the dot, the icon and the marker. */
   .timeline-item-info {
-    --timeline-accent: var(--color-info);
-    --timeline-accent-content: var(--color-info-content);
+    --_timeline-accent: var(--color-info);
+    --_timeline-accent-content: var(--color-info-content);
   }
   .timeline-item-success {
-    --timeline-accent: var(--color-success);
-    --timeline-accent-content: var(--color-success-content);
+    --_timeline-accent: var(--color-success);
+    --_timeline-accent-content: var(--color-success-content);
   }
   .timeline-item-warning {
-    --timeline-accent: var(--color-warning);
-    --timeline-accent-content: var(--color-warning-content);
+    --_timeline-accent: var(--color-warning);
+    --_timeline-accent-content: var(--color-warning-content);
   }
   .timeline-item-danger {
-    --timeline-accent: var(--color-danger);
-    --timeline-accent-content: var(--color-danger-content);
+    --_timeline-accent: var(--color-danger);
+    --_timeline-accent-content: var(--color-danger-content);
   }
   .timeline-item-current {
-    --timeline-accent: var(--color-primary);
-    --timeline-accent-content: var(--color-primary-content);
+    --_timeline-accent: var(--color-primary);
+    --_timeline-accent-content: var(--color-primary-content);
   }
 
   /* Numbered variant — the gutter holds a numbered/checked marker (steps rail). */
@@ -122,8 +122,8 @@
   .timeline-marker {
     @apply inline-flex items-center justify-center
            size-7 rounded-full text-xs font-semibold tabular-nums;
-    background-color: var(--timeline-accent, var(--color-surface-strong));
-    color: var(--timeline-accent-content, var(--color-text-muted));
+    background-color: var(--_timeline-accent, var(--color-surface-strong));
+    color: var(--_timeline-accent-content, var(--color-text-muted));
     box-shadow: 0 0 0 3px var(--surface-current, var(--color-surface));
   }
 

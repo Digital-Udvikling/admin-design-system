@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
 - `Combobox` and the `combobox-*` classes: type to filter `items` and pick one value, or several as removable chips with `multiple`. `Combobox.Empty` and `Combobox.Status` cover no-match and loading, and `inputValue` with `filter={null}` supports server search. (both)
 - `Menu.Actions` (`menu-actions`) for a filter menu's Reset and Apply, `closeOnClick` and `danger` (`menu-item-danger`) on `Menu.Item`, `menu-popup-end` (`Menu.Popup align="end"`), and `icon` on `Menu.Trigger`; an icon-only `btn-square` trigger drops the chevron. (both)
+- `page-center` / `PageCenter`, a full-height `<main>` that centres one capped-width child, for sign-in and error pages (`page-center-lg` / `size="lg"`, `--page-center-max`). (both)
 - `render` on `Link`, `Badge`, `Breadcrumbs.Item`, `Card.Container`, `Item`, `Item.Container`, `Menu.Item`, `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders onto your own element, such as a router link: `render={<NextLink href="/orders" />}`. It works from a Server Component. (react)
 - `Pagination` `renderItem` receives `PaginationItemProps` (exported) as its second argument, to spread onto a router link. (react)
 - `.sidebar[data-collapsed]` collapses the rail without a `sidebar-toggle`, and `Sidebar` `collapsed` / `defaultCollapsed` work without a `Sidebar.CollapseToggle`. (both)
@@ -89,6 +90,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
 - Menu and select popups have a `border-strong` edge and a small shadow, menu rows and select options keep one height whatever they hold, long labels wrap, popups near the viewport's end edge flip to fit, and `menu-item[aria-current="page"]` gets the selected fill. (css)
 - Sidebar rows have one height whatever they hold, sub-items indent to the parent label and truncate like items (`classNames.label`), a group holding the current page highlights its trigger while closed or collapsed, and collapsed-rail labels are visually hidden so icon-only links keep their names. (both)
+- `.container` side padding is `1rem` at every width, matching the navbar and footer gutter. (css)
 
 ### Removed
 

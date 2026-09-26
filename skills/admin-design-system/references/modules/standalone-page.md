@@ -1,0 +1,122 @@
+# Standalone page
+
+> Centre a sign-in or error page outside the app shell.
+
+## Contents
+
+- [Examples](#examples)
+  - [Sign in](#sign-in)
+  - [Error page](#error-page)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
+
+## Examples
+
+The page fills at least the viewport's height. The examples below cap it with an inline `min-height` so they fit the preview.
+
+### Sign in
+
+**Example**
+
+```html
+<main class="page-center" style="min-height: 24rem">
+  <form class="card" method="post" action="/login">
+    <div class="card-body">
+      <h3 class="card-title">Sign in</h3>
+      <div class="field">
+        <label class="field-label" for="login-email">Email</label>
+        <input
+          id="login-email"
+          class="input"
+          type="email"
+          name="email"
+          autocomplete="username"
+          required
+        />
+      </div>
+      <div class="field">
+        <label class="field-label" for="login-password">Password</label>
+        <input
+          id="login-password"
+          class="input"
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+      <button class="btn btn-primary btn-full-width" type="submit">Sign in</button>
+    </div>
+  </form>
+</main>
+```
+
+```tsx
+<PageCenter style={{ minHeight: "24rem" }}>
+  <Card.Container render={<form method="post" action="/login" />}>
+    <Card.Body>
+      <Card.Title>Sign in</Card.Title>
+      <Field name="email" label="Email">
+        <Input type="email" autoComplete="username" required />
+      </Field>
+      <Field name="password" label="Password">
+        <Input type="password" autoComplete="current-password" required />
+      </Field>
+      <Button variant="primary" fullWidth type="submit">
+        Sign in
+      </Button>
+    </Card.Body>
+  </Card.Container>
+</PageCenter>
+```
+
+### Error page
+
+**Example**
+
+```html
+<main class="page-center page-center-lg" style="min-height: 20rem">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Page not found</h3>
+      <p class="card-description">The page has moved, or the link is out of date.</p>
+      <div class="card-actions">
+        <a class="btn btn-primary" href="/">Back to the dashboard</a>
+      </div>
+    </div>
+  </div>
+</main>
+```
+
+```tsx
+<PageCenter size="lg" style={{ minHeight: "20rem" }}>
+  <Card
+    title="Page not found"
+    description="The page has moved, or the link is out of date."
+    actions={
+      <Button variant="primary" render={<a href="/" />} nativeButton={false}>
+        Back to the dashboard
+      </Button>
+    }
+  />
+</PageCenter>
+```
+
+## Reference
+
+### React
+
+| Prop   | Type           | Default |
+| ------ | -------------- | ------- |
+| `size` | `"md" \| "lg"` | `"md"`  |
+
+`PageCenter` renders `<main>`, so use it for a page without [`AppShell`](app-shell.md), which renders its own. Plus native `<main>` attributes.
+
+### Vanilla
+
+| Class / var         | Effect                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `page-center`       | Full-width grid at least `100dvh` tall with `1rem` padding; centres its child and caps it at `24rem` |
+| `page-center-lg`    | Caps the child at `32rem`                                                                            |
+| `--page-center-max` | The child's cap, for a width between the presets                                                     |

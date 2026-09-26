@@ -126,6 +126,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 - **Pulling in Select2, react-select or a hand-rolled searchable select.** React has [Combobox](references/components/forms/combobox.md), with `multiple` for chips. A vanilla page filters by a few values with the [filter menu](references/patterns/filter-menu.md), a GET form of checkbox rows in a popover menu, and needs no JavaScript.
 - **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
 - **A hand-rolled copy button.** React has [`<CopyButton value>`](references/components/copy-button.md) and `useCopy()`, which announce the copy to screen readers; a property list value takes `copyable`.
+- **A hand-rolled centred login or error page.** Use [`page-center` / `<PageCenter>`](references/modules/standalone-page.md) outside the app shell.
 - **A bare `<span>` styled as a status dot.** Use `indicator-dot` / [`<StatusDot>`](references/components/indicator.md) next to the status text.
 - **`window.confirm()`, `window.prompt()` or a hand-rolled confirm script.** React has `useConfirm()` and `usePrompt()` ([Dialog](references/components/dialog.md)). A vanilla page puts the POST form inside a `<dialog>` opened with `commandfor` ([confirm before submit](references/patterns/confirm.md)), which needs no JavaScript.
 
@@ -231,3 +232,4 @@ Read references **on demand** — do not pre-load. The index below lists every a
 ### Modules
 
 - [App shell](references/modules/app-shell.md) — Page chrome — navbar, optional sidebar, optional footer — around a main content area.
+- [Standalone page](references/modules/standalone-page.md) — Centre a sign-in or error page outside the app shell.

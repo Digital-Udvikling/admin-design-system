@@ -137,6 +137,7 @@ export {
   type ComboboxGroupLabelProps,
 } from "./Combobox";
 export { Container, type ContainerProps, type ContainerSize } from "./Container";
+export { PageCenter, type PageCenterProps, type PageCenterSize } from "./PageCenter";
 export {
   Card,
   type CardProps,

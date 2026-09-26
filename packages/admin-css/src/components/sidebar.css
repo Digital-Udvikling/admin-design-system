@@ -260,7 +260,7 @@
 
   .sidebar-drawer {
     @apply fixed inset-y-0 left-0 z-50 flex flex-col
-           bg-surface-muted text-text border-r border-border
+           bg-surface-muted text-text border-r border-border-strong shadow-sm
            transition-transform duration-150;
     --surface-current: var(--color-surface-muted);
     width: min(var(--app-shell-sidebar-w, 240px), 80vw);

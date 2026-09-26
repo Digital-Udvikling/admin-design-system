@@ -9,7 +9,7 @@
            rounded-md
            text-xs font-medium
            bg-text text-surface
-           shadow-md
+           shadow-sm
            pointer-events-none;
     text-wrap: pretty;
     overflow-wrap: break-word;

@@ -129,6 +129,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A checkbox, radio, switch or badge in a table cell no longer makes its row taller than a plain row (a small badge in a compact table), avatars centre on the row, and vanilla and React footer rows match. (css)
 - In `.prose`, inline `<code>` chips keep their border and padding on both halves when they wrap across lines, and `<th>` row headers in a table body are medium weight in both bundles (`admin.css` rendered them bold and the scoped bundle regular). (css)
 - The switch thumb, accordion open and close, and the mobile sidebar drawer no longer animate under `prefers-reduced-motion: reduce`. (css)
+- Hotkey chips no longer cause a hydration error on Apple devices when the page is server-rendered (Next.js, Remix, any SSR). The server rendered `Ctrl`, `Shift` and `Alt` in `Kbd` and in the `Button`, `ToggleButton` and `Menu.Item` hotkey chips while an Apple client rendered `⌘`, `⇧` and `⌥`, so React discarded the server HTML and re-rendered the tree. They now hydrate with the server's labels and switch after hydration, and a `mod` binding switches with them. Server renders that are never hydrated (`renderToString` in the browser) keep the non-Apple labels. (react)
 
 ## [0.21.0] - 2026-09-25
 

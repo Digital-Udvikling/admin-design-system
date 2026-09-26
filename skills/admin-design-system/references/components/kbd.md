@@ -52,7 +52,7 @@
 | `keys`     | `string \| readonly string[]` | —       |
 | `children` | `string`                      | —       |
 
-`keys` takes `useHotkey` chord syntax and renders one chip per part inside a `kbd-group`, modifiers first in the order `Ctrl`, `Shift`, `Alt`, `Meta`. `mod` resolves to `Cmd` on macOS and `Ctrl` elsewhere. Pass an array for alternatives and only the first renders — the platform menu convention of showing the primary binding. An unparseable chord renders nothing.
+`keys` takes `useHotkey` chord syntax and renders one chip per part inside a `kbd-group`, modifiers first in the order `Ctrl`, `Shift`, `Alt`, `Meta`. `mod` renders `⌘` on Apple platforms and `Ctrl` elsewhere; server-rendered chips start with the non-Apple labels (see [Conventions › Hotkeys](../basics/conventions.md#hotkeys)). Pass an array for alternatives and only the first renders — the platform menu convention of showing the primary binding. An unparseable chord renders nothing.
 
 `children` is the unparsed form: a literal string in a single chip. Plus native `<span>` attributes.
 

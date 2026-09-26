@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, type Ref } from "react";
-import { canonicalize, parseKeys, toAriaKeyShortcuts } from "./hotkey-parse";
+import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore, type Ref } from "react";
+import { IS_APPLE, canonicalize, parseKeys, toAriaKeyShortcuts } from "./hotkey-parse";
 import { register, type HotkeyEntry, type HotkeyHandler } from "./hotkey-registry";
 
 export interface HotkeyOptions {
@@ -17,6 +17,19 @@ export interface HotkeyInfo {
   canonicalChords: readonly string[];
 }
 
+const subscribeNever = () => () => {};
+const getApplePlatform = () => IS_APPLE;
+const getServerApplePlatform = () => false;
+
+/**
+ * Whether `mod` means ⌘. `false` on the server and while hydrating, then the
+ * detected platform, so Apple labels replace the server's Ctrl without a
+ * hydration mismatch.
+ */
+export function useApplePlatform(): boolean {
+  return useSyncExternalStore(subscribeNever, getApplePlatform, getServerApplePlatform);
+}
+
 /**
  * Register a keyboard shortcut, e.g. `useHotkey("mod+s", save)`. The handler
  * is latched in a ref, so callers need not memoize it. Nullish `keys` is a
@@ -28,6 +41,7 @@ export function useHotkey(
   options?: HotkeyOptions,
 ): HotkeyInfo {
   const enabled = options?.enabled ?? true;
+  const apple = useApplePlatform();
   const handlerRef = useRef<HotkeyHandler>(handler);
   handlerRef.current = handler;
 
@@ -38,7 +52,7 @@ export function useHotkey(
     if (keyId === "") {
       return { canonicalChords: [], ariaKeyShortcuts: undefined, primaryChord: undefined };
     }
-    const parsed = parseKeys(keys as string | readonly string[]);
+    const parsed = parseKeys(keys as string | readonly string[], apple);
     const cans = parsed.map(canonicalize);
     return {
       canonicalChords: cans,
@@ -46,7 +60,7 @@ export function useHotkey(
       primaryChord: cans[0],
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- keyId is the stable proxy for keys, which changes identity with every inline array
-  }, [keyId]);
+  }, [keyId, apple]);
 
   useEffect(() => {
     if (!enabled || derived.canonicalChords.length === 0) return;

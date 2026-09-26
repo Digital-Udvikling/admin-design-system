@@ -15,8 +15,9 @@ export interface ParsedChord {
 
 const MOD_ORDER: readonly Modifier[] = ["ctrl", "shift", "alt", "meta"];
 
-// Detected once at module load (SSR-safe — the registry never dispatches
-// server-side) and shared by parse and display so a binding and its `<Kbd>` chip agree.
+// The browser's platform, detected once at module load. Also true in a Node ≥21
+// server on macOS (`navigator.platform` is "MacIntel"), so rendering must read
+// `useApplePlatform()` and pass the result to parse and format explicitly.
 function detectApplePlatform(): boolean {
   if (typeof navigator === "undefined") return false;
   const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData;
@@ -24,13 +25,12 @@ function detectApplePlatform(): boolean {
   return /^(mac|iphone|ipad|ipod)/i.test(platform);
 }
 
-const IS_APPLE = detectApplePlatform();
-const MOD_TARGET: Modifier = IS_APPLE ? "meta" : "ctrl";
+export const IS_APPLE = detectApplePlatform();
 
-function tokenToMod(token: string): Modifier | null {
+function tokenToMod(token: string, apple: boolean): Modifier | null {
   switch (token) {
     case "mod":
-      return MOD_TARGET;
+      return apple ? "meta" : "ctrl";
     case "ctrl":
     case "control":
       return "ctrl";
@@ -45,7 +45,7 @@ function tokenToMod(token: string): Modifier | null {
   }
 }
 
-export function parseChord(input: string): ParsedChord {
+export function parseChord(input: string, apple: boolean): ParsedChord {
   const tokens = input
     .trim()
     .toLowerCase()
@@ -58,7 +58,7 @@ export function parseChord(input: string): ParsedChord {
   const mods = new Set<Modifier>();
   let key: string | null = null;
   for (const token of tokens) {
-    const mod = tokenToMod(token);
+    const mod = tokenToMod(token, apple);
     if (mod !== null) {
       mods.add(mod);
       continue;
@@ -74,9 +74,9 @@ export function parseChord(input: string): ParsedChord {
   return { mods, key };
 }
 
-export function parseKeys(keys: string | readonly string[]): ParsedChord[] {
+export function parseKeys(keys: string | readonly string[], apple: boolean): ParsedChord[] {
   const list = typeof keys === "string" ? [keys] : keys;
-  return list.map(parseChord);
+  return list.map((input) => parseChord(input, apple));
 }
 
 /** Canonical wire form used as a map key in the registry. */
@@ -127,15 +127,20 @@ const SPECIAL_KEY_LABELS: Record<string, string> = {
   delete: "Del",
 };
 
-const MOD_LABELS: Record<Modifier, string> = IS_APPLE
-  ? { ctrl: "⌃", shift: "⇧", alt: "⌥", meta: "⌘" }
-  : { ctrl: "Ctrl", shift: "Shift", alt: "Alt", meta: "Meta" };
+const APPLE_MOD_LABELS: Record<Modifier, string> = { ctrl: "⌃", shift: "⇧", alt: "⌥", meta: "⌘" };
+const MOD_LABELS: Record<Modifier, string> = {
+  ctrl: "Ctrl",
+  shift: "Shift",
+  alt: "Alt",
+  meta: "Meta",
+};
 
 /** Visual chips for a chord — one entry per modifier and the final key. */
-export function formatChord(chord: ParsedChord): string[] {
+export function formatChord(chord: ParsedChord, apple: boolean): string[] {
+  const labels = apple ? APPLE_MOD_LABELS : MOD_LABELS;
   const parts: string[] = [];
   for (const mod of MOD_ORDER) {
-    if (chord.mods.has(mod)) parts.push(MOD_LABELS[mod]);
+    if (chord.mods.has(mod)) parts.push(labels[mod]);
   }
   const special = SPECIAL_KEY_LABELS[chord.key];
   if (special !== undefined) {

@@ -40,6 +40,8 @@ Both packages share base names. The unscoped vanilla bundle renders `<Button var
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
+React props follow the same split: `variant` picks one of a set of mutually exclusive looks (usually a tone), `size` is `sm` / `md` / `lg`, a boolean prop sets one modifier that combines with the others (`compact`, `bordered`, `soft`, `square`), and any other enum is for a modifier with three or more levels (`density` on `Table`).
+
 Form controls take `variant` `bordered` or `ghost` only; invalid is a state. Mark a control invalid with `aria-invalid="true"` or an invalid `Field` (`error` / `invalid`); `:user-invalid` covers native constraints. There is no `input-danger`.
 
 ### Router links (`render`)
@@ -110,6 +112,10 @@ For vanilla / no-build contexts (Jinja, Go templates, plain HTML) the package sh
 Admin users run current browsers — there is no legacy budget. Reach for modern HTML and CSS before reaching for JavaScript, and don't pull in `framer-motion`, manual portals, `requestAnimationFrame` loops, or `useState` mirroring what the DOM already tracks. Base UI handles the cases where JS is genuinely needed.
 
 What the system itself builds on, so you can match it: `<dialog>` + `showModal()`, the `popover` attribute with `anchor-name` / `position-anchor`, `<details>` + `::details-content`, `:has()`, `field-sizing: content`, `@starting-style` with `transition-behavior: allow-discrete`, `subgrid`, `text-wrap: balance`, `light-dark()` and `color-mix()`. Don't infer support for anything beyond what a component's reference page shows.
+
+### Stability
+
+Class names, React props and exports, token names, documented custom properties and the package entry points are semver API; token values and pixel metrics can change in a minor. Custom properties that start with `--_` are internal: never set or read them. Import CSS only through the named entry points (`admin.css`, `theme.css`, `components.css`, `fonts.css`, `@aortl/admin-react/styles.css`), never a path under `src/` or `dist/`. See [Stability](references/getting-started/stability.md).
 
 ### Charts
 

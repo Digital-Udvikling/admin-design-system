@@ -42,6 +42,8 @@ Both packages share base names. The unscoped vanilla bundle renders `<Button var
 
 Naming pattern: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes use `sm` / (default, omitted) / `lg`.
 
+React props follow the same split: `variant` picks one of a set of mutually exclusive looks (usually a tone), `size` is `sm` / `md` / `lg`, a boolean prop sets one modifier that combines with the others (`compact`, `bordered`, `soft`, `square`), and any other enum is for a modifier with three or more levels (`density` on `Table`).
+
 Form controls take `variant` `bordered` or `ghost` only; invalid is a state. Mark a control invalid with `aria-invalid="true"` or an invalid `Field` (`error` / `invalid`); `:user-invalid` covers native constraints. There is no `input-danger`.
 
 ### Router links (`render`)
@@ -113,6 +115,10 @@ Admin users run current browsers — there is no legacy budget. Reach for modern
 
 What the system itself builds on, so you can match it: `<dialog>` + `showModal()`, the `popover` attribute with `anchor-name` / `position-anchor`, `<details>` + `::details-content`, `:has()`, `field-sizing: content`, `@starting-style` with `transition-behavior: allow-discrete`, `subgrid`, `text-wrap: balance`, `light-dark()` and `color-mix()`. Don't infer support for anything beyond what a component's reference page shows.
 
+### Stability
+
+Class names, React props and exports, token names, documented custom properties and the package entry points are semver API; token values and pixel metrics can change in a minor. Custom properties that start with `--_` are internal: never set or read them. Import CSS only through the named entry points (`admin.css`, `theme.css`, `components.css`, `fonts.css`, `@aortl/admin-react/styles.css`), never a path under `src/` or `dist/`. See [Stability](references/getting-started/stability.md).
+
 ### Charts
 
 Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (vanilla `.chart-bars` / `.chart-stack` / `.chart-donut`). For dense inline micro-viz and dashboard cards; no axes, ticks, or gridlines. Driven by inline custom properties, never `data-*`; in React the primary API is the `data` prop. See [Charts](references/components/charts.md) for the full API.
@@ -165,6 +171,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Agent skill](references/getting-started/skill.md) — Install the design system as an Agent Skill.
 - [React](references/getting-started/react.md) — Typed components emitting the same class names as the CSS package.
 - [Scoped bundle](references/getting-started/scoped.md) — Drop admin styles into a non-admin app without colliding on class names.
+- [Stability](references/getting-started/stability.md) — What semver covers, and the supported browsers.
 - [Tailwind](references/getting-started/tailwind.md) — Drop the design system into an existing Tailwind v4.1+ project.
 - [Vanilla CSS](references/getting-started/vanilla.md) — One pre-built stylesheet, no build tooling required.
 

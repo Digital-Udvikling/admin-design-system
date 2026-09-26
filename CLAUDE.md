@@ -92,7 +92,7 @@ CSS-side, components accommodate an icon as a direct child of the root (`flex it
 `packages/admin-css/src/theme.css`. Two `@theme static` blocks, both registered with Tailwind so it generates utilities AND emits CSS variables:
 
 1. **Palette** — Flexoki ramps (`--color-blue-600`, `--color-base-50`, paper, black, …). `--color-*: initial` wipes Tailwind's defaults; Flexoki is the single source of truth. Tones are absolute, identical in light/dark mode.
-2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, `--color-danger`, …) declared once via `light-dark()`. Dark mode swaps to Flexoki's inverted pairs (paper↔black, base-50↔base-950, accent-600↔accent-400).
+2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, `--color-danger`, `--color-category-blue`, …) declared once via `light-dark()`. Dark mode swaps to Flexoki's inverted pairs (paper↔black, base-50↔base-950, accent-600↔accent-400).
 
 **Components only reference semantic tokens, never palette tones directly** — override `--color-primary` and every component follows.
 

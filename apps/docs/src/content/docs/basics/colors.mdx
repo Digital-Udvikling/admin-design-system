@@ -56,11 +56,13 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 
 <ColorFamily
   family="Surface"
-  description="Page and component backgrounds, lightest to strongest."
+  description="Page and component backgrounds, lightest to strongest. Hover and Stripe are translucent washes over whatever surface is below."
   variants={[
     { label: "Base", variable: "--color-surface" },
     { label: "Muted", variable: "--color-surface-muted" },
     { label: "Strong", variable: "--color-surface-strong" },
+    { label: "Hover", variable: "--color-surface-hover" },
+    { label: "Stripe", variable: "--color-surface-stripe" },
   ]}
 />
 
@@ -125,6 +127,57 @@ Primary and the state families (danger, success, warning, info) share a four-slo
     { label: "Strong", variable: "--color-border-strong" },
   ]}
 />
+
+## Categorical
+
+For colour-coding categories that aren't states, such as event types or chart series. Each hue reads as text on `surface`, `surface-muted` and its own muted tint at 4.5:1 in both modes. Utilities: `text-category-<hue>`, `bg-category-<hue>`, `border-category-<hue>`, and the same with `-muted`.
+
+<ColorFamily
+  family="Categorical"
+  description="Text and marks for a category."
+  variants={[
+    { label: "Red", variable: "--color-category-red" },
+    { label: "Orange", variable: "--color-category-orange" },
+    { label: "Yellow", variable: "--color-category-yellow" },
+    { label: "Green", variable: "--color-category-green" },
+    { label: "Cyan", variable: "--color-category-cyan" },
+    { label: "Blue", variable: "--color-category-blue" },
+    { label: "Purple", variable: "--color-category-purple" },
+    { label: "Magenta", variable: "--color-category-magenta" },
+  ]}
+/>
+
+<ColorFamily
+  family="Categorical muted"
+  description="Tinted fills behind a category's text."
+  variants={[
+    { label: "Red", variable: "--color-category-red-muted" },
+    { label: "Orange", variable: "--color-category-orange-muted" },
+    { label: "Yellow", variable: "--color-category-yellow-muted" },
+    { label: "Green", variable: "--color-category-green-muted" },
+    { label: "Cyan", variable: "--color-category-cyan-muted" },
+    { label: "Blue", variable: "--color-category-blue-muted" },
+    { label: "Purple", variable: "--color-category-purple-muted" },
+    { label: "Magenta", variable: "--color-category-magenta-muted" },
+  ]}
+/>
+
+:::example
+
+```html
+<p class="flex flex-wrap gap-4 text-sm">
+  <span class="text-category-blue"
+    ><i class="ti ti-shopping-cart" aria-hidden="true"></i> Add to cart</span
+  >
+  <span class="text-category-green"
+    ><i class="ti ti-credit-card" aria-hidden="true"></i> Order</span
+  >
+  <span class="text-category-purple"><i class="ti ti-search" aria-hidden="true"></i> Search</span>
+  <span class="rounded-sm bg-category-orange-muted px-1.5 text-category-orange">Campaign</span>
+</p>
+```
+
+:::
 
 ## Palette
 

@@ -10,7 +10,8 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
 // Regression guards for utility leakage: admin.css once auto-scanned the repo
 // and shipped stray utilities, and Tailwind's `.container` utility overrode
-// container.css. Compiles fresh into a temp dir; dist/ may be stale.
+// container.css (likewise `.table` and `.table-cell`). Compiles fresh into a temp dir;
+// dist/ may be stale.
 
 const PKG_ROOT = fileURLToPath(new URL("../", import.meta.url));
 const SRC = join(PKG_ROOT, "src");
@@ -42,7 +43,7 @@ function hasComponentRule(root, selector) {
   root.walkAtRules("layer", (layer) => {
     if (layer.params.trim() !== "components") return;
     layer.walkRules((rule) => {
-      if (rule.selector === selector) found = true;
+      if (rule.selectors.includes(selector)) found = true;
     });
   });
   return found;
@@ -51,6 +52,7 @@ function hasComponentRule(root, selector) {
 let dir;
 let admin;
 let consumer;
+let utilities;
 
 beforeAll(async () => {
   dir = await mkdtemp(join(tmpdir(), "admin-css-bundle-"));
@@ -61,15 +63,16 @@ beforeAll(async () => {
     fixture,
     [
       `@import "${TAILWIND_INDEX}";`,
-      `@source inline("container table table-cell");`,
+      `@source inline("container table table-cell flex");`,
       `@import "${join(SRC, "theme.css")}";`,
       `@import "${join(SRC, "components/index.css")}";`,
     ].join("\n"),
   );
-  [admin, consumer] = await Promise.all([
+  [admin, consumer, utilities] = await Promise.all([
     compile(join(SRC, "admin.css"), join(dir, "admin.css"), PKG_ROOT),
     // cwd is the empty temp dir so auto source detection scans nothing else.
     compile(fixture, join(dir, "consumer.out.css"), dir),
+    compile(join(SRC, "utilities.css"), join(dir, "utilities.css"), PKG_ROOT),
   ]);
 }, 60_000);
 
@@ -88,13 +91,22 @@ describe("admin.css", () => {
   });
 });
 
-describe("Tailwind consumer path (components/index.css beside tailwindcss)", () => {
-  test("does not generate the .container utility", () => {
-    expect(utilitySelectors(consumer)).not.toContain(".container");
-    expect(hasComponentRule(consumer, ".container")).toBe(true);
+describe("admin.utilities.css", () => {
+  test.each([".container", ".table", ".table-cell"])("does not ship the %s utility", (selector) => {
+    expect(utilitySelectors(utilities)).not.toContain(selector);
   });
+});
 
-  test("still generates the other inline candidates, so the exclusion is what drops .container", () => {
-    expect(utilitySelectors(consumer)).toEqual(expect.arrayContaining([".table", ".table-cell"]));
+describe("Tailwind consumer path (components/index.css beside tailwindcss)", () => {
+  test.each([".container", ".table", ".table-cell"])(
+    "does not generate the %s utility that shares a component's name",
+    (selector) => {
+      expect(utilitySelectors(consumer)).not.toContain(selector);
+      expect(hasComponentRule(consumer, selector)).toBe(true);
+    },
+  );
+
+  test("still generates other inline candidates, so the exclusion is what drops them", () => {
+    expect(utilitySelectors(consumer)).toContain(".flex");
   });
 });

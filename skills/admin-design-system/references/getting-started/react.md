@@ -76,7 +76,7 @@ Beyond the standard `<div>` attributes — all forwarded, including `style` and 
 | `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline — see [Theming › System accent](../basics/theming.md#system-accent).            |
 
 ```tsx
-<AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
+<AdminRoot theme="dark" systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   {/* ... */}
 </AdminRoot>
 ```

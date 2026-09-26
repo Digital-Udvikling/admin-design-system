@@ -13,7 +13,7 @@
  */
 
 @source inline(
-  "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,table,inline-table,table-row,table-cell,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
+  "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,inline-table,table-row,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
 );
 @source inline("{,sm:,md:,lg:,xl:,2xl:}overflow{,-x,-y}-{auto,hidden,visible,scroll,clip}");
 
@@ -120,12 +120,18 @@
 
 /* Foundation semantic colors — kept in sync with theme.css */
 @source inline(
-  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,text,text-muted,border,border-strong}"
+  "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{surface,surface-muted,surface-strong,surface-hover,surface-stripe,text,text-muted,border,border-strong}"
 );
 
 /* Accent semantic colors — kept in sync with theme.css */
 @source inline(
   "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{primary,system-accent,danger,success,warning,info}{,-hover,-muted,-content}"
+);
+
+/* Categorical colors — kept in sync with theme.css. No variants: a category's
+   colour doesn't change on hover or focus */
+@source inline(
+  "{bg,text,border}-category-{red,orange,yellow,green,cyan,blue,purple,magenta}{,-muted}"
 );
 
 /* Link / focus — deliberately narrower than the accents above: focus rings

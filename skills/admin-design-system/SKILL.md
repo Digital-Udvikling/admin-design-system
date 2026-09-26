@@ -74,6 +74,8 @@ Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><
 
 Override semantic tokens to reskin the system; never reference Flexoki tones directly from component code.
 
+Hover and zebra fills use the translucent `surface-hover` / `surface-stripe` washes, so they show on any container. A custom filled container sets `--surface-current` to its fill so timeline rings, avatar-group rings and pinned or sticky table cells paint the same surface; see [Theming › Container surface](references/basics/theming.md).
+
 ### Dark mode
 
 Driven entirely by CSS `color-scheme` and `[data-theme]`:
@@ -110,7 +112,7 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 - **Missing `<AdminRoot>`.** `admin-react` components emit `_ao-`-prefixed classes that only match inside `._ao-admin-root`. Without the wrapper everything renders unstyled. Mount one high in the tree.
 - **Mixing prefixed and bare class names.** A React app uses the scoped bundle (`_ao-btn`); a full-page vanilla app uses bare (`btn`). Don't write `btn` inside an `admin-react` tree, or `_ao-btn` outside one — pick the flavor (see Quick start) and stay in it.
 - **Hand-rolling spacing and layout.** Use `<Container>` for page sections and flex/grid utilities for rows and grids ([Row](references/components/row.md), [Grid](references/components/grid.md)); there are no `Row` or `Grid` components. Density is a system property, not a per-page decision.
-- **Reaching for raw Flexoki tones in component code.** Reference semantic tokens (`bg-primary`, `text-text-muted`, `border-border`); override those to reskin.
+- **Reaching for raw Flexoki tones in component code.** Reference semantic tokens (`bg-primary`, `text-text-muted`, `border-border`); override those to reskin. To colour-code categories (event types, chart series), use the [categorical tokens](references/basics/colors.md#categorical) (`text-category-blue`, `--color-category-blue`), not `text-blue-600 dark:text-blue-400`.
 - **Adding `framer-motion`, manual portals, or `requestAnimationFrame`.** Prefer the platform (see above); Base UI covers the genuinely stateful cases.
 - **Putting `required` on the `<Field>` instead of the control.** The asterisk comes from the control's own `required`, on a label that is a direct child of the field. `<Field required>` alone marks the label but validates nothing; use it for controls with no native `required`, and `<Field.Label required>` for a label wrapped in another element. `required={false}` removes the asterisk.
 

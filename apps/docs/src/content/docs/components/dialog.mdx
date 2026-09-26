@@ -590,7 +590,7 @@ A `Dialog.Title` sets the dialog's `aria-labelledby` and a `Dialog.Description` 
 
 A descendant marked `data-autofocus` takes focus each time the dialog opens. React's `autoFocus` doesn't work here: it focuses at mount, while the dialog is still closed.
 
-Leave `open` off for the uncontrolled case, as the Invoker Commands pattern below does: no state, no effect, no ref. Pass `open` with `onOpenChange` when the open state belongs to React (a multi-step flow, an async submit, a deep-linked route): the wrapper bridges it to `showModal()` / `close()` and forwards the native `close` event back as `onOpenChange(false)`, so Esc and backdrop clicks stay in sync with your state.
+Leave `open` off for the uncontrolled case, as the Invoker Commands pattern below does: no state, no effect, no ref. Pass `open` with `onOpenChange` when the open state belongs to React (a multi-step flow, an async submit, a deep-linked route): the wrapper bridges it to `showModal()` / `close()`, forwards the native `close` event back as `onOpenChange(false)`, and reports an open it didn't make (an invoker command) as `onOpenChange(true)`, so Esc, backdrop clicks and invokers stay in sync with your state.
 
 Plus native `<dialog>` attributes.
 
@@ -614,7 +614,7 @@ Plus native `<dialog>` attributes.
 | `dialog-footer`      | Action row: muted fill, top border, right-aligned, wrapping; a button wider than the row wraps its label                                      |
 | `dialog-close`       | `1.75rem` square button with a `1rem` icon at the header's inline end, centred on the title's first line                                      |
 
-There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.
+There is no `dialog-md` — it's the unmodified `dialog`. Everything modal comes from the native element via `showModal()`: focus trap, inert page, Esc, and `::backdrop`. Safari doesn't support `closedby` yet, so a vanilla `closedby="any"` dialog closes on Esc there but not on a backdrop click; the React `Dialog` and `Drawer` add a backdrop-click handler where the attribute is missing. The page behind a modal still scrolls; `dialog-body` sets `overscroll-behavior: contain`, so scrolling past its end doesn't move the page. The fade and lift use `@starting-style` with `transition-behavior: allow-discrete` and run on open and close without JavaScript. Under `prefers-reduced-motion: reduce` only the fade remains.
 
 A `<dialog>` takes no name from the heading inside it: give the title an `id` and point the dialog's `aria-labelledby` at it, and `aria-describedby` at the description. Use `role="alertdialog"` for a confirmation that needs an answer.
 

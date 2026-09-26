@@ -6,7 +6,7 @@ import { SidebarCollapseToggle, SidebarCollapsibleBase, SidebarRoot } from "./Si
 import { hasNode } from "./slot";
 
 export interface SidebarProps extends Omit<ComponentProps<"aside">, "onChange"> {
-  /** Controlled collapsed state. Pair with `onCollapsedChange`. */
+  /** Controlled collapsed state, set as `data-collapsed` on the root. Pair with `onCollapsedChange`. */
   collapsed?: boolean;
   /** Uncontrolled initial state. */
   defaultCollapsed?: boolean;

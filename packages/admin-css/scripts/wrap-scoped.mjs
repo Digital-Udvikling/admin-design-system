@@ -4,7 +4,8 @@
  * `@scope (._ao-admin-root)`, admin class names prefixed `_ao-` so they can't
  * collide with host classes. Globals that can't be scoped (`@property`,
  * `@font-face`, `@keyframes`, `@charset`, `@import`, `@position-try`) are hoisted above the
- * scope. `@layer` is dropped and blocks are flattened in declared order —
+ * scope, and the names `@keyframes` and `@position-try` define are prefixed so
+ * they can't collide with the host's. `@layer` is dropped and blocks are flattened in declared order —
  * layered rules always lose to unlayered host rules of any specificity, so
  * the bundle ships unlayered. Cascade invariants are locked in by
  * `wrap-scoped.test.mjs`.
@@ -47,6 +48,8 @@ function rewriteSelector(selector) {
   const out = [];
   for (const sel of root.nodes) {
     const trimmed = sel.toString().trim();
+    // `:host` (Tailwind pairs it with `:root`) matches nothing inside the scope.
+    if (trimmed === ":host") continue;
     const rewritten = SELECTOR_REWRITES.get(trimmed) ?? trimmed;
     if (seen.has(rewritten)) continue;
     seen.add(rewritten);
@@ -162,20 +165,21 @@ function bumpSpecificity(selectorList) {
   return out.join(", ");
 }
 
-// Keyframe steps (`from`/`to`/`0%`) aren't selectors — `:scope to` is invalid
-// CSS. Tailwind nests `@keyframes` inside `@layer components`, so the hoist
-// pass misses them; skip rule-walking under any keyframes ancestor instead.
-function isInsideKeyframes(rule) {
-  for (let p = rule.parent; p; p = p.parent) {
-    if (p.type === "atrule" && /(?:^|-)keyframes$/.test(p.name)) return true;
-  }
-  return false;
+// Token blocks (`:root, :host { --color-*: … }`) become `:where(:scope)` at
+// (0,0,0), so a consumer's `._ao-admin-root { --color-primary: … }` overrides
+// them; at `:scope`'s (0,1,0) the scoped declaration would win the tie on
+// scope proximity.
+function isTokenBlock(rule) {
+  return (
+    rule.selector === ":scope" &&
+    rule.nodes.every((node) => node.type === "comment" || node.prop?.startsWith("--"))
+  );
 }
 
 function rewriteSelectorsDeep(container) {
   container.walkRules((rule) => {
-    if (isInsideKeyframes(rule)) return;
     rule.selector = bumpSpecificity(prefixClassesInSelector(rewriteSelector(rule.selector)));
+    if (isTokenBlock(rule)) rule.selector = ":where(:scope)";
   });
 }
 
@@ -267,6 +271,29 @@ function prependBareElementReset(scope) {
   scope.prepend(postcss.parse(BARE_ELEMENT_RESET));
 }
 
+const NAMED_GLOBALS = /^(?:(?:-webkit-|-moz-)?keyframes|position-try)$/;
+const NAME_REFERENCES = /^(?:animation|animation-name|position-try|position-try-fallbacks)$/;
+
+// `spinner-spin` → `_ao-spinner-spin`, `--menu-fit` → `--_ao-menu-fit`.
+function prefixName(name) {
+  return name.startsWith("--") ? `--${PREFIX}${name.slice(2)}` : `${PREFIX}${name}`;
+}
+
+function prefixGlobalNames(root) {
+  const names = new Map();
+  root.walkAtRules(NAMED_GLOBALS, (rule) => {
+    const name = rule.params.trim();
+    names.set(name, prefixName(name));
+    rule.params = prefixName(name);
+  });
+  if (names.size === 0) return;
+  const escaped = [...names.keys()].map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const pattern = new RegExp(`(?<![\\w-])(${escaped.join("|")})(?![\\w-])`, "g");
+  root.walkDecls(NAME_REFERENCES, (decl) => {
+    decl.value = decl.value.replace(pattern, (name) => names.get(name));
+  });
+}
+
 function shouldHoist(node) {
   if (node.type === "comment") return true;
   if (node.type !== "atrule") return false;
@@ -290,8 +317,17 @@ export function wrap(css) {
   // otherwise declare Tailwind's layer order document-wide in the consumer's
   // document.
   const layerOrder = collectDeclaredLayerOrder(root);
+  prefixGlobalNames(root);
 
+  // Tailwind nests `@keyframes` inside `@layer components`; they are global
+  // names either way, so pull them out wherever they sit.
   const hoisted = [];
+  root.walkAtRules((node) => {
+    if (node.parent !== root && HOIST_ATRULES.has(node.name)) {
+      node.remove();
+      hoisted.push(node);
+    }
+  });
   const wrapped = [];
   while (root.first) {
     const node = root.first;

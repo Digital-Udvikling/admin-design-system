@@ -426,9 +426,9 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
 
 ### Click to collapse
 
-`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox; the rail responds to `.sidebar:has(.sidebar-toggle:checked)`. Pass each item's `icon` so it stays visible when collapsed, and wrap header text in `<Sidebar.Label>` so it hides with the item labels.
+`<Sidebar.CollapseToggle>` is a `<label>` wrapping a hidden checkbox; the rail collapses while it is checked, or while the `.sidebar` has `data-collapsed`. Pass each item's `icon` so it stays visible when collapsed, and wrap header text in `<Sidebar.Label>` so it hides with the item labels.
 
-React's `<Sidebar>` exposes `collapsed` / `defaultCollapsed` / `onCollapsedChange` for controlled state.
+React's `<Sidebar>` takes `collapsed` / `defaultCollapsed` / `onCollapsedChange` and sets `data-collapsed`, so the rail collapses without a toggle too.
 
 :::example
 
@@ -911,7 +911,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                                            |
 | `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                                            |
 | `sidebar`                     | Column flex rail at `--app-shell-sidebar-w` (`240px`), muted surface, right border, 150ms width transition; a direct `drawer` child fills it at rail width and hides `sidebar-collapse-toggle`       |
-| `sidebar-toggle`              | 1px visually-hidden checkbox — `.sidebar:has(.sidebar-toggle:checked)` is what drives the collapsed state                                                                                            |
+| `sidebar-toggle`              | 1px visually-hidden checkbox; checked, it collapses the rail like `data-collapsed` on the `sidebar`                                                                                                  |
 | `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                                          |
 | `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                                                     |
 | `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                                                                                                                       |
@@ -935,7 +935,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 
 The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 
-The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest. Write `aria-current="page"` and the toggle's `aria-label` yourself.
+The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest, or render `<aside class="sidebar" data-collapsed>` for a rail that starts collapsed without a toggle. Write `aria-current="page"` and the toggle's `aria-label` yourself.
 
 Below `48rem` a direct-child `sidebar` is hidden. `sidebar-drawer` and `sidebar-drawer-backdrop` are the React drawer, styled for Base UI's `[data-starting-style]` / `[data-ending-style]` transition hooks. In vanilla, put a copy of the sidebar in a [`<dialog class="dialog drawer drawer-start">`](../../components/drawer/) and open it from `navbar-mobile-toggle` with invoker commands; a `sidebar` directly inside a `drawer` fills it at the rail width, capped at `80vw`:
 

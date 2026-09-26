@@ -13,7 +13,7 @@
  */
 
 @source inline(
-  "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,table,inline-table,table-row,table-cell,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
+  "{,sm:,md:,lg:,xl:,2xl:}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,contents,inline-table,table-row,hidden,flow-root,list-item,static,fixed,absolute,relative,sticky,visible,invisible,collapse,sr-only,not-sr-only}"
 );
 @source inline("{,sm:,md:,lg:,xl:,2xl:}overflow{,-x,-y}-{auto,hidden,visible,scroll,clip}");
 

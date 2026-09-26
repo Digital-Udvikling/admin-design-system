@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { describe, expect, it } from "vitest";
 import { NumberInput } from "./NumberInput";
 import { adminSelector } from "./test-setup";
@@ -26,6 +26,12 @@ describe("NumberInput", () => {
     expect(container.querySelector(adminSelector("number-input"))).toHaveAdminClass(
       "number-input-danger",
     );
+  });
+
+  it("forwards ref to the visible group", () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<NumberInput ref={ref} inputAriaLabel="Q" />);
+    expect(ref.current).toHaveAdminClass("number-input");
   });
 
   it("forwards classNames to slots", () => {

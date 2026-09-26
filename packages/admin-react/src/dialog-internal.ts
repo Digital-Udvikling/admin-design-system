@@ -24,8 +24,11 @@ export const DialogContext = createContext<DialogContextValue | null>(null);
 /**
  * Drives a native `<dialog>` from a controlled `open` prop, shared by `<Dialog>`
  * and `<Drawer>`: merges the consumer ref, calls `showModal()` / `close()` on
- * change, and reports closes (Esc, backdrop, form submit) via `onOpenChange`.
- * On every open, however triggered, focuses the first `[data-autofocus]` descendant.
+ * change, reports closes (Esc, backdrop, form submit) via `onOpenChange(false)`
+ * and opens the prop didn't make (an invoker command, `showModal()`) via
+ * `onOpenChange(true)`. On every open, however triggered, focuses the first
+ * `[data-autofocus]` descendant. Where `closedby` is unsupported (Safari),
+ * `closedby="any"` closes on a backdrop click through a click listener.
  * Returns `ref` for the portal container context, and the ids the mounted title
  * and description registered (`undefined` while none is mounted).
  */
@@ -33,10 +36,13 @@ export function useDialogElement(
   open: boolean | undefined,
   onOpenChange: ((open: boolean) => void) | undefined,
   consumerRef: Ref<HTMLDialogElement> | undefined,
+  closedby: "any" | "closerequest" | "none",
 ) {
   const ref = useRef<HTMLDialogElement | null>(null);
   const onOpenChangeRef = useRef(onOpenChange);
   onOpenChangeRef.current = onOpenChange;
+  const openRef = useRef(open);
+  openRef.current = open;
   const [titleId, setTitleId] = useState<string | undefined>(undefined);
   const [descriptionId, setDescriptionId] = useState<string | undefined>(undefined);
 
@@ -55,10 +61,11 @@ export function useDialogElement(
     const el = ref.current;
     if (!el) return;
     const handleClose = () => onOpenChangeRef.current?.(false);
-    // Stands in for `autoFocus`, which React focuses at mount, while the dialog is still closed.
     const handleToggle = (event: Event) => {
       if (event.target !== el || (event as ToggleEvent).newState !== "open") return;
+      // Stands in for `autoFocus`, which React focuses at mount, while the dialog is still closed.
       el.querySelector<HTMLElement>("[data-autofocus]")?.focus();
+      if (openRef.current !== true) onOpenChangeRef.current?.(true);
     };
     el.addEventListener("close", handleClose);
     el.addEventListener("toggle", handleToggle);
@@ -67,6 +74,37 @@ export function useDialogElement(
       el.removeEventListener("toggle", handleToggle);
     };
   }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || closedby !== "any" || "closedBy" in HTMLDialogElement.prototype) return;
+    // A backdrop click targets the <dialog> itself, outside its box. Both ends must be on
+    // the backdrop, so a drag that starts inside (selecting text) doesn't close it.
+    const onBackdrop = (event: MouseEvent) => {
+      if (event.target !== el) return false;
+      const box = el.getBoundingClientRect();
+      return (
+        event.clientX < box.left ||
+        event.clientX > box.right ||
+        event.clientY < box.top ||
+        event.clientY > box.bottom
+      );
+    };
+    let pressedOnBackdrop = false;
+    const handlePointerDown = (event: PointerEvent) => {
+      pressedOnBackdrop = onBackdrop(event);
+    };
+    const handleClick = (event: MouseEvent) => {
+      if (el.open && pressedOnBackdrop && onBackdrop(event)) el.close();
+      pressedOnBackdrop = false;
+    };
+    el.addEventListener("pointerdown", handlePointerDown);
+    el.addEventListener("click", handleClick);
+    return () => {
+      el.removeEventListener("pointerdown", handlePointerDown);
+      el.removeEventListener("click", handleClick);
+    };
+  }, [closedby]);
 
   const ctx: DialogContextValue = {
     close: () => ref.current?.close(),

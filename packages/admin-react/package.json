@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "vite build && pnpm copy:css",
-    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css",
+    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css && cp -r ../admin-css/dist/fonts ./dist/",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",

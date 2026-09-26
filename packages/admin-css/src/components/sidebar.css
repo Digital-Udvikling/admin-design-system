@@ -20,19 +20,19 @@
     pointer-events: none;
   }
 
-  .sidebar:has(.sidebar-toggle:checked) {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) {
     width: var(--app-shell-sidebar-w-collapsed, 56px);
   }
 
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-group-label,
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-badge,
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible-panel,
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible-trigger::after {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-group-label,
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-badge,
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible-panel,
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible-trigger::after {
     display: none;
   }
 
   /* Visually hidden, not display:none: the icon is aria-hidden, so the label is the row's accessible name. */
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-label {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-label {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -41,21 +41,21 @@
     white-space: nowrap;
   }
 
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-item,
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-subitem,
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible-trigger {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-item,
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-subitem,
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible-trigger {
     @apply relative justify-center px-1;
   }
 
   /* Header and toggle centre on the rail's icon column; `safe` falls back to start when an
      unwrapped header name overflows, so the tile isn't pushed off the left edge. */
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-header {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-header {
     @apply px-0 overflow-hidden;
     justify-content: safe center;
   }
 
   /* align-self, not the footer's align-items, so footer items keep stretching. */
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-collapse-toggle {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapse-toggle {
     @apply self-center;
   }
 
@@ -161,7 +161,7 @@
   /* A closed group or the collapsed rail hides the current sub-item, so its trigger marks the location. */
   :is(
       .sidebar-collapsible:not([open]),
-      .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+      .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible
     ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
     > .sidebar-collapsible-trigger {
     @apply bg-primary-muted text-primary font-medium;
@@ -169,7 +169,7 @@
 
   :is(
       .sidebar-collapsible:not([open]),
-      .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+      .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible
     ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
     > .sidebar-collapsible-trigger
     .sidebar-icon {
@@ -243,7 +243,7 @@
     transition: rotate 150ms ease;
   }
 
-  .sidebar:has(.sidebar-toggle:checked) .sidebar-collapse-toggle::before {
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapse-toggle::before {
     rotate: -90deg;
   }
 
@@ -318,7 +318,7 @@
 
     :is(
         .sidebar-collapsible:not([open]),
-        .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+        .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible
       ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
       > .sidebar-collapsible-trigger {
       forced-color-adjust: none;
@@ -328,7 +328,7 @@
 
     :is(
         .sidebar-collapsible:not([open]),
-        .sidebar:has(.sidebar-toggle:checked) .sidebar-collapsible
+        .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-collapsible
       ):has(.sidebar-subitem:is([aria-current="page"], [data-active]))
       > .sidebar-collapsible-trigger
       .sidebar-icon {

@@ -8,9 +8,8 @@ import { PortalContainerContext } from "./portal-context";
 import type { SidebarCollapseToggleProps, SidebarCollapsibleProps, SidebarProps } from "./Sidebar";
 
 interface SidebarContextValue {
-  collapsed?: boolean;
-  defaultCollapsed?: boolean;
-  onCollapsedChange?: (collapsed: boolean) => void;
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextValue | null>(null);
@@ -28,10 +27,21 @@ export function SidebarRoot({
   const shell = useAppShell();
   const drawerOpen = shell?.mobileDrawerOpen ?? false;
   const portalContainer = useContext(PortalContainerContext);
+  const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed ?? false);
+  const isCollapsed = collapsed ?? internalCollapsed;
+  const setCollapsed = (next: boolean) => {
+    if (collapsed === undefined) setInternalCollapsed(next);
+    onCollapsedChange?.(next);
+  };
 
   return (
-    <SidebarContext.Provider value={{ collapsed, defaultCollapsed, onCollapsedChange }}>
-      <aside className={cn("sidebar", className)} {...rest}>
+    <SidebarContext.Provider value={{ collapsed: isCollapsed, setCollapsed }}>
+      {/* `data-collapsed` collapses the rail without a CollapseToggle; the toggle mirrors it. */}
+      <aside
+        className={cn("sidebar", className)}
+        data-collapsed={isCollapsed ? "" : undefined}
+        {...rest}
+      >
         {drawerOpen ? null : children}
       </aside>
       {shell ? (
@@ -115,8 +125,6 @@ export function SidebarCollapseToggle({
   ...rest
 }: SidebarCollapseToggleProps) {
   const ctx = useContext(SidebarContext);
-  const controlledChecked = ctx?.collapsed;
-  const isControlled = controlledChecked !== undefined;
 
   return (
     <label className={cn("sidebar-collapse-toggle", className)} {...rest}>
@@ -124,10 +132,13 @@ export function SidebarCollapseToggle({
         type="checkbox"
         className={cn("sidebar-toggle", classNames?.input)}
         aria-label={label}
-        {...(isControlled
-          ? { checked: controlledChecked }
-          : { defaultChecked: ctx?.defaultCollapsed })}
-        onChange={(event) => ctx?.onCollapsedChange?.(event.currentTarget.checked)}
+        // Outside a Sidebar the checkbox holds the state itself, as in vanilla markup.
+        {...(ctx
+          ? {
+              checked: ctx.collapsed,
+              onChange: (event) => ctx.setCollapsed(event.currentTarget.checked),
+            }
+          : {})}
       />
       {children}
     </label>

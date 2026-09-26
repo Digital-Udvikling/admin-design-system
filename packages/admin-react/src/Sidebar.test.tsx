@@ -172,6 +172,29 @@ describe("Sidebar", () => {
       expect(onCollapsedChange).toHaveBeenNthCalledWith(1, true);
     });
 
+    it("collapses the rail without a CollapseToggle", () => {
+      const { container, rerender } = render(<Sidebar collapsed />);
+      const aside = container.querySelector("aside");
+      expect(aside).toHaveAttribute("data-collapsed");
+      rerender(<Sidebar collapsed={false} />);
+      expect(aside).not.toHaveAttribute("data-collapsed");
+    });
+
+    it("uncontrolled: the toggle flips data-collapsed on the root", async () => {
+      const user = userEvent.setup();
+      const { container } = render(
+        <Sidebar defaultCollapsed>
+          <Sidebar.Footer>
+            <Sidebar.CollapseToggle />
+          </Sidebar.Footer>
+        </Sidebar>,
+      );
+      const aside = container.querySelector("aside");
+      expect(aside).toHaveAttribute("data-collapsed");
+      await user.click(screen.getByRole("checkbox", { name: "Toggle sidebar" }));
+      expect(aside).not.toHaveAttribute("data-collapsed");
+    });
+
     it("controlled: ignores clicks when the parent does not update collapsed", async () => {
       const user = userEvent.setup();
       render(

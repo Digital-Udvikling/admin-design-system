@@ -27,6 +27,7 @@ export function DialogContainer({
     open,
     onOpenChange,
     consumerRef,
+    closedby,
   );
 
   return (

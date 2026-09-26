@@ -63,11 +63,24 @@ test(":root rules are rewritten to :scope", () => {
   const scope = getScope(wrap(input));
   let foundRootRewrite = false;
   scope.walkRules((rule) => {
-    if (rule.selector.startsWith(":scope") && rule.toString().includes("--color")) {
+    if (/^(:scope|:where\(:scope\))/.test(rule.selector) && rule.toString().includes("--color")) {
       foundRootRewrite = true;
     }
   });
   expect(foundRootRewrite, ":root should become :scope inside @scope").toBe(true);
+});
+
+test("token blocks sit at zero specificity so a ._ao-admin-root override wins", () => {
+  const scope = getScope(
+    wrap(`@layer theme { :root, :host { --color-primary: black; } }
+      @layer base { :root { color-scheme: light dark; } }`),
+  );
+  const selectors = [];
+  scope.walkRules((rule) => selectors.push(rule.selector));
+  expect(selectors).toContain(":where(:scope)");
+  expect(selectors.join(" ")).not.toContain(":host");
+  // A block with real properties keeps :scope, which the root's own attributes build on.
+  expect(selectors).toContain(":scope");
 });
 
 test("admin-root class emits dual compound+descendant form", () => {
@@ -183,4 +196,33 @@ test("native CSS nesting is flattened — no `&` survives, hover targets the ele
     expect(part).toMatch(/_ao-btn-muted:hover$/);
     expect(part).not.toMatch(/^:scope:hover$/);
   }
+});
+
+test("@keyframes nested in a layer is hoisted out of @scope and prefixed with its references", () => {
+  const output = wrap(`
+    @layer components {
+      .spinner { animation: spinner-spin 0.6s linear infinite; }
+      .spinner-alt { animation-name: spinner-spin; }
+      .other { animation: spinner-spin-slow 1s; }
+      @keyframes spinner-spin { to { rotate: 360deg; } }
+    }
+  `);
+  const root = postcss.parse(output);
+  const keyframes = root.nodes.filter((n) => n.type === "atrule" && n.name === "keyframes");
+  expect(keyframes.map((n) => n.params)).toEqual(["_ao-spinner-spin"]);
+  getScope(output).walkAtRules("keyframes", () => {
+    throw new Error("@keyframes left inside @scope");
+  });
+  expect(output).toContain("animation: _ao-spinner-spin 0.6s linear infinite");
+  expect(output).toContain("animation-name: _ao-spinner-spin");
+  expect(output).toContain("animation: spinner-spin-slow 1s");
+});
+
+test("@position-try names are prefixed along with their references", () => {
+  const output = wrap(`
+    @position-try --menu-fit { max-block-size: 100%; }
+    .menu-popup { position-try-fallbacks: --menu-fit, flip-block; }
+  `);
+  expect(output).toContain("@position-try --_ao-menu-fit");
+  expect(output).toContain("position-try-fallbacks: --_ao-menu-fit, flip-block");
 });

@@ -27,6 +27,7 @@ export function DrawerContainer({
     open,
     onOpenChange,
     consumerRef,
+    closedby,
   );
   return (
     <DialogContext.Provider value={ctx}>

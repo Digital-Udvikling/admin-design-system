@@ -4,7 +4,7 @@
  * (publint, plus arethetypeswrong for admin-react), installs them into a temp
  * project, then imports and server-renders admin-react, evaluates it under the
  * `react-server` condition with "use client" modules as client references, and
- * resolves every CSS subpath. Needs `pnpm build` first and network access for
+ * resolves every CSS subpath and the relative `url()`s (fonts) inside it. Needs `pnpm build` first and network access for
  * the install. Exits non-zero on the first failure.
  */
 import { execFileSync } from "node:child_process";
@@ -43,7 +43,7 @@ console.log("  ok: " + Object.keys(admin).length + " exports evaluate with clien
 `;
 
 const CSS = `
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 const specifiers = [
   "@aortl/admin-react/styles.css",
@@ -54,11 +54,18 @@ const specifiers = [
     "@aortl/admin-css/" + f + ".min.css",
   ]),
 ];
+let assets = 0;
 for (const s of specifiers) {
-  const path = fileURLToPath(import.meta.resolve(s));
+  const url = import.meta.resolve(s);
+  const path = fileURLToPath(url);
   if (!existsSync(path)) throw new Error(s + " resolves to a missing file: " + path);
+  for (const [, ref] of readFileSync(path, "utf8").matchAll(/url\\(["']?(\\.[^"')]+)["']?\\)/g)) {
+    const asset = fileURLToPath(new URL(ref, url));
+    if (!existsSync(asset)) throw new Error(s + " references a missing file: " + ref);
+    assets++;
+  }
 }
-console.log("  ok: " + specifiers.length + " CSS subpaths resolve");
+console.log("  ok: " + specifiers.length + " CSS subpaths resolve, with " + assets + " relative url()s");
 `;
 
 const run = (cmd, args, cwd = ROOT) =>

@@ -171,6 +171,57 @@ describe("Dialog", () => {
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
+    it("an open the prop didn't make fires onOpenChange(true)", () => {
+      const onOpenChange = vi.fn();
+      render(<Dialog onOpenChange={onOpenChange} title="x" />);
+      getDialog().showModal();
+      getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState: "open" }));
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+    });
+
+    it("an open driven by the prop doesn't echo onOpenChange(true)", () => {
+      const onOpenChange = vi.fn();
+      const { rerender } = render(<Dialog open={false} onOpenChange={onOpenChange} title="x" />);
+      rerender(<Dialog open={true} onOpenChange={onOpenChange} title="x" />);
+      getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState: "open" }));
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+    });
+
+    describe("without native closedby", () => {
+      const descriptor = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, "closedBy");
+      beforeEach(() => {
+        if (descriptor) delete (HTMLDialogElement.prototype as { closedBy?: string }).closedBy;
+      });
+      afterEach(() => {
+        if (descriptor) Object.defineProperty(HTMLDialogElement.prototype, "closedBy", descriptor);
+      });
+
+      function clickAt(target: Element, clientX: number, clientY: number) {
+        target.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX, clientY }));
+        target.dispatchEvent(new MouseEvent("click", { bubbles: true, clientX, clientY }));
+      }
+
+      it("closes on a backdrop click when closedby is any", () => {
+        const onOpenChange = vi.fn();
+        render(<Dialog open onOpenChange={onOpenChange} title="x" />);
+        const dialog = getDialog();
+        vi.spyOn(dialog, "getBoundingClientRect").mockReturnValue(new DOMRect(100, 100, 200, 200));
+        clickAt(dialog, 150, 150);
+        expect(dialog).toHaveAttribute("open");
+        clickAt(dialog, 10, 10);
+        expect(dialog).not.toHaveAttribute("open");
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+      });
+
+      it("ignores backdrop clicks when closedby is closerequest", () => {
+        render(<Dialog.Container open closedby="closerequest" aria-label="x" />);
+        const dialog = getDialog();
+        vi.spyOn(dialog, "getBoundingClientRect").mockReturnValue(new DOMRect(100, 100, 200, 200));
+        clickAt(dialog, 10, 10);
+        expect(dialog).toHaveAttribute("open");
+      });
+    });
+
     it("CloseButton click closes the dialog and notifies onOpenChange", async () => {
       const user = userEvent.setup();
       function Controlled() {

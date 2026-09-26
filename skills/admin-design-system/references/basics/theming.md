@@ -13,6 +13,7 @@
   - [A semantic role](#a-semantic-role)
   - [A palette tone](#a-palette-tone)
   - [The whole palette](#the-whole-palette)
+  - [In the scoped bundle](#in-the-scoped-bundle)
 - [Container surface](#container-surface)
 - [Popup layering](#popup-layering)
 
@@ -107,6 +108,18 @@ Replaces a Flexoki tone everywhere it is used, including inside any semantic rol
 ### The whole palette
 
 Both layers are plain declarations on `:root`. Redefine the palette in your own stylesheet to ship a different brand.
+
+### In the scoped bundle
+
+The scoped bundle (and so `@aortl/admin-react/styles.css`) declares every token on `._ao-admin-root`, so a `:root` override stops at the scope. Set overrides on the root instead:
+
+```css
+._ao-admin-root {
+  --color-primary: var(--color-green-600);
+}
+```
+
+An inline `style` on `<AdminRoot>` does the same for one subtree.
 
 ## Container surface
 

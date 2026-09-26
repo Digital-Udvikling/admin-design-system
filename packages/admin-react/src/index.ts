@@ -152,19 +152,25 @@ export {
   BarChart,
   type BarChartProps,
   type BarChartContainerProps,
-  type BarProps,
+  type BarChartBarProps,
   type BarChartVariant,
   type BarChartOrientation,
 } from "./BarChart";
-export { Donut, type DonutProps, type DonutFigureProps, type DonutRingProps } from "./Donut";
+export {
+  Donut,
+  type DonutProps,
+  type DonutFigureProps,
+  type DonutRingProps,
+  type DonutCenterProps,
+} from "./Donut";
 export {
   StackedBar,
   type StackedBarProps,
   type StackedBarTrackProps,
-  type SegmentProps,
+  type StackedBarSegmentProps,
 } from "./StackedBar";
 export { ChartLegend, type ChartLegendProps } from "./ChartLegend";
-export { SERIES, type ChartDatum, type ChartSize, type ChartType } from "./chart-internal";
+export { SERIES, type ChartDatum, type ChartSize } from "./chart-internal";
 export {
   Dialog,
   type DialogProps,

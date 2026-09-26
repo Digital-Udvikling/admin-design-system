@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `selected` on `Item` and `Item.Container` (`[data-selected]` on `.item`) applies the selected-row tint. (both)
 - A `.card`, `.badge` or `.item` that is itself a link gets a focus ring and a hover state. (css)
 - `.prose` styles `<kbd>` as a key chip and GFM task lists with the checkbox in the bullet gutter. (css)
+- `--chart-legend-gap` sets the space between a chart and its legend. (css)
 - `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
 
 ### Changed
@@ -37,6 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** `Avatar` takes `square` instead of `shape`, and the `AvatarShape` type is removed. (react)
 - **Breaking:** `alert` is a block instead of a flex column: inline markup flows as one paragraph and the icon and dismiss align to the first line. Put body text after an `alert-title` in `alert-description`; `Alert.Description` renders a `<div>`. (both)
 - **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
+- **Breaking:** Chart custom properties are `--chart-value`, `--chart-bar-color`, `--chart-segment-color` and `--chart-legend-color` (were `--value`, `--bar-color`, `--segment-color`, `--legend-color`). (css)
+- **Breaking:** `BarProps`, `SegmentProps`, `TrendDirection` and `TrendIntent` are `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection` and `StatCardTrendIntent`. (react)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
@@ -61,12 +64,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
 - `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
 - `.prose` markdown tables match `.table`, the block after a heading drops its top margin, `a.btn` keeps its button styling, and table cells respect markdown's column `align`. (css)
+- `progress` and `.chart-stack` tracks use the `border` colour, and indeterminate `progress` slides a solid segment. (css)
 - Unstriped property lists line up with `property-list-title`, labels sit on the first line of wrapped text, a copyable `numeric` value aligns with the other numeric rows, and copy buttons announce the copy. (both)
 - Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
 
 ### Removed
 
 - **Breaking:** The CommonJS build of `@aortl/admin-react` (`dist/*.cjs`, the `require` condition and `main`). It ships ES modules as `dist/*.js`. (react)
+- **Breaking:** The `ChartType` type export. (react)
 
 ### Fixed
 
@@ -79,7 +84,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Dialog` and `Drawer` take their accessible name and description from `Dialog.Title` and `Dialog.Description`, call `onOpenChange(true)` when an invoker command opens them, and with `closedby="any"` close on a backdrop click in Safari. (react)
 - Menu, select and tooltip popups inside a `.dialog` or `.drawer` with a `.dialog-body` are not clipped by the dialog; `.dialog-body` is the scroll region. (css)
 - A layout utility such as `flex` on a `tab-panel` works in both bundles, and `tabs-boxed` hugs its segments. (css)
+- Text on coloured fills meets WCAG AA: soft `info`, `success` and `danger` badges, `alert-description`, and card, stat-card and chart text on coloured cards. (css)
 - Long unbreakable strings such as URLs, IDs and hashes wrap inside accordion summaries, item descriptions, property list values, tooltips, breadcrumbs, card titles and `field-row` labels. (both)
+- The donut hole matches `--donut-thickness`, inline horizontal bar charts render their bars, fills stay in the track when a value exceeds `max`, and vertical bars draw a baseline so a zero value shows. (both)
 
 ## [0.21.0] - 2026-09-25
 

@@ -17,8 +17,8 @@ describe("StackedBar", () => {
     expect(container.querySelector(adminSelector("chart-stack"))).not.toBeNull();
     const segments = container.querySelectorAll(adminSelector("chart-segment"));
     expect(segments).toHaveLength(2);
-    expect(segments[0]).toHaveAttribute("style", expect.stringContaining("--value: 60"));
-    expect(segments[0]).toHaveAttribute("style", expect.stringContaining("--segment-color"));
+    expect(segments[0]).toHaveAttribute("style", expect.stringContaining("--chart-value: 60"));
+    expect(segments[0]).toHaveAttribute("style", expect.stringContaining("--chart-segment-color"));
     expect(segments[0]).toHaveAttribute("title", "Done: 60");
   });
 
@@ -43,7 +43,7 @@ describe("StackedBar", () => {
       </StackedBar.Track>,
     );
     const segment = container.querySelector(adminSelector("chart-segment"));
-    expect(segment).toHaveAttribute("style", expect.stringContaining("--value: 30"));
-    expect(segment).toHaveAttribute("style", expect.stringContaining("--segment-color"));
+    expect(segment).toHaveAttribute("style", expect.stringContaining("--chart-value: 30"));
+    expect(segment).toHaveAttribute("style", expect.stringContaining("--chart-segment-color"));
   });
 });

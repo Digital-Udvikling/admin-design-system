@@ -20,15 +20,15 @@ describe("BarChart", () => {
     expect(container.querySelectorAll(adminSelector("chart-bar"))).toHaveLength(2);
   });
 
-  it("computes --chart-max from the data and sets --value per bar", () => {
+  it("computes --chart-max from the data and sets --chart-value per bar", () => {
     const { container } = render(<BarChart data={[{ value: 20 }, { value: 60 }]} />);
     expect(container.querySelector(adminSelector("chart"))).toHaveAttribute(
       "style",
       expect.stringContaining("--chart-max: 60"),
     );
     const bars = container.querySelectorAll(adminSelector("chart-bar"));
-    expect(bars[0]).toHaveAttribute("style", expect.stringContaining("--value: 20"));
-    expect(bars[1]).toHaveAttribute("style", expect.stringContaining("--value: 60"));
+    expect(bars[0]).toHaveAttribute("style", expect.stringContaining("--chart-value: 20"));
+    expect(bars[1]).toHaveAttribute("style", expect.stringContaining("--chart-value: 60"));
   });
 
   it("honours an explicit max", () => {
@@ -64,13 +64,29 @@ describe("BarChart", () => {
     expect(container.querySelector(adminSelector("chart-bar-label"))).toBeNull();
   });
 
-  it("sets --bar-color only when a datum carries an explicit colour", () => {
+  it("sets --chart-bar-color only when a datum carries an explicit colour", () => {
     const { container } = render(
       <BarChart data={[{ value: 5 }, { value: 7, color: "var(--color-red-500)" }]} />,
     );
     const bars = container.querySelectorAll(adminSelector("chart-bar"));
-    expect(bars[0]?.getAttribute("style") ?? "").not.toContain("--bar-color");
-    expect(bars[1]).toHaveAttribute("style", expect.stringContaining("--bar-color"));
+    expect(bars[0]?.getAttribute("style") ?? "").not.toContain("--chart-bar-color");
+    expect(bars[1]).toHaveAttribute("style", expect.stringContaining("--chart-bar-color"));
+  });
+
+  it("puts the datum title on the bar row, not the fill", () => {
+    const { container } = render(<BarChart data={[{ label: "Wed", value: 0 }]} />);
+    expect(container.querySelector(adminSelector("chart-bar"))).toHaveAttribute("title", "Wed: 0");
+    expect(container.querySelector(adminSelector("chart-bar-fill"))).not.toHaveAttribute("title");
+  });
+
+  it("lets a consumer title override the datum title", () => {
+    const { container } = render(
+      <BarChart.Bar datum={{ label: "Wed", value: 0 }} title="Wednesday: no runs" />,
+    );
+    expect(container.querySelector(adminSelector("chart-bar"))).toHaveAttribute(
+      "title",
+      "Wednesday: no runs",
+    );
   });
 
   it("lets a consumer override the aria-label", () => {
@@ -86,7 +102,7 @@ describe("BarChart", () => {
     );
     expect(container.querySelector(adminSelector("chart-bar"))).toHaveAttribute(
       "style",
-      expect.stringContaining("--value: 5"),
+      expect.stringContaining("--chart-value: 5"),
     );
     expect(container.querySelector(adminSelector("chart-bar-label"))?.textContent).toBe("A");
   });

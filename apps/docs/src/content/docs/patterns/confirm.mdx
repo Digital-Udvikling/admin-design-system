@@ -78,7 +78,7 @@ The trigger opens the dialog with an invoker command, and the dialog holds the f
 
 ### Row actions
 
-Render one dialog per row after the table, from the same loop, with the row key in its `id` and `action`. Each row's button opens its own dialog, so the confirmation names the record and posts to its URL.
+Render one dialog per row in its actions cell, with the row key in its `id` and `action`. Each row's button opens its own dialog, so the confirmation names the record and posts to its URL.
 
 :::example
 
@@ -105,6 +105,30 @@ Render one dialog per row after the table, from the same loop, with the row key 
         >
           <i class="ti ti-archive" aria-hidden="true"></i>
         </button>
+        <dialog
+          id="confirm-archive-118"
+          class="dialog dialog-sm"
+          closedby="closerequest"
+          role="alertdialog"
+          aria-labelledby="confirm-archive-118-title"
+        >
+          <form method="post" action="/suppliers/118/archive">
+            <div class="dialog-header">
+              <h2 id="confirm-archive-118-title" class="dialog-title">Archive Nordic Fittings?</h2>
+            </div>
+            <div class="dialog-footer">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                commandfor="confirm-archive-118"
+                command="close"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-danger">Archive</button>
+            </div>
+          </form>
+        </dialog>
       </td>
     </tr>
     <tr>
@@ -120,48 +144,34 @@ Render one dialog per row after the table, from the same loop, with the row key 
         >
           <i class="ti ti-archive" aria-hidden="true"></i>
         </button>
+        <dialog
+          id="confirm-archive-121"
+          class="dialog dialog-sm"
+          closedby="closerequest"
+          role="alertdialog"
+          aria-labelledby="confirm-archive-121-title"
+        >
+          <form method="post" action="/suppliers/121/archive">
+            <div class="dialog-header">
+              <h2 id="confirm-archive-121-title" class="dialog-title">Archive Baltic Valves?</h2>
+            </div>
+            <div class="dialog-footer">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                commandfor="confirm-archive-121"
+                command="close"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-danger">Archive</button>
+            </div>
+          </form>
+        </dialog>
       </td>
     </tr>
   </tbody>
 </table>
-<dialog
-  id="confirm-archive-118"
-  class="dialog dialog-sm"
-  closedby="closerequest"
-  role="alertdialog"
-  aria-labelledby="confirm-archive-118-title"
->
-  <form method="post" action="/suppliers/118/archive">
-    <div class="dialog-header">
-      <h2 id="confirm-archive-118-title" class="dialog-title">Archive Nordic Fittings?</h2>
-    </div>
-    <div class="dialog-footer">
-      <button type="button" class="btn btn-ghost" commandfor="confirm-archive-118" command="close">
-        Cancel
-      </button>
-      <button type="submit" class="btn btn-danger">Archive</button>
-    </div>
-  </form>
-</dialog>
-<dialog
-  id="confirm-archive-121"
-  class="dialog dialog-sm"
-  closedby="closerequest"
-  role="alertdialog"
-  aria-labelledby="confirm-archive-121-title"
->
-  <form method="post" action="/suppliers/121/archive">
-    <div class="dialog-header">
-      <h2 id="confirm-archive-121-title" class="dialog-title">Archive Baltic Valves?</h2>
-    </div>
-    <div class="dialog-footer">
-      <button type="button" class="btn btn-ghost" commandfor="confirm-archive-121" command="close">
-        Cancel
-      </button>
-      <button type="submit" class="btn btn-danger">Archive</button>
-    </div>
-  </form>
-</dialog>
 ```
 
 :::

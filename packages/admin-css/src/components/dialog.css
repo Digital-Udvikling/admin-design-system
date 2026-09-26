@@ -14,6 +14,9 @@
     /* Long tokens (filenames, IDs) break instead of pushing past max-width;
        inherited by title + description. */
     overflow-wrap: break-word;
+    /* Placed in a right-aligned, nowrap cell (`table-cell-actions`) it would inherit both. */
+    text-align: start;
+    white-space: normal;
     opacity: 0;
     transform: translateY(-0.5rem) scale(0.98);
     transition:

@@ -96,7 +96,8 @@
   .table-compact :where(td, th) > .badge-sm {
     vertical-align: top;
   }
-  .table-cell-actions > * + * {
+  /* A row's confirm <dialog> sits in the cell but renders centred in the top layer. */
+  .table-cell-actions > * + :not(dialog) {
     margin-inline-start: 0.25rem;
   }
 

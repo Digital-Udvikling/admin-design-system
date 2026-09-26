@@ -5,21 +5,45 @@
     @apply flex items-center gap-3 w-full px-3 py-2 text-sm text-text;
   }
 
+  /* A row that is itself a link (`<a class="item">`, React `render`); `item-link` covers a row
+     whose title holds the link. */
+  .item:any-link {
+    @apply cursor-pointer
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
+  }
+  .item:any-link:hover {
+    background-image: linear-gradient(var(--color-surface-hover), var(--color-surface-hover));
+  }
+
   .item-media {
     @apply flex items-center shrink-0 text-text-muted;
   }
   .item-media > :is(i, svg) {
     font-size: 1.25rem;
   }
+  .item-sm .item-media > :is(i, svg) {
+    font-size: 1rem;
+  }
+  .item-lg .item-media > :is(i, svg) {
+    font-size: 1.5rem;
+  }
+  /* An icon takes the title's line box (leading-tight, 1.25em) and overhangs the padding.
+     Beside a multi-line content column it pins to the first line; avatars stay centred. */
+  .item-media:has(> :is(i, svg)) {
+    height: 1.25em;
+  }
+  .item-media:has(> :is(i, svg)):has(~ .item-content > :nth-child(2)) {
+    align-self: flex-start;
+  }
 
-  /* min-w-0 lets the text column shrink so long values wrap instead of pushing
-     the actions off the row. */
+  /* min-w-0 + overflow-wrap let long values (emails, URLs, IDs) wrap inside the
+     column instead of running under the actions. */
   .item-content {
     @apply flex flex-col gap-0.5 flex-1 min-w-0;
+    overflow-wrap: anywhere;
   }
   .item-title {
     @apply font-medium leading-tight;
-    overflow-wrap: break-word;
   }
   .item-description {
     @apply text-text-muted leading-snug;
@@ -27,16 +51,17 @@
   }
 
   .item-actions {
-    @apply flex items-center gap-2 shrink-0 relative z-[1];
+    @apply flex items-center gap-2 shrink-0;
     margin-inline-start: auto;
   }
 
   /* Variants — keep it flat: default / outline / muted only. */
-  .item-outline {
+  .item-bordered {
     @apply border border-border rounded-lg;
   }
   .item-muted {
     @apply bg-surface-muted rounded-lg;
+    --surface-current: var(--color-surface-muted);
   }
 
   /* Sizes */
@@ -54,23 +79,87 @@
   .item-group > .item:not(:last-child) {
     @apply border-b border-border;
   }
+  /* The end rows round themselves instead of the group clipping, so vanilla
+     tooltips and menus can overflow it. */
   .item-group-bordered {
-    @apply border border-border rounded-lg overflow-hidden;
+    --_item-group-radius: var(--radius-lg);
+    @apply border border-border rounded-(--_item-group-radius);
+  }
+  .item-group-bordered > .item:first-child {
+    @apply rounded-t-[calc(var(--_item-group-radius)-1px)];
+  }
+  .item-group-bordered > .item:last-child {
+    @apply rounded-b-[calc(var(--_item-group-radius)-1px)];
   }
 
-  /* Clickable row — the first nested <a> fills the row via ::after; actions keep
-     their own stacking context so they stay clickable (same trick as table-row-link). */
+  /* The primary link (the <a> in item-title, or an <a> content column) stretches a ::before
+     over the row; ::after stays free for link-external's arrow. */
   .item-link {
     @apply relative cursor-pointer;
   }
+  /* Layered as an image so the wash also shows on muted rows. */
   .item-link:hover {
-    @apply bg-surface-muted;
+    background-image: linear-gradient(var(--color-surface-hover), var(--color-surface-hover));
   }
-  .item-link a:first-of-type::after {
+  .item-link :is(.item-title a, .item-content > a, a.item-content)::before {
     content: "";
     @apply absolute inset-0;
   }
-  .item-link:focus-within {
+  .item-link .item-actions {
+    @apply relative z-[1];
+  }
+  /* Zero specificity, so component rules that position their own controls
+     (.input-action, .tab-input) win whatever the import order. */
+  :where(.item-link)
+    :where(a, button, input, select, textarea, label, summary, [tabindex]):not(
+      :where(.item-actions *, .item-title a, .item-content > a, a.item-content)
+    ) {
+    position: relative;
+    z-index: 1;
+  }
+  /* Raised controls share z-1 across rows; lift the row whose tooltip is open
+     above the rows after it. Menu popups sit in the top layer or a portal. */
+  .item-link:has(.tooltip-wrap:hover, .tooltip-wrap:focus-within) {
+    z-index: 2;
+  }
+  /* Ring the row for keyboard focus on the primary link only; other controls
+     keep their own ring. */
+  .item-link:has(:is(.item-title a, .item-content > a, a.item-content):focus-visible) {
     @apply outline-2 -outline-offset-2 outline-focus;
+  }
+  .item-link :is(.item-title a, .item-content > a, a.item-content):focus-visible {
+    outline: none;
+  }
+
+  /* Selection is [data-selected] only; unlike table rows, a current link doesn't
+     tint the item. Hover keeps the selected fill. */
+  .item[data-selected] {
+    @apply bg-primary-muted;
+    --surface-current: var(--color-primary-muted);
+  }
+  /* A strong divider only between two selected items: primary-muted equals border in light mode. */
+  .item-group > .item[data-selected]:has(+ .item[data-selected]) {
+    @apply border-b-border-strong;
+  }
+  /* text-muted on the tint is under 4.5:1 in both themes. */
+  .item[data-selected] .item-description {
+    @apply text-text;
+  }
+  :is(.item-link, .item:any-link)[data-selected]:hover {
+    background-image: none;
+  }
+
+  @media (forced-colors: active) {
+    .item[data-selected] {
+      background-color: Highlight;
+    }
+    /* Opted out: the Canvas text backplate would hide HighlightText. */
+    .item[data-selected] :is(.item-media, .item-content) {
+      forced-color-adjust: none;
+      color: HighlightText;
+    }
+    .item[data-selected] :is(.item-title a, .item-content > a, .item-description) {
+      color: HighlightText;
+    }
   }
 }

@@ -17,14 +17,18 @@ export {
 } from "./Alert";
 export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
-export { BrandTile, type BrandTileProps, type BrandTileVariant } from "./BrandTile";
+export {
+  BrandTile,
+  type BrandTileProps,
+  type BrandTileVariant,
+  type BrandTileSize,
+} from "./BrandTile";
 export {
   Avatar,
   AvatarGroup,
   type AvatarProps,
   type AvatarGroupProps,
   type AvatarSize,
-  type AvatarShape,
 } from "./Avatar";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { renderIcon, type IconProp, type IconComponent, type IconRenderProps } from "./icon";

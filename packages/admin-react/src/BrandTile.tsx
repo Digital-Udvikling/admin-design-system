@@ -2,12 +2,15 @@ import type { CSSProperties, ComponentProps } from "react";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 
-export type BrandTileVariant = "solid" | "soft" | "info" | "success" | "danger";
+export type BrandTileVariant = "accent" | "info" | "success" | "warning" | "danger";
+export type BrandTileSize = "md" | "lg";
 
 export interface BrandTileProps extends ComponentProps<"span"> {
-  /** Tint treatment. `solid` is the accent fill; the rest are `*-muted` fills with a colored glyph. */
+  /** Fill colour. `accent` is `--color-system-accent`. */
   variant?: BrandTileVariant;
-  size?: "md" | "lg";
+  /** A `-muted` fill with a coloured glyph instead of the solid fill. */
+  soft?: boolean;
+  size?: BrandTileSize;
   /** 1–2 letter monogram. Ignored if `icon` or `src` is provided. */
   monogram?: string;
   /** Icon component or element. Takes precedence over `monogram`, yields to `src`. */
@@ -30,7 +33,8 @@ export interface BrandTileProps extends ComponentProps<"span"> {
  * tiles expose `alt` to assistive tech instead.
  */
 export function BrandTile({
-  variant = "solid",
+  variant = "accent",
+  soft = false,
   size = "md",
   monogram,
   icon,
@@ -49,7 +53,8 @@ export function BrandTile({
   const classes = cn(
     [
       "brand-tile",
-      variant !== "solid" && `brand-tile-${variant}`,
+      variant !== "accent" && `brand-tile-${variant}`,
+      soft && "brand-tile-soft",
       size === "lg" && "brand-tile-lg",
     ],
     className,

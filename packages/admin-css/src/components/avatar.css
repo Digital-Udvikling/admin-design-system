@@ -23,14 +23,22 @@
     @apply size-10 text-sm;
   }
 
-  /* Overlapping stack — later siblings paint on top. */
+  /* Overlapping stack — later siblings paint on top. The ring takes the
+     enclosing container's fill so it reads as a gap on cards and chrome too. */
   .avatar-group {
     @apply inline-flex items-center;
   }
   .avatar-group > .avatar {
-    @apply ring-2 ring-surface;
+    @apply ring-2 ring-(--surface-current,var(--color-surface));
   }
+  /* The overlap scales with the covered avatar so its initials stay legible. */
   .avatar-group > .avatar + .avatar {
+    @apply -ms-1.5;
+  }
+  .avatar-group > .avatar-sm + .avatar {
+    @apply -ms-1;
+  }
+  .avatar-group > .avatar-lg + .avatar {
     @apply -ms-2;
   }
 

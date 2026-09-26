@@ -34,7 +34,7 @@ On `Input`, `size` replaces the native `size` attribute (the width in characters
 
 The status vocabulary is `info`, `success`, `warning` and `danger`, plus `primary` for brand emphasis and `neutral` as the unmodified default. Not every component offers all of them; each component's `Reference` lists its own set.
 
-**Caution** — On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text colour rather than taking the accent — accent-on-tint fails contrast, most visibly for yellow. Each component's `Reference` says which. `BrandTile` drops `warning` altogether for the same reason.
+**Caution** — On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text colour because the accent on its own tint fails contrast, yellow most of all. Each component's `Reference` says which.
 
 ## Icons
 

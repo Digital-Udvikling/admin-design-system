@@ -10,8 +10,6 @@ export interface TableProps extends ComponentProps<"table"> {
   bordered?: boolean;
   /** Cell padding. Default `"default"`. */
   density?: TableDensity;
-  /** @deprecated Use `density="relaxed"`. Kept for the class-name contract. */
-  relaxed?: boolean;
   /** Pins `<thead>`; requires a scrolling ancestor such as `Table.Scroll` with a `max-height`. */
   sticky?: boolean;
   /**
@@ -24,14 +22,12 @@ export interface TableProps extends ComponentProps<"table"> {
 function TableRoot({
   striped,
   bordered,
-  density,
-  relaxed,
+  density = "default",
   sticky,
   pinCol,
   className,
   ...rest
 }: TableProps) {
-  const resolvedDensity = density ?? (relaxed ? "relaxed" : "default");
   return (
     <table
       className={cn(
@@ -39,8 +35,8 @@ function TableRoot({
           "table",
           striped && "table-striped",
           bordered && "table-bordered",
-          resolvedDensity === "compact" && "table-compact",
-          resolvedDensity === "relaxed" && "table-relaxed",
+          density === "compact" && "table-compact",
+          density === "relaxed" && "table-relaxed",
           sticky && "table-sticky",
           pinCol && "table-pin-col",
         ],

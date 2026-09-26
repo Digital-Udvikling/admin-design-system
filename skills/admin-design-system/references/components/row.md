@@ -244,7 +244,7 @@
 <div className="flex w-full flex-wrap items-center gap-3">
   <span className="font-semibold">Orders</span>
   <Badge>128</Badge>
-  <Input inputSize="sm" type="search" placeholder="Search" className="min-w-32 flex-1" />
+  <Input size="sm" type="search" placeholder="Search" className="min-w-32 flex-1" />
   <div className="flex gap-2">
     <Button size="sm" icon={IconFilter}>
       Filter

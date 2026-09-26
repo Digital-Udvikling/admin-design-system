@@ -75,13 +75,12 @@ import { FileInput } from "@aortl/admin-react";
 
 ### React
 
-| Prop        | Type                                | Default      |
-| ----------- | ----------------------------------- | ------------ |
-| `variant`   | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
-| `size`      | `"sm" \| "md" \| "lg"`              | `"md"`       |
-| `inputSize` | `"sm" \| "md" \| "lg"`              | —            |
+| Prop      | Type                                | Default      |
+| --------- | ----------------------------------- | ------------ |
+| `variant` | `"bordered" \| "ghost" \| "danger"` | `"bordered"` |
+| `size`    | `"sm" \| "md" \| "lg"`              | `"md"`       |
 
-`inputSize` is a deprecated alias of `size`; `size` wins when both are set. The native `size` attribute doesn't apply to file inputs. `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
+The native `size` attribute doesn't apply to file inputs. `type` is fixed to `"file"`. Plus native `<input>` attributes, including `accept`, `multiple` and `capture`.
 
 There are no status variants beyond `danger`, and no `info` / `success` / `warning`, unlike [Inputs](../inputs/). For a label, description and validation, wrap it in a [Field](../fields/).
 

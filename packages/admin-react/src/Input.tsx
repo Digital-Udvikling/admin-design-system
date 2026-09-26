@@ -14,7 +14,8 @@ type BaseInputProps = Omit<ComponentProps<typeof BaseInput>, "size">;
 
 export interface InputProps extends BaseInputProps {
   variant?: InputVariant;
-  inputSize?: InputSize;
+  /** Default `"md"`. Replaces the native `size` attribute (width in characters); set a width with CSS instead. */
+  size?: InputSize;
   /** Leading icon, floated inside the field. Pass a component (`icon={IconSearch}`) or an element. */
   icon?: IconProp;
   /** Trailing icon, floated inside the field. Pass a component (`iconTrailing={IconX}`) or an element. */

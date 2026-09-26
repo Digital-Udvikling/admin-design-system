@@ -157,7 +157,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 ```tsx
 <div className="flex w-full flex-col gap-3">
   <div className="flex flex-wrap items-center gap-2">
-    <Input type="search" placeholder="Search orders" inputSize="sm" className="flex-1" />
+    <Input type="search" placeholder="Search orders" size="sm" className="flex-1" />
     <Button size="sm" icon={IconFilter} commandfor="orders-filters-r" command="show-modal">
       Filters
     </Button>
@@ -379,7 +379,7 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 ```
 
 ```tsx
-<Table bordered relaxed>
+<Table bordered density="relaxed">
   <Table.Head>
     <Table.Row>
       <Table.HeaderCell>SKU</Table.HeaderCell>
@@ -1178,7 +1178,6 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
 | `Table`                          | `striped`  | `boolean`                               | `false`     |
 | `Table`                          | `bordered` | `boolean`                               | `false`     |
 | `Table`                          | `density`  | `"compact" \| "default" \| "relaxed"`   | `"default"` |
-| `Table`                          | `relaxed`  | `boolean`                               | `false`     |
 | `Table`                          | `sticky`   | `boolean`                               | `false`     |
 | `Table`                          | `pinCol`   | `boolean`                               | `false`     |
 | `Table.Row`                      | `selected` | `boolean`                               | `false`     |
@@ -1190,7 +1189,7 @@ Put a [Checkbox](forms/checkboxes.md) in the first cell. Wire the select-all hea
 | `Table.HeaderCell`               | `sort`     | `"ascending" \| "descending" \| "none"` | —           |
 | `Table.HeaderCell`               | `onSort`   | `MouseEventHandler<HTMLButtonElement>`  | —           |
 
-`relaxed` is deprecated — use `density="relaxed"`. `sticky` and `pinCol` need a scrolling ancestor such as `Table.Scroll`, a `<section>` with `tabIndex={0}` that requires `aria-label` or `aria-labelledby`. `sort` wraps the header's children in a `table-sort` button that calls `onSort`; any value but `"none"` also sets `aria-sort`. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
+`sticky` and `pinCol` need a scrolling ancestor such as `Table.Scroll`, a `<section>` with `tabIndex={0}` that requires `aria-label` or `aria-labelledby`. `sort` wraps the header's children in a `table-sort` button that calls `onSort`; any value but `"none"` also sets `aria-sort`. `selected` sets `[data-selected]` for checkbox-less selection; `asLink` styles the row but you still supply the `<a>`. `align="left"` and `density="default"` emit nothing. Set `gutter` on the header cell too so the column lines up, and `Table.Empty` takes a `colSpan` — set it to the column count.
 
 Plus each element's native attributes. `Table` takes no `classNames` — every part accepts `className`. `Table.Empty` renders its own `<tr>`, so drop it straight into `Table.Body`.
 

@@ -52,7 +52,7 @@ describe("Table", () => {
 
   it("emits modifier classes on the root", () => {
     render(
-      <Table striped bordered relaxed sticky data-testid="t">
+      <Table striped bordered density="relaxed" sticky data-testid="t">
         <Table.Body>
           <Table.Row>
             <Table.Cell>x</Table.Cell>
@@ -69,7 +69,7 @@ describe("Table", () => {
     );
   });
 
-  it("maps density to the padding modifier and keeps relaxed working", () => {
+  it("maps density to the padding modifier", () => {
     const { rerender } = render(
       <Table density="compact" data-testid="t">
         <Table.Body>
@@ -82,7 +82,7 @@ describe("Table", () => {
     expect(screen.getByTestId("t")).toHaveAdminClass("table-compact");
 
     rerender(
-      <Table relaxed data-testid="t">
+      <Table density="relaxed" data-testid="t">
         <Table.Body>
           <Table.Row>
             <Table.Cell>x</Table.Cell>

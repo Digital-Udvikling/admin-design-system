@@ -302,16 +302,15 @@ A native `<select>` can't hold an icon.
 | `Select`         | `items`       | `Record<string, ReactNode>` or `{label, value}[]` | —            |
 | `Select.Trigger` | `variant`     | `"bordered" \| "ghost" \| "danger"`               | `"bordered"` |
 | `Select.Trigger` | `size`        | `"sm" \| "md" \| "lg"`                            | `"md"`       |
-| `Select.Trigger` | `triggerSize` | `"sm" \| "md" \| "lg"`                            | —            |
 | `Select.Trigger` | `icon`        | [`IconProp`](../../basics/conventions.md#icons)  | —            |
 | `Select.Popup`   | `side`        | `"top" \| "bottom" \| "left" \| "right"`          | `"bottom"`   |
 | `Select.Popup`   | `align`       | `"start" \| "center" \| "end"`                    | `"start"`    |
 | `Select.Popup`   | `sideOffset`  | `number`                                          | `4`          |
 | `Select.Popup`   | `alignOffset` | `number`                                          | `0`          |
 
-`triggerSize` is the deprecated name for `size`; `size` wins when both are set. Without `items`, `Select.Value` shows the raw value instead of the label. `side`, `align` and both offsets (in px) position the popup relative to the trigger; with `align="start"`, a popup wider than the trigger lines up with its start edge.
+Without `items`, `Select.Value` shows the raw value instead of the label. `side`, `align` and both offsets (in px) position the popup relative to the trigger; with `align="start"`, a popup wider than the trigger lines up with its start edge.
 
-Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
+Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. `Select` is generic over the value: `onValueChange` receives the type of `value` or `defaultValue` (an array with `multiple`), and `<Select<Status>>` sets it when neither is passed. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
 
 Only the trigger responds to `variant` and `size`. The chevron and `icon` are `1em`, so they scale with the trigger text; the popup and items keep one size. A long value truncates with an ellipsis.
 

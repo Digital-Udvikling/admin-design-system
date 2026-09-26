@@ -43,7 +43,7 @@ function ClearIcon() {
 
 export function InputBase({
   variant = "bordered",
-  inputSize = "md",
+  size = "md",
   iconNode,
   iconTrailingNode,
   clearable = false,
@@ -106,11 +106,7 @@ export function InputBase({
       disabled={disabled}
       readOnly={readOnly}
       className={cn(
-        [
-          "input",
-          variant !== "bordered" && `input-${variant}`,
-          inputSize !== "md" && `input-${inputSize}`,
-        ],
+        ["input", variant !== "bordered" && `input-${variant}`, size !== "md" && `input-${size}`],
         className,
       )}
       {...rest}

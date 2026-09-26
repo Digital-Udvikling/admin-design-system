@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import { AdminRoot } from "./AdminRoot";
 import { Dialog } from "./Dialog";
 import { Select } from "./Select";
@@ -45,17 +45,17 @@ describe("Select", () => {
     expect(screen.getByTestId("value")).toHaveAdminClass("select-value");
   });
 
-  it("maps size to the size class, with triggerSize as a fallback", () => {
+  it("maps size to the size class", () => {
     render(
       <Select>
         <Select.Trigger aria-label="sm" size="sm" />
-        <Select.Trigger aria-label="lg" triggerSize="lg" />
-        <Select.Trigger aria-label="both" size="sm" triggerSize="lg" />
+        <Select.Trigger aria-label="md" />
+        <Select.Trigger aria-label="lg" size="lg" />
       </Select>,
     );
     expect(screen.getByRole("combobox", { name: "sm" })).toHaveAdminClass("select-sm");
     expect(screen.getByRole("combobox", { name: "lg" })).toHaveAdminClass("select-lg");
-    expect(screen.getByRole("combobox", { name: "both" })).toHaveAdminClass("select-sm");
+    expect(screen.getByRole("combobox", { name: "md" })).not.toHaveAdminClass("select-md");
   });
 
   it("renders the icon prop before the value, aria-hidden", () => {
@@ -72,6 +72,33 @@ describe("Select", () => {
     expect(trigger.firstElementChild).toBe(icon);
     expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon.nextElementSibling).toHaveAdminClass("select-value");
+  });
+
+  it("types onValueChange from the value", () => {
+    type Status = "open" | "closed";
+    function StatusSelect({ status }: { status: Status }) {
+      return (
+        <Select
+          value={status}
+          onValueChange={(next) => expectTypeOf(next).toEqualTypeOf<Status | null>()}
+        >
+          <Select.Trigger aria-label="status" />
+        </Select>
+      );
+    }
+    render(<StatusSelect status="open" />);
+    // @ts-expect-error -- a handler for another value type no longer type-checks
+    render(<Select value="open" onValueChange={(next: number) => next} />);
+    render(
+      <Select<Status, true>
+        multiple
+        defaultValue={["open"]}
+        onValueChange={(next) => expectTypeOf(next).toEqualTypeOf<Status[]>()}
+      >
+        <Select.Trigger aria-label="statuses" />
+      </Select>,
+    );
+    expect(screen.getByRole("combobox", { name: "status" })).toBeInTheDocument();
   });
 
   describe("interactions", () => {

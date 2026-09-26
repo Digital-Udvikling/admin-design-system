@@ -20,6 +20,14 @@ describe("Input", () => {
     expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-warning");
   });
 
+  it("maps size to the size class and omits the native size attribute", () => {
+    const { rerender } = render(<Input aria-label="x" size="sm" />);
+    expect(screen.getByLabelText("x")).toHaveAdminClass("input", "input-sm");
+    expect(screen.getByLabelText("x")).not.toHaveAttribute("size");
+    rerender(<Input aria-label="x" />);
+    expect(screen.getByLabelText("x")).not.toHaveAdminClass("input-md");
+  });
+
   describe("interactions", () => {
     it("uncontrolled: typing updates value and fires onChange per keystroke", async () => {
       const user = userEvent.setup();

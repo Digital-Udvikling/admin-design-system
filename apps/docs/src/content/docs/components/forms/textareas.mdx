@@ -93,14 +93,11 @@ import { Textarea } from "@aortl/admin-react";
 
 ### React
 
-| Prop           | Type                                                                    | Default      |
-| -------------- | ----------------------------------------------------------------------- | ------------ |
-| `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
-| `size`         | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
-| `textareaSize` | `"sm" \| "md" \| "lg"`                                                  | —            |
-| `autoResize`   | `boolean`                                                               | `false`      |
-
-`textareaSize` is a deprecated alias of `size`; `size` wins when both are set.
+| Prop         | Type                                                                    | Default      |
+| ------------ | ----------------------------------------------------------------------- | ------------ |
+| `variant`    | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
+| `size`       | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
+| `autoResize` | `boolean`                                                               | `false`      |
 
 Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](../fields/) it gets the same id, label association and validity wiring as an `Input`, and works standalone outside one. Plus native `<textarea>` attributes.
 

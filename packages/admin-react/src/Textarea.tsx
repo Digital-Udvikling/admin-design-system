@@ -7,9 +7,8 @@ export type TextareaSize = "sm" | "md" | "lg";
 
 export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> {
   variant?: TextareaVariant;
+  /** Default `"md"`. */
   size?: TextareaSize;
-  /** @deprecated Use `size`; `size` wins when both are set. */
-  textareaSize?: TextareaSize;
   /**
    * Height tracks content via CSS `field-sizing`; browsers without it keep a fixed, resizable
    * box. Floor: max(base min-height, `rows`); cap with `max-height`.
@@ -24,13 +23,11 @@ export interface TextareaProps extends Omit<ComponentProps<"textarea">, "size"> 
  */
 export function Textarea({
   variant = "bordered",
-  size,
-  textareaSize,
+  size = "md",
   autoResize,
   className,
   ...rest
 }: TextareaProps) {
-  const resolvedSize = size ?? textareaSize ?? "md";
   return (
     <BaseField.Control
       // Field.Control is typed for <input>; Base UI merges its props into this
@@ -42,7 +39,7 @@ export function Textarea({
         [
           "textarea",
           variant !== "bordered" && `textarea-${variant}`,
-          resolvedSize !== "md" && `textarea-${resolvedSize}`,
+          size !== "md" && `textarea-${size}`,
           autoResize && "textarea-autosize",
         ],
         className,

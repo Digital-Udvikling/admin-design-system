@@ -4,9 +4,18 @@ import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { SelectPopup } from "./Select.client";
 
-export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
+/**
+ * `Value` is inferred from `value`, `defaultValue` or `onValueChange`, so the handler receives the
+ * item type (`Value[]` with `multiple`). Pass it explicitly (`<Select<Status>>`) when nothing infers it.
+ */
+export type SelectProps<
+  Value = unknown,
+  Multiple extends boolean | undefined = false,
+> = BaseSelect.Root.Props<Value, Multiple>;
 
-function SelectRoot(props: SelectProps) {
+function SelectRoot<Value, Multiple extends boolean | undefined = false>(
+  props: SelectProps<Value, Multiple>,
+) {
   return <BaseSelect.Root {...props} />;
 }
 
@@ -19,29 +28,25 @@ export interface SelectTriggerProps extends BaseSelectTriggerProps {
   variant?: SelectTriggerVariant;
   /** Default `"md"`. */
   size?: SelectTriggerSize;
-  /** @deprecated Use `size`. `size` wins when both are set. */
-  triggerSize?: SelectTriggerSize;
   /** Leading icon, rendered before `children`. */
   icon?: IconProp;
 }
 
 function SelectTrigger({
   variant = "bordered",
-  size,
-  triggerSize,
+  size = "md",
   icon,
   className,
   children,
   ...rest
 }: SelectTriggerProps) {
-  const resolvedSize = size ?? triggerSize ?? "md";
   return (
     <BaseSelect.Trigger
       className={cn(
         [
           "select",
           variant !== "bordered" && `select-${variant}`,
-          resolvedSize !== "md" && `select-${resolvedSize}`,
+          size !== "md" && `select-${size}`,
         ],
         className,
       )}

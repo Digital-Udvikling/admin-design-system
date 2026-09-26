@@ -9,19 +9,16 @@ type BaseInputProps = Omit<ComponentProps<typeof BaseInput>, "size" | "type">;
 
 export interface FileInputProps extends BaseInputProps {
   variant?: FileInputVariant;
+  /** Default `"md"`. */
   size?: FileInputSize;
-  /** @deprecated Use `size`; `size` wins when both are set. */
-  inputSize?: FileInputSize;
 }
 
 export function FileInput({
   variant = "bordered",
-  size,
-  inputSize,
+  size = "md",
   className,
   ...rest
 }: FileInputProps) {
-  const resolvedSize = size ?? inputSize ?? "md";
   return (
     <BaseInput
       type="file"
@@ -29,7 +26,7 @@ export function FileInput({
         [
           "file-input",
           variant !== "bordered" && `file-input-${variant}`,
-          resolvedSize !== "md" && `file-input-${resolvedSize}`,
+          size !== "md" && `file-input-${size}`,
         ],
         className,
       )}

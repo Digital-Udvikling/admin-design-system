@@ -55,9 +55,9 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 ```
 
 ```tsx
-<Input inputSize="sm" placeholder="Small" />
+<Input size="sm" placeholder="Small" />
 <Input placeholder="Medium" />
-<Input inputSize="lg" placeholder="Large" />
+<Input size="lg" placeholder="Large" />
 ```
 
 :::
@@ -240,7 +240,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 | Component       | Prop           | Type                                                                    | Default           |
 | --------------- | -------------- | ----------------------------------------------------------------------- | ----------------- |
 | `Input`         | `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"`      |
-| `Input`         | `inputSize`    | `"sm" \| "md" \| "lg"`                                                  | `"md"`            |
+| `Input`         | `size`         | `"sm" \| "md" \| "lg"`                                                  | `"md"`            |
 | `Input`         | `icon`         | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
 | `Input`         | `iconTrailing` | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
 | `Input`         | `clearable`    | `boolean`                                                               | `false`           |
@@ -251,7 +251,7 @@ import { IconCopy, IconSearch, IconMail } from "@tabler/icons-react";
 | `Input.Action`  | `icon`         | [`IconProp`](../../../basics/conventions/#icons)                        | —                 |
 | `PasswordInput` | `revealLabel`  | `string`                                                                | `"Show password"` |
 
-The size prop is `inputSize` because `<input>` has a native `size` attribute — see [Conventions › Sizes](../../../basics/conventions/#sizes). `type` defaults to `"text"`.
+`size` replaces the native `size` attribute; see [Conventions › Sizes](../../../basics/conventions/#sizes). `type` defaults to `"text"`.
 
 Any of `icon`, `iconTrailing`, `clearable` or `action` wraps the input in an `input-icon` span; without them the `<input>` is rendered bare. When wrapped, `className` and `style` still reach the `<input>`; set width on `classNames.wrapper` (`classNames={{ wrapper: "flex-1" }}`), or the glyphs stay at the wrapper's edges. `classNames` covers `wrapper` and `action`. `clearable` shows the × only while the field holds a value and is neither disabled nor read-only; clearing sets the value through the native setter and dispatches a real `input` event, so controlled components and form libraries both see the change, then calls `onClear`. `action` replaces the clear button and the trailing icon with your own control. Build it with `Input.Action`, a `type="button"` `input-action` that renders `icon` plus any children and passes other props to the `<button>`; give it an `aria-label`.
 

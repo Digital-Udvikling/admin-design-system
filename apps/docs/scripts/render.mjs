@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { chromium } from "playwright-core";
 import { BASE_URL, bundle } from "./lib/bundle.mjs";
+import { MIME, findChrome as lookupChrome, pool } from "./lib/browser.mjs";
 import {
   collectExamples,
   loadPages,
@@ -204,7 +205,8 @@ function ensureCss() {
   const newest = Math.max(...walk(join(CSS_PKG, "src"), ".css").map((f) => statSync(f).mtimeMs));
   if (newest <= oldest) return;
   console.error("render: admin-css source changed, rebuilding dist…");
-  for (const script of ["build:dev", "build:utilities", "build:scoped"]) {
+  // build:scoped also wraps admin.min.css, so a fresh checkout needs build:min first.
+  for (const script of ["build:dev", "build:min", "build:utilities", "build:scoped"]) {
     execFileSync("pnpm", ["run", script], { cwd: CSS_PKG, stdio: "ignore" });
   }
   // Tailwind leaves an unchanged output unwritten, which would keep it looking stale.
@@ -241,13 +243,18 @@ const FRAME = `display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem
 const FRAME_SELECTOR = { vanilla: "#frame", react: "#root > ._ao-admin-root" };
 
 function cellHtml({ variant, theme, html, moduleIndex }) {
+  // Layer the unlayered scoped bundle below utilities, as global.css does, or its reset beats them.
+  const scoped =
+    variant === "react"
+      ? `<style>@layer theme, base, admin, components, utilities; @import url("${fsUrl(join(CSS_DIST, "admin.scoped.css"))}") layer(admin);</style>`
+      : "";
   const links = [
-    TABLER_CSS,
-    join(CSS_DIST, variant === "vanilla" ? "admin.css" : "admin.scoped.css"),
-    join(CSS_DIST, "admin.utilities.css"),
-  ]
-    .map((f) => `<link rel="stylesheet" href="${fsUrl(f)}">`)
-    .join("\n");
+    scoped,
+    ...[TABLER_CSS, ...(variant === "vanilla" ? [join(CSS_DIST, "admin.css")] : [])].map(
+      (f) => `<link rel="stylesheet" href="${fsUrl(f)}">`,
+    ),
+    `<link rel="stylesheet" href="${fsUrl(join(CSS_DIST, "admin.utilities.css"))}">`,
+  ].join("\n");
   const frame = FRAME_SELECTOR[variant];
   const style = `body { margin: 0; } ${frame} { ${FRAME} } ${frame}:has(.tooltip-wrap) { padding: 3rem; }`;
   const body =
@@ -256,16 +263,6 @@ function cellHtml({ variant, theme, html, moduleIndex }) {
       : `<div id="root"></div><script src="${ORIGIN}/bundle.js"></script><script>__mount(${moduleIndex})</script>`;
   return `<!doctype html><html data-theme="${theme}"><head><meta charset="utf-8">${links}<style>${style}</style></head><body>${body}</body></html>`;
 }
-
-const MIME = {
-  ".css": "text/css",
-  ".js": "text/javascript",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".woff2": "font/woff2",
-  ".woff": "font/woff",
-  ".ttf": "font/ttf",
-};
 
 const fileCache = new Map();
 // Shared across cells: each context starts with an empty HTTP cache, and
@@ -436,18 +433,10 @@ async function compose(browser, label, cells) {
 // ---------------------------------------------------------------- main
 
 function findChrome() {
-  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
-  for (const name of ["chromium", "chromium-browser", "google-chrome", "google-chrome-stable"]) {
-    try {
-      return execFileSync("which", [name], {
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "ignore"],
-      }).trim();
-    } catch {}
-  }
-  const bundled = chromium.executablePath();
-  if (existsSync(bundled)) return bundled;
-  fail("no Chromium found; set CHROME_PATH or put chromium / google-chrome on PATH");
+  return (
+    lookupChrome() ??
+    fail("no Chromium found; set CHROME_PATH or put chromium / google-chrome on PATH")
+  );
 }
 
 /**
@@ -478,24 +467,6 @@ async function bundleAll(modules) {
     }
     return out;
   }
-}
-
-/**
- * Runs `tasks` with at most `limit` in flight; results keep task order. Each
- * task gets its worker's `local` object, for state reused across its tasks.
- */
-async function pool(tasks, limit) {
-  const results = Array.from({ length: tasks.length });
-  let next = 0;
-  const worker = async () => {
-    const local = {};
-    while (next < tasks.length) {
-      const i = next++;
-      results[i] = await tasks[i](local);
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, worker));
-  return results;
 }
 
 ensureCss();

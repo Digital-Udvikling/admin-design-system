@@ -1,0 +1,78 @@
+name: Visual report
+
+# Screenshots every docs example on the PR's base and head and reports the changed
+# ones. Fails only when a build or capture breaks.
+
+on:
+  pull_request:
+    paths:
+      - "packages/**"
+      - "apps/docs/**"
+      - ".github/workflows/visual-report.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-report-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # One Chromium for both captures; antialiasing differs between builds.
+      CHROME_PATH: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: head
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: head/package.json
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            head/pnpm-lock.yaml
+            base/pnpm-lock.yaml
+
+      - name: Build base docs
+        working-directory: base
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter docs build
+
+      - name: Build head docs
+        working-directory: head
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter docs build
+
+      - name: Capture and compare
+        run: |
+          "$CHROME_PATH" --version
+          node head/apps/docs/scripts/visual-diff.mjs base/apps/docs/dist head/apps/docs/dist --out visual-diff
+
+      - name: Job summary
+        if: always()
+        run: |
+          if [ -f visual-diff/report/summary.md ]; then
+            cat visual-diff/report/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-diff
+          path: visual-diff/report
+          if-no-files-found: ignore

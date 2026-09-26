@@ -121,6 +121,12 @@
     @apply bg-primary;
   }
 
+  /* Standalone, beside its text label ("● Online") rather than on an anchor's corner. */
+  .indicator-dot:not(.indicator-item) {
+    vertical-align: middle;
+    margin-inline-end: 0.25rem;
+  }
+
   /* Forced colors replaces the fill with Canvas, which erases the dot. */
   @media (forced-colors: active) {
     .indicator-dot {

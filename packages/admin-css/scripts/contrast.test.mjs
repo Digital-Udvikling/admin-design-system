@@ -55,6 +55,9 @@ const PAIRS = [
   ]),
   // `btn-danger-ghost` sets its label in danger-hover, on the page and on its danger-muted hover fill.
   ...[...SURFACES, "danger-muted"].map((bg) => ["danger-hover", bg]),
+  ...["red", "orange", "yellow", "green", "cyan", "blue", "purple", "magenta"].flatMap((hue) =>
+    [...SURFACES, `category-${hue}-muted`].map((bg) => [`category-${hue}`, bg]),
+  ),
 ];
 
 describe("semantic token contrast", () => {

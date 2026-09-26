@@ -5,6 +5,7 @@
 ## Contents
 
 - [Semantic tokens](#semantic-tokens)
+- [Categorical](#categorical)
 - [Palette](#palette)
 
 The palette is [Flexoki](https://stephango.com/flexoki). The system layers it as palette tones (`--color-blue-600`, `--color-base-50`, …) and semantic aliases that point at them (`--color-primary`, `--color-surface`, …) — see [Principles › Two-layer tokens](principles.md#two-layer-tokens).
@@ -81,6 +82,47 @@ Primary and the state families (danger, success, warning, info) share a four-slo
 
 - Base — `--color-border`
 - Strong — `--color-border-strong`
+
+## Categorical
+
+For colour-coding kinds of thing, such as event types or chart series, where the colour names a category and not a state. Each hue reads as text on `surface`, `surface-muted` and its own muted tint at 4.5:1 in both modes. Utilities: `text-category-<hue>`, `bg-category-<hue>`, `border-category-<hue>`, and the same with `-muted`.
+
+**Categorical** — Text and marks for a category.
+
+- Red — `--color-category-red`
+- Orange — `--color-category-orange`
+- Yellow — `--color-category-yellow`
+- Green — `--color-category-green`
+- Cyan — `--color-category-cyan`
+- Blue — `--color-category-blue`
+- Purple — `--color-category-purple`
+- Magenta — `--color-category-magenta`
+
+**Categorical muted** — Tinted fills behind a category's text.
+
+- Red — `--color-category-red-muted`
+- Orange — `--color-category-orange-muted`
+- Yellow — `--color-category-yellow-muted`
+- Green — `--color-category-green-muted`
+- Cyan — `--color-category-cyan-muted`
+- Blue — `--color-category-blue-muted`
+- Purple — `--color-category-purple-muted`
+- Magenta — `--color-category-magenta-muted`
+
+**Example**
+
+```html
+<p class="flex flex-wrap gap-4 text-sm">
+  <span class="text-category-blue"
+    ><i class="ti ti-shopping-cart" aria-hidden="true"></i> Add to cart</span
+  >
+  <span class="text-category-green"
+    ><i class="ti ti-credit-card" aria-hidden="true"></i> Order</span
+  >
+  <span class="text-category-purple"><i class="ti ti-search" aria-hidden="true"></i> Search</span>
+  <span class="rounded-sm bg-category-orange-muted px-1.5 text-category-orange">Campaign</span>
+</p>
+```
 
 ## Palette
 

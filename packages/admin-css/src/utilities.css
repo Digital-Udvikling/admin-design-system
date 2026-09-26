@@ -128,6 +128,12 @@
   "{,hover:,focus:,focus-visible:,active:}{bg,text,border,outline,ring,shadow}-{primary,system-accent,danger,success,warning,info}{,-hover,-muted,-content}"
 );
 
+/* Categorical colors — kept in sync with theme.css. No variants: a category's
+   colour doesn't change on hover or focus */
+@source inline(
+  "{bg,text,border}-category-{red,orange,yellow,green,cyan,blue,purple,magenta}{,-muted}"
+);
+
 /* Link / focus — deliberately narrower than the accents above: focus rings
    only need `outline-focus`, links only `text-link{,-hover}` */
 @source inline("{,focus-visible:}outline-focus");

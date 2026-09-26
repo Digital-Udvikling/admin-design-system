@@ -444,6 +444,8 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 
 ### Per-series colours
 
+Colour a series by its category with the [categorical tokens](../../basics/colors/#categorical), so a bar matches the same category's label elsewhere on the page.
+
 :::example
 
 ```html
@@ -453,17 +455,25 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
   aria-label="Bar chart. A: 30, B: 50, C: 20."
   style="--chart-max: 50"
 >
-  <div class="chart-bar" style="--value: 30; --bar-color: var(--color-blue-500)" title="A: 30">
+  <div class="chart-bar" style="--value: 30; --bar-color: var(--color-category-blue)" title="A: 30">
     <span class="chart-bar-label">A</span>
     <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">30</span>
   </div>
-  <div class="chart-bar" style="--value: 50; --bar-color: var(--color-green-500)" title="B: 50">
+  <div
+    class="chart-bar"
+    style="--value: 50; --bar-color: var(--color-category-green)"
+    title="B: 50"
+  >
     <span class="chart-bar-label">B</span>
     <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">50</span>
   </div>
-  <div class="chart-bar" style="--value: 20; --bar-color: var(--color-orange-400)" title="C: 20">
+  <div
+    class="chart-bar"
+    style="--value: 20; --bar-color: var(--color-category-orange)"
+    title="C: 20"
+  >
     <span class="chart-bar-label">C</span>
     <div class="chart-bar-track"><div class="chart-bar-fill"></div></div>
     <span class="chart-bar-value">20</span>
@@ -475,9 +485,9 @@ A `conic-gradient` ring with the centre masked out. React builds the cumulative 
 <BarChart
   showValues
   data={[
-    { label: "A", value: 30, color: "var(--color-blue-500)" },
-    { label: "B", value: 50, color: "var(--color-green-500)" },
-    { label: "C", value: 20, color: "var(--color-orange-400)" },
+    { label: "A", value: 30, color: "var(--color-category-blue)" },
+    { label: "B", value: 50, color: "var(--color-category-green)" },
+    { label: "C", value: 20, color: "var(--color-category-orange)" },
   ]}
 />
 ```
@@ -579,7 +589,7 @@ There is no `chart-info` or `chart-md` — both are the unmodified `chart`.
 
 Values arrive as inline custom properties rather than `data-` attributes because CSS can't read an attribute as a number for `calc()`. That is also why `--donut-segments` is a pre-built stop string: CSS can't sum a variable-length list of siblings, so the cumulative percentages have to be computed before they reach the style attribute. The fill transitions the _resolved_ length, not `--value`, since an unregistered custom property doesn't animate; transitions are dropped under `prefers-reduced-motion: reduce`.
 
-There is no chart token layer. A single series rides `currentColor`; multi-series charts take colours inline. React cycles this `SERIES` sequence of existing palette tokens — copy it verbatim so both bundles render identically:
+There is no chart token layer. A single series rides `currentColor`; multi-series charts take colours inline, such as the `--color-category-*` tokens. Without a `color`, React cycles this `SERIES` sequence of mid-tone palette tokens, which reads the same in both modes — copy it verbatim so both bundles render identically:
 
 ```css
 var(--color-blue-500)

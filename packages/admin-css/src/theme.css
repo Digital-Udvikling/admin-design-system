@@ -254,6 +254,26 @@
   --color-info-hover: light-dark(var(--color-blue-700), var(--color-blue-200));
   --color-info-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
   --color-info-content: light-dark(var(--color-paper), var(--color-black));
+
+  /* Categorical: colour-codes kinds (event types, series), never states. Each is the
+     step nearest 600/400 that reaches 4.5:1 as text on surface, surface-muted and
+     its own -muted tint; the fills are those tints. */
+  --color-category-red: light-dark(var(--color-red-600), var(--color-red-300));
+  --color-category-red-muted: light-dark(var(--color-red-50), var(--color-red-950));
+  --color-category-orange: light-dark(var(--color-orange-700), var(--color-orange-400));
+  --color-category-orange-muted: light-dark(var(--color-orange-50), var(--color-orange-950));
+  --color-category-yellow: light-dark(var(--color-yellow-800), var(--color-yellow-400));
+  --color-category-yellow-muted: light-dark(var(--color-yellow-50), var(--color-yellow-950));
+  --color-category-green: light-dark(var(--color-green-700), var(--color-green-400));
+  --color-category-green-muted: light-dark(var(--color-green-50), var(--color-green-950));
+  --color-category-cyan: light-dark(var(--color-cyan-700), var(--color-cyan-400));
+  --color-category-cyan-muted: light-dark(var(--color-cyan-50), var(--color-cyan-950));
+  --color-category-blue: light-dark(var(--color-blue-600), var(--color-blue-300));
+  --color-category-blue-muted: light-dark(var(--color-blue-50), var(--color-blue-950));
+  --color-category-purple: light-dark(var(--color-purple-600), var(--color-purple-400));
+  --color-category-purple-muted: light-dark(var(--color-purple-50), var(--color-purple-950));
+  --color-category-magenta: light-dark(var(--color-magenta-600), var(--color-magenta-400));
+  --color-category-magenta-muted: light-dark(var(--color-magenta-50), var(--color-magenta-950));
 }
 
 /* `light dark` follows the OS; [data-theme] forces a mode. Deliberately not

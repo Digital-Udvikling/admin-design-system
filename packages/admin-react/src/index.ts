@@ -29,6 +29,7 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from ".
 export { renderIcon, type IconProp, type IconComponent, type IconRenderProps } from "./icon";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
+export { CopyButton, type CopyButtonProps } from "./CopyButton";
 export {
   Breadcrumbs,
   type BreadcrumbsProps,
@@ -64,6 +65,7 @@ export {
   type IndicatorVertical,
   type IndicatorHorizontal,
 } from "./Indicator";
+export { StatusDot, type StatusDotProps, type StatusDotVariant } from "./StatusDot";
 export { Link, type LinkProps } from "./Link";
 export { Separator, type SeparatorProps } from "./Separator";
 export {
@@ -124,6 +126,7 @@ export {
   type ComboboxGroupLabelProps,
 } from "./Combobox";
 export { Container, type ContainerProps, type ContainerSize } from "./Container";
+export { PageCenter, type PageCenterProps, type PageCenterSize } from "./PageCenter";
 export {
   Card,
   type CardProps,
@@ -252,6 +255,7 @@ export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
+export { useCopy, type UseCopyOptions, type UseCopyResult } from "./useCopy";
 export { useConfirm, usePrompt, type ConfirmOptions, type PromptOptions } from "./useConfirm";
 export {
   Tooltip,

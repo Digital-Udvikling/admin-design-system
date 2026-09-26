@@ -7,7 +7,6 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  type ReactNode,
   type Ref,
 } from "react";
 
@@ -20,11 +19,6 @@ export interface DialogContextValue {
 }
 
 export const DialogContext = createContext<DialogContextValue | null>(null);
-
-/** Whether a shorthand slot has something to render: `null`, `false`, `undefined` and `""` don't. */
-export function hasSlot(node: ReactNode): boolean {
-  return node !== undefined && node !== null && node !== false && node !== "";
-}
 
 /**
  * Drives a native `<dialog>` from a controlled `open` prop, shared by `<Dialog>`

@@ -49,7 +49,7 @@ export interface NumberInputProps extends ComponentProps<typeof NumberField.Root
   variant?: NumberInputVariant;
   size?: NumberInputSize;
   /**
-   * Per-slot class overrides. `className` and `group` both target the visible
+   * Per-slot class overrides. `className`, `style` and `group` target the visible
    * `.number-input` group; `root` targets Base UI's `display: contents` Root.
    */
   classNames?: SlotClasses<"root" | "group" | "decrement" | "input" | "increment">;
@@ -83,6 +83,7 @@ export function NumberInput({
   decrementIcon,
   incrementIcon,
   className,
+  style,
   ...rootProps
 }: NumberInputProps) {
   const group = classNames?.group;
@@ -103,6 +104,7 @@ export function NumberInput({
           ],
           groupClassName,
         )}
+        style={style}
       >
         <NumberField.Decrement
           className={cn("number-input-step", classNames?.decrement)}

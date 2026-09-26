@@ -5,6 +5,7 @@ import { useAppShell } from "./AppShell";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
+import { hasNode } from "./slot";
 
 interface SidebarContextValue {
   collapsed?: boolean;
@@ -122,17 +123,12 @@ function SidebarItem({
       {icon != null ? (
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
-      {hasSlot(children) ? (
+      {hasNode(children) ? (
         <SidebarLabel className={classNames?.label}>{children}</SidebarLabel>
       ) : null}
-      {hasSlot(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
     </a>
   );
-}
-
-/** Whether a shorthand slot has content: `null`, `undefined`, `false` and `""` render no wrapper. */
-function hasSlot(node: ReactNode): boolean {
-  return node != null && node !== false && node !== "";
 }
 
 export type SidebarIconProps = ComponentProps<"span">;
@@ -193,7 +189,7 @@ function SidebarCollapsible({
       {icon != null ? (
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
-      {hasSlot(label) ? <SidebarLabel className={classNames?.label}>{label}</SidebarLabel> : null}
+      {hasNode(label) ? <SidebarLabel className={classNames?.label}>{label}</SidebarLabel> : null}
     </>
   );
 
@@ -255,7 +251,7 @@ function SidebarSubItem({
         <SidebarIcon className={classNames?.icon}>{renderIcon(icon)}</SidebarIcon>
       ) : null}
       {children}
-      {hasSlot(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
+      {hasNode(badge) ? <SidebarBadge className={classNames?.badge}>{badge}</SidebarBadge> : null}
     </a>
   );
 }

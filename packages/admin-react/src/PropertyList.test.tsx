@@ -196,4 +196,19 @@ describe("PropertyList", () => {
     expect(screen.queryByRole("heading")).not.toBeInTheDocument();
     expect(screen.getByTestId("root").querySelector("dl")).toBeInTheDocument();
   });
+
+  it("renders no heading for an empty title", () => {
+    const { rerender } = render(
+      <PropertyList title={null}>
+        <PropertyList.Item label="X" value="Y" />
+      </PropertyList>,
+    );
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+    rerender(
+      <PropertyList title="">
+        <PropertyList.Item label="X" value="Y" />
+      </PropertyList>,
+    );
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+  });
 });

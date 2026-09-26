@@ -2,13 +2,14 @@ import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { Badge, type BadgeSize, type BadgeVariant } from "./Badge";
 import { cn } from "./cn";
 import type { IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type IndicatorVertical = "top" | "middle" | "bottom";
 export type IndicatorHorizontal = "start" | "center" | "end";
 export type IndicatorPlacement = `${IndicatorVertical}-${IndicatorHorizontal}`;
 
 export interface IndicatorProps extends ComponentProps<"div"> {
-  /** Badge content (count, "!", text). Omit for a label-less status dot. */
+  /** Badge content (count, "!", text). Omit it, or pass `null`, `false` or `""`, for a label-less status dot. */
   label?: ReactNode;
   /** Variant for both the badge and the dot. Defaults to `"neutral"`. */
   variant?: BadgeVariant;
@@ -48,7 +49,7 @@ export function Indicator({
     vertical !== "top" && `indicator-${vertical}`,
     horizontal !== "end" && `indicator-${horizontal}`,
   ];
-  const hasContent = label !== undefined || icon !== undefined;
+  const hasContent = hasNode(label) || icon != null;
   const displayLabel =
     typeof label === "number" && max !== undefined && label > max ? `${max}+` : label;
   // A generic span can't carry a name, so a labelled item becomes a status in both forms.

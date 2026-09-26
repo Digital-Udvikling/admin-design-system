@@ -59,6 +59,16 @@ describe("Drawer", () => {
     expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
   });
 
+  it("renders no title for an icon without a title", () => {
+    function Warn(props: { size?: number | string }) {
+      return <svg data-testid="warn" {...props} />;
+    }
+    const { container } = render(<Drawer open icon={Warn} />);
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("warn")).not.toBeInTheDocument();
+    expect(container.querySelector("dialog")).not.toHaveAttribute("aria-labelledby");
+  });
+
   it("is labelled by its title and described by its description", () => {
     render(<Drawer open title="Filters" description="Narrow the list." />);
     const dialog = document.querySelector("dialog");

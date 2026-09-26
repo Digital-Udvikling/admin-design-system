@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { cn, type SlotClasses } from "./cn";
+import { hasNode } from "./slot";
 
 // Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
 function CopyGlyph({ className }: { className: string }) {
@@ -56,7 +57,7 @@ export interface PropertyListProps extends Omit<ComponentProps<"section">, "titl
   compact?: boolean;
   /** Collapses the section when every value rendered the auto em-dash fallback. */
   hideIfAllEmpty?: boolean;
-  /** Section heading rendered as `<h3 class="property-list-title">`. */
+  /** Section heading rendered as `<h3 class="property-list-title">`; `null`, `false` and `""` render none. */
   title?: ReactNode;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"title" | "items">;
@@ -85,7 +86,7 @@ function PropertyListRoot({
       )}
       {...rest}
     >
-      {title !== undefined ? (
+      {hasNode(title) ? (
         <h3 className={cn("property-list-title", classNames?.title)}>{title}</h3>
       ) : null}
       <dl className={cn("property-list-items", classNames?.items)}>{children}</dl>

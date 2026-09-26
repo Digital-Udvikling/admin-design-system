@@ -1,6 +1,7 @@
 import { Field as BaseField } from "@base-ui/react/field";
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
+import { hasNode } from "./slot";
 
 export type FieldContainerProps = ComponentProps<typeof BaseField.Root>;
 
@@ -31,11 +32,6 @@ export interface FieldProps extends FieldContainerProps {
   classNames?: SlotClasses<"label" | "description" | "error">;
 }
 
-/** A shorthand slot renders only for real content; `null`, `false` and `""` count as empty. */
-function hasContent(node: ReactNode): boolean {
-  return node !== undefined && node !== null && node !== false && node !== "";
-}
-
 /** Standard field — label, control (`children`), description, error. For other shapes, compose `<Field.Container>` by hand. */
 function FieldRoot({
   label,
@@ -49,13 +45,13 @@ function FieldRoot({
   children,
   ...rest
 }: FieldProps) {
-  const hasError = hasContent(error);
-  const labelEl = hasContent(label) ? (
+  const hasError = hasNode(error);
+  const labelEl = hasNode(label) ? (
     <FieldLabel required={required} className={classNames?.label}>
       {label}
     </FieldLabel>
   ) : null;
-  const descriptionEl = hasContent(description) ? (
+  const descriptionEl = hasNode(description) ? (
     <FieldDescription className={classNames?.description}>{description}</FieldDescription>
   ) : null;
   const errorEl = hasError ? (

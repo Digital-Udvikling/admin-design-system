@@ -191,7 +191,7 @@
 | `incrementIcon`  | `ReactNode`                                      | `+` glyph    |
 | `classNames`     | [slots](../../basics/conventions.md#classnames) | —            |
 
-Renders the whole group — steppers, field, ARIA — from one component, so there are no sub-parts to compose. `className` lands on the visible `number-input` group, so layout utilities such as `max-w-32` size it; `classNames` covers `root`, `group`, `decrement`, `input`, `increment`. `inputAriaLabel` names the field when there's no associated `<label>`; inside a [Field](fields.md) the label supplies the name instead, and an invalid Field gives the group the danger border without `variant`.
+Renders the whole group — steppers, field, ARIA — from one component, so there are no sub-parts to compose. `className` and `style` land on the visible `number-input` group, so layout utilities such as `max-w-32` size it; `classNames` covers `root`, `group`, `decrement`, `input`, `increment`. `inputAriaLabel` names the field when there's no associated `<label>`; inside a [Field](fields.md) the label supplies the name instead, and an invalid Field gives the group the danger border without `variant`.
 
 Wraps [Base UI NumberField](https://base-ui.com/react/components/number-field), which owns `value` / `defaultValue` / `onValueChange`, `min`, `max`, `step`, `format`, clamp-on-blur, and scrub-to-change. `format` takes `Intl.NumberFormat` options.
 

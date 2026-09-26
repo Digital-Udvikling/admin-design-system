@@ -9,7 +9,7 @@ import {
 } from "react";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
-import { hasSlot } from "./dialog-internal";
+import { hasNode } from "./slot";
 
 export interface ConfirmOptions {
   /** Dialog heading. */
@@ -147,7 +147,7 @@ function ConfirmDialog({
       <Dialog.Header>
         <Dialog.Title>{title}</Dialog.Title>
       </Dialog.Header>
-      {hasSlot(description) ? <Dialog.Description>{description}</Dialog.Description> : null}
+      {hasNode(description) ? <Dialog.Description>{description}</Dialog.Description> : null}
       <Dialog.Footer>
         <Button
           ref={danger ? initialFocusRef : undefined}

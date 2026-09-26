@@ -89,6 +89,17 @@ describe("Dialog", () => {
     expect(getDialog().children).toHaveLength(0);
   });
 
+  it("renders no title for an icon without a title", () => {
+    function Warn(props: { size?: number | string }) {
+      return <svg data-testid="warn" {...props} />;
+    }
+    render(<Dialog open icon={Warn} title={null} />);
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("warn")).not.toBeInTheDocument();
+    expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
+  });
+
   describe("accessible name", () => {
     it("is labelled by the title and described by the description", () => {
       render(<Dialog open title="Invite teammate" description="They'll get an email." />);

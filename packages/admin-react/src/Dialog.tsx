@@ -1,8 +1,9 @@
 import { useContext, type ComponentProps, type ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
-import { DialogContext, hasSlot, useDialogElement, useDialogLabelId } from "./dialog-internal";
+import { DialogContext, useDialogElement, useDialogLabelId } from "./dialog-internal";
 import { renderIcon, type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
+import { hasNode } from "./slot";
 
 export type DialogSize = "sm" | "md" | "lg" | "auto" | "metabase";
 export type DialogClosedBy = "any" | "closerequest" | "none";
@@ -150,7 +151,7 @@ function DialogCloseButton({
 }
 
 export interface DialogProps extends Omit<DialogContainerProps, "title" | "children"> {
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Dialog.Title>`. */
   title?: ReactNode;
@@ -183,7 +184,8 @@ function DialogRoot({
   children,
   ...containerProps
 }: DialogProps) {
-  const hasTitle = hasSlot(title) || icon != null;
+  // An icon alone would be an empty heading naming the dialog, so the title row needs a title.
+  const hasTitle = hasNode(title);
   const showHeader = hasTitle || dismissible;
   return (
     <DialogContainer {...containerProps}>
@@ -199,11 +201,11 @@ function DialogRoot({
           ) : null}
         </DialogHeader>
       ) : null}
-      {hasSlot(description) ? (
+      {hasNode(description) ? (
         <DialogDescription className={classNames?.description}>{description}</DialogDescription>
       ) : null}
-      {hasSlot(children) ? <DialogBody className={classNames?.body}>{children}</DialogBody> : null}
-      {hasSlot(actions) ? (
+      {hasNode(children) ? <DialogBody className={classNames?.body}>{children}</DialogBody> : null}
+      {hasNode(actions) ? (
         <DialogFooter className={classNames?.footer}>{actions}</DialogFooter>
       ) : null}
     </DialogContainer>

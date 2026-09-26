@@ -47,6 +47,14 @@ describe("NumberInput", () => {
     expect(container.querySelector(adminSelector("number-input-root"))).not.toHaveClass("max-w-32");
   });
 
+  it("puts style on the visible group, not the display: contents root", () => {
+    const { container } = render(<NumberInput inputAriaLabel="Q" style={{ width: 120 }} />);
+    expect(container.querySelector(adminSelector("number-input"))).toHaveStyle({ width: "120px" });
+    expect(container.querySelector(adminSelector("number-input-root"))).not.toHaveAttribute(
+      "style",
+    );
+  });
+
   it("resolves a className function against the group state", () => {
     const { container } = render(
       <NumberInput inputAriaLabel="Q" disabled className={(s) => (s.disabled ? "is-off" : "")} />,

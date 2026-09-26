@@ -1,9 +1,10 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { Dialog, type DialogClosedBy } from "./Dialog";
-import { DialogContext, hasSlot, useDialogElement } from "./dialog-internal";
+import { DialogContext, useDialogElement } from "./dialog-internal";
 import { type IconProp } from "./icon";
 import { PortalContainerContext } from "./portal-context";
+import { hasNode } from "./slot";
 
 export type DrawerSide = "start" | "end" | "bottom";
 export type DrawerSize = "sm" | "md" | "lg";
@@ -71,7 +72,7 @@ function DrawerContainer({
 }
 
 export interface DrawerProps extends Omit<DrawerContainerProps, "title" | "children"> {
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Drawer.Title>`. */
   title?: ReactNode;
@@ -103,7 +104,8 @@ function DrawerRoot({
   children,
   ...containerProps
 }: DrawerProps) {
-  const hasTitle = hasSlot(title) || icon != null;
+  // An icon alone would be an empty heading naming the drawer, so the title row needs a title.
+  const hasTitle = hasNode(title);
   const showHeader = hasTitle || dismissible;
   return (
     <DrawerContainer {...containerProps}>
@@ -119,13 +121,13 @@ function DrawerRoot({
           ) : null}
         </Dialog.Header>
       ) : null}
-      {hasSlot(description) ? (
+      {hasNode(description) ? (
         <Dialog.Description className={classNames?.description}>{description}</Dialog.Description>
       ) : null}
-      {hasSlot(children) ? (
+      {hasNode(children) ? (
         <Dialog.Body className={classNames?.body}>{children}</Dialog.Body>
       ) : null}
-      {hasSlot(actions) ? (
+      {hasNode(actions) ? (
         <Dialog.Footer className={classNames?.footer}>{actions}</Dialog.Footer>
       ) : null}
     </DrawerContainer>

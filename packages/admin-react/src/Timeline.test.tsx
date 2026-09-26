@@ -63,6 +63,15 @@ describe("Timeline", () => {
     expect(screen.getByText("Order placed")).toHaveClass("x-custom");
   });
 
+  it("renders no wrapper for empty title, time and description", () => {
+    const { container } = render(
+      <Timeline>
+        <Timeline.Item title={null} time={false} description="" />
+      </Timeline>,
+    );
+    expect(container.querySelector(adminSelector("timeline-content"))?.children).toHaveLength(0);
+  });
+
   it("uses an icon indicator when icon is set", () => {
     function Star(props: { size?: number | string }) {
       return <svg data-testid="star" {...props} />;

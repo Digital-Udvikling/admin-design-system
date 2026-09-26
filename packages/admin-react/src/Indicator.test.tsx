@@ -48,6 +48,16 @@ describe("Indicator", () => {
     expect(dot.textContent).toBe("");
   });
 
+  it("renders the dot for an empty label", () => {
+    const { container } = render(
+      <Indicator label={null}>
+        <span>inbox</span>
+      </Indicator>,
+    );
+    expect(container.querySelector(adminSelector("indicator-dot"))).toBeInTheDocument();
+    expect(container.querySelector(adminSelector("badge"))).toBeNull();
+  });
+
   it("gives a labelled badge and a labelled dot the status role", () => {
     render(
       <>

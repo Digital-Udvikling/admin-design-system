@@ -568,7 +568,7 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
 | `cancelLabel`      | `ReactNode`             | `"Cancel"`   |
 | `variant`          | `"default" \| "danger"` | `"default"`  |
 
-`Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X, and an empty slot (`null`, `false`, `""`) renders nothing. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
+`Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X, an empty slot (`null`, `false`, `""`) renders nothing, and `icon` needs a `title`. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
 
 A `Dialog.Title` sets the dialog's `aria-labelledby` and a `Dialog.Description` its `aria-describedby`, in `Dialog.Container` too. Passing `aria-label`, `aria-labelledby` or `aria-describedby` overrides them.
 

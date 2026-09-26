@@ -2,6 +2,7 @@ import { Input as BaseInput } from "@base-ui/react/input";
 import { useCallback, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type InputVariant = "bordered" | "ghost" | "danger" | "info" | "success" | "warning";
 export type InputSize = "sm" | "md" | "lg";
@@ -140,7 +141,7 @@ function InputRoot({
     />
   );
 
-  const hasAction = action != null && action !== false && action !== "";
+  const hasAction = hasNode(action);
 
   // Clearable inputs always wrap (a stable tree) so the field doesn't remount —
   // and lose focus — when the clear button appears on the first keystroke.

@@ -8,6 +8,7 @@ import {
 } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type AlertVariant = "info" | "success" | "warning" | "danger";
 
@@ -47,8 +48,6 @@ export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"title" | "description" | "action" | "dismiss">;
 }
-
-const hasNode = (node: ReactNode) => node != null && node !== false && node !== "";
 
 // Must match the block list in alert.css's stacking-gap rule.
 const BLOCK_TAGS = new Set([

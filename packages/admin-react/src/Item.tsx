@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type ItemVariant = "default" | "outline" | "muted";
 export type ItemSize = "sm" | "md" | "lg";
@@ -79,11 +80,6 @@ export interface ItemProps extends Omit<ItemContainerProps, "title"> {
   classNames?: SlotClasses<"media" | "content" | "title" | "description" | "actions">;
 }
 
-/** Shorthand slots render only for real content: `null`, `false`, `undefined` and `""` emit no wrapper. */
-function filled(node: ReactNode): boolean {
-  return node != null && node !== false && node !== "";
-}
-
 /** Opinionated row with media / title+description / actions shorthand. For other shapes, compose `<Item.Container>`. */
 function ItemRoot({
   media,
@@ -95,20 +91,20 @@ function ItemRoot({
   children,
   ...rest
 }: ItemProps) {
-  const leading = filled(media) ? media : renderIcon(icon);
+  const leading = hasNode(media) ? media : renderIcon(icon);
   return (
     <ItemContainer {...rest}>
-      {filled(leading) ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
-      {filled(title) || filled(description) ? (
+      {hasNode(leading) ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
+      {hasNode(title) || hasNode(description) ? (
         <ItemContent className={classNames?.content}>
-          {filled(title) ? <ItemTitle className={classNames?.title}>{title}</ItemTitle> : null}
-          {filled(description) ? (
+          {hasNode(title) ? <ItemTitle className={classNames?.title}>{title}</ItemTitle> : null}
+          {hasNode(description) ? (
             <ItemDescription className={classNames?.description}>{description}</ItemDescription>
           ) : null}
         </ItemContent>
       ) : null}
       {children}
-      {filled(actions) ? (
+      {hasNode(actions) ? (
         <ItemActions className={classNames?.actions}>{actions}</ItemActions>
       ) : null}
     </ItemContainer>

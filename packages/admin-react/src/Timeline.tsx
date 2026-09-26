@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type TimelineStatus = "default" | "info" | "success" | "warning" | "danger" | "current";
 
@@ -69,13 +70,11 @@ function TimelineItem({
     >
       <span className={cn("timeline-indicator", classNames?.indicator)}>{indicator}</span>
       <div className={cn("timeline-content", classNames?.content)}>
-        {title !== undefined ? (
+        {hasNode(title) ? (
           <div className={cn("timeline-title", classNames?.title)}>{title}</div>
         ) : null}
-        {time !== undefined ? (
-          <div className={cn("timeline-time", classNames?.time)}>{time}</div>
-        ) : null}
-        {description !== undefined ? (
+        {hasNode(time) ? <div className={cn("timeline-time", classNames?.time)}>{time}</div> : null}
+        {hasNode(description) ? (
           <div className={cn("timeline-description", classNames?.description)}>{description}</div>
         ) : null}
         {children}

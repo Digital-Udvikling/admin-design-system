@@ -1,6 +1,9 @@
+"use client";
+
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
 import { formatChord, parseKeys } from "./hotkey-parse";
+import { useApplePlatform } from "./useHotkey";
 
 export interface KbdProps extends Omit<ComponentProps<"span">, "children"> {
   /**
@@ -14,12 +17,13 @@ export interface KbdProps extends Omit<ComponentProps<"span">, "children"> {
 
 /** Keyboard shortcut chips — parsed via `keys`, or a single literal chip via `children`. */
 export function Kbd({ keys, children, className, ...rest }: KbdProps) {
+  const apple = useApplePlatform();
   if (keys != null) {
-    const chord = parseKeys(keys)[0];
+    const chord = parseKeys(keys, apple)[0];
     if (!chord) {
       return null;
     }
-    const parts = formatChord(chord);
+    const parts = formatChord(chord, apple);
     return (
       <span className={cn("kbd-group", className)} {...rest}>
         {parts.map((part, i) => (

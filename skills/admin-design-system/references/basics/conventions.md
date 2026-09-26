@@ -128,7 +128,7 @@ function HelpShortcut({ onOpen }: { onOpen: () => void }) {
 }
 ```
 
-`mod` resolves to `Cmd` on macOS and `Ctrl` elsewhere. Pass an array for alternatives; only the first renders as a chip. `{ enabled: false }` pauses registration without unmounting, and a nullish chord is a no-op, so the hook is safe to call unconditionally.
+`mod` is `⌘` on Apple platforms and `Ctrl` elsewhere. Chips and `aria-keyshortcuts` render the non-Apple labels (`Ctrl`, `Shift`, `Alt`) on the server and switch to `⌘`, `⇧`, `⌥` on hydration. Pass an array for alternatives; only the first renders as a chip. `{ enabled: false }` pauses registration without unmounting, and a nullish chord is a no-op, so the hook is safe to call unconditionally.
 
 Vanilla has no equivalent — bind your own `keydown` listener and use [Kbd](../components/kbd.md) for the chip.
 

@@ -39,10 +39,11 @@ pnpm test           # vitest on admin-react (happy-dom + RTL)
 pnpm lint           # oxlint
 pnpm format         # oxfmt
 pnpm check-docs     # links, anchors, Reference classes/props, tsx type-check, vanilla/React parity
+pnpm check-package  # pack both packages, lint them, import the tarballs; needs pnpm build
 pnpm generate-skill # regenerate skills/ from docs MDX
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, `check-package`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
 
 ## Rendering an example
 

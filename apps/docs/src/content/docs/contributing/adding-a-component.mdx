@@ -129,6 +129,10 @@ Export the component and every public type from `packages/admin-react/src/index.
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 ```
 
+### Server Components
+
+Every export must be importable from a React Server Component. Only the part that calls a hook, creates a context, or creates a function prop (an event handler, or a render function for Base UI) goes in `<Name>.client.tsx` with `"use client"`, as `Button.tsx` renders `ButtonBase` from `Button.client.tsx`. Keep compound assembly (`Object.assign`) and `renderIcon` in the directive-free module: a server import of a `"use client"` module sees opaque references, so attached parts are `undefined`, and a component-reference icon can't cross into a client component. When the root itself is client, the directive-free module attaches the parts to the imported root. `Pagination` is the one exception. `src/server-components.test.ts` checks these rules.
+
 ### Default-omit the default variant and size
 
 Skip the class when the value is the default, since the default look already lives in the base class. So `<Badge>`, `<Badge variant="neutral">`, and `<Badge size="md">` all render the same DOM as the bare `.badge` vanilla markup.

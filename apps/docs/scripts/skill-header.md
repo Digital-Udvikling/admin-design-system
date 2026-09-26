@@ -71,6 +71,10 @@ Component references render at `size="1em"` with `aria-hidden`, so the glyph inh
 
 Vanilla CSS uses the Tabler webfont directly: `<button class="btn btn-primary"><i class="ti ti-plus"></i> Add</button>` (or `_ao-btn _ao-btn-primary` inside an `._ao-admin-root` wrapper).
 
+### Server Components
+
+Every `@aortl/admin-react` component, compound part and `icon={IconPlus}` renders in a React Server Component. Event handlers, the hooks (`useConfirm`, `usePrompt`, `useHotkey`, `useAppShell`) and `Pagination`'s default buttons need a Client Component; a server page passes `Pagination` a `renderItem` that returns links.
+
 ### Tokens (two layers)
 
 1. **Flexoki palette tones** — absolute colors (`--color-blue-600`, `--color-base-50`). Identical in light/dark.

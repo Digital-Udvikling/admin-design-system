@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A `.sidebar` directly in a `<dialog class="dialog drawer">` fills the drawer and hides its collapse toggle, for a vanilla mobile nav drawer. (css)
 - `.app-shell` uses the sidebar layout when a `.sidebar` is a direct child, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
 - Type exports for `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn` and `BrandTileSize`. (react)
+- React Server Component support: stateless components, compound parts and component-reference icons render on the server, and client modules carry `"use client"`. `Pagination`'s default buttons need a Client Component parent; a `renderItem` that returns links works from a server page. (react)
 
 ### Changed
 

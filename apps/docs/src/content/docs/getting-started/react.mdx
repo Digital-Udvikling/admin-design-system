@@ -56,7 +56,7 @@ Admin styles still beat Tailwind's preflight, and your utilities beat admin styl
 Two things that example is doing:
 
 - `<AdminRoot>` is required. Components emit `_ao-`-prefixed class names that only match inside `@scope (._ao-admin-root)`, and `<AdminRoot>` is the `<div>` that opens that scope. Mount it once near the top of your tree: at the app root for a full-page admin app, or around each embedded admin surface inside a host app. It also publishes itself as the portal container, so `Select` and `Tooltip` popups land inside the scope instead of on `document.body`.
-- You supply `'use client'` yourself. The package ships no directive of its own, so under React Server Components every module rendering an interactive component needs it at the top, or must be reached from one that has it. The stylesheet import has no such constraint.
+- It renders in a React Server Component: a server page can use any component, compound parts (`Select.Trigger`) and icon props (`icon={IconPlus}`) included. Event handlers (`onClick`, `onOpenChange`, `onPageChange`) and the hooks (`useConfirm`, `usePrompt`, `useHotkey`, `useAppShell`) need a Client Component. So do `Pagination`'s default buttons; a server page passes a `renderItem` that returns links.
 
 ## `<AdminRoot>` props
 
@@ -79,28 +79,18 @@ A plain `<div className="_ao-admin-root">` opens the scope too, but you write th
 
 ### Next.js (App Router)
 
-Import the stylesheet once in the root layout — a server component, where CSS imports are fine — and render `<AdminRoot>` from a small client wrapper:
-
-```tsx
-// app/providers.tsx
-"use client";
-import { AdminRoot } from "@aortl/admin-react";
-
-export function AdminProviders({ children }: { children: React.ReactNode }) {
-  return <AdminRoot>{children}</AdminRoot>;
-}
-```
+Import the stylesheet once in the root layout and render `<AdminRoot>` there. The layout and pages stay Server Components:
 
 ```tsx
 // app/layout.tsx
 import "@aortl/admin-react/styles.css";
-import { AdminProviders } from "./providers";
+import { AdminRoot } from "@aortl/admin-react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <AdminProviders>{children}</AdminProviders>
+        <AdminRoot>{children}</AdminRoot>
       </body>
     </html>
   );

@@ -69,6 +69,10 @@ In React source you still write the bare name (`cn("btn", className)`); `cn` add
 
 React components wrap Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) for a11y wiring, focus, validation. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
 
+### Server Components
+
+Every export must work in a React Server Component. A module gets `"use client"` only when it calls a hook, creates a context, or creates a function prop (an event handler on any element, or a render function for Base UI). A module that only other `"use client"` modules import needs none. The client part goes in `<Name>.client.tsx` beside the public `<Name>.tsx`. Compound assembly and `renderIcon` stay in the directive-free module: a server import of a `"use client"` module sees opaque references, and a component-reference icon can't cross into a client component. When the root itself is client (`AppShell`, `Sidebar`), the directive-free module attaches the parts to the imported root. `Pagination` is the one exception: its handlers only wrap the consumer's `onPageChange`, and a server parent uses `renderItem`. `src/server-components.test.ts` checks these rules; the build fails if a `"use client"` module doesn't end up as its own `dist/` file with the directive.
+
 ### High-level component + `.Container` escape hatch
 
 When a component has a meaningful container/inner-wrapper distinction in CSS (e.g. `.card` + `.card-body`) AND shorthand props that auto-fill the wrapper:
@@ -171,7 +175,7 @@ Keep: code examples, a11y hooks, version-pinning, override/escape-hatch APIs, no
 
 1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`). If the component might host an icon, lay out the root with flex + gap so a leading `<i>`/`<svg>` works without a wrapper.
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
-3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose classes with `cn` (not bare `clsx`), re-export from `src/index.ts` (component + types).
+3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose classes with `cn` (not bare `clsx`), re-export from `src/index.ts` (component + types). Parts that call hooks or define handlers go in `<Name>.client.tsx` (see [Server Components](#server-components)).
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke test at minimum; interaction tests for controlled state.
 5. `apps/docs/src/content/docs/components/<name>.mdx` — `## Examples` (one `###` + `:::example` per variation), then `## Reference` with `### React` and `### Vanilla` tables; the Vanilla table lists every class the CSS defines. Run what CI runs: `pnpm build && pnpm --filter docs check-docs -- --require-build --strict-coverage`.
 6. `pnpm generate-skill` to regenerate the agent-skill bundle from the new MDX. CI verifies the bundle is in sync via `git diff --exit-code -- skills`, so a forgotten regen turns into a red build.

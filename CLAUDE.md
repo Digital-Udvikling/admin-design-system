@@ -44,6 +44,7 @@ pnpm lint:fix
 pnpm format          # oxfmt (NOT prettier)
 pnpm format:check
 pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check, vanilla/React class parity
+pnpm check-a11y      # axe (WCAG 2.2 A/AA) on every example, vanilla + React × light + dark, closed and with overlays open; needs pnpm build
 pnpm check-package   # pack both packages: publint, attw, install the tarballs, import (plain + react-server), resolve CSS subpaths; needs pnpm build
 pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm render components/buttons.mdx:42   # PNG of an example: vanilla + React × light + dark (--help)
@@ -51,7 +52,7 @@ pnpm visual-diff <base-dist> <head-dist>  # screenshot every example in two docs
 pnpm clean
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-package`, the skill drift check (`generate-skill` + `git diff --exit-code -- skills`), `check-docs --require-build --strict-coverage`, `check-types`, `test` — replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, `check-package`, the skill drift check (`generate-skill` + `git diff --exit-code -- skills`), `check-docs --require-build --strict-coverage`, `check-a11y`, `check-types`, `test` — replicate locally before pushing.
 
 ## Architecture
 

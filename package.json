@@ -10,6 +10,7 @@
     "dev": "pnpm --filter docs dev",
     "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
     "check-docs": "pnpm --filter docs check-docs",
+    "check-a11y": "pnpm --filter docs check-a11y",
     "check-package": "node scripts/check-package/index.mjs",
     "test": "pnpm -r --filter='@aortl/*' run test",
     "generate-skill": "pnpm --filter docs generate-skill",

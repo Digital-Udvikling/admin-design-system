@@ -39,11 +39,12 @@ pnpm test           # vitest on admin-react (happy-dom + RTL)
 pnpm lint           # oxlint
 pnpm format         # oxfmt
 pnpm check-docs     # links, anchors, Reference classes/props, tsx type-check, vanilla/React parity
+pnpm check-a11y     # axe on every example, overlays opened; needs pnpm build
 pnpm check-package  # pack both packages, lint them, import the tarballs; needs pnpm build
 pnpm generate-skill # regenerate skills/ from docs MDX
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-package`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, `check-package`, `check-docs`, `check-a11y`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
 
 ## Rendering an example
 
@@ -69,6 +70,17 @@ pnpm visual-diff ../base/apps/docs/dist apps/docs/dist --out /tmp/visual-diff
 ```
 
 Compare captures made with the same Chromium; a different build shifts antialiasing and reports every cell as changed.
+
+## Accessibility check
+
+`pnpm check-a11y` runs axe-core with the WCAG 2.2 A and AA rules over every example preview in the built docs, vanilla and React, light and dark. Each preview is scanned closed, then once per overlay: vanilla `<dialog>`s and `[popover]`s are opened from script, `<details>` expanded, CSS tooltips revealed, and React popup triggers clicked. Starlight's chrome is not scanned. Failures print as `file.mdx:line`, so `pnpm render` can open the same example.
+
+```bash
+pnpm check-a11y                         # every page
+pnpm check-a11y components/forms       # site paths starting with this
+```
+
+The landmark rules and `region` are off: an example is a fragment inside the docs page's `<main>`, so an app-shell `<main>` nests in it and repeated examples repeat their landmark labels. Give a bare control in an example an `aria-label` rather than silencing the rule. The `IGNORED` list in `scripts/check-a11y.mjs` holds the few nodes axe misreads, each with its reason.
 
 ## Releasing
 

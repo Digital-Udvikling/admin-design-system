@@ -47,6 +47,9 @@ jobs:
       - name: Docs links + class-name drift
         run: pnpm --filter docs check-docs -- --require-build --strict-coverage
 
+      - name: Accessibility (axe on every example)
+        run: pnpm check-a11y
+
       - name: Type check (tsc / astro)
         run: pnpm check-types
 

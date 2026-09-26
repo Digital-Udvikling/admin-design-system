@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 // Screenshot every docs example in two built sites and report which changed. See `--help`.
 
-import { createServer } from "node:http";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
-import { dirname, extname, join, relative, resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import pixelmatch from "pixelmatch";
 import { chromium } from "playwright-core";
 import { PNG } from "pngjs";
 import { BASE_URL } from "./lib/bundle.mjs";
-import { MIME, findChrome, pool } from "./lib/browser.mjs";
-import { collectExamples, loadPages } from "./lib/examples.mjs";
+import { findChrome, pool } from "./lib/browser.mjs";
+import {
+  THEMES,
+  examplePages,
+  openPage,
+  serveDist,
+  showVariant,
+  sourceLabels,
+  tagExamples,
+  themeContexts,
+} from "./lib/site.mjs";
 
 const HELP = `Usage: pnpm visual-diff <base-dist> <head-dist> [--out <dir>]
        pnpm visual-diff capture <dist> <dir>
@@ -69,101 +69,7 @@ if (!(concurrency > 0)) fail("--concurrency must be a positive number");
 
 // ---------------------------------------------------------------- capture
 
-const THEMES = ["light", "dark"];
 const CELL_ORDER = ["vanilla-light", "vanilla-dark", "react-light", "react-dark"];
-const VIEWPORT = { width: 1280, height: 900 };
-
-/** Serves `dist` at BASE_URL on a free localhost port. */
-function serveDist(dist) {
-  const server = createServer((req, res) => {
-    const path = decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname);
-    if (!path.startsWith(BASE_URL)) return res.writeHead(404).end();
-    let file = join(dist, path.slice(BASE_URL.length));
-    if (existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
-    if (!existsSync(file)) return res.writeHead(404).end();
-    res
-      .writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" })
-      .end(readFileSync(file));
-  });
-  return new Promise((ok) =>
-    server.listen(0, "127.0.0.1", () => {
-      const { port } = /** @type {import("node:net").AddressInfo} */ (server.address());
-      ok({ origin: `http://127.0.0.1:${port}`, close: () => server.close() });
-    }),
-  );
-}
-
-/** Site paths (`components/buttons/`) of every page in `dist` that holds an example. */
-function examplePages(dist) {
-  const out = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir).sort()) {
-      const full = join(dir, entry);
-      if (statSync(full).isDirectory()) walk(full);
-      else if (
-        entry === "index.html" &&
-        readFileSync(full, "utf8").includes('class="not-content example-block')
-      ) {
-        out.push(relative(dist, dirname(full)).replaceAll("\\", "/").replace(/(.)$/, "$1/"));
-      }
-    }
-  };
-  walk(dist);
-  return out;
-}
-
-/**
- * Tags every example on the page and lists its cells. Runs in the page. The id
- * is `<heading id>/<n>`, the example's position under the nearest heading above
- * it, so an edit elsewhere on the page doesn't renumber it.
- */
-function tagExamples() {
-  const out = [];
-  const seen = new Map();
-  let heading = "top";
-  let index = 0;
-  for (const el of document.querySelectorAll(
-    ".sl-markdown-content :is(h2, h3, h4)[id], .example-block",
-  )) {
-    if (!el.classList.contains("example-block")) {
-      heading = el.id;
-      continue;
-    }
-    const n = seen.get(heading) ?? 0;
-    seen.set(heading, n + 1);
-    const preview = el.querySelector(".example-preview");
-    if (preview === null) continue;
-    preview.dataset.vdIndex = String(index);
-    const split = preview.querySelectorAll(":scope > .preview-variant");
-    const variants =
-      split.length > 0
-        ? [...split].map((v) => (v.dataset.variant === "react" ? "react" : "vanilla"))
-        : [preview.querySelector("astro-island, ._ao-admin-root") ? "react" : "vanilla"];
-    out.push({ key: `${heading}/${n}`, index, variants });
-    index++;
-  }
-  return out;
-}
-
-/** Shows `variant` in every split preview. Runs in the page. */
-function showVariant(variant) {
-  const want = variant === "react" ? "react" : "html";
-  for (const el of document.querySelectorAll(".example-preview > .preview-variant")) {
-    el.hidden = el.dataset.variant !== want;
-  }
-}
-
-async function settle(page) {
-  // React previews hydrate (`client:load`); islands drop `ssr` once they have.
-  await page
-    .waitForFunction(() => document.querySelector("astro-island[ssr]") === null, null, {
-      timeout: 10_000,
-    })
-    .catch(() => {});
-  await page.evaluate(() =>
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 5000))]),
-  );
-}
 
 /**
  * Captures every example cell of the site at `dist` into `dir`.
@@ -184,38 +90,14 @@ async function capture(dist, dir) {
   /** @type {Manifest} */
   const manifest = { cells: {}, errors: [], warnings: [] };
   try {
-    const contexts = Object.fromEntries(
-      await Promise.all(
-        THEMES.map(async (theme) => {
-          const context = await browser.newContext({
-            viewport: VIEWPORT,
-            colorScheme: theme,
-            reducedMotion: "reduce",
-          });
-          await context.addInitScript((t) => {
-            // Sandboxed iframes in examples (dialog embeds) deny storage access.
-            try {
-              localStorage.setItem("starlight-theme", t);
-            } catch {}
-          }, theme);
-          return [theme, context];
-        }),
-      ),
-    );
+    const contexts = await themeContexts(browser);
     const tasks = pages.flatMap((path) =>
       THEMES.map((theme) => async () => {
         const page = await contexts[theme].newPage();
         const pageErrors = [];
         page.on("pageerror", (e) => pageErrors.push(e.message));
         try {
-          const res = await page.goto(`${server.origin}${BASE_URL}${path}`, {
-            waitUntil: "networkidle",
-          });
-          if (!res?.ok()) throw new Error(`HTTP ${res?.status()}`);
-          await page.evaluate((t) => (document.documentElement.dataset.theme = t), theme);
-          // Starlight's fixed header would overlay any example scrolled under it.
-          await page.addStyleTag({ content: "header.header { position: absolute !important; }" });
-          await settle(page);
+          await openPage(page, `${server.origin}${BASE_URL}${path}`, theme);
           const examples = await page.evaluate(tagExamples);
           for (const variant of ["vanilla", "react"]) {
             const mine = examples.filter((e) => e.variants.includes(variant));
@@ -225,7 +107,7 @@ async function capture(dist, dir) {
               const id = `${path}#${ex.key}`;
               const cell = `${variant}-${theme}`;
               const file = `${slug(id)}.${cell}.png`;
-              const target = page.locator(`[data-vd-index="${ex.index}"]`);
+              const target = page.locator(`[data-example-index="${ex.index}"]`);
               await target.screenshot({
                 path: join(dir, file),
                 animations: "disabled",
@@ -305,18 +187,6 @@ function diffCell(beforeFile, afterFile) {
   };
 }
 
-/** `components/buttons/#variants/0` → `components/buttons.mdx:42`, from this checkout's MDX. */
-function sourceLabels() {
-  const { pages } = loadPages();
-  const byPage = new Map();
-  for (const ex of collectExamples(pages)) {
-    const path = ex.rel.replace(/(^|\/)index\.mdx$/, "$1").replace(/\.mdx$/, "/");
-    if (!byPage.has(path)) byPage.set(path, []);
-    byPage.get(path).push(`${ex.rel}:${ex.line}`);
-  }
-  return (entry) => byPage.get(entry.page)?.[entry.index] ?? null;
-}
-
 function compare(baseDir, headDir, outDir) {
   const read = (dir) => {
     const file = join(dir, "manifest.json");
@@ -327,7 +197,8 @@ function compare(baseDir, headDir, outDir) {
   const head = read(headDir);
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(join(outDir, "cells"), { recursive: true });
-  const label = sourceLabels();
+  const labels = sourceLabels();
+  const label = (entry) => labels(entry.page, entry.index);
 
   const changed = [];
   const added = [];

@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Icon-only menu triggers: a `btn-square` trigger that holds an icon drops the chevron, and `Menu.Trigger` takes an `icon` prop. (both)
 - `--chart-legend-gap` sets the space between a chart and its legend: `0.5rem` below it, or `0.5em` beside an inline chart. Set it to `0` on a chart root laid out as a flex row so a side legend stays centred. (css)
 - `Timeline.Item` with `status="current"` sets `aria-current="step"`, which an explicit `aria-current` overrides. (react)
+- `btn-danger-ghost` (`Button variant="danger-ghost"`), a low-emphasis destructive button with danger text on a transparent fill and border and a `danger-muted` fill on hover, and `menu-item-danger` (`Menu.Item danger`) for destructive menu items. (both)
+- `size` on `Select.Trigger`, `Textarea` and `FileInput`, as on `Button` and `NumberInput`, and `icon` on `Select.Trigger` (before the value) and `Accordion.Summary`, rendered at `1em` with `aria-hidden`. `IconProp`, `IconComponent`, `IconRenderProps` and `renderIcon` are exported. (react)
+- `table-sort`, a text button for sortable headers whose indicator follows the cell's `aria-sort`, stays visible in forced-colors mode and keeps the plain header's height and type. React's `Table.HeaderCell` takes `sort` (`"ascending" | "descending" | "none"`) and `onSort` and sets `aria-sort` for you. (both)
+- `table-cell-actions` (`Table.Cell actions`), a trailing row-actions column that shrinks to its controls, puts 0.25rem between them and drops block padding so a `btn-sm` row is no taller than a text row, and `table-scroll` (`Table.Scroll`), an opt-in scroll region for wide tables that also serves as the scrolling ancestor `table-sticky` and `table-pin-col` need. (both)
+- `[data-selected]` on an `.item` fills it with the table-row selection tint and sets its description in the text colour (`Highlight` / `HighlightText` in forced-colors mode); `Item` and `Item.Container` take a `selected` prop, and two adjacent selected items keep a strong divider between them. (both)
+- `delay` and `closeDelay` on `Tooltip` for per-tooltip timing; when unset, a surrounding `Tooltip.Provider`'s values apply. (react)
+- `Dialog` and `Drawer` focus the first descendant marked `data-autofocus` each time they open, since React's `autoFocus` fires at mount while the dialog is still closed. (react)
+- A sidebar group that holds the current page highlights its trigger while the group is closed or the rail is collapsed, and a navbar dropdown whose menu holds a `menu-item` with `aria-current="page"` highlights its trigger, and `menu-item[aria-current="page"]` gets the selected fill in the open menu (`Highlight` in forced-colors mode). `<Navbar.Dropdown>` takes `active` (sets `data-active` on the trigger, for a page in the section that isn't one of its items), `icon` and `classNames` (`trigger`, `popup`), and `.app-shell` switches to the sidebar layout when a `.sidebar` is a direct child, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
+- `.prose` styles a raw `<kbd>` as the key chip, and GFM task lists, whose checkbox replaces the bullet and hangs in the bullet gutter so wrapped lines line up with the first. (css)
+- Vanilla tab panels match `data-value` `1` to `12` (was `1` to `6`). (css)
+- A `.sidebar` placed directly in a `<dialog class="dialog drawer">` fills the drawer at the sidebar rail width (capped at 80vw) and hides its collapse toggle, so a vanilla app shell can open its nav as a drawer with invoker commands below 48rem, where a direct-child sidebar is hidden. (css)
 
 ### Changed
 
@@ -40,6 +51,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - At the first or last page, `Pagination` previous/next set `aria-disabled="true"` without native `disabled`, so they stay focusable and keyboard focus stays on the control; tests that assert `toBeDisabled()` should assert `aria-disabled` instead. Built-in chevrons and custom `previousIcon`/`nextIcon` render at `1em` (14px at the default size, was 16px), as in the vanilla bundle. (react)
 - Sidebar rows have one height whatever they contain: items and group triggers are 28px, sub-items 24px. Sub-items are indented 1.5rem so their text lines up with the parent label, and `.sidebar-header` has 1rem side padding. (css)
 - The neutral `badge` has a `border` edge (was transparent), so it stays visible on zebra bands and card fills; `badge-primary` takes a border in its fill colour. (css)
+- Menu rows are 28px whatever they hold (icon, check indicator or `kbd`), with a 20px line and the leading icon or check on the first line of a wrapped label, and select options match (were 32px). The menu popup caps at 20rem so long labels wrap, including unbreakable IDs and hashes, and where anchor positioning is supported it is at least as wide as its trigger. The select popup caps at `max(20rem, trigger width)`, and long option labels wrap anywhere. (css)
+- Field label, description and error share a 16px line height (the label was 14px, help text 19.5px), with 20px for a `field-row` label, and `field-row` uses a 0.5rem gap beside a checkbox or radio and 0.75rem beside a switch. Wrapped rows in a horizontal `.radio-group` are 0.5rem apart (was 1rem), as in the vertical group, and the number input field has tighter inline padding (8/6/10px at md/sm/lg), so narrow quantity fields no longer clip the last digit. (css)
+- The `progress` and `.chart-stack` tracks use the `border` colour instead of `surface-strong`, so the whole track shows on cards, and indeterminate `progress` slides a solid segment instead of a soft gradient. (css)
+- A `link` inside an alert thickens its underline on hover instead of fading to 85% opacity. (css)
+- `card-description` sits 8px below a `card-title` or `card-header` (was 12px), so descriptions line up across cards with and without a toolbar; compact cards keep their 8px gap. (css)
+- Vertical bar charts draw a 1px `border` baseline under each column with square bottom corners, so a zero value is visible. `BarChart.Bar` puts the datum `title` on the `.chart-bar` row instead of the fill, so the label, track and value all show the hover read-out and zero-value bars have a hover target. (both)
+- Table rows whose link has `aria-current` tint as selected, so master-detail rows need only that attribute. (css)
+- `item-media` icons scale with the row size (`1rem` in `item-sm`, `1.5rem` in `item-lg`), and `AvatarGroup` `size` sets the default size of the `Avatar`s inside it; an explicit `size` on an `Avatar` still wins. (both)
+- Accordion summary rows are 36px (was 44px), with `0.75rem` inline and `0.5rem` block padding, and content pads `0.75rem`, the inset items and tables use. Open and close take 150ms. (css)
+- Tooltip bubbles sit on whole pixels (24px at md, 20px at sm, plus 16px per extra line) and use `text-wrap: pretty`, so multi-line bubbles hug their text. (css)
+- `.drawer` is bordered only on the edge facing the page, like `.sidebar-drawer`. (css)
+- Active sidebar sub-items tint their `.sidebar-icon` like active items, and `<Sidebar.SubItem>` wraps its children in `<Sidebar.Label>`, so long sub-items truncate like items; `classNames` gains a `label` slot. (both)
+- `.container` side padding is `1rem` at every width (was `1.5rem` from 48rem up), the navbar and footer gutter, so page content lines up with the brand and footer text. (css)
+- `.prose` tables match `.table`: 6px block padding (33px rows, was 37px), a medium-weight header on the `surface-stripe` wash with a strong divider, and no divider under the last body or footer row. These rules apply only to markdown tables (`table:not(.table)`), so a `.table` inside `.prose` keeps its own styling. The block after a `.prose` heading drops its top margin, so the gap below a heading is 8px (was 12px, and 24px for a subheading directly under a heading). (css)
+- The em-dash for an empty property list value (`property-list-value-empty`) is muted. (css)
+
+### Deprecated
+
+- `triggerSize` on `Select.Trigger`, `textareaSize` on `Textarea` and `inputSize` on `FileInput`, in favour of `size`. They still work, and `size` wins when both are set. (react)
 
 ### Fixed
 
@@ -86,6 +116,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A controlled `<Sidebar.Collapsible open>` no longer opens when the parent ignores the change, and no longer repeats `onOpenChange` for updates that come from the `open` prop. (react)
 - In `.prose`, `a.btn` keeps its button colour, radius and no underline instead of taking the link treatment, a `.code-block` keeps its default wrapping and `code-block-nowrap` works, and table cells respect the `align` attribute markdown emits for `| --: |` / `| :-: |` columns. (css)
 - An icon in `item-media` aligns with the first line of a wrapping title instead of the middle of the block; avatar media stays centred. A badge after the text of a `card-title` keeps an 8px gap, and `dialog-description` sits 8px under the title, as on cards. (css)
+- The `indicator` auto-offset on a `card` anchor is `4px` (was `6px`), so a corner item sits on the rounded corner instead of inside it. (css)
+- A single `kbd` directly inside a `menu-item` is pushed to the row end like a `kbd-group`, and button-styled menu triggers keep the `.btn` gap for their size (8px at md, 10px at lg) instead of 6px. (css)
+- The dialog close icon renders at 16px whether it is the default X, an `icon` prop or a vanilla `<i class="ti ti-x">`. (both)
+- A checkbox, radio, switch or badge in a table cell no longer makes its row taller than a plain row (a small badge in a compact table), avatars centre on the row, and vanilla and React footer rows match. (css)
+- In `.prose`, inline `<code>` chips keep their border and padding on both halves when they wrap across lines, and `<th>` row headers in a table body are medium weight in both bundles (`admin.css` rendered them bold and the scoped bundle regular). (css)
+- The switch thumb, accordion open and close, and the mobile sidebar drawer no longer animate under `prefers-reduced-motion: reduce`. (css)
 
 ## [0.21.0] - 2026-09-25
 

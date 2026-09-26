@@ -62,7 +62,9 @@ CI runs `lint`, `format:check`, `build`, `check-package`, the skill drift check 
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
 
-React props mirror it: `variant` for mutually exclusive looks (usually a tone), `size` for `sm`/`md`/`lg`, a boolean for one combinable modifier (`compact`, `bordered`, `soft`, `square`), and another enum only for a modifier with three or more levels (`Table` `density`). Position props (`side`, `align`, `orientation`) use Base UI / ARIA values. Link-like components take an element-only `render` (via the directive-free `renderAs` in `src/render.ts`) so consumers pass a router link; merge refs with `mergeRefs` from `src/merge-refs.ts`.
+React props mirror it: `variant` for mutually exclusive looks (usually a tone), `size` for `sm`/`md`/`lg`, a boolean for one combinable modifier (`compact`, `bordered`, `soft`, `square`), and another enum only for a modifier with three or more levels (`Table` `density`). Position props (`side`, `align`, `orientation`) use Base UI / ARIA values; `current` marks the current page (`aria-current`). Form controls' `variant` is a look (`bordered` / `ghost`); invalid is a state (`aria-invalid`, `:user-invalid`, an invalid `Field`), never a variant. Link-like components take an element-only `render` (via the directive-free `renderAs` in `src/render.ts`) so consumers pass a router link; merge refs with `mergeRefs` from `src/merge-refs.ts`.
+
+Custom properties a consumer may set are `--<component>-*` and documented on the page; plumbing between admin's own rules is `--_<component>-*` and outside semver. `check-docs --strict-coverage` fails on a public one no page mentions. `apps/docs/src/content/docs/getting-started/stability.mdx` states what semver covers.
 
 Two output forms ship from one source:
 

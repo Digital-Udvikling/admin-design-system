@@ -113,6 +113,10 @@ Admin users run current browsers — there is no legacy budget. Reach for modern
 
 What the system itself builds on, so you can match it: `<dialog>` + `showModal()`, the `popover` attribute with `anchor-name` / `position-anchor`, `<details>` + `::details-content`, `:has()`, `field-sizing: content`, `@starting-style` with `transition-behavior: allow-discrete`, `subgrid`, `text-wrap: balance`, `light-dark()` and `color-mix()`. Don't infer support for anything beyond what a component's reference page shows.
 
+### Stability
+
+Class names, React props and exports, token names, documented custom properties and the package entry points are semver API; token values and pixel metrics can change in a minor. Custom properties that start with `--_` are internal: never set or read them. Import CSS only through the named entry points (`admin.css`, `theme.css`, `components.css`, `fonts.css`, `@aortl/admin-react/styles.css`), never a path under `src/` or `dist/`. See [Stability](references/getting-started/stability.md).
+
 ### Charts
 
 Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (vanilla `.chart-bars` / `.chart-stack` / `.chart-donut`). For dense inline micro-viz and dashboard cards; no axes, ticks, or gridlines. Driven by inline custom properties, never `data-*`; in React the primary API is the `data` prop. See [Charts](references/components/charts.md) for the full API.

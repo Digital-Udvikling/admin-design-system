@@ -91,6 +91,13 @@
     @apply text-sm text-text-muted;
   }
 
+  /* Title and description read as one unit: 8px apart, closer than the body gap.
+     The same offset after a header clears the toolbar's overhang and keeps
+     descriptions level across a row of cards with and without toolbars. */
+  :is(.card-title, .card-header) + .card-description {
+    @apply -mt-1;
+  }
+
   .card-actions {
     @apply flex flex-wrap items-center gap-2 mt-auto pt-2;
   }
@@ -107,6 +114,11 @@
 
   .card-compact .card-body {
     @apply p-3 gap-2;
+  }
+
+  /* The compact body gap is already 8px. */
+  .card-compact :is(.card-title, .card-header) + .card-description {
+    @apply mt-0;
   }
 
   .card-bordered {

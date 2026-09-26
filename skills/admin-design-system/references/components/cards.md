@@ -284,10 +284,11 @@
 
 ```html
 <div class="card card-bordered">
-  <div class="card-body" style="border-bottom: 1px solid var(--color-border)">
+  <div class="card-body">
     <h3 class="card-title">Connected</h3>
     <p class="card-description">Last sync 3 minutes ago.</p>
   </div>
+  <hr class="separator" />
   <div class="card-body">
     <div class="card-actions">
       <button class="btn btn-ghost btn-sm">Re-sync now</button>
@@ -299,10 +300,11 @@
 
 ```tsx
 <Card.Container bordered>
-  <Card.Body style={{ borderBottom: "1px solid var(--color-border)" }}>
+  <Card.Body>
     <Card.Title>Connected</Card.Title>
     <Card.Description>Last sync 3 minutes ago.</Card.Description>
   </Card.Body>
+  <Separator />
   <Card.Body>
     <Card.Actions>
       <Button variant="ghost" size="sm">
@@ -395,7 +397,7 @@
 
 `Card` always wraps its children in a `Card.Body` and renders the shorthand props around them: media above, then title (with `icon`, plus `toolbar` in a `Card.Header` when present), description, children, actions. A shorthand prop that is `null`, `false` or `""` renders nothing, so `actions={canEdit && <Button />}` leaves no empty row; `icon` needs a `title`. `classNames` covers `media`, `body`, `header`, `toolbar`, `title`, `description`, `actions`.
 
-`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies, a custom divider, a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body.
+`variant`, `bordered` and `compact` live on the root, so they work on [`Card.Container`](../basics/conventions.md#container-escape-hatch) too — which is the form to reach for when the layout doesn't fit one body: two bodies split by a [separator](separator.md#splitting-card-sections), a media header, or a scroll region. `Card.Title` keeps its `icon` prop there, and `Card.Header` + `Card.Toolbar` are available for building the header row by hand. `scroll` is `Card.Container`-only: it pins a direct-child header and actions, and `Card` nests those inside its body.
 
 `toolbar` controls are usually [square icon buttons](buttons.md#icon-only) with an `aria-label`. Plus native `<div>` attributes.
 
@@ -408,7 +410,7 @@
 | `card-title`                                            | `text-lg` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                       |
 | `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                       |
 | `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1.25rem` icon |
-| `card-description`                                      | `text-sm` muted                                                                                                                                     |
+| `card-description`                                      | `text-sm` muted; `0.5rem` below a `card-title` or `card-header`                                                                                     |
 | `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                            |
 | `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                    |
 | `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                       |

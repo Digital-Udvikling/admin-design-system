@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Link } from "./Link";
+import { RouterLink } from "./test-setup";
 
 describe("Link", () => {
   it("renders", () => {
@@ -38,5 +39,17 @@ describe("Link", () => {
     const el = screen.getByRole("link", { name: "Docs" });
     expect(el).toHaveAttribute("target", "_self");
     expect(el).toHaveAttribute("rel", "nofollow");
+  });
+
+  it("render: link styling on a router link, keeping external defaults", () => {
+    render(
+      <Link external render={<RouterLink href="https://example.com" />}>
+        Docs
+      </Link>,
+    );
+    const link = screen.getByRole("link", { name: /Docs/ });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAdminClass("link", "link-external");
+    expect(link).toHaveAttribute("target", "_blank");
   });
 });

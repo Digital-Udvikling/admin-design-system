@@ -15,12 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
+- **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
 - Dark `--color-danger`, `--color-info`, `--color-link` and `--color-text-muted` and light `--color-success` move one step to meet 4.5:1 text contrast on cards and tints, dark `--color-code-surface` is base-850 so code blocks show inside cards, and `--color-system-accent-content` picks white or black from the accent's lightness. (css)
 - Buttons use the `rounded-md` radius, labels don't wrap except in full-width buttons and rows too narrow for them, and `btn-danger` keeps its red fill on hover. (css)
 - `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
+- The neutral `badge` has a `border` edge, badges keep their content width in flex columns and grids, and a badge in a `btn` doesn't make it taller. (css)
 - The vanilla tooltip sizes to its content up to 20rem, is `display: none` while hidden, opens on keyboard focus but not on click, and paints on `--z-popup`. Where anchor positioning is supported it escapes overflow clipping and flips to stay in the viewport. (css)
 
 ### Removed
@@ -33,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
 - Hotkey chips in `Kbd`, `Button`, `ToggleButton` and `Menu.Item` hydrate without a mismatch on Apple devices: they render the server's `Ctrl`, `Shift` and `Alt` labels and switch to `⌘`, `⇧` and `⌥` after hydration. (react)
 - A `loading` `Button` sets `aria-disabled` and keeps keyboard focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
+- Breadcrumb items with a leading icon line up with their siblings, and `Breadcrumbs.Item` icons render at `1em`. (both)
 
 ## [0.21.0] - 2026-09-25
 

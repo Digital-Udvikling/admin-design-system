@@ -1,15 +1,28 @@
 @layer components {
+  /* `w-fit` stops a flex-column or grid parent from stretching the pill. The border keeps
+     the neutral pill visible on a stripe or card fill that matches surface-strong. */
   .badge {
     @apply inline-flex items-center justify-center gap-1
-           px-2 h-5 rounded-full
+           w-fit px-2 h-5 rounded-full
            text-xs font-medium leading-none whitespace-nowrap
-           border border-transparent
+           border border-border
            bg-surface-strong text-text;
+  }
+
+  /* A badge that is itself a link (a filter chip, React `render`): underline on hover. */
+  .badge:any-link {
+    @apply hover:underline
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
   /* Keep a status dot or leading glyph round when the label is long. */
   .badge > :is(i, svg) {
     flex-shrink: 0;
+  }
+
+  /* Overhangs the button's padding instead of growing it past its line box. */
+  .btn > .badge {
+    margin-block: -0.25rem;
   }
 
   /* Variants — solid status fills matching the alert palette; bare `.badge` is the neutral look. */
@@ -31,22 +44,26 @@
 
   /* Solid neutral — high-contrast ink fill (counts on tabs, etc.) */
   .badge-primary {
-    @apply bg-primary text-primary-content;
+    @apply bg-primary text-primary-content border-primary;
   }
 
-  /* Soft — composable modifier, pairs with a variant class; bare `.badge` is already the soft neutral. */
+  /* Soft — composable modifier, pairs with a variant class; bare `.badge` is already the soft neutral.
+     Accent text is pulled 20% toward the ink so small text on the tint clears 4.5:1 in both modes. */
   .badge-soft.badge-info {
-    @apply bg-info-muted text-info border-info-muted;
+    @apply bg-info-muted border-info-muted;
+    color: color-mix(in oklab, var(--color-info) 80%, var(--color-text));
   }
   .badge-soft.badge-success {
-    @apply bg-success-muted text-success border-success-muted;
+    @apply bg-success-muted border-success-muted;
+    color: color-mix(in oklab, var(--color-success) 80%, var(--color-text));
   }
   /* Yellow accent text fails contrast on the tinted surface — same constraint as stat-card. */
   .badge-soft.badge-warning {
     @apply bg-warning-muted text-text border-warning-muted;
   }
   .badge-soft.badge-danger {
-    @apply bg-danger-muted text-danger border-danger-muted;
+    @apply bg-danger-muted border-danger-muted;
+    color: color-mix(in oklab, var(--color-danger) 80%, var(--color-text));
   }
   .badge-soft.badge-primary {
     @apply bg-primary-muted text-text border-primary-muted;
@@ -58,10 +75,17 @@
            size-3.5 -mr-1 rounded-full
            text-inherit cursor-pointer
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus;
+           focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-focus;
   }
   .badge-remove:hover {
     background-color: color-mix(in oklab, currentColor 15%, transparent);
+  }
+  /* The focus token equals the info fill and is weak on the others, so solid hosts ring in their ink. */
+  .badge:is(.badge-info, .badge-success, .badge-warning, .badge-danger, .badge-primary):not(
+      .badge-soft
+    )
+    .badge-remove {
+    @apply focus-visible:outline-current;
   }
   .badge-sm .badge-remove {
     @apply size-3 -mr-0.5;

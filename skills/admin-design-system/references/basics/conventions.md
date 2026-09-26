@@ -10,6 +10,7 @@
 - [className](#classname)
 - [classNames](#classnames)
 - [.Container escape hatch](#container-escape-hatch)
+- [render](#render)
 - [Hotkeys](#hotkeys)
 - [Layout](#layout)
 
@@ -112,6 +113,22 @@ Components not listed don't take it: leaves (`Button`, `Badge`) carry `className
 Where a component has shorthand props that auto-fill an inner wrapper, the default export is the opinionated form and `.Container` is the bare primitive — the root element and nothing else, for layouts the shorthand can't express (multiple bodies, media headers, custom dividers).
 
 `BarChart`, `Card`, `Dialog`, `Drawer`, `Field` and `Item` expose one. In vanilla there is no distinction: you are always composing the bare classes.
+
+## `render`
+
+Link-like components render an `<a>` by default. Pass `render` with an element to render onto it instead, such as your router's link. The component's classes, `aria-current` and children go onto that element, its own `className` is appended, and its other props win.
+
+```tsx
+import NextLink from "next/link";
+
+<Sidebar.Item current icon={IconReceipt} render={<NextLink href="/orders" />}>
+  Orders
+</Sidebar.Item>;
+```
+
+`Navbar.Item`, `Sidebar.Item`, `Sidebar.SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container` and `Item` / `Item.Container` take an element, so they work from a Server Component. `Button` and `Menu.Item` get `render` from Base UI, which also accepts a function; a `Button` rendered as an anchor needs `nativeButton={false}` (see [Buttons](../components/buttons.md)).
+
+Put the content in the admin component's children and leave the element empty. Don't hard-code `_ao-` classes on your own link: the prefix belongs to the scoped bundle.
 
 ## Hotkeys
 

@@ -123,15 +123,16 @@
 | `Breadcrumbs.Item` | `href`       | `string`                                      | —              |
 | `Breadcrumbs.Item` | `current`    | `boolean`                                     | `false`        |
 | `Breadcrumbs.Item` | `icon`       | [`IconProp`](../basics/conventions.md#icons) | —              |
+| `Breadcrumbs.Item` | `render`     | `ReactElement`                                | —              |
 
-The root inserts a `Separator` between every pair of children, so you never write one by hand — pass `separator` to change the glyph. Omitting `href` renders a `<span>`, correct for the last entry; `current` adds `aria-current="page"` independently, so set both on an entry that is a link and the current page. `Item` takes the native attributes of whichever element it renders.
+The root inserts a `Separator` between every pair of children, so you never write one by hand; pass `separator` to change the glyph. Omitting `href` renders a `<span>`, correct for the last entry; `render` renders the link onto your own element, such as a router link (see [Conventions › `render`](../basics/conventions.md#render)). `current` adds `aria-current="page"` independently, so set both on an entry that is a link and the current page. `Item` takes the native attributes of whichever element it renders.
 
 ### Vanilla
 
-| Class                  | Effect                                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| `breadcrumbs`          | Root `<nav>`: `text-sm`, muted. Its direct `<ol>` becomes an inline-flex wrapping row, `0.375rem` gap |
-| `breadcrumb-item`      | One entry, `0.375rem` gap for a leading icon, muted until hover                                       |
-| `breadcrumb-separator` | Renders `/` when empty; a child `<i>`/`<svg>` replaces it, sized `0.875rem`                           |
+| Class                  | Effect                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `breadcrumbs`          | Root `<nav>`: `text-sm`, muted. Its direct `<ol>` becomes a wrapping flex row, `0.375rem` gap |
+| `breadcrumb-item`      | One entry, `0.375rem` gap for a leading icon, muted until hover                               |
+| `breadcrumb-separator` | Renders `/` when empty; a child `<i>`/`<svg>` replaces it, sized `0.875rem`                   |
 
-Write `aria-label="Breadcrumb"` on the `<nav>`, `aria-current="page"` on the final entry — which also turns off its pointer events — and `role="presentation" aria-hidden="true"` on each separator so it stays out of the list semantics. Long trails wrap onto a second line.
+Write `aria-label="Breadcrumb"` on the `<nav>`, `aria-current="page"` on the final entry — which also turns off its pointer events — and `role="presentation" aria-hidden="true"` on each separator so it stays out of the list semantics. Long trails wrap onto a second line; an unbreakable ID or hash breaks inside its crumb.

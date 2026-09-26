@@ -18,9 +18,21 @@
            text-text-muted bg-transparent
            border-0 cursor-pointer select-none
            transition-colors duration-150
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
-           hover:text-text
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+
+  /* :where() holds the hover at `.tabs .tab` specificity, so selected colors still win. */
+  .tabs
+    .tab:where(
+      :not(:disabled, [data-disabled], [aria-disabled="true"], .tab-input:disabled + .tab)
+    ) {
+    @apply hover:text-text;
+  }
+
+  /* Base UI keeps disabled tabs focusable, so they carry data-disabled, never :disabled. */
+  .tabs .tab:is(:disabled, [data-disabled], [aria-disabled="true"]),
+  .tabs .tab-input:disabled + .tab {
+    @apply opacity-50 cursor-not-allowed;
   }
 
   .tabs .tab[data-selected],
@@ -85,24 +97,20 @@
   /* Boxed (segmented control). */
   .tabs-boxed .tab-list {
     @apply gap-0 p-0.5 border border-border rounded-md bg-surface-muted;
+    /* Hug the segments instead of stretching across (or down) the flex root. */
+    align-self: flex-start;
   }
 
-  /* Sit above the sliding thumb (::before below) so labels stay legible. */
+  /* Above the sliding thumb (::before below). Segment = control height − 6px (2px padding
+     + 1px border per side), so the track matches `.btn` at each size. */
   .tabs-boxed .tab {
-    @apply rounded relative z-[1];
+    @apply rounded relative z-[1] h-6.5;
   }
 
   .tabs-boxed .tab[data-selected],
   .tabs-boxed .tab[aria-selected="true"],
   .tabs-boxed .tab-input:checked + .tab {
-    @apply bg-surface text-text shadow-sm;
-  }
-
-  /* Primary-filled thumb — the active segment uses the primary color. */
-  .tabs-boxed.tabs-primary .tab[data-selected],
-  .tabs-boxed.tabs-primary .tab[aria-selected="true"],
-  .tabs-boxed.tabs-primary .tab-input:checked + .tab {
-    @apply bg-primary text-primary-content shadow-sm;
+    @apply bg-primary-muted text-text;
   }
 
   /* Sliding active marker, zero extra DOM: the selected tab becomes a CSS
@@ -136,9 +144,11 @@
       @apply bg-primary;
       left: anchor(left);
       right: anchor(right);
-      inset-block-end: -1px;
+      /* Off the tab, not the list, so a wrapped row-1 tab keeps its own bar. */
+      top: calc(anchor(bottom) - 1px);
       block-size: 2px;
       transition:
+        top 180ms ease,
         left 180ms ease,
         right 180ms ease;
     }
@@ -160,7 +170,7 @@
     .tabs-boxed .tab[data-selected],
     .tabs-boxed .tab[aria-selected="true"],
     .tabs-boxed .tab-input:checked + .tab {
-      @apply bg-transparent shadow-none;
+      @apply bg-transparent;
     }
 
     .tabs-boxed .tab-list::before {
@@ -169,25 +179,21 @@
       bottom: anchor(bottom);
       left: anchor(left);
       z-index: 0;
-      @apply rounded bg-surface shadow-sm;
+      @apply rounded bg-primary-muted;
       transition:
         top 180ms ease,
         right 180ms ease,
         bottom 180ms ease,
         left 180ms ease;
     }
+  }
 
-    /* Keep the label legible on the primary thumb; the bg-primary here overrides
-       the higher-specificity fallback above so the sliding thumb still shows. */
-    .tabs-boxed.tabs-primary .tab[data-selected],
-    .tabs-boxed.tabs-primary .tab[aria-selected="true"],
-    .tabs-boxed.tabs-primary .tab-input:checked + .tab {
-      @apply bg-transparent text-primary-content shadow-none;
-    }
-
-    .tabs-boxed.tabs-primary .tab-list::before {
-      @apply bg-primary shadow-none;
-    }
+  /* The root too, so the modifier holds when .tabs is a flex item (toolbar, card header).
+     `stretch` (not 100%) honours bleed margins; only .min.css is autoprefixed. */
+  .tabs-full-width:not([data-orientation="vertical"]) {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: stretch;
   }
 
   .tabs-full-width:not([data-orientation="vertical"]) .tab-list {
@@ -216,28 +222,50 @@
     @apply px-4 h-11 text-base;
   }
 
-  /* Panels — Base UI handles hidden state via data-hidden / hidden attr. */
+  .tabs-boxed.tabs-sm .tab {
+    @apply h-5;
+  }
+
+  .tabs-boxed.tabs-lg .tab {
+    @apply h-8;
+  }
+
+  /* Base UI makes the open panel a tab stop. */
   .tabs .tab-panel {
-    @apply pt-3 outline-none;
+    @apply pt-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
-  /* Vanilla pattern: show only the panel whose data-value matches the checked input. */
-  .tabs .tab-panel {
-    display: none;
-  }
-
-  .tabs:has(.tab-input[value="1"]:checked) .tab-panel[data-value="1"],
-  .tabs:has(.tab-input[value="2"]:checked) .tab-panel[data-value="2"],
-  .tabs:has(.tab-input[value="3"]:checked) .tab-panel[data-value="3"],
-  .tabs:has(.tab-input[value="4"]:checked) .tab-panel[data-value="4"],
-  .tabs:has(.tab-input[value="5"]:checked) .tab-panel[data-value="5"],
-  .tabs:has(.tab-input[value="6"]:checked) .tab-panel[data-value="6"] {
-    display: block;
-  }
-
-  /* Base UI applies `hidden` itself — reinstate display for its panels. */
-  .tabs .tab-panel:not([hidden]):not([data-value]) {
-    display: block;
+  /* Vanilla: hide each panel whose data-value isn't the checked input's (or is past the
+     enumerated range), leaving the open panel's display to the consumer. React panels have
+     no data-value; Base UI's `hidden` hides them. */
+  .tabs:not(:has(.tab-input[value="1"]:checked)) .tab-panel[data-value="1"],
+  .tabs:not(:has(.tab-input[value="2"]:checked)) .tab-panel[data-value="2"],
+  .tabs:not(:has(.tab-input[value="3"]:checked)) .tab-panel[data-value="3"],
+  .tabs:not(:has(.tab-input[value="4"]:checked)) .tab-panel[data-value="4"],
+  .tabs:not(:has(.tab-input[value="5"]:checked)) .tab-panel[data-value="5"],
+  .tabs:not(:has(.tab-input[value="6"]:checked)) .tab-panel[data-value="6"],
+  .tabs:not(:has(.tab-input[value="7"]:checked)) .tab-panel[data-value="7"],
+  .tabs:not(:has(.tab-input[value="8"]:checked)) .tab-panel[data-value="8"],
+  .tabs:not(:has(.tab-input[value="9"]:checked)) .tab-panel[data-value="9"],
+  .tabs:not(:has(.tab-input[value="10"]:checked)) .tab-panel[data-value="10"],
+  .tabs:not(:has(.tab-input[value="11"]:checked)) .tab-panel[data-value="11"],
+  .tabs:not(:has(.tab-input[value="12"]:checked)) .tab-panel[data-value="12"],
+  .tabs
+    .tab-panel[data-value]:not(
+      [data-value="1"],
+      [data-value="2"],
+      [data-value="3"],
+      [data-value="4"],
+      [data-value="5"],
+      [data-value="6"],
+      [data-value="7"],
+      [data-value="8"],
+      [data-value="9"],
+      [data-value="10"],
+      [data-value="11"],
+      [data-value="12"]
+    ) {
+    display: none !important;
   }
 
   .tabs[data-orientation="vertical"] {
@@ -245,7 +273,12 @@
   }
 
   .tabs[data-orientation="vertical"] .tab-list {
-    @apply flex-col items-stretch border-b-0 border-r border-border;
+    @apply flex-col items-stretch;
+  }
+
+  /* Bordered only: boxed keeps its full box. */
+  .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab-list {
+    @apply border-b-0 border-r border-border;
   }
 
   .tabs[data-orientation="vertical"] .tab {
@@ -266,10 +299,29 @@
     transform: scaleY(1);
   }
 
+  /* Each selector matches the specificity of the rule that sets its transition. */
   @media (prefers-reduced-motion: reduce) {
     .tabs .tab-list::before,
+    .tabs:not(.tabs-boxed) .tab-list::before,
+    .tabs[data-orientation="vertical"]:not(.tabs-boxed) .tab-list::before,
     .tabs:not(.tabs-boxed) .tab::after {
       transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .tabs:not(.tabs-boxed) .tab-list::before,
+    .tabs:not(.tabs-boxed) .tab::after,
+    .tabs.tabs-boxed .tab-list::before {
+      background-color: Highlight;
+    }
+
+    /* Opt out so the text backplate doesn't paint Canvas behind HighlightText. */
+    .tabs.tabs-boxed .tab:is([data-selected], [aria-selected="true"]),
+    .tabs.tabs-boxed .tab-input:checked + .tab {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
     }
   }
 }

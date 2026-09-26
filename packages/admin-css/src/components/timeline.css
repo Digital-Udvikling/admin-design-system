@@ -13,16 +13,21 @@
     column-gap: 0.75rem;
     padding-bottom: 1rem;
     position: relative;
+    /* Reset, so a timeline nested in a status item doesn't inherit its accent. */
+    --_timeline-accent: initial;
+    --_timeline-accent-content: initial;
   }
   .timeline-item:last-child {
     padding-bottom: 0;
   }
 
-  /* Connector — vertical line centred in the gutter, hidden on the last item. */
+  /* Connector — vertical line centred in the gutter from this indicator's
+     centre to the next one's, hidden on the last item. The indicators mask it,
+     so the gap above and below each dot is the same 3px ring. */
   .timeline-item:not(:last-child)::before {
     content: "";
     position: absolute;
-    inset-block: 0.75rem 0;
+    inset-block: 0.75rem -0.75rem;
     inset-inline-start: 0.75rem;
     width: 2px;
     transform: translateX(-50%);
@@ -39,20 +44,22 @@
     position: relative;
     z-index: 1;
   }
+  /* Rings and icon backing mask the connector in the fill of the container
+     the timeline sits on (`--surface-current`, set by cards, dialogs, …). */
   .timeline-dot {
     display: inline-block;
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 9999px;
-    background-color: var(--color-border-strong);
-    box-shadow: 0 0 0 3px var(--color-surface);
+    background-color: var(--_timeline-accent, var(--color-border-strong));
+    box-shadow: 0 0 0 3px var(--surface-current, var(--color-surface));
   }
-  /* Surface backing masks the connector running behind an icon indicator. */
   .timeline-indicator > :is(i, svg) {
     font-size: 1rem;
-    color: var(--color-text-muted);
-    background-color: var(--color-surface);
+    color: var(--_timeline-accent, var(--color-text-muted));
+    background-color: var(--surface-current, var(--color-surface));
     border-radius: 9999px;
+    box-shadow: 0 0 0 2px var(--surface-current, var(--color-surface));
   }
 
   .timeline-content {
@@ -63,8 +70,9 @@
     min-width: 0;
     padding-block: 0.125rem 0;
   }
+  /* 2px padding + half the 20px line box centres the title on the 24px gutter. */
   .timeline-title {
-    @apply text-sm font-medium text-text leading-tight;
+    @apply text-sm font-medium text-text;
   }
   .timeline-time {
     @apply text-xs text-text-muted tabular-nums;
@@ -74,18 +82,26 @@
     text-wrap: pretty;
   }
 
-  /* Status accents on the dot. */
-  .timeline-item-info .timeline-dot {
-    background-color: var(--color-info);
+  /* Status accent, read by the dot, the icon and the marker. */
+  .timeline-item-info {
+    --_timeline-accent: var(--color-info);
+    --_timeline-accent-content: var(--color-info-content);
   }
-  .timeline-item-success .timeline-dot {
-    background-color: var(--color-success);
+  .timeline-item-success {
+    --_timeline-accent: var(--color-success);
+    --_timeline-accent-content: var(--color-success-content);
   }
-  .timeline-item-warning .timeline-dot {
-    background-color: var(--color-warning);
+  .timeline-item-warning {
+    --_timeline-accent: var(--color-warning);
+    --_timeline-accent-content: var(--color-warning-content);
   }
-  .timeline-item-danger .timeline-dot {
-    background-color: var(--color-danger);
+  .timeline-item-danger {
+    --_timeline-accent: var(--color-danger);
+    --_timeline-accent-content: var(--color-danger-content);
+  }
+  .timeline-item-current {
+    --_timeline-accent: var(--color-primary);
+    --_timeline-accent-content: var(--color-primary-content);
   }
 
   /* Numbered variant — the gutter holds a numbered/checked marker (steps rail). */
@@ -99,30 +115,31 @@
   .timeline-numbered .timeline-indicator {
     height: 1.75rem;
   }
+  /* Centres the title on the 28px marker. */
+  .timeline-numbered .timeline-content {
+    padding-block-start: 0.25rem;
+  }
   .timeline-marker {
     @apply inline-flex items-center justify-center
-           size-7 rounded-full text-xs font-semibold tabular-nums
-           bg-surface-strong text-text-muted;
-    box-shadow: 0 0 0 3px var(--color-surface);
-  }
-  /* Completed and current steps fill with the primary ink. */
-  .timeline-item-success .timeline-marker,
-  .timeline-item-current .timeline-marker {
-    @apply bg-primary text-primary-content;
+           size-7 rounded-full text-xs font-semibold tabular-nums;
+    background-color: var(--_timeline-accent, var(--color-surface-strong));
+    color: var(--_timeline-accent-content, var(--color-text-muted));
+    box-shadow: 0 0 0 3px var(--surface-current, var(--color-surface));
   }
 
   /* Horizontal variant — items sit side by side as equal columns, indicator
-     above centred content, and the connector runs along the indicator row. */
+     above centred content, and the connector runs along the indicator row.
+     Grid, not flex: a content-sized rail gets columns as wide as the widest
+     label instead of splitting the summed label widths evenly. */
   .timeline-horizontal {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
   }
   .timeline-horizontal .timeline-item {
     grid-template-columns: none;
     grid-template-rows: 1.5rem auto;
     row-gap: 0.5rem;
-    flex: 1 1 0;
-    min-width: 0;
     padding-bottom: 0;
     padding-inline: 0.5rem;
     text-align: center;
@@ -152,5 +169,38 @@
   }
   .timeline-horizontal.timeline-numbered .timeline-item:not(:last-child)::before {
     inset-block-start: 0.875rem;
+  }
+
+  @media (forced-colors: active) {
+    .timeline-item:not(:last-child)::before,
+    .timeline-dot {
+      background-color: CanvasText;
+    }
+    /* <svg> keeps author colours (`preserve-parent-color`), so set system ones. */
+    .timeline-indicator > :is(i, svg) {
+      color: CanvasText;
+      background-color: Canvas;
+      box-shadow: 0 0 0 2px Canvas;
+    }
+    .timeline-marker {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+    /* Opt out so the text backplate doesn't defeat the filled markers. */
+    :is(.timeline-item-info, .timeline-item-success, .timeline-item-warning, .timeline-item-danger)
+      .timeline-marker {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+      color: Canvas;
+      box-shadow: 0 0 0 3px Canvas;
+    }
+    /* Highlight can be translucent; layer it on Canvas to hide the connector. */
+    .timeline-item-current .timeline-marker {
+      forced-color-adjust: none;
+      background: linear-gradient(Highlight, Highlight), Canvas;
+      color: HighlightText;
+      outline-color: Highlight;
+      box-shadow: 0 0 0 3px Canvas;
+    }
   }
 }

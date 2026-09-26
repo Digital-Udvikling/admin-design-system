@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `selected` on `Item` and `Item.Container` (`[data-selected]` on `.item`) applies the selected-row tint. (both)
 - A `.card`, `.badge` or `.item` that is itself a link gets a focus ring and a hover state. (css)
 - `.prose` styles `<kbd>` as a key chip and GFM task lists with the checkbox in the bullet gutter. (css)
+- `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
 
 ### Changed
 
@@ -60,6 +61,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
 - `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
 - `.prose` markdown tables match `.table`, the block after a heading drops its top margin, `a.btn` keeps its button styling, and table cells respect markdown's column `align`. (css)
+- Unstriped property lists line up with `property-list-title`, labels sit on the first line of wrapped text, a copyable `numeric` value aligns with the other numeric rows, and copy buttons announce the copy. (both)
+- Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
 
 ### Removed
 
@@ -76,6 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Dialog` and `Drawer` take their accessible name and description from `Dialog.Title` and `Dialog.Description`, call `onOpenChange(true)` when an invoker command opens them, and with `closedby="any"` close on a backdrop click in Safari. (react)
 - Menu, select and tooltip popups inside a `.dialog` or `.drawer` with a `.dialog-body` are not clipped by the dialog; `.dialog-body` is the scroll region. (css)
 - A layout utility such as `flex` on a `tab-panel` works in both bundles, and `tabs-boxed` hugs its segments. (css)
+- Long unbreakable strings such as URLs, IDs and hashes wrap inside accordion summaries, item descriptions, property list values, tooltips, breadcrumbs, card titles and `field-row` labels. (both)
 
 ## [0.21.0] - 2026-09-25
 

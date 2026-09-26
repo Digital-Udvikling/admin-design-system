@@ -50,7 +50,7 @@ Pass a pre-instantiated element when you need to override that:
 <Button icon={<IconPlus size={20} />}>Add</Button>
 ```
 
-In vanilla, drop an `<i>` or `<svg>` as a direct child of the component root — no wrapper class. The root already lays out with `flex` + `gap`, and a `flex-shrink: 0` rule keeps the glyph from squashing. Position in the markup decides leading vs trailing.
+In vanilla, drop an `<i>` or `<svg>` as a direct child of the component root — no wrapper class. The component positions it: controls lay out with `flex` + `gap`, and text that can wrap (alerts, card and dialog titles, timeline and list items) pins the glyph to the first line. The glyph never shrinks. Position in the markup decides leading vs trailing.
 
 See [Icons](icons.md) for the library, install, and sizing table.
 

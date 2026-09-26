@@ -43,6 +43,12 @@
     background-color: var(--color-primary-content);
   }
 
+  /* After the hover rules, which tie on specificity. field.css owns a parent .field[data-invalid]. */
+  .radio:is([aria-invalid="true"], [data-invalid])[data-unchecked],
+  input.radio:is([aria-invalid="true"], [data-invalid], :user-invalid):not(:checked) {
+    @apply border-danger;
+  }
+
   .radio-group {
     @apply inline-flex flex-wrap gap-4;
   }

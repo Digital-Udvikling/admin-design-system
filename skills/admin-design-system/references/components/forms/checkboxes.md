@@ -92,6 +92,8 @@ Works two ways with identical output. On a native `<input type="checkbox">` the 
 
 Indeterminate draws a dash. It can't be set in HTML — assign `node.indeterminate = true` in JS.
 
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an unchecked `checkbox` a danger border.
+
 A `<label>` wrapping the control is laid out for you: inline row, `0.5rem` gap, pointer cursor, the whole row dimmed to 50% when the control is disabled, and long text wraps beside the box rather than overflowing. No class needed on the label.
 
 The box takes the height of one line (`1lh`) via its block margins, so it sits on the first line of a wrapped label and a checkbox cell doesn't make a table row taller.

@@ -19,14 +19,13 @@
     @apply outline-2 outline-offset-2 outline-focus;
   }
 
-  /* Invalid: the modifier, Base UI's data-invalid, an invalid native field, or an invalid
-     .field. After the focus rule at equal specificity, so the ring turns danger too. */
+  /* Invalid: the modifier, Base UI's data-invalid or an invalid native field. After the focus
+     rule at equal specificity, so the ring turns danger too. */
   .number-input:is(
     .number-input-danger,
     [data-invalid],
     :has(> .number-input-field:is([aria-invalid="true"], :user-invalid))
-  ),
-  .field[data-invalid] .number-input {
+  ) {
     @apply border-danger outline-danger;
   }
 

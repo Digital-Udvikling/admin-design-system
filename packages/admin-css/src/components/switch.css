@@ -12,9 +12,10 @@
     margin-block: calc((1lh - 1.25rem) / 2);
   }
 
-  /* Base UI span variant: state is driven by data-* attributes. */
+  /* Base UI span variant: state is driven by data-* attributes. The off track alone is
+     under 3:1, so it takes the checkbox's text-muted edge. */
   .switch[data-unchecked] {
-    @apply bg-border-strong;
+    @apply bg-border-strong border-text-muted hover:border-text;
   }
 
   .switch[data-checked] {
@@ -40,6 +41,10 @@
     @apply appearance-none bg-border-strong mx-0;
   }
 
+  input.switch:not(:checked) {
+    @apply border-text-muted hover:border-text;
+  }
+
   input.switch:checked {
     @apply bg-primary;
   }
@@ -53,6 +58,12 @@
 
   input.switch:checked::before {
     @apply translate-x-4 bg-primary-content;
+  }
+
+  /* After the hover rules, which tie on specificity. field.css owns a parent .field[data-invalid]. */
+  .switch:is([aria-invalid="true"], [data-invalid])[data-unchecked],
+  input.switch:is([aria-invalid="true"], [data-invalid], :user-invalid):not(:checked) {
+    @apply border-danger;
   }
 
   /* Switches are wider than checkboxes/radios, so the label gap is larger. */

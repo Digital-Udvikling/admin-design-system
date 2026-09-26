@@ -22,8 +22,7 @@
 
   /* Separate from .input-danger so its :hover/:focus-visible stay (0,2,0); these
      heavier selectors must beat the status variants below. */
-  .input:is([aria-invalid="true"], [data-invalid], :user-invalid),
-  .field[data-invalid] .input {
+  .input:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 

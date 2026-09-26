@@ -66,6 +66,15 @@
     mask-image: var(--checkbox-dash);
   }
 
+  /* After the hover rules, which tie on specificity. field.css owns a parent .field[data-invalid]. */
+  .checkbox:is([aria-invalid="true"], [data-invalid])[data-unchecked],
+  input.checkbox:is([aria-invalid="true"], [data-invalid], :user-invalid):not(
+      :checked,
+      :indeterminate
+    ) {
+    @apply border-danger;
+  }
+
   label:has(> .checkbox) {
     @apply inline-flex items-center gap-2 cursor-pointer;
     /* Long labels wrap beside the shrink-0 box instead of overflowing. */

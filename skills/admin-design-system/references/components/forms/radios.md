@@ -119,6 +119,8 @@ For a long list of options, use a [Select](selects.md).
 
 Works two ways with identical output. On a native `<input type="radio">` the appearance is reset and the dot drawn as a `::after` keyed off `:checked`. On an element with `role="radio"` the states come from `[data-checked]`, `[data-unchecked]` and `[data-disabled]`, the set React emits.
 
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an unchecked `radio` a danger border.
+
 Write `role="radiogroup"` on the group yourself. Native radios need a shared `name` to be mutually exclusive; nothing in the CSS enforces that. Arrow-key navigation between options is browser behaviour for native inputs only.
 
 A wrapping `<label>` is laid out for you: inline row, `0.5rem` gap, pointer cursor, the whole row dimmed to 50% when disabled, long text wrapping beside the control. The control takes the height of one line (`1lh`), so it sits on the label's first line.

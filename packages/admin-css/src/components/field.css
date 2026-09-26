@@ -73,7 +73,11 @@
         ),
       > .input-icon > .input:is(:disabled, [data-disabled]),
       > .number-input > .number-input-field:disabled,
-      > .number-input-root > .number-input > .number-input-field:disabled
+      > .number-input-root > .number-input > .number-input-field:disabled,
+      > .input-group > :is(.input, .select, .file-input):is(:disabled, [data-disabled]),
+      > .input-group > .input-icon > .input:is(:disabled, [data-disabled]),
+      > .input-group > .number-input > .number-input-field:disabled,
+      > .input-group > .number-input-root > .number-input > .number-input-field:disabled
     )
     > .field-label {
     @apply opacity-50 cursor-not-allowed;
@@ -88,7 +92,9 @@
   }
 
   /* Base UI sets data-invalid on the Field root when validation fails; vanilla sets it by hand.
-     outline-color also covers :focus-visible, number-input's :focus-within and an open select. */
+     The one owner of the field-driven state: (0,3,0) beats the controls' hover and ring rules
+     (number-input's focus ring ties and loses on import order), and outline-color covers
+     :focus-visible, number-input's :focus-within and an open select. */
   .field[data-invalid] :is(.input, .textarea, .select, .file-input, .number-input) {
     @apply border-danger outline-danger;
   }

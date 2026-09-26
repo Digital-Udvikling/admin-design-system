@@ -5,8 +5,9 @@
     @apply inline-flex w-full isolate;
   }
 
-  /* An open menu's popup has to clear what follows the group. */
-  .input-group:has(> .menu[open]) {
+  /* An open menu's popup, or a showing vanilla tooltip, has to clear what follows the group.
+     :has() can't nest, so the tooltip's focus test is a descendant match. */
+  .input-group:has(> .menu[open], > .tooltip-wrap:hover, > .tooltip-wrap :focus-visible) {
     @apply relative z-30;
   }
 
@@ -28,7 +29,8 @@
 
   /* Wrappers hand the group's corners to the bordered control inside; inherit works
      through React NumberInput's display: contents root. */
-  .input-group > :is(.input-icon, .number-input-root) > :is(.input, .number-input) {
+  .input-group > :is(.input-icon, .number-input-root) > :is(.input, .number-input),
+  .input-group > :is(.tooltip-wrap, .indicator) > :is(.btn, .input, .select) {
     border-radius: inherit;
   }
 

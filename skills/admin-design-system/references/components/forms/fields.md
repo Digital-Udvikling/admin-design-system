@@ -190,23 +190,27 @@ Messages that follow the control's own validity go in `Field.Container`; each `F
 **Example**
 
 ```html
-<div class="field">
-  <label class="field-label" for="sku">SKU</label>
-  <input id="sku" class="input" value="AO-10432" disabled />
-</div>
-<div class="field field-row">
-  <input id="archive" type="checkbox" role="switch" class="switch" disabled />
-  <label class="field-label" for="archive">Auto-archive</label>
+<div class="flex flex-col gap-4">
+  <div class="field">
+    <label class="field-label" for="sku">SKU</label>
+    <input id="sku" class="input" value="AO-10432" disabled />
+  </div>
+  <div class="field field-row">
+    <input id="archive" type="checkbox" role="switch" class="switch" disabled />
+    <label class="field-label" for="archive">Auto-archive</label>
+  </div>
 </div>
 ```
 
 ```tsx
-<Field label="SKU" disabled>
-  <Input defaultValue="AO-10432" />
-</Field>
-<Field inline label="Auto-archive" disabled>
-  <Switch />
-</Field>
+<div className="flex flex-col gap-4">
+  <Field label="SKU" disabled>
+    <Input defaultValue="AO-10432" />
+  </Field>
+  <Field inline label="Auto-archive" disabled>
+    <Switch />
+  </Field>
+</div>
 ```
 
 ## Reference

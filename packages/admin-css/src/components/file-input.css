@@ -14,15 +14,19 @@
   }
 
   /* No shell to divide, so the picker is bordered like a .btn; a muted fill alone vanishes
-     on surface-muted containers. */
+     on surface-muted containers. The borderless shell hands its border colour to the picker,
+     so hover and invalid states show there, and the picker fills the control height. */
   .file-input-ghost {
-    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent
+    @apply bg-transparent border-0 hover:bg-surface-hover
            file:border file:rounded-lg;
   }
 
+  .file-input-ghost::file-selector-button {
+    border-color: inherit;
+  }
+
   .file-input-danger,
-  .file-input:is([aria-invalid="true"], [data-invalid], :user-invalid),
-  .field[data-invalid] .file-input {
+  .file-input:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
   }
 

@@ -74,13 +74,15 @@ For a choice submitted with a form, use a [Checkbox](../checkboxes/).
 
 ### Vanilla
 
-| Class          | Effect                                                                                       |
-| -------------- | -------------------------------------------------------------------------------------------- |
-| `switch`       | `2.25rem` × `1.25rem` track, full radius, `border-strong` off / primary on                   |
-| `switch-thumb` | `1rem` circle with a shadow, paper off and `primary-content` on, sliding `1rem` when checked |
+| Class          | Effect                                                                                              |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| `switch`       | `2.25rem` × `1.25rem` track, full radius, `border-strong` off with a `text-muted` edge / primary on |
+| `switch-thumb` | `1rem` circle with a shadow, paper off and `primary-content` on, sliding `1rem` when checked        |
 
 Works two ways with identical output. On a native `<input type="checkbox" role="switch">` the appearance is reset and the thumb drawn as a `::before`, keyed off `:checked` — no `switch-thumb` element needed. On an element with `role="switch"` the states come from `[data-checked]`, `[data-unchecked]` and `[data-disabled]`, and the thumb is a real `switch-thumb` child; that's what React emits. Write `role="switch"` yourself on the native input, otherwise it announces as a checkbox.
 
 A wrapping `<label>` is laid out for you: inline row, `0.75rem` gap (wider than a checkbox's, since the track is wider), pointer cursor, the whole row dimmed to 50% when disabled. The track takes the height of one line (`1lh`), so it sits on the label's first line. Pair it with [`field-row`](../fields/#inline-label) for a label on the same line as the control.
+
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an off `switch` a danger edge.
 
 A switch applies its change immediately. For something that only takes effect on submit, use a [checkbox](../checkboxes/).

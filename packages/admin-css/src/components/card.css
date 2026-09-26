@@ -3,8 +3,7 @@
     @apply flex flex-col
            bg-surface-muted text-text
            border border-border
-           rounded-xl
-           shadow-xs;
+           rounded-lg;
     --surface-current: var(--color-surface-muted);
     /* min-width: 0 lets the card shrink inside a flex/grid track instead of forcing it wide. */
     overflow-wrap: break-word;
@@ -12,7 +11,7 @@
   }
 
   .card-body {
-    @apply flex flex-col gap-3 p-5;
+    @apply flex flex-col gap-3 p-4;
   }
 
   /* The last body fills a stretched card so `card-actions` (mt-auto) reaches the bottom.
@@ -23,7 +22,7 @@
 
   /* Block flow, not flex, so links, <strong> and badges wrap as one run of text. */
   .card-title {
-    @apply text-lg font-semibold leading-tight;
+    @apply text-base font-semibold leading-tight;
     /* Let a long title wrap instead of widening the card. */
     min-width: 0;
     overflow-wrap: anywhere;
@@ -52,7 +51,7 @@
      so a badge that fits the line doesn't grow the title the way baseline alignment does. */
   .card-title > .badge {
     vertical-align: top;
-    translate: 0 calc(1.125rem * 1.25 / 2 - 50%);
+    translate: 0 calc(1rem * 1.25 / 2 - 50%);
     /* With the markup space, 8px like a gap-2 header row. */
     margin-inline-start: 0.25rem;
   }
@@ -122,7 +121,7 @@
   }
 
   .card-bordered {
-    @apply shadow-none border-border-strong;
+    @apply border-border-strong;
   }
 
   /* Fills with the page background so the panel sits flush instead of raised. */
@@ -225,7 +224,7 @@
      Direct-child header/actions gain padding + a divider since inside
      .card-body they carry none. */
   .card-scroll > .card-header {
-    @apply shrink-0 px-5 py-3 border-b border-border;
+    @apply shrink-0 px-4 py-3 border-b border-border;
   }
   .card-scroll > .card-body {
     @apply flex-1 min-h-0 overflow-y-auto;
@@ -236,7 +235,7 @@
     border-bottom-right-radius: inherit;
   }
   .card-scroll > .card-actions {
-    @apply shrink-0 px-5 py-3 border-t border-border;
+    @apply shrink-0 px-4 py-3 border-t border-border;
   }
   .card-compact.card-scroll > :is(.card-header, .card-actions) {
     @apply px-3 py-2;

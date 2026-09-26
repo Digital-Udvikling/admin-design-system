@@ -96,18 +96,13 @@
 <div class="card card-compact card-bordered">
   <div class="card-body">
     <h3 class="card-title">Flat & dense</h3>
-    <p class="card-description">Less padding, stronger border, no shadow.</p>
+    <p class="card-description">Less padding, stronger border.</p>
   </div>
 </div>
 ```
 
 ```tsx
-<Card
-  compact
-  bordered
-  title="Flat & dense"
-  description="Less padding, stronger border, no shadow."
-/>
+<Card compact bordered title="Flat & dense" description="Less padding, stronger border." />
 ```
 
 ### Color variants
@@ -405,16 +400,16 @@
 
 | Class                                                   | Effect                                                                                                                                              |
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.75rem` radius, extra-small shadow                                                              |
-| `card-body`                                             | Content region: `1.25rem` padding, `0.75rem` gap                                                                                                    |
-| `card-title`                                            | `text-lg` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                       |
+| `card`                                                  | Column panel: `surface-muted` fill, `1px` border, `0.5rem` radius                                                                                   |
+| `card-body`                                             | Content region: `1rem` padding, `0.75rem` gap                                                                                                       |
+| `card-title`                                            | `text-base` semibold text; a leading icon hangs on the first line, `0.5rem` gap                                                                     |
 | `card-header`                                           | Title row that can hold a trailing toolbar, aligned to the title's first line                                                                       |
 | `card-toolbar`                                          | Trailing controls at the row end; bare icons and `btn-sm btn-square` buttons, also as a `menu` trigger or in a `tooltip-wrap`, get a `1.25rem` icon |
 | `card-description`                                      | `text-sm` muted; `0.5rem` below a `card-title` or `card-header`                                                                                     |
 | `card-actions`                                          | Wrapping button row, `0.5rem` gap; pushed to the bottom of a stretched card; a button wider than the row wraps its label                            |
 | `card-media`                                            | Full-bleed media block; inherits the card's radius at the first or last position                                                                    |
 | `card-compact`                                          | Body drops to `0.75rem` padding, `0.5rem` gap                                                                                                       |
-| `card-bordered`                                         | No shadow, stronger border; accent-tinted on the colour variants                                                                                    |
+| `card-bordered`                                         | Stronger border; accent-tinted on the colour variants                                                                                               |
 | `card-muted`                                            | Fills with the page surface so the panel sits flush rather than raised                                                                              |
 | `card-primary` `card-info` `card-success` `card-danger` | Tinted `-muted` surface and border, title in the matching accent, description in the text colour                                                    |
 | `card-warning`                                          | Tinted warning surface and border, title and description in the text colour                                                                         |

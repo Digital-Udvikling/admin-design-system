@@ -59,6 +59,7 @@ export {
   type IndicatorVertical,
   type IndicatorHorizontal,
 } from "./Indicator";
+export { StatusDot, type StatusDotProps, type StatusDotVariant } from "./StatusDot";
 export { Link, type LinkProps } from "./Link";
 export { Separator, type SeparatorProps } from "./Separator";
 export {

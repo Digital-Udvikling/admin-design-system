@@ -2,13 +2,14 @@ import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { Badge, type BadgeSize, type BadgeVariant } from "./Badge";
 import { cn } from "./cn";
 import type { IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type IndicatorVertical = "top" | "middle" | "bottom";
 export type IndicatorHorizontal = "start" | "center" | "end";
 export type IndicatorPlacement = `${IndicatorVertical}-${IndicatorHorizontal}`;
 
 export interface IndicatorProps extends ComponentProps<"div"> {
-  /** Badge content (count, "!", text). Omit for a label-less status dot. */
+  /** Badge content (count, "!", text). Omit it, or pass `null`, `false` or `""`, for a label-less status dot. */
   label?: ReactNode;
   /** Variant for both the badge and the dot. Defaults to `"neutral"`. */
   variant?: BadgeVariant;
@@ -19,8 +20,9 @@ export interface IndicatorProps extends ComponentProps<"div"> {
   /** Where the indicator sits relative to children. Default `"top-end"`. */
   placement?: IndicatorPlacement;
   /**
-   * Pixels to pull the indicator toward the anchor's center — aligns it with
-   * the visual corner of rounded anchors (e.g. `4` for `rounded-md`).
+   * Pixels to pull a corner indicator toward the anchor's center, onto the arc
+   * of a rounded corner (about 0.3 × the radius, e.g. `2` for `rounded-lg`).
+   * Ignored by `*-center` and `middle-*` placements, which sit on a straight edge.
    */
   offset?: number;
   /** Clamp a numeric `label` to `${max}+` when it exceeds this value. */
@@ -47,9 +49,11 @@ export function Indicator({
     vertical !== "top" && `indicator-${vertical}`,
     horizontal !== "end" && `indicator-${horizontal}`,
   ];
-  const hasContent = label !== undefined || icon !== undefined;
+  const hasContent = hasNode(label) || icon != null;
   const displayLabel =
     typeof label === "number" && max !== undefined && label > max ? `${max}+` : label;
+  // A generic span can't carry a name, so a labelled item becomes a status in both forms.
+  const role = ariaLabel !== undefined ? "status" : undefined;
   const style =
     offset !== undefined
       ? ({ ...styleProp, "--indicator-offset": `${offset}px` } as CSSProperties)
@@ -62,6 +66,7 @@ export function Indicator({
           variant={variant}
           size={size}
           icon={icon}
+          role={role}
           aria-label={ariaLabel}
         >
           {displayLabel}
@@ -76,7 +81,7 @@ export function Indicator({
             ],
             undefined,
           )}
-          role={ariaLabel !== undefined ? "status" : undefined}
+          role={role}
           aria-label={ariaLabel}
         />
       )}

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
 - `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
 - `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
+- `StatusDot`, a standalone `indicator-dot`: `aria-hidden` beside its status text, or `role="status"` when given an `aria-label`. (both)
 - `delay` and `closeDelay` on `Tooltip`; when unset, the enclosing `Tooltip.Provider`'s values apply. (react)
 
 ### Changed
@@ -35,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
 - Hotkey chips in `Kbd`, `Button`, `ToggleButton` and `Menu.Item` hydrate without a mismatch on Apple devices: they render the server's `Ctrl`, `Shift` and `Alt` labels and switch to `⌘`, `⇧` and `⌥` after hydration. (react)
 - A `loading` `Button` sets `aria-disabled` and keeps keyboard focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
+- `indicator-center` and `indicator-middle` straddle the anchor's edge, `--indicator-offset` applies to corner placements only, and `<Indicator label aria-label>` gives the badge `role="status"`. (both)
 - Breadcrumb items with a leading icon line up with their siblings, and `Breadcrumbs.Item` icons render at `1em`. (both)
 
 ## [0.21.0] - 2026-09-25

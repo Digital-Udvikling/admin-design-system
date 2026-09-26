@@ -35,7 +35,9 @@
     "./admin.scoped.min.css": "./dist/admin.scoped.min.css",
     "./admin.utilities.css": "./dist/admin.utilities.css",
     "./admin.utilities.min.css": "./dist/admin.utilities.min.css",
-    "./src/*": "./src/*"
+    "./theme.css": "./src/theme.css",
+    "./components.css": "./src/components/index.css",
+    "./fonts.css": "./src/fonts.css"
   },
   "publishConfig": {
     "access": "public",

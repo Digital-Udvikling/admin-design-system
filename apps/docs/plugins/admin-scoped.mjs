@@ -2,7 +2,7 @@
  * Serves the scoped `_ao-` bundle from admin-css *source* so React previews
  * hot-reload without the Tailwind CLI + wrap-scoped watchers writing to dist.
  *
- * Import `@aortl/admin-css/src/admin.css?scoped`: `@tailwindcss/vite` compiles
+ * Import `packages/admin-css/src/admin.css?scoped`: `@tailwindcss/vite` compiles
  * it like any CSS root (and watches its imports), then this plugin runs
  * `wrap()` on the result and puts it in `@layer admin`, the equivalent of
  * `@import "@aortl/admin-css/admin.scoped.css" layer(admin)`.

@@ -18,8 +18,8 @@
  * skipped — Starlight owns the body/font reset; its --sl-color-* variables are
  * remapped onto the Flexoki palette below.
  */
-@import "@aortl/admin-css/src/theme.css";
-@import "@aortl/admin-css/src/components/index.css";
+@import "@aortl/admin-css/theme.css";
+@import "@aortl/admin-css/components.css";
 
 /*
  * AdminRoot deliberately owns its surface and forks color-scheme; inside

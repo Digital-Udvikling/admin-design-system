@@ -29,7 +29,7 @@ export interface ConfirmOptions {
   variant?: "default" | "danger";
 }
 
-type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
+export type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
 
 export interface PromptOptions {
   /** Dialog heading. */
@@ -52,7 +52,7 @@ export interface PromptOptions {
   variant?: "default" | "danger";
 }
 
-type PromptFn = (options: PromptOptions) => Promise<string | null>;
+export type PromptFn = (options: PromptOptions) => Promise<string | null>;
 
 type Request =
   | { kind: "confirm"; options: ConfirmOptions; resolve: (confirmed: boolean) => void }

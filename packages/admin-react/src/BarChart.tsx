@@ -55,7 +55,7 @@ function BarChartContainer({
   );
 }
 
-export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
+export interface BarChartBarProps extends Omit<ComponentProps<"div">, "color"> {
   /** Auto-fills label / value / title / colour from a datum. */
   datum?: ChartDatum;
   /** Raw value when composing without a datum. */
@@ -71,7 +71,7 @@ export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
  * fill stays `currentColor` — single-series bars never cycle SERIES. The datum
  * `title` sits on the row, so label, track and value all show it on hover.
  */
-function Bar({ datum, value, label, color, className, style, ...rest }: BarProps) {
+function Bar({ datum, value, label, color, className, style, ...rest }: BarChartBarProps) {
   const v = datum?.value ?? value ?? 0;
   const lab = datum?.label ?? label;
   const barColor = datum?.color ?? color;

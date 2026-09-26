@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { AppShellRoot } from "./AppShell.client";
 import { cn } from "./cn";
 
-export { useAppShell } from "./AppShell.client";
+export { useAppShell, type AppShellContextValue } from "./AppShell.client";
 
 export interface AppShellProps extends ComponentProps<"div"> {
   /** Adds `app-shell-with-sidebar`. Optional: a `<Sidebar>` rendered as a direct child switches the grid on its own. */

@@ -16,7 +16,7 @@ function Track({ className, ...rest }: StackedBarTrackProps) {
   return <div className={cn("chart-stack", className)} {...rest} />;
 }
 
-export interface SegmentProps extends Omit<ComponentProps<"div">, "color"> {
+export interface StackedBarSegmentProps extends Omit<ComponentProps<"div">, "color"> {
   /** Auto-fills value / title / colour from a datum. */
   datum?: ChartDatum;
   /** Index into the SERIES palette (used when the datum has no `color`). */
@@ -28,7 +28,15 @@ export interface SegmentProps extends Omit<ComponentProps<"div">, "color"> {
 }
 
 /** One proportion segment, sized by `flex: var(--value)`; SERIES-cycle colours by default. */
-function Segment({ datum, index = 0, value, color, className, style, ...rest }: SegmentProps) {
+function Segment({
+  datum,
+  index = 0,
+  value,
+  color,
+  className,
+  style,
+  ...rest
+}: StackedBarSegmentProps) {
   const v = datum?.value ?? value ?? 0;
   const segColor = datum !== undefined ? seriesColor(datum, index) : color;
   const vars: Record<string, string | number> = { "--value": v };

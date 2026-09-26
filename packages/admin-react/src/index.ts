@@ -15,7 +15,13 @@ export {
   type AlertDescriptionProps,
   type AlertActionProps,
 } from "./Alert";
-export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
+export {
+  AppShell,
+  useAppShell,
+  type AppShellProps,
+  type AppShellMainProps,
+  type AppShellContextValue,
+} from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 export {
   BrandTile,
@@ -149,8 +155,8 @@ export {
   StatCard,
   type StatCardProps,
   type StatCardTrend,
-  type TrendDirection,
-  type TrendIntent,
+  type StatCardTrendDirection,
+  type StatCardTrendIntent,
 } from "./StatCard";
 export {
   Timeline,
@@ -176,19 +182,25 @@ export {
   BarChart,
   type BarChartProps,
   type BarChartContainerProps,
-  type BarProps,
+  type BarChartBarProps,
   type BarChartVariant,
   type BarChartOrientation,
 } from "./BarChart";
-export { Donut, type DonutProps, type DonutFigureProps, type DonutRingProps } from "./Donut";
+export {
+  Donut,
+  type DonutProps,
+  type DonutFigureProps,
+  type DonutRingProps,
+  type DonutCenterProps,
+} from "./Donut";
 export {
   StackedBar,
   type StackedBarProps,
   type StackedBarTrackProps,
-  type SegmentProps,
+  type StackedBarSegmentProps,
 } from "./StackedBar";
 export { ChartLegend, type ChartLegendProps } from "./ChartLegend";
-export { SERIES, type ChartDatum, type ChartSize, type ChartType } from "./chart-internal";
+export { SERIES, type ChartDatum, type ChartSize } from "./chart-internal";
 export {
   Dialog,
   type DialogProps,
@@ -260,8 +272,16 @@ export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
+export type { HotkeyHandler } from "./hotkey-registry";
 export { useCopy, type UseCopyOptions, type UseCopyResult } from "./useCopy";
-export { useConfirm, usePrompt, type ConfirmOptions, type PromptOptions } from "./useConfirm";
+export {
+  useConfirm,
+  usePrompt,
+  type ConfirmOptions,
+  type PromptOptions,
+  type ConfirmFn,
+  type PromptFn,
+} from "./useConfirm";
 export {
   Tooltip,
   type TooltipProps,
@@ -290,6 +310,8 @@ export {
   type TableCellProps,
   type TableScrollProps,
   type TableSort,
+  type TableDensity,
+  type TableEmptyProps,
 } from "./Table";
 export {
   Sidebar,

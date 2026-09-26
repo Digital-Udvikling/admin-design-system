@@ -4,19 +4,19 @@ import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
 import { hasNode } from "./slot";
 
-export type TrendDirection = "up" | "down" | "flat";
-export type TrendIntent = "positive" | "negative" | "neutral";
+export type StatCardTrendDirection = "up" | "down" | "flat";
+export type StatCardTrendIntent = "positive" | "negative" | "neutral";
 
 export interface StatCardTrend {
   /** Delta text, e.g. "+12.4%" or "+1,204 this week". */
   value: ReactNode;
   /** Caret direction. Default `"up"`. */
-  direction?: TrendDirection;
+  direction?: StatCardTrendDirection;
   /** Tone, independent of direction (a falling error rate is good). Derived from direction when omitted. */
-  intent?: TrendIntent;
+  intent?: StatCardTrendIntent;
 }
 
-function trendIntent(direction: TrendDirection): TrendIntent {
+function trendIntent(direction: StatCardTrendDirection): StatCardTrendIntent {
   if (direction === "down") return "negative";
   if (direction === "flat") return "neutral";
   return "positive";

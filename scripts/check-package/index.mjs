@@ -47,8 +47,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 const specifiers = [
   "@aortl/admin-react/styles.css",
-  "@aortl/admin-react/styles.scoped.css",
   "@aortl/admin-css",
+  "@aortl/admin-css/theme.css",
+  "@aortl/admin-css/components.css",
+  "@aortl/admin-css/fonts.css",
   ...["admin", "admin.scoped", "admin.utilities"].flatMap((f) => [
     "@aortl/admin-css/" + f + ".css",
     "@aortl/admin-css/" + f + ".min.css",
@@ -104,7 +106,6 @@ try {
     "esm-only",
     "--exclude-entrypoints",
     "./styles.css",
-    "./styles.scoped.css",
   ]);
 
   step("install the tarballs into a temp project");

@@ -30,8 +30,7 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./styles.css": "./dist/admin.scoped.css",
-    "./styles.scoped.css": "./dist/admin.scoped.css"
+    "./styles.css": "./dist/admin.scoped.css"
   },
   "publishConfig": {
     "access": "public",
@@ -71,7 +70,7 @@
     "vitest": "4.1.6"
   },
   "peerDependencies": {
-    "react": ">=19.2",
-    "react-dom": ">=19.2"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

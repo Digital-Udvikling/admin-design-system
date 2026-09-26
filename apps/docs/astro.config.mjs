@@ -28,10 +28,11 @@ export default defineConfig({
       customCss: [
         // global.css first: it declares the `@layer` order the scoped bundle slots into.
         "./src/styles/global.css",
-        "@aortl/admin-css/src/admin.css?scoped",
+        // Source, not the package export: the scoped plugin wraps Tailwind's output.
+        "../../packages/admin-css/src/admin.css?scoped",
         // Kept out of the HMR'd sheets: re-parsing @font-face on every CSS edit
         // re-registers the fonts and flashes fallback text and icons.
-        "@aortl/admin-css/src/fonts.css",
+        "@aortl/admin-css/fonts.css",
         "@tabler/icons-webfont/dist/tabler-icons.min.css",
       ],
       components: {

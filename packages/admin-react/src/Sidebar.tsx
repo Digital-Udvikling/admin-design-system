@@ -42,7 +42,8 @@ function SidebarGroupLabel({ className, ...rest }: SidebarGroupLabelProps) {
 }
 
 export interface SidebarItemProps extends ComponentProps<"a"> {
-  active?: boolean;
+  /** Marks the current page: sets `aria-current="page"`. */
+  current?: boolean;
   /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
   render?: RenderElement;
   /** Leading icon. Rendered inside `<Sidebar.Icon>`. */
@@ -54,7 +55,7 @@ export interface SidebarItemProps extends ComponentProps<"a"> {
 }
 
 function SidebarItem({
-  active,
+  current,
   icon,
   badge,
   render,
@@ -65,7 +66,7 @@ function SidebarItem({
 }: SidebarItemProps) {
   return renderAs("a", render, {
     className: cn("sidebar-item", className),
-    "aria-current": active ? "page" : undefined,
+    "aria-current": current ? "page" : undefined,
     ...rest,
     children: (
       <>
@@ -146,7 +147,8 @@ function SidebarCollapsible({
 }
 
 export interface SidebarSubItemProps extends ComponentProps<"a"> {
-  active?: boolean;
+  /** Marks the current page: sets `aria-current="page"`. */
+  current?: boolean;
   /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
   render?: RenderElement;
   icon?: IconProp;
@@ -156,7 +158,7 @@ export interface SidebarSubItemProps extends ComponentProps<"a"> {
 }
 
 function SidebarSubItem({
-  active,
+  current,
   icon,
   badge,
   render,
@@ -167,7 +169,7 @@ function SidebarSubItem({
 }: SidebarSubItemProps) {
   return renderAs("a", render, {
     className: cn("sidebar-subitem", className),
-    "aria-current": active ? "page" : undefined,
+    "aria-current": current ? "page" : undefined,
     ...rest,
     children: (
       <>

@@ -13,7 +13,7 @@ describe("Navbar", () => {
         <Navbar.Brand>Acme</Navbar.Brand>
         <Navbar.Items>
           <Navbar.Item href="#orders">Orders</Navbar.Item>
-          <Navbar.Item href="#users" active>
+          <Navbar.Item href="#users" current>
             Users
           </Navbar.Item>
         </Navbar.Items>
@@ -137,7 +137,7 @@ describe("Navbar", () => {
   it("render: puts the item classes and aria-current on a router link", () => {
     render(
       <Navbar.Item
-        active
+        current
         icon={() => <svg data-testid="icon" />}
         render={<RouterLink href="/orders" />}
       >

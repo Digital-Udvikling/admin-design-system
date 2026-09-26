@@ -135,7 +135,7 @@ Link-like components render an `<a>` by default. Pass `render` with an element t
 ```tsx
 import NextLink from "next/link";
 
-<Sidebar.Item active icon={IconReceipt} render={<NextLink href="/orders" />}>
+<Sidebar.Item current icon={IconReceipt} render={<NextLink href="/orders" />}>
   Orders
 </Sidebar.Item>;
 ```

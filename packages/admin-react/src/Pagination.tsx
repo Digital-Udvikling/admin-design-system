@@ -145,7 +145,10 @@ export function Pagination({
         {items.map((item, i) => {
           const props = paginationItemProps(item, prev, next, classNames);
           return (
-            <li key={paginationItemKey(item, i)} className={cn("page-item", classNames?.item)}>
+            <li
+              key={paginationItemKey(item, i)}
+              className={cn("pagination-item", classNames?.item)}
+            >
               {renderItem ? renderItem(item, props) : defaultRender(item, props, onPageChange)}
             </li>
           );
@@ -216,20 +219,20 @@ function paginationItemProps(
     case "previous":
     case "next":
       return {
-        className: cn("page-link", classNames?.link),
+        className: cn("pagination-link", classNames?.link),
         "aria-label": item.type === "previous" ? "Previous page" : "Next page",
         "aria-disabled": item.disabled || undefined,
         children: item.type === "previous" ? prev : next,
       };
     case "ellipsis":
       return {
-        className: cn("page-ellipsis", classNames?.ellipsis),
+        className: cn("pagination-ellipsis", classNames?.ellipsis),
         "aria-hidden": true,
         children: "…",
       };
     case "page":
       return {
-        className: cn(["page-link", item.selected && "active"], classNames?.link),
+        className: cn("pagination-link", classNames?.link),
         "aria-label": `Page ${item.page}`,
         "aria-current": item.selected ? "page" : undefined,
         children: item.page,

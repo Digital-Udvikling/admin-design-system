@@ -22,24 +22,24 @@
 ```html
 <nav class="pagination" aria-label="Pagination">
   <ul>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Previous page" disabled>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Previous page" disabled>
         <i class="ti ti-chevron-left" aria-hidden="true"></i>
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link active" type="button" aria-current="page" aria-label="Page 1">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-current="page" aria-label="Page 1">
         1
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 2">2</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 2">2</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 3">3</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 3">3</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Next page">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Next page">
         <i class="ti ti-chevron-right" aria-hidden="true"></i>
       </button>
     </li>
@@ -58,32 +58,32 @@
 ```html
 <nav class="pagination" aria-label="Pagination">
   <ul>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Previous page">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Previous page">
         <i class="ti ti-chevron-left" aria-hidden="true"></i>
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 1">1</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 1">1</button>
     </li>
-    <li class="page-item"><span class="page-ellipsis" aria-hidden="true">…</span></li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 9">9</button>
+    <li class="pagination-item"><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 9">9</button>
     </li>
-    <li class="page-item">
-      <button class="page-link active" type="button" aria-current="page" aria-label="Page 10">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-current="page" aria-label="Page 10">
         10
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 11">11</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 11">11</button>
     </li>
-    <li class="page-item"><span class="page-ellipsis" aria-hidden="true">…</span></li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 50">50</button>
+    <li class="pagination-item"><span class="pagination-ellipsis" aria-hidden="true">…</span></li>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 50">50</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Next page">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Next page">
         <i class="ti ti-chevron-right" aria-hidden="true"></i>
       </button>
     </li>
@@ -102,30 +102,30 @@
 ```html
 <nav class="pagination" aria-label="Pagination">
   <ul>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Previous page">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Previous page">
         <i class="ti ti-arrow-left" aria-hidden="true"></i>
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 1">1</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 1">1</button>
     </li>
-    <li class="page-item">
-      <button class="page-link active" type="button" aria-current="page" aria-label="Page 2">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-current="page" aria-label="Page 2">
         2
       </button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 3">3</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 3">3</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 4">4</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 4">4</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Page 5">5</button>
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Page 5">5</button>
     </li>
-    <li class="page-item">
-      <button class="page-link" type="button" aria-label="Next page">
+    <li class="pagination-item">
+      <button class="pagination-link" type="button" aria-label="Next page">
         <i class="ti ti-arrow-right" aria-hidden="true"></i>
       </button>
     </li>
@@ -145,27 +145,35 @@
 
 ### Links (routing libraries)
 
-In React, spread `renderItem`'s second argument onto your router's link. It carries the `_ao-` classes, so don't write `className="page-link"` by hand.
+In React, spread `renderItem`'s second argument onto your router's link. It carries the `_ao-` classes, so don't write `className="pagination-link"` by hand.
 
 **Example**
 
 ```html
 <nav class="pagination" aria-label="Pagination">
   <ul>
-    <li class="page-item">
-      <a class="page-link" href="?p=1" aria-label="Previous page">
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=1" aria-label="Previous page">
         <i class="ti ti-chevron-left" aria-hidden="true"></i>
       </a>
     </li>
-    <li class="page-item"><a class="page-link" href="?p=1" aria-label="Page 1">1</a></li>
-    <li class="page-item">
-      <a class="page-link active" href="?p=2" aria-current="page" aria-label="Page 2">2</a>
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=1" aria-label="Page 1">1</a>
     </li>
-    <li class="page-item"><a class="page-link" href="?p=3" aria-label="Page 3">3</a></li>
-    <li class="page-item"><a class="page-link" href="?p=4" aria-label="Page 4">4</a></li>
-    <li class="page-item"><a class="page-link" href="?p=5" aria-label="Page 5">5</a></li>
-    <li class="page-item">
-      <a class="page-link" href="?p=3" aria-label="Next page">
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=2" aria-current="page" aria-label="Page 2">2</a>
+    </li>
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=3" aria-label="Page 3">3</a>
+    </li>
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=4" aria-label="Page 4">4</a>
+    </li>
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=5" aria-label="Page 5">5</a>
+    </li>
+    <li class="pagination-item">
+      <a class="pagination-link" href="?p=3" aria-label="Next page">
         <i class="ti ti-chevron-right" aria-hidden="true"></i>
       </a>
     </li>
@@ -215,12 +223,11 @@ Plus native `<nav>` attributes.
 
 ### Vanilla
 
-| Class           | Effect                                                                                          |
-| --------------- | ----------------------------------------------------------------------------------------------- |
-| `pagination`    | Root `<nav>`. Turns its direct `<ol>`/`<ul>` into an inline-flex row, `0.25rem` gap, no markers |
-| `page-item`     | One `<li>`                                                                                      |
-| `page-link`     | Page control: `2rem` square minimum, `0.375rem` radius, `text-sm`, transparent until hover      |
-| `active`        | On a `page-link`, marks the current page — the same styling as `aria-current="page"`            |
-| `page-ellipsis` | Muted `…` occupying the same `2rem` box                                                         |
+| Class                 | Effect                                                                                          |
+| --------------------- | ----------------------------------------------------------------------------------------------- |
+| `pagination`          | Root `<nav>`. Turns its direct `<ol>`/`<ul>` into an inline-flex row, `0.25rem` gap, no markers |
+| `pagination-item`     | One `<li>`                                                                                      |
+| `pagination-link`     | Page control: `2rem` square minimum, `0.375rem` radius, `text-sm`, transparent until hover      |
+| `pagination-ellipsis` | Muted `…` occupying the same `2rem` box                                                         |
 
-`pagination` itself sets nothing — it exists to scope the list. `page-link` marks the current page from either `.active` or `aria-current="page"`; write `aria-current` for assistive tech and use `.active` only where you can't. It dims for `[disabled]`, `[aria-disabled="true"]` and `[data-disabled]`, so an anchor that can't be a real `<button>` still reads as inactive. The React range logic has no vanilla equivalent — compute it server-side.
+`pagination` itself sets nothing — it exists to scope the list. `pagination-link` marks the current page from `aria-current="page"`. It dims for `[disabled]`, `[aria-disabled="true"]` and `[data-disabled]`, so an anchor that can't be a real `<button>` still reads as inactive. The React range logic has no vanilla equivalent — compute it server-side.

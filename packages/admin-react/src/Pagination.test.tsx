@@ -168,19 +168,20 @@ describe("Pagination", () => {
       />,
     );
     const current = screen.getByRole("link", { name: "Page 1" });
-    expect(current).toHaveAdminClass("page-link", "active");
+    expect(current).toHaveAdminClass("pagination-link");
+    expect(current).not.toHaveAdminClass("active");
     expect(current).toHaveClass("x-link");
     expect(current).toHaveAttribute("aria-current", "page");
     expect(current).toHaveTextContent("1");
 
     const prev = screen.getByRole("link", { name: "Previous page" });
-    expect(prev).toHaveAdminClass("page-link");
+    expect(prev).toHaveAdminClass("pagination-link");
     expect(prev).toHaveAttribute("aria-disabled", "true");
     expect(prev.querySelector("svg")).not.toBeNull();
     expect(screen.getByRole("link", { name: "Next page" })).not.toHaveAttribute("aria-disabled");
 
     const ellipsis = screen.getByTestId("ellipsis");
-    expect(ellipsis).toHaveAdminClass("page-ellipsis");
+    expect(ellipsis).toHaveAdminClass("pagination-ellipsis");
     expect(ellipsis).toHaveAttribute("aria-hidden", "true");
     expect(ellipsis).toHaveTextContent("…");
   });

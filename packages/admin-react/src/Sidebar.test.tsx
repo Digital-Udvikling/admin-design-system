@@ -15,7 +15,7 @@ describe("Sidebar", () => {
         <Sidebar.Nav>
           <Sidebar.Group>
             <Sidebar.GroupLabel>Section</Sidebar.GroupLabel>
-            <Sidebar.Item href="#a" active>
+            <Sidebar.Item href="#a" current>
               Home
             </Sidebar.Item>
             <Sidebar.Item href="#b">Settings</Sidebar.Item>
@@ -275,7 +275,7 @@ describe("Sidebar", () => {
   it("render: Item and SubItem render onto a router link", () => {
     render(
       <>
-        <Sidebar.Item active badge="3" render={<RouterLink href="/orders" />}>
+        <Sidebar.Item current badge="3" render={<RouterLink href="/orders" />}>
           Orders
         </Sidebar.Item>
         <Sidebar.SubItem render={<RouterLink href="/orders/open" />}>Open</Sidebar.SubItem>

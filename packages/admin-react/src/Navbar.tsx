@@ -38,17 +38,18 @@ function NavbarItems({ className, ...rest }: NavbarItemsProps) {
 }
 
 export interface NavbarItemProps extends ComponentProps<"a"> {
-  active?: boolean;
+  /** Marks the current page: sets `aria-current="page"`. */
+  current?: boolean;
   /** Element to render in place of the `<a>`, such as a router link: `render={<NextLink href="/orders" />}`. */
   render?: RenderElement;
   /** Leading icon. */
   icon?: IconProp;
 }
 
-function NavbarItem({ active, icon, render, className, children, ...rest }: NavbarItemProps) {
+function NavbarItem({ current, icon, render, className, children, ...rest }: NavbarItemProps) {
   return renderAs("a", render, {
     className: cn("navbar-item", className),
-    "aria-current": active ? "page" : undefined,
+    "aria-current": current ? "page" : undefined,
     ...rest,
     children: (
       <>

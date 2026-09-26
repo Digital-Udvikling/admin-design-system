@@ -94,7 +94,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#" active icon={IconHome}>
+      <Sidebar.Item href="#" current icon={IconHome}>
         Dashboard
       </Sidebar.Item>
       <Sidebar.Item href="#" icon={IconReceipt}>
@@ -111,7 +111,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 
 ## Navbar
 
-48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `active` on an item sets `aria-current="page"`. Items accept a leading `icon` prop.
+48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `current` on an item sets `aria-current="page"`. Items accept a leading `icon` prop.
 
 **Example**
 
@@ -148,7 +148,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
     Acme
   </Navbar.Brand>
   <Navbar.Items>
-    <Navbar.Item href="#" active icon={IconHome}>
+    <Navbar.Item href="#" current icon={IconHome}>
       Dashboard
     </Navbar.Item>
     <Navbar.Item href="#" icon={IconReceipt}>
@@ -313,7 +313,7 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
 
 ### Items and groups
 
-`<Sidebar.Item>` is a leaf link; `active` marks the current route, `icon` shows a leading glyph, `badge` adds a trailing count or pill. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>` that hides when collapsed. `<Sidebar.Header>` is the slot for an app logo or product switcher above the nav.
+`<Sidebar.Item>` is a leaf link; `current` marks the current route, `icon` shows a leading glyph, `badge` adds a trailing count or pill. `<Sidebar.Group>` clusters items under an optional `<Sidebar.GroupLabel>` that hides when collapsed. `<Sidebar.Header>` is the slot for an app logo or product switcher above the nav.
 
 **Example**
 
@@ -322,7 +322,7 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
   <Sidebar.Nav>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Workspace</Sidebar.GroupLabel>
-      <Sidebar.Item href="#" active icon={IconHome}>
+      <Sidebar.Item href="#" current icon={IconHome}>
         Dashboard
       </Sidebar.Item>
       <Sidebar.Item href="#" icon={IconReceipt} badge="12">
@@ -390,7 +390,7 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
       Ordrer
     </Sidebar.Item>
     <Sidebar.Collapsible defaultOpen icon={IconShoppingCart} label="Webshop">
-      <Sidebar.SubItem href="#" active>
+      <Sidebar.SubItem href="#" current>
         CMS
       </Sidebar.SubItem>
       <Sidebar.SubItem href="#">Kampagner</Sidebar.SubItem>
@@ -447,7 +447,7 @@ React's `<Sidebar>` takes `collapsed` / `defaultCollapsed` / `onCollapsedChange`
     <Sidebar.Label>AO Retail</Sidebar.Label>
   </Sidebar.Header>
   <Sidebar.Nav>
-    <Sidebar.Item href="#" active icon={IconHome}>
+    <Sidebar.Item href="#" current icon={IconHome}>
       Dashboard
     </Sidebar.Item>
     <Sidebar.Item href="#" icon={IconReceipt}>
@@ -482,7 +482,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#" active icon={IconHome}>
+      <Sidebar.Item href="#" current icon={IconHome}>
         Dashboard
       </Sidebar.Item>
       <Sidebar.Item href="#" icon={IconReceipt}>
@@ -592,7 +592,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
         Produkter
       </Sidebar.Item>
       <Sidebar.Collapsible defaultOpen icon={IconShoppingCart} label="Webshop">
-        <Sidebar.SubItem href="#" active>
+        <Sidebar.SubItem href="#" current>
           CMS
         </Sidebar.SubItem>
         <Sidebar.SubItem href="#">Kampagner</Sidebar.SubItem>
@@ -638,7 +638,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
       Insights
     </Navbar.Brand>
     <Navbar.Items>
-      <Navbar.Item href="#" active>
+      <Navbar.Item href="#" current>
         Dashboard
       </Navbar.Item>
       <Navbar.Dropdown label="Reports">
@@ -693,7 +693,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
   </Navbar>
   <Sidebar>
     <Sidebar.Nav>
-      <Sidebar.Item href="#" active icon={IconHome}>
+      <Sidebar.Item href="#" current icon={IconHome}>
         Dashboard
       </Sidebar.Item>
       <Sidebar.Item href="#" icon={IconReceipt}>
@@ -826,40 +826,40 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Footer.Link`            | `<a>`            | `footer-link`                               |
 | `Footer.Meta`            | `<div>`          | `footer-meta`                               |
 
-| Part                     | Prop                        | Type                           | Default                  |
-| ------------------------ | --------------------------- | ------------------------------ | ------------------------ |
-| `AppShell`               | `hasSidebar`                | `boolean`                      | `false`                  |
-| `AppShell`               | `systemAccent`              | `string` (CSS color)           | inherited                |
-| `AppShell`               | `mobileDrawerOpen`          | `boolean`                      | uncontrolled             |
-| `AppShell`               | `defaultMobileDrawerOpen`   | `boolean`                      | `false`                  |
-| `AppShell`               | `onMobileDrawerOpenChange`  | `(open: boolean) => void`      | —                        |
-| `Navbar`                 | `systemAccent`              | `string` (CSS color)           | inherited                |
-| `Navbar.Item`            | `active`                    | `boolean`                      | `false`                  |
-| `Navbar.Item`            | `icon`                      | component or element           | —                        |
-| `Navbar.Item`            | `render`                    | `ReactElement`                 | —                        |
-| `Navbar.Dropdown`        | `label`                     | `ReactNode`                    | required                 |
-| `Navbar.Dropdown`        | `active`                    | `boolean`                      | an item's `aria-current` |
-| `Navbar.Dropdown`        | `icon`                      | component or element           | —                        |
-| `Navbar.Dropdown`        | `align`                     | `"start" \| "center" \| "end"` | `"start"`                |
-| `Navbar.MobileToggle`    | `label`                     | `string`                       | `"Open menu"`            |
-| `Sidebar`                | `collapsed`                 | `boolean`                      | uncontrolled             |
-| `Sidebar`                | `defaultCollapsed`          | `boolean`                      | `false`                  |
-| `Sidebar`                | `onCollapsedChange`         | `(collapsed: boolean) => void` | —                        |
-| `Sidebar`                | `drawerLabel`               | `string`                       | `"Navigation"`           |
-| `Sidebar.Item`           | `active`                    | `boolean`                      | `false`                  |
-| `Sidebar.Item`           | `icon`                      | component or element           | —                        |
-| `Sidebar.Item`           | `badge`                     | `ReactNode`                    | —                        |
-| `Sidebar.Item`           | `render`                    | `ReactElement`                 | —                        |
-| `Sidebar.Collapsible`    | `icon`                      | component or element           | —                        |
-| `Sidebar.Collapsible`    | `label`                     | `ReactNode`                    | —                        |
-| `Sidebar.Collapsible`    | `trigger`                   | `ReactNode`                    | icon + label             |
-| `Sidebar.Collapsible`    | `open` / `defaultOpen`      | `boolean`                      | uncontrolled             |
-| `Sidebar.Collapsible`    | `onOpenChange`              | `(open: boolean) => void`      | —                        |
-| `Sidebar.SubItem`        | `active` / `icon` / `badge` | as `Sidebar.Item`              | —                        |
-| `Sidebar.SubItem`        | `render`                    | `ReactElement`                 | —                        |
-| `Sidebar.CollapseToggle` | `label`                     | `string`                       | `"Toggle sidebar"`       |
+| Part                     | Prop                         | Type                           | Default                  |
+| ------------------------ | ---------------------------- | ------------------------------ | ------------------------ |
+| `AppShell`               | `hasSidebar`                 | `boolean`                      | `false`                  |
+| `AppShell`               | `systemAccent`               | `string` (CSS color)           | inherited                |
+| `AppShell`               | `mobileDrawerOpen`           | `boolean`                      | uncontrolled             |
+| `AppShell`               | `defaultMobileDrawerOpen`    | `boolean`                      | `false`                  |
+| `AppShell`               | `onMobileDrawerOpenChange`   | `(open: boolean) => void`      | —                        |
+| `Navbar`                 | `systemAccent`               | `string` (CSS color)           | inherited                |
+| `Navbar.Item`            | `current`                    | `boolean`                      | `false`                  |
+| `Navbar.Item`            | `icon`                       | component or element           | —                        |
+| `Navbar.Item`            | `render`                     | `ReactElement`                 | —                        |
+| `Navbar.Dropdown`        | `label`                      | `ReactNode`                    | required                 |
+| `Navbar.Dropdown`        | `active`                     | `boolean`                      | an item's `aria-current` |
+| `Navbar.Dropdown`        | `icon`                       | component or element           | —                        |
+| `Navbar.Dropdown`        | `align`                      | `"start" \| "center" \| "end"` | `"start"`                |
+| `Navbar.MobileToggle`    | `label`                      | `string`                       | `"Open menu"`            |
+| `Sidebar`                | `collapsed`                  | `boolean`                      | uncontrolled             |
+| `Sidebar`                | `defaultCollapsed`           | `boolean`                      | `false`                  |
+| `Sidebar`                | `onCollapsedChange`          | `(collapsed: boolean) => void` | —                        |
+| `Sidebar`                | `drawerLabel`                | `string`                       | `"Navigation"`           |
+| `Sidebar.Item`           | `current`                    | `boolean`                      | `false`                  |
+| `Sidebar.Item`           | `icon`                       | component or element           | —                        |
+| `Sidebar.Item`           | `badge`                      | `ReactNode`                    | —                        |
+| `Sidebar.Item`           | `render`                     | `ReactElement`                 | —                        |
+| `Sidebar.Collapsible`    | `icon`                       | component or element           | —                        |
+| `Sidebar.Collapsible`    | `label`                      | `ReactNode`                    | —                        |
+| `Sidebar.Collapsible`    | `trigger`                    | `ReactNode`                    | icon + label             |
+| `Sidebar.Collapsible`    | `open` / `defaultOpen`       | `boolean`                      | uncontrolled             |
+| `Sidebar.Collapsible`    | `onOpenChange`               | `(open: boolean) => void`      | —                        |
+| `Sidebar.SubItem`        | `current` / `icon` / `badge` | as `Sidebar.Item`              | —                        |
+| `Sidebar.SubItem`        | `render`                     | `ReactElement`                 | —                        |
+| `Sidebar.CollapseToggle` | `label`                      | `string`                       | `"Toggle sidebar"`       |
 
-`active` writes `aria-current="page"`, except on `Navbar.Dropdown`, where it sets `data-active` on the trigger. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `active` (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
+`current` writes `aria-current="page"`. `active` on `Navbar.Dropdown` sets `data-active` on the trigger, for a section that holds the current page. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `current` (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
 
 `<Navbar.MobileToggle>` and `<Sidebar>`'s drawer both read `<AppShell>`'s context, so the toggle is inert outside a shell. When the drawer opens, `<Sidebar>` **moves** its children into the drawer rather than duplicating them — state held in a sidebar child does not survive crossing that breakpoint.
 

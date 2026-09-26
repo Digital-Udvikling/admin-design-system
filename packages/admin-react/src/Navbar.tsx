@@ -2,7 +2,7 @@ import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { useAppShell } from "./AppShell";
 import { cn } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
-import { Menu } from "./Menu";
+import { Menu, type MenuProps } from "./Menu";
 
 export interface NavbarProps extends ComponentProps<"header"> {
   /**
@@ -53,7 +53,7 @@ function NavbarItem({ active, icon, className, children, ...rest }: NavbarItemPr
   );
 }
 
-export interface NavbarDropdownProps extends Omit<ComponentProps<"details">, "title"> {
+export interface NavbarDropdownProps extends Omit<MenuProps, "title"> {
   /** Text shown in the trigger. */
   label: ReactNode;
 }

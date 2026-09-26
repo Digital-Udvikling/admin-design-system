@@ -176,15 +176,17 @@ Add `hasSidebar` for a two-column grid; a `<Footer>` drops into the bottom row a
   </div>
   <nav class="navbar-items">
     <a class="navbar-item" href="#">Dashboard</a>
-    <details class="menu">
-      <summary class="menu-trigger navbar-item">Products</summary>
-      <div class="menu-popup" role="menu">
+    <div class="menu">
+      <button type="button" class="menu-trigger navbar-item" popovertarget="navbar-products">
+        Products
+      </button>
+      <div class="menu-popup" id="navbar-products" popover>
         <button class="menu-item" type="button">Catalogue</button>
         <button class="menu-item" type="button">Categories</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Imports</button>
       </div>
-    </details>
+    </div>
   </nav>
 </header>
 ```
@@ -227,14 +229,16 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
       <option value="lavprisvvs.dk">LavprisVVS.dk</option>
       <option value="elproffs.se">ELproffs.se</option>
     </select>
-    <details class="menu">
-      <summary class="menu-trigger navbar-item">Nickolaj</summary>
-      <div class="menu-popup" role="menu">
+    <div class="menu">
+      <button type="button" class="menu-trigger navbar-item" popovertarget="navbar-account">
+        Nickolaj
+      </button>
+      <div class="menu-popup" id="navbar-account" popover>
         <button class="menu-item" type="button">Profile</button>
         <hr class="menu-separator" />
         <button class="menu-item" type="button">Sign out</button>
       </div>
-    </details>
+    </div>
   </div>
 </header>
 ```

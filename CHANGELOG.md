@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `table-cell-actions` / `Table.Cell actions`, a trailing row-actions column, and `table-scroll` / `Table.Scroll`, a keyboard-scrollable `<section>` for wide tables that needs `aria-label` or `aria-labelledby` and hosts `table-sticky` and `table-pin-col`. (both)
 - `--chart-legend-gap` sets the space between a chart and its legend. (css)
 - `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
+- `Menu.Actions` (`menu-actions`) for a filter menu's Reset and Apply, `closeOnClick` and `danger` (`menu-item-danger`) on `Menu.Item`, `menu-popup-end` (`Menu.Popup align="end"`), and `icon` on `Menu.Trigger`; an icon-only `btn-square` trigger drops the chevron. (both)
 
 ### Changed
 
@@ -43,6 +44,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** Position values follow Base UI: `Timeline` takes `orientation="horizontal"` instead of `horizontal`, `Table.Cell` / `Table.HeaderCell` `align` takes `start`, `center` or `end` (`data-align="end"`), and `tooltip-wrap-left` / `-right` are `tooltip-wrap-start` / `-end`. (both)
 - **Breaking:** Chart custom properties are `--chart-value`, `--chart-bar-color`, `--chart-segment-color` and `--chart-legend-color` (were `--value`, `--bar-color`, `--segment-color`, `--legend-color`). (css)
 - **Breaking:** `BarProps`, `SegmentProps`, `TrendDirection` and `TrendIntent` are `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection` and `StatCardTrendIntent`. (react)
+- **Breaking:** The vanilla menu is a `popover`: `<div class="menu">` holds a `<button class="menu-trigger" popovertarget="…">` and a `<div class="menu-popup" id="…" popover>`, so each menu needs a unique `id`. Drop `role="menu"` and `role="menuitem"`, and use native checkboxes and radios in a `<label class="menu-item">`. (css)
+- **Breaking:** `Menu` is built on the Base UI Menu, with arrow keys, typeahead and focus return: it takes `open`, `defaultOpen`, `onOpenChange` and `modal`, and `Menu.Popup` portals and takes `side` and `align`. Checkable items take `checked` / `onCheckedChange`; `role="menuitemradio"` items become `Menu.RadioItem`s in a `Menu.RadioGroup`. `Menu.Item` hotkeys fire while the menu is closed. (react)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
@@ -71,6 +74,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `progress` and `.chart-stack` tracks use the `border` colour, and indeterminate `progress` slides a solid segment. (css)
 - Unstriped property lists line up with `property-list-title`, labels sit on the first line of wrapped text, a copyable `numeric` value aligns with the other numeric rows, and copy buttons announce the copy. (both)
 - Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
+- Menu and select popups have a `border-strong` edge and a small shadow, menu rows and select options keep one height whatever they hold, long labels wrap, popups near the viewport's end edge flip to fit, and `menu-item[aria-current="page"]` gets the selected fill. (css)
 
 ### Removed
 
@@ -95,6 +99,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `table-row-link` and `item-link` stretch only the row's link, so other links, buttons, menus and form controls in the row stay clickable. (css)
 - A `<th scope="row">` in `<tbody>` styles as a body cell, and `Table.HeaderCell scope="row"` emits `table-cell`. (both)
 - The donut hole matches `--donut-thickness`, inline horizontal bar charts render their bars, fills stay in the track when a value exceeds `max`, and vertical bars draw a baseline so a zero value shows. (both)
+- `aria-disabled` `Menu.Item`s don't fire `onClick`, a `ref` on `Menu.Item` keeps its `hotkey`, and `Menu.Group` is named by its `Menu.GroupLabel`. (react)
 
 ## [0.21.0] - 2026-09-25
 

@@ -5,8 +5,8 @@ import { describe, expect, test } from "vitest";
 
 // Regression guards for the popup-vs-dialog clipping fix: a dialog's
 // `overflow: hidden` clips even `position: fixed` descendants (its identity
-// `transform` makes it a containing block), and `<details>`-based menus get
-// clipped by `overflow: auto` ancestors.
+// `transform` makes it a containing block). The vanilla menu popup avoids both
+// that and `overflow: auto` ancestors by rendering in the top layer as a popover.
 
 const SRC_ROOT = fileURLToPath(new URL("../src/", import.meta.url));
 
@@ -33,59 +33,41 @@ function declValues(rules, prop) {
   return values;
 }
 
-describe("menu.css anchor-positioning escape hatch", () => {
-  test(".menu-trigger declares anchor-name --menu-trigger inside @supports", async () => {
+describe("menu.css popover anchoring", () => {
+  test(".menu-trigger declares anchor-name --menu-trigger", async () => {
     const { root } = await parse("components/menu.css");
-    const triggerRules = findRules(root, ".menu-trigger");
-    const anchorNames = declValues(triggerRules, "anchor-name");
+    const anchorNames = declValues(findRules(root, ".menu-trigger"), "anchor-name");
     expect(anchorNames, "expected `.menu-trigger { anchor-name: --menu-trigger }`").toContain(
       "--menu-trigger",
     );
   });
 
-  test(".menu-popup anchors to --menu-trigger via position-anchor", async () => {
+  test(".menu scopes the anchor name so each popup finds its own trigger", async () => {
     const { root } = await parse("components/menu.css");
-    const popupRules = findRules(root, ".menu-popup");
-    const anchors = declValues(popupRules, "position-anchor");
-    expect(anchors, "expected `.menu-popup { position-anchor: --menu-trigger }`").toContain(
-      "--menu-trigger",
+    const scopes = declValues(findRules(root, ".menu"), "anchor-scope");
+    expect(scopes, "expected `.menu { anchor-scope: --menu-trigger }`").toContain("--menu-trigger");
+  });
+
+  test(".menu-popup[popover] anchors to --menu-trigger and resets the UA centring", async () => {
+    const { root } = await parse("components/menu.css");
+    const rules = findRules(root, ".menu-popup[popover]");
+    expect(declValues(rules, "position-anchor")).toContain("--menu-trigger");
+    expect(declValues(rules, "inset"), "the UA popover rule centres with inset: 0").toContain(
+      "auto",
     );
   });
 
-  test(".menu-popup uses position: fixed in the anchor branch so it escapes clipping", async () => {
+  test(".menu-popup[popover] flips above and toward the start edge via position-try-fallbacks", async () => {
     const { root } = await parse("components/menu.css");
-    const popupRules = findRules(root, ".menu-popup");
-    const positions = declValues(popupRules, "position");
-    // Both are needed: the `absolute` fallback and `fixed` inside the
-    // `@supports (anchor-name)` branch.
-    expect(
-      positions,
-      "expected `.menu-popup { position: fixed }` inside the anchor branch",
-    ).toContain("fixed");
-  });
-
-  test(".menu-popup flips above the trigger via position-try-fallbacks", async () => {
-    const { root } = await parse("components/menu.css");
-    const popupRules = findRules(root, ".menu-popup");
-    const tryFallbacks = declValues(popupRules, "position-try-fallbacks");
-    expect(
-      tryFallbacks,
-      "expected `.menu-popup { position-try-fallbacks: --menu-popup-flip-up }`",
-    ).toContain("--menu-popup-flip-up");
-  });
-
-  test("@position-try --menu-popup-flip-up swaps top -> bottom: anchor(top)", async () => {
-    const { root } = await parse("components/menu.css");
-    let positionTry;
-    root.walkAtRules("position-try", (rule) => {
-      if (rule.params.trim() === "--menu-popup-flip-up") positionTry = rule;
-    });
-    expect(positionTry, "expected `@position-try --menu-popup-flip-up` block").toBeTruthy();
-    const decls = {};
-    positionTry.walkDecls((d) => {
-      decls[d.prop] = d.value;
-    });
-    expect(decls.bottom, "flip block should set `bottom: anchor(top)`").toBe("anchor(top)");
+    const options = declValues(
+      findRules(root, ".menu-popup[popover]"),
+      "position-try-fallbacks",
+    ).flatMap((value) => value.split(",").map((option) => option.trim().replace(/\s+/g, " ")));
+    expect(options, "expected a flip-block fallback (no room below)").toContain("flip-block");
+    expect(options, "expected a flip-inline fallback (no room at the end)").toContain(
+      "flip-inline",
+    );
+    expect(options, "expected the combined corner fallback").toContain("flip-block flip-inline");
   });
 });
 

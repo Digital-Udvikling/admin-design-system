@@ -56,7 +56,7 @@
   }
 
   /* Variants — keep it flat: default / outline / muted only. */
-  .item-outline {
+  .item-bordered {
     @apply border border-border rounded-lg;
   }
   .item-muted {

@@ -17,9 +17,13 @@ describe("BrandTile", () => {
     expect(screen.getByTestId("tile")).toHaveAdminClass("brand-tile", "brand-tile-lg");
   });
 
-  it("applies the variant class for soft tints", () => {
-    render(<BrandTile monogram="OR" variant="success" data-testid="tile" />);
-    expect(screen.getByTestId("tile")).toHaveAdminClass("brand-tile", "brand-tile-success");
+  it("applies the tone and soft classes", () => {
+    render(<BrandTile monogram="OR" variant="warning" soft data-testid="tile" />);
+    expect(screen.getByTestId("tile")).toHaveAdminClass(
+      "brand-tile",
+      "brand-tile-warning",
+      "brand-tile-soft",
+    );
   });
 
   it("renders an icon and ignores the monogram when both are provided", () => {

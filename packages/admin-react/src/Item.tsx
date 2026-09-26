@@ -4,7 +4,7 @@ import { renderIcon, type IconProp } from "./icon";
 import { renderAs, type RenderElement } from "./render";
 import { hasNode } from "./slot";
 
-export type ItemVariant = "default" | "outline" | "muted";
+export type ItemVariant = "default" | "bordered" | "muted";
 export type ItemSize = "sm" | "md" | "lg";
 
 export interface ItemContainerProps extends ComponentProps<"div"> {

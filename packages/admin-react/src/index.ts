@@ -17,7 +17,12 @@ export {
 } from "./Alert";
 export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
-export { BrandTile, type BrandTileProps, type BrandTileVariant } from "./BrandTile";
+export {
+  BrandTile,
+  type BrandTileProps,
+  type BrandTileVariant,
+  type BrandTileSize,
+} from "./BrandTile";
 export {
   Avatar,
   AvatarGroup,

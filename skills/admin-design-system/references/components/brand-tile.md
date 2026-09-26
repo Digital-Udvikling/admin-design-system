@@ -8,7 +8,8 @@
   - [Monogram](#monogram)
   - [Icon](#icon)
   - [Sizes](#sizes)
-  - [Soft tints](#soft-tints)
+  - [Tones](#tones)
+  - [Soft](#soft)
   - [Image](#image)
 - [Reference](#reference)
   - [React](#react)
@@ -72,7 +73,33 @@
 <BrandTile monogram="OR" size="lg" />
 ```
 
-### Soft tints
+### Tones
+
+**Example**
+
+```html
+<span class="brand-tile brand-tile-info" aria-hidden="true">
+  <i class="ti ti-package"></i>
+</span>
+<span class="brand-tile brand-tile-success" aria-hidden="true">
+  <i class="ti ti-shopping-cart"></i>
+</span>
+<span class="brand-tile brand-tile-warning" aria-hidden="true">
+  <i class="ti ti-alert-triangle"></i>
+</span>
+<span class="brand-tile brand-tile-danger" aria-hidden="true">
+  <i class="ti ti-chart-bar"></i>
+</span>
+```
+
+```tsx
+<BrandTile icon={IconPackage} variant="info" />
+<BrandTile icon={IconShoppingCart} variant="success" />
+<BrandTile icon={IconAlertTriangle} variant="warning" />
+<BrandTile icon={IconChartBar} variant="danger" />
+```
+
+### Soft
 
 **Example**
 
@@ -85,27 +112,31 @@
 >
   OR
 </span>
-<span class="brand-tile brand-tile-info" aria-hidden="true">
+<span class="brand-tile brand-tile-info brand-tile-soft" aria-hidden="true">
   <i class="ti ti-package"></i>
 </span>
-<span class="brand-tile brand-tile-success" aria-hidden="true">
+<span class="brand-tile brand-tile-success brand-tile-soft" aria-hidden="true">
   <i class="ti ti-shopping-cart"></i>
 </span>
-<span class="brand-tile brand-tile-danger" aria-hidden="true">
+<span class="brand-tile brand-tile-warning brand-tile-soft" aria-hidden="true">
+  <i class="ti ti-alert-triangle"></i>
+</span>
+<span class="brand-tile brand-tile-danger brand-tile-soft" aria-hidden="true">
   <i class="ti ti-chart-bar"></i>
 </span>
 ```
 
 ```tsx
-<BrandTile monogram="OR" variant="soft" />
+<BrandTile monogram="OR" soft />
 <BrandTile
   monogram="OR"
-  variant="soft"
+  soft
   systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))"
 />
-<BrandTile icon={IconPackage} variant="info" />
-<BrandTile icon={IconShoppingCart} variant="success" />
-<BrandTile icon={IconChartBar} variant="danger" />
+<BrandTile icon={IconPackage} variant="info" soft />
+<BrandTile icon={IconShoppingCart} variant="success" soft />
+<BrandTile icon={IconAlertTriangle} variant="warning" soft />
+<BrandTile icon={IconChartBar} variant="danger" soft />
 ```
 
 ### Image
@@ -126,15 +157,16 @@
 
 ### React
 
-| Prop           | Type                                                   | Default   |
-| -------------- | ------------------------------------------------------ | --------- |
-| `variant`      | `"solid" \| "soft" \| "info" \| "success" \| "danger"` | `"solid"` |
-| `size`         | `"md" \| "lg"`                                         | `"md"`    |
-| `monogram`     | `string`                                               | —         |
-| `icon`         | [`IconProp`](../basics/conventions.md#icons)          | —         |
-| `src`          | `string`                                               | —         |
-| `alt`          | `string`                                               | `""`      |
-| `systemAccent` | `string` (CSS color)                                   | inherited |
+| Prop           | Type                                                       | Default    |
+| -------------- | ---------------------------------------------------------- | ---------- |
+| `variant`      | `"accent" \| "info" \| "success" \| "warning" \| "danger"` | `"accent"` |
+| `soft`         | `boolean`                                                  | `false`    |
+| `size`         | `"md" \| "lg"`                                             | `"md"`     |
+| `monogram`     | `string`                                                   | —          |
+| `icon`         | [`IconProp`](../basics/conventions.md#icons)              | —          |
+| `src`          | `string`                                                   | —          |
+| `alt`          | `string`                                                   | `""`       |
+| `systemAccent` | `string` (CSS color)                                       | inherited  |
 
 Content precedence is `src` > `icon` > `monogram`. Monogram and icon tiles are marked `aria-hidden`, since the brand name is next to them in the navbar; an image tile exposes `alt` instead. There is no `sm`. Plus native `<span>` attributes.
 
@@ -142,15 +174,15 @@ Sits in [`Navbar.Brand`](../modules/app-shell.md#navbar).
 
 ### Vanilla
 
-| Class                                                      | Effect                                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `brand-tile`                                               | `1.5rem` square, `0.25rem` radius, accent fill, `11px` semibold monogram |
-| `brand-tile-lg`                                            | `2.5rem`, `0.375rem` radius, `text-sm`                                   |
-| `brand-tile-soft`                                          | Accent `-muted` fill with an accent glyph                                |
-| `brand-tile-info` `brand-tile-success` `brand-tile-danger` | Status `-muted` fill with a matching glyph                               |
+| Class                                                                           | Effect                                                                                            |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `brand-tile`                                                                    | `1.5rem` square, `0.25rem` radius, accent fill, `11px` semibold monogram                          |
+| `brand-tile-lg`                                                                 | `2.5rem`, `0.375rem` radius, `text-sm`                                                            |
+| `brand-tile-info` `brand-tile-success` `brand-tile-warning` `brand-tile-danger` | Status fill with its `-content` glyph                                                             |
+| `brand-tile-soft`                                                               | `-muted` fill with a glyph in the tone (accent without one); soft `warning` keeps the text colour |
 
 A direct `<i>`/`<svg>` child is sized in CSS — `14px`, or `20px` under `brand-tile-lg` — so vanilla needs no inline `font-size` and React icons render at `1em`. A direct `<img>` child flips the tile to a bordered surface via `:has()` and is `object-contain`, so an arbitrary-ratio logo isn't cropped.
 
-There is no `brand-tile-solid` or `brand-tile-md` — both are the unmodified `brand-tile` — and no `brand-tile-warning`; see [Conventions › Tones](../basics/conventions.md#tones). Keep monograms to two characters; the default box won't fit more.
+There is no `brand-tile-accent` or `brand-tile-md` — both are the unmodified `brand-tile`. Keep monograms to two characters; the default box won't fit more.
 
 The fill comes from `--color-system-accent`. The tile derives `--color-system-accent-muted` and `--color-system-accent-content` from the accent in scope, so an override on the tile, the navbar or the shell retints the soft fill and sets the solid tile's glyph to paper or black by the accent's lightness. An override of `-muted` or `-content` on `:root`, the navbar or the shell doesn't reach the tile; set it on the tile itself (`.brand-tile { --color-system-accent-content: var(--color-paper); }`). The soft glyph is the accent itself: for `brand-tile-soft`, pass a `light-dark()` pair (e.g. `light-dark(var(--color-purple-600), var(--color-purple-400))`) so it stays legible on the dark tint. See [Theming › System accent](../basics/theming.md#system-accent).

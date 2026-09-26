@@ -181,9 +181,9 @@
 
 ```html
 <div class="flex w-full flex-col gap-2">
-  <div class="item item-outline">
+  <div class="item item-bordered">
     <div class="item-content">
-      <div class="item-title">Outline</div>
+      <div class="item-title">Bordered</div>
       <div class="item-description">Bordered row.</div>
     </div>
   </div>
@@ -198,7 +198,7 @@
 
 ```tsx
 <div className="flex w-full flex-col gap-2">
-  <Item variant="outline" title="Outline" description="Bordered row." />
+  <Item variant="bordered" title="Bordered" description="Bordered row." />
   <Item variant="muted" title="Muted" description="Filled row." />
 </div>
 ```
@@ -278,7 +278,7 @@
 
 | Part        | Prop          | Type                                          | Default     |
 | ----------- | ------------- | --------------------------------------------- | ----------- |
-| `Item`      | `variant`     | `"default" \| "outline" \| "muted"`           | `"default"` |
+| `Item`      | `variant`     | `"default" \| "bordered" \| "muted"`          | `"default"` |
 | `Item`      | `size`        | `"sm" \| "md" \| "lg"`                        | `"md"`      |
 | `Item`      | `asLink`      | `boolean`                                     | `false`     |
 | `Item`      | `selected`    | `boolean`                                     | `false`     |
@@ -307,7 +307,7 @@ For list semantics pass `role="list"` to `ItemGroup` and `role="listitem"` to ea
 | `item-title`          | Primary line: medium weight, tight leading                                                                                                                       |
 | `item-description`    | Secondary line: muted, snug leading                                                                                                                              |
 | `item-actions`        | Trailing slot pushed to the row end, `0.5rem` gap; stays clickable above the `item-link` overlay                                                                 |
-| `item-outline`        | `1px` border, `0.5rem` radius                                                                                                                                    |
+| `item-bordered`       | `1px` border, `0.5rem` radius                                                                                                                                    |
 | `item-muted`          | Muted surface, `0.5rem` radius                                                                                                                                   |
 | `item-sm`             | `0.5rem` gap, `0.5rem`/`0.375rem` padding, `text-xs`                                                                                                             |
 | `item-lg`             | `1rem` gap, `1rem`/`0.75rem` padding, `text-base`                                                                                                                |

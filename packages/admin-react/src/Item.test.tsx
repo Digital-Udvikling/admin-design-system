@@ -44,10 +44,10 @@ describe("Item", () => {
   });
 
   it("applies variant, size, and asLink modifiers", () => {
-    const { container } = render(<Item variant="outline" size="lg" asLink title="x" />);
+    const { container } = render(<Item variant="bordered" size="lg" asLink title="x" />);
     expect(container.querySelector(adminSelector("item"))).toHaveAdminClass(
       "item",
-      "item-outline",
+      "item-bordered",
       "item-lg",
       "item-link",
     );

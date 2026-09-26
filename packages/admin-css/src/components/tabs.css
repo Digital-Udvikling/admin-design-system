@@ -21,7 +21,7 @@
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
-  /* :where() keeps the hover at its old specificity so selected colors (tabs-primary) still win. */
+  /* :where() keeps the hover at its old specificity so selected colors still win. */
   .tabs
     .tab:where(
       :not(:disabled, [data-disabled], [aria-disabled="true"], .tab-input:disabled + .tab)
@@ -114,13 +114,6 @@
     @apply bg-primary-muted text-text;
   }
 
-  /* Primary-filled thumb — the active segment uses the primary color. */
-  .tabs-boxed.tabs-primary .tab[data-selected],
-  .tabs-boxed.tabs-primary .tab[aria-selected="true"],
-  .tabs-boxed.tabs-primary .tab-input:checked + .tab {
-    @apply bg-primary text-primary-content;
-  }
-
   /* Sliding active marker, zero extra DOM: the selected tab becomes a CSS
      anchor and a single .tab-list pseudo tracks it via anchor() insets, which
      the browser interpolates between tabs — vanilla `:checked` and React both
@@ -193,18 +186,6 @@
         right 180ms ease,
         bottom 180ms ease,
         left 180ms ease;
-    }
-
-    /* Keep the label legible on the primary thumb; the bg-primary here overrides
-       the higher-specificity fallback above so the sliding thumb still shows. */
-    .tabs-boxed.tabs-primary .tab[data-selected],
-    .tabs-boxed.tabs-primary .tab[aria-selected="true"],
-    .tabs-boxed.tabs-primary .tab-input:checked + .tab {
-      @apply bg-transparent text-primary-content;
-    }
-
-    .tabs-boxed.tabs-primary .tab-list::before {
-      @apply bg-primary;
     }
   }
 

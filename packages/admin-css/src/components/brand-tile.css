@@ -34,17 +34,34 @@
     font-size: 20px;
   }
 
-  /* Soft tints — *-muted fill, colored glyph. */
+  /* Status tones: a solid fill, or with brand-tile-soft a *-muted fill and coloured glyph. */
+  .brand-tile-info {
+    @apply bg-info text-info-content;
+  }
+  .brand-tile-success {
+    @apply bg-success text-success-content;
+  }
+  .brand-tile-warning {
+    @apply bg-warning text-warning-content;
+  }
+  .brand-tile-danger {
+    @apply bg-danger text-danger-content;
+  }
+
   .brand-tile-soft {
     @apply bg-system-accent-muted text-system-accent;
   }
-  .brand-tile-info {
+  .brand-tile-soft.brand-tile-info {
     @apply bg-info-muted text-info;
   }
-  .brand-tile-success {
+  .brand-tile-soft.brand-tile-success {
     @apply bg-success-muted text-success;
   }
-  .brand-tile-danger {
+  /* Yellow fails contrast as a glyph on its own tint; the glyph keeps the text colour. */
+  .brand-tile-soft.brand-tile-warning {
+    @apply bg-warning-muted text-text;
+  }
+  .brand-tile-soft.brand-tile-danger {
     @apply bg-danger-muted text-danger;
   }
 

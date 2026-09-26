@@ -7,7 +7,6 @@
 - [Examples](#examples)
   - [Basic (bordered)](#basic-bordered)
   - [Boxed (segmented control)](#boxed-segmented-control)
-  - [Primary](#primary)
   - [Sizes](#sizes)
   - [Full width](#full-width)
   - [Full width, boxed](#full-width-boxed)
@@ -76,46 +75,6 @@
 
 ```tsx
 <Tabs defaultValue="week" variant="boxed">
-  <Tabs.List>
-    <Tabs.Tab value="day">Day</Tabs.Tab>
-    <Tabs.Tab value="week">Week</Tabs.Tab>
-    <Tabs.Tab value="month">Month</Tabs.Tab>
-  </Tabs.List>
-  <Tabs.Panel value="day">Daily breakdown.</Tabs.Panel>
-  <Tabs.Panel value="week">Weekly breakdown.</Tabs.Panel>
-  <Tabs.Panel value="month">Monthly breakdown.</Tabs.Panel>
-</Tabs>
-```
-
-### Primary
-
-**Example**
-
-```html
-<div class="tabs tabs-boxed tabs-primary">
-  <div class="tab-list" role="radiogroup" aria-label="Period">
-    <input class="tab-input" type="radio" name="boxed-primary" id="boxed-primary-1" value="1" />
-    <label class="tab" for="boxed-primary-1">Day</label>
-    <input
-      class="tab-input"
-      type="radio"
-      name="boxed-primary"
-      id="boxed-primary-2"
-      value="2"
-      checked
-    />
-    <label class="tab" for="boxed-primary-2">Week</label>
-    <input class="tab-input" type="radio" name="boxed-primary" id="boxed-primary-3" value="3" />
-    <label class="tab" for="boxed-primary-3">Month</label>
-  </div>
-  <div class="tab-panel" data-value="1">Daily breakdown.</div>
-  <div class="tab-panel" data-value="2">Weekly breakdown.</div>
-  <div class="tab-panel" data-value="3">Monthly breakdown.</div>
-</div>
-```
-
-```tsx
-<Tabs defaultValue="week" variant="boxed" primary>
   <Tabs.List>
     <Tabs.Tab value="day">Day</Tabs.Tab>
     <Tabs.Tab value="week">Week</Tabs.Tab>
@@ -500,10 +459,9 @@
 | `Tabs`     | `size`      | `"sm" \| "md" \| "lg"`                        | `"md"`       |
 | `Tabs`     | `fullWidth` | `boolean`                                     | `false`      |
 | `Tabs`     | `wrap`      | `boolean`                                     | `false`      |
-| `Tabs`     | `primary`   | `boolean`                                     | `false`      |
 | `Tabs.Tab` | `icon`      | [`IconProp`](../basics/conventions.md#icons) | —            |
 
-`primary` only affects `variant="boxed"`. Wraps [Base UI Tabs](https://base-ui.com/react/components/tabs), which owns `value` / `defaultValue` / `onValueChange`, `orientation` and `disabled` on `Tabs.Tab`, and supplies the `role="tablist"` wiring plus arrow-key navigation. `Tabs.Tab` and `Tabs.Panel` are matched by `value`, which can be any string. Plus native `<div>` attributes.
+Wraps [Base UI Tabs](https://base-ui.com/react/components/tabs), which owns `value` / `defaultValue` / `onValueChange`, `orientation` and `disabled` on `Tabs.Tab`, and supplies the `role="tablist"` wiring plus arrow-key navigation. `Tabs.Tab` and `Tabs.Panel` are matched by `value`, which can be any string. Plus native `<div>` attributes.
 
 Prefer React over the vanilla pattern past twelve panels — see below.
 
@@ -517,7 +475,6 @@ Prefer React over the vanilla pattern past twelve panels — see below.
 | `tab-panel`       | `0.75rem` of top padding; hidden unless its `data-value` matches the checked input                                                |
 | `tab-input`       | The visually-hidden radio driving selection                                                                                       |
 | `tabs-boxed`      | Segmented control: bordered `0.375rem` box, muted fill, a `primary-muted` thumb behind the active label. `2rem` tall, like `.btn` |
-| `tabs-primary`    | Fills that thumb with the primary colour. Boxed only                                                                              |
 | `tabs-full-width` | Root and list span the container, tabs share the row evenly                                                                       |
 | `tabs-wrap`       | List flows onto new rows, each label staying on one line                                                                          |
 | `tabs-sm`         | `1.75rem` tall tabs, `text-xs`; boxed track `1.625rem`                                                                            |

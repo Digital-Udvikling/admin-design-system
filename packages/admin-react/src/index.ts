@@ -229,7 +229,14 @@ export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
 export type { HotkeyHandler } from "./hotkey-registry";
-export { useConfirm, type ConfirmOptions } from "./useConfirm";
+export {
+  useConfirm,
+  usePrompt,
+  type ConfirmOptions,
+  type PromptOptions,
+  type ConfirmFn,
+  type PromptFn,
+} from "./useConfirm";
 export {
   Tooltip,
   type TooltipProps,

@@ -1,8 +1,9 @@
 "use client";
 
 import { Input as BaseInput } from "@base-ui/react/input";
-import { useCallback, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
+import { mergeRefs } from "./merge-refs";
 import type { InputProps, PasswordInputProps } from "./Input";
 import { InputAction } from "./InputAction";
 import { hasNode } from "./slot";
@@ -68,14 +69,7 @@ export function InputBase({
   );
   const hasValue = isControlled ? value != null && String(value).length > 0 : uncontrolledHasValue;
 
-  const setRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      innerRef.current = node;
-      if (typeof consumerRef === "function") consumerRef(node);
-      else if (consumerRef) consumerRef.current = node;
-    },
-    [consumerRef],
-  );
+  const setRef = useMemo(() => mergeRefs<HTMLInputElement>(innerRef, consumerRef), [consumerRef]);
 
   function handleChange(event: InputChangeEvent) {
     if (!isControlled) setUncontrolledHasValue(event.target.value.length > 0);

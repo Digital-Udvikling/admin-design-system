@@ -1,14 +1,15 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useId,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type Ref,
 } from "react";
+import { mergeRefs } from "./merge-refs";
 
 export interface DialogContextValue {
   close: () => void;
@@ -41,14 +42,7 @@ export function useDialogElement(
 
   // Without this merge, a consumer `ref` would flow through `...rest`, override
   // `ref={ref}`, and silently break open/close.
-  const setRef = useCallback(
-    (node: HTMLDialogElement | null) => {
-      ref.current = node;
-      if (typeof consumerRef === "function") consumerRef(node);
-      else if (consumerRef) consumerRef.current = node;
-    },
-    [consumerRef],
-  );
+  const setRef = useMemo(() => mergeRefs<HTMLDialogElement>(ref, consumerRef), [consumerRef]);
 
   useEffect(() => {
     const el = ref.current;

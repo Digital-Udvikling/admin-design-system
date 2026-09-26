@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useRef, type CSSProperties, type ComponentProps } from "react";
+import { useMemo, useRef, type CSSProperties, type ComponentProps } from "react";
 import { cn } from "./cn";
+import { mergeRefs } from "./merge-refs";
 import { PortalContainerContext } from "./portal-context";
 import { ConfirmHost } from "./useConfirm";
 
@@ -37,14 +38,7 @@ export function AdminRoot({
   // portal to `document.body`, outside `@scope (._ao-admin-root)`, and render
   // unstyled. A `<Dialog>` ancestor overrides this with its own `<dialog>`.
   const portalRef = useRef<HTMLElement | null>(null);
-  const setRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      portalRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [ref],
-  );
+  const setRef = useMemo(() => mergeRefs<HTMLDivElement>(portalRef, ref), [ref]);
 
   return (
     <PortalContainerContext.Provider value={portalRef}>

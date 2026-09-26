@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore, type Ref } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore, type Ref } from "react";
+import { mergeRefs } from "./merge-refs";
 import { IS_APPLE, canonicalize, parseKeys, toAriaKeyShortcuts } from "./hotkey-parse";
 import { register, type HotkeyEntry, type HotkeyHandler } from "./hotkey-registry";
 
@@ -83,14 +84,7 @@ export function useHotkeyClick<E extends HTMLElement>(
   options?: HotkeyOptions,
 ): HotkeyInfo & { setRef: (node: E | null) => void } {
   const elementRef = useRef<E | null>(null);
-  const setRef = useCallback(
-    (node: E | null) => {
-      elementRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [ref],
-  );
+  const setRef = useMemo(() => mergeRefs<E>(elementRef, ref), [ref]);
 
   const info = useHotkey(keys, () => elementRef.current?.click(), options);
   return { ...info, setRef };

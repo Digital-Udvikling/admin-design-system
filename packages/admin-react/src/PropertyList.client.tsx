@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useRef, useState, type MouseEvent } from "react";
+import { useMemo, useRef, useState, type MouseEvent } from "react";
 import { cn } from "./cn";
+import { mergeRefs } from "./merge-refs";
 import type { PropertyListValueProps } from "./PropertyList";
 
 // Hand-rolled to Tabler's stroke conventions so admin-react stays icon-library-agnostic.
@@ -60,14 +61,7 @@ export function PropertyListValue({
 }: PropertyListValueProps) {
   // Merged, not overridden by `rest`: copy reads the cell's text through ddRef.
   const ddRef = useRef<HTMLElement | null>(null);
-  const setRef = useCallback(
-    (node: HTMLElement | null) => {
-      ddRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [ref],
-  );
+  const setRef = useMemo(() => mergeRefs<HTMLElement>(ddRef, ref), [ref]);
   const copyButtonRef = useRef<HTMLButtonElement | null>(null);
   const [copied, setCopied] = useState(false);
 

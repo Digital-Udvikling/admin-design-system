@@ -121,11 +121,15 @@
     outline: none;
   }
 
-  /* Programmatic selection, the same hook as table rows. Hover keeps the
-     selected fill. */
+  /* Selection is [data-selected] only; unlike table rows, a current link doesn't
+     tint the item. Hover keeps the selected fill. */
   .item[data-selected] {
     @apply bg-primary-muted;
     --surface-current: var(--color-primary-muted);
+  }
+  /* A strong divider only between two selected items: primary-muted equals border in light mode. */
+  .item-group > .item[data-selected]:has(+ .item[data-selected]) {
+    @apply border-b-border-strong;
   }
   /* text-muted on the tint is under 4.5:1 in both themes. */
   .item[data-selected] .item-description {

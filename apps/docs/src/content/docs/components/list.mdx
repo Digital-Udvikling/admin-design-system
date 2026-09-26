@@ -317,7 +317,7 @@ For list semantics pass `role="list"` to `ItemGroup` and `role="listitem"` to ea
 | `item-group-bordered` | Wraps the stack in a `1px` border and `0.5rem` radius; the end rows round to match, so tooltips and menus can overflow it   |
 | `item-link`           | Stretches the `<a>` in `item-title` over the row via `::before`, tints on hover, rings when that link has keyboard focus    |
 
-There is no `item-md` or `item-default` — both are the unmodified `item`. `[data-selected]` on an `item` fills it with `primary-muted`, the same selection tint as table rows, and raises the description to `text`. For list semantics use `<ul class="item-group">` with `<li class="item">` rows.
+There is no `item-md` or `item-default` — both are the unmodified `item`. `[data-selected]` on an `item` fills it with `primary-muted`, the same selection tint as table rows, and raises the description to `text`; two adjacent selected items keep a strong divider. Unlike a table row, an item isn't tinted by an `aria-current` link alone. For list semantics use `<ul class="item-group">` with `<li class="item">` rows.
 
 In an `item-link` row the stretched link can also be an `<a>` placed directly in `item-content`, or an `<a class="item-content">`. Other links, buttons and form controls in the row stay clickable above the overlay.
 

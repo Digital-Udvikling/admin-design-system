@@ -374,17 +374,18 @@ For a form value, use a [Select](forms/selects.md).
 
 ### Vanilla
 
-| Class                 | Effect                                                                                                                                          |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `menu`                | Positioning context on a `<details>`                                                                                                            |
-| `menu-trigger`        | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                                                       |
-| `menu-popup`          | Popup panel: `11rem` min-width (the trigger's width when wider), `20rem` max-width, `18rem` max-height, scrolls, bordered surface with a shadow |
-| `menu-item`           | Row: full width, `0.75rem`/`0.25rem` padding, `text-sm` on a `1.25rem` line, hover wash, inset focus ring, `0.5rem` gap for an icon             |
-| `menu-item-danger`    | Destructive item: danger label and icon, danger-tinted hover                                                                                    |
-| `menu-item-indicator` | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                                                            |
-| `menu-separator`      | `1px` divider with `0.25rem` of margin                                                                                                          |
-| `menu-group`          | Column wrapper for a labelled set                                                                                                               |
-| `menu-group-label`    | Group heading: `text-xs` uppercase, muted                                                                                                       |
+| Class                   | Effect                                                                                                                                          |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `menu`                  | Positioning context on a `<details>`                                                                                                            |
+| `menu-trigger`          | `<summary>` behaviour: pointer cursor, no marker, trailing chevron that rotates when open                                                       |
+| `menu-popup`            | Popup panel: `11rem` min-width (the trigger's width when wider), `20rem` max-width, `18rem` max-height, scrolls, bordered surface with a shadow |
+| `menu-item`             | Row: full width, `0.75rem`/`0.25rem` padding, `text-sm` on a `1.25rem` line, hover wash, inset focus ring, `0.5rem` gap for an icon             |
+| `menu-item-danger`      | Destructive item: danger label and icon, danger-tinted hover                                                                                    |
+| `menu-item-indicator`   | `1em` check gutter, always reserved; its glyph shows only when `aria-checked="true"`                                                            |
+| `[aria-current="page"]` | On `menu-item`: primary-muted fill, primary text, medium weight                                                                                 |
+| `menu-separator`        | `1px` divider with `0.25rem` of margin                                                                                                          |
+| `menu-group`            | Column wrapper for a labelled set                                                                                                               |
+| `menu-group-label`      | Group heading: `text-xs` uppercase, muted                                                                                                       |
 
 Open and close is the browser's, via `<details>`/`<summary>`. Write the roles yourself: `role="menu"` on the popup, `role="menuitem"` on each item (`"menuitemcheckbox"` or `"menuitemradio"` plus `aria-checked` for checkable ones) and `role="group"` on a `menu-group`, named with `aria-labelledby` pointing at its `menu-group-label`. Items are reached with Tab in both bundles; there is no arrow-key navigation. A disabled anchor item takes `aria-disabled="true"` and no `href`, so neither a click nor Enter navigates.
 

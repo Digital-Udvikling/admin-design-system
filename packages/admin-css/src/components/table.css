@@ -83,13 +83,16 @@
     @apply w-px text-right whitespace-nowrap;
   }
 
-  /* Inline controls centre on the row instead of sitting on the text baseline. */
-  .table :where(td, th) > :is(.checkbox, .radio, .switch, .avatar),
+  /* Inline controls centre on the row instead of sitting on the text baseline.
+     Checkbox, radio and switch already fill one line box on their own. */
+  .table :where(td, th) > .avatar,
   .table-cell-actions > * {
     vertical-align: middle;
   }
-  /* A switch is exactly the default line-box height, so top alignment adds no slack. */
-  .table :where(td, th) > .switch {
+  /* A pill exactly as tall as the line box (md; sm in table-compact) top-aligns and adds
+     no slack. Other sizes stay on the text baseline. */
+  .table:not(.table-compact) :where(td, th) > .badge:not(.badge-sm, .badge-lg),
+  .table-compact :where(td, th) > .badge-sm {
     vertical-align: top;
   }
   .table-cell-actions > * + * {

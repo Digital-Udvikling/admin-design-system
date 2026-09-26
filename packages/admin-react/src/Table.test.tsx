@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "./Checkbox";
 import { Table } from "./Table";
 
@@ -52,7 +52,7 @@ describe("Table", () => {
 
   it("emits modifier classes on the root", () => {
     render(
-      <Table striped bordered relaxed sticky data-testid="t">
+      <Table striped bordered density="relaxed" sticky data-testid="t">
         <Table.Body>
           <Table.Row>
             <Table.Cell>x</Table.Cell>
@@ -69,7 +69,7 @@ describe("Table", () => {
     );
   });
 
-  it("maps density to the padding modifier and keeps relaxed working", () => {
+  it("maps density to the padding modifier", () => {
     const { rerender } = render(
       <Table density="compact" data-testid="t">
         <Table.Body>
@@ -82,7 +82,7 @@ describe("Table", () => {
     expect(screen.getByTestId("t")).toHaveAdminClass("table-compact");
 
     rerender(
-      <Table relaxed data-testid="t">
+      <Table density="relaxed" data-testid="t">
         <Table.Body>
           <Table.Row>
             <Table.Cell>x</Table.Cell>
@@ -127,7 +127,7 @@ describe("Table", () => {
             <Table.Cell gutter data-testid="gutter">
               !
             </Table.Cell>
-            <Table.Cell align="right" numeric data-testid="numeric">
+            <Table.Cell align="end" numeric data-testid="numeric">
               42
             </Table.Cell>
             <Table.Cell align="center" data-testid="center">
@@ -139,8 +139,83 @@ describe("Table", () => {
     );
     expect(screen.getByTestId("gutter")).toHaveAdminClass("table-cell", "table-cell-gutter");
     expect(screen.getByTestId("numeric")).toHaveAdminClass("table-cell", "table-cell-numeric");
-    expect(screen.getByTestId("numeric")).toHaveAttribute("data-align", "right");
+    expect(screen.getByTestId("numeric")).toHaveAttribute("data-align", "end");
     expect(screen.getByTestId("center")).toHaveAttribute("data-align", "center");
+  });
+
+  it("Table.HeaderCell with scope=row renders a body-styled row header", () => {
+    render(
+      <Table>
+        <Table.Body>
+          <Table.Row>
+            <Table.HeaderCell scope="row">#1001</Table.HeaderCell>
+            <Table.Cell>Ada</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>,
+    );
+    const header = screen.getByRole("rowheader", { name: "#1001" });
+    expect(header).toHaveAttribute("scope", "row");
+    expect(header).toHaveAdminClass("table-cell");
+    expect(header).not.toHaveAdminClass("table-header-cell");
+  });
+
+  it("Table.HeaderCell sort renders a table-sort button and sets aria-sort only when sorted", async () => {
+    const user = userEvent.setup();
+    const onSort = vi.fn();
+    render(
+      <Table>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell sort="ascending" onSort={onSort}>
+              Name
+            </Table.HeaderCell>
+            <Table.HeaderCell sort="none">Created</Table.HeaderCell>
+            <Table.HeaderCell>Email</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+      </Table>,
+    );
+    const name = screen.getByRole("columnheader", { name: "Name" });
+    expect(name).toHaveAttribute("aria-sort", "ascending");
+    expect(screen.getByRole("columnheader", { name: "Created" })).not.toHaveAttribute("aria-sort");
+    expect(screen.getByRole("columnheader", { name: "Email" }).querySelector("button")).toBeNull();
+
+    const button = screen.getByRole("button", { name: "Name" });
+    expect(button).toHaveAdminClass("table-sort");
+    expect(button).toHaveAttribute("type", "button");
+    await user.click(button);
+    expect(onSort).toHaveBeenCalledTimes(1);
+  });
+
+  it("Table.Cell actions and Table.Scroll emit their classes", () => {
+    render(
+      <Table.Scroll aria-label="Approvals" data-testid="scroll">
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell actions data-testid="actions">
+                <button type="button">Approve</button>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </Table.Scroll>,
+    );
+    expect(screen.getByTestId("scroll")).toHaveAdminClass("table-scroll");
+    expect(screen.getByTestId("actions")).toHaveAdminClass("table-cell", "table-cell-actions");
+  });
+
+  it("Table.Scroll is a named, focusable region", () => {
+    render(
+      <Table.Scroll aria-label="Orders">
+        <Table />
+      </Table.Scroll>,
+    );
+    const region = screen.getByRole("region", { name: "Orders" });
+    expect(region).toHaveAttribute("tabindex", "0");
+    // @ts-expect-error -- a scroll region needs aria-label or aria-labelledby
+    void (<Table.Scroll />);
   });
 
   it("Table.Row exposes selected and asLink hooks", () => {

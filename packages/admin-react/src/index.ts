@@ -275,6 +275,10 @@ export {
   type TableRowProps,
   type TableHeaderCellProps,
   type TableCellProps,
+  type TableScrollProps,
+  type TableSort,
+  type TableDensity,
+  type TableEmptyProps,
 } from "./Table";
 export {
   Sidebar,

@@ -11,9 +11,15 @@
     @apply px-3 py-1.5 text-left align-middle border-b border-border;
   }
 
+  /* The header band is a wash so it still shows on a surface-muted card. */
   .table :where(thead th),
   .table-header-cell {
-    @apply font-medium text-text-muted bg-surface-muted border-b-border-strong whitespace-nowrap;
+    @apply font-semibold text-text bg-surface-stripe border-b-border-strong whitespace-nowrap;
+  }
+
+  /* Row headers (<th scope="row">) read as body cells, one weight up. */
+  .table :where(tbody th:not(.table-header-cell)) {
+    @apply font-medium;
   }
 
   /* Totals/footer — all tfoot rows are emphasized; the first row carries a
@@ -26,99 +32,195 @@
     @apply border-t-2 border-t-border-strong;
   }
 
-  /* Body cells only — break long unbreakable values (IDs, hashes, URLs) instead
-     of forcing the table into horizontal overflow. */
+  /* Breaks IDs, hashes and URLs only in a constrained cell (fixed layout, explicit width);
+     an auto-layout column still grows to fit the longest token. */
   .table :where(td),
   .table-cell {
     overflow-wrap: break-word;
   }
 
-  /* No divider on the final row — `> :last-child` is the last section, tbody or
-     tfoot (browsers wrap a loose <tr> in an implicit tbody). */
-  .table > :last-child > tr:last-child :where(td),
+  /* No divider on the final row — the last section is tbody or tfoot (browsers
+     wrap a loose <tr> in an implicit tbody). */
+  .table > :where(tbody, tfoot):last-child > tr:last-child > :where(td, th),
   .table > :last-child > tr:last-child .table-cell {
     @apply border-b-0;
   }
 
   /* `data-align` serves both hand-written markup and React's `align` prop. */
-  .table :where(th, td)[data-align="right"] {
-    @apply text-right;
+  .table :where(th, td)[data-align="end"] {
+    @apply text-end;
   }
   .table :where(th, td)[data-align="center"] {
     @apply text-center;
   }
 
+  /* nowrap keeps an amount and its unit ("12.344,50 kr.") on one line. */
   .table-cell-numeric {
-    @apply text-right tabular-nums;
+    @apply text-right tabular-nums whitespace-nowrap;
   }
 
-  /* Status-icon gutter; the child rule normalizes Tabler webfont <i> and React
-     SVG icons to the same 16px box and baseline. */
+  /* Status-icon gutter. Block children (webfont <i>, SVG, checkbox) centre on the cell with no
+     line box; min-width stops an overflowing auto-layout table from squeezing it. */
   .table-cell-gutter {
-    @apply w-6 px-0 text-center text-text-muted;
+    @apply w-6 min-w-6 text-center text-text-muted;
+  }
+  .table-cell-gutter > :is(i, svg, .checkbox) {
+    display: flex;
+    margin-inline: auto;
+  }
+  .table-cell-gutter > i {
+    width: fit-content;
   }
   .table-cell-gutter > :is(i, svg) {
     font-size: 1rem;
     line-height: 1;
+  }
+
+  /* Trailing row-actions column: shrinks to its controls, and its block padding
+     is dropped (below the density rules) so a btn-sm fits a text row. */
+  .table-cell-actions {
+    @apply w-px text-right whitespace-nowrap;
+  }
+
+  /* Inline controls centre on the row instead of sitting on the text baseline.
+     Checkbox, radio and switch already fill one line box on their own. */
+  .table :where(td, th) > .avatar,
+  .table-cell-actions > * {
     vertical-align: middle;
+  }
+  /* A pill exactly as tall as the line box (md; sm in table-compact) top-aligns and adds
+     no slack. Other sizes stay on the text baseline. */
+  .table:not(.table-compact) :where(td, th) > .badge:not(.badge-sm, .badge-lg),
+  .table-compact :where(td, th) > .badge-sm {
+    vertical-align: top;
+  }
+  /* A row's confirm <dialog> sits in the cell but renders centred in the top layer. */
+  .table-cell-actions > * + :not(dialog) {
+    margin-inline-start: 0.25rem;
+  }
+
+  /* Row states set --_table-row-bg on the <tr>; cells paint it as an image layer over their
+     own background-color (pinned cells over the container fill). Later states win: stripe,
+     hover, selection. Reset per row so a nested table doesn't inherit. */
+  .table tbody tr {
+    --_table-row-bg: transparent;
+    --_table-row-divider: var(--color-border);
+  }
+  .table tbody tr > :where(td, th) {
+    background-image: linear-gradient(var(--_table-row-bg), var(--_table-row-bg));
+  }
+  /* table-header-cell keeps its strong divider in a body row. */
+  .table tbody tr > :where(:is(td, th):not(.table-header-cell)) {
+    border-bottom-color: var(--_table-row-divider);
   }
 
   /* Modifiers compose independently — striped + sticky + relaxed is valid. */
-  .table-striped tbody tr:nth-child(even) :where(td) {
-    @apply bg-surface-muted;
+  .table-striped tbody tr:nth-child(even) {
+    --_table-row-bg: var(--color-surface-stripe);
+  }
+
+  /* Hover — always on. Admin tables expect a row-scan affordance. */
+  .table tbody tr:hover {
+    --_table-row-bg: var(--color-surface-hover);
+  }
+
+  /* Selection: [data-selected], a checked row checkbox (switches and Base UI's
+     hidden inputs excluded) or a current row link. */
+  .table
+    tbody
+    tr:is(
+      [data-selected],
+      :has(
+        input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+        .checkbox[data-checked],
+        a[aria-current]:not([aria-current="false"])
+      )
+    ) {
+    --_table-row-bg: var(--color-primary-muted);
+    --surface-current: var(--color-primary-muted);
+  }
+
+  /* A strong divider only between two selected rows: primary-muted equals border in light
+     mode. :has() can't nest, so the next row's tests are relative descendant matches. */
+  .table
+    tbody
+    tr:is(
+      [data-selected],
+      :has(
+        input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+        .checkbox[data-checked],
+        a[aria-current]:not([aria-current="false"])
+      )
+    ):has(
+      + tr[data-selected],
+      + tr input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+      + tr .checkbox[data-checked],
+      + tr a[aria-current]:not([aria-current="false"])
+    ) {
+    --_table-row-divider: var(--color-border-strong);
   }
 
   .table-bordered {
     @apply border border-border;
   }
+  /* Vertical rules only, so the strong header and footer dividers survive. */
   .table-bordered :where(th, td) {
-    @apply border border-border;
+    @apply border-x border-x-border;
   }
 
   .table-relaxed :where(th, td) {
     @apply px-4 py-3;
   }
 
-  /* Sticky header — requires a scrolling ancestor. The component adds no wrapper:
-     it'd have no vanilla equivalent and breaks compositions like <details><table>. */
+  /* Sticky header — requires a scrolling ancestor (see table-scroll). The divider is an inset
+     shadow: a collapsed border belongs to the grid and scrolls away. */
   .table-sticky thead :where(th) {
-    @apply sticky top-0 z-10 bg-surface-muted;
+    @apply sticky top-0 z-10;
+    border-bottom-width: 0;
+    box-shadow: inset 0 -1px 0 var(--color-border-strong);
+  }
+  /* Opaque header cells: the header wash over the container fill. */
+  .table-sticky thead :where(th),
+  .table-pin-col thead > tr > :first-child {
+    background:
+      linear-gradient(var(--color-surface-stripe), var(--color-surface-stripe)),
+      var(--surface-current, var(--color-surface));
   }
 
-  /* Hover — always on. Admin tables expect a row-scan affordance. */
-  .table tbody tr {
-    @apply transition-colors duration-75;
-  }
-  .table tbody tr:hover :where(td) {
-    @apply bg-surface-muted;
-  }
-
-  /* [data-selected] is the hook for programmatic selection without a checkbox. */
-  .table tbody tr:has(input[type="checkbox"]:checked),
-  .table tbody tr:has(.checkbox[data-checked]),
-  .table tbody tr[data-selected] {
-    @apply bg-primary-muted;
-  }
-  .table tbody tr:has(input[type="checkbox"]:checked):hover :where(td),
-  .table tbody tr:has(.checkbox[data-checked]):hover :where(td),
-  .table tbody tr[data-selected]:hover :where(td) {
-    @apply bg-primary-muted;
-  }
-
-  /* The row's first <a> gets its hit-area expanded over the row via ::after;
-     other in-row anchors/buttons need `relative` + non-auto z-index to stay
-     clickable (`.btn` already qualifies). */
+  /* Whole-row link: the row's first <a> in document order (no earlier sibling of
+     it or of an ancestor holds a link) stretches a ::before over the row; ::after
+     stays free for link-external's arrow. */
   .table-row-link {
     @apply relative cursor-pointer;
   }
-  .table-row-link:hover :where(td) {
-    @apply bg-surface-muted;
-  }
-  .table-row-link a:first-of-type::after {
+  .table-row-link
+    a:not(.table-row-link :is(a, :has(a)) ~ a, .table-row-link :is(a, :has(a)) ~ * a)::before {
     content: "";
     @apply absolute inset-0;
   }
-  .table-row-link:focus-within {
+  /* Controls and later links sit above the overlay. Zero specificity, so a
+     component that positions its own control (input-action) keeps it. */
+  :where(
+    .table-row-link :is(button, input, select, textarea, label, summary, [tabindex]:not(a)),
+    .table-row-link :is(a, :has(a)) ~ a,
+    .table-row-link :is(a, :has(a)) ~ * a
+  ) {
+    position: relative;
+    z-index: 1;
+  }
+  /* Keyboard focus on the row link rings the row through its overlay. */
+  .table-row-link
+    a:not(
+      .table-row-link :is(a, :has(a)) ~ a,
+      .table-row-link :is(a, :has(a)) ~ * a
+    ):focus-visible {
+    outline: none;
+  }
+  .table-row-link
+    a:not(
+      .table-row-link :is(a, :has(a)) ~ a,
+      .table-row-link :is(a, :has(a)) ~ * a
+    ):focus-visible::before {
     @apply outline-2 -outline-offset-2 outline-focus;
   }
 
@@ -129,40 +231,130 @@
     @apply px-2 py-1 text-xs;
   }
 
+  /* Column classes win over the density modifiers. */
+  .table :where(th, td).table-cell-gutter {
+    @apply px-0;
+  }
+  .table :where(th, td).table-cell-actions {
+    @apply py-0;
+  }
+
+  /* A table directly in a card, or in its table-scroll, puts its edge cells on the card's
+     inset; the gutter's px-0 gives way so a selection checkbox lines up with the title. */
+  :is(.card > .table, .card > .table-scroll > .table) > * > tr > :first-child {
+    padding-inline-start: 1rem;
+  }
+  :is(.card > .table, .card > .table-scroll > .table) > * > tr > :last-child {
+    padding-inline-end: 1rem;
+  }
+  :is(.card-compact > .table, .card-compact > .table-scroll > .table) > * > tr > :first-child {
+    padding-inline-start: 0.75rem;
+  }
+  :is(.card-compact > .table, .card-compact > .table-scroll > .table) > * > tr > :last-child {
+    padding-inline-end: 0.75rem;
+  }
+
   /* Empty state — a centered, muted message row (author sets colspan). */
   .table :where(td).table-empty,
   .table-empty {
     @apply text-center text-text-muted py-8;
   }
   /* No hover affordance on the empty-state row. */
-  .table tbody tr:has(> .table-empty):hover :where(td) {
-    background-color: transparent;
+  .table tbody tr:has(> .table-empty) {
+    --_table-row-bg: transparent;
   }
 
-  /* Pinned first column — sticky against horizontal scroll. Requires an
-     overflow-x ancestor (the table adds no wrapper, same stance as table-sticky).
-     Each row state repaints the cell so scrolled content doesn't bleed through. */
-  .table-pin-col :where(thead th, tbody td, tfoot :is(td, th)):first-child {
+  /* Pinned first column; needs an overflow-x ancestor (see table-scroll). The edge is an
+     inset shadow, since a collapsed border scrolls away with the grid. */
+  .table-pin-col {
+    --_table-pin-edge: -1px;
+  }
+  .table-pin-col:dir(rtl) {
+    --_table-pin-edge: 1px;
+  }
+  .table-pin-col :where(thead, tbody, tfoot) > tr > :first-child {
     position: sticky;
     inset-inline-start: 0;
+    box-shadow: inset var(--_table-pin-edge) 0 0 var(--_table-row-divider, var(--color-border));
   }
-  .table-pin-col tbody td:first-child {
-    z-index: 1;
-    background-color: var(--color-surface);
+  /* Opaque so scrolled content doesn't show through; z-index 2 clears the
+     controls table-row-link lifts to 1. */
+  .table-pin-col :where(tbody, tfoot) > tr > :first-child {
+    z-index: 2;
+    background:
+      linear-gradient(var(--_table-row-bg, transparent), var(--_table-row-bg, transparent)),
+      var(--surface-current, var(--color-surface));
   }
   /* Header corner sits above the body column and the sticky header row. */
-  .table-pin-col :where(thead th):first-child {
+  .table-pin-col thead > tr > :first-child {
     z-index: 11;
   }
-  .table-pin-col.table-striped tbody tr:nth-child(even) td:first-child {
-    background-color: var(--color-surface-muted);
+  .table-sticky.table-pin-col thead > tr > :first-child {
+    box-shadow:
+      inset var(--_table-pin-edge) 0 0 var(--color-border),
+      inset 0 -1px 0 var(--color-border-strong);
   }
-  .table-pin-col tbody tr:hover td:first-child {
-    background-color: var(--color-surface-muted);
+
+  /* Opt-in scroll region for wide tables, table-sticky and table-pin-col. The
+     table adds none itself: it would break compositions like <details><table>. */
+  .table-scroll {
+    @apply max-w-full overflow-auto overscroll-x-contain;
   }
-  .table-pin-col tbody tr:has(input[type="checkbox"]:checked) td:first-child,
-  .table-pin-col tbody tr:has(.checkbox[data-checked]) td:first-child,
-  .table-pin-col tbody tr[data-selected] td:first-child {
-    background-color: var(--color-primary-muted);
+
+  /* Sortable header: a text button in the header's type; the indicator follows
+     the cell's aria-sort. */
+  .table-sort {
+    --_table-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 9l4 -4l4 4'/%3E%3Cpath d='M16 15l-4 4l-4 -4'/%3E%3C/svg%3E");
+    font: inherit;
+    color: inherit;
+    /* Top-aligned so the button fills the line box instead of growing the header row. */
+    vertical-align: top;
+    @apply inline-flex items-center gap-1 p-0 border-0 bg-transparent rounded-sm cursor-pointer
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+  .table-sort::after {
+    content: "";
+    @apply size-[1em] shrink-0;
+    background-color: var(--color-text-muted);
+    mask: var(--_table-sort-icon) center / contain no-repeat;
+  }
+  .table-sort:hover::after {
+    background-color: currentColor;
+  }
+  :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort {
+    --_table-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+  }
+  :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
+    background-color: currentColor;
+  }
+  [aria-sort="ascending"] > .table-sort::after {
+    rotate: 180deg;
+  }
+  /* Label stays flush with right-aligned numbers; the indicator leads. */
+  [data-align="end"] > .table-sort {
+    @apply flex-row-reverse;
+  }
+
+  /* Fills are forced to Canvas and a Highlight fill would sit under Canvas text
+     backplates, so selection becomes an inset outline. */
+  @media (forced-colors: active) {
+    .table
+      tbody
+      tr:is(
+        [data-selected],
+        :has(
+          input[type="checkbox"]:checked:not([role="switch"], [aria-hidden="true"]),
+          .checkbox[data-checked],
+          a[aria-current]:not([aria-current="false"])
+        )
+      ) {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+    .table-sort::after,
+    .table-sort:hover::after,
+    :is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
+      background-color: CanvasText;
+    }
   }
 }

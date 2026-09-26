@@ -18,7 +18,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
 <section class="flex w-full flex-col gap-3">
   <div class="flex flex-wrap items-center justify-between gap-3">
     <div class="flex items-center gap-2">
-      <h2 class="text-lg font-semibold">Orders</h2>
+      <h2>Orders</h2>
       <span class="badge">128</span>
     </div>
     <div class="flex gap-2">
@@ -37,19 +37,19 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
       <tr>
         <th>Order</th>
         <th>Customer</th>
-        <th data-align="right">Total</th>
+        <th data-align="end">Total</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>#1001</td>
         <td>Ada Lovelace</td>
-        <td data-align="right">$129.00</td>
+        <td data-align="end">$129.00</td>
       </tr>
       <tr>
         <td>#1002</td>
         <td>Grace Hopper</td>
-        <td data-align="right">$72.50</td>
+        <td data-align="end">$72.50</td>
       </tr>
     </tbody>
   </table>
@@ -60,7 +60,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
 <section className="flex w-full flex-col gap-3">
   <div className="flex flex-wrap items-center justify-between gap-3">
     <div className="flex items-center gap-2">
-      <h2 className="text-lg font-semibold">Orders</h2>
+      <h2>Orders</h2>
       <Badge>128</Badge>
     </div>
     <div className="flex gap-2">
@@ -77,19 +77,19 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
       <Table.Row>
         <Table.HeaderCell>Order</Table.HeaderCell>
         <Table.HeaderCell>Customer</Table.HeaderCell>
-        <Table.HeaderCell align="right">Total</Table.HeaderCell>
+        <Table.HeaderCell align="end">Total</Table.HeaderCell>
       </Table.Row>
     </Table.Head>
     <Table.Body>
       <Table.Row>
         <Table.Cell>#1001</Table.Cell>
         <Table.Cell>Ada Lovelace</Table.Cell>
-        <Table.Cell align="right">$129.00</Table.Cell>
+        <Table.Cell align="end">$129.00</Table.Cell>
       </Table.Row>
       <Table.Row>
         <Table.Cell>#1002</Table.Cell>
         <Table.Cell>Grace Hopper</Table.Cell>
-        <Table.Cell align="right">$72.50</Table.Cell>
+        <Table.Cell align="end">$72.50</Table.Cell>
       </Table.Row>
     </Table.Body>
   </Table>
@@ -106,7 +106,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
 <section class="flex w-full flex-col gap-3">
   <div class="flex flex-wrap items-center justify-between gap-3">
     <div class="flex items-center gap-2">
-      <h2 class="text-lg font-semibold">Team members</h2>
+      <h2>Team members</h2>
       <span class="badge">2</span>
     </div>
     <button class="btn btn-primary btn-sm" type="button">
@@ -116,14 +116,14 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
   </div>
   <div class="item-group item-group-bordered">
     <div class="item">
-      <div class="item-media"><span class="avatar avatar-sm">AL</span></div>
+      <div class="item-media"><span class="avatar avatar-sm" aria-hidden="true">AL</span></div>
       <div class="item-content">
         <div class="item-title">Ada Lovelace</div>
         <div class="item-description">Admin · ada@example.com</div>
       </div>
     </div>
     <div class="item">
-      <div class="item-media"><span class="avatar avatar-sm">GH</span></div>
+      <div class="item-media"><span class="avatar avatar-sm" aria-hidden="true">GH</span></div>
       <div class="item-content">
         <div class="item-title">Grace Hopper</div>
         <div class="item-description">Editor · grace@example.com</div>
@@ -137,7 +137,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
 <section className="flex w-full flex-col gap-3">
   <div className="flex flex-wrap items-center justify-between gap-3">
     <div className="flex items-center gap-2">
-      <h2 className="text-lg font-semibold">Team members</h2>
+      <h2>Team members</h2>
       <Badge>2</Badge>
     </div>
     <Button variant="primary" size="sm" icon={IconPlus}>
@@ -146,12 +146,12 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
   </div>
   <ItemGroup bordered>
     <Item
-      media={<Avatar initials="AL" size="sm" />}
+      media={<Avatar initials="AL" size="sm" aria-hidden />}
       title="Ada Lovelace"
       description="Admin · ada@example.com"
     />
     <Item
-      media={<Avatar initials="GH" size="sm" />}
+      media={<Avatar initials="GH" size="sm" aria-hidden />}
       title="Grace Hopper"
       description="Editor · grace@example.com"
     />
@@ -171,7 +171,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
     <div class="card-header">
       <h3 class="card-title">
         Webhooks
-        <span class="badge badge-sm">2</span>
+        <span class="badge">2</span>
       </h3>
       <div class="card-toolbar">
         <button class="btn btn-sm" type="button">Add webhook</button>
@@ -199,8 +199,7 @@ import { IconDownload, IconPlus } from "@tabler/icons-react";
 <Card
   title={
     <>
-      Webhooks
-      <Badge size="sm">2</Badge>
+      Webhooks <Badge>2</Badge>
     </>
   }
   toolbar={<Button size="sm">Add webhook</Button>}

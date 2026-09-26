@@ -23,24 +23,24 @@
         <tr>
           <th>Order</th>
           <th>Customer</th>
-          <th data-align="right">Total</th>
+          <th data-align="end">Total</th>
         </tr>
       </thead>
       <tbody>
         <tr class="table-row-link">
           <td><a href="#1001">#1001</a></td>
           <td>Ada Lovelace</td>
-          <td data-align="right">$129.00</td>
+          <td data-align="end">$129.00</td>
         </tr>
-        <tr class="table-row-link" data-selected>
+        <tr class="table-row-link">
           <td><a href="#1002" aria-current="true">#1002</a></td>
           <td>Grace Hopper</td>
-          <td data-align="right">$72.50</td>
+          <td data-align="end">$72.50</td>
         </tr>
         <tr class="table-row-link">
           <td><a href="#1003">#1003</a></td>
           <td>Alan Turing</td>
-          <td data-align="right">$18.00</td>
+          <td data-align="end">$18.00</td>
         </tr>
       </tbody>
     </table>
@@ -82,7 +82,7 @@
         <Table.Row>
           <Table.HeaderCell>Order</Table.HeaderCell>
           <Table.HeaderCell>Customer</Table.HeaderCell>
-          <Table.HeaderCell align="right">Total</Table.HeaderCell>
+          <Table.HeaderCell align="end">Total</Table.HeaderCell>
         </Table.Row>
       </Table.Head>
       <Table.Body>
@@ -91,23 +91,23 @@
             <a href="#1001">#1001</a>
           </Table.Cell>
           <Table.Cell>Ada Lovelace</Table.Cell>
-          <Table.Cell align="right">$129.00</Table.Cell>
+          <Table.Cell align="end">$129.00</Table.Cell>
         </Table.Row>
-        <Table.Row asLink selected>
+        <Table.Row asLink>
           <Table.Cell>
             <a href="#1002" aria-current="true">
               #1002
             </a>
           </Table.Cell>
           <Table.Cell>Grace Hopper</Table.Cell>
-          <Table.Cell align="right">$72.50</Table.Cell>
+          <Table.Cell align="end">$72.50</Table.Cell>
         </Table.Row>
         <Table.Row asLink>
           <Table.Cell>
             <a href="#1003">#1003</a>
           </Table.Cell>
           <Table.Cell>Alan Turing</Table.Cell>
-          <Table.Cell align="right">$18.00</Table.Cell>
+          <Table.Cell align="end">$18.00</Table.Cell>
         </Table.Row>
       </Table.Body>
     </Table>
@@ -204,4 +204,4 @@
 
 ## Built from
 
-[Table](../components/tables.md), [Card](../components/cards.md), [PropertyList](../components/property-list.md) and [Badge](../components/badges.md) in a [Grid](../components/grid.md), whose utilities vanilla pages load from the [utilities bundle](../getting-started/vanilla.md#utilities-optional). Selection is yours to wire: mark the active row `selected` (`[data-selected]` in vanilla), put `aria-current="true"` on its link, and render that record in the detail pane. Below the `sm` breakpoint the pane stacks under the table.
+[Table](../components/tables.md), [Card](../components/cards.md), [PropertyList](../components/property-list.md) and [Badge](../components/badges.md) in a [Grid](../components/grid.md), whose utilities vanilla pages load from the [utilities bundle](../getting-started/vanilla.md#utilities-optional). Selection is yours to wire: put `aria-current="true"` on the active row's link, which also tints the row (use `selected` / `[data-selected]` for a row without a link), and render that record in the detail pane. Below the `sm` breakpoint the pane stacks under the table.

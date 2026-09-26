@@ -24,14 +24,11 @@
   "sideEffects": [
     "**/*.css"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     },
     "./styles.css": "./dist/admin.scoped.css",
     "./styles.scoped.css": "./dist/admin.scoped.css"
@@ -53,7 +50,7 @@
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",
-    "@base-ui/react": "1.4.1",
+    "@base-ui/react": "^1.4.1",
     "clsx": "2.1.1"
   },
   "devDependencies": {

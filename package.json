@@ -10,6 +10,7 @@
     "dev": "pnpm --filter docs dev",
     "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
     "check-docs": "pnpm --filter docs check-docs",
+    "check-package": "node scripts/check-package/index.mjs",
     "test": "pnpm -r --filter='@aortl/*' run test",
     "generate-skill": "pnpm --filter docs generate-skill",
     "render": "pnpm --filter docs render",
@@ -22,11 +23,14 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
     "@release-it/bumper": "7.0.6",
     "@release-it/keep-a-changelog": "7.1.0",
+    "es-module-lexer": "2.1.0",
     "husky": "9.1.7",
     "oxfmt": "0.50.0",
     "oxlint": "1.65.0",
+    "publint": "0.3.24",
     "release-it": "20.2.0",
     "typescript": "5.8.3"
   },

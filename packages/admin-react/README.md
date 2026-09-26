@@ -36,5 +36,5 @@ export function App() {
 ## Build
 
 ```fish
-pnpm build       # produces dist/index.{mjs,cjs}, dist/index.d.ts, dist/admin.css
+pnpm build       # produces ESM dist/*.js + dist/*.d.ts (one per module), dist/admin.scoped.css
 ```

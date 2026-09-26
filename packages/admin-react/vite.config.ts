@@ -34,18 +34,22 @@ export default defineConfig({
     react(),
     dts({
       tsconfigPath: "./tsconfig.json",
-      rollupTypes: true,
       include: ["src"],
       exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test-setup.ts"],
+      // Source imports are extensionless (bundler resolution); Node ESM resolution needs `.js`.
+      beforeWriteFile: (filePath, content) => ({
+        filePath,
+        content: content.replace(/((?:from|import\()\s*["'])(\.\.?\/[^"']+?)(["'])/g, "$1$2.js$3"),
+      }),
     }),
     assertUseClient(),
   ],
   build: {
     lib: {
       entry: resolve(import.meta.dirname, "src/index.ts"),
-      formats: ["es", "cjs"],
+      formats: ["es"],
       // One file per source module, so each keeps its own "use client" boundary.
-      fileName: (format, name) => `${name}.${format === "es" ? "mjs" : "cjs"}`,
+      fileName: (_format, name) => `${name}.js`,
     },
     rollupOptions: {
       external: (id) =>

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `number-input-ghost` / `<NumberInput variant="ghost">`, and `aria-invalid` on `NumberInput`, which it sets on the field. (both)
+- `brand-tile-warning` / `<BrandTile variant="warning">`. (both)
+- Type exports for types the API already used: `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn` and `BrandTileSize`. (react)
+- `@aortl/admin-css/theme.css`, `/components.css` and `/fonts.css`, the source entry points for a Tailwind build. (css)
 - `data-collapsed` on a `.sidebar` collapses the rail without a `sidebar-toggle`, for a rail that renders collapsed from the server. (css)
 - `CopyButton`, a button that writes `value` to the clipboard, shows a check and sets `data-copied` for 1200ms (`timeout`), and reads `copiedLabel` ("Copied") from a polite live region inside the enclosing `Dialog` or `AdminRoot`. Without children it is a ghost square icon button named "Copy". `useCopy()` returns the same `{ copied, copy }` for your own trigger, and `PropertyList` copy buttons now announce the copy too. (react)
 - `page-center` / `PageCenter`, a `<main>` at least the viewport's height that centres one child capped at 24rem (`page-center-lg` / `size="lg"`: 32rem; `--page-center-max` for anything between), for sign-in and error pages outside the app shell. (both)
@@ -40,6 +44,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Breaking:** Form controls take `variant` `bordered` or `ghost` only; invalid is a state. `input-danger`, `input-info`, `input-success`, `input-warning`, the matching `textarea-*` classes, `select-danger`, `file-input-danger`, `number-input-danger` and `combobox-danger` are removed, as are those `variant` values on `Input`, `Textarea`, `Select.Trigger`, `FileInput`, `Combobox.Control` and `NumberInput`. Mark a control with `aria-invalid="true"` or put it in an invalid `Field`; `:user-invalid` and `data-invalid` still apply. (both)
+- **Breaking:** `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` take `current` instead of `active`, like `Breadcrumbs.Item`; it sets `aria-current="page"`. `Navbar.Dropdown` keeps `active`. (react)
+- **Breaking:** Pagination classes are `pagination-item`, `pagination-link` and `pagination-ellipsis` (were `page-item`, `page-link`, `page-ellipsis`), and the current page is marked by `aria-current="page"` only; the bare `.active` class no longer styles it. (both)
+- **Breaking:** Position values follow Base UI: `Timeline` takes `orientation="horizontal"` instead of `horizontal`; `Table.Cell` / `Table.HeaderCell` `align` takes `start`, `center` or `end` (was `left`, `center`, `right`), and cells use `data-align="end"` (was `"right"`); `tooltip-wrap-left` / `-right` become `tooltip-wrap-start` / `-end`. (both)
+- **Breaking:** `item-outline` / `Item variant="outline"` is `item-bordered` / `variant="bordered"`. (both)
+- **Breaking:** `BrandTile` takes `variant` `accent` (default), `info`, `success`, `warning` or `danger`, and a `soft` boolean; `solid` and `soft` are no longer variants. `brand-tile-info`, `brand-tile-success` and `brand-tile-danger` are solid fills; add `brand-tile-soft` for the tint they had. (both)
+- **Breaking:** `tabs-primary` and `Tabs` `primary` are removed; boxed tabs mark the selection with the `primary-muted` fill. (both)
+- **Breaking:** `Spinner`, `Navbar.MobileToggle` and `Sidebar.CollapseToggle` take `aria-label` instead of `label`, with the same defaults. (react)
+- **Breaking:** Chart custom properties are `--chart-value`, `--chart-bar-color`, `--chart-segment-color` and `--chart-legend-color` (were `--value`, `--bar-color`, `--segment-color`, `--legend-color`), and the rail widths are `--sidebar-width` and `--sidebar-width-collapsed` (were `--app-shell-sidebar-w` and `-collapsed`). Custom properties starting with `--_` are internal: `--btn-hover`, `--table-row-bg`, `--timeline-accent`, the chevron masks and the other undocumented ones moved there. (css)
+- **Breaking:** `@aortl/admin-css` no longer exports `./src/*`; import `theme.css`, `components.css` and `fonts.css` by those names. `@aortl/admin-react` drops the duplicate `./styles.scoped.css` subpath (use `./styles.css`). (both)
+- **Breaking:** `BarProps`, `SegmentProps`, `TrendDirection` and `TrendIntent` are `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection` and `StatCardTrendIntent`, and `ChartType` is no longer exported. (react)
+- The `react` and `react-dom` peer range is `^19.2.0` (was `>=19.2`). (react)
 - IBM Plex ships in the package (`dist/fonts/`, SIL OFL 1.1) instead of loading from `fonts.gstatic.com`, so no page makes a request to Google. The CSS references the files relatively, so a CDN link to `dist/admin.min.css` and `@aortl/admin-react/styles.css` both pick them up. (both)
 - The scoped bundle declares its tokens at zero specificity (`:where(:scope)`), so `._ao-admin-root { --color-primary: … }` overrides them; before, the bundle's own declaration won. Its `@keyframes` and `@position-try` names carry the `_ao-` prefix, so a host's `spinner-spin` can't replace them. (css)
 - `Dialog` and `Drawer` call `onOpenChange(true)` when something other than `open` opens them, such as an invoker command, so controlled state follows. (react)

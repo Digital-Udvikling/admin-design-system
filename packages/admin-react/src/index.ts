@@ -252,7 +252,7 @@ export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
-export { useConfirm, type ConfirmOptions } from "./useConfirm";
+export { useConfirm, usePrompt, type ConfirmOptions, type PromptOptions } from "./useConfirm";
 export {
   Tooltip,
   type TooltipProps,

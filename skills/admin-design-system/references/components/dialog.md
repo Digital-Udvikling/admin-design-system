@@ -11,6 +11,7 @@
   - [Form dialog](#form-dialog)
   - [Destructive, no light dismiss](#destructive-no-light-dismiss)
   - [Confirmation (React only)](#confirmation-react-only)
+  - [Prompt (React only)](#prompt-react-only)
   - [Composed with Dialog.Container](#composed-with-dialogcontainer)
   - [Controlled state](#controlled-state)
 - [Reference](#reference)
@@ -394,6 +395,40 @@ function DeleteProject() {
 <DeleteProject />;
 ```
 
+### Prompt (React only)
+
+`usePrompt()` shares `useConfirm()`'s host and queue.
+
+**Example**
+
+```tsx
+function RenameProject() {
+  const prompt = usePrompt();
+  const [name, setName] = useState("Billing");
+  return (
+    <>
+      <Button
+        onClick={async () => {
+          const next = await prompt({
+            title: "Rename project",
+            label: "Name",
+            defaultValue: name,
+            required: true,
+            confirmLabel: "Rename",
+          });
+          if (next !== null) setName(next);
+        }}
+      >
+        Rename project
+      </Button>
+      <span>{name}</span>
+    </>
+  );
+}
+
+<RenameProject />;
+```
+
 ### Composed with Dialog.Container
 
 **Example**
@@ -529,6 +564,18 @@ function ConfirmDelete({ onConfirm }: { onConfirm: () => void }) {
 | `cancelLabel`      | `ReactNode`             | `"Cancel"`   |
 | `variant`          | `"default" \| "danger"` | `"default"`  |
 
+| `prompt()` option | Type                    | Default      |
+| ----------------- | ----------------------- | ------------ |
+| `title`           | `ReactNode`             | — (required) |
+| `label`           | `ReactNode`             | — (required) |
+| `description`     | `ReactNode`             | —            |
+| `defaultValue`    | `string`                | `""`         |
+| `placeholder`     | `string`                | —            |
+| `required`        | `boolean`               | `false`      |
+| `confirmLabel`    | `ReactNode`             | `"Confirm"`  |
+| `cancelLabel`     | `ReactNode`             | `"Cancel"`   |
+| `variant`         | `"default" \| "danger"` | `"default"`  |
+
 `Dialog` assembles header (title, `icon`, close button), description, body and footer around its children; `dismissible={false}` drops the X, an empty slot (`null`, `false`, `""`) renders nothing, and `icon` needs a `title`. `classNames` covers `header`, `title`, `close`, `description`, `body`, `footer`.
 
 A `Dialog.Title` sets the dialog's `aria-labelledby` and a `Dialog.Description` its `aria-describedby`, in `Dialog.Container` too. Passing `aria-label`, `aria-labelledby` or `aria-describedby` overrides them.
@@ -542,6 +589,8 @@ Leave `open` off for the uncontrolled case, as the Invoker Commands pattern belo
 Plus native `<dialog>` attributes.
 
 `useConfirm()` returns `confirm(options)`, which opens a `size="sm"` dialog with Cancel then Confirm and resolves `Promise<boolean>`: `true` on Confirm, `false` on Cancel, Esc, or when the `<AdminRoot>` unmounts. A backdrop click does nothing. Calls made while one is open queue and open in call order. `variant: "danger"` renders a danger confirm button and puts initial focus on Cancel; otherwise Confirm takes focus. The caller runs the action and shows its pending and error state after the promise resolves.
+
+`usePrompt()` returns `prompt(options)`, which opens the same dialog with a labelled `Input` that takes focus. It resolves `Promise<string | null>`: the input's value on Confirm or Enter, `null` on Cancel, Esc, or when the `<AdminRoot>` unmounts. `required` is the native attribute, so an empty input blocks Confirm and shows the invalid state. Prompts and confirms share one queue.
 
 ### Vanilla
 

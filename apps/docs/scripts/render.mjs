@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { chromium } from "playwright-core";
 import { BASE_URL, bundle } from "./lib/bundle.mjs";
+import { MIME, findChrome as lookupChrome, pool } from "./lib/browser.mjs";
 import {
   collectExamples,
   loadPages,
@@ -264,16 +265,6 @@ function cellHtml({ variant, theme, html, moduleIndex }) {
   return `<!doctype html><html data-theme="${theme}"><head><meta charset="utf-8">${links}<style>${style}</style></head><body>${body}</body></html>`;
 }
 
-const MIME = {
-  ".css": "text/css",
-  ".js": "text/javascript",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".woff2": "font/woff2",
-  ".woff": "font/woff",
-  ".ttf": "font/ttf",
-};
-
 const fileCache = new Map();
 // Shared across cells: each context starts with an empty HTTP cache, and
 // refetching the webfonts per cell dominated the render time.
@@ -443,18 +434,10 @@ async function compose(browser, label, cells) {
 // ---------------------------------------------------------------- main
 
 function findChrome() {
-  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
-  for (const name of ["chromium", "chromium-browser", "google-chrome", "google-chrome-stable"]) {
-    try {
-      return execFileSync("which", [name], {
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "ignore"],
-      }).trim();
-    } catch {}
-  }
-  const bundled = chromium.executablePath();
-  if (existsSync(bundled)) return bundled;
-  fail("no Chromium found; set CHROME_PATH or put chromium / google-chrome on PATH");
+  return (
+    lookupChrome() ??
+    fail("no Chromium found; set CHROME_PATH or put chromium / google-chrome on PATH")
+  );
 }
 
 /**
@@ -485,24 +468,6 @@ async function bundleAll(modules) {
     }
     return out;
   }
-}
-
-/**
- * Runs `tasks` with at most `limit` in flight; results keep task order. Each
- * task gets its worker's `local` object, for state reused across its tasks.
- */
-async function pool(tasks, limit) {
-  const results = Array.from({ length: tasks.length });
-  let next = 0;
-  const worker = async () => {
-    const local = {};
-    while (next < tasks.length) {
-      const i = next++;
-      results[i] = await tasks[i](local);
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, worker));
-  return results;
 }
 
 ensureCss();

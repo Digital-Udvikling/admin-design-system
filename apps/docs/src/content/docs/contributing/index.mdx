@@ -39,10 +39,11 @@ pnpm test           # vitest on admin-react (happy-dom + RTL)
 pnpm lint           # oxlint
 pnpm format         # oxfmt
 pnpm check-docs     # links, anchors, Reference classes/props, tsx type-check, vanilla/React parity
+pnpm check-package  # pack both packages, lint them, import the tarballs; needs pnpm build
 pnpm generate-skill # regenerate skills/ from docs MDX
 ```
 
-CI runs `lint`, `format:check`, `build`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+CI runs `lint`, `format:check`, `build`, `check-package`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
 
 ## Rendering an example
 
@@ -56,6 +57,18 @@ pnpm render --html '<span class="badge">New</span>' --tsx '<Badge>New</Badge>'
 ```
 
 Cells mirror the docs preview frame. React renders client-side from admin-react source; both sides load `admin.utilities.css`, so a utility missing from that bundle shows up unstyled. `pnpm render --help` lists every option.
+
+## Visual diff
+
+Every pull request that touches `packages/` or `apps/docs/` gets a visual report. The `Visual report` workflow builds the docs for the base and the head, screenshots every example preview (vanilla and React, light and dark) with the same Chromium, and compares them pixel by pixel. The job summary lists the changed, added and removed examples by `file.mdx:line`, and the `visual-diff` artifact holds before, after and diff PNGs of each changed cell. It never fails on a difference.
+
+To run it locally, build the docs on each side and pass both `dist` directories:
+
+```bash
+pnpm visual-diff ../base/apps/docs/dist apps/docs/dist --out /tmp/visual-diff
+```
+
+Compare captures made with the same Chromium; a different build shifts antialiasing and reports every cell as changed.
 
 ## Releasing
 

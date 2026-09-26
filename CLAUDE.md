@@ -47,6 +47,7 @@ pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs Rea
 pnpm check-package   # pack both packages: publint, attw, install the tarballs, import (plain + react-server), resolve CSS subpaths; needs pnpm build
 pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm render components/buttons.mdx:42   # PNG of an example: vanilla + React × light + dark (--help)
+pnpm visual-diff <base-dist> <head-dist>  # screenshot every example in two docs builds, report the changed ones (--help)
 pnpm clean
 ```
 
@@ -119,6 +120,8 @@ Two shapes per component:
 `src/test-setup.ts` wires an explicit `afterEach(cleanup)` — RTL's auto-cleanup checks for `afterEach` at module-load which vitest doesn't expose that early, so without this the DOM leaks across tests in the same file. Tests are excluded from the published build via `tsconfig.json` and `vite-plugin-dts`; `tsconfig.test.json` type-checks them as the second half of `pnpm check-types`. `css: false` in `vitest.config.ts` — visual checks belong in docs.
 
 To see a CSS or component change, run `pnpm render <page>.mdx:<line>` and read the PNG it prints. `--click <selector>` opens dialogs, menus and popovers first. `--probe <selector> --props width,color` prints computed styles for each cell, which is cheaper than reading an image when you're checking a number. The render is static apart from the clicks, so hover, focus-visible and Safari quirks still need `pnpm dev` and a browser.
+
+Every PR touching `packages/` or `apps/docs/` also gets the `Visual report` workflow (`.github/workflows/visual-report.yml`): it builds the docs for base and head, runs `pnpm visual-diff` on both with the runner's Chrome, and puts the changed examples in the job summary and before/after/diff PNGs in the `visual-diff` artifact. It is a report, not a gate; it fails only when a build or capture breaks.
 
 ### Docs `:::example` directive
 

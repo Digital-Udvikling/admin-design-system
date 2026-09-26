@@ -14,27 +14,32 @@ npm install @aortl/admin-react react react-dom
 
 ```tsx
 import "@aortl/admin-react/styles.css";
-import { Button, Card, Input } from "@aortl/admin-react";
+import { AdminRoot, Button, Card, Input } from "@aortl/admin-react";
 
 export function App() {
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Sign in</Card.Title>
-        <Input placeholder="Email" />
-        <Input type="password" placeholder="Password" />
-        <Card.Actions>
-          <Button variant="primary">Sign in</Button>
-          <Button variant="ghost">Cancel</Button>
-        </Card.Actions>
-      </Card.Body>
-    </Card>
+    <AdminRoot>
+      <Card
+        title="Sign in"
+        actions={
+          <>
+            <Button variant="primary">Sign in</Button>
+            <Button variant="ghost">Cancel</Button>
+          </>
+        }
+      >
+        <Input placeholder="Email" aria-label="Email" />
+        <Input type="password" placeholder="Password" aria-label="Password" />
+      </Card>
+    </AdminRoot>
   );
 }
 ```
 
+`<AdminRoot>` is required: the stylesheet only matches inside it, and popups portal into it.
+
 ## Build
 
 ```fish
-pnpm build       # produces dist/index.{mjs,cjs}, dist/index.d.ts, dist/admin.css
+pnpm build       # produces ESM dist/*.js + dist/*.d.ts (one per module), dist/admin.scoped.css, dist/fonts/
 ```

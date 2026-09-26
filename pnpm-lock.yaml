@@ -145,7 +145,7 @@ importers:
         specifier: workspace:*
         version: link:../admin-css
       '@base-ui/react':
-        specifier: 1.4.1
+        specifier: ^1.4.1
         version: 1.4.1(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       clsx:
         specifier: 2.1.1
@@ -5741,7 +5741,7 @@ snapshots:
 
   '@npmcli/fs@4.0.0':
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.5
 
   '@octokit/auth-token@6.0.0': {}
 
@@ -7642,7 +7642,7 @@ snapshots:
       acorn: 8.16.0
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
-      semver: 7.8.0
+      semver: 7.8.5
 
   jsonc-parser@2.3.1: {}
 
@@ -7815,7 +7815,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.5
 
   make-fetch-happen@14.0.3:
     dependencies:
@@ -8170,7 +8170,7 @@ snapshots:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.8.0
+      semver: 7.8.5
       tar: 7.5.15
       tinyglobby: 0.2.16
       which: 5.0.0
@@ -8709,8 +8709,7 @@ snapshots:
 
   semver@7.8.4: {}
 
-  semver@7.8.5:
-    optional: true
+  semver@7.8.5: {}
 
   sharp@0.34.4:
     dependencies:
@@ -9071,7 +9070,7 @@ snapshots:
 
   typescript-auto-import-cache@0.3.6:
     dependencies:
-      semver: 7.8.4
+      semver: 7.8.5
 
   typescript@5.8.3: {}
 
@@ -9309,7 +9308,7 @@ snapshots:
   volar-service-typescript@0.0.70(@volar/language-service@2.4.28):
     dependencies:
       path-browserify: 1.0.1
-      semver: 7.8.4
+      semver: 7.8.5
       typescript-auto-import-cache: 0.3.6
       vscode-languageserver-textdocument: 1.0.12
       vscode-nls: 5.2.0

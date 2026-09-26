@@ -21,6 +21,8 @@ npm install @aortl/admin-react react react-dom
 
 Package page: [`@aortl/admin-react` on npm](https://www.npmjs.com/package/@aortl/admin-react).
 
+The package is ESM only and needs React 19.2 or later. `require("@aortl/admin-react")` works only where Node or the bundler can `require()` an ES module.
+
 ## Import styles + components
 
 ```tsx

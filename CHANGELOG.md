@@ -6,8 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
+- The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
+
+### Removed
+
+- **Breaking:** The CommonJS build of `@aortl/admin-react` (`dist/*.cjs`, the `require` condition and `main`). It ships ES modules as `dist/*.js`. (react)
+
+### Fixed
+
+- The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
 
 ## [0.21.0] - 2026-09-25
 

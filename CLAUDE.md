@@ -98,7 +98,7 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 ### Build pipeline
 
-Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, externals everything; then `cp ../admin-css/dist/admin.css ./dist/admin.css` for the `./styles.css` subpath export) → `docs`.
+Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, ESM only, one `.js` + `.d.ts` per source module, externals everything; then `cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css` for the `./styles.css` subpath export) → `docs`.
 
 `apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.** The scoped bundle for React previews is also compiled from source: `customCss` imports `@aortl/admin-css/src/admin.css?scoped`, and `apps/docs/plugins/admin-scoped.mjs` runs `wrap()` on Tailwind's output and puts it in `@layer admin`. So `pnpm dev` and the docs build never read `admin-css/dist`.
 
@@ -210,7 +210,7 @@ Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publi
 
 ## Conventions
 
-- pnpm ≥10, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges.
+- pnpm ≥10, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges, except `@base-ui/react` in `admin-react`'s `dependencies`: an exact pin gives a consumer that also uses Base UI a second copy, and Base UI context doesn't cross copies.
 - Tailwind v4 (`@theme`, `@custom-variant`, `light-dark()`). No `tailwind.config.js` — everything is CSS.
 - TypeScript strict + `noUncheckedIndexedAccess` + `verbatimModuleSyntax` (use `import type` for types).
 - Conventional Commits.

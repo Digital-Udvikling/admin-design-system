@@ -96,6 +96,7 @@
   .select-popup,
   .combobox-popup {
     --surface-current: var(--color-surface);
+    --_code-surface: initial;
     @apply min-w-[var(--anchor-width)] max-h-72 overflow-auto
            py-1 outline-none
            bg-surface text-text

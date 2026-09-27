@@ -6,6 +6,7 @@
   .accordion-item {
     @apply border border-border rounded-lg bg-surface;
     --surface-current: var(--color-surface);
+    --_code-surface: initial;
     /* Enables transitioning height: 0 ↔ height: auto on ::details-content. */
     interpolate-size: allow-keywords;
   }

@@ -5,6 +5,7 @@
            border border-border
            rounded-lg;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
     /* min-width: 0 lets the card shrink inside a flex/grid track instead of forcing it wide. */
     overflow-wrap: break-word;
     min-width: 0;
@@ -141,32 +142,38 @@
   .card-muted {
     @apply bg-surface;
     --surface-current: var(--color-surface);
+    --_code-surface: initial;
   }
 
   /* Color variants — tinted surface + accent title, mirroring Alert. */
   .card-primary {
     @apply bg-primary-muted border-primary-muted;
     --surface-current: var(--color-primary-muted);
+    --_code-surface: initial;
   }
 
   .card-info {
     @apply bg-info-muted border-info-muted;
     --surface-current: var(--color-info-muted);
+    --_code-surface: initial;
   }
 
   .card-success {
     @apply bg-success-muted border-success-muted;
     --surface-current: var(--color-success-muted);
+    --_code-surface: initial;
   }
 
   .card-warning {
     @apply bg-warning-muted border-warning-muted;
     --surface-current: var(--color-warning-muted);
+    --_code-surface: initial;
   }
 
   .card-danger {
     @apply bg-danger-muted border-danger-muted;
     --surface-current: var(--color-danger-muted);
+    --_code-surface: initial;
   }
 
   /* `bordered` on a tint draws an accent edge instead of the fill colour. */

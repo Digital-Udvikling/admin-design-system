@@ -9,7 +9,8 @@ export interface CodeBlockProps extends ComponentProps<"pre"> {
 /**
  * Styled `<pre>` for logs, JSON dumps, terminal output, raw model output.
  * Theme-following surface via `--color-code-surface` / `--color-code-text`.
- * No syntax highlighting — layer Shiki/Prism on a nested `<code>` if needed.
+ * Sets the `--shiki-*` variables of Shiki's `css-variables` theme, so
+ * highlighted children take the system's syntax colors.
  * Focusable (`tabIndex={0}`), so an overflowing block scrolls by keyboard.
  */
 export function CodeBlock({ nowrap, className, ...rest }: CodeBlockProps) {

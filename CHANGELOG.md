@@ -7,9 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - `field-row-reverse` / `<Field inline reverse>` for swapping the order of an inline field's label and control. (both)
+- `prose-exclude` / `Prose.Exclude` keeps a subtree's own component styling and UI type inside `.prose`, spaced on the block gap. (both)
+- `.code-block` colours Shiki's `css-variables` theme with Flexoki syntax roles in both modes. (css)
 
 ### Changed
 
+- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height. (css)
 - `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 
 ## [0.22.0] - 2026-09-30

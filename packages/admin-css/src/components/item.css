@@ -62,6 +62,7 @@
   .item-muted {
     @apply bg-surface-muted rounded-lg;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
   }
 
   /* Sizes */
@@ -136,6 +137,7 @@
   .item[data-selected] {
     @apply bg-primary-muted;
     --surface-current: var(--color-primary-muted);
+    --_code-surface: initial;
   }
   /* A strong divider only between two selected items: primary-muted equals border in light mode. */
   .item-group > .item[data-selected]:has(+ .item[data-selected]) {

@@ -13,7 +13,6 @@ export const BASE_URL = "/admin-design-system/";
 
 const EXAMPLE_ID = /^example:(\d+)$/;
 const GLUE_PATH = join(DOCS_ROOT, "__bundle_glue.tsx");
-const STUB = "\0stub";
 // CJS deps inlined into ESM (react-dom/server) `require` node builtins; ESM has no `require`.
 const NODE_REQUIRE = `import { createRequire as __createRequire } from "node:module"; const require = __createRequire(import.meta.url);`;
 
@@ -68,14 +67,9 @@ export async function bundle({ modules, glue, platform }) {
           const m = EXAMPLE_ID.exec(id);
           if (m) return paths[Number(m[1])];
           if (sources.has(id)) return id;
-          // Starlight components are forwarded into every preview below their
-          // import but are Astro, not React; an empty CJS module satisfies any
-          // named import.
-          if (id.startsWith("@astrojs/")) return STUB;
           return null;
         },
         load(id) {
-          if (id === STUB) return { code: "module.exports = {};", moduleType: "js" };
           const code = sources.get(id);
           return code === undefined ? null : { code, moduleType: "tsx" };
         },

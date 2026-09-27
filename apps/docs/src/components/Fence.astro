@@ -1,0 +1,12 @@
+---
+// MDX renders every highlighted markdown fence through this, to add the copy button.
+import CodeCopy from "./CodeCopy.astro";
+
+// Shiki already sets `tabindex="0"`, so an overflowing block scrolls by keyboard.
+const { className, class: cls, ...rest } = Astro.props;
+---
+
+<div class="prose-exclude code-pane">
+  <pre class={cls ?? className} {...rest}><slot /></pre>
+  <CodeCopy />
+</div>

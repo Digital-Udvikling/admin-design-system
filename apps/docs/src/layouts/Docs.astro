@@ -1,0 +1,128 @@
+---
+// The page chrome, built from the design system's own vanilla classes: app shell,
+// navbar, sidebar (copied into a drawer below 48rem), `.prose` article and TOC.
+import "../styles/global.css";
+// Source, not the package export: the scoped plugin wraps Tailwind's output.
+import "../../../../packages/admin-css/src/admin.css?scoped";
+// Kept out of the HMR'd sheets: re-parsing @font-face on every CSS edit
+// re-registers the fonts and flashes fallback text and icons.
+import "@aortl/admin-css/fonts.css";
+import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+import type { MarkdownHeading } from "astro";
+import { getCollection } from "astro:content";
+import FlavorPicker from "../components/FlavorPicker.astro";
+import SidebarNav from "../components/SidebarNav.astro";
+import ThemeSelect from "../components/ThemeSelect.astro";
+import { buildNav } from "../nav";
+import { version } from "../version";
+
+interface Props {
+  title: string;
+  description: string;
+  headings?: MarkdownHeading[];
+  /** Deepest heading level the TOC lists. */
+  tocDepth?: number;
+  /** Source path under apps/docs, for the "Edit page" link. */
+  editPath?: string;
+}
+
+const { title, description, headings = [], tocDepth = 3, editPath } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const site = "Admin design system";
+const repo = "https://github.com/Digital-Udvikling/admin-design-system";
+const nav = buildNav(await getCollection("docs"), base);
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= tocDepth);
+const isHome = Astro.url.pathname === base;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{isHome ? site : `${title} | ${site}`}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={site} />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem("admin-docs-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="navbar">
+        <button
+          class="navbar-mobile-toggle"
+          type="button"
+          aria-label="Open menu"
+          commandfor="nav-drawer"
+          command="show-modal"></button>
+        <a class="navbar-brand docs-brand" href={base}>{site}</a>
+        <a class="badge docs-version" href={`${base}changelog/`}>v{version}</a>
+        <div class="navbar-actions">
+          <FlavorPicker />
+          <ThemeSelect />
+          <a class="btn btn-ghost btn-sm btn-square" href={repo} aria-label="GitHub">
+            <i class="ti ti-brand-github" aria-hidden="true"></i>
+          </a>
+        </div>
+      </header>
+      <aside class="sidebar">
+        <SidebarNav groups={nav} current={Astro.url.pathname} />
+      </aside>
+      <main class="docs-main">
+        <div class="container docs-page">
+          <article class="prose docs-article">
+            <h1>{title}</h1>
+            <slot />
+            {
+              editPath && (
+                <p class="docs-edit">
+                  <a class="link" href={`${repo}/edit/main/apps/docs/${editPath}`}>
+                    <i class="ti ti-pencil" aria-hidden="true" />
+                    Edit page
+                  </a>
+                </p>
+              )
+            }
+          </article>
+          {
+            toc.length > 0 && (
+              <nav class="docs-toc" aria-labelledby="toc-heading">
+                <div class="docs-toc-heading" id="toc-heading">On this page</div>
+                <ul>
+                  {toc.map((h) => (
+                    <li data-depth={h.depth}>
+                      <a href={`#${h.slug}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
+        </div>
+      </main>
+    </div>
+    <dialog id="nav-drawer" class="dialog drawer drawer-start" closedby="any" aria-label="Navigation">
+      <aside class="sidebar">
+        <SidebarNav groups={nav} current={Astro.url.pathname} />
+      </aside>
+    </dialog>
+    <script is:inline>
+      // Bring the current page's link into view in a long sidebar, without scrolling the page.
+      (() => {
+        const nav = document.querySelector(".app-shell > .sidebar .sidebar-nav");
+        const link = nav?.querySelector('[aria-current="page"]');
+        if (!nav || !link) return;
+        const offset = link.getBoundingClientRect().top - nav.getBoundingClientRect().top;
+        if (offset > nav.clientHeight - 48) nav.scrollTop = offset - nav.clientHeight / 2;
+      })();
+    </script>
+  </body>
+</html>

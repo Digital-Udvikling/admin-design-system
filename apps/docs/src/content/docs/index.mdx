@@ -1,21 +1,21 @@
 ---
 title: Admin design system
 description: An opinionated design system for admin interfaces.
-template: splash
-hero:
-  tagline: Density-first components for internal admin tooling — not for customer-facing surfaces. Vanilla CSS or React, same class names.
-  actions:
-    - text: Browse components
-      link: components/buttons/
-      icon: right-arrow
-      variant: primary
-    - text: Why it looks like this
-      link: basics/principles/
-      variant: minimal
 ---
 
 import CardGrid from "../../components/CardGrid.astro";
 import LinkCard from "../../components/LinkCard.astro";
+
+Density-first components for internal admin tooling — not for customer-facing surfaces. Vanilla CSS or React, same class names.
+
+<div class="prose-exclude home-actions">
+  <a class="btn btn-primary" href={`${import.meta.env.BASE_URL}components/buttons/`}>
+    Browse components <i class="ti ti-arrow-right" aria-hidden="true" />
+  </a>
+  <a class="btn btn-ghost" href={`${import.meta.env.BASE_URL}basics/principles/`}>
+    Why it looks like this
+  </a>
+</div>
 
 ## Pick a flavor
 

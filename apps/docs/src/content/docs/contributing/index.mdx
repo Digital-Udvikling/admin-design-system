@@ -12,7 +12,7 @@ packages/
   admin-css/      Tailwind v4 source → pre-built CSS + semantic class names.
   admin-react/    React wrappers around Base UI; emit the same class names.
 apps/
-  docs/           Astro + Starlight; imports admin-css *source* in dev.
+  docs/           Astro site whose chrome is admin-css; imports admin-css *source* in dev.
 skills/
   admin-design-system/   Generated agent skill bundle. See Writing docs.
 ```
@@ -43,6 +43,10 @@ pnpm generate-skill # regenerate skills/ from docs MDX
 ```
 
 CI runs `lint`, `format:check`, `build`, `check-docs`, `check-types`, `test`, and verifies `skills/` is in sync via `git diff --exit-code`. Replicate locally before pushing.
+
+## Site layout
+
+The chrome is the design system's own vanilla classes: `src/layouts/Docs.astro` lays out the app shell, navbar, sidebar, `.prose` article and TOC, and `src/styles/global.css` holds the few docs-local rules on semantic tokens. `src/nav.ts` lists every page of a section directory in the sidebar, ordered by frontmatter `sidebar.order` and then title; a new section goes in its `SECTIONS`. When the chrome needs something the system lacks, add it to admin-css if an admin app would use it too.
 
 ## Rendering an example
 

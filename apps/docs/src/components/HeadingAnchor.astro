@@ -1,0 +1,10 @@
+---
+// A pointer convenience, hidden from assistive tech: the TOC already links every section.
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<a class="heading-anchor" href={`#${id}`} aria-hidden="true" tabindex="-1">#</a>

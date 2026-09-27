@@ -1,0 +1,8 @@
+---
+// MDX renders `###` through this, to add the section link.
+import HeadingAnchor from "./HeadingAnchor.astro";
+
+const { id } = Astro.props;
+---
+
+<h3 id={id}><slot /><HeadingAnchor id={id} /></h3>

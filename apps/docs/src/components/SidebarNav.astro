@@ -1,0 +1,42 @@
+---
+import type { NavGroup } from "../nav";
+
+interface Props {
+  groups: NavGroup[];
+  /** Pathname of the current page, to mark its link `aria-current="page"`. */
+  current: string;
+}
+
+const { groups, current } = Astro.props;
+const here = (href: string) => (href === current ? "page" : undefined);
+---
+
+<nav class="sidebar-nav" aria-label="Docs">
+  {
+    groups.map((group) => (
+      <div class="sidebar-group">
+        {group.label && <div class="sidebar-group-label">{group.label}</div>}
+        {group.items.map((item) =>
+          "links" in item ? (
+            <details class="sidebar-collapsible" open={item.links.some((l) => l.href === current)}>
+              <summary class="sidebar-collapsible-trigger">
+                <span class="sidebar-label">{item.label}</span>
+              </summary>
+              <div class="sidebar-collapsible-panel">
+                {item.links.map((l) => (
+                  <a class="sidebar-subitem" href={l.href} aria-current={here(l.href)}>
+                    <span class="sidebar-label">{l.label}</span>
+                  </a>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <a class="sidebar-item" href={item.href} aria-current={here(item.href)}>
+              <span class="sidebar-label">{item.label}</span>
+            </a>
+          ),
+        )}
+      </div>
+    ))
+  }
+</nav>

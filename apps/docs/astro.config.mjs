@@ -2,64 +2,35 @@ import { fileURLToPath } from "node:url";
 import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
-import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import adminScopedPlugin from "./plugins/admin-scoped.mjs";
 import remarkExample from "./plugins/example/index.mjs";
 import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
+import { shikiTheme } from "./src/shiki-theme";
 
 export default defineConfig({
   site: "https://digital-udvikling.github.io",
   base: "/admin-design-system/",
   markdown: {
-    // Astro 7's native Sätteri pipeline. `directive: true` enables `:::example`
-    // (Starlight also flips it on for its asides). The example transform parses
-    // fences natively — no remark-directive needed.
+    // Astro 7's native Sätteri pipeline. `directive: true` enables `:::example`;
+    // the example transform parses fences natively — no remark-directive needed.
     processor: satteri({
       features: { directive: true },
       mdastPlugins: [remarkExample],
     }),
-  },
-  integrations: [
-    react(),
-    starlight({
-      title: "Admin design system",
-      customCss: [
-        // global.css first: it declares the `@layer` order the scoped bundle slots into.
-        "./src/styles/global.css",
-        // Source, not the package export: the scoped plugin wraps Tailwind's output.
-        "../../packages/admin-css/src/admin.css?scoped",
-        // Kept out of the HMR'd sheets: re-parsing @font-face on every CSS edit
-        // re-registers the fonts and flashes fallback text and icons.
-        "@aortl/admin-css/fonts.css",
-        "@tabler/icons-webfont/dist/tabler-icons.min.css",
-      ],
-      components: {
-        SiteTitle: "./src/components/SiteTitle.astro",
-      },
-      editLink: {
-        baseUrl: "https://github.com/Digital-Udvikling/admin-design-system/edit/main/apps/docs/",
-      },
-      social: [
+    shikiConfig: {
+      theme: shikiTheme,
+      transformers: [
         {
-          icon: "github",
-          label: "GitHub",
-          href: "https://github.com/Digital-Udvikling/admin-design-system",
+          pre(node) {
+            this.addClassToHast(node, "code-block code-block-nowrap");
+          },
         },
       ],
-      sidebar: [
-        { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started/" } }] },
-        { label: "Basics", items: [{ autogenerate: { directory: "basics/" } }] },
-        { label: "Changelog", link: "/changelog/" },
-        { label: "Components", items: [{ autogenerate: { directory: "components/" } }] },
-        { label: "Patterns", items: [{ autogenerate: { directory: "patterns/" } }] },
-        { label: "Modules", items: [{ autogenerate: { directory: "modules/" } }] },
-        { label: "Contributing", items: [{ autogenerate: { directory: "contributing/" } }] },
-      ],
-    }),
-    mdx(),
-  ],
+    },
+  },
+  integrations: [react(), mdx()],
   vite: {
     plugins: [tailwindcss(), adminScopedPlugin(), virtualPreviewsPlugin()],
     // The `:::example` previews are virtual modules Vite's cold dep scanner never
@@ -83,7 +54,6 @@ export default defineConfig({
         "@base-ui/react/toggle",
         "@base-ui/react/tooltip",
         "@tabler/icons-react",
-        "@astrojs/starlight/components",
         "clsx",
       ],
     },

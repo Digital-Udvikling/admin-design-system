@@ -10,8 +10,11 @@ const SCOPED_QUERY = /[?&]scoped\b/;
 export default function adminScopedPlugin() {
   return {
     name: "admin-scoped",
-    // Normal order: after `@tailwindcss/vite` (pre) and `vite:css`, before
-    // `vite:css-post` turns the CSS into a JS module.
+    // `pre`, listed after `@tailwindcss/vite` (also `pre`), so it wraps Tailwind's
+    // output before Astro's dev server caches the CSS it inlines into the page.
+    // Normal order ran after that cache: dev pages painted the unwrapped bundle,
+    // and React previews stayed unstyled until Vite's client swapped the sheet.
+    enforce: "pre",
     transform: {
       filter: { id: SCOPED_QUERY },
       handler(code, id) {

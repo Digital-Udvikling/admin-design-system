@@ -38,8 +38,15 @@
       "footer  footer";
   }
 
+  /* Sticks on a long page, its nav scrolling inside; `height: 100%` still fills the row of a
+     short one, which `align-self: start` would otherwise shrink to content. */
   .app-shell > .sidebar {
     grid-area: sidebar;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100%;
+    max-height: 100dvh;
   }
 
   /* Mobile: the sidebar lives in a Dialog drawer, so reclaim the column. */

@@ -95,6 +95,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Menu and select popups have a `border-strong` edge and a small shadow, menu rows and select options keep one height whatever they hold, long labels wrap, popups near the viewport's end edge flip to fit, and `menu-item[aria-current="page"]` gets the selected fill. (css)
 - Sidebar rows have one height whatever they hold, sub-items indent to the parent label and truncate like items (`classNames.label`), a group holding the current page highlights its trigger while closed or collapsed, and collapsed-rail labels are visually hidden so icon-only links keep their names. (both)
 - `.container` side padding is `1rem` at every width, matching the navbar and footer gutter. (css)
+- A `.sidebar` directly in `.app-shell` is sticky, capped at the viewport height with its nav scrolling inside, so it stays in view on long pages. (css)
 - `--color-code-surface` is closer to the page surface (base-100 light, base-950 dark), so syntax colors on a code block reach 4.5:1. (css)
 
 ### Removed

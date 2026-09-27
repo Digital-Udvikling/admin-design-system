@@ -1,5 +1,5 @@
 ---
-import { Code } from "@astrojs/starlight/components";
+import CodePane from "./CodePane.astro";
 import { version } from "../version";
 
 interface Props {
@@ -13,4 +13,4 @@ const { pkg, extra } = Astro.props;
 const command = `npm install ${pkg}@${version}${extra ? ` ${extra}` : ""}`;
 ---
 
-<Code code={command} lang="bash" />
+<CodePane code={command} lang="bash" />

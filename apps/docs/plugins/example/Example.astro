@@ -1,5 +1,5 @@
 ---
-import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
+import CodePane from "../../src/components/CodePane.astro";
 
 interface Props {
   /** Pre-formatted HTML source. */
@@ -13,16 +13,17 @@ const hasReact = !!react;
 const hasBoth = !!html && hasReact;
 ---
 
-<section class="not-content example-block">
+{/* A dual example shows the flavor picked by the page's `#flavor-*` radios (FlavorPicker.astro). */}
+<section class="not-content example-block" data-dual={hasBoth ? "" : undefined}>
   <div class="example-frame">
     {
       hasBoth ? (
-        <package-preview class="example-preview">
+        <div class="example-preview">
           <div class="preview-variant" data-variant="html" set:html={html!} />
-          <div class="preview-variant" data-variant="react" hidden>
+          <div class="preview-variant" data-variant="react">
             <slot name="preview" />
           </div>
-        </package-preview>
+        </div>
       ) : (
         <div class="example-preview">
           {hasReact ? (
@@ -34,89 +35,21 @@ const hasBoth = !!html && hasReact;
       )
     }
     <div class="example-source">
-      {
-        hasBoth ? (
-          <Tabs syncKey="package">
-            <TabItem label="Vanilla CSS">
-              <Code code={html!} lang="html" />
-            </TabItem>
-            <TabItem label="React">
-              <Code code={react!} lang="tsx" />
-            </TabItem>
-          </Tabs>
-        ) : html ? (
-          <Code code={html} lang="html" />
-        ) : react ? (
-          <Code code={react} lang="tsx" />
-        ) : null
-      }
+      {html && <CodePane code={html} lang="html" data-variant="html" />}
+      {react && <CodePane code={react} lang="tsx" data-variant="react" />}
     </div>
   </div>
 </section>
-
-{/* Storage key, sync attribute, and tab selectors intentionally track
-@astrojs/starlight/user-components/Tabs.astro — keep them in sync. */}
-<script>
-  const STORAGE_KEY = "starlight-synced-tabs__package";
-
-  class PackagePreview extends HTMLElement {
-    #observer: MutationObserver | null = null;
-    #onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) this.#apply(e.newValue);
-    };
-
-    connectedCallback() {
-      if (this.querySelectorAll(".preview-variant").length < 2) return;
-
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) this.#apply(stored);
-
-      const tabs = this.parentElement?.querySelector(
-        'starlight-tabs[data-sync-key="package"]',
-      );
-      if (tabs) {
-        this.#observer = new MutationObserver(() => {
-          const tab = tabs.querySelector('[role="tab"][aria-selected="true"]');
-          const label = tab?.textContent?.trim();
-          if (label) this.#apply(label);
-        });
-        this.#observer.observe(tabs, {
-          attributes: true,
-          attributeFilter: ["aria-selected"],
-          subtree: true,
-        });
-      }
-
-      window.addEventListener("storage", this.#onStorage);
-    }
-
-    disconnectedCallback() {
-      this.#observer?.disconnect();
-      this.#observer = null;
-      window.removeEventListener("storage", this.#onStorage);
-    }
-
-    #apply(label: string) {
-      const wantReact = label === "React";
-      for (const v of this.querySelectorAll<HTMLElement>(".preview-variant")) {
-        const isReact = v.dataset.variant === "react";
-        v.hidden = wantReact ? !isReact : isReact;
-      }
-    }
-  }
-
-  customElements.define("package-preview", PackagePreview);
-</script>
 
 <style>
   .example-block {
     margin: 1.5rem 0 2rem;
   }
   .example-frame {
-    border: 1px solid var(--sl-color-hairline);
+    border: 1px solid var(--color-border);
     border-radius: 0.5rem;
     overflow: hidden;
-    background: var(--sl-color-bg);
+    background: var(--color-surface);
   }
   /* Stand-ins for admin-css/base.css, which the docs skip so Starlight keeps its body. */
   .example-preview {
@@ -125,7 +58,7 @@ const hasBoth = !!html && hasReact;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;
-    border-bottom: 1px solid var(--sl-color-hairline);
+    border-bottom: 1px solid var(--color-border);
     background: var(--color-surface);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
@@ -145,16 +78,14 @@ const hasBoth = !!html && hasReact;
   .example-preview .preview-variant[hidden] {
     display: none;
   }
-  .example-source :global(starlight-tabs),
-  .example-source :global(div[role="tabpanel"]) {
-    margin-top: 0;
-  }
-  .example-source :global(.tablist-wrapper) {
-    background: var(--sl-color-bg-nav);
-  }
-  .example-source :global(pre) {
+  .example-source :global(.code-block) {
     margin: 0;
     border-radius: 0;
-    border: none;
+  }
+  /* Global: the flavor radios live in the page chrome, and `data-variant` also
+  marks CodePane roots, which this component's scope doesn't reach. */
+  :global(:root:has(#flavor-html:checked) .example-block[data-dual] [data-variant="react"]),
+  :global(:root:has(#flavor-react:checked) .example-block[data-dual] [data-variant="html"]) {
+    display: none;
   }
 </style>

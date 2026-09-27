@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `field-row-reverse` / `<Field inline reverse>` for swapping the order of an inline field's label and control. (both)
 - `prose-exclude` / `Prose.Exclude` keeps a subtree's own component styling and UI type inside `.prose`, spaced on the block gap. (both)
 - `.code-block` colours Shiki's `css-variables` theme with Flexoki syntax roles in both modes. (css)
+- A `.sidebar` directly in `.app-shell` stays in view on long pages, its nav scrolling inside. (css)
 
 ### Changed
 

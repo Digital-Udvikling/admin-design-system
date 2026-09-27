@@ -96,6 +96,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Sidebar rows have one height whatever they hold, sub-items indent to the parent label and truncate like items (`classNames.label`), a group holding the current page highlights its trigger while closed or collapsed, and collapsed-rail labels are visually hidden so icon-only links keep their names. (both)
 - `.container` side padding is `1rem` at every width, matching the navbar and footer gutter. (css)
 - A `.sidebar` directly in `.app-shell` is sticky, capped at the viewport height with its nav scrolling inside, so it stays in view on long pages. (css)
+- `.prose` reads on its own scale: 24/18/16/14px headings with more room above an `h2` than an `h3`, a `1.625` body line at 14px, `1em` block spacing, and muted list markers. (css)
+- `h1`–`h3` balance their wrapped lines and `h1` tracks `0.01em` tighter; paragraphs wrap with `text-wrap: pretty`. (css)
 - `--color-code-surface` is closer to the page surface (base-100 light, base-950 dark), so syntax colors on a code block reach 4.5:1. (css)
 
 ### Removed

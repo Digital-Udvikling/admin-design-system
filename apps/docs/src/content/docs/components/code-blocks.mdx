@@ -67,11 +67,26 @@ import { CodeBlock } from "@aortl/admin-react";
 
 ### With syntax highlighting
 
+`.code-block` sets the variables of [Shiki](https://shiki.style/)'s `css-variables` theme, so highlighted tokens take the Flexoki syntax colors and follow dark mode.
+
+:::example
+
 ```html
 <pre
   class="code-block"
   tabindex="0"
-><code class="language-json">{ "highlighted": true }</code></pre>
+><code><span class="line"><span style="color:var(--shiki-token-comment)">// Retry failed jobs once</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">const</span><span style="color:var(--shiki-token-constant)"> failed</span><span style="color:var(--shiki-token-keyword)"> =</span><span style="color:var(--shiki-token-constant)"> jobs</span><span style="color:var(--shiki-token-function)">.filter</span><span style="color:var(--shiki-foreground)">((job) </span><span style="color:var(--shiki-token-keyword)">=&gt;</span><span style="color:var(--shiki-token-constant)"> job</span><span style="color:var(--shiki-foreground)">.status </span><span style="color:var(--shiki-token-keyword)">===</span><span style="color:var(--shiki-token-string-expression)"> "failed"</span><span style="color:var(--shiki-foreground)">);</span></span></code></pre>
+```
+
+:::
+
+Highlight with `theme: "css-variables"` and put `code-block` on the `<pre>`, for example with a `pre` transformer. In React, render Shiki's `structure: "inline"` output inside `CodeBlock`:
+
+```tsx
+const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", structure: "inline" });
+
+<CodeBlock dangerouslySetInnerHTML={{ __html: html }} />;
 ```
 
 ## Reference
@@ -91,6 +106,8 @@ import { CodeBlock } from "@aortl/admin-react";
 | `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono, `0.5rem` radius, long lines wrapped |
 | `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                  |
 
-Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. The root already has `overflow: auto`, so an inline `max-height` clamps a log viewer's height. Add `tabindex="0"` so a block that overflows scrolls by keyboard. There is no syntax highlighting — layer Shiki or Prism on a nested `<code>`, which this class leaves alone so the highlighter's token colours show through.
+Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. The root already has `overflow: auto`, so an inline `max-height` clamps a log viewer's height. Add `tabindex="0"` so a block that overflows scrolls by keyboard.
+
+`code-block` sets Shiki's `--shiki-foreground`, `--shiki-background` and one `--shiki-token-*` per role: `--shiki-token-comment` and `--shiki-token-punctuation` (`--color-text-muted`), `--shiki-token-keyword` and `--shiki-token-inserted` (green), `--shiki-token-function` (orange), `--shiki-token-string` and `--shiki-token-string-expression` (cyan), `--shiki-token-constant` (purple), `--shiki-token-parameter` and `--shiki-token-link` (blue), `--shiki-token-deleted` (red), `--shiki-token-changed` (yellow). The colors are the `--color-category-*` tokens. Override one on `.code-block` to retheme it. Other highlighters that emit class names (Prism, highlight.js) bring their own theme.
 
 For inline keyboard chips, use [Kbd](../kbd/).

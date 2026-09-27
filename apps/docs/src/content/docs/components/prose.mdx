@@ -104,6 +104,114 @@ import Callout from "../../../components/Callout.astro";
 
 :::
 
+### Reading size
+
+`prose-lg` is for long-form text: help articles, changelogs, policies, model answers.
+
+:::example
+
+```html
+<div class="prose prose-lg">
+  <h2>Refund policy</h2>
+  <p>
+    Refunds return to the original payment method within
+    <strong>5–7 business days</strong>. Partial refunds are prorated against the unused term, and
+    the customer receives a credit note by email once the refund posts.
+  </p>
+  <h3>Eligibility</h3>
+  <ul>
+    <li>Annual plans, within 30 days of renewal</li>
+    <li>Monthly plans, within 48 hours of the charge</li>
+  </ul>
+  <p>Run <code>aortl billing refund &lt;invoice-id&gt;</code> to start one from the CLI.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Refund window</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Annual</td>
+        <td>30 days</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>48 hours</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+```tsx
+<Prose size="lg">
+  <h2>Refund policy</h2>
+  <p>
+    Refunds return to the original payment method within <strong>5–7 business days</strong>. Partial
+    refunds are prorated against the unused term, and the customer receives a credit note by email
+    once the refund posts.
+  </p>
+  <h3>Eligibility</h3>
+  <ul>
+    <li>Annual plans, within 30 days of renewal</li>
+    <li>Monthly plans, within 48 hours of the charge</li>
+  </ul>
+  <p>
+    Run <code>aortl billing refund &lt;invoice-id&gt;</code> to start one from the CLI.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Refund window</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Annual</td>
+        <td>30 days</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>48 hours</td>
+      </tr>
+    </tbody>
+  </table>
+</Prose>
+```
+
+:::
+
+### Components at reading size
+
+:::example
+
+```html
+<div class="prose prose-lg">
+  <p>The invoice this refund applies to:</p>
+  <div class="prose-exclude">
+    <div class="card">
+      <div class="card-body">INV-2041 · Annual plan · renewed 12 days ago</div>
+    </div>
+  </div>
+  <p>The refund posts within 5–7 business days.</p>
+</div>
+```
+
+```tsx
+<Prose size="lg">
+  <p>The invoice this refund applies to:</p>
+  <Prose.Exclude>
+    <Card>INV-2041 · Annual plan · renewed 12 days ago</Card>
+  </Prose.Exclude>
+  <p>The refund posts within 5–7 business days.</p>
+</Prose>
+```
+
+:::
+
 ### Embedded components
 
 A component inside rendered HTML goes in `prose-exclude`, so `.prose` doesn't add list markers or block margins to its elements.
@@ -213,16 +321,38 @@ Sanitize untrusted HTML before injecting it. The wrapper styles markup; it does 
 | `Prose`         | `div.prose`         |
 | `Prose.Exclude` | `div.prose-exclude` |
 
-Neither takes props of its own — native `<div>` attributes only.
+| Prop   | Type           | Default |
+| ------ | -------------- | ------- |
+| `size` | `"md" \| "lg"` | `"md"`  |
+
+`size` is on `Prose` only; `"lg"` adds `prose-lg`. A nested `Prose` renders at its own size. Plus native `<div>` attributes.
 
 ### Vanilla
 
-| Class           | Effect                                                                                                                                                                                                                                                                                                          |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prose`         | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, `<kbd>` key chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](../tables/) |
-| `prose-exclude` | A subtree `.prose` leaves unstyled, for components embedded in rendered HTML. It resets to UI type (`text-sm`, `1.5` line height) and, as a direct child of `.prose`, takes the `1em` block gap. A `.prose` inside it styles its own content again                                                              |
+| Class           | Effect                                                                                                                                                                                                                                                                                                                                        |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prose`         | Restores element styling inside the wrapper: `text-sm` on a `1.625` line, `1em` block rhythm, a heading scale of its own, muted list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, `<kbd>` key chips, a scrolling `<pre>`, a bordered `<blockquote>`, and the table look from [Tables](../tables/) |
+| `prose-lg`      | With `prose`: the reading size for long-form text. `text-base` on a `1.7` line, `1.25em` block rhythm, a steeper heading scale and a `45em` line length on text blocks. Tables, `<pre>` and `prose-exclude` subtrees keep UI size; a `.prose` nested inside renders at the default size                                                       |
+| `prose-exclude` | A subtree `.prose` leaves unstyled, for components embedded in rendered HTML. It resets to UI type (`text-sm`, `1.5` line height) and, as a direct child of `.prose`, takes the block gap. A `.prose` inside it styles its own content again                                                                                                  |
 
 The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral, which leaves backend-rendered HTML unstyled. This class re-establishes it for one region, from the same semantic tokens, so it follows dark mode. First and last children keep their outer margins collapsed.
+
+Each cell gives the size, then the space above / below.
+
+| Element         | `prose`                                      | `prose-lg`                           | Line-height |
+| --------------- | -------------------------------------------- | ------------------------------------ | ----------- |
+| `<h1>`          | `1.714em` (24px), 32 / 16px                  | `2em` (32px), 40 / 16px              | 1.25        |
+| `<h2>`          | `1.286em` (18px), 32 / 12px                  | `1.5em` (24px), 42 / 12px            | 1.35        |
+| `<h3>`          | `1.143em` (16px), 24 / 8px                   | `1.25em` (20px), 32 / 12px           | 1.4         |
+| `<h4>`          | `1em` (14px), 20 / 8px                       | `1em` (16px), 24 / 8px               | 1.45        |
+| `<h5>`, `<h6>`  | `0.857em` (12px), 20 / 8px, uppercase, muted | `0.857em` (13.7px), 23 / 9px         | 1.5         |
+| Body            | 14px, `1em` (14px) between blocks            | 16px, `1.25em` (20px) between blocks | 1.625 / 1.7 |
+| Inline `<code>` | `0.85em`                                     | `0.875em`                            | —           |
+| Line length     | none                                         | `45em` (720px)                       | —           |
+
+Heading sizes and the spacing around text are em of the text, so a wrapper that changes the font size inside `.prose` scales them. The gap around tables, `<pre>` and `prose-exclude` subtrees, and the line length, are fixed on `.prose`. The line length applies to paragraphs, headings, captions, definition lists, and list items and quotes that hold no code, table or excluded subtree.
+
+Headings are semibold and balance their lines; paragraphs and list items wrap with `text-wrap: pretty`. A heading's bottom margin sets the gap to the block it leads, and a heading that follows another keeps its top margin. Table cells keep the UI's `1.5` line.
 
 Every descendant rule is wrapped in `:where()`, so a consumer's own `.prose a { … }` wins on specificity without `!important`.
 

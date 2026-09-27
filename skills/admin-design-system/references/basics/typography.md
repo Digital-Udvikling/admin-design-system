@@ -89,7 +89,9 @@ IBM Plex Mono — fixed-width, for IDs, hashes, and code.
 | `<body>`                       | 0.875rem (14px) | 400       | 1.5             | Default text                   |
 | —                              | 0.75rem (12px)  | 400 / 500 | 1rem (16px)     | Captions, hints, table meta    |
 
-Heading sizes are applied at the element level. `h4`–`h6` have no defaults outside [Prose](../components/prose.md).
+This is the dense UI scale, applied at the element level: `h1`–`h3` balance their wrapped lines, `h1` tightens its tracking by `0.01em`, and paragraphs wrap with `text-wrap: pretty`. `h4`–`h6` have no defaults outside [Prose](../components/prose.md).
+
+Type has two registers. The dense UI scale above is the default on every screen, including `.prose`, which keeps the 14px body on a `1.625` line with 24/18/16px headings. `.prose-lg` is the reading register, 16px on a `1.7` line with a `45em` line length, for long-form text only: help articles, changelogs, policies, model answers. Never use it for UI. See [Prose](../components/prose.md#reading-size).
 
 ## Body and small text
 

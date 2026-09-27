@@ -1,9 +1,7 @@
 @layer components {
   /* One key per chip; stack inside `.kbd-group` for chords. 4em/3 of the 0.75em
-     font is the host's 1em, so a chip never grows its host. Raw `<kbd>` in
-     `.prose` gets the chip too; an outer `<kbd>` around chord keys stays plain. */
-  .kbd,
-  .prose :where(kbd:not(:has(kbd))) {
+     font is the host's 1em, so a chip never grows its host. */
+  .kbd {
     @apply inline-flex items-center justify-center
            min-w-[calc(4em/3)] h-[calc(4em/3)] px-[calc(1em/3)]
            rounded border
@@ -11,6 +9,19 @@
            whitespace-nowrap tabular-nums;
     background-color: color-mix(in srgb, currentColor 8%, transparent);
     border-color: color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  /* Raw `<kbd>` in `.prose` gets the same chip; an outer `<kbd>` around chord keys stays plain. */
+  .prose :where(kbd:not(:has(kbd))) {
+    @variant prose-scope {
+      @apply inline-flex items-center justify-center
+             min-w-[calc(4em/3)] h-[calc(4em/3)] px-[calc(1em/3)]
+             rounded border
+             text-[0.75em] font-mono leading-none align-middle
+             whitespace-nowrap tabular-nums;
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      border-color: color-mix(in srgb, currentColor 22%, transparent);
+    }
   }
 
   /* Always emitted by the React `<Kbd>` so selectors can target the whole binding. */

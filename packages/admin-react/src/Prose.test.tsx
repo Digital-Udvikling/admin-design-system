@@ -32,6 +32,29 @@ describe("Prose", () => {
     expect(root).toHaveClass("custom");
   });
 
+  it("emits no size class at md and prose-lg at lg", () => {
+    const { container, rerender } = render(<Prose />);
+    expect(container.firstElementChild).not.toHaveAdminClass("prose-lg");
+    rerender(<Prose size="lg" />);
+    expect(container.firstElementChild).toHaveAdminClass("prose");
+    expect(container.firstElementChild).toHaveAdminClass("prose-lg");
+  });
+
+  it("renders a nested Prose at its own size", () => {
+    const { getByTestId } = render(
+      <Prose size="lg">
+        <Prose.Exclude>
+          <Prose data-testid="nested">
+            <p>Specimen</p>
+          </Prose>
+        </Prose.Exclude>
+      </Prose>,
+    );
+    const nested = getByTestId("nested");
+    expect(nested).toHaveAdminClass("prose");
+    expect(nested).not.toHaveAdminClass("prose-lg");
+  });
+
   it("renders Prose.Exclude as the .prose-exclude escape", () => {
     const { getByRole } = render(
       <Prose>

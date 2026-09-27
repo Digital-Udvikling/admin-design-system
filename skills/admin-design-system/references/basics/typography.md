@@ -24,7 +24,7 @@ Body text is **14px**; the UI typeface is IBM Plex.
   monospace;
 ```
 
-Fonts load with `font-display: swap`. The fallback faces are metric-overridden to match Plex's box, so the swap changes glyph shapes without shifting layout.
+Fonts load with `font-display: fallback`: text waits up to 100ms for Plex, which a cached font beats, so moving between pages never paints the fallback. A slower first load paints a fallback face metric-overridden to Plex's box (Arial, or Liberation Sans / Arimo where Arial is missing) and swaps within 3s. To have Plex from the first paint of a first visit too, preload `fonts/plex-sans-latin.woff2` with `<link rel="preload" as="font" type="font/woff2" crossorigin>`.
 
 To opt out, override `--font-sans` / `--font-mono`:
 

@@ -9,7 +9,7 @@ Docs live in `apps/docs/src/content/docs/**/*.mdx`. Each page mirrors a feature 
 
 ## The `:::example` directive
 
-A paired-tabs example with a rendered preview. The block accepts one `html` fence and one `tsx` fence; either may be omitted.
+An example with a rendered preview. The block accepts one `html` fence and one `tsx` fence; either may be omitted. With both, the header's Vanilla CSS / React picker chooses which preview and source every example on the page shows.
 
 ````markdown
 :::example
@@ -28,20 +28,20 @@ A paired-tabs example with a rendered preview. The block accepts one `html` fenc
 What happens at build time, from `apps/docs/plugins/example/index.mjs`:
 
 - Both fences are run through `oxfmt` (the prettier-compatible API), so source in MDX doesn't need to be hand-aligned.
-- The `html` fence drives the **vanilla preview** (`set:html`) and the **Vanilla CSS** code tab.
-- The `tsx` fence is compiled into a default-exported React component, registered as a virtual module (`virtual:example-preview/<hash>.tsx`), hydrated as a client island, and shown when the **React** tab is selected.
+- The `html` fence drives the **vanilla preview** (`set:html`) and its source pane.
+- The `tsx` fence is compiled into a default-exported React component, registered as a virtual module (`virtual:example-preview/<hash>.tsx`), hydrated as a client island, and shown with its source pane when the header picker is on **React**.
 - Top-level `import` statements in the MDX are forwarded into the virtual module, so identifiers used in the `tsx` fence (`<Button>`, `<IconPlus>`) resolve the same way they do in the surrounding page.
 
 Don't author `<Example>` JSX directly — always use the directive.
 
 ### React-only examples
 
-When a feature's behavior lives in the React component (clipboard access, focus traps, anything driven by `useState` + an effect / timer) and the vanilla bundle can't replicate it without consumer-written JS, drop the `html` fence so the example renders the React preview only. Mark the heading with Starlight's `<Badge>`:
+When a feature's behavior lives in the React component (clipboard access, focus traps, anything driven by `useState` + an effect / timer) and the vanilla bundle can't replicate it without consumer-written JS, drop the `html` fence so the example renders the React preview only. Mark the heading with `<ReactOnly />` (`src/components/ReactOnly.astro`):
 
 ````markdown
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 
-### Copyable <StarlightBadge text="React only" variant="caution" />
+### Copyable <ReactOnly />
 
 :::example
 
@@ -54,7 +54,7 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 :::
 ````
 
-Alias to `StarlightBadge` when the page already imports the admin `<Badge>`. Keep the supporting CSS classes shipping in both bundles: consumers wiring their own vanilla JS still need the styling.
+Keep the supporting CSS classes shipping in both bundles: consumers wiring their own vanilla JS still need the styling.
 
 ### Examples that call hooks
 
@@ -79,7 +79,7 @@ The declarations land at module level in the preview module and the trailing JSX
 
 ### Astro imports in MDX
 
-Astro components (e.g. anything from `@astrojs/starlight/components`, or local `.astro` files) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component.
+Astro components (local `.astro` files such as `Callout` and `ReactOnly`) work in MDX prose but cannot live inside the React preview's virtual module. The plugin skips `.astro` imports when forwarding — you get a build error if a `tsx` fence references an Astro component.
 
 ## Callouts
 
@@ -144,7 +144,7 @@ Examples and the Reference carry the page; prose is for what neither can show.
 
 - Any API fact belongs in the Reference table, so no prose goes under an example heading. A sentence survives only when it states something neither the example nor the table can: a browser caveat, a contrast failure, an a11y attribute you must hand-write in vanilla, or a scope boundary ("wire the filtering logic yourself").
 - Reach for `<Callout>` when ignoring it _breaks_ something: a required scrolling ancestor, a stacking-context rule, a missing accessible name. Scope boundaries get a plain short sentence instead. Callouts are heavy, and more than two or three on a page stops being a signal.
-- A heading carrying a `<StarlightBadge>` can't be a deep-link target. The JSX pushes a trailing hyphen into the slug (`classnames-`), and Sätteri's `headingAttributes` feature, which would allow an explicit `{#id}`, is off. If another page needs to link to a section, leave the badge off and state "React only" in the body.
+- A heading carrying a `<ReactOnly />` can't be a deep-link target. The JSX pushes a trailing hyphen into the slug (`classnames-`), and Sätteri's `headingAttributes` feature, which would allow an explicit `{#id}`, is off. If another page needs to link to a section, leave the badge off and state "React only" in the body.
 - Keep the frontmatter `description` to one short sentence (≤ ~10 words), and don't restate it as the body's first paragraph. `title` is sentence case (`App shell`, `Dark mode`, `File inputs`).
 - No marketing voice, and no rationale for third-party choices: name the library, link it, move on. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
 - Voice is flat and factual, with no rhetorical color. Cut antithesis ("X rather than Y"), flavor triads, anthropomorphism ("digits don't shimmy", "an irreversible action wants"), marketing intensifiers ("the fastest way", "the simplest path"), empty reassurance ("text stays readable", "visible at a glance"), and soft hedges ("most likely").

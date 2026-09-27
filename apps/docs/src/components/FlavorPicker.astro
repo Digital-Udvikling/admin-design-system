@@ -1,0 +1,29 @@
+---
+// Picks which flavor every dual `:::example` shows. Example.astro hides the
+// other one with `:root:has(#flavor-*:checked)`, so switching needs no script.
+---
+
+<div class="tabs tabs-boxed tabs-sm flavor-picker">
+  <div class="tab-list" role="radiogroup" aria-label="Example code">
+    <input class="tab-input" type="radio" name="docs-flavor" id="flavor-html" value="html" checked />
+    <label class="tab" for="flavor-html">Vanilla CSS</label>
+    <input class="tab-input" type="radio" name="docs-flavor" id="flavor-react" value="react" />
+    <label class="tab" for="flavor-react">React</label>
+  </div>
+</div>
+
+{/* Inline and right after the radios, so a stored choice applies before the examples paint. */}
+<script is:inline>
+  (() => {
+    const KEY = "admin-docs-flavor";
+    try {
+      if (localStorage.getItem(KEY) === "react") document.getElementById("flavor-react").checked = true;
+    } catch {}
+    document.addEventListener("change", (event) => {
+      if (event.target.name !== "docs-flavor") return;
+      try {
+        localStorage.setItem(KEY, event.target.value);
+      } catch {}
+    });
+  })();
+</script>

@@ -8,7 +8,7 @@ Guidance for Claude Code working in this repo.
 
 - `packages/admin-css` — pre-built CSS, semantic class names (`.btn`, `.input`, `.card`, `.field`). Built from Tailwind v4 source.
 - `packages/admin-react` — React component library. Wraps Base UI primitives and emits the **same class names** as `admin-css`, so vanilla HTML and React render identically.
-- `apps/docs` — Astro + Starlight site with side-by-side vanilla/React tabs.
+- `apps/docs` — Astro + Starlight site; each example shows its vanilla or React source, picked site-wide in the header.
 
 ## Design philosophy
 
@@ -88,7 +88,7 @@ Only use this split when there's real layout variation. Leaf components (`Button
 
 ### Icons
 
-Recommended: **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. Neither package depends on Tabler directly; `apps/docs` has both as devDeps so `:::example` previews render in both tabs.
+Recommended: **Tabler Icons** — webfont (`<i class="ti ti-name">`) for vanilla, `@tabler/icons-react` (`<IconName size={16} />`) for React. Neither package depends on Tabler directly; `apps/docs` has both as devDeps so `:::example` previews render in both flavors.
 
 React components take an `icon` prop (and `iconTrailing` where applicable) that accepts a component reference: `<Button icon={IconPlus}>Add</Button>`. The shared `renderIcon()` helper in `src/icon.ts` renders at `size="1em"` with `aria-hidden` (so SVG icons inherit the host `font-size`, matching the Tabler webfont in the vanilla bundle), and also accepts pre-instantiated elements (`icon={<IconPlus size={20} />}`) when callers need to override size. Prefer this prop over passing icon JSX as children — the two render to identical DOM but the prop ensures consistent defaults.
 
@@ -148,12 +148,12 @@ Authoring syntax (either fence may be omitted):
 :::
 ````
 
-**React-only features** (clipboard access, `useState`/`setTimeout`-driven UI — anything the vanilla bundle can't replicate without consumer-written JS): drop the `html` fence so the example shows only the React preview, and flag the heading with Starlight's `<Badge>` aliased to avoid colliding with the admin `<Badge>`:
+**React-only features** (clipboard access, `useState`/`setTimeout`-driven UI — anything the vanilla bundle can't replicate without consumer-written JS): drop the `html` fence so the example shows only the React preview, and flag the heading with `<ReactOnly />` (`apps/docs/src/components/ReactOnly.astro`):
 
 ```mdx
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 
-### Copyable <StarlightBadge text="React only" variant="caution" />
+### Copyable <ReactOnly />
 ```
 
 Keep the underlying CSS classes shipping in both bundles — consumers wiring their own vanilla JS still rely on the styling.

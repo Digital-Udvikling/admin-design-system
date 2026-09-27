@@ -3,13 +3,13 @@ title: Copy button
 description: Write a value to the clipboard from a button.
 ---
 
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 import { CopyButton, InputGroup, Input, useCopy, Button } from "@aortl/admin-react";
 import { IconLink } from "@tabler/icons-react";
 
 ## Examples
 
-### Icon only <StarlightBadge text="React only" variant="caution" />
+### Icon only <ReactOnly />
 
 :::example
 
@@ -19,7 +19,7 @@ import { IconLink } from "@tabler/icons-react";
 
 :::
 
-### With a label <StarlightBadge text="React only" variant="caution" />
+### With a label <ReactOnly />
 
 :::example
 
@@ -31,7 +31,7 @@ import { IconLink } from "@tabler/icons-react";
 
 :::
 
-### In an input group <StarlightBadge text="React only" variant="caution" />
+### In an input group <ReactOnly />
 
 :::example
 
@@ -44,7 +44,7 @@ import { IconLink } from "@tabler/icons-react";
 
 :::
 
-### Your own trigger <StarlightBadge text="React only" variant="caution" />
+### Your own trigger <ReactOnly />
 
 `useCopy()` returns the clipboard write and the timed `copied` flag without the button.
 

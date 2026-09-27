@@ -72,7 +72,7 @@
 <span class="line"><span style="color:var(--shiki-token-keyword)">const</span><span style="color:var(--shiki-token-constant)"> failed</span><span style="color:var(--shiki-token-keyword)"> =</span><span style="color:var(--shiki-token-constant)"> jobs</span><span style="color:var(--shiki-token-function)">.filter</span><span style="color:var(--shiki-foreground)">((job) </span><span style="color:var(--shiki-token-keyword)">=&gt;</span><span style="color:var(--shiki-token-constant)"> job</span><span style="color:var(--shiki-foreground)">.status </span><span style="color:var(--shiki-token-keyword)">===</span><span style="color:var(--shiki-token-string-expression)"> "failed"</span><span style="color:var(--shiki-foreground)">);</span></span></code></pre>
 ```
 
-Highlight with `theme: "css-variables"` and put `code-block` on the `<pre>`, for example with a `pre` transformer. In React, render Shiki's `structure: "inline"` output inside `CodeBlock`:
+Highlight with `theme: "css-variables"` and put `code-block` on the `<pre>`, for example with a `pre` transformer. Astro's built-in `"css-variables"` preset prefixes its variables `--astro-code-`, so pass Shiki's `createCssVariablesTheme()` there instead. In React, render Shiki's `structure: "inline"` output inside `CodeBlock`:
 
 ```tsx
 const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", structure: "inline" });

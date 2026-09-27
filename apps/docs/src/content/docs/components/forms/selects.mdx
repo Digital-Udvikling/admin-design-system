@@ -4,7 +4,7 @@ description: Pick one value from a collapsed list.
 ---
 
 import { Field, Select } from "@aortl/admin-react";
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../../components/ReactOnly.astro";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
 import Callout from "../../../../components/Callout.astro";
 
@@ -211,7 +211,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 :::
 
-### Leading icon <StarlightBadge text="React only" variant="caution" />
+### Leading icon <ReactOnly />
 
 A native `<select>` can't hold an icon.
 

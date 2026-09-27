@@ -193,7 +193,7 @@ function stripMdxNoiseInProse(prose) {
   prose = flattenColorComponents(prose);
 
   // React-only marker: keep the human-readable text, drop the raw Astro JSX.
-  prose = prose.replace(/<StarlightBadge\b[^>]*?\btext="([^"]+)"[^>]*?\/>/g, "($1)");
+  prose = prose.replace(/<ReactOnly\s*\/>/g, "(React only)");
 
   prose = prose.replace(/^\s*<\/?CardGrid>\s*$/gm, "");
 
@@ -397,7 +397,7 @@ function validateOutput(files) {
     if (content.includes("import.meta.env.BASE_URL")) {
       problems.push(`${rel}: leaked import.meta.env.BASE_URL`);
     }
-    const tag = content.match(/<(StarlightBadge|ColorFamily|ColorRamp|ColorCopy|\/?Callout)\b/);
+    const tag = content.match(/<(ReactOnly|ColorFamily|ColorRamp|ColorCopy|\/?Callout)\b/);
     if (tag) problems.push(`${rel}: un-transformed <${tag[1]}>`);
     // `:::example` is the only directive authored today; asides don't work in this
     // pipeline (see Callout.astro), so a surviving marker is a gap, not content.

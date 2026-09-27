@@ -3,7 +3,7 @@ title: Dialogs
 description: Modal dialogs built on the native dialog element.
 ---
 
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 import { Button, Dialog, Field, Input, Select, useConfirm, usePrompt } from "@aortl/admin-react";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import { useState } from "react";
@@ -361,7 +361,7 @@ The form inside the dialog posts the action, so Delete needs no script. Cancel c
 
 :::
 
-### Confirmation <StarlightBadge text="React only" variant="caution" />
+### Confirmation <ReactOnly />
 
 `useConfirm()` needs an `<AdminRoot>` ancestor, which renders the dialog, and throws without one.
 
@@ -397,7 +397,7 @@ function DeleteProject() {
 
 :::
 
-### Prompt <StarlightBadge text="React only" variant="caution" />
+### Prompt <ReactOnly />
 
 `usePrompt()` shares `useConfirm()`'s host and queue.
 

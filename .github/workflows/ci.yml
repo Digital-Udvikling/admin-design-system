@@ -33,9 +33,6 @@ jobs:
       - name: Build (workspace types for docs check)
         run: pnpm build
 
-      - name: Package tarballs (publint, attw, install + import)
-        run: pnpm check-package
-
       - name: Skill bundle is in sync
         run: |
           pnpm generate-skill

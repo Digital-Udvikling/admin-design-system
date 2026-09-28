@@ -4,7 +4,7 @@
   }
 
   /* All selectors are scoped under `.tabs` so generic `class="tab"` markup
-     elsewhere (e.g. Starlight's own <Tabs>) doesn't pick them up. */
+     elsewhere (a host page's own tab widget) doesn't pick them up. */
   .tabs .tab-list {
     @apply inline-flex items-center gap-1 border-b border-border;
     /* Containing block for the sliding ::before marker (see @supports below) */

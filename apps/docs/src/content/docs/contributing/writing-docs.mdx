@@ -97,7 +97,7 @@ Set `aria-sort` on the sorted column **only**.
 
 Without the blank lines the body becomes JSX children, which oxfmt indents. That is harmless on screen, but it misindents any fenced code the callout wraps.
 
-Starlight's `:::note` / `:::caution` asides do **not** work here: they inject their icon as a raw-HTML mdast node, and the Sätteri processor escapes raw HTML instead of parsing it, so the icon renders as visible SVG source. `generate-skill.mjs` fails the build if a `:::` marker survives, which catches an aside written by habit.
+There are no `:::note` / `:::caution` asides: `:::example` is the only directive. `generate-skill.mjs` fails the build if another `:::` marker survives, which catches an aside written by habit.
 
 Don't use the React `<Alert>` in prose either — it emits `_ao-`-prefixed classes that only match inside `._ao-admin-root`, and page prose has no such wrapper, so it renders unstyled.
 
@@ -131,7 +131,7 @@ description: Compact status indicator for tags and counts.
 
 ### Writing the Reference
 
-- Don't add a `Notes` column. Starlight's content column is max-width constrained, so a table wide enough for prose wraps one word per line. Keep tables to `Prop | Type | Default` (plus a leading `Part` column for compounds) and put the caveats in a short paragraph underneath.
+- Don't add a `Notes` column. The article column is capped at `60rem`, so a table wide enough for prose wraps one word per line. Keep tables to `Prop | Type | Default` (plus a leading `Part` column for compounds) and put the caveats in a short paragraph underneath.
 - List only admin's own props; close with "Plus native `<span>` attributes." rather than enumerating inherited ones.
 - Say when a default emits no class (`md` adds no class), and name classes that don't exist but readers will guess (`badge-neutral`).
 - Write attributes bracketed — `[data-selected]` — so they read as attributes and the docs checker doesn't treat them as class names.

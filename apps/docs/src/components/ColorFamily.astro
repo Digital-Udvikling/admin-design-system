@@ -13,7 +13,7 @@ interface Props {
 const { family, description, variants } = Astro.props;
 ---
 
-<section class="not-content family">
+<section class="prose-exclude family">
   <header class="family-head">
     <h3 class="family-title">{family}</h3>
     {description && <p class="family-desc">{description}</p>}

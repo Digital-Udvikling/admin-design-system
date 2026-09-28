@@ -12,7 +12,7 @@ interface Props {
 const { family, tones } = Astro.props;
 ---
 
-<section class="not-content ramp">
+<section class="prose-exclude ramp">
   <h3 class="ramp-title">{family}</h3>
   <ol class="ramp-strip" style={`--ramp-count: ${tones.length}`}>
     {

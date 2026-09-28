@@ -14,7 +14,7 @@ const hasBoth = !!html && hasReact;
 ---
 
 {/* A dual example shows the flavor picked by the page's `#flavor-*` radios (FlavorPicker.astro). */}
-<section class="not-content example-block" data-dual={hasBoth ? "" : undefined}>
+<section class="prose-exclude example-block" data-dual={hasBoth ? "" : undefined}>
   <div class="example-frame">
     {
       hasBoth ? (
@@ -51,7 +51,7 @@ const hasBoth = !!html && hasReact;
     overflow: hidden;
     background: var(--color-surface);
   }
-  /* Stand-ins for admin-css/base.css, which the docs skip so Starlight keeps its body. */
+  /* The preview is a body of its own: base.css type on the page surface. */
   .example-preview {
     padding: 1.5rem;
     display: flex;

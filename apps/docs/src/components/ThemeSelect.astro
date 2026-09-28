@@ -1,0 +1,27 @@
+---
+// Auto follows the OS through `color-scheme`; Light and Dark set `data-theme` on
+// <html>. Docs.astro applies the stored choice before first paint.
+---
+
+<select class="select select-sm theme-select" aria-label="Theme">
+  <option value="auto">Auto</option>
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+
+<script is:inline>
+  (() => {
+    const KEY = "admin-docs-theme";
+    const select = document.currentScript.previousElementSibling;
+    select.value = document.documentElement.dataset.theme ?? "auto";
+    select.addEventListener("change", () => {
+      const theme = select.value;
+      if (theme === "auto") delete document.documentElement.dataset.theme;
+      else document.documentElement.dataset.theme = theme;
+      try {
+        if (theme === "auto") localStorage.removeItem(KEY);
+        else localStorage.setItem(KEY, theme);
+      } catch {}
+    });
+  })();
+</script>

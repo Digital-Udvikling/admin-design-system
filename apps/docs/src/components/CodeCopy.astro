@@ -1,0 +1,26 @@
+---
+// The copy button of a `.code-pane`: copies the pane's `<pre>` text.
+---
+
+<button type="button" class="btn btn-ghost btn-sm btn-square code-pane-copy" aria-label="Copy code">
+  <i class="ti ti-copy" aria-hidden="true"></i>
+  <i class="ti ti-check" aria-hidden="true"></i>
+</button>
+<span class="code-pane-status" role="status"></span>
+
+<script>
+  // One delegated listener per page: the clipboard has no declarative equivalent.
+  document.addEventListener("click", async (event) => {
+    const button = event.target instanceof Element ? event.target.closest(".code-pane-copy") : null;
+    const pane = button?.closest(".code-pane");
+    if (!button || !pane) return;
+    await navigator.clipboard.writeText(pane.querySelector("pre")?.textContent ?? "");
+    const status = pane.querySelector(".code-pane-status");
+    button.setAttribute("data-copied", "");
+    if (status) status.textContent = "Copied";
+    setTimeout(() => {
+      button.removeAttribute("data-copied");
+      if (status) status.textContent = "";
+    }, 1200);
+  });
+</script>

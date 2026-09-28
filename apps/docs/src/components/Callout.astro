@@ -1,13 +1,8 @@
 ---
-// Starlight's own asides can't be used here: they inject their icon as a raw-HTML
-// mdast node, which the Sätteri processor escapes instead of parsing, so the icon
-// renders as visible SVG source.
-//
 // This reuses the design system's `.alert` for the icon/text grid, radius and
 // padding, but swaps the solid status fill for a muted tint — a docs note is not
-// an app alert and shouldn't shout. `not-content` opts the body out of Starlight's
-// prose styles, which otherwise fight the tinted surface (white `<code>` chips,
-// stacked paragraph margins).
+// an app alert and shouldn't shout. `prose-exclude` opts the body out of `.prose`,
+// whose chips and block margins would fight the tinted surface.
 interface Props {
   /** Tone. Sets the tint, border and icon. */
   variant?: "info" | "success" | "warning" | "danger";
@@ -23,7 +18,7 @@ const ICONS = {
 };
 ---
 
-<div class="callout alert not-content" data-variant={variant}>
+<div class="callout alert prose-exclude" data-variant={variant}>
   <i class={`ti ${ICONS[variant]}`} aria-hidden="true"></i>
   <div class="callout-body"><slot /></div>
 </div>
@@ -90,10 +85,5 @@ const ICONS = {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
-  }
-
-  /* Expressive Code owns the fence's own chrome; just tighten the spacing. */
-  .callout-body :global(.expressive-code) {
-    margin: 0;
   }
 </style>

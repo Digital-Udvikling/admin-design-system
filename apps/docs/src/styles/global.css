@@ -1,33 +1,25 @@
 /*
  * Pre-declare layer order so Tailwind's `components`/`utilities` land after
  * Starlight's layers — otherwise Starlight's append later and `starlight.reset`
- * overrides component sizing regardless of selector specificity.
+ * overrides component sizing regardless of selector specificity. `admin` holds
+ * the scoped bundle (plugins/admin-scoped.mjs), below `utilities` as react.mdx
+ * tells Tailwind hosts to.
  */
 @layer theme, base, starlight.base, starlight.reset, starlight.core,
-  starlight.content, starlight.components, starlight.utils, components,
+  starlight.content, starlight.components, starlight.utils, admin, components,
   utilities;
 
 @import "tailwindcss";
 
-/* Tabler webfont for `<i class="ti ti-x">` in vanilla previews. */
-@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
-
 /*
  * Design-system *source*, not the built bundle, so docs share Tailwind's single
- * compilation pass and admin-css edits hot-reload in dev. admin-css/base.css is
+ * compilation pass and admin-css edits hot-reload in dev. Fonts load as their
+ * own customCss entries (see astro.config.mjs). admin-css/base.css is
  * skipped — Starlight owns the body/font reset; its --sl-color-* variables are
  * remapped onto the Flexoki palette below.
  */
-@import "@aortl/admin-css/src/fonts.css";
-@import "@aortl/admin-css/src/theme.css";
-@import "@aortl/admin-css/src/components/index.css";
-
-/*
- * Scoped `_ao-` bundle matching the React previews (each is wrapped in
- * `<AdminRoot>`). Built artifact, not source — the scoping only exists
- * post-wrap-scoped.
- */
-@import "@aortl/admin-css/admin.scoped.css";
+@import "@aortl/admin-css/theme.css";
+@import "@aortl/admin-css/components.css";
 
 /*
  * AdminRoot deliberately owns its surface and forks color-scheme; inside

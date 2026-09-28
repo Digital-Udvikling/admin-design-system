@@ -13,6 +13,8 @@
   - [A semantic role](#a-semantic-role)
   - [A palette tone](#a-palette-tone)
   - [The whole palette](#the-whole-palette)
+  - [In the scoped bundle](#in-the-scoped-bundle)
+- [Container surface](#container-surface)
 - [Popup layering](#popup-layering)
 
 ## System accent
@@ -21,27 +23,20 @@ One variable drives the navbar stripe, the footer stripe, and [`<BrandTile>`](..
 
 ```css
 :root {
-  --color-system-accent: var(--color-purple-600);
+  --color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400));
 }
 ```
 
-Defaults to a neutral gray. Three derived tokens track it through `color-mix`:
+Defaults to a neutral gray. A `light-dark()` pair keeps the tile legible in both modes. Three derived tokens track it:
 
-| Token                           | What it controls                         | Derivation                        |
-| ------------------------------- | ---------------------------------------- | --------------------------------- |
-| `--color-system-accent`         | Navbar + footer stripe, `.brand-tile` bg | The value you set                 |
-| `--color-system-accent-hover`   | Reserved for hover states                | 12% mix toward `--color-text`     |
-| `--color-system-accent-muted`   | Reserved for subtle backgrounds          | 12% accent over `--color-surface` |
-| `--color-system-accent-content` | Tile / icon foreground                   | `light-dark(paper, black)`        |
+| Token                           | What it controls                         | Derivation                          |
+| ------------------------------- | ---------------------------------------- | ----------------------------------- |
+| `--color-system-accent`         | Navbar + footer stripe, `.brand-tile` bg | The value you set                   |
+| `--color-system-accent-hover`   | Reserved for hover states                | 12% mix toward `--color-text`       |
+| `--color-system-accent-muted`   | `.brand-tile-soft` fill                  | 12% accent over `--color-surface`   |
+| `--color-system-accent-content` | Tile / icon foreground                   | Paper or black, by accent lightness |
 
-Bright accents like `--color-yellow-400` need a manual `-content` override:
-
-```css
-:root {
-  --color-system-accent: var(--color-yellow-400);
-  --color-system-accent-content: var(--color-black);
-}
-```
+`.brand-tile` re-derives `-muted` and `-content` from the accent it inherits, so an accent set on a subtree (`.app-shell`, `.navbar`, the tile itself) reaches the tile's fill and glyph. Overriding `-content` directly doesn't reach the tile.
 
 In React, `<AdminRoot systemAccent="…">` sets it inline on one subtree. To run several accents in one app, see [App shell › Branding](../modules/app-shell.md#branding-multiple-systems).
 
@@ -114,9 +109,32 @@ Replaces a Flexoki tone everywhere it is used, including inside any semantic rol
 
 Both layers are plain declarations on `:root`. Redefine the palette in your own stylesheet to ship a different brand.
 
+### In the scoped bundle
+
+The scoped bundle (and so `@aortl/admin-react/styles.css`) declares every token on `._ao-admin-root`, so a `:root` override stops at the scope. Set overrides on the root instead:
+
+```css
+._ao-admin-root {
+  --color-primary: var(--color-green-600);
+}
+```
+
+An inline `style` on `<AdminRoot>` does the same for one subtree.
+
+## Container surface
+
+Filled containers publish their fill as `--surface-current`: cards and their tints, dialogs and their footer, menu and select popups, accordion items, muted and selected list items, selected table rows, the navbar, sidebar and footer. Components that must paint the surface they sit on read it — timeline rings, avatar-group rings, stacked-bar seams, and the pinned column and sticky header of a table. Set it on your own filled container so those match:
+
+```css
+.my-panel {
+  background-color: var(--color-surface-strong);
+  --surface-current: var(--color-surface-strong);
+}
+```
+
 ## Popup layering
 
-Portaled popups — [`<Select>`](../components/forms/selects.md) and [`<Tooltip>`](../components/tooltip.md) — render on `.popup-layer`, whose `z-index` reads `--z-popup` and defaults to `1000`. Lower it when an `<AdminRoot>` sits inside a host page with chrome that should still paint above admin popups:
+Portaled popups — [`<Select>`](../components/forms/selects.md) and [`<Tooltip>`](../components/tooltip.md) — render on `.popup-layer`, whose `z-index` reads `--z-popup` and defaults to `1000`. The vanilla `.tooltip-wrap` bubble reads it too. Lower it when an `<AdminRoot>` sits inside a host page with chrome that should still paint above admin popups:
 
 ```css
 .my-embedded-panel {

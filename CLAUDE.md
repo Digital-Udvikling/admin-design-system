@@ -46,6 +46,7 @@ pnpm format:check
 pnpm check-docs      # links, anchors, Reference classes vs CSS and props vs React types, tsx examples type-check, vanilla/React class parity
 pnpm generate-skill  # regenerate skills/ from the docs MDX
 pnpm render components/buttons.mdx:42   # PNG of an example: vanilla + React × light + dark (--help)
+pnpm visual-diff <base-dist> <head-dist>  # screenshot every example in two docs builds, report the changed ones (--help)
 pnpm clean
 ```
 
@@ -90,7 +91,7 @@ CSS-side, components accommodate an icon as a direct child of the root (`flex it
 `packages/admin-css/src/theme.css`. Two `@theme static` blocks, both registered with Tailwind so it generates utilities AND emits CSS variables:
 
 1. **Palette** — Flexoki ramps (`--color-blue-600`, `--color-base-50`, paper, black, …). `--color-*: initial` wipes Tailwind's defaults; Flexoki is the single source of truth. Tones are absolute, identical in light/dark mode.
-2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, `--color-danger`, …) declared once via `light-dark()`. Dark mode swaps to Flexoki's inverted pairs (paper↔black, base-50↔base-950, accent-600↔accent-400).
+2. **Semantic** — purpose-named aliases (`--color-primary`, `--color-surface`, `--color-danger`, `--color-category-blue`, …) declared once via `light-dark()`. Dark mode swaps to Flexoki's inverted pairs (paper↔black, base-50↔base-950, accent-600↔accent-400).
 
 **Components only reference semantic tokens, never palette tones directly** — override `--color-primary` and every component follows.
 
@@ -98,9 +99,9 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 ### Build pipeline
 
-Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, externals everything; then `cp ../admin-css/dist/admin.css ./dist/admin.css` for the `./styles.css` subpath export) → `docs`.
+Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, ESM only, one `.js` + `.d.ts` per source module, externals everything; then `cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css` for the `./styles.css` subpath export) → `docs`.
 
-`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.**
+`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.** The scoped bundle for React previews is also compiled from source: `customCss` imports `@aortl/admin-css/src/admin.css?scoped`, and `apps/docs/plugins/admin-scoped.mjs` runs `wrap()` on Tailwind's output and puts it in `@layer admin`. So `pnpm dev` and the docs build never read `admin-css/dist`.
 
 ### Tests
 
@@ -204,13 +205,13 @@ Run `pnpm release` (interactive: pick patch/minor/major; `pnpm release minor` sk
 2. bump the root `package.json` (the canonical release pointer, though root is private) and write the same version into both packages' `package.json` (the bumper plugin — JSON mode, which matches oxfmt's `package.json` formatting, so no reformat step is needed);
 3. commit (`chore(release): v${version}`) and push to `main`.
 
-release-it does **not** publish, tag, or create the GitHub release — that stays in CI. On the pushed commit, `.github/workflows/release.yml` triggers on path `packages/*/package.json`, diffs each version against its `<name>@<version>` git tag, and for every package ahead: gates on `grep`-ing the `## [version]` section out of `CHANGELOG.md` (catches a hand-bump that bypassed `pnpm release`, **before** the irreversible publish) alongside lint/build/types/test, then builds + `npm publish --provenance` + tags `<name>@<version>`, pushes one shared umbrella `v<version>` tag (the target of the compare links), and cuts a GitHub Release from that version's changelog section. Don't publish manually.
+release-it does **not** publish, tag, or create the GitHub release — that stays in CI. On the pushed commit, `.github/workflows/release.yml` triggers on path `packages/*/package.json`, asks npm (`npm view <name>@<version>`) whether each package's version is already published, and for every package that isn't: gates on `grep`-ing the `## [version]` section out of `CHANGELOG.md` (catches a hand-bump that bypassed `pnpm release`, **before** the irreversible publish) alongside lint/format/build/types/test, then builds + `npm publish --provenance`, pushes one shared umbrella `v<version>` tag (the target of the compare links; there are no per-package tags), and cuts a GitHub Release from that version's changelog section. Don't publish manually.
 
 Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publishes `apps/docs/dist` (including the changelog page) to GitHub Pages.
 
 ## Conventions
 
-- pnpm ≥10, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges.
+- pnpm ≥10, Node ≥22. `.npmrc` sets `save-exact=true` — no caret ranges, except `@base-ui/react` in `admin-react`'s `dependencies`: an exact pin gives a consumer that also uses Base UI a second copy, and Base UI context doesn't cross copies.
 - Tailwind v4 (`@theme`, `@custom-variant`, `light-dark()`). No `tailwind.config.js` — everything is CSS.
 - TypeScript strict + `noUncheckedIndexedAccess` + `verbatimModuleSyntax` (use `import type` for types).
 - Conventional Commits.

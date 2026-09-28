@@ -14,14 +14,16 @@ npm install @aortl/admin-css
 
 ```css
 @import "tailwindcss";
-@import "@aortl/admin-css/src/theme.css";
-@import "@aortl/admin-css/src/components/index.css";
+@import "@aortl/admin-css/fonts.css";
+@import "@aortl/admin-css/theme.css";
+@import "@aortl/admin-css/components.css";
 ```
 
+- `fonts.css` registers IBM Plex from files in the package.
 - `theme.css` registers the design tokens — Tailwind generates utilities like `bg-primary` and `text-text-muted`.
-- `components/index.css` ships the semantic classes (`.btn`, `.input`, `.card`, `.field`).
+- `components.css` ships the semantic classes (`.btn`, `.input`, `.card`, `.field`).
 
-Skip either import if you only want one half.
+Skip `theme.css` or `components.css` if you only want one half, and `fonts.css` if you set your own `--font-sans` and `--font-mono`. These three are the only source entry points; other files under `src/` are not exported.
 
 ## Mix utilities and components
 

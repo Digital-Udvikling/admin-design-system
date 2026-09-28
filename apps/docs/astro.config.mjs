@@ -5,6 +5,7 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import adminScopedPlugin from "./plugins/admin-scoped.mjs";
 import remarkExample from "./plugins/example/index.mjs";
 import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
 
@@ -24,7 +25,16 @@ export default defineConfig({
     react(),
     starlight({
       title: "Admin design system",
-      customCss: ["./src/styles/global.css"],
+      customCss: [
+        // global.css first: it declares the `@layer` order the scoped bundle slots into.
+        "./src/styles/global.css",
+        // Source, not the package export: the scoped plugin wraps Tailwind's output.
+        "../../packages/admin-css/src/admin.css?scoped",
+        // Kept out of the HMR'd sheets: re-parsing @font-face on every CSS edit
+        // re-registers the fonts and flashes fallback text and icons.
+        "@aortl/admin-css/fonts.css",
+        "@tabler/icons-webfont/dist/tabler-icons.min.css",
+      ],
       components: {
         SiteTitle: "./src/components/SiteTitle.astro",
       },
@@ -51,7 +61,7 @@ export default defineConfig({
     mdx(),
   ],
   vite: {
-    plugins: [tailwindcss(), virtualPreviewsPlugin()],
+    plugins: [tailwindcss(), adminScopedPlugin(), virtualPreviewsPlugin()],
     // The `:::example` previews are virtual modules Vite's cold dep scanner never
     // sees; lazily discovering their deps re-optimizes mid-load, bumping the
     // optimize `browserHash` and invalidating the loaded `react/jsx-dev-runtime`

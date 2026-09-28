@@ -4,6 +4,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
+- `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
+
+### Changed
+
+- **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
+- The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
+- IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
+- The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
+- Dark `--color-danger`, `--color-info`, `--color-link` and `--color-text-muted` and light `--color-success` move one step to meet 4.5:1 text contrast on cards and tints, dark `--color-code-surface` is base-850 so code blocks show inside cards, and `--color-system-accent-content` picks white or black from the accent's lightness. (css)
+
+### Removed
+
+- **Breaking:** The CommonJS build of `@aortl/admin-react` (`dist/*.cjs`, the `require` condition and `main`). It ships ES modules as `dist/*.js`. (react)
+
+### Fixed
+
+- `admin.utilities.css`, and a Tailwind build that imports `theme.css`, ship no `table` and `table-cell` display utilities, which collided with the table component's class names. (css)
+- The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
+
 ## [0.21.0] - 2026-09-25
 
 ### Added

@@ -21,6 +21,8 @@ npm install @aortl/admin-react react react-dom
 
 Package page: [`@aortl/admin-react` on npm](https://www.npmjs.com/package/@aortl/admin-react).
 
+The package is ESM only and needs React 19.2 or later. `require("@aortl/admin-react")` works only where Node or the bundler can `require()` an ES module.
+
 ## Import styles + components
 
 ```tsx
@@ -54,7 +56,7 @@ The scoped bundle ships unlayered so it wins over a host page's own CSS. In a Ta
 @layer theme, base, admin, components, utilities;
 @import "tailwindcss";
 @import "@aortl/admin-react/styles.css" layer(admin);
-@import "@aortl/admin-css/src/theme.css";
+@import "@aortl/admin-css/theme.css";
 ```
 
 Admin styles still beat Tailwind's preflight, and your utilities beat admin styles. Skip this when embedding in a page whose unlayered CSS would then override the components. `theme.css` registers the design tokens for utilities like `bg-primary`; see [Tailwind](tailwind.md).
@@ -74,7 +76,7 @@ Beyond the standard `<div>` attributes — all forwarded, including `style` and 
 | `systemAccent` | `string` (CSS color) | Sets `--color-system-accent` inline — see [Theming › System accent](../basics/theming.md#system-accent).            |
 
 ```tsx
-<AdminRoot theme="dark" systemAccent="var(--color-purple-600)">
+<AdminRoot theme="dark" systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   {/* ... */}
 </AdminRoot>
 ```

@@ -24,17 +24,13 @@
   "sideEffects": [
     "**/*.css"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     },
-    "./styles.css": "./dist/admin.scoped.css",
-    "./styles.scoped.css": "./dist/admin.scoped.css"
+    "./styles.css": "./dist/admin.scoped.css"
   },
   "publishConfig": {
     "access": "public",
@@ -42,7 +38,7 @@
   },
   "scripts": {
     "build": "vite build && pnpm copy:css",
-    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css",
+    "copy:css": "cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css && cp -r ../admin-css/dist/fonts ./dist/",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
@@ -53,7 +49,7 @@
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",
-    "@base-ui/react": "1.4.1",
+    "@base-ui/react": "^1.4.1",
     "clsx": "2.1.1"
   },
   "devDependencies": {
@@ -74,7 +70,7 @@
     "vitest": "4.1.6"
   },
   "peerDependencies": {
-    "react": ">=19.2",
-    "react-dom": ">=19.2"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

@@ -57,6 +57,16 @@ pnpm render --html '<span class="badge">New</span>' --tsx '<Badge>New</Badge>'
 
 Cells mirror the docs preview frame. React renders client-side from admin-react source; both sides load `admin.utilities.css`, so a utility missing from that bundle shows up unstyled. `pnpm render --help` lists every option.
 
+## Visual diff
+
+`pnpm visual-diff` screenshots every example preview (vanilla and React, light and dark) in two docs builds and compares them pixel by pixel. It lists the changed, added and removed examples by `file.mdx:line` and writes before, after and diff PNGs of each changed cell. Build the docs on each side and pass both `dist` directories:
+
+```bash
+pnpm visual-diff ../base/apps/docs/dist apps/docs/dist --out /tmp/visual-diff
+```
+
+Compare captures made with the same Chromium; a different build shifts antialiasing and reports every cell as changed.
+
 ## Releasing
 
 ```bash

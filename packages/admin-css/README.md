@@ -38,6 +38,6 @@ Or grab it from a CDN — no install needed:
 ## Build
 
 ```fish
-pnpm build       # generates dist/admin.css + dist/admin.min.css
+pnpm build       # dist/admin.css, admin.scoped.css, admin.utilities.css (+ .min.css each) and dist/fonts/
 pnpm dev         # watch mode
 ```

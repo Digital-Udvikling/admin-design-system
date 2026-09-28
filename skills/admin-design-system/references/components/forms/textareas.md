@@ -2,18 +2,6 @@
 
 > Multi-line text input.
 
-## Contents
-
-- [Examples](#examples)
-  - [Variants](#variants)
-  - [Status variants](#status-variants)
-  - [Sizes](#sizes)
-  - [Auto-resize](#auto-resize)
-  - [Disabled](#disabled)
-- [Reference](#reference)
-  - [React](#react)
-  - [Vanilla](#vanilla)
-
 ## Examples
 
 ### Variants
@@ -23,29 +11,23 @@
 ```html
 <textarea class="textarea" placeholder="Bordered (default)"></textarea>
 <textarea class="textarea textarea-ghost" placeholder="Ghost"></textarea>
-<textarea class="textarea textarea-danger" placeholder="Danger">invalid</textarea>
 ```
 
 ```tsx
 <Textarea placeholder="Bordered (default)" />
 <Textarea variant="ghost" placeholder="Ghost" />
-<Textarea variant="danger" defaultValue="invalid" />
 ```
 
-### Status variants
+### Invalid
 
 **Example**
 
 ```html
-<textarea class="textarea textarea-info">Info</textarea>
-<textarea class="textarea textarea-success">Success</textarea>
-<textarea class="textarea textarea-warning">Warning</textarea>
+<textarea class="textarea" aria-label="Notes" aria-invalid="true">too short</textarea>
 ```
 
 ```tsx
-<Textarea variant="info" defaultValue="Info" />
-<Textarea variant="success" defaultValue="Success" />
-<Textarea variant="warning" defaultValue="Warning" />
+<Textarea aria-label="Notes" aria-invalid defaultValue="too short" />
 ```
 
 ### Sizes
@@ -59,9 +41,9 @@
 ```
 
 ```tsx
-<Textarea textareaSize="sm" placeholder="Small" />
+<Textarea size="sm" placeholder="Small" />
 <Textarea placeholder="Medium" />
-<Textarea textareaSize="lg" placeholder="Large" />
+<Textarea size="lg" placeholder="Large" />
 ```
 
 ### Auto-resize
@@ -81,39 +63,38 @@
 **Example**
 
 ```html
-<textarea class="textarea" disabled>Disabled</textarea>
+<textarea class="textarea" disabled aria-label="Notes">Disabled</textarea>
 ```
 
 ```tsx
-<Textarea disabled defaultValue="Disabled" />
+<Textarea disabled aria-label="Notes" defaultValue="Disabled" />
 ```
 
 ## Reference
 
 ### React
 
-| Prop           | Type                                                                    | Default      |
-| -------------- | ----------------------------------------------------------------------- | ------------ |
-| `variant`      | `"bordered" \| "ghost" \| "danger" \| "info" \| "success" \| "warning"` | `"bordered"` |
-| `textareaSize` | `"sm" \| "md" \| "lg"`                                                  | `"md"`       |
-| `autoResize`   | `boolean`                                                               | `false`      |
-
-The size prop is `textareaSize`, not `size`, because `<textarea>` has no native `size` but the type would still collide — see [Conventions › Sizes](../../basics/conventions.md#sizes).
+| Prop         | Type                    | Default      |
+| ------------ | ----------------------- | ------------ |
+| `variant`    | `"bordered" \| "ghost"` | `"bordered"` |
+| `size`       | `"sm" \| "md" \| "lg"`  | `"md"`       |
+| `autoResize` | `boolean`               | `false`      |
 
 Renders a `<textarea>` through Base UI's `Field.Control`, so inside a [Field](fields.md) it gets the same id, label association and validity wiring as an `Input`, and works standalone outside one. Plus native `<textarea>` attributes.
 
 ### Vanilla
 
-| Class                                                 | Effect                                                                                                          |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `textarea`                                            | Full-width box, `0.75rem`/`0.5rem` padding, `0.5rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
-| `textarea-ghost`                                      | No fill or border until hover                                                                                   |
-| `textarea-danger`                                     | Danger border and focus outline                                                                                 |
-| `textarea-info` `textarea-success` `textarea-warning` | Status border and focus outline                                                                                 |
-| `textarea-sm`                                         | `text-xs`, tighter padding, `4rem` min-height                                                                   |
-| `textarea-lg`                                         | `text-base`, looser padding, `6rem` min-height                                                                  |
-| `textarea-autosize`                                   | Height tracks content and manual resizing is off                                                                |
+| Class                   | Effect                                                                                                            |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `textarea`              | Full-width box, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm`, `5rem` min-height, vertically resizable |
+| `textarea-ghost`        | No fill or border; a translucent wash on hover                                                                    |
+| `textarea-sm`           | `text-xs`, tighter padding, `4rem` min-height                                                                     |
+| `textarea-lg`           | `text-base`, looser padding, `6rem` min-height                                                                    |
+| `textarea-autosize`     | Height tracks content, floored at `rows`; manual resizing is off                                                  |
+| `[aria-invalid="true"]` | Danger border and focus outline                                                                                   |
 
-There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`. The status variants tint the border and focus ring only, never the text: warning's yellow fails AA at text size.
+There is no `textarea-bordered` or `textarea-md` — both are the unmodified `textarea`.
 
-`textarea-autosize` is `field-sizing: content`, so growth needs no JavaScript. Its floor is whichever is larger, the class's `min-height` or the `rows` attribute; cap it with your own `max-height`. Chromium-only today — elsewhere the box stays fixed and resizable, which is the same as omitting the class.
+The danger look also applies to Base UI's `[data-invalid]`, to `:user-invalid` once the user has edited the value, and inside an invalid [Field](fields.md).
+
+`textarea-autosize` is `field-sizing: content`, so growth needs no JavaScript. Its floor is whichever is larger, the class's `min-height` or the `rows` attribute; cap it with your own `max-height`. Browsers without `field-sizing` keep the fixed, resizable box, the same as omitting the class.

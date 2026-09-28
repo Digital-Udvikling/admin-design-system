@@ -1,16 +1,21 @@
 @layer components {
   .switch {
-    @apply relative inline-flex items-center w-9 h-5 shrink-0 p-0.5
+    /* Border + p-px = 2px thumb inset all round; the transparent border outlines the track in forced colors. */
+    @apply relative inline-flex items-center w-9 h-5 shrink-0 p-px
            rounded-full border border-transparent
            cursor-pointer
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed;
+    /* Fills exactly one line box: pins to a wrapped label's first line, doesn't grow table rows. */
+    vertical-align: top;
+    margin-block: calc((1lh - 1.25rem) / 2);
   }
 
-  /* Base UI button variant: state is driven by data-* attributes. */
+  /* Base UI span variant: state is driven by data-* attributes. The off track alone is
+     under 3:1, so it takes the checkbox's text-muted edge. */
   .switch[data-unchecked] {
-    @apply bg-border-strong;
+    @apply bg-border-strong border-text-muted hover:border-text;
   }
 
   .switch[data-checked] {
@@ -33,7 +38,11 @@
 
   /* Native input variant. */
   input.switch {
-    @apply appearance-none bg-border-strong m-0;
+    @apply appearance-none bg-border-strong mx-0;
+  }
+
+  input.switch:not(:checked) {
+    @apply border-text-muted hover:border-text;
   }
 
   input.switch:checked {
@@ -51,6 +60,12 @@
     @apply translate-x-4 bg-primary-content;
   }
 
+  /* After the hover rules, which tie on specificity. field.css owns a parent .field[data-invalid]. */
+  .switch:is([aria-invalid="true"], [data-invalid])[data-unchecked],
+  input.switch:is([aria-invalid="true"], [data-invalid], :user-invalid):not(:checked) {
+    @apply border-danger;
+  }
+
   /* Switches are wider than checkboxes/radios, so the label gap is larger. */
   label:has(> .switch) {
     @apply inline-flex items-center gap-3 cursor-pointer;
@@ -59,8 +74,41 @@
     min-width: 0;
   }
 
-  label:has(> .switch:disabled),
-  label:has(> .switch[data-disabled]) {
-    @apply opacity-60 cursor-not-allowed;
+  /* Only the track pins to the first line; icons and kbd stay centred on it. */
+  label:has(> .switch) > .switch {
+    @apply self-start;
+  }
+
+  /* Dim the row once; the control inside must not compound it to 25%. */
+  label:has(> .switch:is(:disabled, [data-disabled])) {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  label:has(> .switch:is(:disabled, [data-disabled])) > .switch {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .switch-thumb,
+    input.switch::before {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    input.switch:checked,
+    .switch[data-checked] {
+      background-color: Highlight;
+    }
+
+    input.switch::before,
+    .switch-thumb {
+      background-color: CanvasText;
+    }
+
+    input.switch:checked::before,
+    .switch[data-checked] .switch-thumb {
+      background-color: HighlightText;
+    }
   }
 }

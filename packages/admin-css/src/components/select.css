@@ -1,13 +1,17 @@
 @layer components {
   .select {
-    @apply inline-flex items-center justify-between gap-2 w-full px-3 py-2
-           rounded-lg text-sm leading-none text-left
+    @apply inline-flex items-center gap-2 w-full min-w-0 px-3 py-2
+           rounded-md text-sm leading-none text-left
            bg-surface text-text
            border border-border hover:border-border-strong
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .select > :is(i, svg) {
+    flex-shrink: 0;
   }
 
   .select[data-popup-open] {
@@ -19,11 +23,15 @@
   }
 
   .select-ghost {
-    @apply bg-transparent border-transparent hover:bg-surface-muted hover:border-transparent;
+    @apply bg-transparent border-transparent hover:bg-surface-hover hover:border-transparent;
   }
 
-  .select-danger {
+  .select:is([aria-invalid="true"], [data-invalid], :user-invalid) {
     @apply border-danger hover:border-danger focus-visible:outline-danger;
+  }
+
+  .select:is([aria-invalid="true"], [data-invalid])[data-popup-open] {
+    @apply outline-danger;
   }
 
   .select-sm {
@@ -35,28 +43,48 @@
   }
 
   /* A replaced <select> can't host a tinted ::after and data URIs can't read
-     CSS variables, so the chevron is a background-image with a hard-coded
-     stroke: Flexoki base-500 (#848484), which reads neutral in both modes. */
+     CSS variables, so the chevron is a background image whose stroke copies
+     text-muted per mode (base-600 / base-400). Its inset and the reserved
+     padding (inset + 1em glyph + 0.5rem gap) match the React trigger. */
   select.select {
     appearance: none;
-    padding-right: 2rem;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23848484' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    padding-right: calc(0.75rem + 1em + 0.5rem);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c6c6c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
     background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1rem;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+
+    @variant dark {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239b9b9b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    }
   }
 
   select.select-sm {
-    padding-right: 1.75rem;
-    background-size: 0.875rem;
+    padding-right: calc(0.625rem + 1em + 0.5rem);
+    background-position: right 0.625rem center;
   }
 
   select.select-lg {
-    padding-right: 2.25rem;
+    padding-right: calc(1rem + 1em + 0.5rem);
+    background-position: right 1rem center;
+  }
+
+  /* The empty-value option is the placeholder; mute it like React's [data-placeholder]. */
+  select.select:has(> option[value=""]:checked) {
+    @apply text-text-muted;
+  }
+
+  select.select:has(> option[value=""]:checked) :is(option, optgroup):not(:disabled) {
+    @apply text-text;
+  }
+
+  /* Clip only the inline axis: under leading-none an overflow-hidden box cuts descenders. */
+  .select-value {
+    @apply min-w-0 overflow-x-clip text-ellipsis whitespace-nowrap;
   }
 
   .select-icon {
-    @apply inline-flex items-center justify-center size-4 shrink-0
+    @apply inline-flex items-center justify-center size-[1em] shrink-0 ms-auto
            text-text-muted transition-transform duration-150;
   }
 
@@ -65,11 +93,14 @@
   }
 
   .select-popup {
+    --surface-current: var(--color-surface);
     @apply min-w-[var(--anchor-width)] max-h-72 overflow-auto
            py-1 outline-none
            bg-surface text-text
-           border border-border rounded-lg shadow-md
+           border border-border-strong rounded-lg shadow-sm
            transition-[opacity,transform] duration-100;
+    /* Capped like menu-popup; a wider trigger still widens it. */
+    max-width: max(20rem, var(--anchor-width));
   }
 
   .select-popup[data-starting-style],
@@ -81,16 +112,18 @@
     @apply -translate-y-1;
   }
 
+  /* Base UI moves real focus onto items, so :focus-visible marks the keyboard cursor. */
   .select-item {
-    @apply flex items-center gap-2 px-3 py-1.5 text-sm
-           cursor-pointer select-none outline-none;
-    /* Break long option labels rather than grow the popup horizontally. */
-    overflow-wrap: break-word;
+    @apply flex items-center gap-2 px-3 py-1 text-sm leading-5
+           cursor-pointer select-none
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
+    /* `anywhere` also lowers min-content, so an unbreakable label wraps inside the capped popup. */
+    overflow-wrap: anywhere;
     min-width: 0;
   }
 
   .select-item[data-highlighted] {
-    @apply bg-surface-muted;
+    @apply bg-surface-hover;
   }
 
   .select-item[data-selected] {
@@ -107,5 +140,12 @@
 
   .select-group-label {
     @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
+  }
+
+  @media (forced-colors: active) {
+    .select-item[data-highlighted] {
+      background-color: Highlight;
+      color: HighlightText;
+    }
   }
 }

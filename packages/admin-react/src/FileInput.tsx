@@ -2,19 +2,20 @@ import { Input as BaseInput } from "@base-ui/react/input";
 import type { ComponentProps } from "react";
 import { cn } from "./cn";
 
-export type FileInputVariant = "bordered" | "ghost" | "danger";
+export type FileInputVariant = "bordered" | "ghost";
 export type FileInputSize = "sm" | "md" | "lg";
 
 type BaseInputProps = Omit<ComponentProps<typeof BaseInput>, "size" | "type">;
 
 export interface FileInputProps extends BaseInputProps {
   variant?: FileInputVariant;
-  inputSize?: FileInputSize;
+  /** Default `"md"`. */
+  size?: FileInputSize;
 }
 
 export function FileInput({
   variant = "bordered",
-  inputSize = "md",
+  size = "md",
   className,
   ...rest
 }: FileInputProps) {
@@ -25,7 +26,7 @@ export function FileInput({
         [
           "file-input",
           variant !== "bordered" && `file-input-${variant}`,
-          inputSize !== "md" && `file-input-${inputSize}`,
+          size !== "md" && `file-input-${size}`,
         ],
         className,
       )}

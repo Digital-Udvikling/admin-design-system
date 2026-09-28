@@ -16,6 +16,8 @@
 
 What holds across the whole library. Component pages list their own props and classes in a `Reference` section and don't repeat any of this.
 
+Invalid is a state, not a variant. Form controls take `variant="bordered"` or `"ghost"`; `aria-invalid="true"`, `:user-invalid` and an invalid [Field](../components/forms/fields.md) turn either one danger.
+
 ## Sizes
 
 Three sizes, named the same everywhere. `md` is the default and emits **no** class — `sm` and `lg` add `<base>-sm` / `<base>-lg`.
@@ -26,7 +28,7 @@ Three sizes, named the same everywhere. `md` is the default and emits **no** cla
 | `size="md"` (or omit) | _no modifier_ |
 | `size="lg"`           | `btn-lg`      |
 
-`Select.Trigger` names its prop `triggerSize` instead — a native `<button>` already has a `size` attribute, so the union would collide.
+On `Input`, `size` replaces the native `size` attribute (the width in characters); set a width with CSS instead.
 
 ## Tones
 
@@ -92,7 +94,7 @@ Shorthand props like `title` and `actions` render inner elements a single `class
 | `Field`                  | `label`, `description`, `error`                                         |
 | `Input`, `PasswordInput` | `wrapper`, `action`                                                     |
 | `Item`                   | `media`, `content`, `title`, `description`, `actions`                   |
-| `NumberInput`            | `group`, `decrement`, `input`, `increment`                              |
+| `NumberInput`            | `root`, `group`, `decrement`, `input`, `increment`                      |
 | `Pagination`             | `item`, `link`, `ellipsis`                                              |
 | `PropertyList`           | `title`, `items`                                                        |
 | `PropertyList.Item`      | `label`, `copy`                                                         |

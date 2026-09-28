@@ -70,6 +70,61 @@ describe("Field", () => {
       expect(screen.getByText("We will not share your email.")).toHaveClass("x-custom");
     });
 
+    it("marks the field invalid when error is set, so the control reddens", () => {
+      const { container } = render(
+        <Field label="Username" error="Username is already taken.">
+          <Input />
+        </Field>,
+      );
+      expect(container.querySelector(adminSelector("field"))).toHaveAttribute("data-invalid");
+      expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true");
+      expect(screen.getByText("Username is already taken.")).toHaveAdminClass("field-error");
+    });
+
+    it("leaves the field valid when error is unset", () => {
+      const { container } = render(
+        <Field label="Username">
+          <Input />
+        </Field>,
+      );
+      expect(container.querySelector(adminSelector("field"))).not.toHaveAttribute("data-invalid");
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("lets an explicit invalid override the error-derived state", () => {
+      const { container } = render(
+        <Field label="Username" error="Checking…" invalid={false}>
+          <Input />
+        </Field>,
+      );
+      expect(container.querySelector(adminSelector("field"))).not.toHaveAttribute("data-invalid");
+      expect(screen.getByText("Checking…")).toBeInTheDocument();
+    });
+
+    it.each([null, false, ""])(
+      "renders no slot and stays valid for %j shorthand props",
+      (empty) => {
+        const { container } = render(
+          <Field label={empty} description={empty} error={empty}>
+            <Input />
+          </Field>,
+        );
+        const root = container.querySelector(adminSelector("field"));
+        expect(root).not.toHaveAttribute("data-invalid");
+        expect(root?.children).toHaveLength(1);
+      },
+    );
+
+    it("sets data-disabled on the label of a disabled field, the hook the CSS dims", () => {
+      render(
+        <Field label="Email" disabled>
+          <Input />
+        </Field>,
+      );
+      expect(screen.getByText("Email")).toHaveAttribute("data-disabled");
+      expect(screen.getByRole("textbox")).toBeDisabled();
+    });
+
     it("places the control before the label and applies field-row when inline", () => {
       const { container } = render(
         <Field inline label="Email me about new orders">
@@ -103,6 +158,23 @@ describe("Field", () => {
   });
 
   describe("interactions", () => {
+    it("Field.Error without match appears only once the control fails validation", async () => {
+      const user = userEvent.setup();
+      const { container } = render(
+        <Field.Container validationMode="onChange">
+          <Field.Label>Username</Field.Label>
+          <Input minLength={3} />
+          <Field.Error>Must be at least 3 characters.</Field.Error>
+        </Field.Container>,
+      );
+      expect(screen.queryByText("Must be at least 3 characters.")).toBeNull();
+      await user.type(screen.getByRole("textbox"), "ab");
+      expect(screen.getByText("Must be at least 3 characters.")).toBeInTheDocument();
+      expect(container.querySelector(adminSelector("field"))).toHaveAttribute("data-invalid");
+      await user.type(screen.getByRole("textbox"), "c");
+      expect(screen.queryByText("Must be at least 3 characters.")).toBeNull();
+    });
+
     it("clicking the label focuses the associated Input", async () => {
       const user = userEvent.setup();
       render(

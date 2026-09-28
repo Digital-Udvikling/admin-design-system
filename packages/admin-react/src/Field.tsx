@@ -1,6 +1,7 @@
 import { Field as BaseField } from "@base-ui/react/field";
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
+import { hasNode } from "./slot";
 
 export type FieldContainerProps = ComponentProps<typeof BaseField.Root>;
 
@@ -15,9 +16,9 @@ export interface FieldProps extends FieldContainerProps {
   /** Renders as `<Field.Description>`. */
   description?: ReactNode;
   /**
-   * Single-message error. Renders as `<Field.Error match={true}>` — shown
-   * whenever the contained control fails validation. For per-`ValidityState`
-   * messages, use `<Field.Container>` and compose `<Field.Error>` directly.
+   * Error message, such as a server-side or form-library error. Always shown when set, and marks
+   * the field invalid (`[data-invalid]`, `aria-invalid`) unless `invalid` is passed. For messages
+   * that follow the control's own validity, compose `<Field.Error>` in `<Field.Container>`.
    */
   error?: ReactNode;
   /**
@@ -38,29 +39,32 @@ function FieldRoot({
   error,
   required,
   inline,
+  invalid,
   className,
   classNames,
   children,
   ...rest
 }: FieldProps) {
-  const labelEl =
-    label !== undefined ? (
-      <FieldLabel required={required} className={classNames?.label}>
-        {label}
-      </FieldLabel>
-    ) : null;
-  const descriptionEl =
-    description !== undefined ? (
-      <FieldDescription className={classNames?.description}>{description}</FieldDescription>
-    ) : null;
-  const errorEl =
-    error !== undefined ? (
-      <FieldError match={true} className={classNames?.error}>
-        {error}
-      </FieldError>
-    ) : null;
+  const hasError = hasNode(error);
+  const labelEl = hasNode(label) ? (
+    <FieldLabel required={required} className={classNames?.label}>
+      {label}
+    </FieldLabel>
+  ) : null;
+  const descriptionEl = hasNode(description) ? (
+    <FieldDescription className={classNames?.description}>{description}</FieldDescription>
+  ) : null;
+  const errorEl = hasError ? (
+    <FieldError match={true} className={classNames?.error}>
+      {error}
+    </FieldError>
+  ) : null;
   return (
-    <FieldContainer className={cn(inline && "field-row", className)} {...rest}>
+    <FieldContainer
+      className={cn(inline && "field-row", className)}
+      invalid={invalid ?? (hasError || undefined)}
+      {...rest}
+    >
       {inline ? (
         <>
           {children}

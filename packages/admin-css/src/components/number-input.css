@@ -6,18 +6,39 @@
 
   /* Connected group: − | input | +, mirroring .input-group's look. */
   .number-input {
-    @apply inline-flex w-full items-stretch
-           rounded-lg border border-border bg-surface
-           transition-colors duration-150
-           focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus;
+    @apply inline-flex w-full h-8 items-stretch
+           rounded-md border border-border bg-surface
+           transition-colors duration-150;
   }
   .number-input:hover {
     @apply border-border-strong;
   }
 
-  /* Borderless field: right-aligned tabular digits, native spinners hidden. */
+  /* Ring the group only for the field; a focused stepper draws its own inset ring. */
+  .number-input:has(> .number-input-field:focus-visible) {
+    @apply outline-2 outline-offset-2 outline-focus;
+  }
+
+  .number-input-ghost {
+    @apply bg-transparent border-transparent;
+  }
+  .number-input-ghost:hover {
+    @apply bg-surface-hover border-transparent;
+  }
+
+  /* Invalid: Base UI's data-invalid or an invalid native field. After the focus rule at equal
+     specificity, so the ring turns danger too. */
+  .number-input:is(
+    [data-invalid],
+    :has(> .number-input-field:is([aria-invalid="true"], :user-invalid))
+  ) {
+    @apply border-danger outline-danger;
+  }
+
+  /* Borderless field: right-aligned tabular digits, native spinners hidden. Tighter inline
+     padding than .input, since the step dividers already frame it and narrow fields clip digits. */
   .number-input-field {
-    @apply flex-1 min-w-0 w-full px-3 py-2
+    @apply flex-1 min-w-0 w-full px-2 py-0
            bg-transparent text-sm leading-none text-text text-right tabular-nums
            border-0 outline-none
            placeholder:text-text-muted
@@ -35,28 +56,40 @@
     @apply inline-flex items-center justify-center shrink-0
            w-8 text-text-muted bg-transparent
            cursor-pointer select-none border-0
-           hover:bg-surface-muted hover:text-text
+           hover:bg-surface-hover hover:text-text
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
+  /* Outer corners follow the shell, so a squared shell in an .input-group squares them too. */
   .number-input-step:first-child {
-    @apply border-r border-border rounded-l-lg;
+    @apply border-r border-border;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
   }
   .number-input-step:last-child {
-    @apply border-l border-border rounded-r-lg;
+    @apply border-l border-border;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
   }
   .number-input-step > :is(i, svg) {
     font-size: 0.875rem;
   }
 
   /* Sizes */
+  .number-input-sm {
+    @apply h-6.5;
+  }
   .number-input-sm .number-input-field {
-    @apply text-xs px-2.5 py-1.5;
+    @apply text-xs px-1.5;
   }
   .number-input-sm .number-input-step {
     @apply w-7;
   }
+  .number-input-lg {
+    @apply h-9.5;
+  }
   .number-input-lg .number-input-field {
-    @apply text-base px-4 py-2.5;
+    @apply text-base px-2.5;
   }
   .number-input-lg .number-input-step {
     @apply w-9;

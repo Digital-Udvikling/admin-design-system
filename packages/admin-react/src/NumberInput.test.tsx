@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { describe, expect, it } from "vitest";
 import { NumberInput } from "./NumberInput";
 import { adminSelector } from "./test-setup";
@@ -21,9 +21,56 @@ describe("NumberInput", () => {
     );
   });
 
+  it("applies the ghost variant on the group", () => {
+    const { container } = render(<NumberInput variant="ghost" inputAriaLabel="Q" />);
+    expect(container.querySelector(adminSelector("number-input"))).toHaveAdminClass(
+      "number-input-ghost",
+    );
+  });
+
+  it("puts aria-invalid on the field", () => {
+    render(<NumberInput aria-invalid inputAriaLabel="Q" />);
+    expect(screen.getByLabelText("Q")).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("forwards ref to the visible group", () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<NumberInput ref={ref} inputAriaLabel="Q" />);
+    expect(ref.current).toHaveAdminClass("number-input");
+  });
+
   it("forwards classNames to slots", () => {
     render(<NumberInput inputAriaLabel="Q" classNames={{ increment: "x-custom" }} />);
     expect(screen.getByRole("button", { name: "Increase" })).toHaveClass("x-custom");
+  });
+
+  it("puts className on the visible group and classNames.root on the root", () => {
+    const { container } = render(
+      <NumberInput
+        inputAriaLabel="Q"
+        className="max-w-32"
+        classNames={{ group: "x-group", root: "x-root" }}
+      />,
+    );
+    const group = container.querySelector(adminSelector("number-input"));
+    expect(group).toHaveClass("max-w-32", "x-group");
+    expect(container.querySelector(adminSelector("number-input-root"))).toHaveClass("x-root");
+    expect(container.querySelector(adminSelector("number-input-root"))).not.toHaveClass("max-w-32");
+  });
+
+  it("puts style on the visible group, not the display: contents root", () => {
+    const { container } = render(<NumberInput inputAriaLabel="Q" style={{ width: 120 }} />);
+    expect(container.querySelector(adminSelector("number-input"))).toHaveStyle({ width: "120px" });
+    expect(container.querySelector(adminSelector("number-input-root"))).not.toHaveAttribute(
+      "style",
+    );
+  });
+
+  it("resolves a className function against the group state", () => {
+    const { container } = render(
+      <NumberInput inputAriaLabel="Q" disabled className={(s) => (s.disabled ? "is-off" : "")} />,
+    );
+    expect(container.querySelector(adminSelector("number-input"))).toHaveClass("is-off");
   });
 
   it("increments the value when the + button is clicked", async () => {

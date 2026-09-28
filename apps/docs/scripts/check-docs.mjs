@@ -439,6 +439,7 @@ const REACT_ONLY = new Map([
   ["radio-indicator", "Base UI's indicator span; vanilla styles the native input"],
   ["switch-thumb", "Base UI's thumb span; vanilla styles the native input"],
   ["select-icon", "Base UI Select's chevron; vanilla's native <select> draws its own"],
+  ["select-value", "Base UI Select's value span; the native <select> renders its own"],
   ["number-input-root", "Base UI NumberField's wrapper"],
   ["table-cell", "explicit cell classes; vanilla matches bare <td> under .table"],
   ["table-header-cell", "explicit cell classes; vanilla matches bare <th> under .table"],

@@ -92,17 +92,17 @@
 
 ### React
 
-| Part              | Renders    | Class             |
-| ----------------- | ---------- | ----------------- |
-| `RadioGroup`      | `<div>`    | `radio-group`     |
-| `Radio`           | `<button>` | `radio`           |
-| `Radio.Indicator` | `<span>`   | `radio-indicator` |
+| Part              | Renders  | Class             |
+| ----------------- | -------- | ----------------- |
+| `RadioGroup`      | `<div>`  | `radio-group`     |
+| `Radio`           | `<span>` | `radio`           |
+| `Radio.Indicator` | `<span>` | `radio-indicator` |
 
 | Part         | Prop          | Type                         | Default        |
 | ------------ | ------------- | ---------------------------- | -------------- |
 | `RadioGroup` | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
 
-`RadioGroup` owns the selection: `value` / `defaultValue` / `onValueChange`, plus `name`, `required` and `disabled`, all from [Base UI RadioGroup](https://base-ui.com/react/components/radio-group). It also provides the roving-focus arrow-key behaviour a radio group is expected to have. `Radio` takes `value` and `disabled`, renders a `<button role="radio">`, and supplies its own indicator — pass `children` only to replace it. Each part takes the native attributes of its element.
+`RadioGroup` owns the selection: `value` / `defaultValue` / `onValueChange`, plus `name`, `required` and `disabled`, all from [Base UI RadioGroup](https://base-ui.com/react/components/radio-group). It also handles roving focus with the arrow keys. `Radio` takes `value` and `disabled`, renders a `<span role="radio">`, and supplies its own indicator — pass `children` only to replace it. Each part takes the native attributes of its element.
 
 For a group label, description and validation, wrap the whole group in a [Field](fields.md).
 
@@ -110,15 +110,17 @@ For a long list of options, use a [Select](selects.md).
 
 ### Vanilla
 
-| Class                  | Effect                                                          |
-| ---------------------- | --------------------------------------------------------------- |
-| `radio`                | `1rem` circle, bordered surface; primary fill when checked      |
-| `radio-indicator`      | `0.375rem` dot in `primary-content` — the React indicator's box |
-| `radio-group`          | Wrapping inline row, `1rem` gap                                 |
-| `radio-group-vertical` | Stacks instead, `0.5rem` gap, start-aligned                     |
+| Class                  | Effect                                                                |
+| ---------------------- | --------------------------------------------------------------------- |
+| `radio`                | `1rem` circle, bordered surface; primary fill when checked            |
+| `radio-indicator`      | `0.375rem` dot in `primary-content` — the React indicator's box       |
+| `radio-group`          | Wrapping inline row, `1rem` column gap, `0.5rem` between wrapped rows |
+| `radio-group-vertical` | Stacks instead, `0.5rem` gap, start-aligned                           |
 
-Works two ways with identical output. On a native `<input type="radio">` the appearance is reset and the dot drawn as a `::after` keyed off `:checked`. On a `<button role="radio">` the states come from `[data-checked]`, `[data-unchecked]` and `[data-disabled]`, the set React emits.
+Works two ways with identical output. On a native `<input type="radio">` the appearance is reset and the dot drawn as a `::after` keyed off `:checked`. On an element with `role="radio"` the states come from `[data-checked]`, `[data-unchecked]` and `[data-disabled]`, the set React emits.
+
+`aria-invalid="true"`, `data-invalid`, `:user-invalid` and an enclosing `field[data-invalid]` give an unchecked `radio` a danger border.
 
 Write `role="radiogroup"` on the group yourself. Native radios need a shared `name` to be mutually exclusive; nothing in the CSS enforces that. Arrow-key navigation between options is browser behaviour for native inputs only.
 
-A wrapping `<label>` is laid out for you: inline row, `0.5rem` gap, pointer cursor, dimmed when disabled, long text wrapping beside the control.
+A wrapping `<label>` is laid out for you: inline row, `0.5rem` gap, pointer cursor, the whole row dimmed to 50% when disabled, long text wrapping beside the control. The control takes the height of one line (`1lh`), so it sits on the label's first line.

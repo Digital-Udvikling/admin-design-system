@@ -2,7 +2,12 @@ import { NumberField } from "@base-ui/react/number-field";
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 
+export type NumberInputVariant = "bordered" | "ghost";
 export type NumberInputSize = "sm" | "md" | "lg";
+
+function joinClasses(...parts: Array<string | undefined>): string | undefined {
+  return parts.filter(Boolean).join(" ") || undefined;
+}
 
 function MinusIcon() {
   return (
@@ -41,13 +46,19 @@ function PlusIcon() {
 }
 
 export interface NumberInputProps extends ComponentProps<typeof NumberField.Root> {
+  variant?: NumberInputVariant;
   size?: NumberInputSize;
-  /** Per-slot class overrides. `className` targets the root; these target inner slots. */
-  classNames?: SlotClasses<"group" | "decrement" | "input" | "increment">;
+  /**
+   * Per-slot class overrides. `className`, `style` and `group` target the visible
+   * `.number-input` group, as does `ref`; `root` targets Base UI's `display: contents` Root.
+   */
+  classNames?: SlotClasses<"root" | "group" | "decrement" | "input" | "increment">;
   /** Input placeholder. */
   placeholder?: string;
   /** aria-label for the field when there's no associated `<label>`. */
   inputAriaLabel?: string;
+  /** Set on the field, which turns the group danger. Inside a `Field`, its validity applies instead. */
+  "aria-invalid"?: boolean | "true" | "false";
   /** aria-label for the decrement button. Default `"Decrease"`. */
   decrementLabel?: string;
   /** aria-label for the increment button. Default `"Increase"`. */
@@ -64,21 +75,41 @@ export interface NumberInputProps extends ComponentProps<typeof NumberField.Root
  * `<input type="number">` and steps with `stepUp()` / `stepDown()`.
  */
 export function NumberInput({
+  variant = "bordered",
   size = "md",
   classNames,
   placeholder,
   inputAriaLabel,
+  "aria-invalid": ariaInvalid,
   decrementLabel = "Decrease",
   incrementLabel = "Increase",
   decrementIcon,
   incrementIcon,
   className,
+  style,
+  ref,
   ...rootProps
 }: NumberInputProps) {
+  const group = classNames?.group;
+  // Group state extends Root state, so a Root className function applies unchanged.
+  const groupClassName =
+    typeof className === "function"
+      ? (state: NumberField.Group.State) => joinClasses(className(state), group)
+      : joinClasses(className, group);
+
   return (
-    <NumberField.Root className={cn("number-input-root", className)} {...rootProps}>
+    <NumberField.Root className={cn("number-input-root", classNames?.root)} {...rootProps}>
       <NumberField.Group
-        className={cn(["number-input", size !== "md" && `number-input-${size}`], classNames?.group)}
+        className={cn(
+          [
+            "number-input",
+            variant !== "bordered" && `number-input-${variant}`,
+            size !== "md" && `number-input-${size}`,
+          ],
+          groupClassName,
+        )}
+        style={style}
+        ref={ref}
       >
         <NumberField.Decrement
           className={cn("number-input-step", classNames?.decrement)}
@@ -90,6 +121,7 @@ export function NumberInput({
           className={cn("number-input-field", classNames?.input)}
           placeholder={placeholder}
           aria-label={inputAriaLabel}
+          aria-invalid={ariaInvalid}
         />
         <NumberField.Increment
           className={cn("number-input-step", classNames?.increment)}

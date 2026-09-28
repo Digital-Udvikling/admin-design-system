@@ -235,7 +235,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
   </Navbar.Brand>
   <Navbar.Actions>
     <Select defaultValue="billigvvs.dk">
-      <Select.Trigger triggerSize="sm" aria-label="Shop">
+      <Select.Trigger size="sm" aria-label="Shop">
         <Select.Value />
         <Select.Icon />
       </Select.Trigger>
@@ -490,7 +490,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
     </Navbar.Brand>
     <Navbar.Actions>
       <Select defaultValue="billigvvs.dk">
-        <Select.Trigger triggerSize="sm" aria-label="Shop">
+        <Select.Trigger size="sm" aria-label="Shop">
           <Select.Value />
           <Select.Icon />
         </Select.Trigger>

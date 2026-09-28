@@ -7,8 +7,10 @@
 - [Examples](#examples)
   - [Default](#default)
   - [Variants](#variants)
+  - [Invalid](#invalid)
   - [Sizes](#sizes)
   - [Groups](#groups)
+  - [Leading icon (React only)](#leading-icon-react-only)
   - [Disabled](#disabled)
   - [Inside a Field](#inside-a-field)
 - [Reference](#reference)
@@ -24,7 +26,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Status">
   <option value="">Select a status…</option>
   <option value="open">Open</option>
   <option value="in-progress">In progress</option>
@@ -34,7 +36,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 ```tsx
 <Select name="status" items={{ open: "Open", "in-progress": "In progress", closed: "Closed" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Status">
     <Select.Value placeholder="Select a status…" />
     <Select.Icon />
   </Select.Trigger>
@@ -60,20 +62,17 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Bordered">
   <option>Bordered</option>
 </select>
-<select class="select select-ghost">
+<select class="select select-ghost" aria-label="Ghost">
   <option>Ghost</option>
-</select>
-<select class="select select-danger">
-  <option>Danger</option>
 </select>
 ```
 
 ```tsx
 <Select defaultValue="x" items={{ x: "Bordered" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Bordered">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -82,7 +81,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Ghost" }}>
-  <Select.Trigger variant="ghost">
+  <Select.Trigger variant="ghost" aria-label="Ghost">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -90,13 +89,26 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
     <Select.Item value="x">Ghost</Select.Item>
   </Select.Popup>
 </Select>
-<Select defaultValue="x" items={{ x: "Danger" }}>
-  <Select.Trigger variant="danger">
+```
+
+### Invalid
+
+**Example**
+
+```html
+<select class="select" aria-label="Warehouse" aria-invalid="true">
+  <option>Choose a warehouse</option>
+</select>
+```
+
+```tsx
+<Select items={{ x: "Choose a warehouse" }} defaultValue="x">
+  <Select.Trigger aria-label="Warehouse" aria-invalid>
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
   <Select.Popup>
-    <Select.Item value="x">Danger</Select.Item>
+    <Select.Item value="x">Choose a warehouse</Select.Item>
   </Select.Popup>
 </Select>
 ```
@@ -106,20 +118,20 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select select-sm">
+<select class="select select-sm" aria-label="Small">
   <option>Small</option>
 </select>
-<select class="select">
+<select class="select" aria-label="Medium">
   <option>Medium</option>
 </select>
-<select class="select select-lg">
+<select class="select select-lg" aria-label="Large">
   <option>Large</option>
 </select>
 ```
 
 ```tsx
 <Select defaultValue="x" items={{ x: "Small" }}>
-  <Select.Trigger triggerSize="sm">
+  <Select.Trigger size="sm" aria-label="Small">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -128,7 +140,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Medium" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Medium">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -137,7 +149,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
   </Select.Popup>
 </Select>
 <Select defaultValue="x" items={{ x: "Large" }}>
-  <Select.Trigger triggerSize="lg">
+  <Select.Trigger size="lg" aria-label="Large">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -152,7 +164,8 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 **Example**
 
 ```html
-<select class="select">
+<select class="select" aria-label="Produce">
+  <option value="">Pick one…</option>
   <optgroup label="Fruit">
     <option>Apple</option>
     <option>Banana</option>
@@ -166,7 +179,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 
 ```tsx
 <Select items={{ apple: "Apple", banana: "Banana", carrot: "Carrot", daikon: "Daikon" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Produce">
     <Select.Value placeholder="Pick one…" />
     <Select.Icon />
   </Select.Trigger>
@@ -197,19 +210,38 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 </Select>
 ```
 
+### Leading icon (React only)
+
+A native `<select>` can't hold an icon.
+
+**Example**
+
+```tsx
+<Select defaultValue="cph" items={{ cph: "Copenhagen", aar: "Aarhus" }}>
+  <Select.Trigger icon={IconBuildingWarehouse} aria-label="Warehouse">
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+  <Select.Popup>
+    <Select.Item value="cph">Copenhagen</Select.Item>
+    <Select.Item value="aar">Aarhus</Select.Item>
+  </Select.Popup>
+</Select>
+```
+
 ### Disabled
 
 **Example**
 
 ```html
-<select class="select" disabled>
+<select class="select" disabled aria-label="Status">
   <option>Disabled</option>
 </select>
 ```
 
 ```tsx
 <Select disabled defaultValue="x" items={{ x: "Disabled" }}>
-  <Select.Trigger>
+  <Select.Trigger aria-label="Status">
     <Select.Value />
     <Select.Icon />
   </Select.Trigger>
@@ -267,7 +299,7 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 | ---------------------- | ------------------------------ | ----------------------------- |
 | `Select`               | nothing — provides context     | —                             |
 | `Select.Trigger`       | `<button>`                     | `select`                      |
-| `Select.Value`         | `<span>`                       | —                             |
+| `Select.Value`         | `<span>`                       | `select-value`                |
 | `Select.Icon`          | `<span>`, chevron by default   | `select-icon`                 |
 | `Select.Popup`         | portal → positioner → `<div>`  | `popup-layer`, `select-popup` |
 | `Select.Item`          | `<div>`                        | `select-item`                 |
@@ -279,33 +311,38 @@ React's `Select` is a compound with a custom popup. Vanilla uses a native `<sele
 | Part             | Prop          | Type                                              | Default      |
 | ---------------- | ------------- | ------------------------------------------------- | ------------ |
 | `Select`         | `items`       | `Record<string, ReactNode>` or `{label, value}[]` | —            |
-| `Select.Trigger` | `variant`     | `"bordered" \| "ghost" \| "danger"`               | `"bordered"` |
-| `Select.Trigger` | `triggerSize` | `"sm" \| "md" \| "lg"`                            | `"md"`       |
+| `Select.Trigger` | `variant`     | `"bordered" \| "ghost"`                           | `"bordered"` |
+| `Select.Trigger` | `size`        | `"sm" \| "md" \| "lg"`                            | `"md"`       |
+| `Select.Trigger` | `icon`        | [`IconProp`](../../basics/conventions.md#icons)  | —            |
+| `Select.Popup`   | `side`        | `"top" \| "bottom" \| "left" \| "right"`          | `"bottom"`   |
+| `Select.Popup`   | `align`       | `"start" \| "center" \| "end"`                    | `"start"`    |
 | `Select.Popup`   | `sideOffset`  | `number`                                          | `4`          |
+| `Select.Popup`   | `alignOffset` | `number`                                          | `0`          |
 
-Without `items`, `Select.Value` shows the raw value instead of the label. `sideOffset` is the trigger-to-popup gap in px.
+Without `items`, `Select.Value` shows the raw value instead of the label. `side`, `align` and both offsets (in px) position the popup relative to the trigger; with `align="start"`, a popup wider than the trigger lines up with its start edge.
 
-Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
+Every part also takes its Base UI props — `value` / `defaultValue` / `onValueChange` / `name` / `required` / `disabled` / `multiple` on the root, `value` and `label` on `Item`. `Select` is generic over the value: `onValueChange` receives the type of `value` or `defaultValue` (an array with `multiple`), and `<Select<Status>>` sets it when neither is passed. Each part takes `className`; `Select` takes no `classNames`, and the positioner's class can't be overridden.
 
-Only the trigger responds to `variant` and `triggerSize`. The chevron, popup and items keep one fixed size.
+Only the trigger responds to `variant` and `size`. The chevron and `icon` are `1em`, so they scale with the trigger text; the popup and items keep one size. A long value truncates with an ellipsis.
 
 To keep every option visible, use [Radios](radios.md); for actions, [Menus](../menus.md); to switch views, [Tabs](../tabs.md).
 
 ### Vanilla
 
-| Class / var             | Effect                                                                                                |
-| ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `select`                | On a native `<select>`: `0.75rem`/`0.5rem` padding, `text-sm`, bordered surface, and a custom chevron |
-| `select-ghost`          | Transparent fill and border until hover                                                               |
-| `select-danger`         | Danger border and focus outline                                                                       |
-| `select-sm`             | `text-xs`, tighter padding, smaller chevron                                                           |
-| `select-lg`             | `text-base`, looser padding                                                                           |
-| `select-icon`           | React chevron slot, `1rem` square; rotates 180° while the popup is open                               |
-| `select-popup`          | React popup: min-width tracks the trigger, `18rem` max height, scrolls                                |
-| `select-item`           | React option row; `[data-highlighted]`, `[data-selected]` and `[data-disabled]` carry its states      |
-| `select-item-indicator` | React checkmark slot, pushed to the row end                                                           |
-| `select-group-label`    | React group heading: uppercase, muted, `text-xs`                                                      |
-| `popup-layer`           | Applied to the React positioner so portaled popups paint above host chrome                            |
-| `--z-popup`             | Read by `popup-layer`, defaults to `1000`. Set it on any ancestor to re-layer                         |
+| Class / var             | Effect                                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `select`                | On a native `<select>`: `0.75rem`/`0.5rem` padding, `text-sm`, bordered surface, and a custom chevron                      |
+| `select-ghost`          | Transparent fill and border until hover                                                                                    |
+| `[aria-invalid="true"]` | Danger border and focus outline; `[data-invalid]`, `:user-invalid` and an invalid `.field` get the same                    |
+| `select-sm`             | `text-xs`, tighter padding, smaller chevron                                                                                |
+| `select-lg`             | `text-base`, looser padding                                                                                                |
+| `select-value`          | React value span; truncates a long value with an ellipsis                                                                  |
+| `select-icon`           | React chevron slot, `1em` square, pushed to the trigger end; rotates 180° while the popup is open                          |
+| `select-popup`          | React popup: min-width tracks the trigger, `20rem` max width (the trigger's width when wider), `18rem` max height, scrolls |
+| `select-item`           | React option row; states via `[data-highlighted]`, `[data-selected]`, `[data-disabled]`; inset ring on keyboard focus      |
+| `select-item-indicator` | React checkmark slot, pushed to the row end                                                                                |
+| `select-group-label`    | React group heading: uppercase, muted, `text-xs`                                                                           |
+| `popup-layer`           | Applied to the React positioner so portaled popups paint above host chrome                                                 |
+| `--z-popup`             | Read by `popup-layer`, defaults to `1000`. Set it on any ancestor to re-layer                                              |
 
-Use `<optgroup>` for groups. The native chevron is a background image with a fixed neutral stroke — a data URI can't read CSS variables, so it doesn't follow your tokens. The five React-only classes above ship in both bundles but have no native equivalent to attach to.
+Use `<optgroup>` for groups. A selected `<option value="">` renders muted, like the React placeholder. The native chevron is a background image whose stroke matches the default `text-muted` in light and dark mode; a data URI can't read CSS variables, so it doesn't follow token overrides. The six React-only classes above ship in both bundles but have no native equivalent to attach to.

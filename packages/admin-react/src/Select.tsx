@@ -1,28 +1,43 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import { useContext, type ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { cn } from "./cn";
-import { PortalContainerContext } from "./portal-context";
+import { renderIcon, type IconProp } from "./icon";
+import { SelectPopup } from "./Select.client";
 
-export type SelectProps = ComponentProps<typeof BaseSelect.Root>;
+/**
+ * `Value` is inferred from `value`, `defaultValue` or `onValueChange`, so the handler receives the
+ * item type (`Value[]` with `multiple`). Pass it explicitly (`<Select<Status>>`) when nothing infers it.
+ */
+export type SelectProps<
+  Value = unknown,
+  Multiple extends boolean | undefined = false,
+> = BaseSelect.Root.Props<Value, Multiple>;
 
-function SelectRoot(props: SelectProps) {
+function SelectRoot<Value, Multiple extends boolean | undefined = false>(
+  props: SelectProps<Value, Multiple>,
+) {
   return <BaseSelect.Root {...props} />;
 }
 
-export type SelectTriggerVariant = "bordered" | "ghost" | "danger";
+export type SelectTriggerVariant = "bordered" | "ghost";
 export type SelectTriggerSize = "sm" | "md" | "lg";
 
 type BaseSelectTriggerProps = Omit<ComponentProps<typeof BaseSelect.Trigger>, "size">;
 
 export interface SelectTriggerProps extends BaseSelectTriggerProps {
   variant?: SelectTriggerVariant;
-  triggerSize?: SelectTriggerSize;
+  /** Default `"md"`. */
+  size?: SelectTriggerSize;
+  /** Leading icon, rendered before `children`. */
+  icon?: IconProp;
 }
 
 function SelectTrigger({
   variant = "bordered",
-  triggerSize = "md",
+  size = "md",
+  icon,
   className,
+  children,
   ...rest
 }: SelectTriggerProps) {
   return (
@@ -31,19 +46,22 @@ function SelectTrigger({
         [
           "select",
           variant !== "bordered" && `select-${variant}`,
-          triggerSize !== "md" && `select-${triggerSize}`,
+          size !== "md" && `select-${size}`,
         ],
         className,
       )}
       {...rest}
-    />
+    >
+      {renderIcon(icon)}
+      {children}
+    </BaseSelect.Trigger>
   );
 }
 
 export type SelectValueProps = ComponentProps<typeof BaseSelect.Value>;
 
-function SelectValue(props: SelectValueProps) {
-  return <BaseSelect.Value {...props} />;
+function SelectValue({ className, ...rest }: SelectValueProps) {
+  return <BaseSelect.Value className={cn("select-value", className)} {...rest} />;
 }
 
 export type SelectIconProps = ComponentProps<typeof BaseSelect.Icon>;
@@ -56,28 +74,13 @@ function SelectIcon({ className, children, ...rest }: SelectIconProps) {
   );
 }
 
-export interface SelectPopupProps extends ComponentProps<typeof BaseSelect.Popup> {
-  sideOffset?: number;
-}
+type SelectPositionerProps = ComponentProps<typeof BaseSelect.Positioner>;
 
-function SelectPopup({ className, sideOffset = 4, children, ...rest }: SelectPopupProps) {
-  const portalContainer = useContext(PortalContainerContext);
-  return (
-    <BaseSelect.Portal container={portalContainer ?? undefined}>
-      {/* Opt out of Base UI's macOS-style alignment (selected item overlaid on
-          the trigger): admin surfaces expect below-the-trigger placement, and
-          the macOS mode collapses the parent dialog's flex layout in <Dialog>. */}
-      <BaseSelect.Positioner
-        className={cn("popup-layer", undefined)}
-        sideOffset={sideOffset}
-        alignItemWithTrigger={false}
-      >
-        <BaseSelect.Popup className={cn("select-popup", className)} {...rest}>
-          {children}
-        </BaseSelect.Popup>
-      </BaseSelect.Positioner>
-    </BaseSelect.Portal>
-  );
+export interface SelectPopupProps extends ComponentProps<typeof BaseSelect.Popup> {
+  side?: SelectPositionerProps["side"];
+  align?: SelectPositionerProps["align"];
+  sideOffset?: number;
+  alignOffset?: SelectPositionerProps["alignOffset"];
 }
 
 export type SelectItemProps = ComponentProps<typeof BaseSelect.Item>;

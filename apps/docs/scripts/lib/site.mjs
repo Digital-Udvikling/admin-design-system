@@ -159,6 +159,9 @@ export function tagExamples() {
  */
 export function showVariant(variant) {
   const want = variant === "react" ? "react" : "html";
+  // The page's flavor radios drive the CSS; builds from before them only honor `hidden`.
+  const radio = document.getElementById(`flavor-${want}`);
+  if (radio instanceof HTMLInputElement) radio.checked = true;
   for (const el of document.querySelectorAll(".example-preview > .preview-variant")) {
     el.hidden = el.dataset.variant !== want;
   }

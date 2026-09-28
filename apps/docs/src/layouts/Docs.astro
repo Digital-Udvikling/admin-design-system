@@ -8,6 +8,10 @@ import "../../../../packages/admin-css/src/admin.css?scoped";
 // re-registers the fonts and flashes fallback text and icons.
 import "@aortl/admin-css/fonts.css";
 import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+import tablerIcons from "@tabler/icons-webfont/dist/fonts/tabler-icons.woff2?url";
+import tabler from "@tabler/icons-webfont/package.json";
+import plexMono from "../../../../packages/admin-css/src/fonts/plex-mono-400-latin.woff2?url";
+import plexSans from "../../../../packages/admin-css/src/fonts/plex-sans-latin.woff2?url";
 import type { MarkdownHeading } from "astro";
 import { getCollection } from "astro:content";
 import FlavorPicker from "../components/FlavorPicker.astro";
@@ -44,6 +48,17 @@ const isHome = Astro.url.pathname === base;
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    {/* Fonts are otherwise requested only once layout needs them, too late for the first
+    paint even from cache. Each href must match the stylesheet's URL exactly, query included. */}
+    <link rel="preload" href={plexSans} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMono} as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href={`${tablerIcons}?v${tabler.version}`}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content={site} />
@@ -76,6 +91,17 @@ const isHome = Astro.url.pathname === base;
       <aside class="sidebar">
         <SidebarNav groups={nav} current={Astro.url.pathname} />
       </aside>
+      <script is:inline>
+        // Right after the sidebar, so it runs before the first paint: bring the current
+        // page's link into view in a long sidebar, without scrolling the page.
+        (() => {
+          const nav = document.querySelector(".app-shell > .sidebar .sidebar-nav");
+          const link = nav?.querySelector('[aria-current="page"]');
+          if (!nav || !link) return;
+          const offset = link.getBoundingClientRect().top - nav.getBoundingClientRect().top;
+          if (offset > nav.clientHeight - 48) nav.scrollTop = offset - nav.clientHeight / 2;
+        })();
+      </script>
       <main class="docs-main">
         <div class="container docs-page">
           <article class="prose docs-article">
@@ -114,15 +140,5 @@ const isHome = Astro.url.pathname === base;
         <SidebarNav groups={nav} current={Astro.url.pathname} />
       </aside>
     </dialog>
-    <script is:inline>
-      // Bring the current page's link into view in a long sidebar, without scrolling the page.
-      (() => {
-        const nav = document.querySelector(".app-shell > .sidebar .sidebar-nav");
-        const link = nav?.querySelector('[aria-current="page"]');
-        if (!nav || !link) return;
-        const offset = link.getBoundingClientRect().top - nav.getBoundingClientRect().top;
-        if (offset > nav.clientHeight - 48) nav.scrollTop = offset - nav.clientHeight / 2;
-      })();
-    </script>
   </body>
 </html>

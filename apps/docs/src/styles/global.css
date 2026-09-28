@@ -124,7 +124,7 @@
   position: relative;
 }
 .prose > .code-pane {
-  margin-block: 0.75rem;
+  margin-block: 1em;
 }
 /* Room for the copy button over the first line. */
 .code-pane .code-block {
@@ -167,7 +167,7 @@
 
 .docs-table-scroll {
   overflow-x: auto;
-  margin-block: 0.75rem;
+  margin-block: 1em;
 }
 .docs-table-scroll:focus-visible {
   outline: 2px solid var(--color-focus);

@@ -10,8 +10,10 @@
     line-height: 1.5;
   }
 
+  /* Dense UI headings: page title, section, group. `.prose` has its own reading scale. */
   h1 {
     @apply text-xl font-semibold leading-tight;
+    letter-spacing: -0.01em;
   }
 
   h2 {
@@ -20,5 +22,16 @@
 
   h3 {
     @apply text-sm font-semibold leading-snug;
+  }
+
+  /* Even lines in a wrapped heading; no one-word last line in a paragraph. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }

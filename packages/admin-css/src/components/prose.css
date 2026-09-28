@@ -14,16 +14,25 @@
   /* Styles rendered HTML (markdown, CMS bodies) that can't carry the system's
      class names — re-establishes what the global reset strips. Descendant rules
      use `:where()` so a consumer's own `.prose a { … }` wins without `!important`,
-     and `prose-scope` so embedded components keep their own look. */
+     and `prose-scope` so embedded components keep their own look.
+     Body stays at the UI's 14px; reading comes from a looser line, em-based block
+     spacing and a heading scale of its own. */
   .prose {
-    @apply text-sm leading-normal text-text;
+    @apply text-sm text-text;
+    line-height: 1.625;
     /* Break long URLs/tokens; the scrolling `<pre>` keeps its own `white-space: pre`. */
     overflow-wrap: break-word;
   }
 
   .prose :where(p, ul, ol, blockquote, pre, table, figure) {
     @variant prose-scope {
-      @apply my-3;
+      margin-block: 1em;
+    }
+  }
+
+  .prose :where(p, li, blockquote, figcaption) {
+    @variant prose-scope {
+      text-wrap: pretty;
     }
   }
   .prose > :first-child {
@@ -33,24 +42,49 @@
     margin-bottom: 0;
   }
 
-  /* base.css already sizes h1–h3; add h4–h6 and the sectioning rhythm. */
+  /* A reading scale of its own, a step up from base.css's dense UI headings; an
+     h2 opens a section with more room above it than an h3. */
   .prose :where(h1, h2, h3, h4, h5, h6) {
     @variant prose-scope {
-      @apply mt-6 mb-2 font-semibold leading-tight;
+      @apply font-semibold text-text;
+      text-wrap: balance;
+    }
+  }
+  .prose :where(h1) {
+    @variant prose-scope {
+      @apply mt-8 mb-4 text-2xl;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+  }
+  .prose :where(h2) {
+    @variant prose-scope {
+      @apply mt-8 mb-3 text-lg;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+  }
+  .prose :where(h3) {
+    @variant prose-scope {
+      @apply mt-6 mb-2 text-base;
+      line-height: 1.4;
     }
   }
   .prose :where(h4) {
     @variant prose-scope {
-      @apply text-sm;
+      @apply mt-5 mb-2 text-sm;
+      line-height: 1.45;
     }
   }
   .prose :where(h5, h6) {
     @variant prose-scope {
-      @apply text-xs uppercase tracking-wide text-text-muted;
+      @apply mt-5 mb-2 text-xs uppercase tracking-wide text-text-muted;
+      line-height: 1.5;
     }
   }
-  /* Lets the heading's mb-2 set the gap instead of collapsing into the next block's my-3. */
-  .prose :where(h1, h2, h3, h4, h5, h6) + :where(*) {
+  /* Lets the heading's bottom margin set the gap to the block it leads. A heading
+     that follows keeps its own top margin, so stacked headings still separate. */
+  .prose :where(h1, h2, h3, h4, h5, h6) + :where(:not(h1, h2, h3, h4, h5, h6)) {
     @variant prose-scope {
       margin-top: 0;
     }
@@ -66,20 +100,24 @@
       @apply list-decimal ps-5;
     }
   }
+  /* Muted markers, so bullets and numbers sit behind the text they lead. */
   .prose :where(li) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
+      &::marker {
+        color: var(--color-text-muted);
+      }
     }
   }
   /* Loose lists wrap each item's text in <p> — tighten those back down. */
   .prose :where(li) :where(p) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
     }
   }
   .prose :where(li > ul, li > ol) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
     }
   }
   /* GFM task lists (tight and loose): the checkbox hangs in the bullet's
@@ -132,6 +170,7 @@
   .prose :where(pre:not(.code-block)) {
     @variant prose-scope {
       @apply rounded-lg bg-code-surface p-3 font-mono text-sm text-code-text;
+      line-height: 1.5;
       white-space: pre;
       overflow-x: auto;
     }
@@ -151,15 +190,16 @@
 
   .prose :where(hr) {
     @variant prose-scope {
-      @apply my-6 border-0 border-t border-border;
+      @apply my-8 border-0 border-t border-border;
     }
   }
 
   /* Tables — the .table look, top-aligned and wrapping since prose cells run to several
      lines. A .table keeps its own rules. */
+  /* Cells keep the UI's 1.5 line so rows stay table-dense. */
   .prose :where(table:not(.table)) {
     @variant prose-scope {
-      @apply w-full border-collapse text-sm;
+      @apply w-full border-collapse text-sm leading-normal;
     }
   }
   .prose :where(table:not(.table)) :where(th, td) {

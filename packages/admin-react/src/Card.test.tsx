@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Card } from "./Card";
-import { adminSelector } from "./test-setup";
+import { adminSelector, RouterLink } from "./test-setup";
 
 describe("Card", () => {
   it("Card.Container composes the bare card primitive", () => {
@@ -119,5 +119,50 @@ describe("Card", () => {
     );
     const root = screen.getByText("Activity").closest(adminSelector("card"));
     expect(root).toHaveAdminClass("card-scroll");
+  });
+
+  it("renders no slot wrapper for null, false or empty shorthand props", () => {
+    const canEdit = false;
+    const { container } = render(
+      <Card
+        media={null}
+        title={null}
+        toolbar={false}
+        description=""
+        actions={canEdit && <button type="button">Edit</button>}
+      >
+        body content
+      </Card>,
+    );
+    for (const slot of [
+      "card-media",
+      "card-header",
+      "card-title",
+      "card-description",
+      "card-actions",
+    ]) {
+      expect(container.querySelector(adminSelector(slot))).toBeNull();
+    }
+    expect(screen.queryByRole("heading")).toBeNull();
+  });
+
+  it("renders no heading for an icon without a title", () => {
+    function StarIcon() {
+      return <svg data-testid="star-icon" />;
+    }
+    render(<Card icon={StarIcon}>body content</Card>);
+    expect(screen.queryByRole("heading")).toBeNull();
+    expect(screen.queryByTestId("star-icon")).toBeNull();
+  });
+
+  it("render: Card.Container renders as a router link", () => {
+    render(
+      <Card.Container bordered render={<RouterLink href="/orders/1042" />}>
+        <Card.Body>Order 1042</Card.Body>
+      </Card.Container>,
+    );
+    const link = screen.getByRole("link", { name: "Order 1042" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAdminClass("card", "card-bordered");
   });
 });

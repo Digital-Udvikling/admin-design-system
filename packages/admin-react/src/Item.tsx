@@ -1,38 +1,45 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { renderAs, type RenderElement } from "./render";
+import { hasNode } from "./slot";
 
-export type ItemVariant = "default" | "outline" | "muted";
+export type ItemVariant = "default" | "bordered" | "muted";
 export type ItemSize = "sm" | "md" | "lg";
 
 export interface ItemContainerProps extends ComponentProps<"div"> {
   variant?: ItemVariant;
   size?: ItemSize;
-  /** Expand the first nested link to fill the whole row (and add hover/focus affordance). */
+  /** Stretch the title's `<a>` (or an `<a>` content column) over the row; actions stay clickable above it. */
   asLink?: boolean;
+  /** Selection highlight, as on `Table.Row`: sets `[data-selected]`. */
+  selected?: boolean;
+  /** Element to render in place of the `<div>`, making the whole row a link. With actions, use `asLink`. */
+  render?: RenderElement;
 }
 /** The bare row primitive — just the `.item` shell, for layouts the default `<Item>` doesn't fit. */
 function ItemContainer({
   variant = "default",
   size = "md",
   asLink,
+  selected,
+  render,
   className,
   ...rest
 }: ItemContainerProps) {
-  return (
-    <div
-      className={cn(
-        [
-          "item",
-          variant !== "default" && `item-${variant}`,
-          size !== "md" && `item-${size}`,
-          asLink && "item-link",
-        ],
-        className,
-      )}
-      {...rest}
-    />
-  );
+  return renderAs("div", render, {
+    "data-selected": selected || undefined,
+    className: cn(
+      [
+        "item",
+        variant !== "default" && `item-${variant}`,
+        size !== "md" && `item-${size}`,
+        asLink && "item-link",
+      ],
+      className,
+    ),
+    ...rest,
+  });
 }
 
 export type ItemMediaProps = ComponentProps<"div">;
@@ -86,23 +93,20 @@ function ItemRoot({
   children,
   ...rest
 }: ItemProps) {
-  const leading = media ?? renderIcon(icon);
-  const hasContent = title !== undefined || description !== undefined;
+  const leading = hasNode(media) ? media : renderIcon(icon);
   return (
     <ItemContainer {...rest}>
-      {leading != null ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
-      {hasContent ? (
+      {hasNode(leading) ? <ItemMedia className={classNames?.media}>{leading}</ItemMedia> : null}
+      {hasNode(title) || hasNode(description) ? (
         <ItemContent className={classNames?.content}>
-          {title !== undefined ? (
-            <ItemTitle className={classNames?.title}>{title}</ItemTitle>
-          ) : null}
-          {description !== undefined ? (
+          {hasNode(title) ? <ItemTitle className={classNames?.title}>{title}</ItemTitle> : null}
+          {hasNode(description) ? (
             <ItemDescription className={classNames?.description}>{description}</ItemDescription>
           ) : null}
         </ItemContent>
       ) : null}
       {children}
-      {actions !== undefined ? (
+      {hasNode(actions) ? (
         <ItemActions className={classNames?.actions}>{actions}</ItemActions>
       ) : null}
     </ItemContainer>

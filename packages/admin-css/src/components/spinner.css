@@ -2,6 +2,8 @@
   /* The currentColor top edge over a muted ring reads as a rotating arc. */
   .spinner {
     display: inline-block;
+    /* An empty inline-block's baseline is its bottom edge; centre it on the text instead. */
+    vertical-align: middle;
     width: 1rem;
     height: 1rem;
     flex-shrink: 0;
@@ -32,6 +34,14 @@
   @keyframes spinner-spin {
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  /* Forced colors give every border edge one color, which hides the arc. */
+  @media (forced-colors: active) {
+    .spinner {
+      border-color: GrayText;
+      border-top-color: CanvasText;
     }
   }
 }

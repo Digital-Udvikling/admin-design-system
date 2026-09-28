@@ -2,7 +2,43 @@
 
 > Task progress bar, determinate or indeterminate.
 
+## Contents
+
+- [Examples](#examples)
+  - [With label](#with-label)
+  - [Determinate](#determinate)
+  - [Indeterminate](#indeterminate)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
+
 ## Examples
+
+### With label
+
+**Example**
+
+```html
+<div class="field w-full">
+  <div class="flex items-baseline justify-between">
+    <label class="field-label" for="disk">Disk usage</label>
+    <span class="text-sm tabular-nums text-text-muted">18 / 100 GB</span>
+  </div>
+  <progress id="disk" class="progress" value="18" max="100"></progress>
+</div>
+```
+
+```tsx
+<Field.Container className="w-full">
+  <div className="flex items-baseline justify-between">
+    <Field.Label htmlFor="disk-usage">Disk usage</Field.Label>
+    <span className="text-sm tabular-nums text-text-muted">18 / 100 GB</span>
+  </div>
+  <Progress id="disk-usage" value={18} />
+</Field.Container>
+```
 
 ### Determinate
 
@@ -85,13 +121,13 @@ For an inline busy state, use a [Spinner](spinners.md).
 
 ### Vanilla
 
-| Class              | Effect                                                               |
-| ------------------ | -------------------------------------------------------------------- |
-| `progress`         | `0.375rem` tall full-width pill, `surface-strong` track, `info` fill |
-| `progress-success` | Success fill                                                         |
-| `progress-warning` | Warning fill                                                         |
-| `progress-danger`  | Danger fill                                                          |
-| `progress-sm`      | `0.25rem` tall                                                       |
-| `progress-lg`      | `0.5rem` tall                                                        |
+| Class              | Effect                                                       |
+| ------------------ | ------------------------------------------------------------ |
+| `progress`         | `0.375rem` tall full-width pill, `border` track, `info` fill |
+| `progress-success` | Success fill                                                 |
+| `progress-warning` | Warning fill                                                 |
+| `progress-danger`  | Danger fill                                                  |
+| `progress-sm`      | `0.25rem` tall                                               |
+| `progress-lg`      | `0.5rem` tall                                                |
 
-There is no `progress-info` or `progress-md` — both are the unmodified `progress`. The fill is `currentColor`, so the variants only set `color`; setting it yourself recolours the bar. Drop the `value` attribute for the indeterminate state, which animates a gradient across the track (slowed to `3s` under `prefers-reduced-motion: reduce`) — the engines disagree about the value pseudo-element when indeterminate, so both are blanked.
+There is no `progress-info` or `progress-md` — both are the unmodified `progress`. The fill is `currentColor`, so the variants only set `color`; setting it yourself recolours the bar. Drop the `value` attribute for the indeterminate state, which slides a segment across the track (slowed to `3s` under `prefers-reduced-motion: reduce`).

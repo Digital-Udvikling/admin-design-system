@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `usePrompt()`, a promise-based `window.prompt` that resolves the entered string, or `null` on Cancel, Esc or unmount. It shares `useConfirm()`'s host and queue in `<AdminRoot>`. (react)
 - `Dialog` and `Drawer` focus the first descendant marked `data-autofocus` each time they open. (react)
 - Vanilla tab panels match `data-value` `1` to `12`. (css)
+- `CopyButton` writes `value` to the clipboard and announces `copiedLabel` in a polite live region; `useCopy()` returns `{ copied, copy }` for your own trigger. (react)
+- `selected` on `Item` and `Item.Container` (`[data-selected]` on `.item`) applies the selected-row tint. (both)
+- A `.card`, `.badge` or `.item` that is itself a link gets a focus ring and a hover state. (css)
+- `.prose` styles `<kbd>` as a key chip and GFM task lists with the checkbox in the bullet gutter. (css)
 
 ### Changed
 
@@ -27,6 +31,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** `.input`, `.number-input` and React `Select.Trigger` match the `.btn` height at each size, and `.input` has a fixed height, so pair controls of one size, such as `input-sm` with `btn-sm`. (both)
 - **Breaking:** `<Field error>` marks the field invalid unless `invalid` is passed. For client-side validity with `validationMode`, compose `Field.Error` inside `Field.Container`. (react)
 - **Breaking:** `tabs-primary` and `Tabs` `primary` are removed; boxed tabs mark the selection with the `primary-muted` fill, and the `tabs-boxed` track matches the control heights, so drop `tabs-sm` from boxed tabs beside md buttons. (both)
+- **Breaking:** `item-outline` / `Item variant="outline"` is `item-bordered` / `variant="bordered"`. (both)
+- **Breaking:** `BrandTile` takes `variant` `accent`, `info`, `success`, `warning` (`brand-tile-warning`) or `danger`, and a `soft` boolean. `brand-tile-info`, `-success` and `-danger` are solid; add `brand-tile-soft` for the tint. The tile derives its muted and content colours from the `--color-system-accent` in scope. (both)
+- **Breaking:** `Avatar` takes `square` instead of `shape`, and the `AvatarShape` type is removed. (react)
+- **Breaking:** `alert` is a block instead of a flex column: inline markup flows as one paragraph and the icon and dismiss align to the first line. Put body text after an `alert-title` in `alert-description`; `Alert.Description` renders a `<div>`. (both)
 - **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
@@ -46,6 +54,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Form controls use the `rounded-md` radius. Input groups square joined corners regardless of stylesheet order, keep the outer radius on a React `Select` or `NumberInput` at the group's end, and form their own stacking context, so a focused control doesn't paint over a sticky table header. (css)
 - Dialogs and drawers have a `border-strong` edge, a small shadow and tighter insets, `.drawer` is bordered only on the edge facing the page, `.dialog-auto` shrinks to its content, and dialogs fade out on close. (both)
 - Accordion summary rows are denser with a `1em` `text-muted` chevron, and content in a closed item can't be focused, read by screen readers or matched by find-in-page. (css)
+- Cards are flat with a smaller radius and `1rem` padding, `card-title` is `text-base`, and `card-toolbar` enlarges only bare icons and icon-only buttons. (css)
+- `card-title`, `stat-card-label`, `stat-card-trend`, `dialog-title` and `accordion-summary` lay out as text: inline markup wraps with the words and children get no flex gap, so in JSX put `{" "}` before a trailing element. (css)
+- `avatar-group` overlaps scale with the avatar size and take their ring from `--surface-current`, `AvatarGroup` `size` sets its avatars' default size, and the `+N` tile has `role="img"`. `Avatar` `alt` defaults to `""`. (both)
+- `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
+- `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
+- `.prose` markdown tables match `.table`, the block after a heading drops its top margin, `a.btn` keeps its button styling, and table cells respect markdown's column `align`. (css)
 
 ### Removed
 

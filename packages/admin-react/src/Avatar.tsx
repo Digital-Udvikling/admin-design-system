@@ -1,17 +1,23 @@
+"use client";
+
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
-import { Children, type ComponentProps, type ReactNode } from "react";
+import { Children, createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { cn } from "./cn";
 
 export type AvatarSize = "sm" | "md" | "lg";
-export type AvatarShape = "circle" | "square";
+
+const AvatarGroupSizeContext = createContext<AvatarSize | undefined>(undefined);
 
 export interface AvatarProps extends ComponentProps<"span"> {
   src?: string;
+  /** Alt text for the image. Defaults to `""` (decorative), for avatars beside a visible name. */
   alt?: string;
   /** Fallback text, typically 1–3 letters. Ignored when `children` is given. */
   initials?: string;
+  /** Defaults to the enclosing `AvatarGroup`'s `size`, else `"md"`. */
   size?: AvatarSize;
-  shape?: AvatarShape;
+  /** Rounded square (`avatar-square`) instead of a circle. */
+  square?: boolean;
 }
 
 /**
@@ -21,19 +27,21 @@ export interface AvatarProps extends ComponentProps<"span"> {
  */
 export function Avatar({
   src,
-  alt,
+  alt = "",
   initials,
-  size = "md",
-  shape = "circle",
+  size: sizeProp,
+  square = false,
   className,
   children,
   ...rest
 }: AvatarProps) {
+  const groupSize = useContext(AvatarGroupSizeContext);
+  const size = sizeProp ?? groupSize ?? "md";
   const fallback: ReactNode = children ?? initials;
   return (
     <BaseAvatar.Root
       className={cn(
-        ["avatar", size !== "md" && `avatar-${size}`, shape === "square" && "avatar-square"],
+        ["avatar", size !== "md" && `avatar-${size}`, square && "avatar-square"],
         className,
       )}
       {...rest}
@@ -47,7 +55,7 @@ export function Avatar({
 export interface AvatarGroupProps extends ComponentProps<"div"> {
   /** Cap the visible avatars; the rest collapse into a trailing "+N" tile. */
   max?: number;
-  /** Size for the surplus tile — match the avatars inside. Default `"md"`. */
+  /** Size for the surplus tile and the default for the avatars inside. */
   size?: AvatarSize;
 }
 
@@ -58,10 +66,13 @@ export function AvatarGroup({ max, size = "md", className, children, ...rest }: 
   const visible = overflow > 0 ? items.slice(0, max) : items;
   return (
     <div className={cn("avatar-group", className)} {...rest}>
-      {visible}
+      <AvatarGroupSizeContext.Provider value={size}>{visible}</AvatarGroupSizeContext.Provider>
       {overflow > 0 ? (
         <span
           className={cn(["avatar", size !== "md" && `avatar-${size}`, "avatar-more"], undefined)}
+          // A text tile, not an <img>: the role is what lets aria-label name it.
+          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
+          role="img"
           aria-label={`+${overflow} more`}
         >
           +{overflow}

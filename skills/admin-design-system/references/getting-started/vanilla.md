@@ -61,13 +61,13 @@ Animations, transitions, filters, backdrop filters, gradient backgrounds, mix-bl
   <div class="card">
     <div class="card-body">
       <h3 class="card-title">Orders</h3>
-      <p class="text-text-muted text-sm">128 placed</p>
+      <p class="card-description">128 placed</p>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
       <h3 class="card-title">Errors</h3>
-      <p class="text-danger text-sm">3 in last hour</p>
+      <p class="card-description text-danger">3 in last hour</p>
     </div>
   </div>
 </div>

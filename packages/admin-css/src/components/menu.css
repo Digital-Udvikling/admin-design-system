@@ -1,39 +1,45 @@
 @layer components {
-  /* Native <details> drives open state — no JS. */
+  /* Vanilla: a popover-attribute popup anchored to its trigger, so Esc and light
+     dismiss come from the browser. React: a Base UI menu with the same classes. */
   .menu {
     @apply relative inline-block;
+    anchor-scope: --menu-trigger;
   }
 
   /* Behaviour only — visual classes (e.g. `btn btn-primary`) may stack on top. */
   .menu-trigger {
-    @apply inline-flex items-center gap-1.5
+    --_menu-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+    @apply inline-flex items-center
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
-    list-style: none;
+    anchor-name: --menu-trigger;
   }
 
-  .menu-trigger::-webkit-details-marker {
-    display: none;
-  }
-
-  /* Default appearance — bows out when `.btn` supplies its own. */
+  /* Default appearance, skipped when `.btn` supplies its own (gap included). */
   .menu-trigger:not(.btn) {
-    @apply px-2.5 py-1.5 rounded-md text-sm leading-none
-           text-text bg-transparent
+    @apply gap-1.5 px-2.5 py-1.5 rounded-md text-sm leading-none
+           text-text bg-transparent border-0
            hover:bg-surface-strong;
   }
 
-  /* em-sized so the chevron scales with btn-sm / btn-lg. */
+  /* em-sized so the chevron scales with btn-sm / btn-lg; the 1em box also
+     makes an empty `btn-square` trigger as square as an icon button. */
   .menu-trigger::after {
     content: "";
-    width: 0.5em;
-    height: 0.5em;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 150ms ease;
-    flex-shrink: 0;
+    flex: none;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask: var(--_menu-chevron) center / contain no-repeat;
+    mask: var(--_menu-chevron) center / contain no-repeat;
+    transition: rotate 150ms ease;
+  }
+
+  /* Muted like the select chevron; filled triggers keep their foreground.
+     :where() holds specificity at the base rule's so forced colors still win. */
+  .menu-trigger:where(:not(.btn-primary, .btn-danger))::after {
+    @apply bg-text-muted;
   }
 
   /* A text-less trigger (split-button dropdown half) centers its chevron. */
@@ -41,60 +47,97 @@
     @apply justify-center;
   }
 
-  .menu[open] > .menu-trigger::after {
-    transform: rotate(-135deg);
+  /* Icon-only trigger (row-actions kebab): the icon is the affordance. */
+  .menu-trigger.btn-square:has(> :is(i, svg))::after {
+    display: none;
+  }
+
+  .menu:has(> .menu-popup:popover-open) > .menu-trigger::after,
+  .menu-trigger[data-popup-open]::after {
+    rotate: 180deg;
   }
 
   .menu-popup {
-    @apply absolute top-full left-0 z-30 mt-1
-           min-w-44 max-h-72 overflow-auto
-           py-1
+    @apply min-w-44 max-w-80 max-h-72 overflow-auto
+           py-1 outline-none
            bg-surface text-text
-           border border-border rounded-lg shadow-md;
+           border border-border-strong rounded-lg shadow-sm
+           transition-[opacity,translate] duration-100;
+    --surface-current: var(--color-surface);
   }
 
-  /* Anchor positioning makes the popup fixed so it escapes ancestor overflow
-     clipping (e.g. inside a <dialog>); browsers without it (Firefox, early
-     2026) fall back to the absolute rules above and clip as before. */
-  @supports (anchor-name: --x) {
-    .menu {
-      anchor-scope: --menu-trigger;
+  /* Vanilla popup: top layer, so no ancestor's overflow or stacking context clips it. */
+  .menu-popup[popover] {
+    inset: auto;
+    margin: 0;
+    margin-block-start: 0.25rem;
+    position-anchor: --menu-trigger;
+    position-area: block-end span-inline-end;
+    /* --menu-fit shrinks a popup that fits neither side instead of shifting it over the trigger. */
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline,
+      --menu-fit,
+      --menu-fit flip-block;
+    position-try-order: most-block-size;
+    /* A trigger wider than 11rem (full-width bulk actions) widens the popup to match. */
+    min-width: max(11rem, anchor-size(width));
+    transition-property: opacity, translate, display, overlay;
+    transition-behavior: allow-discrete;
+  }
+
+  .menu-popup-end[popover] {
+    position-area: block-end span-inline-start;
+  }
+
+  .menu-popup[popover]:not(:popover-open),
+  .menu-popup[data-starting-style],
+  .menu-popup[data-ending-style] {
+    @apply opacity-0 -translate-y-1;
+  }
+
+  @starting-style {
+    .menu-popup:popover-open {
+      @apply opacity-0 -translate-y-1;
     }
-    .menu-trigger {
-      anchor-name: --menu-trigger;
-    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
     .menu-popup {
-      position: fixed;
-      position-anchor: --menu-trigger;
-      top: anchor(bottom);
-      left: anchor(left);
-      position-try-fallbacks: --menu-popup-flip-up;
+      transition: none;
     }
-  }
-
-  @position-try --menu-popup-flip-up {
-    top: auto;
-    bottom: anchor(top);
-    margin-top: 0;
-    margin-bottom: 0.25rem;
   }
 
   .menu-item {
-    @apply flex items-center gap-2 w-full px-3 py-1.5 text-sm leading-none
+    /* `relative` confines a `table-row-link` / `item-link` hit-area overlay to its own row. */
+    @apply relative flex items-center gap-2 w-full px-3 py-1 text-sm leading-5
            text-text bg-transparent
            border-0
            text-left no-underline
            cursor-pointer select-none
-           hover:bg-surface-muted
-           focus-visible:bg-surface-muted focus-visible:outline-none
-           disabled:opacity-50 disabled:cursor-not-allowed;
-    /* The popup has no max-width — break long labels instead of growing it. */
-    overflow-wrap: break-word;
+           hover:bg-surface-hover
+           focus-visible:bg-surface-hover
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus
+           disabled:opacity-50 disabled:pointer-events-none;
+    /* `anywhere` also lowers min-content, so an unbreakable ID wraps inside the capped popup. */
+    overflow-wrap: anywhere;
     min-width: 0;
   }
 
-  .menu-item[aria-disabled="true"] {
-    @apply opacity-50 cursor-not-allowed;
+  /* Destructive action (Delete, Revoke). */
+  .menu-item-danger {
+    @apply text-danger hover:bg-danger-muted focus-visible:bg-danger-muted;
+  }
+
+  .menu-item:is([aria-disabled="true"], [data-disabled]) {
+    @apply opacity-50 pointer-events-none;
+  }
+
+  /* The current page in a nav dropdown, filled like sidebar-subitem. After the hover
+     and focus washes at equal specificity, so the fill holds. */
+  .menu-item[aria-current="page"] {
+    @apply bg-primary-muted text-primary font-medium;
   }
 
   .menu-trigger > :is(i, svg),
@@ -102,19 +145,31 @@
     flex-shrink: 0;
   }
 
-  /* Checkbox/radio items — a leading indicator column whose check shows only when
-     aria-checked. In vanilla, set role=menuitemcheckbox/menuitemradio + aria-checked;
-     the gutter is always reserved so labels stay aligned across the group. */
+  /* Pins leading glyphs to the first line of a wrapped label; 1.25rem is the
+     leading-5 line (not 1lh: Tabler's .ti sets line-height 1). */
+  .menu-item > :is(i, svg, .menu-item-indicator) {
+    align-self: flex-start;
+    margin-block: calc((1.25rem - 1em) / 2);
+  }
+
+  /* Checkable items: the 1em indicator column is always reserved, so checkable and icon
+     labels share one edge; the check shows only when aria-checked. */
   .menu-item-indicator {
     @apply inline-flex items-center justify-center shrink-0;
-    inline-size: 1rem;
-    block-size: 1rem;
+    inline-size: 1em;
+    block-size: 1em;
   }
   .menu-item-indicator > :is(i, svg) {
     opacity: 0;
   }
   .menu-item[aria-checked="true"] .menu-item-indicator > :is(i, svg) {
     opacity: 1;
+  }
+
+  /* Filter menus: a `<label class="menu-item">` whose native checkbox or radio takes
+     the indicator column; the control already fills one line box, so a row stays 28px. */
+  .menu-item > :is(.checkbox, .radio):first-child {
+    align-self: flex-start;
   }
 
   .menu-separator {
@@ -125,7 +180,33 @@
     @apply flex flex-col;
   }
 
+  .menu-actions {
+    @apply flex justify-end gap-2 px-3 py-1;
+  }
+
   .menu-group-label {
     @apply px-3 pt-2 pb-1 text-xs uppercase tracking-wide text-text-muted;
   }
+
+  /* Forced colors repaint backgrounds as Canvas, which erases the masked
+     chevron, the separator line, the hover wash and the current-page fill. */
+  @media (forced-colors: active) {
+    .menu-trigger::after,
+    .menu-separator {
+      background-color: CanvasText;
+    }
+    .menu-item:hover,
+    .menu-item[aria-current="page"] {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}
+
+/* Outside the layer: a try rule is global by name, and wrap-scoped.mjs hoists it out of
+   @scope. 100% is the trigger-to-viewport space, less a 0.25rem gap at each end. 18rem
+   repeats the popup's max-h-72, which a try rule's max-block-size replaces. */
+@position-try --menu-fit {
+  max-block-size: min(18rem, calc(100% - 0.5rem));
 }

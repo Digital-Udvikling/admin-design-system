@@ -6,6 +6,7 @@
 - **[Inputs](inputs.md)** — single-line text, email, password, search, date, …
 - **[Textareas](textareas.md)** — multi-line text.
 - **[Selects](selects.md)** — single-choice dropdown with a custom popup.
+- **[Combobox](combobox.md)** — type to filter, then pick one or more values (React).
 - **[Number inputs](number-inputs.md)** — numeric field with steppers and clamping.
 - **[Checkboxes](checkboxes.md)** — independent on/off toggles.
 - **[Radios](radios.md)** — mutually exclusive choice within a `RadioGroup`.

@@ -107,6 +107,28 @@ export {
   type SelectGroupProps,
   type SelectGroupLabelProps,
 } from "./Select";
+export {
+  Combobox,
+  type ComboboxProps,
+  type ComboboxControlProps,
+  type ComboboxControlVariant,
+  type ComboboxControlSize,
+  type ComboboxInputProps,
+  type ComboboxTriggerProps,
+  type ComboboxClearProps,
+  type ComboboxValueProps,
+  type ComboboxChipsProps,
+  type ComboboxChipProps,
+  type ComboboxChipRemoveProps,
+  type ComboboxPopupProps,
+  type ComboboxListProps,
+  type ComboboxItemProps,
+  type ComboboxItemIndicatorProps,
+  type ComboboxEmptyProps,
+  type ComboboxStatusProps,
+  type ComboboxGroupProps,
+  type ComboboxGroupLabelProps,
+} from "./Combobox";
 export { Container, type ContainerProps, type ContainerSize } from "./Container";
 export {
   Card,
@@ -215,6 +237,9 @@ export {
   type MenuSeparatorProps,
   type MenuGroupProps,
   type MenuGroupLabelProps,
+  type MenuRadioGroupProps,
+  type MenuRadioItemProps,
+  type MenuActionsProps,
 } from "./Menu";
 export {
   Navbar,

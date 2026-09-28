@@ -65,24 +65,15 @@ import { IconUser, IconBell, IconCreditCard } from "@tabler/icons-react";
 ```tsx
 <Accordion>
   <Accordion.Item>
-    <Accordion.Summary>
-      <IconUser size={16} aria-hidden />
-      Account
-    </Accordion.Summary>
+    <Accordion.Summary icon={IconUser}>Account</Accordion.Summary>
     <Accordion.Content>Name, email, password.</Accordion.Content>
   </Accordion.Item>
   <Accordion.Item>
-    <Accordion.Summary>
-      <IconBell size={16} aria-hidden />
-      Notifications
-    </Accordion.Summary>
+    <Accordion.Summary icon={IconBell}>Notifications</Accordion.Summary>
     <Accordion.Content>Email digests, push, in-app banners.</Accordion.Content>
   </Accordion.Item>
   <Accordion.Item>
-    <Accordion.Summary>
-      <IconCreditCard size={16} aria-hidden />
-      Billing
-    </Accordion.Summary>
+    <Accordion.Summary icon={IconCreditCard}>Billing</Accordion.Summary>
     <Accordion.Content>Plan, payment methods, invoices.</Accordion.Content>
   </Accordion.Item>
 </Accordion>
@@ -121,17 +112,21 @@ import { IconUser, IconBell, IconCreditCard } from "@tabler/icons-react";
 | `Accordion.Summary` | `<summary>` | `accordion-summary` |
 | `Accordion.Content` | `<div>`     | `accordion-content` |
 
-No props of its own — each part takes the native attributes of the element it renders, so `open` on `Accordion.Item` and `name` for a single-open group both come from `<details>`. State lives in the DOM; there is no controlled mode.
+| Part                | Prop   | Type                                          | Default |
+| ------------------- | ------ | --------------------------------------------- | ------- |
+| `Accordion.Summary` | `icon` | [`IconProp`](../../basics/conventions/#icons) | —       |
+
+Otherwise each part takes the native attributes of the element it renders, so `open` on `Accordion.Item` and `name` for a single-open group both come from `<details>`. State lives in the DOM; there is no controlled mode.
 
 ### Vanilla
 
-| Class               | Effect                                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `accordion`         | Vertical stack. Rounds the first and last item and collapses the shared borders                              |
-| `accordion-item`    | On `<details>`: bordered surface panel                                                                       |
-| `accordion-summary` | Row trigger: `1rem`/`0.75rem` padding, `text-sm` medium, hover tint, trailing chevron that rotates when open |
-| `accordion-content` | Body: `1rem`/`0.75rem` padding, `text-sm`, divided from the summary by a top border                          |
+| Class               | Effect                                                                                                         |
+| ------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `accordion`         | Vertical stack. Joins its items: squares the inner corners and collapses the shared borders                    |
+| `accordion-item`    | On `<details>`: bordered, rounded surface panel. Works standalone outside an `accordion`                       |
+| `accordion-summary` | Row trigger: `0.75rem`/`0.5rem` padding, `text-sm` medium, hover tint, trailing chevron that rotates when open |
+| `accordion-content` | Body: `0.75rem` padding, `text-sm`, divided from the summary by a top border                                   |
 
 Built on `<details>`/`<summary>`, so the disclosure needs no JavaScript in either bundle: `open` starts an item expanded, and a shared `name` attribute makes a group single-open. The default marker is hidden and replaced by the CSS chevron.
 
-The open/close is animated with `interpolate-size: allow-keywords` on the item plus a `::details-content` transition, which lets `height: 0` interpolate to `auto`; browsers without it toggle instantly. Closed content keeps `content-visibility: visible` so it still contributes intrinsic width — otherwise a shrink-to-fit parent would reflow narrower on close.
+The open/close is animated with `interpolate-size: allow-keywords` on the item plus a `::details-content` transition, which lets `height: 0` interpolate to `auto`. It toggles instantly under `prefers-reduced-motion: reduce` and in browsers without `::details-content`. Closed content still sizes the item's width, so a shrink-to-fit parent keeps its width on toggle. It is not focusable, not announced by screen readers, and find-in-page skips it.

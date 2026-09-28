@@ -1,8 +1,13 @@
-import { useContext, type ComponentProps, type ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
-import { DialogContext, useDialogElement } from "./dialog-internal";
+import {
+  DialogCloseButtonBase,
+  DialogContainer,
+  DialogDescription,
+  DialogTitleBase,
+} from "./Dialog.client";
 import { renderIcon, type IconProp } from "./icon";
-import { PortalContainerContext } from "./portal-context";
+import { hasNode } from "./slot";
 
 export type DialogSize = "sm" | "md" | "lg" | "auto" | "metabase";
 export type DialogClosedBy = "any" | "closerequest" | "none";
@@ -10,8 +15,8 @@ export type DialogClosedBy = "any" | "closerequest" | "none";
 function DefaultCloseIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -37,35 +42,6 @@ export interface DialogContainerProps extends Omit<ComponentProps<"dialog">, "op
   closedby?: DialogClosedBy;
 }
 
-/** The bare `<dialog>` primitive — for layouts the default `<Dialog>` doesn't fit. */
-function DialogContainer({
-  open,
-  onOpenChange,
-  size = "md",
-  closedby = "any",
-  className,
-  children,
-  ref: consumerRef,
-  ...rest
-}: DialogContainerProps) {
-  const { setRef, ctx, ref } = useDialogElement(open, onOpenChange, consumerRef);
-
-  return (
-    <DialogContext.Provider value={ctx}>
-      <PortalContainerContext.Provider value={ref}>
-        <dialog
-          ref={setRef}
-          className={cn(["dialog", size !== "md" && `dialog-${size}`], className)}
-          closedby={closedby}
-          {...rest}
-        >
-          {children}
-        </dialog>
-      </PortalContainerContext.Provider>
-    </DialogContext.Provider>
-  );
-}
-
 export type DialogHeaderProps = ComponentProps<"div">;
 
 function DialogHeader({ className, ...rest }: DialogHeaderProps) {
@@ -77,20 +53,16 @@ export interface DialogTitleProps extends ComponentProps<"h2"> {
   icon?: IconProp;
 }
 
-function DialogTitle({ icon, className, children, ...rest }: DialogTitleProps) {
+function DialogTitle({ icon, children, ...rest }: DialogTitleProps) {
   return (
-    <h2 className={cn("dialog-title", className)} {...rest}>
+    <DialogTitleBase {...rest}>
       {renderIcon(icon)}
       {children}
-    </h2>
+    </DialogTitleBase>
   );
 }
 
 export type DialogDescriptionProps = ComponentProps<"p">;
-
-function DialogDescription({ className, ...rest }: DialogDescriptionProps) {
-  return <p className={cn("dialog-description", className)} {...rest} />;
-}
 
 export type DialogBodyProps = ComponentProps<"div">;
 
@@ -109,34 +81,16 @@ export interface DialogCloseButtonProps extends ComponentProps<"button"> {
   icon?: IconProp;
 }
 
-function DialogCloseButton({
-  icon,
-  className,
-  children,
-  onClick,
-  type = "button",
-  "aria-label": ariaLabel = "Close",
-  ...rest
-}: DialogCloseButtonProps) {
-  const ctx = useContext(DialogContext);
+function DialogCloseButton({ icon, children, ...rest }: DialogCloseButtonProps) {
   return (
-    <button
-      type={type}
-      className={cn("dialog-close", className)}
-      aria-label={ariaLabel}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) ctx?.close();
-      }}
-      {...rest}
-    >
+    <DialogCloseButtonBase {...rest}>
       {children ?? (icon !== undefined ? renderIcon(icon) : <DefaultCloseIcon />)}
-    </button>
+    </DialogCloseButtonBase>
   );
 }
 
 export interface DialogProps extends Omit<DialogContainerProps, "title" | "children"> {
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Dialog.Title>`. */
   title?: ReactNode;
@@ -153,7 +107,10 @@ export interface DialogProps extends Omit<DialogContainerProps, "title" | "child
   children?: ReactNode;
 }
 
-/** Standard modal with shorthand-driven header/body/footer. For other shapes, compose `<Dialog.Container>` by hand. */
+/**
+ * Standard modal with shorthand-driven header/body/footer; an empty slot
+ * (`null`, `false`, `""`) renders nothing. For other shapes, compose `<Dialog.Container>` by hand.
+ */
 function DialogRoot({
   icon,
   title,
@@ -165,7 +122,8 @@ function DialogRoot({
   children,
   ...containerProps
 }: DialogProps) {
-  const hasTitle = title !== undefined || icon !== undefined;
+  // An icon alone would be an empty heading naming the dialog, so the title row needs a title.
+  const hasTitle = hasNode(title);
   const showHeader = hasTitle || dismissible;
   return (
     <DialogContainer {...containerProps}>
@@ -181,13 +139,11 @@ function DialogRoot({
           ) : null}
         </DialogHeader>
       ) : null}
-      {description !== undefined ? (
+      {hasNode(description) ? (
         <DialogDescription className={classNames?.description}>{description}</DialogDescription>
       ) : null}
-      {children !== undefined ? (
-        <DialogBody className={classNames?.body}>{children}</DialogBody>
-      ) : null}
-      {actions !== undefined ? (
+      {hasNode(children) ? <DialogBody className={classNames?.body}>{children}</DialogBody> : null}
+      {hasNode(actions) ? (
         <DialogFooter className={classNames?.footer}>{actions}</DialogFooter>
       ) : null}
     </DialogContainer>

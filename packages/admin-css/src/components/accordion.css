@@ -4,79 +4,118 @@
   }
 
   .accordion-item {
-    @apply border border-border bg-surface;
+    @apply border border-border rounded-lg bg-surface;
+    --surface-current: var(--color-surface);
     /* Enables transitioning height: 0 ↔ height: auto on ::details-content. */
     interpolate-size: allow-keywords;
   }
 
-  .accordion-item:first-child {
-    @apply rounded-t-lg;
-  }
-
-  .accordion-item:last-child {
-    @apply rounded-b-lg;
-  }
-
-  .accordion-item + .accordion-item {
+  /* Stacking is scoped to the group so a standalone item keeps its corners and top border. */
+  .accordion > .accordion-item + .accordion-item {
+    @apply rounded-t-none;
     border-top: 0;
   }
 
+  .accordion > .accordion-item:not(:last-child) {
+    @apply rounded-b-none;
+  }
+
+  /* Block flow, not flex, so inline markup in the label wraps as one run of text. */
   .accordion-summary {
-    @apply flex items-center gap-2
-           px-4 py-3 cursor-pointer select-none
+    --_accordion-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+    /* pe reserves the chevron: its inset, the 1rem glyph and a 0.5rem gap. */
+    @apply relative block
+           ps-3 pe-9 py-2 cursor-pointer select-none
            text-sm font-medium text-text
-           hover:bg-surface-muted
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+           hover:bg-surface-hover transition-colors duration-150
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
     list-style: none;
-    /* Let a long label break and shrink instead of widening the row. */
-    overflow-wrap: break-word;
-    min-width: 0;
+    /* Explicit inner radius (inherit resolves to 0 through the details slot), so the hover wash and inset ring follow the curve. */
+    border-radius: calc(var(--radius-lg) - 1px);
+    /* `anywhere` also lowers min-content, so a long URL or ID can't widen the item. */
+    overflow-wrap: anywhere;
+  }
+
+  .accordion-item[open] > .accordion-summary,
+  .accordion > .accordion-item:not(:last-child) > .accordion-summary {
+    @apply rounded-b-none;
+  }
+
+  .accordion > .accordion-item + .accordion-item > .accordion-summary {
+    @apply rounded-t-none;
   }
 
   .accordion-summary::-webkit-details-marker {
     display: none;
   }
 
-  .accordion-summary > :is(i, svg) {
-    flex-shrink: 0;
+  .accordion-summary:has(> :is(i, svg):first-child) {
+    padding-inline-start: calc(0.75rem + 1em + 0.5rem);
   }
 
-  /* Chevron */
+  /* Floated into the start padding so it sits on the first line. 1.25rem is the
+     text-sm line box; 1lh won't do, as Tabler's .ti sets line-height: 1. */
+  .accordion-summary > :is(i, svg):first-child {
+    float: inline-start;
+    margin-inline-start: calc(-1em - 0.5rem);
+    margin-block-start: calc((1.25rem - 1em) / 2);
+  }
+
   .accordion-summary::after {
     content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 150ms ease;
-    flex-shrink: 0;
-    margin-left: auto;
+    position: absolute;
+    inset-inline-end: 0.75rem;
+    /* Centred on the first line: top padding plus half the line box the glyph leaves. */
+    inset-block-start: calc(0.5rem + (1lh - 1rem) / 2);
+    width: 1rem;
+    height: 1rem;
+    @apply text-text-muted;
+    background-color: currentColor;
+    -webkit-mask: var(--_accordion-chevron) center / contain no-repeat;
+    mask: var(--_accordion-chevron) center / contain no-repeat;
+    transition: rotate 150ms ease;
   }
 
   .accordion-item[open] > .accordion-summary::after {
-    transform: rotate(-135deg);
+    rotate: 180deg;
   }
 
   .accordion-content {
-    @apply px-4 py-3 text-sm text-text border-t border-border;
+    @apply p-3 text-sm text-text border-t border-border;
     overflow-wrap: break-word;
   }
 
-  /* content-visibility stays visible so the closed content still contributes
-     intrinsic width — without it a shrink-to-fit parent reflows narrower on close. */
+  /* Closed content still sizes the width (content-visibility) but leaves tab order and the a11y tree (visibility). */
   .accordion-item::details-content {
     opacity: 0;
     height: 0;
     overflow: clip;
     content-visibility: visible;
+    visibility: hidden;
     transition:
-      opacity 200ms ease,
-      height 200ms ease;
+      opacity 150ms ease,
+      height 150ms ease,
+      visibility 150ms;
   }
 
   .accordion-item[open]::details-content {
     opacity: 1;
     height: auto;
+    /* inherit, not visible, so an open item nested in a closed one stays hidden. */
+    visibility: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-item::details-content,
+    .accordion-summary::after {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    /* The mask-drawn chevron is a background fill, which forced colors paints as Canvas. */
+    .accordion-summary::after {
+      background-color: CanvasText;
+    }
   }
 }

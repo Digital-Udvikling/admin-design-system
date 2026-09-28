@@ -17,6 +17,26 @@ describe("Accordion", () => {
     expect(screen.getByText("Theme, language, accessibility.")).toBeInTheDocument();
   });
 
+  it("renders a summary icon before the label", () => {
+    function IconLead(props: {
+      size?: number | string;
+      "aria-hidden"?: boolean | "true" | "false";
+    }) {
+      return <svg data-testid="lead" {...props} />;
+    }
+    render(
+      <Accordion>
+        <Accordion.Item>
+          <Accordion.Summary icon={IconLead}>Account</Accordion.Summary>
+          <Accordion.Content>Name, email, password.</Accordion.Content>
+        </Accordion.Item>
+      </Accordion>,
+    );
+    const icon = screen.getByTestId("lead");
+    expect(screen.getByText("Account").firstElementChild).toBe(icon);
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+  });
+
   describe("interactions", () => {
     it("toggles open when summary is clicked", async () => {
       const user = userEvent.setup();

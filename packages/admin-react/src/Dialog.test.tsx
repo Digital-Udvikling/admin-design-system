@@ -80,6 +80,71 @@ describe("Dialog", () => {
     expect(screen.getByText("Desc")).toHaveClass("x-custom");
   });
 
+  it("empty shorthand slots render nothing", () => {
+    render(
+      <Dialog open dismissible={false} icon={null} title="" description={null} actions={false}>
+        {false}
+      </Dialog>,
+    );
+    expect(getDialog().children).toHaveLength(0);
+  });
+
+  it("renders no title for an icon without a title", () => {
+    function Warn(props: { size?: number | string }) {
+      return <svg data-testid="warn" {...props} />;
+    }
+    render(<Dialog open icon={Warn} title={null} />);
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("warn")).not.toBeInTheDocument();
+    expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
+  });
+
+  describe("accessible name", () => {
+    it("is labelled by the title and described by the description", () => {
+      render(<Dialog open title="Invite teammate" description="They'll get an email." />);
+      expect(
+        screen.getByRole("dialog", {
+          name: "Invite teammate",
+          description: "They'll get an email.",
+        }),
+      ).toBe(getDialog());
+    });
+
+    it("omits aria-describedby without a description", () => {
+      render(<Dialog open title="Invite teammate" />);
+      expect(getDialog()).toHaveAttribute("aria-labelledby");
+      expect(getDialog()).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("omits aria-labelledby without a title", () => {
+      render(<Dialog open />);
+      expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+    });
+
+    it("covers Dialog.Container compositions and a consumer title id", () => {
+      render(
+        <Dialog.Container open>
+          <form method="dialog">
+            <Dialog.Header>
+              <Dialog.Title id="rename-title">Rename project</Dialog.Title>
+            </Dialog.Header>
+          </form>
+        </Dialog.Container>,
+      );
+      expect(getDialog()).toHaveAttribute("aria-labelledby", "rename-title");
+      expect(screen.getByRole("dialog", { name: "Rename project" })).toBe(getDialog());
+    });
+
+    it("lets aria-label and aria-labelledby win over the title", () => {
+      const { rerender } = render(<Dialog open aria-label="Custom" title="Title" />);
+      expect(getDialog()).not.toHaveAttribute("aria-labelledby");
+      expect(screen.getByRole("dialog", { name: "Custom" })).toBe(getDialog());
+      rerender(<Dialog open aria-labelledby="elsewhere" title="Title" />);
+      expect(getDialog()).toHaveAttribute("aria-labelledby", "elsewhere");
+    });
+  });
+
   describe("interactions", () => {
     it("calls showModal when open transitions false -> true", () => {
       const showModal = vi.spyOn(HTMLDialogElement.prototype, "showModal");
@@ -104,6 +169,57 @@ describe("Dialog", () => {
       render(<Dialog open={true} onOpenChange={onOpenChange} title="x" />);
       getDialog().close();
       expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("an open the prop didn't make fires onOpenChange(true)", () => {
+      const onOpenChange = vi.fn();
+      render(<Dialog onOpenChange={onOpenChange} title="x" />);
+      getDialog().showModal();
+      getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState: "open" }));
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+    });
+
+    it("an open driven by the prop doesn't echo onOpenChange(true)", () => {
+      const onOpenChange = vi.fn();
+      const { rerender } = render(<Dialog open={false} onOpenChange={onOpenChange} title="x" />);
+      rerender(<Dialog open={true} onOpenChange={onOpenChange} title="x" />);
+      getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState: "open" }));
+      expect(onOpenChange).not.toHaveBeenCalledWith(true);
+    });
+
+    describe("without native closedby", () => {
+      const descriptor = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, "closedBy");
+      beforeEach(() => {
+        if (descriptor) delete (HTMLDialogElement.prototype as { closedBy?: string }).closedBy;
+      });
+      afterEach(() => {
+        if (descriptor) Object.defineProperty(HTMLDialogElement.prototype, "closedBy", descriptor);
+      });
+
+      function clickAt(target: Element, clientX: number, clientY: number) {
+        target.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX, clientY }));
+        target.dispatchEvent(new MouseEvent("click", { bubbles: true, clientX, clientY }));
+      }
+
+      it("closes on a backdrop click when closedby is any", () => {
+        const onOpenChange = vi.fn();
+        render(<Dialog open onOpenChange={onOpenChange} title="x" />);
+        const dialog = getDialog();
+        vi.spyOn(dialog, "getBoundingClientRect").mockReturnValue(new DOMRect(100, 100, 200, 200));
+        clickAt(dialog, 150, 150);
+        expect(dialog).toHaveAttribute("open");
+        clickAt(dialog, 10, 10);
+        expect(dialog).not.toHaveAttribute("open");
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+      });
+
+      it("ignores backdrop clicks when closedby is closerequest", () => {
+        render(<Dialog.Container open closedby="closerequest" aria-label="x" />);
+        const dialog = getDialog();
+        vi.spyOn(dialog, "getBoundingClientRect").mockReturnValue(new DOMRect(100, 100, 200, 200));
+        clickAt(dialog, 10, 10);
+        expect(dialog).toHaveAttribute("open");
+      });
     });
 
     it("CloseButton click closes the dialog and notifies onOpenChange", async () => {
@@ -143,6 +259,26 @@ describe("Dialog", () => {
       const close = screen.getByRole("button", { name: "Close" });
       expect(close.parentElement).toHaveAdminClass("dialog-header");
       expect(close.parentElement?.children).toHaveLength(1);
+    });
+
+    it("focuses the [data-autofocus] descendant when the dialog opens", async () => {
+      const user = userEvent.setup();
+      render(
+        <Dialog open title="Rename project">
+          <input aria-label="Name" data-autofocus />
+        </Dialog>,
+      );
+      // Where the browser's dialog focusing steps put focus: the first focusable.
+      await user.tab();
+      const close = screen.getByRole("button", { name: "Close" });
+      expect(close).toHaveFocus();
+      // happy-dom has no ToggleEvent; the handler only reads `newState`.
+      const toggle = (newState: string) =>
+        getDialog().dispatchEvent(Object.assign(new Event("toggle"), { newState }));
+      toggle("closed");
+      expect(close).toHaveFocus();
+      toggle("open");
+      expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
     });
 
     it("forwards closedby to the dialog element with 'any' as default", () => {

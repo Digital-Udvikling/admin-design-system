@@ -1,19 +1,24 @@
 @layer components {
+  /* The closed values are the exit target; `[open]` holds the resting state. */
   .dialog {
     @apply m-auto p-0
            bg-surface text-text
-           border border-border
-           rounded-xl
-           shadow-lg
+           border border-border-strong
+           rounded-lg
+           shadow-sm
            flex-col;
+    --surface-current: var(--color-surface);
     width: calc(100% - 2rem);
     max-width: 32rem;
     max-height: calc(100dvh - 2rem);
     /* Long tokens (filenames, IDs) break instead of pushing past max-width;
        inherited by title + description. */
     overflow-wrap: break-word;
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    /* Placed in a right-aligned, nowrap cell (`table-cell-actions`) it would inherit both. */
+    text-align: start;
+    white-space: normal;
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
     transition:
       display 150ms allow-discrete,
       overlay 150ms allow-discrete,
@@ -21,18 +26,30 @@
       transform 150ms ease-out;
   }
 
+  /* The UA's `dialog:modal { overflow: auto }` clips portaled popups; lift it when a
+     `.dialog-body` scrolls instead. */
+  .dialog:has(.dialog-body) {
+    overflow: visible;
+  }
+
   /* Gate on [open] — an unconditional flex would override the UA's
      `dialog:not([open]) { display: none }` and render the dialog in-flow. */
   .dialog[open] {
     display: flex;
+    opacity: 1;
+    transform: none;
   }
 
   .dialog::backdrop {
-    background: var(--color-scrim);
+    background: transparent;
     transition:
       display 150ms allow-discrete,
       overlay 150ms allow-discrete,
       background 150ms ease-out;
+  }
+
+  .dialog[open]::backdrop {
+    background: var(--color-scrim);
   }
 
   @starting-style {
@@ -54,11 +71,10 @@
     max-width: 48rem;
   }
 
-  /* Shrink to fit content rather than filling a preset width, still capped to
-     the viewport so long content scrolls instead of overflowing. */
+  /* `auto` would stretch between the modal's `inset-inline: 0`. */
   .dialog-auto {
-    width: auto;
-    max-width: calc(100vw - 2rem);
+    width: fit-content;
+    max-width: calc(100% - 2rem);
   }
 
   /* Sized for an embedded Metabase iframe: a full-width body child lands at
@@ -77,17 +93,37 @@
 
   /* Subparts */
   .dialog-header {
-    @apply flex items-start gap-3 px-5 pt-5 pb-3;
+    @apply flex items-start gap-3 px-4 pt-4 pb-3;
   }
 
+  /* Block flow, not flex, so links, <code> and <strong> wrap as one run of text. */
   .dialog-title {
-    @apply flex-1 flex items-center gap-2 text-lg font-semibold leading-tight m-0;
+    @apply flex-1 text-base font-semibold leading-tight m-0;
     /* Let a long title shrink and wrap rather than widen the header. */
     min-width: 0;
   }
 
+  .dialog-title:has(> :is(i, svg):first-child) {
+    padding-inline-start: calc(1em + 0.5rem);
+  }
+
+  /* Floated into the padding so it sits on the first line and markup whitespace
+     can't shift the text; 0.125em centres 1em in the 1.25 line box. */
+  .dialog-title > :is(i, svg):first-child {
+    float: inline-start;
+    margin-inline-start: calc(-1em - 0.5rem);
+    margin-block-start: 0.125em;
+  }
+
+  /* Preflight makes <svg> a block; in title text it flows inline like the webfont <i>,
+     and -0.125em puts it where the webfont glyph sits on the line. */
+  .dialog-title svg {
+    display: inline-block;
+    vertical-align: -0.125em;
+  }
+
   .dialog-description {
-    @apply px-5 -mt-2 mb-3 text-sm text-text-muted;
+    @apply px-4 -mt-1 mb-3 text-sm text-text-muted;
   }
 
   /* flex-auto (basis auto), not flex-1 (basis 0): Safari collapses a basis-0 flex
@@ -95,35 +131,99 @@
      clipping short bodies. min-h-0 still lets tall content shrink and scroll here
      while the header/footer stay pinned. */
   .dialog-body {
-    @apply flex-auto min-h-0 px-5 py-3 overflow-y-auto flex flex-col gap-3;
+    @apply flex-auto min-h-0 px-4 py-3 overflow-y-auto flex flex-col gap-3;
+    overscroll-behavior: contain;
+  }
+
+  /* Children with a set height (iframe, chart) keep it and the body scrolls;
+     a child that should scroll on its own needs `flex-shrink: 1`. */
+  .dialog-body > * {
+    flex-shrink: 0;
+  }
+
+  /* Edge padding when there is no header or footer, and the parent's radius so
+     a body scrollbar or focus ring at the edge stays inside the corners.
+     Trailing checks look at siblings, not :last-child, because popups portal
+     in after the footer. */
+  .dialog-description:first-child {
+    @apply mt-4;
+  }
+
+  .dialog-body:first-child {
+    @apply pt-4;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  .dialog-description:not(:has(~ .dialog-body, ~ .dialog-footer)) {
+    @apply mb-4;
+  }
+
+  .dialog-body:not(:has(~ .dialog-footer)) {
+    @apply pb-4;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  .dialog-metabase .dialog-body:not(:has(~ .dialog-footer)) {
+    @apply pb-11;
   }
 
   /* In the form-dialog pattern the form is the sole flex child; it must carry
-     the flex column so the body's `flex-auto min-h-0` still scrolls. */
+     the flex column so the body's `flex-auto min-h-0` still scrolls, and the
+     radius so the footer can inherit it. */
   .dialog > form {
     @apply flex flex-col min-h-0 flex-auto;
+    border-radius: inherit;
   }
 
   .dialog-footer {
     @apply flex flex-wrap items-center justify-end gap-2
-           px-5 py-3
+           px-4 py-3
            border-t border-border
            bg-surface-muted;
+    --surface-current: var(--color-surface-muted);
     /* Keep the muted background inside the parent's rounded corners — don't
        use `overflow: hidden` on `.dialog` for this; it clips popups. */
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }
 
-  /* ms-auto pins the button to the header's end when there is no title. */
+  /* A button wider than the row wraps its label; shorter ones still move to the next line whole. */
+  .dialog-footer > .btn {
+    white-space: normal;
+  }
+
+  /* ms-auto pins the button to the header's end when there is no title.
+     font-size sizes a 1em icon (webfont or SVG) to 16px. */
   .dialog-close {
     @apply inline-flex items-center justify-center
            size-7 shrink-0 ms-auto
            rounded-md text-text-muted
+           text-base
            bg-transparent
            hover:bg-surface-strong hover:text-text
            cursor-pointer
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+
+  /* Centres the 28px box on the title's first line without making the header
+     taller. Without a title it keeps its full height to clear the description. */
+  .dialog-title ~ .dialog-close {
+    margin-block: calc((1rem * 1.25 - 1.75rem) / 2);
+  }
+
+  /* Keep the fade, drop the lift and the drawer slides. */
+  @media (prefers-reduced-motion: reduce) {
+    .dialog {
+      transition:
+        display 150ms allow-discrete,
+        overlay 150ms allow-discrete,
+        opacity 150ms ease-out;
+    }
+    .dialog:not([open]) {
+      transform: none;
+    }
   }
 }

@@ -1,9 +1,9 @@
 import type { ComponentProps, ReactNode } from "react";
-import { cn, type SlotClasses } from "./cn";
+import type { SlotClasses } from "./cn";
 import { Dialog, type DialogClosedBy } from "./Dialog";
-import { DialogContext, useDialogElement } from "./dialog-internal";
-import { type IconProp } from "./icon";
-import { PortalContainerContext } from "./portal-context";
+import { DrawerContainer } from "./Drawer.client";
+import type { IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type DrawerSide = "start" | "end" | "bottom";
 export type DrawerSize = "sm" | "md" | "lg";
@@ -21,45 +21,8 @@ export interface DrawerContainerProps extends Omit<ComponentProps<"dialog">, "op
   closedby?: DialogClosedBy;
 }
 
-/** The bare edge-anchored `<dialog>` primitive — for layouts the default `<Drawer>` doesn't fit. */
-function DrawerContainer({
-  open,
-  onOpenChange,
-  side = "end",
-  size = "md",
-  closedby = "any",
-  className,
-  children,
-  ref: consumerRef,
-  ...rest
-}: DrawerContainerProps) {
-  const { setRef, ctx, ref } = useDialogElement(open, onOpenChange, consumerRef);
-  return (
-    <DialogContext.Provider value={ctx}>
-      <PortalContainerContext.Provider value={ref}>
-        <dialog
-          ref={setRef}
-          className={cn(
-            [
-              "dialog",
-              "drawer",
-              side !== "end" && `drawer-${side}`,
-              size !== "md" && `drawer-${size}`,
-            ],
-            className,
-          )}
-          closedby={closedby}
-          {...rest}
-        >
-          {children}
-        </dialog>
-      </PortalContainerContext.Provider>
-    </DialogContext.Provider>
-  );
-}
-
 export interface DrawerProps extends Omit<DrawerContainerProps, "title" | "children"> {
-  /** Leading icon for the title row. */
+  /** Leading icon for the title row; ignored without a `title`. */
   icon?: IconProp;
   /** Renders as `<Drawer.Title>`. */
   title?: ReactNode;
@@ -76,7 +39,10 @@ export interface DrawerProps extends Omit<DrawerContainerProps, "title" | "child
   children?: ReactNode;
 }
 
-/** Edge-anchored panel with shorthand-driven header/body/footer. For other shapes, compose `<Drawer.Container>`. */
+/**
+ * Edge-anchored panel with shorthand-driven header/body/footer; an empty slot
+ * (`null`, `false`, `""`) renders nothing. For other shapes, compose `<Drawer.Container>`.
+ */
 function DrawerRoot({
   icon,
   title,
@@ -88,7 +54,8 @@ function DrawerRoot({
   children,
   ...containerProps
 }: DrawerProps) {
-  const hasTitle = title !== undefined || icon !== undefined;
+  // An icon alone would be an empty heading naming the drawer, so the title row needs a title.
+  const hasTitle = hasNode(title);
   const showHeader = hasTitle || dismissible;
   return (
     <DrawerContainer {...containerProps}>
@@ -104,13 +71,13 @@ function DrawerRoot({
           ) : null}
         </Dialog.Header>
       ) : null}
-      {description !== undefined ? (
+      {hasNode(description) ? (
         <Dialog.Description className={classNames?.description}>{description}</Dialog.Description>
       ) : null}
-      {children !== undefined ? (
+      {hasNode(children) ? (
         <Dialog.Body className={classNames?.body}>{children}</Dialog.Body>
       ) : null}
-      {actions !== undefined ? (
+      {hasNode(actions) ? (
         <Dialog.Footer className={classNames?.footer}>{actions}</Dialog.Footer>
       ) : null}
     </DrawerContainer>

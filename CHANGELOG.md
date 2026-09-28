@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `delay` and `closeDelay` on `Tooltip`; when unset, the enclosing `Tooltip.Provider`'s values apply. (react)
 - `number-input-ghost` / `<NumberInput variant="ghost">`, and `aria-invalid` on `NumberInput`. (both)
 - `Input.Action`, a `type="button"` `.input-action` with an `icon` prop for the `Input` `action` slot. (react)
+- `icon` on `Select.Trigger` (before the value) and on `Accordion.Summary`. (react)
+- `usePrompt()`, a promise-based `window.prompt` that resolves the entered string, or `null` on Cancel, Esc or unmount. It shares `useConfirm()`'s host and queue in `<AdminRoot>`. (react)
+- `Dialog` and `Drawer` focus the first descendant marked `data-autofocus` each time they open. (react)
+- Vanilla tab panels match `data-value` `1` to `12`. (css)
 
 ### Changed
 
@@ -22,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** Every sized control takes `size`: `inputSize` on `Input` and `FileInput`, `triggerSize` on `Select.Trigger` and `textareaSize` on `Textarea` are removed. `Input` does not accept the native `size` attribute; set a width in CSS. (react)
 - **Breaking:** `.input`, `.number-input` and React `Select.Trigger` match the `.btn` height at each size, and `.input` has a fixed height, so pair controls of one size, such as `input-sm` with `btn-sm`. (both)
 - **Breaking:** `<Field error>` marks the field invalid unless `invalid` is passed. For client-side validity with `validationMode`, compose `Field.Error` inside `Field.Container`. (react)
+- **Breaking:** `tabs-primary` and `Tabs` `primary` are removed; boxed tabs mark the selection with the `primary-muted` fill, and the `tabs-boxed` track matches the control heights, so drop `tabs-sm` from boxed tabs beside md buttons. (both)
 - **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
@@ -39,6 +44,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `NumberInput`'s `ref`, `className` and `style` apply to the visible `number-input` group; `classNames.root` targets the Base UI Root. (react)
 - An `indicator` around a form control fills the width like the bare control; set a narrower width on the `indicator`. (css)
 - Form controls use the `rounded-md` radius. Input groups square joined corners regardless of stylesheet order, keep the outer radius on a React `Select` or `NumberInput` at the group's end, and form their own stacking context, so a focused control doesn't paint over a sticky table header. (css)
+- Dialogs and drawers have a `border-strong` edge, a small shadow and tighter insets, `.drawer` is bordered only on the edge facing the page, `.dialog-auto` shrinks to its content, and dialogs fade out on close. (both)
+- Accordion summary rows are denser with a `1em` `text-muted` chevron, and content in a closed item can't be focused, read by screen readers or matched by find-in-page. (css)
 
 ### Removed
 
@@ -52,6 +59,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A `loading` `Button` sets `aria-disabled` and keeps keyboard focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
 - `indicator-center` and `indicator-middle` straddle the anchor's edge, `--indicator-offset` applies to corner placements only, and `<Indicator label aria-label>` gives the badge `role="status"`. (both)
 - Breadcrumb items with a leading icon line up with their siblings, and `Breadcrumbs.Item` icons render at `1em`. (both)
+- `Dialog` and `Drawer` take their accessible name and description from `Dialog.Title` and `Dialog.Description`, call `onOpenChange(true)` when an invoker command opens them, and with `closedby="any"` close on a backdrop click in Safari. (react)
+- Menu, select and tooltip popups inside a `.dialog` or `.drawer` with a `.dialog-body` are not clipped by the dialog; `.dialog-body` is the scroll region. (css)
+- A layout utility such as `flex` on a `tab-panel` works in both bundles, and `tabs-boxed` hugs its segments. (css)
 
 ## [0.21.0] - 2026-09-25
 

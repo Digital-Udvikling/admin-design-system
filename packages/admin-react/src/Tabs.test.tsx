@@ -102,6 +102,28 @@ describe("Tabs", () => {
       expect(onValueChange.mock.calls[0]?.[0]).toBe("b");
     });
 
+    it("disabled: exposes data-disabled / aria-disabled and ignores clicks", async () => {
+      const user = userEvent.setup();
+      render(
+        <Tabs defaultValue="a">
+          <Tabs.List>
+            <Tabs.Tab value="a">A</Tabs.Tab>
+            <Tabs.Tab value="b" disabled>
+              B
+            </Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="a">First</Tabs.Panel>
+          <Tabs.Panel value="b">Second</Tabs.Panel>
+        </Tabs>,
+      );
+      const tab = screen.getByRole("tab", { name: "B" });
+      // The CSS keys off these, since Base UI never sets the native `disabled` on tabs.
+      expect(tab).toHaveAttribute("data-disabled");
+      expect(tab).toHaveAttribute("aria-disabled", "true");
+      await user.click(tab);
+      expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute("aria-selected", "true");
+    });
+
     it("controlled: ignores clicks when parent does not update value", async () => {
       const user = userEvent.setup();
       render(

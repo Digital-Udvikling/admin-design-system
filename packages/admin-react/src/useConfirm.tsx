@@ -1,15 +1,20 @@
+"use client";
+
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useId,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
+import { Field } from "./Field";
+import { Input } from "./Input";
+import { hasNode } from "./slot";
 
 export interface ConfirmOptions {
   /** Dialog heading. */
@@ -24,15 +29,41 @@ export interface ConfirmOptions {
   variant?: "default" | "danger";
 }
 
-type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
+export type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
 
-interface PendingConfirm {
-  id: number;
-  options: ConfirmOptions;
-  resolve: (confirmed: boolean) => void;
+export interface PromptOptions {
+  /** Dialog heading. */
+  title: ReactNode;
+  /** Supporting text under the heading. */
+  description?: ReactNode;
+  label: ReactNode;
+  defaultValue?: string;
+  placeholder?: string;
+  /** Native `required`: an empty input blocks Confirm and shows the invalid state. */
+  required?: boolean;
+  /** Confirm button label. Default: `"Confirm"`. */
+  confirmLabel?: ReactNode;
+  /** Cancel button label. Default: `"Cancel"`. */
+  cancelLabel?: ReactNode;
+  /** `"danger"` renders a danger confirm button. Default: `"default"`. */
+  variant?: "default" | "danger";
 }
 
-const ConfirmContext = createContext<ConfirmFn | null>(null);
+export type PromptFn = (options: PromptOptions) => Promise<string | null>;
+
+type Request =
+  | { kind: "confirm"; options: ConfirmOptions; resolve: (confirmed: boolean) => void }
+  | { kind: "prompt"; options: PromptOptions; resolve: (value: string | null) => void };
+
+type Pending = Request & { id: number };
+
+// The answer a request settles with when it is dismissed or its host unmounts.
+function dismiss(entry: Pending) {
+  if (entry.kind === "confirm") entry.resolve(false);
+  else entry.resolve(null);
+}
+
+const ConfirmContext = createContext<{ confirm: ConfirmFn; prompt: PromptFn } | null>(null);
 
 /**
  * Returns `confirm(options)`, an async `window.confirm`: it opens a confirmation
@@ -43,42 +74,63 @@ const ConfirmContext = createContext<ConfirmFn | null>(null);
  * @throws When called outside `<AdminRoot>`, which hosts the dialog.
  */
 export function useConfirm(): ConfirmFn {
-  const confirm = useContext(ConfirmContext);
-  if (confirm === null) {
+  const host = useContext(ConfirmContext);
+  if (host === null) {
     throw new Error("useConfirm() must be called inside <AdminRoot>, which hosts the dialog.");
   }
-  return confirm;
+  return host.confirm;
 }
 
 /**
- * Hosts `useConfirm()` for its subtree: queues requests FIFO and renders the
- * head of the queue as a dialog, nothing while idle. Rendered by `<AdminRoot>`.
+ * Returns `prompt(options)`, an async `window.prompt`: resolves the entered string on Confirm
+ * (Enter submits), or `null` on Cancel, Esc, or when the hosting `<AdminRoot>` unmounts. Shares
+ * `useConfirm()`'s queue. The function identity is stable.
+ *
+ * @throws When called outside `<AdminRoot>`, which hosts the dialog.
+ */
+export function usePrompt(): PromptFn {
+  const host = useContext(ConfirmContext);
+  if (host === null) {
+    throw new Error("usePrompt() must be called inside <AdminRoot>, which hosts the dialog.");
+  }
+  return host.prompt;
+}
+
+/**
+ * Hosts `useConfirm()` and `usePrompt()` for its subtree: queues requests FIFO and
+ * renders the head of the queue as a dialog, nothing while idle. Rendered by `<AdminRoot>`.
  */
 export function ConfirmHost({ children }: { children?: ReactNode }) {
-  const [queue, setQueue] = useState<readonly PendingConfirm[]>([]);
+  const [queue, setQueue] = useState<readonly Pending[]>([]);
   // Unsettled requests, mutated only from callbacks so the unmount cleanup can resolve them.
-  const pending = useRef(new Set<PendingConfirm>());
+  const pending = useRef(new Set<Pending>());
   const nextId = useRef(0);
 
-  const confirm = useCallback<ConfirmFn>(
-    (options) =>
-      new Promise<boolean>((resolve) => {
-        const entry: PendingConfirm = { id: nextId.current++, options, resolve };
-        pending.current.add(entry);
-        setQueue((q) => [...q, entry]);
-      }),
-    [],
+  const enqueue = useCallback((request: Request) => {
+    const entry: Pending = { ...request, id: nextId.current++ };
+    pending.current.add(entry);
+    setQueue((q) => [...q, entry]);
+  }, []);
+
+  const host = useMemo(
+    () => ({
+      confirm: (options: ConfirmOptions) =>
+        new Promise<boolean>((resolve) => enqueue({ kind: "confirm", options, resolve })),
+      prompt: (options: PromptOptions) =>
+        new Promise<string | null>((resolve) => enqueue({ kind: "prompt", options, resolve })),
+    }),
+    [enqueue],
   );
 
-  const settle = useCallback((entry: PendingConfirm, confirmed: boolean) => {
-    if (pending.current.delete(entry)) entry.resolve(confirmed);
+  const remove = useCallback((entry: Pending) => {
     setQueue((q) => q.filter((e) => e !== entry));
+    return pending.current.delete(entry);
   }, []);
 
   useEffect(() => {
     const set = pending.current;
     return () => {
-      for (const entry of set) entry.resolve(false);
+      for (const entry of set) dismiss(entry);
       set.clear();
       // A no-op on a real unmount; keeps state consistent when StrictMode or
       // <Activity> re-runs effects on a live instance.
@@ -88,13 +140,23 @@ export function ConfirmHost({ children }: { children?: ReactNode }) {
 
   const current = queue[0];
   return (
-    <ConfirmContext.Provider value={confirm}>
+    <ConfirmContext.Provider value={host}>
       {children}
-      {current !== undefined ? (
+      {current?.kind === "confirm" ? (
         <ConfirmDialog
           key={current.id}
           options={current.options}
-          onSettle={(confirmed) => settle(current, confirmed)}
+          onSettle={(confirmed) => {
+            if (remove(current)) current.resolve(confirmed);
+          }}
+        />
+      ) : current?.kind === "prompt" ? (
+        <PromptDialog
+          key={current.id}
+          options={current.options}
+          onSettle={(value) => {
+            if (remove(current)) current.resolve(value);
+          }}
         />
       ) : null}
     </ConfirmContext.Provider>
@@ -119,8 +181,6 @@ function ConfirmDialog({
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const initialFocusRef = useRef<HTMLElement | null>(null);
   const confirmed = useRef(false);
-  const titleId = useId();
-  const descriptionId = useId();
 
   // Child effects run first, so the dialog is already open via showModal(),
   // which focused the first button; move focus to the intended one.
@@ -145,15 +205,11 @@ function ConfirmDialog({
       size="sm"
       closedby="closerequest"
       role="alertdialog"
-      aria-labelledby={titleId}
-      aria-describedby={description !== undefined ? descriptionId : undefined}
     >
       <Dialog.Header>
-        <Dialog.Title id={titleId}>{title}</Dialog.Title>
+        <Dialog.Title>{title}</Dialog.Title>
       </Dialog.Header>
-      {description !== undefined ? (
-        <Dialog.Description id={descriptionId}>{description}</Dialog.Description>
-      ) : null}
+      {hasNode(description) ? <Dialog.Description>{description}</Dialog.Description> : null}
       <Dialog.Footer>
         <Button
           ref={danger ? initialFocusRef : undefined}
@@ -170,6 +226,83 @@ function ConfirmDialog({
           {confirmLabel}
         </Button>
       </Dialog.Footer>
+    </Dialog.Container>
+  );
+}
+
+function PromptDialog({
+  options,
+  onSettle,
+}: {
+  options: PromptOptions;
+  onSettle: (value: string | null) => void;
+}) {
+  const {
+    title,
+    description,
+    label,
+    defaultValue = "",
+    placeholder,
+    required,
+    confirmLabel = "Confirm",
+    cancelLabel = "Cancel",
+    variant = "default",
+  } = options;
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const value = useRef<string | null>(null);
+
+  // showModal() focused the first focusable element; the input is the one to type in.
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const close = (result: string | null) => {
+    value.current = result;
+    dialogRef.current?.close();
+  };
+
+  return (
+    <Dialog.Container
+      ref={dialogRef}
+      open
+      onOpenChange={(open) => {
+        if (!open) onSettle(value.current);
+      }}
+      size="sm"
+      closedby="closerequest"
+    >
+      {/* Submit runs only once native validation passes, so `required` blocks it. */}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          close(inputRef.current?.value ?? "");
+        }}
+      >
+        <Dialog.Header>
+          <Dialog.Title>{title}</Dialog.Title>
+        </Dialog.Header>
+        {hasNode(description) ? <Dialog.Description>{description}</Dialog.Description> : null}
+        <Dialog.Body>
+          <Field label={label}>
+            <Input
+              ref={inputRef}
+              defaultValue={defaultValue}
+              placeholder={placeholder}
+              required={required}
+              autoComplete="off"
+            />
+          </Field>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button variant="ghost" onClick={() => close(null)}>
+            {cancelLabel}
+          </Button>
+          <Button type="submit" variant={variant === "danger" ? "danger" : "primary"}>
+            {confirmLabel}
+          </Button>
+        </Dialog.Footer>
+      </form>
     </Dialog.Container>
   );
 }

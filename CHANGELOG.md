@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A `.sidebar` directly in a `<dialog class="dialog drawer">` fills the drawer and hides its collapse toggle, for a vanilla mobile nav drawer. (css)
 - `.app-shell` uses the sidebar layout when a `.sidebar` is a direct child, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
 - Type exports for `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn` and `BrandTileSize`. (react)
+- React Server Component support: stateless components, compound parts and component-reference icons render on the server, and client modules carry `"use client"`. `Pagination`'s default buttons need a Client Component parent; a `renderItem` that returns links works from a server page. (react)
 
 ### Changed
 
@@ -60,6 +61,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** `Spinner`, `Navbar.MobileToggle` and `Sidebar.CollapseToggle` take `aria-label` instead of `label`. (react)
 - **Breaking:** The rail widths are `--sidebar-width` and `--sidebar-width-collapsed` (were `--app-shell-sidebar-w` and `-collapsed`); set on `:root`, they size the rail and the React mobile drawer. (css)
 - **Breaking:** Pagination classes are `pagination-item`, `pagination-link` and `pagination-ellipsis` (were `page-*`), and only `aria-current="page"` marks the current page. At the first or last page, previous and next set `aria-disabled` and stay focusable. (both)
+- **Breaking:** Custom properties starting with `--_` are internal and outside semver; `--btn-hover`, `--table-row-bg`, `--timeline-accent` and the other undocumented ones are renamed to `--_*`. (css)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)

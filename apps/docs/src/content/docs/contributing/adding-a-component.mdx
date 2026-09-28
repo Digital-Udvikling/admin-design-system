@@ -25,7 +25,7 @@ See [Principles › Two flavors, one contract](../../basics/principles/#two-flav
 
 ## 1. CSS
 
-Wrap rules in `@layer components` so they land in Tailwind's `components` layer. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code.
+Wrap rules in `@layer components` so they land in Tailwind's `components` layer. Use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`, `border-border`) — never reference Flexoki tones (`--color-blue-600`) directly from component code. Name a custom property a consumer may set `--<component>-*` and document it on the page; prefix plumbing between your own rules `--_<component>-*`. `check-docs --strict-coverage` fails on a public one no page mentions.
 
 Fold the **default** variant's look into the base class instead of a separate modifier, so vanilla `class="badge"` and React `<Badge>` match with no default-variant class.
 
@@ -128,6 +128,10 @@ Export the component and every public type from `packages/admin-react/src/index.
 ```ts
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 ```
+
+### Server Components
+
+Every export must be importable from a React Server Component. Only the part that calls a hook, creates a context, or creates a function prop (an event handler, or a render function for Base UI) goes in `<Name>.client.tsx` with `"use client"`, as `Button.tsx` renders `ButtonBase` from `Button.client.tsx`. Keep compound assembly (`Object.assign`) and `renderIcon` in the directive-free module: a server import of a `"use client"` module sees opaque references, so attached parts are `undefined`, and a component-reference icon can't cross into a client component. When the root itself is client, the directive-free module attaches the parts to the imported root. `Pagination` is the one exception. `src/server-components.test.ts` checks these rules.
 
 ### Default-omit the default variant and size
 

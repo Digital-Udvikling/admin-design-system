@@ -17,7 +17,7 @@ Behaviour HTML and CSS can express declaratively is not written in JavaScript. A
 
 `@aortl/admin-css` defines `.btn`, `.input`, `.field`; `@aortl/admin-react` emits those same classes. Vanilla HTML and React render identical DOM, so adopting one flavor doesn't lock out the other — mix them on the same page. The CSS is the source of truth and React inherits visual changes from it.
 
-Class names are therefore public API: renaming `.btn-primary` is a breaking change. They read `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`, with sizes `sm` / `md` (default, omitted) / `lg`.
+Class names are therefore public API: renaming `.btn-primary` is a breaking change. [Stability](../../getting-started/stability/) lists everything else semver covers. They read `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`, with sizes `sm` / `md` (default, omitted) / `lg`.
 
 ## Two-layer tokens
 

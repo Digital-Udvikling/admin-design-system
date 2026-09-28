@@ -60,6 +60,10 @@ CI runs `lint`, `format:check`, `build`, the skill drift check (`generate-skill`
 
 Naming: `<base>` + `<base>-<variant>` + (optional) `<base>-<size>` + (optional) `<base>-<modifier>`. Sizes: `sm` / `md` (default, omitted) / `lg`.
 
+React props mirror it: `variant` for mutually exclusive looks (usually a tone), `size` for `sm`/`md`/`lg`, a boolean for one combinable modifier (`compact`, `bordered`, `soft`, `square`), and another enum only for a modifier with three or more levels (`Table` `density`). Position props (`side`, `align`, `orientation`) use Base UI / ARIA values; `current` marks the current page (`aria-current`). Form controls' `variant` is a look (`bordered` / `ghost`); invalid is a state (`aria-invalid`, `:user-invalid`, an invalid `Field`), never a variant. Link-like components take an element-only `render` (via the directive-free `renderAs` in `src/render.ts`) so consumers pass a router link; merge refs with `mergeRefs` from `src/merge-refs.ts`.
+
+Custom properties a consumer may set are `--<component>-*` and documented on the page; plumbing between admin's own rules is `--_<component>-*` and outside semver. `check-docs --strict-coverage` fails on a public one no page mentions. `apps/docs/src/content/docs/getting-started/stability.mdx` states what semver covers.
+
 Two output forms ship from one source:
 
 - **Unscoped, unprefixed** (`@aortl/admin-css/admin.css`) — class names are bare (`.btn`, `.card`). For full-page admin apps that own the document. Hand-written HTML uses these names directly.
@@ -68,6 +72,10 @@ Two output forms ship from one source:
 In React source you still write the bare name (`cn("btn", className)`); `cn` adds the prefix at render time. The consumer-supplied `className` prop is passed through verbatim — only admin's own classes carry the prefix. Tests assert on the prefixed form (`expect(el).toHaveClass("_ao-btn")`). `admin.css` ships no Tailwind utilities (`source(none)`), so `cn` must only name classes defined in `components/*.css` — `cn("sr-only")` renders `_ao-sr-only` with no rule behind it.
 
 React components wrap Base UI primitives (`@base-ui/react/button`, `/input`, `/field`) for a11y wiring, focus, validation. Compound parts use `Object.assign` dot-notation (`Card.Body`, `Field.Label`).
+
+### Server Components
+
+Every export must work in a React Server Component. A module gets `"use client"` only when it calls a hook, creates a context, or creates a function prop (an event handler on any element, or a render function for Base UI). A module that only other `"use client"` modules import needs none. The client part goes in `<Name>.client.tsx` beside the public `<Name>.tsx`. Compound assembly and `renderIcon` stay in the directive-free module: a server import of a `"use client"` module sees opaque references, and a component-reference icon can't cross into a client component. When the root itself is client (`AppShell`, `Sidebar`), the directive-free module attaches the parts to the imported root. `Pagination` is the one exception: its handlers only wrap the consumer's `onPageChange`, and a server parent uses `renderItem`. `src/server-components.test.ts` checks these rules; the build fails if a `"use client"` module doesn't end up as its own `dist/` file with the directive.
 
 ### High-level component + `.Container` escape hatch
 
@@ -171,7 +179,7 @@ Keep: code examples, a11y hooks, version-pinning, override/escape-hatch APIs, no
 
 1. `packages/admin-css/src/components/<name>.css` — wrap in `@layer components { ... }`, use `@apply` with semantic tokens (`bg-primary`, `text-text-muted`). If the component might host an icon, lay out the root with flex + gap so a leading `<i>`/`<svg>` works without a wrapper.
 2. Add `@import "./<name>.css";` to `packages/admin-css/src/components/index.css`.
-3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose classes with `cn` (not bare `clsx`), re-export from `src/index.ts` (component + types).
+3. (Optional) `packages/admin-react/src/<Name>.tsx` — wrap a Base UI primitive if applicable, compose classes with `cn` (not bare `clsx`), re-export from `src/index.ts` (component + types). Parts that call hooks or define handlers go in `<Name>.client.tsx` (see [Server Components](#server-components)).
 4. (If React) `packages/admin-react/src/<Name>.test.tsx` — smoke test at minimum; interaction tests for controlled state.
 5. `apps/docs/src/content/docs/components/<name>.mdx` — `## Examples` (one `###` + `:::example` per variation), then `## Reference` with `### React` and `### Vanilla` tables; the Vanilla table lists every class the CSS defines. Run what CI runs: `pnpm build && pnpm --filter docs check-docs -- --require-build --strict-coverage`.
 6. `pnpm generate-skill` to regenerate the agent-skill bundle from the new MDX. CI verifies the bundle is in sync via `git diff --exit-code -- skills`, so a forgotten regen turns into a red build.

@@ -4,8 +4,10 @@
 
 ## Contents
 
+- [Prop shapes](#prop-shapes)
 - [Sizes](#sizes)
 - [Tones](#tones)
+- [Custom properties](#custom-properties)
 - [Icons](#icons)
 - [className](#classname)
 - [classNames](#classnames)
@@ -15,6 +17,15 @@
 - [Layout](#layout)
 
 What holds across the whole library. Component pages list their own props and classes in a `Reference` section and don't repeat any of this.
+
+## Prop shapes
+
+- `variant` picks one of a set of mutually exclusive looks, usually a tone: `variant="danger"`.
+- `size` is `sm`, `md` or `lg`; see [Sizes](#sizes).
+- A boolean prop sets one modifier class that combines with the others: `compact`, `bordered`, `soft`, `striped`, `square`, `danger` on `Menu.Item`.
+- Any other enum is for a modifier with three or more levels, such as `density` on `Table` (`compact`, `default`, `relaxed`).
+
+Position and direction props (`side`, `align`, `orientation`) take the values Base UI and ARIA use.
 
 Invalid is a state, not a variant. Form controls take `variant="bordered"` or `"ghost"`; `aria-invalid="true"`, `:user-invalid` and an invalid [Field](../components/forms/fields.md) turn either one danger.
 
@@ -35,6 +46,10 @@ On `Input`, `size` replaces the native `size` attribute (the width in characters
 The status vocabulary is `info`, `success`, `warning` and `danger`, plus `primary` for brand emphasis and `neutral` as the unmodified default. Not every component offers all of them; each component's `Reference` lists its own set.
 
 **Caution** — On tinted surfaces (`soft` and `-muted` fills), some tones keep the default text colour because the accent on its own tint fails contrast, yellow most of all. Each component's `Reference` says which.
+
+## Custom properties
+
+A component's knobs are named after it (`--chart-value`, `--sidebar-width`, `--indicator-offset`) and listed in its `Reference`. `--surface-current` and `--z-popup` are the two globals; see [Theming](theming.md). A property that starts with `--_` (`--_btn-hover`) is internal and can change in any release; don't set it.
 
 ## Icons
 

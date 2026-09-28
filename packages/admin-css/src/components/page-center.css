@@ -1,0 +1,17 @@
+@layer components {
+  /* A standalone page (sign-in, error) outside the app shell: one child, centred in the viewport. */
+  .page-center {
+    @apply grid place-items-center w-full p-4;
+    min-block-size: 100dvh;
+    --page-center-max: 24rem;
+  }
+
+  .page-center > * {
+    inline-size: 100%;
+    max-inline-size: var(--page-center-max);
+  }
+
+  .page-center-lg {
+    --page-center-max: 32rem;
+  }
+}

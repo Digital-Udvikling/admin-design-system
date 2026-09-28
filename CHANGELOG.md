@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
+- `--surface-current`, the fill a container publishes for rings, seams and pinned cells that paint over it. Cards, dialogs, popups, selected rows, the navbar, sidebar and footer set it; set it on your own filled containers. (css)
 - `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
 - `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
 - `StatusDot`, a standalone `indicator-dot`: `aria-hidden` beside its status text, or `role="status"` when given an `aria-label`. (both)
@@ -28,6 +29,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
 - `Combobox` and the `combobox-*` classes: type to filter `items` and pick one value, or several as removable chips with `multiple`. `Combobox.Empty` and `Combobox.Status` cover no-match and loading, and `inputValue` with `filter={null}` supports server search. (both)
 - `Menu.Actions` (`menu-actions`) for a filter menu's Reset and Apply, `closeOnClick` and `danger` (`menu-item-danger`) on `Menu.Item`, `menu-popup-end` (`Menu.Popup align="end"`), and `icon` on `Menu.Trigger`; an icon-only `btn-square` trigger drops the chevron. (both)
+- `page-center` / `PageCenter`, a full-height `<main>` that centres one capped-width child, for sign-in and error pages (`page-center-lg` / `size="lg"`, `--page-center-max`). (both)
+- `render` on `Link`, `Badge`, `Breadcrumbs.Item`, `Card.Container`, `Item`, `Item.Container`, `Menu.Item`, `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders onto your own element, such as a router link: `render={<NextLink href="/orders" />}`. It works from a Server Component. (react)
+- `Pagination` `renderItem` receives `PaginationItemProps` (exported) as its second argument, to spread onto a router link. (react)
+- `.sidebar[data-collapsed]` collapses the rail without a `sidebar-toggle`, and `Sidebar` `collapsed` / `defaultCollapsed` work without a `Sidebar.CollapseToggle`. (both)
+- A `.sidebar` directly in a `<dialog class="dialog drawer">` fills the drawer and hides its collapse toggle, for a vanilla mobile nav drawer. (css)
+- `.app-shell` uses the sidebar layout when a `.sidebar` is a direct child, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
+- Type exports for `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn` and `BrandTileSize`. (react)
 
 ### Changed
 
@@ -47,6 +55,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Breaking:** `BarProps`, `SegmentProps`, `TrendDirection` and `TrendIntent` are `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection` and `StatCardTrendIntent`. (react)
 - **Breaking:** The vanilla menu is a `popover`: `<div class="menu">` holds a `<button class="menu-trigger" popovertarget="…">` and a `<div class="menu-popup" id="…" popover>`, so each menu needs a unique `id`. Drop `role="menu"` and `role="menuitem"`, and use native checkboxes and radios in a `<label class="menu-item">`. (css)
 - **Breaking:** `Menu` is built on the Base UI Menu, with arrow keys, typeahead and focus return: it takes `open`, `defaultOpen`, `onOpenChange` and `modal`, and `Menu.Popup` portals and takes `side` and `align`. Checkable items take `checked` / `onCheckedChange`; `role="menuitemradio"` items become `Menu.RadioItem`s in a `Menu.RadioGroup`. `Menu.Item` hotkeys fire while the menu is closed. (react)
+- **Breaking:** `Navbar.Dropdown` is built on `Menu` and takes `active`, `align` and `classNames` (`trigger`, `popup`); it marks its trigger when an item has `aria-current`. The vanilla `navbar-dropdown` uses the popover menu markup. (both)
+- **Breaking:** `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` take `current` instead of `active`; it sets `aria-current="page"`. (react)
+- **Breaking:** `Spinner`, `Navbar.MobileToggle` and `Sidebar.CollapseToggle` take `aria-label` instead of `label`. (react)
+- **Breaking:** The rail widths are `--sidebar-width` and `--sidebar-width-collapsed` (were `--app-shell-sidebar-w` and `-collapsed`); set on `:root`, they size the rail and the React mobile drawer. (css)
+- **Breaking:** Pagination classes are `pagination-item`, `pagination-link` and `pagination-ellipsis` (were `page-*`), and only `aria-current="page"` marks the current page. At the first or last page, previous and next set `aria-disabled` and stay focusable. (both)
 - The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
 - IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
 - The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
@@ -76,6 +89,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Unstriped property lists line up with `property-list-title`, labels sit on the first line of wrapped text, a copyable `numeric` value aligns with the other numeric rows, and copy buttons announce the copy. (both)
 - Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
 - Menu and select popups have a `border-strong` edge and a small shadow, menu rows and select options keep one height whatever they hold, long labels wrap, popups near the viewport's end edge flip to fit, and `menu-item[aria-current="page"]` gets the selected fill. (css)
+- Sidebar rows have one height whatever they hold, sub-items indent to the parent label and truncate like items (`classNames.label`), a group holding the current page highlights its trigger while closed or collapsed, and collapsed-rail labels are visually hidden so icon-only links keep their names. (both)
+- `.container` side padding is `1rem` at every width, matching the navbar and footer gutter. (css)
 
 ### Removed
 
@@ -101,6 +116,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A `<th scope="row">` in `<tbody>` styles as a body cell, and `Table.HeaderCell scope="row"` emits `table-cell`. (both)
 - The donut hole matches `--donut-thickness`, inline horizontal bar charts render their bars, fills stay in the track when a value exceeds `max`, and vertical bars draw a baseline so a zero value shows. (both)
 - `aria-disabled` `Menu.Item`s don't fire `onClick`, a `ref` on `Menu.Item` keeps its `hotkey`, and `Menu.Group` is named by its `Menu.GroupLabel`. (react)
+- The `<Sidebar>` mobile drawer portals into `<AdminRoot>` and hides the collapse toggle, and a controlled `<Sidebar.Collapsible open>` follows its `open` prop. (react)
+- At the 48rem breakpoint the app shell shows the sidebar rail, and a navbar wider than the viewport doesn't widen the main area. (css)
+- Hover fills on ghost buttons and controls, options, menu items, accordion summaries, pagination links and `item-link` rows use `surface-hover`, so they show inside cards, dialogs, the navbar and the sidebar. (css)
+- `aria-disabled="true"` and `data-disabled` dim `.btn`, `.menu-item`, `.tab` and `.pagination-link` like `:disabled`, with no hover fill. (css)
+- Keyboard focus draws an inset ring on menu items, select options, number-input steppers, accordion summaries, sidebar rows and the open React tab panel. (css)
+- Checks, radio dots, switch thumbs, spinners, `progress`, selected tabs, rows and options, and current navbar and sidebar items stay visible in forced-colors mode. (css)
+- The switch thumb, accordion and mobile sidebar drawer don't animate under `prefers-reduced-motion: reduce`. (css)
+- Shorthand props set to `null`, `false` or `""` render nothing on `Field`, `Alert`, `Card`, `StatCard`, `Item`, `Dialog`, `Drawer`, `Sidebar` items and others, so `actions={canEdit && …}` adds no empty row; `0` still renders. (react)
 
 ## [0.21.0] - 2026-09-25
 

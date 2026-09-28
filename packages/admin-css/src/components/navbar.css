@@ -5,6 +5,7 @@
     @apply flex items-center gap-3 px-4 h-12
            bg-surface-muted text-text
            border-b-2 border-system-accent;
+    --surface-current: var(--color-surface-muted);
   }
 
   .navbar-brand {
@@ -25,8 +26,12 @@
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }
 
+  /* A dropdown whose menu holds the current page marks its trigger. The `.menu-trigger`
+     selector outranks `.menu-trigger:not(.btn):hover` so the fill holds on hover. */
   .navbar-item[aria-current="page"],
-  .navbar-item[data-active] {
+  .navbar-item[data-active],
+  .navbar-item.menu-trigger[data-active],
+  .navbar-items .menu:has(.menu-item[aria-current="page"]) > .navbar-item {
     @apply bg-primary-muted text-primary;
   }
 
@@ -39,9 +44,14 @@
     @apply flex items-center gap-2 ml-auto;
   }
 
+  /* Menus in the actions slot align to the trigger's end edge so the popup stays on screen. */
+  .navbar-actions .menu-popup[popover] {
+    position-area: block-end span-inline-start;
+  }
+
   /* Hamburger — three lines from one element + two box-shadow strokes. */
   .navbar-mobile-toggle {
-    @apply inline-flex items-center justify-center size-9 -ml-2
+    @apply inline-flex items-center justify-center size-9 -ml-2 shrink-0
            rounded-md text-text bg-transparent
            hover:bg-surface-strong
            cursor-pointer
@@ -60,9 +70,28 @@
       0 6px 0 currentColor;
   }
 
-  @media (min-width: 48rem) {
+  @media (width >= 48rem) {
     .navbar-mobile-toggle {
       display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .navbar-item:is([aria-current="page"], [data-active]),
+    .navbar-item.menu-trigger[data-active],
+    .navbar-items .menu:has(.menu-item[aria-current="page"]) > .navbar-item {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    /* Forced colors drops box-shadow and resets the bar's fill to Canvas. */
+    .navbar-mobile-toggle::before {
+      forced-color-adjust: none;
+      background: CanvasText;
+      box-shadow:
+        0 -6px 0 CanvasText,
+        0 6px 0 CanvasText;
     }
   }
 }

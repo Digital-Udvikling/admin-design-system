@@ -15,7 +15,13 @@ export {
   type AlertDescriptionProps,
   type AlertActionProps,
 } from "./Alert";
-export { AppShell, useAppShell, type AppShellProps, type AppShellMainProps } from "./AppShell";
+export {
+  AppShell,
+  useAppShell,
+  type AppShellProps,
+  type AppShellMainProps,
+  type AppShellContextValue,
+} from "./AppShell";
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from "./Badge";
 export {
   BrandTile,
@@ -78,6 +84,7 @@ export {
   getPaginationItems,
   type PaginationProps,
   type PaginationItem,
+  type PaginationItemProps,
 } from "./Pagination";
 export { Textarea, type TextareaProps, type TextareaVariant, type TextareaSize } from "./Textarea";
 export { Checkbox, type CheckboxProps, type CheckboxIndicatorProps } from "./Checkbox";
@@ -130,6 +137,7 @@ export {
   type ComboboxGroupLabelProps,
 } from "./Combobox";
 export { Container, type ContainerProps, type ContainerSize } from "./Container";
+export { PageCenter, type PageCenterProps, type PageCenterSize } from "./PageCenter";
 export {
   Card,
   type CardProps,

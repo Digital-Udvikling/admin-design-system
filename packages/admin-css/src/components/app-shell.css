@@ -1,12 +1,12 @@
 @layer components {
   /* The sidebar column is `auto` so the .sidebar's own width drives it —
-     collapse/peek modes change the sidebar's intrinsic width, not this grid. */
+     collapse/peek modes change the sidebar's intrinsic width, not this grid.
+     minmax(0, 1fr) keeps a wide navbar from widening main and footer. Rail widths get no
+     defaults here, only sidebar.css's var() fallbacks, so a :root value also reaches the React
+     drawer portaled outside the shell. */
   .app-shell {
-    --app-shell-sidebar-w: 240px;
-    --app-shell-sidebar-w-collapsed: 56px;
-
     @apply grid min-h-screen w-full bg-surface text-text;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
       "header"
@@ -28,29 +28,32 @@
     grid-area: footer;
   }
 
-  .app-shell-with-sidebar {
-    grid-template-columns: auto 1fr;
+  /* A direct-child .sidebar switches the layout on its own; :where() keeps the class's specificity. */
+  .app-shell-with-sidebar,
+  .app-shell:where(:has(> .sidebar)) {
+    grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
       "header header"
       "sidebar main"
       "footer  footer";
   }
 
-  .app-shell-with-sidebar > .sidebar {
+  .app-shell > .sidebar {
     grid-area: sidebar;
   }
 
   /* Mobile: the sidebar lives in a Dialog drawer, so reclaim the column. */
-  @media (max-width: 48rem) {
-    .app-shell-with-sidebar {
-      grid-template-columns: 1fr;
+  @media (width < 48rem) {
+    .app-shell-with-sidebar,
+    .app-shell:where(:has(> .sidebar)) {
+      grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
         "header"
         "main"
         "footer";
     }
 
-    .app-shell-with-sidebar > .sidebar {
+    .app-shell > .sidebar {
       display: none;
     }
   }

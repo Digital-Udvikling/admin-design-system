@@ -43,6 +43,11 @@ const PAIRS = [
   ...["text", "text-muted", "link"].flatMap((fg) => SURFACES.map((bg) => [fg, bg])),
   ["text", "surface-strong"],
   ["code-text", "code-surface"],
+  // `.code-block`'s Shiki token colors.
+  ...[
+    "text-muted",
+    ...["green", "orange", "cyan", "purple", "blue", "red", "yellow"].map((h) => `category-${h}`),
+  ].map((fg) => [fg, "code-surface"]),
   ["primary-content", "primary"],
   ["primary-content", "primary-hover"],
   // Warning is fill-only: `text-warning` never sets text, only `text-warning-content` on it.

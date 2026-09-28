@@ -6,6 +6,7 @@
 
 - [Examples](#examples)
   - [Rendered markdown](#rendered-markdown)
+  - [Embedded components](#embedded-components)
   - [Injecting a rendered HTML string](#injecting-a-rendered-html-string)
 - [Reference](#reference)
   - [React](#react)
@@ -107,6 +108,50 @@
 </Prose>
 ```
 
+### Embedded components
+
+A component inside rendered HTML goes in `prose-exclude`, so `.prose` doesn't add list markers or block margins to its elements.
+
+**Example**
+
+```html
+<div class="prose">
+  <p>The order moved through these steps:</p>
+  <div class="prose-exclude">
+    <ol class="timeline">
+      <li class="timeline-item timeline-item-success">
+        <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+        <div class="timeline-content">
+          <div class="timeline-title">Order shipped</div>
+          <div class="timeline-time">14:32 · today</div>
+        </div>
+      </li>
+      <li class="timeline-item">
+        <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+        <div class="timeline-content">
+          <div class="timeline-title">Order placed</div>
+          <div class="timeline-time">14:28 · today</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <p>Refunds are possible until it is delivered.</p>
+</div>
+```
+
+```tsx
+<Prose>
+  <p>The order moved through these steps:</p>
+  <Prose.Exclude>
+    <Timeline>
+      <Timeline.Item status="success" title="Order shipped" time="14:32 · today" />
+      <Timeline.Item title="Order placed" time="14:28 · today" />
+    </Timeline>
+  </Prose.Exclude>
+  <p>Refunds are possible until it is delivered.</p>
+</Prose>
+```
+
 ### Injecting a rendered HTML string
 
 ```html
@@ -124,18 +169,24 @@
 
 ### React
 
-Takes no props of its own — native `<div>` attributes only.
+| Part            | Renders             |
+| --------------- | ------------------- |
+| `Prose`         | `div.prose`         |
+| `Prose.Exclude` | `div.prose-exclude` |
+
+Neither takes props of its own — native `<div>` attributes only.
 
 ### Vanilla
 
-| Class   | Effect                                                                                                                                                                                                                                                                                                          |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prose` | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, `<kbd>` key chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](tables.md) |
+| Class           | Effect                                                                                                                                                                                                                                                                                                          |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prose`         | Restores element styling inside the wrapper: `text-sm`, `0.75rem` block rhythm, list markers, GFM task-list checkboxes in place of bullets, underlined links, `<code>` chips, `<kbd>` key chips, a scrolling `<pre>`, a bordered `<blockquote>`, `h4`–`h6` sizing, and the table look from [Tables](tables.md) |
+| `prose-exclude` | A subtree `.prose` leaves unstyled, for components embedded in rendered HTML; a `.prose` inside it styles its own content again                                                                                                                                                                                 |
 
 The global reset strips margins, list markers, and link styling from bare elements so admin chrome stays neutral, which leaves backend-rendered HTML unstyled. This class re-establishes it for one region, from the same semantic tokens, so it follows dark mode. First and last children keep their outer margins collapsed.
 
 Every descendant rule is wrapped in `:where()`, so a consumer's own `.prose a { … }` wins on specificity without `!important`.
 
-Anchors with `.btn`, `<pre class="code-block">` and `<table class="table">` keep their own styling inside `.prose`.
+Anchors with `.btn`, `<pre class="code-block">` and `<table class="table">` keep their own styling inside `.prose`. Any other component goes in `prose-exclude`.
 
 When you control the markup, reach for the dedicated components instead: [Link](links.md), [Table](tables.md), [Code blocks](code-blocks.md).

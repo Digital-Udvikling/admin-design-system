@@ -1,7 +1,20 @@
+/* Where `.prose` element rules apply: outside a `prose-exclude` subtree, unless a
+   `.prose` inside that subtree starts rendered HTML again (two levels deep). The
+   subject carries the check, at zero specificity. Not `@scope (.prose) to
+   (.prose-exclude)`: the scoped bundle would nest it in its own `@scope`, which
+   host toolchains mis-lower. */
+@custom-variant prose-scope (&:not(:where(
+  :where(.prose-exclude, .prose-exclude *):not(:where(.prose-exclude .prose *)),
+  :where(.prose-exclude .prose .prose-exclude, .prose-exclude .prose .prose-exclude *):not(
+    :where(.prose-exclude .prose .prose-exclude .prose *)
+  )
+)));
+
 @layer components {
   /* Styles rendered HTML (markdown, CMS bodies) that can't carry the system's
      class names — re-establishes what the global reset strips. Descendant rules
-     use `:where()` so a consumer's own `.prose a { … }` wins without `!important`. */
+     use `:where()` so a consumer's own `.prose a { … }` wins without `!important`,
+     and `prose-scope` so embedded components keep their own look. */
   .prose {
     @apply text-sm leading-normal text-text;
     /* Break long URLs/tokens; the scrolling `<pre>` keeps its own `white-space: pre`. */
@@ -9,7 +22,9 @@
   }
 
   .prose :where(p, ul, ol, blockquote, pre, table, figure) {
-    @apply my-3;
+    @variant prose-scope {
+      @apply my-3;
+    }
   }
   .prose > :first-child {
     margin-top: 0;
@@ -20,34 +35,52 @@
 
   /* base.css already sizes h1–h3; add h4–h6 and the sectioning rhythm. */
   .prose :where(h1, h2, h3, h4, h5, h6) {
-    @apply mt-6 mb-2 font-semibold leading-tight;
+    @variant prose-scope {
+      @apply mt-6 mb-2 font-semibold leading-tight;
+    }
   }
   .prose :where(h4) {
-    @apply text-sm;
+    @variant prose-scope {
+      @apply text-sm;
+    }
   }
   .prose :where(h5, h6) {
-    @apply text-xs uppercase tracking-wide text-text-muted;
+    @variant prose-scope {
+      @apply text-xs uppercase tracking-wide text-text-muted;
+    }
   }
   /* Lets the heading's mb-2 set the gap instead of collapsing into the next block's my-3. */
   .prose :where(h1, h2, h3, h4, h5, h6) + :where(*) {
-    margin-top: 0;
+    @variant prose-scope {
+      margin-top: 0;
+    }
   }
 
   .prose :where(ul) {
-    @apply list-disc ps-5;
+    @variant prose-scope {
+      @apply list-disc ps-5;
+    }
   }
   .prose :where(ol) {
-    @apply list-decimal ps-5;
+    @variant prose-scope {
+      @apply list-decimal ps-5;
+    }
   }
   .prose :where(li) {
-    @apply my-1;
+    @variant prose-scope {
+      @apply my-1;
+    }
   }
   /* Loose lists wrap each item's text in <p> — tighten those back down. */
   .prose :where(li) :where(p) {
-    @apply my-1;
+    @variant prose-scope {
+      @apply my-1;
+    }
   }
   .prose :where(li > ul, li > ol) {
-    @apply my-1;
+    @variant prose-scope {
+      @apply my-1;
+    }
   }
   /* GFM task lists (tight and loose): the checkbox hangs in the bullet's
      1.25rem gutter (14px box, 2px margin, the space GFM emits), so wrapped lines
@@ -59,85 +92,119 @@
         > p:first-child > input[type="checkbox"]:first-child
       )
     ) {
-    list-style: none;
+    @variant prose-scope {
+      list-style: none;
+    }
   }
   .prose
     :where(
       li > input[type="checkbox"]:first-child,
       li > p:first-child > input[type="checkbox"]:first-child
     ) {
-    @apply size-3.5;
-    margin-block: 0;
-    margin-inline: -1.25rem 0.125rem;
-    vertical-align: -0.1875rem;
+    @variant prose-scope {
+      @apply size-3.5;
+      margin-block: 0;
+      margin-inline: -1.25rem 0.125rem;
+      vertical-align: -0.1875rem;
+    }
   }
 
   /* Links — the .link treatment without needing the class on every anchor. */
   .prose :where(a:not(.btn)) {
-    @apply rounded-sm text-link underline underline-offset-2
-           hover:text-link-hover
-           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+    @variant prose-scope {
+      @apply rounded-sm text-link underline underline-offset-2
+             hover:text-link-hover
+             focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+    }
   }
 
   /* Clone so a chip that wraps keeps its border and padding on both fragments. */
   .prose :where(code) {
-    @apply rounded border border-border bg-code-surface px-1 py-0.5
-           font-mono text-code-text box-decoration-clone;
-    font-size: 0.85em;
+    @variant prose-scope {
+      @apply rounded border border-border bg-code-surface px-1 py-0.5
+             font-mono text-code-text box-decoration-clone;
+      font-size: 0.85em;
+    }
   }
 
   /* Mirrors .code-block (which keeps its own wrapping); nested <code> sheds the
      chip so highlighter tokens show. */
   .prose :where(pre:not(.code-block)) {
-    @apply rounded-lg bg-code-surface p-3 font-mono text-sm text-code-text;
-    white-space: pre;
-    overflow-x: auto;
+    @variant prose-scope {
+      @apply rounded-lg bg-code-surface p-3 font-mono text-sm text-code-text;
+      white-space: pre;
+      overflow-x: auto;
+    }
   }
   .prose :where(pre) code {
-    @apply rounded-none border-0 bg-transparent p-0;
-    font-size: inherit;
+    @variant prose-scope {
+      @apply rounded-none border-0 bg-transparent p-0;
+      font-size: inherit;
+    }
   }
 
   .prose :where(blockquote) {
-    @apply border-s-2 border-border-strong ps-3 text-text-muted;
+    @variant prose-scope {
+      @apply border-s-2 border-border-strong ps-3 text-text-muted;
+    }
   }
 
   .prose :where(hr) {
-    @apply my-6 border-0 border-t border-border;
+    @variant prose-scope {
+      @apply my-6 border-0 border-t border-border;
+    }
   }
 
   /* Tables — the .table look, top-aligned and wrapping since prose cells run to several
      lines. A .table keeps its own rules. */
   .prose :where(table:not(.table)) {
-    @apply w-full border-collapse text-sm;
+    @variant prose-scope {
+      @apply w-full border-collapse text-sm;
+    }
   }
   .prose :where(table:not(.table)) :where(th, td) {
-    @apply border-b border-border px-3 py-1.5 align-top;
+    @variant prose-scope {
+      @apply border-b border-border px-3 py-1.5 align-top;
+    }
   }
   /* Author CSS beats the `align` hint markdown emits for `| --: |` columns. */
   .prose :where(table:not(.table)) :where(th:not([align]), td:not([align])) {
-    @apply text-start;
+    @variant prose-scope {
+      @apply text-start;
+    }
   }
   /* A wash, so the band still shows on a surface-muted card. */
   .prose :where(table:not(.table)) :where(thead th) {
-    @apply font-semibold text-text bg-surface-stripe border-b-border-strong;
+    @variant prose-scope {
+      @apply font-semibold text-text bg-surface-stripe border-b-border-strong;
+    }
   }
   /* Row headers, as in .table; otherwise vanilla gets the UA's bold and React the reset's 400. */
   .prose :where(table:not(.table)) :where(tbody th) {
-    @apply font-medium;
+    @variant prose-scope {
+      @apply font-medium;
+    }
   }
   /* tbody/tfoot only, so a header-only table keeps its divider. */
   .prose :where(table:not(.table) > :is(tbody, tfoot):last-child > tr:last-child > :is(td, th)) {
-    @apply border-b-0;
+    @variant prose-scope {
+      @apply border-b-0;
+    }
   }
 
   .prose :where(img) {
-    @apply h-auto max-w-full rounded-md;
+    @variant prose-scope {
+      @apply h-auto max-w-full rounded-md;
+    }
   }
   .prose :where(figcaption) {
-    @apply mt-1 text-xs text-text-muted;
+    @variant prose-scope {
+      @apply mt-1 text-xs text-text-muted;
+    }
   }
   .prose :where(strong) {
-    @apply font-semibold;
+    @variant prose-scope {
+      @apply font-semibold;
+    }
   }
 }

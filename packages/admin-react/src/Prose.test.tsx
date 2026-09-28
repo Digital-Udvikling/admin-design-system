@@ -31,4 +31,22 @@ describe("Prose", () => {
     expect(root).toHaveAdminClass("prose");
     expect(root).toHaveClass("custom");
   });
+
+  it("renders Prose.Exclude as the .prose-exclude escape", () => {
+    const { getByRole } = render(
+      <Prose>
+        <p>Body copy.</p>
+        <Prose.Exclude>
+          <table>
+            <tbody>
+              <tr>
+                <td>Cell</td>
+              </tr>
+            </tbody>
+          </table>
+        </Prose.Exclude>
+      </Prose>,
+    );
+    expect(getByRole("table").parentElement).toHaveAdminClass("prose-exclude");
+  });
 });

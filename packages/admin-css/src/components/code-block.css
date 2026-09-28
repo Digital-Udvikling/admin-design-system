@@ -7,6 +7,23 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow: auto;
+
+    /* Colors for Shiki's `css-variables` theme, Flexoki's syntax roles; the
+       highlighter's inline `var(--shiki-*)` styles read them. */
+    --shiki-foreground: var(--color-code-text);
+    --shiki-background: var(--color-code-surface);
+    --shiki-token-comment: var(--color-text-muted);
+    --shiki-token-punctuation: var(--color-text-muted);
+    --shiki-token-keyword: var(--color-category-green);
+    --shiki-token-function: var(--color-category-orange);
+    --shiki-token-string: var(--color-category-cyan);
+    --shiki-token-string-expression: var(--color-category-cyan);
+    --shiki-token-constant: var(--color-category-purple);
+    --shiki-token-parameter: var(--color-category-blue);
+    --shiki-token-link: var(--color-category-blue);
+    --shiki-token-inserted: var(--color-category-green);
+    --shiki-token-deleted: var(--color-category-red);
+    --shiki-token-changed: var(--color-category-yellow);
   }
 
   /* Long lines scroll horizontally instead of breaking; pair with an inline

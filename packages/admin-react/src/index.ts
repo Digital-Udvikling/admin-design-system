@@ -270,7 +270,7 @@ export {
 } from "./Tabs";
 export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
-export { Prose, type ProseProps } from "./Prose";
+export { Prose, type ProseExcludeProps, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
 export type { HotkeyHandler } from "./hotkey-registry";
 export { useCopy, type UseCopyOptions, type UseCopyResult } from "./useCopy";

@@ -44,8 +44,10 @@ function Ring({ data, pie, thickness, className, style, ...rest }: DonutRingProp
   );
 }
 
+export type DonutCenterProps = ComponentProps<"div">;
+
 /** Centred overlay (a total, a label). Not a child of the ring — masks clip subtrees. */
-function Center({ className, ...rest }: ComponentProps<"div">) {
+function Center({ className, ...rest }: DonutCenterProps) {
   return <div className={cn("chart-donut-center", className)} {...rest} />;
 }
 

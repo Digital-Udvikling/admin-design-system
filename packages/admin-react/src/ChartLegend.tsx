@@ -17,7 +17,7 @@ export function ChartLegend({ data, className, ...rest }: ChartLegendProps) {
         <li
           key={d.label ?? i}
           className={cn("chart-legend-item", undefined)}
-          style={mergeStyle({ "--legend-color": seriesColor(d, i) })}
+          style={mergeStyle({ "--chart-legend-color": seriesColor(d, i) })}
           title={datumTitle(d)}
         >
           {d.label ?? d.value}

@@ -19,7 +19,7 @@ describe("ChartLegend", () => {
     expect(paid).toHaveAttribute("title", "Paid: 60");
     expect(refunded).toHaveAttribute(
       "style",
-      expect.stringContaining("--legend-color: var(--color-danger)"),
+      expect.stringContaining("--chart-legend-color: var(--color-danger)"),
     );
   });
 });

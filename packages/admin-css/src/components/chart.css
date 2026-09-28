@@ -3,17 +3,18 @@
    * Pure-CSS charts driven by inline custom properties — not data-*
    * attributes (CSS can't read an attribute as a number for calc()).
    * Contract: bars — container `--chart-max` (default 100), each bar
-   * `--value`; stack — each segment `--value` (flex-grow ratios, no max);
+   * `--chart-value`; stack — each segment `--chart-value` (flex-grow ratios, no max);
    * donut — `--donut-segments` holds a pre-built cumulative conic-gradient
    * stop string (CSS can't sum a variable-length sibling list).
    * Single-series colour rides currentColor; multi-series is set inline via
-   * `--bar-color` / `--segment-color` / `--legend-color`.
+   * `--chart-bar-color` / `--chart-segment-color` / `--chart-legend-color`.
    */
   .chart {
     --chart-max: 100;
     --chart-height: 8rem; /* bar track cross-axis size (md) */
     --chart-size: 8rem; /* donut diameter (md) */
     --chart-gap: 0.25rem;
+    --chart-legend-gap: 0.5rem;
     color: var(--color-info);
   }
 
@@ -62,10 +63,10 @@
 
   .chart-bar-fill {
     block-size: 0.75rem;
-    inline-size: calc(var(--value) / var(--chart-max) * 100%);
-    background: var(--bar-color, currentColor);
+    inline-size: clamp(0%, calc(var(--chart-value) / var(--chart-max) * 100%), 100%);
+    background: var(--chart-bar-color, currentColor);
     border-radius: 2px;
-    /* Transition the resolved length, not --value (unregistered — won't
+    /* Transition the resolved length, not --chart-value (unregistered — won't
        animate); both axes so the vertical fill animates too. */
     transition:
       inline-size 200ms ease,
@@ -111,10 +112,19 @@
     padding: 0;
   }
 
+  /* Columns can be narrower than their text; ellipsize instead of overlapping. */
+  .chart-bars-vertical .chart-bar-value,
+  .chart-bars-vertical .chart-bar-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The bottom hairline is a baseline, so a zero value reads as zero, not missing. */
   .chart-bars-vertical .chart-bar-track {
     order: 1;
     flex: 1 1 auto;
     min-block-size: 0;
+    border-block-end: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -122,7 +132,9 @@
 
   .chart-bars-vertical .chart-bar-fill {
     inline-size: 100%;
-    block-size: calc(var(--value) / var(--chart-max) * 100%);
+    block-size: clamp(0%, calc(var(--chart-value) / var(--chart-max) * 100%), 100%);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
   }
 
   .chart-bars-vertical .chart-bar-label {
@@ -131,7 +143,12 @@
     padding: 0;
   }
 
-  /* Stacked / proportion bar */
+  /* Stacked / proportion bar. The root has no width of its own, so without this
+     it shrinks to its legend (or to 0) in a flex parent. */
+  .chart:has(> .chart-stack):not(.chart-inline) {
+    inline-size: 100%;
+  }
+
   .chart-stack {
     display: flex;
     flex-direction: row;
@@ -139,17 +156,17 @@
     block-size: 0.75rem;
     border-radius: 9999px;
     overflow: hidden;
-    background: var(--color-surface-strong);
+    background: var(--color-border);
   }
 
   .chart-segment {
-    flex: var(--value) 1 0;
+    flex: var(--chart-value) 1 0;
     min-inline-size: 0;
-    background: var(--segment-color, currentColor);
+    background: var(--chart-segment-color, currentColor);
     transition: flex-grow 200ms ease;
   }
   .chart-segment + .chart-segment {
-    box-shadow: -1px 0 0 0 var(--color-surface);
+    box-shadow: -1px 0 0 0 var(--surface-current, var(--color-surface));
   }
 
   /* Donut / pie — conic-gradient ring, centre punched out by a radial-gradient
@@ -162,6 +179,7 @@
     aspect-ratio: 1;
     display: inline-grid;
     place-items: center;
+    vertical-align: top; /* no strut descender gap under the figure */
   }
 
   .chart-donut {
@@ -170,15 +188,17 @@
     aspect-ratio: 1;
     border-radius: 50%;
     background: conic-gradient(var(--donut-segments, currentColor 0 100%));
+    /* closest-side makes 100% the radius, so the hole radius is 100% - 2t. The
+       0.5px ramp sits inside the hole so a 50% ring is solid. */
     -webkit-mask: radial-gradient(
-      circle at center,
-      transparent calc(50% - var(--donut-thickness)),
-      #000 calc(50% - var(--donut-thickness))
+      closest-side,
+      transparent calc(100% - 2 * var(--donut-thickness) - 0.5px),
+      #000 calc(100% - 2 * var(--donut-thickness))
     );
     mask: radial-gradient(
-      circle at center,
-      transparent calc(50% - var(--donut-thickness)),
-      #000 calc(50% - var(--donut-thickness))
+      closest-side,
+      transparent calc(100% - 2 * var(--donut-thickness) - 0.5px),
+      #000 calc(100% - 2 * var(--donut-thickness))
     );
   }
 
@@ -192,7 +212,7 @@
   }
 
   .chart-donut-center {
-    @apply text-center text-sm font-semibold tabular-nums leading-tight;
+    @apply text-center text-sm font-semibold tabular-nums leading-tight text-text;
     grid-area: 1 / 1;
     z-index: 1;
     pointer-events: none;
@@ -205,6 +225,9 @@
     margin: 0;
     padding: 0;
   }
+  .chart:not(.chart-inline) > * + .chart-legend {
+    margin-block-start: var(--chart-legend-gap);
+  }
 
   .chart-legend-item {
     @apply inline-flex items-center gap-1.5;
@@ -214,7 +237,7 @@
     inline-size: 0.625rem;
     block-size: 0.625rem;
     border-radius: 2px;
-    background: var(--legend-color, currentColor);
+    background: var(--chart-legend-color, currentColor);
     flex-shrink: 0;
   }
 
@@ -234,6 +257,19 @@
     vertical-align: middle;
     --chart-height: 1em;
     --chart-size: 1.25em;
+    --chart-legend-gap: 0.5em;
+  }
+  /* Stack and donut roots only: centring would collapse the sparkline's stretched tracks. */
+  .chart-inline:not(.chart-bars) {
+    align-items: center;
+    gap: var(--chart-legend-gap);
+  }
+  /* Horizontal bars keep their grid; inline-flex would drop the subgrid rows to 0 width. */
+  .chart-inline.chart-bars:not(.chart-bars-vertical) {
+    display: inline-grid;
+  }
+  .chart-inline.chart-bars:not(.chart-bars-vertical) .chart-bar-fill {
+    block-size: 0.5em;
   }
   .chart-inline .chart-stack {
     inline-size: 6em;

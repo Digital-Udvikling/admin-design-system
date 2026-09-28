@@ -119,12 +119,14 @@ Three pure-CSS, JS-free primitives — `<BarChart>`, `<StackedBar>`, `<Donut>` (
 - **Icon-only buttons without a name.** `<Button icon={IconTrash} />` with no children, an empty `Menu.Trigger`, or a vanilla `btn-square` needs an `aria-label`. A Tooltip is not an accessible name.
 - **Reaching for a toast library.** There is no toast. A server-rendered page shows the last request's messages as an alert stack at the top of `main` ([flash messages](references/patterns/flash-messages.md)); a React view shows an `<Alert>` next to the action, or a status in the affected row.
 - **A hand-rolled copy button.** React has [`<CopyButton value>`](references/components/copy-button.md) and `useCopy()`, which announce the copy to screen readers; a property list value takes `copyable`.
+- **A bare `<span>` styled as a status dot.** Use `indicator-dot` / [`<StatusDot>`](references/components/indicator.md) next to the status text.
+- **`window.confirm()`, `window.prompt()` or a hand-rolled confirm script.** React has `useConfirm()` and `usePrompt()` ([Dialog](references/components/dialog.md)). A vanilla page puts the POST form inside a `<dialog>` opened with `commandfor` ([confirm before submit](references/patterns/confirm.md)), which needs no JavaScript.
 
 ## When nothing fits
 
 In a consumer repo you use the system; changing it is a separate task in a checkout of [`Digital-Udvikling/admin-design-system`](https://github.com/Digital-Udvikling/admin-design-system).
 
-1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers and master-detail.
+1. Re-check the index and the component's Reference table: most gaps are a prop, a `.Container`, or a composition. Check the Patterns pages for layouts like empty states, section headers, master-detail, confirmations and flash messages.
 2. Prefer composition: a prop, `className` / `classNames`, `.Container`, or a documented class on your own element (a router `Link` with `navbar-item`, written `_ao-navbar-item` inside `<AdminRoot>`).
 3. Otherwise write the smallest local workaround, either a stand-in built from system primitives and semantic tokens or a narrow override of one system class, and mark it with a comment in the file's own syntax:
    `aortl-gap: <component> — <what the system can't express> — #<issue> | unreported`

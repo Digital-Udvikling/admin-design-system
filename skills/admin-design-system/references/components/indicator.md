@@ -8,6 +8,7 @@
   - [Count on a button](#count-on-a-button)
   - [Count overflow](#count-overflow)
   - [Status dot](#status-dot)
+  - [Standalone status dot](#standalone-status-dot)
   - [Placements](#placements)
   - [Multiple items](#multiple-items)
 - [Reference](#reference)
@@ -44,7 +45,9 @@
 
 ```html
 <div class="indicator">
-  <span class="indicator-item badge badge-danger badge-sm">99+</span>
+  <span class="indicator-item badge badge-danger badge-sm" role="status" aria-label="128 unread"
+    >99+</span
+  >
   <button class="btn btn-primary">
     <i class="ti ti-inbox" aria-hidden="true"></i>
     Inbox
@@ -53,7 +56,7 @@
 ```
 
 ```tsx
-<Indicator label={128} max={99} variant="danger">
+<Indicator label={128} max={99} variant="danger" aria-label="128 unread">
   <Button variant="primary" icon={IconInbox}>
     Inbox
   </Button>
@@ -84,6 +87,60 @@
     Account
   </Button>
 </Indicator>
+```
+
+### Standalone status dot
+
+Next to its text label, the dot is decorative and takes `aria-hidden`.
+
+**Example**
+
+```html
+<table class="table">
+  <thead>
+    <tr>
+      <th>Worker</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>queue-eu-1</td>
+      <td><span class="indicator-dot indicator-dot-success" aria-hidden="true"></span>Online</td>
+    </tr>
+    <tr>
+      <td>queue-eu-2</td>
+      <td><span class="indicator-dot indicator-dot-danger" aria-hidden="true"></span>Offline</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+```tsx
+<Table>
+  <Table.Head>
+    <Table.Row>
+      <Table.HeaderCell>Worker</Table.HeaderCell>
+      <Table.HeaderCell>Status</Table.HeaderCell>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>queue-eu-1</Table.Cell>
+      <Table.Cell>
+        <StatusDot variant="success" />
+        Online
+      </Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>queue-eu-2</Table.Cell>
+      <Table.Cell>
+        <StatusDot variant="danger" />
+        Offline
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
 ```
 
 ### Placements
@@ -203,30 +260,43 @@
 | `max`        | `number`                                                                 | —           |
 | `aria-label` | `string`                                                                 | —           |
 
-The anchor goes in `children`; the floating element is built from the props. With `label` or `icon` it is a [Badge](badges.md) and `size` applies; with neither it is a label-less dot and `size` is ignored. `max` clamps a numeric `label` to `${max}+`.
+The anchor goes in `children`; the floating element is built from the props. With `label` or `icon` it is a [Badge](badges.md) and `size` applies; with neither it is a label-less dot and `size` is ignored. `max` clamps a numeric `label` to `${max}+`. `offset` replaces the auto-offset for corner placements; `*-center` and `middle-*` placements ignore it.
 
-`aria-label` names the floating element, not the wrapper, and a dot gets `role="status"` only when you pass one — without it the dot is decorative. One `Indicator` carries one item; for two on the same anchor, compose the classes as in the last example.
+`aria-label` names the floating element, not the wrapper, and gives it `role="status"`. Without one, a dot is decorative and a badge is read as its text. One `Indicator` carries one item; for two on the same anchor, compose the classes as in the last example.
 
 Plus native `<div>` attributes.
 
 For a label inline with text, use a [Badge](badges.md).
 
+#### StatusDot
+
+| Prop         | Type                                                                     | Default     |
+| ------------ | ------------------------------------------------------------------------ | ----------- |
+| `variant`    | `"neutral" \| "info" \| "success" \| "warning" \| "danger" \| "primary"` | `"neutral"` |
+| `aria-label` | `string`                                                                 | —           |
+
+A standalone `indicator-dot`. With `aria-label` it renders `role="status"`, like a labelled `Indicator`. Without one it is `aria-hidden`, and adjacent text must carry the status.
+
+Plus native `<span>` attributes.
+
 ### Vanilla
 
-| Class / var                                                                                                         | Effect                                                                               |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `indicator`                                                                                                         | Wrapper: `position: relative`, inline, shrink-wrapped to the anchor                  |
-| `indicator-item`                                                                                                    | The floating child. Absolute, `z-index: 1`, half-overflowing the top-end corner      |
-| `indicator-start`                                                                                                   | Pin to the inline start                                                              |
-| `indicator-center`                                                                                                  | Centre on the inline axis                                                            |
-| `indicator-end`                                                                                                     | Pin to the inline end (default)                                                      |
-| `indicator-top`                                                                                                     | Pin to the top (default)                                                             |
-| `indicator-middle`                                                                                                  | Centre on the block axis                                                             |
-| `indicator-bottom`                                                                                                  | Pin to the bottom                                                                    |
-| `indicator-dot`                                                                                                     | `0.5rem` round dot in the muted text colour — an empty `badge` would still be a pill |
-| `indicator-dot-info` `indicator-dot-success` `indicator-dot-warning` `indicator-dot-danger` `indicator-dot-primary` | Status fill for the dot                                                              |
-| `--indicator-offset`                                                                                                | Pixels to pull the item back toward the anchor's centre                              |
+| Class / var                                                                                                         | Effect                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `indicator`                                                                                                         | Wrapper: `position: relative`, inline, shrink-wrapped to the anchor up to the available width; a form-control anchor keeps its full field width                         |
+| `indicator-item`                                                                                                    | The floating child. Absolute, `z-index: 1`, half-overflowing the top-end corner                                                                                         |
+| `indicator-start`                                                                                                   | Pin to the inline start                                                                                                                                                 |
+| `indicator-center`                                                                                                  | Centre on the inline axis                                                                                                                                               |
+| `indicator-end`                                                                                                     | Pin to the inline end (default)                                                                                                                                         |
+| `indicator-top`                                                                                                     | Pin to the top (default)                                                                                                                                                |
+| `indicator-middle`                                                                                                  | Centre on the block axis                                                                                                                                                |
+| `indicator-bottom`                                                                                                  | Pin to the bottom                                                                                                                                                       |
+| `indicator-dot`                                                                                                     | `0.5rem` round dot in the muted text colour — an empty `badge` would still be a pill. Without `indicator-item` it sits on the text's middle, `0.25rem` before its label |
+| `indicator-dot-info` `indicator-dot-success` `indicator-dot-warning` `indicator-dot-danger` `indicator-dot-primary` | Status fill for the dot                                                                                                                                                 |
+| `--indicator-offset`                                                                                                | Pixels to pull the item back toward the anchor's centre                                                                                                                 |
 
 One vertical and one horizontal modifier compose, so placement is nine combinations from six classes rather than a 3×3 selector grid. Both defaults are omitted: a bare `indicator-item` is top-end.
 
-`--indicator-offset` aligns the item with the _visual_ corner of a rounded anchor, and `:has()` sets it from the direct child: `2px` for `btn`, `input` and `avatar-square`, `6px` for `card` and `avatar-lg`, `5px` for `avatar`, `3px` for `avatar-sm`. Any other anchor gets `0`, which centres the item exactly on the geometric corner — set the property (or React's `offset`) yourself for a rounded one.
+A form-control anchor (`input`, `input-icon`, `input-group`, `select`, `textarea`, `number-input`, `file-input`) makes the wrapper a block that fills the available width, like the bare control. For a narrower control, set the width on the `indicator` (React: `style` or `className` on `Indicator`), not on the control, since the item is placed against the wrapper's edge.
+
+`--indicator-offset` aligns the item with the _visual_ corner of a rounded anchor, and `:has()` sets it from the direct child: `2px` for `btn`, `card`, form controls and `avatar-square`, `3px` for `avatar-sm`, `5px` for `avatar`, `6px` for `avatar-lg`. Any other anchor gets `0`, which centres the item exactly on the geometric corner — set the property (or React's `offset`) yourself for a rounded one. `indicator-center` and `indicator-middle` reset it to `0`, since they sit on a straight edge.

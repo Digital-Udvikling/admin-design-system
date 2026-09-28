@@ -1,33 +1,33 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, MouseEventHandler } from "react";
 import { cn } from "./cn";
 
-export type TableAlign = "left" | "right" | "center";
+export type TableAlign = "start" | "center" | "end";
 export type TableDensity = "compact" | "default" | "relaxed";
+export type TableSort = "ascending" | "descending" | "none";
 
 export interface TableProps extends ComponentProps<"table"> {
   striped?: boolean;
   bordered?: boolean;
   /** Cell padding. Default `"default"`. */
   density?: TableDensity;
-  /** @deprecated Use `density="relaxed"`. Kept for the class-name contract. */
-  relaxed?: boolean;
-  /** Pins `<thead>`; requires an overflowing ancestor (`overflow: auto` + `max-height` wrapper). */
+  /** Pins `<thead>`; requires a scrolling ancestor such as `Table.Scroll` with a `max-height`. */
   sticky?: boolean;
-  /** Pins the first column against horizontal scroll; requires an overflow-x ancestor. */
+  /**
+   * Pins the first column against horizontal scroll; requires an overflow-x ancestor such as `Table.Scroll`.
+   * Put an `asLink` row's link in a later column; the pinned cell stays outside the row's hit area.
+   */
   pinCol?: boolean;
 }
 
 function TableRoot({
   striped,
   bordered,
-  density,
-  relaxed,
+  density = "default",
   sticky,
   pinCol,
   className,
   ...rest
 }: TableProps) {
-  const resolvedDensity = density ?? (relaxed ? "relaxed" : "default");
   return (
     <table
       className={cn(
@@ -35,8 +35,8 @@ function TableRoot({
           "table",
           striped && "table-striped",
           bordered && "table-bordered",
-          resolvedDensity === "compact" && "table-compact",
-          resolvedDensity === "relaxed" && "table-relaxed",
+          density === "compact" && "table-compact",
+          density === "relaxed" && "table-relaxed",
           sticky && "table-sticky",
           pinCol && "table-pin-col",
         ],
@@ -66,7 +66,7 @@ function TableFoot({ className, ...rest }: TableFootProps) {
 export interface TableRowProps extends ComponentProps<"tr"> {
   /** Programmatic selection highlight — independent of the CSS rule tinting rows with a checked checkbox. */
   selected?: boolean;
-  /** Applies `.table-row-link` so the first `<a>` in the row fills it; the consumer still supplies the anchor. */
+  /** Applies `.table-row-link`: the row's first `<a>` fills it; other controls stay clickable. */
   asLink?: boolean;
 }
 function TableRow({ selected, asLink, className, ...rest }: TableRowProps) {
@@ -83,15 +83,44 @@ export interface TableHeaderCellProps extends Omit<ComponentProps<"th">, "align"
   align?: TableAlign;
   /** Narrow first-column gutter, mirroring the body cell `gutter` so the column lines up. */
   gutter?: boolean;
+  /**
+   * Makes the column sortable: wraps the children in a `table-sort` button whose indicator
+   * shows this direction, and sets `aria-sort` unless `"none"`. Ordering the rows is yours.
+   */
+  sort?: TableSort;
+  /** Click handler for the `sort` button. */
+  onSort?: MouseEventHandler<HTMLButtonElement>;
 }
-function TableHeaderCell({ align, gutter, className, scope, ...rest }: TableHeaderCellProps) {
+/** Column header by default; `scope="row"` renders a row header styled as a body cell (`table-cell`). */
+function TableHeaderCell({
+  align,
+  gutter,
+  sort,
+  onSort,
+  className,
+  scope,
+  children,
+  ...rest
+}: TableHeaderCellProps) {
   return (
     <th
-      className={cn(["table-header-cell", gutter && "table-cell-gutter"], className)}
-      data-align={align && align !== "left" ? align : undefined}
+      className={cn(
+        [scope === "row" ? "table-cell" : "table-header-cell", gutter && "table-cell-gutter"],
+        className,
+      )}
+      data-align={align && align !== "start" ? align : undefined}
       scope={scope ?? "col"}
+      aria-sort={sort && sort !== "none" ? sort : undefined}
       {...rest}
-    />
+    >
+      {sort ? (
+        <button type="button" className={cn("table-sort", undefined)} onClick={onSort}>
+          {children}
+        </button>
+      ) : (
+        children
+      )}
+    </th>
   );
 }
 
@@ -101,15 +130,22 @@ export interface TableCellProps extends Omit<ComponentProps<"td">, "align"> {
   gutter?: boolean;
   /** `text-right` + `tabular-nums` for currency/totals columns. */
   numeric?: boolean;
+  /** Trailing row-actions column: shrinks to its controls, right-aligned, no block padding. */
+  actions?: boolean;
 }
-function TableCell({ align, gutter, numeric, className, ...rest }: TableCellProps) {
+function TableCell({ align, gutter, numeric, actions, className, ...rest }: TableCellProps) {
   return (
     <td
       className={cn(
-        ["table-cell", gutter && "table-cell-gutter", numeric && "table-cell-numeric"],
+        [
+          "table-cell",
+          gutter && "table-cell-gutter",
+          numeric && "table-cell-numeric",
+          actions && "table-cell-actions",
+        ],
         className,
       )}
-      data-align={align && align !== "left" ? align : undefined}
+      data-align={align && align !== "start" ? align : undefined}
       {...rest}
     />
   );
@@ -130,6 +166,20 @@ function TableEmpty({ colSpan, className, children, ...rest }: TableEmptyProps) 
   );
 }
 
+/** A name is required: a screen reader announces the focusable region. */
+export type TableScrollProps = ComponentProps<"section"> &
+  ({ "aria-label": string } | { "aria-labelledby": string });
+/**
+ * Scroll region for wide tables, and the scrolling ancestor `sticky` (with a `max-height`) and
+ * `pinCol` need. A `<section>` with `tabIndex={0}`, so it scrolls by keyboard.
+ */
+function TableScroll({ className, ...rest }: TableScrollProps) {
+  return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scroll container must be focusable to scroll by keyboard (WCAG 2.1.1)
+    <section tabIndex={0} className={cn("table-scroll", className)} {...rest} />
+  );
+}
+
 export const Table = Object.assign(TableRoot, {
   Head: TableHead,
   Body: TableBody,
@@ -138,4 +188,5 @@ export const Table = Object.assign(TableRoot, {
   HeaderCell: TableHeaderCell,
   Cell: TableCell,
   Empty: TableEmpty,
+  Scroll: TableScroll,
 });

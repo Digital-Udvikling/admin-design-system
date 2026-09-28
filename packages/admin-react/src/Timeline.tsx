@@ -1,20 +1,25 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn, type SlotClasses } from "./cn";
 import { renderIcon, type IconProp } from "./icon";
+import { hasNode } from "./slot";
 
 export type TimelineStatus = "default" | "info" | "success" | "warning" | "danger" | "current";
 
 export interface TimelineProps extends ComponentProps<"ol"> {
   /** Turn the rail into a numbered step list. */
   numbered?: boolean;
-  /** Lay items out as side-by-side columns instead of a vertical rail. */
-  horizontal?: boolean;
+  /** `horizontal` lays items out as side-by-side columns instead of a vertical rail. */
+  orientation?: "vertical" | "horizontal";
 }
-function TimelineRoot({ numbered, horizontal, className, ...rest }: TimelineProps) {
+function TimelineRoot({ numbered, orientation = "vertical", className, ...rest }: TimelineProps) {
   return (
     <ol
       className={cn(
-        ["timeline", numbered && "timeline-numbered", horizontal && "timeline-horizontal"],
+        [
+          "timeline",
+          numbered && "timeline-numbered",
+          orientation === "horizontal" && "timeline-horizontal",
+        ],
         className,
       )}
       {...rest}
@@ -23,7 +28,7 @@ function TimelineRoot({ numbered, horizontal, className, ...rest }: TimelineProp
 }
 
 export interface TimelineItemProps extends Omit<ComponentProps<"li">, "title"> {
-  /** Accent for the indicator. `current` highlights a numbered marker. */
+  /** Accent for the dot, icon or marker. `current` fills with the primary ink and sets `aria-current="step"`. */
   status?: TimelineStatus;
   /** Indicator icon, replacing the default dot. */
   icon?: IconProp;
@@ -64,17 +69,16 @@ function TimelineItem({
         ["timeline-item", status !== "default" && `timeline-item-${status}`],
         className,
       )}
+      aria-current={status === "current" ? "step" : undefined}
       {...rest}
     >
       <span className={cn("timeline-indicator", classNames?.indicator)}>{indicator}</span>
       <div className={cn("timeline-content", classNames?.content)}>
-        {title !== undefined ? (
+        {hasNode(title) ? (
           <div className={cn("timeline-title", classNames?.title)}>{title}</div>
         ) : null}
-        {time !== undefined ? (
-          <div className={cn("timeline-time", classNames?.time)}>{time}</div>
-        ) : null}
-        {description !== undefined ? (
+        {hasNode(time) ? <div className={cn("timeline-time", classNames?.time)}>{time}</div> : null}
+        {hasNode(description) ? (
           <div className={cn("timeline-description", classNames?.description)}>{description}</div>
         ) : null}
         {children}

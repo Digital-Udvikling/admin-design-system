@@ -55,33 +55,39 @@ function BarChartContainer({
   );
 }
 
-export interface BarProps extends Omit<ComponentProps<"div">, "color"> {
+export interface BarChartBarProps extends Omit<ComponentProps<"div">, "color"> {
   /** Auto-fills label / value / title / colour from a datum. */
   datum?: ChartDatum;
   /** Raw value when composing without a datum. */
   value?: number;
   /** Category label when composing without a datum. */
   label?: string;
-  /** Explicit bar colour (`--bar-color`). Overrides the single-series fill. */
+  /** Explicit bar colour (`--chart-bar-color`). Overrides the single-series fill. */
   color?: string;
 }
 
 /**
  * One bar. The value cell always renders (CSS hides it without `.chart-values`);
- * fill stays `currentColor` — single-series bars never cycle SERIES.
+ * fill stays `currentColor` — single-series bars never cycle SERIES. The datum
+ * `title` is on the row so the whole row shows it on hover.
  */
-function Bar({ datum, value, label, color, className, style, ...rest }: BarProps) {
+function Bar({ datum, value, label, color, className, style, ...rest }: BarChartBarProps) {
   const v = datum?.value ?? value ?? 0;
   const lab = datum?.label ?? label;
   const barColor = datum?.color ?? color;
-  const vars: Record<string, string | number> = { "--value": v };
-  if (barColor !== undefined) vars["--bar-color"] = barColor;
+  const vars: Record<string, string | number> = { "--chart-value": v };
+  if (barColor !== undefined) vars["--chart-bar-color"] = barColor;
   const title = datum !== undefined ? datumTitle(datum) : undefined;
   return (
-    <div className={cn("chart-bar", className)} style={mergeStyle(vars, style)} {...rest}>
+    <div
+      className={cn("chart-bar", className)}
+      style={mergeStyle(vars, style)}
+      title={title}
+      {...rest}
+    >
       {lab !== undefined ? <span className={cn("chart-bar-label", undefined)}>{lab}</span> : null}
       <div className={cn("chart-bar-track", undefined)}>
-        <div className={cn("chart-bar-fill", undefined)} title={title} />
+        <div className={cn("chart-bar-fill", undefined)} />
       </div>
       <span className={cn("chart-bar-value", undefined)}>{v}</span>
     </div>

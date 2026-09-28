@@ -3,46 +3,48 @@
     @apply inline-flex;
   }
 
+  /* `.indicator` and `.tooltip-wrap` wrap a single .btn; every rule below
+     drills through them so the wrapped button still joins the strip. */
   .btn-group > .btn,
-  .btn-group > .indicator > .btn {
+  .btn-group > :is(.indicator, .tooltip-wrap) > .btn {
     @apply rounded-none relative focus-visible:z-10;
   }
 
-  /* Split buttons: a <details class="menu"> sits in the strip; inline-flex
-     stretches its <summary> to match sibling .btn heights. */
+  /* Split buttons: a `.menu` wrapper sits in the strip; inline-flex
+     stretches its trigger to match sibling .btn heights. */
   .btn-group > .menu {
-    @apply relative focus-visible:z-10;
+    @apply relative;
     display: inline-flex;
   }
 
   .btn-group > .menu > .menu-trigger {
-    @apply rounded-none;
+    @apply rounded-none relative focus-visible:z-10;
   }
 
   /* Horizontal-only — vertical groups also carry .btn-group, hence the :not() scope. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
   .btn-group:not(.btn-group-vertical) > .menu:not(:first-child),
-  .btn-group:not(.btn-group-vertical) > .indicator:not(:first-child) {
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):not(:first-child) {
     @apply -ml-px;
   }
 
   .btn-group:not(.btn-group-vertical) > .btn:first-child,
   .btn-group:not(.btn-group-vertical) > .menu:first-child > .menu-trigger,
-  .btn-group:not(.btn-group-vertical) > .indicator:first-child > .btn {
-    @apply rounded-l-lg;
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):first-child > .btn {
+    @apply rounded-l-md;
   }
 
   .btn-group:not(.btn-group-vertical) > .btn:last-child,
   .btn-group:not(.btn-group-vertical) > .menu:last-child > .menu-trigger,
-  .btn-group:not(.btn-group-vertical) > .indicator:last-child > .btn {
-    @apply rounded-r-lg;
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):last-child > .btn {
+    @apply rounded-r-md;
   }
 
   /* Seam divider — color-mix on currentColor adapts to every .btn variant
      without per-variant rules. */
   .btn-group:not(.btn-group-vertical) > .btn:not(:first-child),
   .btn-group:not(.btn-group-vertical) > .menu:not(:first-child) > .menu-trigger,
-  .btn-group:not(.btn-group-vertical) > .indicator:not(:first-child) > .btn {
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap):not(:first-child) > .btn {
     border-left-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
@@ -51,41 +53,51 @@
   }
 
   .btn-group-vertical > .btn,
-  .btn-group-vertical > .indicator > .btn {
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap) > .btn {
     @apply justify-start;
   }
 
-  /* .indicator hugs its button (w-max) when horizontal; a vertical group
-     stretches every cell, so the wrapper and its button fill the width. */
-  .btn-group-vertical > .indicator {
+  /* A vertical group stretches every cell; the wrapper (w-max on .indicator)
+     and its button fill the width. */
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap) {
     @apply w-auto;
   }
 
-  .btn-group-vertical > .indicator > .btn {
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap) > .btn {
     @apply w-full;
+  }
+
+  /* The trigger fills the stretched .menu and pushes the chevron to the end, like the
+     kbd-group in a vertical .btn. */
+  .btn-group-vertical > .menu > .menu-trigger {
+    @apply flex-1 justify-start;
+  }
+
+  .btn-group-vertical > .menu > .menu-trigger::after {
+    margin-inline-start: auto;
   }
 
   .btn-group-vertical > .btn:not(:first-child),
   .btn-group-vertical > .menu:not(:first-child),
-  .btn-group-vertical > .indicator:not(:first-child) {
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap):not(:first-child) {
     @apply -mt-px;
   }
 
   .btn-group-vertical > .btn:first-child,
   .btn-group-vertical > .menu:first-child > .menu-trigger,
-  .btn-group-vertical > .indicator:first-child > .btn {
-    @apply rounded-t-lg;
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap):first-child > .btn {
+    @apply rounded-t-md;
   }
 
   .btn-group-vertical > .btn:last-child,
   .btn-group-vertical > .menu:last-child > .menu-trigger,
-  .btn-group-vertical > .indicator:last-child > .btn {
-    @apply rounded-b-lg;
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap):last-child > .btn {
+    @apply rounded-b-md;
   }
 
   .btn-group-vertical > .btn:not(:first-child),
   .btn-group-vertical > .menu:not(:first-child) > .menu-trigger,
-  .btn-group-vertical > .indicator:not(:first-child) > .btn {
+  .btn-group-vertical > :is(.indicator, .tooltip-wrap):not(:first-child) > .btn {
     border-top-color: color-mix(in oklab, currentColor 25%, transparent);
   }
 
@@ -97,15 +109,35 @@
 
   .btn-group-full-width:not(.btn-group-vertical) > .btn,
   .btn-group-full-width:not(.btn-group-vertical) > .menu,
-  .btn-group-full-width:not(.btn-group-vertical) > .indicator {
+  .btn-group-full-width:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap) {
     @apply flex-1;
   }
 
-  .btn-group-full-width:not(.btn-group-vertical) > .indicator > .btn {
+  .btn-group-full-width:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap) > .btn {
     @apply w-full;
+  }
+
+  .btn-group-full-width:not(.btn-group-vertical) > .menu > .menu-trigger {
+    @apply flex-1;
+  }
+
+  /* A chevron-only split half keeps its own width; the labelled members share the rest. */
+  .btn-group-full-width:not(.btn-group-vertical) > .menu:has(> .menu-trigger:empty) {
+    @apply flex-none;
   }
 
   .btn-group-full-width.btn-group-vertical {
     @apply w-full;
+  }
+
+  /* A squeezed horizontal strip wraps its labels instead of overflowing; full-width members
+     take their width from the row, like btn-full-width. */
+  .btn-group:not(.btn-group-vertical) > .btn,
+  .btn-group:not(.btn-group-vertical) > :is(.indicator, .tooltip-wrap) > .btn,
+  .btn-group:not(.btn-group-vertical) > .menu > .menu-trigger,
+  .btn-group-full-width > .btn,
+  .btn-group-full-width > :is(.indicator, .tooltip-wrap) > .btn,
+  .btn-group-full-width > .menu > .menu-trigger {
+    @apply whitespace-normal;
   }
 }

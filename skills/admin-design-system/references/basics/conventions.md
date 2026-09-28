@@ -10,6 +10,7 @@
 - [className](#classname)
 - [classNames](#classnames)
 - [.Container escape hatch](#container-escape-hatch)
+- [render](#render)
 - [Hotkeys](#hotkeys)
 - [Layout](#layout)
 
@@ -113,6 +114,22 @@ Where a component has shorthand props that auto-fill an inner wrapper, the defau
 
 `BarChart`, `Card`, `Dialog`, `Drawer`, `Field` and `Item` expose one. In vanilla there is no distinction: you are always composing the bare classes.
 
+## `render`
+
+Link-like components render an `<a>` by default. Pass `render` with an element to render onto it instead, such as your router's link. The component's classes, `aria-current` and children go onto that element, its own `className` is appended, and its other props win.
+
+```tsx
+import NextLink from "next/link";
+
+<Sidebar.Item current icon={IconReceipt} render={<NextLink href="/orders" />}>
+  Orders
+</Sidebar.Item>;
+```
+
+`Navbar.Item`, `Sidebar.Item`, `Sidebar.SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container` and `Item` / `Item.Container` take an element, so they work from a Server Component. `Button` and `Menu.Item` get `render` from Base UI, which also accepts a function; a `Button` rendered as an anchor needs `nativeButton={false}` (see [Buttons](../components/buttons.md)).
+
+Put the content in the admin component's children and leave the element empty. Don't hard-code `_ao-` classes on your own link: the prefix belongs to the scoped bundle.
+
 ## Hotkeys
 
 For a shortcut tied to a visible control, use the `hotkey` prop on [Buttons](../components/buttons.md) and [Menu.Item](../components/menus.md) — it renders a trailing chip and dispatches a real click, so `onClick` fires, `type="submit"` submits, and an anchor navigates.
@@ -128,7 +145,7 @@ function HelpShortcut({ onOpen }: { onOpen: () => void }) {
 }
 ```
 
-`mod` resolves to `Cmd` on macOS and `Ctrl` elsewhere. Pass an array for alternatives; only the first renders as a chip. `{ enabled: false }` pauses registration without unmounting, and a nullish chord is a no-op, so the hook is safe to call unconditionally.
+`mod` is `⌘` on Apple platforms and `Ctrl` elsewhere. Chips and `aria-keyshortcuts` render the non-Apple labels (`Ctrl`, `Shift`, `Alt`) on the server and switch to `⌘`, `⇧`, `⌥` on hydration. Pass an array for alternatives; only the first renders as a chip. `{ enabled: false }` pauses registration without unmounting, and a nullish chord is a no-op, so the hook is safe to call unconditionally.
 
 Vanilla has no equivalent — bind your own `keydown` listener and use [Kbd](../components/kbd.md) for the chip.
 

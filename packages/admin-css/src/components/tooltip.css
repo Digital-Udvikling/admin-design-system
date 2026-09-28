@@ -1,17 +1,18 @@
 @layer components {
   /* Two paths, one class. React: Base UI portals and positions the popup;
      `.tooltip` carries paint + per-side transitions via Base UI's data attrs.
-     Vanilla: `.tooltip-wrap` reveals a nested `.tooltip` on :hover /
-     :focus-within — no JS. Replace with `interesttarget` + `popover="hint"`
-     once cross-browser support lands. */
+     Vanilla: `.tooltip-wrap` reveals a nested `.tooltip` on :hover / keyboard
+     focus — no JS. Replace with `interestfor` + `popover="hint"` once
+     cross-browser support lands. */
   .tooltip {
     @apply inline-block max-w-xs px-2 py-1
            rounded-md
-           text-xs leading-snug font-medium
+           text-xs font-medium
            bg-text text-surface
-           shadow-md
+           shadow-sm
            pointer-events-none;
-    text-wrap: balance;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
   }
 
   .tooltip-sm {
@@ -52,14 +53,20 @@
 
   /* Default position: top, centered. Equivalent to .tooltip-wrap-top. */
   .tooltip-wrap > .tooltip {
-    @apply absolute opacity-0 invisible;
+    @apply absolute opacity-0;
+    /* Not visibility: a laid-out bubble reopens on its last flipped side, and a
+       hidden wide one adds page overflow. */
+    display: none;
     left: 50%;
     bottom: 100%;
     margin-bottom: calc(var(--spacing) * 1.5);
     transform: translateX(-50%);
+    /* `left: 50%` leaves half the wrap to shrink-to-fit into; max-w-xs still caps it. */
+    width: max-content;
+    z-index: var(--z-popup, 1000);
     transition:
-      opacity 150ms ease-out 0ms,
-      visibility 0s linear 150ms;
+      opacity 150ms ease-out,
+      display 150ms allow-discrete;
   }
   .tooltip-wrap-bottom > .tooltip {
     top: 100%;
@@ -72,34 +79,67 @@
     margin-left: 0;
     transform: translateX(-50%);
   }
-  .tooltip-wrap-left > .tooltip {
-    top: 50%;
-    right: 100%;
-    bottom: auto;
-    left: auto;
-    margin-top: 0;
-    margin-right: calc(var(--spacing) * 1.5);
-    margin-bottom: 0;
-    margin-left: 0;
+  .tooltip-wrap-start > .tooltip {
+    inset-block: 50% auto;
+    inset-inline: auto 100%;
+    margin: 0;
+    margin-inline-end: calc(var(--spacing) * 1.5);
     transform: translateY(-50%);
   }
-  .tooltip-wrap-right > .tooltip {
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    left: 100%;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: calc(var(--spacing) * 1.5);
+  .tooltip-wrap-end > .tooltip {
+    inset-block: 50% auto;
+    inset-inline: 100% auto;
+    margin: 0;
+    margin-inline-start: calc(var(--spacing) * 1.5);
     transform: translateY(-50%);
   }
 
+  /* Fixed + anchored so the bubble escapes ancestor overflow and flips.
+     Gated on anchor-scope: without it every bubble anchors to the last wrap on the page. */
+  @supports (anchor-scope: --x) {
+    .tooltip-wrap {
+      anchor-name: --tooltip;
+      anchor-scope: --tooltip;
+    }
+    .tooltip-wrap > .tooltip {
+      position: fixed;
+      position-anchor: --tooltip;
+      inset: auto;
+      transform: none;
+      margin: 0 0 calc(var(--spacing) * 1.5);
+      position-area: top;
+      position-try-fallbacks: flip-block;
+    }
+    .tooltip-wrap-bottom > .tooltip {
+      position-area: bottom;
+      margin: calc(var(--spacing) * 1.5) 0 0;
+    }
+    .tooltip-wrap-start > .tooltip {
+      position-area: inline-start;
+      margin: 0;
+      margin-inline-end: calc(var(--spacing) * 1.5);
+      position-try-fallbacks: flip-inline;
+    }
+    .tooltip-wrap-end > .tooltip {
+      position-area: inline-end;
+      margin: 0;
+      margin-inline-start: calc(var(--spacing) * 1.5);
+      position-try-fallbacks: flip-inline;
+    }
+  }
+
+  /* :focus-visible, not :focus-within: a mouse click focuses the button and
+     would pin the bubble open after the pointer leaves. Matches Base UI. */
   .tooltip-wrap:hover > .tooltip,
-  .tooltip-wrap:focus-within > .tooltip {
-    @apply opacity-100 visible;
-    transition:
-      opacity 150ms ease-out 200ms,
-      visibility 0s linear 200ms;
+  .tooltip-wrap:has(:focus-visible) > .tooltip {
+    @apply opacity-100;
+    display: block;
+    transition: opacity 150ms ease-out 200ms;
+  }
+  @starting-style {
+    .tooltip-wrap:hover > .tooltip,
+    .tooltip-wrap:has(:focus-visible) > .tooltip {
+      opacity: 0;
+    }
   }
 }

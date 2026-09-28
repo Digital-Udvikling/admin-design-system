@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { createElement, type ComponentProps } from "react";
 import { afterEach, expect } from "vitest";
 
 afterEach(() => {
@@ -11,6 +12,11 @@ afterEach(() => {
 const ADMIN_PREFIX = "_ao-";
 
 export const adminSelector = (name: string): string => `.${ADMIN_PREFIX}${name}`;
+
+/** Stand-in for a router's link component in `render` prop tests; marks its anchor `data-router`. */
+export function RouterLink(props: ComponentProps<"a">) {
+  return createElement("a", { "data-router": "", ...props });
+}
 
 expect.extend({
   toHaveAdminClass(received: Element, ...names: string[]) {

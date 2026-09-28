@@ -1,16 +1,40 @@
 @layer components {
+  /* Inline, so a link in running text wraps like text. */
   .link {
-    @apply inline-flex items-center gap-1
-           text-link underline underline-offset-2
+    @apply text-link underline underline-offset-2
            rounded-sm transition-colors duration-150
            hover:text-link-hover
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
-    /* Links are often the URL itself — break instead of overflowing a narrow cell. */
+    /* `anywhere` also lowers min-content, so a URL can't widen a flex row. */
+    overflow-wrap: anywhere;
+  }
+
+  /* Auto-layout table columns size to whole tokens (table.css); a link in a cell breaks
+     only when the cell is constrained. */
+  :where(.table td, .table th, .table-cell) .link {
     overflow-wrap: break-word;
   }
 
+  /* Baseline-aligned so the label sits on the surrounding text's baseline, not the icon's edge. */
+  .link:has(> :is(i, svg)) {
+    @apply inline-flex items-baseline gap-1;
+  }
+
+  /* When the label wraps, icons stay on its first line; the webfont `<i>` gets there by baseline alignment. */
   .link > :is(i, svg) {
-    flex-shrink: 0;
+    @apply shrink-0;
+  }
+
+  /* A one-line-tall box centres the SVG's glyph on the first line. */
+  .link > svg {
+    align-self: flex-start;
+    height: 1lh;
+  }
+
+  /* An atomic inline doesn't receive the propagated underline; -0.125em moves the glyph off the baseline to the SVG's line centre. */
+  .link > i::before {
+    display: inline-block;
+    vertical-align: -0.125em;
   }
 
   /* Trailing ↗ drawn in CSS — no JS or icon-font dependency in either bundle. */
@@ -18,13 +42,18 @@
     --link-external-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 7 7 17'/%3E%3Cpath d='M8 7h9v9'/%3E%3C/svg%3E");
   }
 
+  /* Non-atomic inline holding a word joiner, so the ↗ can't wrap away from the last word. The mask paints it into the padding. */
   .link-external::after {
-    content: "";
-    flex: none;
-    width: 0.85em;
-    height: 0.85em;
+    content: "\2060";
+    margin-inline-start: 0.25rem;
+    padding-inline-start: 0.85em;
     background-color: currentColor;
-    -webkit-mask: var(--link-external-arrow) center / contain no-repeat;
-    mask: var(--link-external-arrow) center / contain no-repeat;
+    -webkit-mask: var(--link-external-arrow) right center / 0.85em 0.85em no-repeat;
+    mask: var(--link-external-arrow) right center / 0.85em 0.85em no-repeat;
+  }
+
+  /* Inside the icon flex row the gap already spaces it, and baseline alignment keeps it on the first line. */
+  .link-external:has(> :is(i, svg))::after {
+    @apply shrink-0 ms-0;
   }
 }

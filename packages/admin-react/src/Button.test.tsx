@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { forwardRef } from "react";
+import { createElement, forwardRef, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "./Button";
 import { __resetRegistry } from "./hotkey-registry";
@@ -14,6 +14,13 @@ describe("Button", () => {
   it("maps variant to the matching class", () => {
     render(<Button variant="muted">go</Button>);
     expect(screen.getByRole("button", { name: "go" })).toHaveAdminClass("btn-muted");
+  });
+
+  it("maps the danger-ghost variant to btn-danger-ghost", () => {
+    render(<Button variant="danger-ghost">Delete</Button>);
+    const btn = screen.getByRole("button", { name: "Delete" });
+    expect(btn).toHaveAdminClass("btn-danger-ghost");
+    expect(btn).not.toHaveAdminClass("btn-danger");
   });
 
   it("renders icon and iconTrailing component refs around children", () => {
@@ -65,6 +72,57 @@ describe("Button", () => {
     });
   });
 
+  describe("as a link", () => {
+    // Base UI fills in the children; a childless JSX <a /> trips the a11y lint.
+    const anchor = (href: string) => createElement("a", { href });
+
+    it("keeps link semantics: no role or type on <a href>", () => {
+      render(
+        <Button render={anchor("/orders/new")} nativeButton={false}>
+          New order
+        </Button>,
+      );
+      const link = screen.getByRole("link", { name: "New order" });
+      expect(link).toHaveAttribute("href", "/orders/new");
+      expect(link).not.toHaveAttribute("role");
+      expect(link).not.toHaveAttribute("type");
+    });
+
+    it("lets an explicit role win", () => {
+      render(
+        <Button render={anchor("/x")} nativeButton={false} role="menuitem">
+          Go
+        </Button>,
+      );
+      expect(screen.getByRole("menuitem", { name: "Go" })).toBeInTheDocument();
+    });
+
+    it("keeps role=button on a non-link render", () => {
+      render(
+        <Button render={<div />} nativeButton={false}>
+          Go
+        </Button>,
+      );
+      const el = screen.getByRole("button", { name: "Go" });
+      expect(el.tagName).toBe("DIV");
+      expect(el).not.toHaveAttribute("type");
+    });
+
+    it("styles a disabled link through aria-disabled", () => {
+      render(
+        <Button render={anchor("/x")} nativeButton={false} disabled>
+          Go
+        </Button>,
+      );
+      expect(screen.getByRole("link", { name: "Go" })).toHaveAttribute("aria-disabled", "true");
+    });
+  });
+
+  it("defaults type to button on a native button", () => {
+    render(<Button>go</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+  });
+
   it("passes the invoker commandfor/command attributes through to the DOM", () => {
     render(
       <Button commandfor="confirm" command="show-modal">
@@ -107,7 +165,7 @@ describe("Button", () => {
       expect(onClick).not.toHaveBeenCalled();
     });
 
-    it("loading: applies btn-loading, marks aria-busy, disables, and skips clicks", async () => {
+    it("loading: applies btn-loading, marks aria-busy and aria-disabled, and skips clicks and keys", async () => {
       const user = userEvent.setup();
       const onClick = vi.fn();
       render(
@@ -118,12 +176,52 @@ describe("Button", () => {
       const btn = screen.getByRole("button", { name: "Saving" });
       expect(btn).toHaveAdminClass("btn-loading");
       expect(btn).toHaveAttribute("aria-busy", "true");
-      expect(btn).toBeDisabled();
+      expect(btn).toHaveAttribute("aria-disabled", "true");
+      expect(btn).not.toHaveAttribute("disabled");
       await user.click(btn);
+      btn.focus();
+      await user.keyboard("{Enter}");
       expect(onClick).not.toHaveBeenCalled();
     });
 
-    it("loading: suppresses the leading icon but keeps the trailing one", () => {
+    it("loading: keeps focus on the button that started it", async () => {
+      const user = userEvent.setup();
+      function Save() {
+        const [loading, setLoading] = useState(false);
+        return (
+          <Button loading={loading} onClick={() => setLoading(true)}>
+            Save
+          </Button>
+        );
+      }
+      render(<Save />);
+      const btn = screen.getByRole("button", { name: "Save" });
+      await user.tab();
+      await user.keyboard("{Enter}");
+      expect(btn).toHaveAttribute("aria-busy", "true");
+      expect(btn).toHaveFocus();
+    });
+
+    it("disabled without loading still sets the native attribute", () => {
+      render(<Button disabled>go</Button>);
+      expect(screen.getByRole("button")).toBeDisabled();
+    });
+
+    it("disabled with focusableWhenDisabled sets aria-disabled and stays focusable", async () => {
+      const user = userEvent.setup();
+      render(
+        <Button disabled focusableWhenDisabled>
+          go
+        </Button>,
+      );
+      const btn = screen.getByRole("button");
+      expect(btn).toHaveAttribute("aria-disabled", "true");
+      expect(btn).not.toHaveAttribute("disabled");
+      await user.tab();
+      expect(btn).toHaveFocus();
+    });
+
+    it("loading: keeps the leading icon first, where the CSS swaps it for the spinner", () => {
       function IconLead(props: { "aria-hidden"?: boolean | "true" | "false" }) {
         return <svg data-testid="lead" {...props} />;
       }
@@ -135,8 +233,9 @@ describe("Button", () => {
           Saving
         </Button>,
       );
-      expect(screen.queryByTestId("lead")).not.toBeInTheDocument();
-      expect(screen.getByTestId("trail")).toBeInTheDocument();
+      const btn = screen.getByRole("button");
+      expect(btn.firstElementChild).toBe(screen.getByTestId("lead"));
+      expect(btn.lastElementChild).toBe(screen.getByTestId("trail"));
     });
   });
 

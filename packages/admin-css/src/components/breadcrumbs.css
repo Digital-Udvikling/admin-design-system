@@ -1,11 +1,17 @@
 @layer components {
   .breadcrumbs {
     @apply text-sm text-text-muted;
-    overflow-wrap: break-word;
+    /* `anywhere` lowers min-content, so a trailing ID or hash wraps instead of overflowing. */
+    overflow-wrap: anywhere;
   }
 
   .breadcrumbs > ol {
-    @apply inline-flex flex-wrap items-center gap-1.5 m-0 p-0 list-none;
+    @apply flex flex-wrap items-center gap-1.5 m-0 p-0 list-none;
+  }
+
+  /* Flex, not block: a block li adds a line box whose strut misaligns an icon-led item. */
+  .breadcrumbs > ol > li {
+    @apply flex items-center min-w-0;
   }
 
   .breadcrumb-item {

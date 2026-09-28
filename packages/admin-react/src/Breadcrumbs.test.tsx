@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Breadcrumbs } from "./Breadcrumbs";
-import { adminSelector } from "./test-setup";
+import { adminSelector, RouterLink } from "./test-setup";
 
 describe("Breadcrumbs", () => {
   it("renders a labelled nav landmark with items and separators between them", () => {
@@ -31,6 +31,20 @@ describe("Breadcrumbs", () => {
     expect(current).toHaveAttribute("aria-current", "page");
   });
 
+  it("renders an icon at 1em so it follows the breadcrumb font size", () => {
+    function Icon(props: { size?: number | string; "aria-hidden"?: boolean | "true" | "false" }) {
+      return <svg data-testid="icon" width={props.size} height={props.size} />;
+    }
+    render(
+      <Breadcrumbs>
+        <Breadcrumbs.Item href="/" icon={Icon}>
+          Home
+        </Breadcrumbs.Item>
+      </Breadcrumbs>,
+    );
+    expect(screen.getByTestId("icon")).toHaveAttribute("width", "1em");
+  });
+
   it("accepts a custom aria-label", () => {
     render(
       <Breadcrumbs aria-label="Folder path">
@@ -38,5 +52,18 @@ describe("Breadcrumbs", () => {
       </Breadcrumbs>,
     );
     expect(screen.getByRole("navigation", { name: "Folder path" })).toBeInTheDocument();
+  });
+
+  it("render: an item renders onto a router link without href", () => {
+    render(
+      <Breadcrumbs>
+        <Breadcrumbs.Item render={<RouterLink href="/orders" />}>Orders</Breadcrumbs.Item>
+        <Breadcrumbs.Item current>1042</Breadcrumbs.Item>
+      </Breadcrumbs>,
+    );
+    const link = screen.getByRole("link", { name: "Orders" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAdminClass("breadcrumb-item");
+    expect(link.parentElement?.tagName).toBe("LI");
   });
 });

@@ -27,6 +27,7 @@ export {
   type AvatarShape,
 } from "./Avatar";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
+export { renderIcon, type IconProp, type IconComponent, type IconRenderProps } from "./icon";
 export { ButtonGroup, type ButtonGroupProps, type ButtonGroupOrientation } from "./ButtonGroup";
 export { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
 export {
@@ -58,6 +59,7 @@ export {
   type IndicatorVertical,
   type IndicatorHorizontal,
 } from "./Indicator";
+export { StatusDot, type StatusDotProps, type StatusDotVariant } from "./StatusDot";
 export { Link, type LinkProps } from "./Link";
 export { Separator, type SeparatorProps } from "./Separator";
 export {
@@ -220,6 +222,7 @@ export { Kbd, type KbdProps } from "./Kbd";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseProps } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";
+export type { HotkeyHandler } from "./hotkey-registry";
 export { useConfirm, type ConfirmOptions } from "./useConfirm";
 export {
   Tooltip,

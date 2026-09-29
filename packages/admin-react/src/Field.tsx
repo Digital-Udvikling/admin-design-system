@@ -28,6 +28,8 @@ export interface FieldProps extends FieldContainerProps {
   required?: boolean;
   /** Inline layout (`.field-row`) — control beside its label; pairs with switches and single checkboxes. */
   inline?: boolean;
+  /** With `inline`, renders the label before (left of) the control (`.field-row-reverse`). */
+  reverse?: boolean;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"label" | "description" | "error">;
 }
@@ -39,6 +41,7 @@ function FieldRoot({
   error,
   required,
   inline,
+  reverse,
   invalid,
   className,
   classNames,
@@ -61,7 +64,7 @@ function FieldRoot({
   ) : null;
   return (
     <FieldContainer
-      className={cn(inline && "field-row", className)}
+      className={cn(inline && ["field-row", reverse && "field-row-reverse"], className)}
       invalid={invalid ?? (hasError || undefined)}
       {...rest}
     >

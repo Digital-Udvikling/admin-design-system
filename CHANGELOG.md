@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `field-row-reverse` / `<Field inline reverse>`, which puts the label before the control. (both)
 - `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
 - `--surface-current`, the fill a container publishes for rings, seams and pinned cells that paint over it. Cards, dialogs, popups, selected rows, the navbar, sidebar and footer set it; set it on your own filled containers. (css)

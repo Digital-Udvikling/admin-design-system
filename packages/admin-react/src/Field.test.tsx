@@ -138,6 +138,30 @@ describe("Field", () => {
       const labelEl = screen.getByText("Email me about new orders");
       expect(switchEl).not.toBeNull();
       expect(children.indexOf(switchEl as Element)).toBeLessThan(children.indexOf(labelEl));
+      expect(root).not.toHaveAdminClass("field-row-reverse");
+    });
+
+    it("applies field-row-reverse when inline and reverse", () => {
+      const { container } = render(
+        <Field inline reverse label="Email me about new orders">
+          <Switch />
+        </Field>,
+      );
+      expect(container.querySelector(adminSelector("field"))).toHaveAdminClass(
+        "field-row",
+        "field-row-reverse",
+      );
+    });
+
+    it("ignores reverse without inline", () => {
+      const { container } = render(
+        <Field reverse label="Name">
+          <Input />
+        </Field>,
+      );
+      expect(container.querySelector(adminSelector("field"))).not.toHaveAdminClass(
+        "field-row-reverse",
+      );
     });
   });
 

@@ -199,7 +199,14 @@ The repo ships an Agent Skill at `skills/admin-design-system/` (see [getting-sta
 
 ## Changelog
 
-Root `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/) format. **One file for both packages** — they share a version and release together; tag each entry `(css)` / `(react)` / `(both)` to show which dep a consumer bumps. It is hand-curated, not generated from commits: every PR with a consumer-visible change adds a bullet under `## [Unreleased]` (the Conventional Commit prefix maps to the H3 — `feat:` → Added, `fix:` → Fixed). Skip docs-only and internal changes.
+Root `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/) format. **One file for both packages** — they share a version and release together; tag each entry `(css)` / `(react)` / `(both)` to show which dep a consumer bumps. It is hand-curated, not generated from commits: every PR with a consumer-visible change adds a bullet under `## [Unreleased]` (the Conventional Commit prefix maps to the H3 — `feat:` → Added, `fix:` → Fixed, `feat!:` → Breaking). Skip docs-only and internal changes.
+
+The reader is a consumer bumping the version. `apps/docs/src/content/docs/contributing/adding-a-component.mdx` §5 has the rules; in short:
+
+- `### Breaking` comes first in a version, one old → new line per edit a consumer must make; link the docs page when a line isn't enough.
+- One line per entry, about 15 words: the API name and what the consumer gets, or the symptom a fix removes. Mechanism and root cause belong in the PR.
+- Visual-only changes (radius, padding, borders, hover fills, contrast) share one "Visual refresh" bullet at the top of Changed.
+- Don't log fixes to features that haven't shipped yet.
 
 The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` via the `@changelog` Vite alias (typed by the ambient `apps/docs/src/changelog.d.ts`) and renders it inside Starlight's `<StarlightPage>`, passing `getHeadings()` so the version TOC populates — no copy step, no generated file. The file has no top-level `# Changelog` heading; the page title supplies it. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
 

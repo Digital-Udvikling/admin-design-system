@@ -5,7 +5,7 @@ description: Build UI for internal admin tooling with the @aortl/admin design sy
 
 # aortl admin design system
 
-Generated for `@aortl/admin` 0.21.0. If the repo depends on, or pins an unpkg URL to, a different `@aortl/*` version, tell the user to update this skill (`npx skills update`, or `/plugin marketplace update digital-udvikling`) before trusting the references: props and classes may differ.
+Generated for `@aortl/admin` 0.22.0. If the repo depends on, or pins an unpkg URL to, a different `@aortl/*` version, tell the user to update this skill (`npx skills update`, or `/plugin marketplace update digital-udvikling`) before trusting the references: props and classes may differ.
 
 A small, opinionated design system for internal admin tooling. Ships as two packages from one source of truth:
 

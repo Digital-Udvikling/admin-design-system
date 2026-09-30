@@ -6,245 +6,247 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- `field-row-reverse` / `<Field inline reverse>`, which swaps the label and control order in an inline field. (both)
-- `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
-- `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
-- `--surface-current`, the fill a container publishes for rings, seams and pinned cells that paint over it. Cards, dialogs, popups, selected rows, the navbar, sidebar and footer set it; set it on your own filled containers. (css)
-- `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
-- `btn-danger-ghost` / `<Button variant="danger-ghost">`, a low-emphasis destructive button. (both)
-- `StatusDot`, a standalone `indicator-dot`: `aria-hidden` beside its status text, or `role="status"` when given an `aria-label`. (both)
-- `delay` and `closeDelay` on `Tooltip`; when unset, the enclosing `Tooltip.Provider`'s values apply. (react)
-- `number-input-ghost` / `<NumberInput variant="ghost">`, and `aria-invalid` on `NumberInput`. (both)
-- `Input.Action`, a `type="button"` `.input-action` with an `icon` prop for the `Input` `action` slot. (react)
-- `icon` on `Select.Trigger` (before the value) and on `Accordion.Summary`. (react)
-- `usePrompt()`, a promise-based `window.prompt` that resolves the entered string, or `null` on Cancel, Esc or unmount. It shares `useConfirm()`'s host and queue in `<AdminRoot>`. (react)
-- `Dialog` and `Drawer` focus the first descendant marked `data-autofocus` each time they open. (react)
-- Vanilla tab panels match `data-value` `1` to `12`. (css)
-- `CopyButton` writes `value` to the clipboard and announces `copiedLabel` in a polite live region; `useCopy()` returns `{ copied, copy }` for your own trigger. (react)
-- `selected` on `Item` and `Item.Container` (`[data-selected]` on `.item`) applies the selected-row tint. (both)
-- A `.card`, `.badge` or `.item` that is itself a link gets a focus ring and a hover state. (css)
-- `.prose` styles `<kbd>` as a key chip and GFM task lists with the checkbox in the bullet gutter. (css)
-- `table-sort` for sortable column headers; `Table.HeaderCell` takes `sort` and `onSort` and sets `aria-sort`. (both)
-- `table-cell-actions` / `Table.Cell actions`, a trailing row-actions column, and `table-scroll` / `Table.Scroll`, a keyboard-scrollable `<section>` for wide tables that needs `aria-label` or `aria-labelledby` and hosts `table-sticky` and `table-pin-col`. (both)
-- `--chart-legend-gap` sets the space between a chart and its legend. (css)
-- `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
-- `Combobox` and the `combobox-*` classes: type to filter `items` and pick one value, or several as removable chips with `multiple`. `Combobox.Empty` and `Combobox.Status` cover no-match and loading, and `inputValue` with `filter={null}` supports server search. (both)
-- `Menu.Actions` (`menu-actions`) for a filter menu's Reset and Apply, `closeOnClick` and `danger` (`menu-item-danger`) on `Menu.Item`, `menu-popup-end` (`Menu.Popup align="end"`), and `icon` on `Menu.Trigger`; an icon-only `btn-square` trigger drops the chevron. (both)
-- `page-center` / `PageCenter`, a full-height `<main>` that centres one capped-width child, for sign-in and error pages (`page-center-lg` / `size="lg"`, `--page-center-max`). (both)
-- `render` on `Link`, `Badge`, `Breadcrumbs.Item`, `Card.Container`, `Item`, `Item.Container`, `Menu.Item`, `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders onto your own element, such as a router link: `render={<NextLink href="/orders" />}`. It works from a Server Component. (react)
-- `Pagination` `renderItem` receives `PaginationItemProps` (exported) as its second argument, to spread onto a router link. (react)
-- `.sidebar[data-collapsed]` collapses the rail without a `sidebar-toggle`, and `Sidebar` `collapsed` / `defaultCollapsed` work without a `Sidebar.CollapseToggle`. (both)
-- A `.sidebar` directly in a `<dialog class="dialog drawer">` fills the drawer and hides its collapse toggle, for a vanilla mobile nav drawer. (css)
-- `.app-shell` uses the sidebar layout when a `.sidebar` is a direct child, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
-- Type exports for `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn` and `BrandTileSize`. (react)
-- React Server Component support: stateless components, compound parts and component-reference icons render on the server, and client modules carry `"use client"`. `Pagination`'s default buttons need a Client Component parent; a `renderItem` that returns links works from a server page. (react)
+- `field-row-reverse` / `<Field inline reverse>` for swapping the order of an inline field's label and control. (both)
 
 ### Changed
 
-- `<Field inline>` and `.field-row` put the label before any control other than a checkbox or switch; a checkbox or switch keeps it after. Add `reverse` / `field-row-reverse` for the other order. (both)
-- **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
-- **Breaking:** Form controls take `variant` `bordered` or `ghost`; invalid is a state. `input-` and `textarea-` `danger`/`info`/`success`/`warning`, `select-danger` and `file-input-danger` are removed with their `variant` values. Controls, checkboxes, radios and switches show the danger style from `aria-invalid`, `data-invalid`, an invalid `.field`, or `:user-invalid` once edited. (both)
-- **Breaking:** Every sized control takes `size`: `inputSize` on `Input` and `FileInput`, `triggerSize` on `Select.Trigger` and `textareaSize` on `Textarea` are removed. `Input` does not accept the native `size` attribute; set a width in CSS. (react)
-- **Breaking:** `.input`, `.number-input` and React `Select.Trigger` match the `.btn` height at each size, and `.input` has a fixed height, so pair controls of one size, such as `input-sm` with `btn-sm`. (both)
-- **Breaking:** `<Field error>` marks the field invalid unless `invalid` is passed. For client-side validity with `validationMode`, compose `Field.Error` inside `Field.Container`. (react)
-- **Breaking:** `tabs-primary` and `Tabs` `primary` are removed; boxed tabs mark the selection with the `primary-muted` fill, and the `tabs-boxed` track matches the control heights, so drop `tabs-sm` from boxed tabs beside md buttons. (both)
-- **Breaking:** `item-outline` / `Item variant="outline"` is `item-bordered` / `variant="bordered"`. (both)
-- **Breaking:** `BrandTile` takes `variant` `accent`, `info`, `success`, `warning` (`brand-tile-warning`) or `danger`, and a `soft` boolean. `brand-tile-info`, `-success` and `-danger` are solid; add `brand-tile-soft` for the tint. The tile derives its muted and content colours from the `--color-system-accent` in scope. (both)
-- **Breaking:** `Avatar` takes `square` instead of `shape`, and the `AvatarShape` type is removed. (react)
-- **Breaking:** `alert` is a block instead of a flex column: inline markup flows as one paragraph and the icon and dismiss align to the first line. Put body text after an `alert-title` in `alert-description`; `Alert.Description` renders a `<div>`. (both)
-- **Breaking:** `.link` is `inline`, and inline-flex only with a direct `<i>`/`<svg>` child, so a link in running text wraps and the `.link-external` ↗ stays with the last word. (css)
-- **Breaking:** Position values follow Base UI: `Timeline` takes `orientation="horizontal"` instead of `horizontal`, `Table.Cell` / `Table.HeaderCell` `align` takes `start`, `center` or `end` (`data-align="end"`), and `tooltip-wrap-left` / `-right` are `tooltip-wrap-start` / `-end`. (both)
-- **Breaking:** Chart custom properties are `--chart-value`, `--chart-bar-color`, `--chart-segment-color` and `--chart-legend-color` (were `--value`, `--bar-color`, `--segment-color`, `--legend-color`). (css)
-- **Breaking:** `BarProps`, `SegmentProps`, `TrendDirection` and `TrendIntent` are `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection` and `StatCardTrendIntent`. (react)
-- **Breaking:** The vanilla menu is a `popover`: `<div class="menu">` holds a `<button class="menu-trigger" popovertarget="…">` and a `<div class="menu-popup" id="…" popover>`, so each menu needs a unique `id`. Drop `role="menu"` and `role="menuitem"`, and use native checkboxes and radios in a `<label class="menu-item">`. (css)
-- **Breaking:** `Menu` is built on the Base UI Menu, with arrow keys, typeahead and focus return: it takes `open`, `defaultOpen`, `onOpenChange` and `modal`, and `Menu.Popup` portals and takes `side` and `align`. Checkable items take `checked` / `onCheckedChange`; `role="menuitemradio"` items become `Menu.RadioItem`s in a `Menu.RadioGroup`. `Menu.Item` hotkeys fire while the menu is closed. (react)
-- **Breaking:** `Navbar.Dropdown` is built on `Menu` and takes `active`, `align` and `classNames` (`trigger`, `popup`); it marks its trigger when an item has `aria-current`. The vanilla `navbar-dropdown` uses the popover menu markup. (both)
-- **Breaking:** `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` take `current` instead of `active`; it sets `aria-current="page"`. (react)
-- **Breaking:** `Spinner`, `Navbar.MobileToggle` and `Sidebar.CollapseToggle` take `aria-label` instead of `label`. (react)
-- **Breaking:** The rail widths are `--sidebar-width` and `--sidebar-width-collapsed` (were `--app-shell-sidebar-w` and `-collapsed`); set on `:root`, they size the rail and the React mobile drawer. (css)
-- **Breaking:** Pagination classes are `pagination-item`, `pagination-link` and `pagination-ellipsis` (were `page-*`), and only `aria-current="page"` marks the current page. At the first or last page, previous and next set `aria-disabled` and stay focusable. (both)
-- **Breaking:** Custom properties starting with `--_` are internal and outside semver; `--btn-hover`, `--table-row-bg`, `--timeline-accent` and the other undocumented ones are renamed to `--_*`. (css)
-- The `react` and `react-dom` peer range is `^19.2.0`, and `@base-ui/react` is a `^1.4.1` range so an app that also uses Base UI shares one copy. (react)
-- IBM Plex ships in the package (`dist/fonts/`) instead of loading from Google Fonts. (both)
-- The scoped bundle declares its tokens at zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them, and prefixes its `@keyframes` and `@position-try` names with `_ao-`. (css)
-- Dark `--color-danger`, `--color-info`, `--color-link` and `--color-text-muted` and light `--color-success` move one step to meet 4.5:1 text contrast on cards and tints, dark `--color-code-surface` is base-850 so code blocks show inside cards, and `--color-system-accent-content` picks white or black from the accent's lightness. (css)
-- Buttons use the `rounded-md` radius, labels don't wrap except in full-width buttons and rows too narrow for them, and `btn-danger` keeps its red fill on hover. (css)
-- `kbd` takes its colour from the host and is one host `em` tall, so a hotkey doesn't make a button or menu row taller; a single `kbd` in a `menu-item` sits at the row end. (css)
-- The neutral `badge` has a `border` edge, badges keep their content width in flex columns and grids, and a badge in a `btn` doesn't make it taller. (css)
-- The vanilla tooltip sizes to its content up to 20rem, is `display: none` while hidden, opens on keyboard focus but not on click, and paints on `--z-popup`. Where anchor positioning is supported it escapes overflow clipping and flips to stay in the viewport. (css)
-- Checkbox, radio and switch take one line box and align with the first line of a wrapping label, an indeterminate checkbox draws a dash, unchecked borders meet 3:1 contrast, and a disabled control dims once with its label. (both)
-- A `field-row` with a description or error is a two-column grid with the message under the label, a `field-label` dims when its control is disabled, and `textarea-autosize` honours `rows` as its minimum height. (css)
-- `Select.Trigger` lays out like the native `.select`: a leading icon before the value, an ellipsis on a long value (`select-value`) and a `1em` chevron. Wrap a custom chevron in `Select.Icon`. `Select.Popup` aligns to the trigger's start edge and takes `side`, `align` and `alignOffset`. (both)
-- `Select` is generic over its value, so `onValueChange` receives the item type (`Value[]` with `multiple`) instead of `unknown`. (react)
-- `.input-action` meets the WCAG 2.5.8 minimum target size, date and time inputs put the picker glyph at the trailing edge, and an `Input` `action` replaces the clear button. (both)
-- `NumberInput`'s `ref`, `className` and `style` apply to the visible `number-input` group; `classNames.root` targets the Base UI Root. (react)
-- An `indicator` around a form control fills the width like the bare control; set a narrower width on the `indicator`. (css)
-- Form controls use the `rounded-md` radius. Input groups square joined corners regardless of stylesheet order, keep the outer radius on a React `Select` or `NumberInput` at the group's end, and form their own stacking context, so a focused control doesn't paint over a sticky table header. (css)
-- Dialogs and drawers have a `border-strong` edge, a small shadow and tighter insets, `.drawer` is bordered only on the edge facing the page, `.dialog-auto` shrinks to its content, and dialogs fade out on close. (both)
-- Accordion summary rows are denser with a `1em` `text-muted` chevron, and content in a closed item can't be focused, read by screen readers or matched by find-in-page. (css)
-- Cards are flat with a smaller radius and `1rem` padding, `card-title` is `text-base`, and `card-toolbar` enlarges only bare icons and icon-only buttons. (css)
-- `card-title`, `stat-card-label`, `stat-card-trend`, `dialog-title` and `accordion-summary` lay out as text: inline markup wraps with the words and children get no flex gap, so in JSX put `{" "}` before a trailing element. (css)
-- `avatar-group` overlaps scale with the avatar size and take their ring from `--surface-current`, `AvatarGroup` `size` sets its avatars' default size, and the `+N` tile has `role="img"`. `Avatar` `alt` defaults to `""`. (both)
-- `item-media` icons scale with the row size and align with the first line of a wrapping title. (css)
-- `CodeBlock` renders `tabIndex={0}`, so an overflowing block scrolls by keyboard. (react)
-- `.prose` markdown tables match `.table`, the block after a heading drops its top margin, `a.btn` keeps its button styling, and table cells respect markdown's column `align`. (css)
-- Table row hover, stripes and the header band are translucent washes that show inside cards, column headers are semibold in the text colour, a table directly in a card lines up with the card's inset, and rows whose link has `aria-current` tint as selected. (css)
-- `progress` and `.chart-stack` tracks use the `border` colour, and indeterminate `progress` slides a solid segment. (css)
-- Unstriped property lists line up with `property-list-title`, labels sit on the first line of wrapped text, a copyable `numeric` value aligns with the other numeric rows, and copy buttons announce the copy. (both)
-- Timeline `status` colours the dot, icon and numbered marker alike, rings mask the connector in `--surface-current`, and `timeline-horizontal` lays items out as equal columns. (css)
-- Menu and select popups have a `border-strong` edge and a small shadow, menu rows and select options keep one height whatever they hold, long labels wrap, popups near the viewport's end edge flip to fit, and `menu-item[aria-current="page"]` gets the selected fill. (css)
-- Sidebar rows have one height whatever they hold, sub-items indent to the parent label and truncate like items (`classNames.label`), a group holding the current page highlights its trigger while closed or collapsed, and collapsed-rail labels are visually hidden so icon-only links keep their names. (both)
-- `.container` side padding is `1rem` at every width, matching the navbar and footer gutter. (css)
+- `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 
-### Removed
+## [0.22.0] - 2026-09-30
 
-- **Breaking:** The CommonJS build of `@aortl/admin-react` (`dist/*.cjs`, the `require` condition and `main`). It ships ES modules as `dist/*.js`. (react)
-- **Breaking:** `relaxed` on `Table`; use `density="relaxed"` (the `table-relaxed` class stays). (react)
-- **Breaking:** The `ChartType` type export. (react)
+### Breaking
 
-### Fixed
-
-- `admin.utilities.css`, and a Tailwind build that imports `theme.css`, ship no `table` and `table-cell` display utilities, which collided with the table component's class names. (css)
-- The type declarations resolve under TypeScript's `node16` / `nodenext` module resolution. (react)
-- Hotkey chips in `Kbd`, `Button`, `ToggleButton` and `Menu.Item` hydrate without a mismatch on Apple devices: they render the server's `Ctrl`, `Shift` and `Alt` labels and switch to `⌘`, `⇧` and `⌥` after hydration. (react)
-- A `loading` `Button` sets `aria-disabled` and keeps keyboard focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
-- `indicator-center` and `indicator-middle` straddle the anchor's edge, `--indicator-offset` applies to corner placements only, and `<Indicator label aria-label>` gives the badge `role="status"`. (both)
-- Breadcrumb items with a leading icon line up with their siblings, and `Breadcrumbs.Item` icons render at `1em`. (both)
-- `Dialog` and `Drawer` take their accessible name and description from `Dialog.Title` and `Dialog.Description`, call `onOpenChange(true)` when an invoker command opens them, and with `closedby="any"` close on a backdrop click in Safari. (react)
-- Menu, select and tooltip popups inside a `.dialog` or `.drawer` with a `.dialog-body` are not clipped by the dialog; `.dialog-body` is the scroll region. (css)
-- A layout utility such as `flex` on a `tab-panel` works in both bundles, and `tabs-boxed` hugs its segments. (css)
-- Text on coloured fills meets WCAG AA: soft `info`, `success` and `danger` badges, `alert-description`, and card, stat-card and chart text on coloured cards. (css)
-- Long unbreakable strings such as URLs, IDs and hashes wrap inside accordion summaries, item descriptions, property list values, tooltips, breadcrumbs, card titles and `field-row` labels. (both)
-- Selected rows keep their tint on striped tables, `table-pin-col`, `table-sticky` and `table-bordered` keep their dividers, `table-cell-numeric` keeps an amount with its unit, and checkboxes, switches and badges in cells don't make a row taller. (css)
-- `table-row-link` and `item-link` stretch only the row's link, so other links, buttons, menus and form controls in the row stay clickable. (css)
-- A `<th scope="row">` in `<tbody>` styles as a body cell, and `Table.HeaderCell scope="row"` emits `table-cell`. (both)
-- The donut hole matches `--donut-thickness`, inline horizontal bar charts render their bars, fills stay in the track when a value exceeds `max`, and vertical bars draw a baseline so a zero value shows. (both)
-- `aria-disabled` `Menu.Item`s don't fire `onClick`, a `ref` on `Menu.Item` keeps its `hotkey`, and `Menu.Group` is named by its `Menu.GroupLabel`. (react)
-- The `<Sidebar>` mobile drawer portals into `<AdminRoot>` and hides the collapse toggle, and a controlled `<Sidebar.Collapsible open>` follows its `open` prop. (react)
-- At the 48rem breakpoint the app shell shows the sidebar rail, and a navbar wider than the viewport doesn't widen the main area. (css)
-- Hover fills on ghost buttons and controls, options, menu items, accordion summaries, pagination links and `item-link` rows use `surface-hover`, so they show inside cards, dialogs, the navbar and the sidebar. (css)
-- `aria-disabled="true"` and `data-disabled` dim `.btn`, `.menu-item`, `.tab` and `.pagination-link` like `:disabled`, with no hover fill. (css)
-- Keyboard focus draws an inset ring on menu items, select options, number-input steppers, accordion summaries, sidebar rows and the open React tab panel. (css)
-- Checks, radio dots, switch thumbs, spinners, `progress`, selected tabs, rows and options, and current navbar and sidebar items stay visible in forced-colors mode. (css)
-- The switch thumb, accordion and mobile sidebar drawer don't animate under `prefers-reduced-motion: reduce`. (css)
-- Shorthand props set to `null`, `false` or `""` render nothing on `Field`, `Alert`, `Card`, `StatCard`, `Item`, `Dialog`, `Drawer`, `Sidebar` items and others, so `actions={canEdit && …}` adds no empty row; `0` still renders. (react)
-
-## [0.21.0] - 2026-09-25
+- `@aortl/admin-css` exports `theme.css`, `components.css` and `fonts.css` in place of `./src/*`; `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
+- `@aortl/admin-react` ships ES modules only; the CommonJS build and `require` condition are removed. (react)
+- The `react` and `react-dom` peer range is `^19.2.0`. (react)
+- Form control `danger`/`info`/`success`/`warning` variants are removed: `variant` is `bordered` or `ghost`, and invalid comes from `aria-invalid`, an invalid `Field` or `:user-invalid`. See [Fields](https://digital-udvikling.github.io/admin-design-system/components/forms/fields/). (both)
+- `inputSize`, `triggerSize` and `textareaSize` → `size`; `Input` rejects the native `size` attribute. (react)
+- `.input`, `.number-input` and `Select.Trigger` match the `.btn` height per size, so pair same-size controls (`input-sm` with `btn-sm`). (both)
+- `<Field error>` marks the field invalid unless `invalid` is passed. (react)
+- `tabs-primary` / `Tabs` `primary` are removed; drop `tabs-sm` on boxed tabs beside md buttons. (both)
+- `item-outline` / `variant="outline"` → `item-bordered` / `variant="bordered"`. (both)
+- `brand-tile-info`, `-success` and `-danger` are solid; add `brand-tile-soft` / `soft` for the tint. (both)
+- `Avatar` `shape` → `square`; the `AvatarShape` type is removed. (react)
+- `.alert` is a block: put body text in `alert-description` after `alert-title`; `Alert.Description` renders a `<div>`. (both)
+- `.link` is `inline`, and `inline-flex` only with a direct icon child. (css)
+- `Timeline` `horizontal` → `orientation="horizontal"`, `Table.Cell` `align` takes `start`/`center`/`end`, and `tooltip-wrap-left`/`-right` → `-start`/`-end`. (both)
+- `--value`, `--bar-color`, `--segment-color`, `--legend-color` → `--chart-value`, `--chart-bar-color`, `--chart-segment-color`, `--chart-legend-color`. (css)
+- `BarProps`, `SegmentProps`, `TrendDirection`, `TrendIntent` → `BarChartBarProps`, `StackedBarSegmentProps`, `StatCardTrendDirection`, `StatCardTrendIntent`. (react)
+- Vanilla menus use `popover`: new markup, a unique `id` per menu, and native inputs for checkable items. See [Menus](https://digital-udvikling.github.io/admin-design-system/components/menus/). (css)
+- `Menu` is built on Base UI Menu: `Menu.Popup` portals, and `role="menuitemradio"` items become `Menu.RadioItem` in a `Menu.RadioGroup`. See [Menus](https://digital-udvikling.github.io/admin-design-system/components/menus/). (react)
+- `Navbar.Dropdown` is built on `Menu`, and the vanilla `navbar-dropdown` uses the popover menu markup. (both)
+- `Navbar.Item`, `Sidebar.Item`, `Sidebar.SubItem`: `active` → `current`. (react)
+- `Spinner`, `Navbar.MobileToggle`, `Sidebar.CollapseToggle`: `label` → `aria-label`. (react)
+- `--app-shell-sidebar-w` / `-collapsed` → `--sidebar-width` / `--sidebar-width-collapsed`. (css)
+- `page-*` pagination classes → `pagination-item`, `pagination-link`, `pagination-ellipsis`; mark the current page with `aria-current="page"`. (both)
+- Undocumented custom properties (`--btn-hover`, `--table-row-bg`, `--timeline-accent`, …) are renamed to internal `--_*`. (css)
+- `Table` `relaxed` → `density="relaxed"`. (react)
+- The `ChartType` type export is removed. (react)
 
 ### Added
 
-- `Button` types the HTML invoker attributes `commandfor` and `command`, which `@types/react` doesn't declare yet, so the documented `Dialog` and `Drawer` invoker examples type-check. (react)
-- `systemAccent` on `BrandTile` and `Navbar`, as on `AdminRoot` and `AppShell`: sets `--color-system-accent` inline. (react)
-- `maxWidth` on `Container` sets `--container-max` inline, overriding the `size` preset. (react)
-- `useConfirm()`, a promise-based `window.confirm`: `await confirm({ title, description, confirmLabel, cancelLabel, variant })` resolves `true` on Confirm and `false` on Cancel, Esc, or unmount. `<AdminRoot>` hosts the dialog, a `size="sm"` `Dialog` with no light dismiss that renders only while a confirm is pending, and queues concurrent calls in order. `variant: "danger"` renders a danger confirm button and focuses Cancel. Throws outside `<AdminRoot>`. (react)
-- `variant` and `size` on `Menu.Trigger` style the trigger as a `Button` (`_ao-btn`, square without children), for button-styled and split-button menus. A raw `className="btn"` on the trigger rendered unstyled under the scoped bundle, since the `_ao-` prefix is added only to admin's own classes. (react)
+- `--color-category-*` and `-muted` tints for colour-coding categories, with `text-`, `bg-` and `border-category-*` utilities. (css)
+- `--color-surface-hover` and `--color-surface-stripe` washes, with `bg-` utilities. (css)
+- `--surface-current`: set it on your own filled containers so rings and pinned cells match their fill. (css)
+- `renderIcon` and the `IconProp`, `IconComponent` and `IconRenderProps` types are exported. (react)
+- `btn-danger-ghost` / `<Button variant="danger-ghost">`. (both)
+- `BrandTile` `variant="warning"` (`brand-tile-warning`). (both)
+- `StatusDot`, a standalone status dot. (both)
+- `Tooltip` `delay` and `closeDelay`. (react)
+- `number-input-ghost` / `<NumberInput variant="ghost">`, and `aria-invalid` on `NumberInput`. (both)
+- `Input.Action` for the `Input` `action` slot. (react)
+- `icon` on `Select.Trigger` and `Accordion.Summary`. (react)
+- `usePrompt()`, a promise-based `window.prompt`. (react)
+- `Dialog` and `Drawer` focus the `data-autofocus` descendant on open. (react)
+- Vanilla tab panels up to 12 (`data-value` `1`–`12`). (css)
+- `CopyButton` and `useCopy()`. (react)
+- `selected` on `Item` / `[data-selected]` on `.item`. (both)
+- A `.card`, `.badge` or `.item` that is a link gets hover and focus styles. (css)
+- `.prose` styles `<kbd>` and GFM task lists. (css)
+- Sortable column headers: `table-sort` / `Table.HeaderCell` `sort` and `onSort`. (both)
+- `table-cell-actions` / `Table.Cell actions` for row actions, and `table-scroll` / `Table.Scroll` for wide tables. (both)
+- `--chart-legend-gap`. (css)
+- `Timeline.Item` `status="current"` sets `aria-current="step"`. (react)
+- `Combobox`: filterable single or multi select, with chips, empty/loading states and server search. (both)
+- `Menu` keyboard navigation and typeahead, with `open`, `defaultOpen`, `onOpenChange` and `modal`. (react)
+- `Menu.Actions`, `Menu.Item` `closeOnClick` and `danger`, `Menu.Popup` `align="end"`, and `Menu.Trigger` `icon`. (both)
+- `Navbar.Dropdown` `active`, `align` and `classNames`. (react)
+- `page-center` / `PageCenter` for sign-in and error pages. (both)
+- `render` on `Link`, `Badge`, `Item`, `Menu.Item`, nav items and more, for router links: `render={<NextLink href="/orders" />}`. (react)
+- `Pagination` `renderItem` receives `PaginationItemProps` to spread onto a router link. (react)
+- `.sidebar[data-collapsed]`, and `Sidebar` `collapsed` without a collapse toggle. (both)
+- A `.sidebar` inside a `.drawer` dialog for a vanilla mobile nav. (css)
+- `.app-shell` detects a child `.sidebar`, so `app-shell-with-sidebar` / `hasSidebar` is optional. (both)
+- Type exports: `TableDensity`, `TableEmptyProps`, `DonutCenterProps`, `AppShellContextValue`, `HotkeyHandler`, `ConfirmFn`, `PromptFn`, `BrandTileSize`. (react)
+- React Server Component support; `Pagination`'s default buttons need a Client Component parent. (react)
 
 ### Changed
 
-- The asterisk on a `.field-label` follows the control's own `required` (via `:has()`) when the label is a direct child of the `.field`, so pages whose required controls lacked `[data-required]` now show one: React forms without `<Field required>`, and Django templates without crispy's `.asteriskField` (crispy labels are unchanged). `[data-required]` / `<Field required>` still add it, for controls with no native `required`, a wrapped label, or a nested field holding both its own and a sub-field's required control. `[data-required="false"]`, which `<Field required={false}>` now renders, removes it. (both)
+- Visual refresh: flatter cards, `rounded-md` controls, bordered dialogs and popups, denser menus, accordions and sidebar rows, translucent hover fills, and AA text contrast. (css)
+- IBM Plex ships in the package instead of loading from Google Fonts. (both)
+- `@base-ui/react` is a `^1.4.1` range, so an app that also uses Base UI shares one copy. (react)
+- Scoped tokens have zero specificity, so `._ao-admin-root { --color-primary: … }` overrides them. (css)
+- `card-title`, `dialog-title`, `stat-card-label` and similar lay out as text: in JSX put `{" "}` before a trailing element. (css)
+- `Select` is generic over its value, so `onValueChange` is typed. (react)
+- `Select.Popup` takes `side`, `align` and `alignOffset`; wrap a custom chevron in `Select.Icon`. (both)
+- An `Input` `action` replaces the clear button. (both)
+- `NumberInput` `ref`, `className` and `style` target the visible group; `classNames.root` targets the Base UI Root. (react)
+- An `indicator` around a form control fills the width; set a narrower width on the `indicator`. (css)
+- The vanilla tooltip opens on focus but not on click, and flips to stay in the viewport. (css)
+- `Menu.Item` hotkeys fire while the menu is closed. (react)
+- Pagination previous and next stay focusable with `aria-disabled` at the ends. (both)
+- `AvatarGroup` `size` sets its avatars' default size, and `Avatar` `alt` defaults to `""`. (react)
+- Closed accordion content is hidden from focus, screen readers and find-in-page. (css)
+- Rows and menu items whose link has `aria-current` get the selected tint, as does a sidebar group holding the current page. (both)
+- `.container` side padding is `1rem` at every width. (css)
 
 ### Fixed
 
-- Containers are no longer capped at Tailwind's breakpoint widths. `admin.css` and `admin.scoped.css` shipped Tailwind's `.container` utility, whose later `utilities` layer overrode `max-width` on every `.container` and `<Container>`: the default, `container-sm`/`-lg`/`-fluid`, and per-instance `--container-max`. Container widths change as a result: wider at most viewports, and `90rem` in place of `96rem` at the widest. Tailwind builds that import the source CSS generated the same utility; `theme.css` now excludes it with `@source not inline("container")`, which needs Tailwind v4.1+. (css)
-- The checked `Switch` thumb no longer vanishes in dark mode. It was `paper` on the `primary` track, which is also paper in dark mode; the checked thumb now uses `primary-content`, as `ToggleButton`'s mini switch already did. (css)
+- `admin.utilities.css` no longer ships `table` / `table-cell` utilities that collided with the table component. (css)
+- Type declarations resolve under `node16` / `nodenext`. (react)
+- Hotkey chips no longer cause a hydration mismatch on Apple devices. (react)
+- A `loading` `Button` keeps focus, and a `Button` rendered as `<a href>` keeps its link role. (react)
+- `indicator-center` / `indicator-middle` placement, and `role="status"` on a labelled `Indicator`. (both)
+- Breadcrumb items with an icon line up with their siblings. (both)
+- `Dialog` and `Drawer` take their accessible name from `Dialog.Title`, and `closedby="any"` closes on backdrop click in Safari. (react)
+- Popups inside a `.dialog-body` are no longer clipped. (css)
+- Layout utilities on a `tab-panel` work in both bundles. (css)
+- Soft badges, alert descriptions and text on coloured cards meet WCAG AA. (css)
+- Long URLs and IDs wrap in accordions, items, property lists, tooltips, breadcrumbs, card titles and field rows. (both)
+- Striped selected rows, pinned, sticky and bordered dividers, numeric units, and row height with controls in tables. (css)
+- `table-row-link` and `item-link` no longer block other controls in the row. (css)
+- A `<th scope="row">` in `<tbody>` styles as a body cell. (both)
+- A focused input-group control no longer paints over a sticky table header. (css)
+- `textarea-autosize` honours `rows` as its minimum height. (css)
+- `.prose` keeps `a.btn` styling and markdown column `align`. (css)
+- The donut hole, inline horizontal bars, values over `max` and zero-value vertical bars render correctly. (both)
+- `aria-disabled` `Menu.Item`s don't fire `onClick`, and a `ref` on `Menu.Item` keeps its `hotkey`. (react)
+- Menu and select popups flip to fit near the viewport's end edge. (css)
+- The `Sidebar` mobile drawer portals into `<AdminRoot>`, and a controlled `Sidebar.Collapsible` follows `open`. (react)
+- The app shell shows the sidebar rail at 48rem, and a wide navbar no longer widens the main area. (css)
+- `aria-disabled` and `data-disabled` dim buttons, menu items, tabs and pagination links. (css)
+- Keyboard focus rings on menu items, options, steppers, accordion summaries and sidebar rows. (css)
+- Checks, selections and current items stay visible in forced-colors mode. (css)
+- Switch, accordion and mobile drawer respect `prefers-reduced-motion`. (css)
+- `PropertyList` copy buttons announce the copy, and the `AvatarGroup` `+N` tile has `role="img"`. (both)
+- Shorthand props set to `null`, `false` or `""` render nothing, so `actions={canEdit && …}` adds no empty row. (react)
 
-### Removed
+## [0.21.0] - 2026-09-25
 
-- Stray Tailwind utilities in `admin.css` and `admin.scoped.css`: `.flex`, `.grid`, `.block`, `.inline`, `.hidden`, `.sr-only`, `.relative`, `.absolute`, `.fixed`, `.sticky`, `.flex-1`, `.overflow-hidden`, `.rounded`, `.text-right`, `.tabular-nums` and a few more. The build scanned the repo for class-like strings and emitted whatever matched. Vanilla pages that relied on any of them without `admin.utilities.css` must add that bundle. `Dialog` and `Drawer` headers without a title and `Sidebar.CollapseToggle` used two of them; `.dialog-close` now pins itself to the header end with `margin-inline-start: auto`, and the toggle drops its redundant `sr-only` label (the checkbox keeps its `aria-label`). `admin.utilities.css` also loses `.transform`, which its safelist never included. (both)
+### Breaking
+
+- Stray Tailwind utilities (`.flex`, `.hidden`, `.sr-only`, …) are removed from `admin.css`; vanilla pages using them must add `admin.utilities.css`. (both)
+
+### Added
+
+- `Button` types `commandfor` and `command` for `Dialog` / `Drawer` invokers. (react)
+- `systemAccent` on `BrandTile` and `Navbar`. (react)
+- `maxWidth` on `Container`. (react)
+- `useConfirm()`, a promise-based `window.confirm` hosted by `<AdminRoot>`. (react)
+- `variant` and `size` on `Menu.Trigger` style it as a `Button`. (react)
+
+### Changed
+
+- The `.field-label` asterisk follows the control's native `required`; `[data-required="false"]` removes it. (both)
+
+### Fixed
+
+- `.container` widths are no longer capped at Tailwind's breakpoints, so most get wider; Tailwind source builds need v4.1+. (css)
+- The checked `Switch` thumb is visible in dark mode. (css)
 
 ## [0.20.1] - 2026-07-30
 
 ### Fixed
 
-- `Select` and `Tooltip` popups no longer paint behind host chrome. Base UI positions them in a `position: fixed` wrapper with `z-index: auto`, so an `<AdminRoot>` embedded in a page whose own elements carry a positive `z-index` hid its own dropdowns. Both positioners now carry a `.popup-layer` class: `z-index: var(--z-popup, 1000)`. Declare `--z-popup` on `.admin-root` or any ancestor to slot popups into a host's own stacking scale. (both)
+- `Select` and `Tooltip` popups no longer paint behind host elements with a `z-index`; set `--z-popup` to fit a host's scale. (both)
 
 ## [0.20.0] - 2026-07-06
 
 ### Added
 
-- `Timeline` horizontal variant — `.timeline-horizontal` (React `horizontal` prop) lays items out as equal-width columns with the connector running along the indicator row. Composes with the numbered variant for a step tracker. (both)
+- `Timeline` horizontal variant (`.timeline-horizontal`, `horizontal`). (both)
 
 ## [0.19.1] - 2026-07-02
 
 ### Changed
 
-- Copyable `PropertyList` value cells copy on click anywhere in the cell, not only on the copy button (which stays as the keyboard and screen-reader path). Selecting text or clicking an interactive child doesn't trigger a copy; the cell shows a pointer cursor. (both)
+- Copyable `PropertyList` values copy on a click anywhere in the cell. (both)
 
 ## [0.19.0] - 2026-07-02
 
 ### Added
 
-- `ToggleButton` — a two-state button styled like `Button` (same variants, sizes, icons, `hotkey`), wrapping Base UI Toggle. CSS-side there is no new class: any `.btn` with an `aria-pressed` attribute renders a leading mini-switch indicator, and `aria-pressed="true"` slides it on and adds a selected wash — so vanilla toggles and `.btn-group` composition work out of the box. (both)
+- `ToggleButton`, and a toggle style on any `.btn` with `aria-pressed`. (both)
 
 ### Fixed
 
-- Dialog body no longer clips its content in Safari. `.dialog-body` (and the form-dialog wrapper) used `flex: 1 1 0%`; Safari collapses a `flex-basis: 0` item that is itself an `overflow` scroll container to ~0 content height, so even short bodies were cut off behind a scrollbar. Switched to `flex: 1 1 auto` — content still shrinks and scrolls when tall. (css)
+- `.dialog-body` is no longer clipped in Safari. (css)
 
 ## [0.18.5] - 2026-06-30
 
 ### Fixed
 
-- Global hotkey handling no longer throws on synthetic `keydown` events that omit `key` (autofill, password managers, some IMEs); `normalizeEvent` now treats a `key`-less event as no chord. (react)
+- Hotkeys no longer throw on `keydown` events without `key`, such as from autofill. (react)
 
 ## [0.18.4] - 2026-06-29
 
 ### Added
 
-- `Tabs` `primary` prop (`.tabs-primary`) fills the active segment of a boxed segmented control with the primary color. (both)
-- `.btn-group` members can be wrapped in `.indicator` to float a badge or status dot at a button's corner; the seam, rounding, and full-width/vertical sizing logic now drills through the wrapper. (css)
+- `Tabs` `primary` (`.tabs-primary`). (both)
+- `.btn-group` members can be wrapped in `.indicator`. (css)
 
 ## [0.18.3] - 2026-06-29
 
 ### Added
 
-- `Tabs.Tab` `icon` prop (leading glyph via `renderIcon`); tab SVG icons are pinned to the label size (`.tabs .tab > svg`), so non-Tabler sets (e.g. Heroicons) render uniformly. (both)
-- `Tabs` `wrap` prop (`.tabs-wrap`) lets the list wrap onto new rows instead of overflowing, keeping each tab's label on one line. (both)
+- `Tabs.Tab` `icon`. (both)
+- `Tabs` `wrap` (`.tabs-wrap`). (both)
 
 ## [0.18.2] - 2026-06-29
 
 ### Added
 
-- `Dialog` `size="auto"` (`.dialog-auto`) shrinks the modal to fit its content, and `size="metabase"` (`.dialog-metabase`) widens it to 1138px with 44px gutters so a full-width embedded iframe lands at 1048px. (both)
+- `Dialog` `size="auto"` and `size="metabase"` (`.dialog-auto`, `.dialog-metabase`). (both)
 
 ## [0.18.1] - 2026-06-25
 
 ### Fixed
 
-- Scoped bundle (`admin.scoped.css`) now ships with native CSS nesting pre-flattened. The nested form silently broke once a consumer's build pipeline downleveled it — LightningCSS mis-lowers a nested `&` inside `@scope` to a bare `:scope`, rewriting `._ao-btn:hover` to `:scope:hover` and killing every `:hover`/`:focus`/state rule. (both)
+- The scoped bundle ships with CSS nesting flattened, so builds that downlevel it keep `:hover` and state rules. (both)
 
 ## [0.18.0] - 2026-06-16
 
 ### Added
 
-- `classNames` prop for per-slot class overrides on shorthand components — reach inner elements the shorthand props render (`Card`, `StatCard`, `Alert`, `Item`, `Field`, `Dialog`, `Drawer`, `Timeline.Item`, `PropertyList`, `Input`, `NumberInput`, `Pagination`, `Sidebar.Item`/`SubItem`/`Collapsible`/`CollapseToggle`, `Tooltip`). Exports a `SlotClasses` type helper. (react)
-- `Alert` dismiss button (`onDismiss` / `.alert-dismiss`). (both)
-- `StatCard` `trend` slot with a directional caret and direction-independent intent color (`.stat-card-trend`). (both)
-- `AvatarGroup` `max` overflow with a `+N` tile (`.avatar-more`). (both)
-- `Indicator` `max` clamp for numeric labels (e.g. `99+`). (react)
-- `Table` density (`compact`), an empty-state row (`Table.Empty` / `.table-empty`), and a pinned first column (`pinCol` / `.table-pin-col`). (both)
-- `Menu` checkbox/radio items (`checked` / `.menu-item[aria-checked]` + `.menu-item-indicator`). (both)
-- `Input` `clearable` button and a `PasswordInput` reveal toggle (`.input-action`). (both)
-- `Item` and `ItemGroup` components / `.item` — compact list rows with media, content, and actions. (both)
-- `Timeline` component / `.timeline` — vertical event rail with a numbered steps variant. (both)
-- `Drawer` component / `.drawer` — edge-anchored panel sharing the `<dialog>` machinery. (both)
-- `NumberInput` component / `.number-input` — numeric field with steppers over Base UI NumberField. (both)
+- `classNames` on shorthand components for per-slot classes, and the `SlotClasses` type. (react)
+- `Alert` `onDismiss` (`.alert-dismiss`). (both)
+- `StatCard` `trend` (`.stat-card-trend`). (both)
+- `AvatarGroup` `max` with a `+N` tile (`.avatar-more`). (both)
+- `Indicator` `max` for numeric labels, such as `99+`. (react)
+- `Table` `compact`, `Table.Empty` and `pinCol` (`.table-empty`, `.table-pin-col`). (both)
+- `Menu` checkbox and radio items (`checked`, `.menu-item-indicator`). (both)
+- `Input` `clearable` and `PasswordInput` (`.input-action`). (both)
+- `Item` and `ItemGroup` (`.item`), compact list rows. (both)
+- `Timeline` (`.timeline`). (both)
+- `Drawer` (`.drawer`). (both)
+- `NumberInput` (`.number-input`). (both)
 
 ## [0.17.0] - 2026-06-15
 
 ### Added
 
-- `Separator` component / `.separator` class — a styled `<hr>` with a vertical modifier. (both)
-- `Avatar` and `AvatarGroup` / `.avatar` — image with a no-JS initials fallback, circle/square, `sm`/`md`/`lg`, plus `.indicator` auto-offsets for avatar anchors. (both)
-- Badge soft tinted variants (`soft` / `.badge-soft`) and a dismissible remove button (`onRemove`, `removeLabel` / `.badge-remove`). (both)
-- Alert trailing action slot (`action` / `Alert.Action` / `.alert-action`). (both)
-- In-field input icons — `icon` / `iconTrailing` on `Input`, `.input-icon` wrapper. (both)
-- Card media slot (`media` / `Card.Media` / `.card-media`) and scroll region (`scroll` on `Card.Container` / `.card-scroll`). (both)
-- BrandTile `lg` size, soft tint variants, and bordered image tiles. (both)
+- `Separator` (`.separator`). (both)
+- `Avatar` and `AvatarGroup` (`.avatar`). (both)
+- `Badge` `soft` and `onRemove` (`.badge-soft`, `.badge-remove`). (both)
+- `Alert` `action` / `Alert.Action` (`.alert-action`). (both)
+- `Input` `icon` and `iconTrailing` (`.input-icon`). (both)
+- `Card` `media` and `scroll` (`.card-media`, `.card-scroll`). (both)
+- `BrandTile` `lg`, soft variants and bordered image tiles. (both)
 
 ### Changed
 
-- `.link` inside an `.alert` inherits the variant's content color instead of the link blue. (css)
-- `tfoot` rows are styled by default — semibold cells with a strong divider above the first footer row (previously unstyled). (css)
+- A `.link` in an `.alert` inherits the alert's text colour. (css)
+- `tfoot` rows are styled by default. (css)
 
 ## [0.16.2] - 2026-06-11
 
@@ -258,13 +260,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [0.16.0] - 2026-06-03
 
+### Breaking
+
+- The default `Progress` and chart variant `primary` → `info`. (both)
+
 ### Added
 
 - `Prose` component / `.prose` class for styling rendered markdown and HTML. (both)
-
-### Changed
-
-- Rename the default `Progress` and chart variant from `primary` to `info`. (both)
 
 ### Fixed
 
@@ -282,17 +284,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [0.15.0] - 2026-06-02
 
+### Breaking
+
+- `primary` is a high-contrast neutral; blue moves to `info`. (both)
+
 ### Changed
 
-- Make `primary` a high-contrast neutral and move blue to `info`. (both)
-- Use solid color fills for `Alert` and `Badge` status variants. (both)
+- `Alert` and `Badge` status variants use solid fills. (both)
 
-[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.21.0...HEAD
+[Unreleased]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.22.0...HEAD
 [0.16.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/Digital-Udvikling/admin-design-system/releases/tag/v0.15.0
 
+[0.22.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.1...v0.21.0
 [0.20.1]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.20.0...v0.20.1
 [0.20.0]: https://github.com/Digital-Udvikling/admin-design-system/compare/v0.19.1...v0.20.0

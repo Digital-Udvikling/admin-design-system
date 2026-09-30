@@ -237,7 +237,27 @@ pnpm check-docs
 
 ## 5. Changelog
 
-Add a bullet under `## [Unreleased]` in the root `CHANGELOG.md`, tagged `(css)` / `(react)` / `(both)` so a consumer knows which dependency to bump. Skip docs-only and internal changes. The release workflow greps the version's section out of `CHANGELOG.md` before it publishes, so a missing entry fails the release.
+Add a bullet under `## [Unreleased]` in the root `CHANGELOG.md`, tagged `(css)` / `(react)` / `(both)` so a consumer knows which dependency to bump. Skip docs-only and internal changes.
+
+Write for a consumer bumping the version, who wants to know what to change in their app:
+
+- **Breaking** — a `### Breaking` section heads the version, with one old → new line per edit the consumer makes. When one line isn't enough, link the docs page instead of explaining inline.
+- **One line per entry**, about 15 words. Added names the API; Fixed names the symptom, not the cause. Mechanism, root cause and the full list of affected selectors go in the PR.
+- **Visual-only changes** that need no code change share one "Visual refresh" bullet at the top of Changed.
+- **Unshipped work** — don't log a fix to a feature added in the same `[Unreleased]` section.
+
+```md
+<!-- Too long -->
+
+- Dialog body no longer clips its content in Safari. `.dialog-body` used `flex: 1 1 0%`; Safari collapses a `flex-basis: 0` item that is itself a scroll container, so even short bodies were cut off. Switched to `flex: 1 1 auto`. (css)
+
+<!-- Good -->
+
+- `.dialog-body` is no longer clipped in Safari. (css)
+- `Navbar.Item`, `Sidebar.Item`: `active` → `current`. (react)
+```
+
+The release workflow greps the version's section out of `CHANGELOG.md` before it publishes, so a missing entry fails the release.
 
 ## 6. Regenerate the skill
 

@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- `field-row-reverse` / `<Field inline reverse>`, which puts the label before the control. (both)
+- `field-row-reverse` / `<Field inline reverse>`, which swaps the label and control order in an inline field. (both)
 - `--color-category-{red,orange,yellow,green,cyan,blue,purple,magenta}` and their `-muted` tints for colour-coding categories such as event types or chart series, with `text-`, `bg-` and `border-category-*` utilities in `admin.utilities.css`. Each meets 4.5:1 as text on surfaces and its own tint. (css)
 - `--color-surface-hover` and `--color-surface-stripe`, translucent washes for hover and zebra fills that show on any container, with `bg-surface-hover` and `bg-surface-stripe` utilities. (css)
 - `--surface-current`, the fill a container publishes for rings, seams and pinned cells that paint over it. Cards, dialogs, popups, selected rows, the navbar, sidebar and footer set it; set it on your own filled containers. (css)
@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- `<Field inline>` and `.field-row` put the label before any control other than a checkbox or switch; a checkbox or switch keeps it after. Add `reverse` / `field-row-reverse` for the other order. (both)
 - **Breaking:** `@aortl/admin-css` exports its Tailwind source entries as `theme.css`, `components.css` and `fonts.css` in place of `./src/*`, and `@aortl/admin-react` drops `./styles.scoped.css` (use `./styles.css`). (both)
 - **Breaking:** Form controls take `variant` `bordered` or `ghost`; invalid is a state. `input-` and `textarea-` `danger`/`info`/`success`/`warning`, `select-danger` and `file-input-danger` are removed with their `variant` values. Controls, checkboxes, radios and switches show the danger style from `aria-invalid`, `data-invalid`, an invalid `.field`, or `:user-invalid` once edited. (both)
 - **Breaking:** Every sized control takes `size`: `inputSize` on `Input` and `FileInput`, `triggerSize` on `Select.Trigger` and `textareaSize` on `Textarea` are removed. `Input` does not accept the native `size` attribute; set a width in CSS. (react)

@@ -25,29 +25,46 @@
     grid-column: 2;
   }
 
-  /* Label before the control, by CSS so the DOM order (control, label) stays the same. Flex packs
-     from the right in a reversed row, so justify-end pins the pair to the left. */
-  .field-row-reverse {
+  /* Visual order is CSS-only; the DOM is always control, then label. The label sits after a
+     checkbox or switch and before any other control; .field-row-reverse swaps either. A flipped
+     row lays out label first, in the inline-start direction. */
+  :is(
+    .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+    .field-row-reverse:has(> :is(.checkbox, .switch))
+  ) {
     @apply flex-row-reverse justify-end;
   }
 
-  .field-row-reverse:has(> .field-description, > .field-error) {
+  :is(
+    .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+    .field-row-reverse:has(> :is(.checkbox, .switch))
+  ):has(> .field-description, > .field-error) {
     @apply justify-normal;
   }
 
-  .field-row-reverse:has(> .field-description, > .field-error) > .field-label {
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
+    > :is(.field-label, .field-description, .field-error) {
     grid-column: 1;
-    grid-row: 1;
   }
 
-  .field-row-reverse:has(> .field-description, > .field-error)
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
     > :not(.field-label, .field-description, .field-error) {
     grid-column: 2;
     grid-row: 1;
   }
 
-  .field-row-reverse > :is(.field-description, .field-error) {
-    grid-column: 1;
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
+    > .field-label {
+    grid-row: 1;
   }
 
   .field-row > .field-label {

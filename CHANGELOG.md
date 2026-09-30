@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `field-row-reverse` / `<Field inline reverse>` for swapping the order of an inline field's label and control. (both)
+
+### Changed
+
+- `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
+
 ## [0.22.0] - 2026-09-30
 
 ### Breaking

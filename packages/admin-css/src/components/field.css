@@ -25,6 +25,48 @@
     grid-column: 2;
   }
 
+  /* Visual order is CSS-only; the DOM is always control, then label. The label sits after a
+     checkbox or switch and before any other control; .field-row-reverse swaps either. A flipped
+     row lays out label first, in the inline-start direction. */
+  :is(
+    .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+    .field-row-reverse:has(> :is(.checkbox, .switch))
+  ) {
+    @apply flex-row-reverse justify-end;
+  }
+
+  :is(
+    .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+    .field-row-reverse:has(> :is(.checkbox, .switch))
+  ):has(> .field-description, > .field-error) {
+    @apply justify-normal;
+  }
+
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
+    > :is(.field-label, .field-description, .field-error) {
+    grid-column: 1;
+  }
+
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
+    > :not(.field-label, .field-description, .field-error) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  :is(
+      .field-row:not(.field-row-reverse):not(:has(> :is(.checkbox, .switch))),
+      .field-row-reverse:has(> :is(.checkbox, .switch))
+    ):has(> .field-description, > .field-error)
+    > .field-label {
+    grid-row: 1;
+  }
+
   .field-row > .field-label {
     @apply leading-5;
   }

@@ -26,8 +26,13 @@ export interface FieldProps extends FieldContainerProps {
    * `true` adds it, for controls with no native `required`; `false` removes it. Validates nothing.
    */
   required?: boolean;
-  /** Inline layout (`.field-row`) — control beside its label; pairs with switches and single checkboxes. */
+  /**
+   * Inline layout (`.field-row`) — control beside its label. The label goes after a single checkbox or
+   * switch and before any other control.
+   */
   inline?: boolean;
+  /** With `inline`, swaps the label and control from the order `inline` chose (`.field-row-reverse`). */
+  reverse?: boolean;
   /** Per-slot class overrides. `className` targets the root; these target inner slots. */
   classNames?: SlotClasses<"label" | "description" | "error">;
 }
@@ -39,6 +44,7 @@ function FieldRoot({
   error,
   required,
   inline,
+  reverse,
   invalid,
   className,
   classNames,
@@ -61,7 +67,7 @@ function FieldRoot({
   ) : null;
   return (
     <FieldContainer
-      className={cn(inline && "field-row", className)}
+      className={cn(inline && ["field-row", reverse && "field-row-reverse"], className)}
       invalid={invalid ?? (hasError || undefined)}
       {...rest}
     >

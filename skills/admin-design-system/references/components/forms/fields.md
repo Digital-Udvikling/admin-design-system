@@ -10,10 +10,7 @@
   - [Required checkbox group](#required-checkbox-group)
   - [With validation](#with-validation)
   - [Inline label](#inline-label)
-  - [Inline with an input](#inline-with-an-input)
   - [Inline with description](#inline-with-description)
-  - [Inline reversed](#inline-reversed)
-  - [Inline reversed input](#inline-reversed-input)
   - [One error per validity key](#one-error-per-validity-key)
   - [Disabled](#disabled)
 - [Reference](#reference)
@@ -109,36 +106,46 @@
 
 ### Inline label
 
-**Example**
-
-```html
-<div class="field field-row">
-  <input id="notify" type="checkbox" role="switch" class="switch" />
-  <label class="field-label" for="notify">Email me about new orders</label>
-</div>
-```
-
-```tsx
-<Field inline label="Email me about new orders">
-  <Switch />
-</Field>
-```
-
-### Inline with an input
+A checkbox or switch goes before its label, any other control after it; `reverse` swaps the order.
 
 **Example**
 
 ```html
-<div class="field field-row">
-  <input id="qty" class="input" value="12" />
-  <label class="field-label" for="qty">Quantity</label>
+<div class="flex flex-col gap-4">
+  <div class="field field-row">
+    <input id="notify" type="checkbox" role="switch" class="switch" />
+    <label class="field-label" for="notify">Email me about new orders</label>
+  </div>
+  <div class="field field-row">
+    <input id="qty" class="input" value="12" />
+    <label class="field-label" for="qty">Quantity</label>
+  </div>
+  <div class="field field-row field-row-reverse">
+    <input id="notify-reverse" type="checkbox" role="switch" class="switch" />
+    <label class="field-label" for="notify-reverse">Email me about new orders</label>
+  </div>
+  <div class="field field-row field-row-reverse">
+    <input id="qty-reverse" class="input" value="12" />
+    <label class="field-label" for="qty-reverse">Quantity</label>
+  </div>
 </div>
 ```
 
 ```tsx
-<Field inline label="Quantity">
-  <Input defaultValue="12" />
-</Field>
+<div className="flex flex-col gap-4">
+  <Field inline label="Email me about new orders">
+    <Switch />
+  </Field>
+  <Field inline label="Quantity">
+    <Input defaultValue="12" />
+  </Field>
+  <Field inline reverse label="Email me about new orders">
+    <Switch />
+  </Field>
+  <Field inline reverse label="Quantity">
+    <Input defaultValue="12" />
+  </Field>
+</div>
 ```
 
 ### Inline with description
@@ -171,40 +178,6 @@
 </Field>
 <Field inline label="Accept the terms" error="Accept the terms to continue.">
   <Checkbox required />
-</Field>
-```
-
-### Inline reversed
-
-**Example**
-
-```html
-<div class="field field-row field-row-reverse">
-  <input id="reverse" type="checkbox" role="switch" class="switch" />
-  <label class="field-label" for="reverse">Email me about new orders</label>
-</div>
-```
-
-```tsx
-<Field inline reverse label="Email me about new orders">
-  <Switch />
-</Field>
-```
-
-### Inline reversed input
-
-**Example**
-
-```html
-<div class="field field-row field-row-reverse">
-  <input id="qty-reverse" class="input" value="12" />
-  <label class="field-label" for="qty-reverse">Quantity</label>
-</div>
-```
-
-```tsx
-<Field inline reverse label="Quantity">
-  <Input defaultValue="12" />
 </Field>
 ```
 

@@ -33,6 +33,8 @@ function DismissIcon() {
 
 export interface AlertProps extends Omit<ComponentProps<"div">, "title"> {
   variant: AlertVariant;
+  /** Tinted fill with body text in the text colour; the tone moves to the border and icon. */
+  soft?: boolean;
   /** Leading icon. Rendered as the first child so the CSS grid kicks in. */
   icon?: IconProp;
   /** Renders as `<Alert.Title>`. `null`, `false` and `""` render nothing. */
@@ -119,6 +121,7 @@ function groupText(items: ReactNode[], keepLead: boolean): ReactNode[] {
 
 function AlertRoot({
   variant,
+  soft = false,
   icon,
   title,
   description,
@@ -148,7 +151,7 @@ function AlertRoot({
   return (
     <div
       role={role ?? defaultRole}
-      className={cn(["alert", `alert-${variant}`], className)}
+      className={cn(["alert", `alert-${variant}`, soft && "alert-soft"], className)}
       {...rest}
     >
       {leading}

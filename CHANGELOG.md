@@ -11,10 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `.code-block` colours Shiki's `css-variables` theme with Flexoki syntax roles in both modes. (css)
 - A `.sidebar` directly in `.app-shell` stays in view on long pages, its nav scrolling inside. (css)
 - `prose-lg` / `<Prose size="lg">` sets long-form text at 16px, with a steeper heading scale and a capped line length. (both)
+- `.code` / `<Code>` sets an identifier in a sentence as an inline chip tinted from the text colour. (both)
 
 ### Changed
 
-- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines. (css)
+- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines; `.prose` `<code>` chips are borderless tints of the text colour. (css)
 - `.prose` heading sizes and heading, list and quote spacing are in em, so they follow the font size set on or inside `.prose`. (css)
 - `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 

@@ -104,14 +104,15 @@
 <div class="alert alert-info" role="status">
   <i class="ti ti-info-circle" aria-hidden="true"></i>
   <div>
-    Deploy <code>v1.2.0</code> finished. See the <a href="#" class="link">release notes</a>.
+    Deploy <code class="code">v1.2.0</code> finished. See the
+    <a href="#" class="link">release notes</a>.
   </div>
 </div>
 ```
 
 ```tsx
 <Alert variant="info" icon={IconInfoCircle}>
-  Deploy <code>v1.2.0</code> finished. See the <Link href="#">release notes</Link>.
+  Deploy <Code>v1.2.0</Code> finished. See the <Link href="#">release notes</Link>.
 </Alert>
 ```
 

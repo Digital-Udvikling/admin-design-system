@@ -199,7 +199,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Buttons](references/components/buttons.md) — Trigger an action, submit a form, or toggle a state.
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
 - [Charts](references/components/charts.md) — Pure-CSS bar, proportion, and donut primitives.
-- [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs, JSON, and terminal output.
+- [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs and JSON, plus inline code chips.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
 - [Copy button](references/components/copy-button.md) — Write a value to the clipboard from a button.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native dialog element.

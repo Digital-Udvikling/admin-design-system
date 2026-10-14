@@ -269,6 +269,7 @@ export {
   type TabsPanelProps,
 } from "./Tabs";
 export { Kbd, type KbdProps } from "./Kbd";
+export { Code, type CodeProps } from "./Code";
 export { CodeBlock, type CodeBlockProps } from "./CodeBlock";
 export { Prose, type ProseExcludeProps, type ProseProps, type ProseSize } from "./Prose";
 export { useHotkey, type HotkeyOptions, type HotkeyInfo } from "./useHotkey";

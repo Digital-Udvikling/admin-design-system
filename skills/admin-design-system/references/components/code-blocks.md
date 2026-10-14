@@ -1,6 +1,17 @@
 # Code blocks
 
-> Styled <pre> for logs, JSON, and terminal output.
+> Styled <pre> for logs and JSON, plus inline code chips.
+
+## Contents
+
+- [Examples](#examples)
+  - [Basic](#basic)
+  - [Nowrap + max-height](#nowrap-max-height)
+  - [Inline](#inline)
+  - [With syntax highlighting](#with-syntax-highlighting)
+- [Reference](#reference)
+  - [React](#react)
+  - [Vanilla](#vanilla)
 
 ## Examples
 
@@ -58,6 +69,42 @@
 </CodeBlock>
 ```
 
+### Inline
+
+**Example**
+
+```html
+<div class="flex flex-col gap-4">
+  <p>Type <code class="code">prod-eu-db</code> to confirm. Its 3 replicas are deleted with it.</p>
+  <div class="field">
+    <label class="field-label" for="invoice-number">Invoice number</label>
+    <input id="invoice-number" class="input" aria-describedby="invoice-number-desc" />
+    <p id="invoice-number-desc" class="field-description">
+      Format <code class="code">INV-0000</code>, as printed on the invoice.
+    </p>
+  </div>
+</div>
+```
+
+```tsx
+<div className="flex flex-col gap-4">
+  <p>
+    Type <Code>prod-eu-db</Code> to confirm. Its 3 replicas are deleted with it.
+  </p>
+  <Field
+    name="invoice-number"
+    label="Invoice number"
+    description={
+      <>
+        Format <Code>INV-0000</Code>, as printed on the invoice.
+      </>
+    }
+  >
+    <Input />
+  </Field>
+</div>
+```
+
 ### With syntax highlighting
 
 `.code-block` sets the variables of [Shiki](https://shiki.style/)'s `css-variables` theme, so highlighted tokens take the Flexoki syntax colors and follow dark mode.
@@ -84,11 +131,16 @@ const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", stru
 
 ### React
 
+| Part        | Renders          |
+| ----------- | ---------------- |
+| `CodeBlock` | `pre.code-block` |
+| `Code`      | `code.code`      |
+
 | Prop     | Type      | Default |
 | -------- | --------- | ------- |
 | `nowrap` | `boolean` | `false` |
 
-`CodeBlock` renders `tabIndex={0}`, so a block that overflows scrolls by keyboard; pass `tabIndex={-1}` to take it out of the tab order. Plus native `<pre>` attributes.
+`nowrap` is on `CodeBlock` only. `CodeBlock` renders `tabIndex={0}`, so a block that overflows scrolls by keyboard; pass `tabIndex={-1}` to take it out of the tab order. Plus native `<pre>` attributes; `Code` takes native `<code>` attributes.
 
 ### Vanilla
 
@@ -96,9 +148,10 @@ const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", stru
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono at `1.5` line height, `0.5rem` radius, long lines wrapped |
 | `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                                       |
+| `code`              | Inline chip for an identifier in a sentence: mono at `0.85em`, tinted from the text colour, which it inherits            |
 
-Surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. In dark mode the code surface matches `--color-surface-muted`, so inside a card, sidebar, navbar, footer, dialog footer or muted item the block takes `--color-surface` instead; on your own surface-muted container, set `background-color: var(--color-surface)` on the `code-block`. The root already has `overflow: auto`, so an inline `max-height` clamps a log viewer's height. Add `tabindex="0"` so a block that overflows scrolls by keyboard.
+The block's surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. In dark mode the code surface matches `--color-surface-muted`, so inside a card, sidebar, navbar, footer, dialog footer or muted item the block takes `--color-surface` instead; on your own surface-muted container, set `background-color: var(--color-surface)` on the `code-block`. The root already has `overflow: auto`, so an inline `max-height` clamps a log viewer's height. Add `tabindex="0"` so a block that overflows scrolls by keyboard.
 
 `code-block` sets Shiki's `--shiki-foreground`, `--shiki-background` and one `--shiki-token-*` per role: `--shiki-token-comment` and `--shiki-token-punctuation` (`--color-text-muted`), `--shiki-token-keyword` and `--shiki-token-inserted` (green), `--shiki-token-function` (orange), `--shiki-token-string` and `--shiki-token-string-expression` (cyan), `--shiki-token-constant` (purple), `--shiki-token-parameter` and `--shiki-token-link` (blue), `--shiki-token-deleted` (red), `--shiki-token-changed` (yellow). The colors are the `--color-category-*` tokens. Override one on `.code-block` to retheme it. Other highlighters that emit class names (Prism, highlight.js) bring their own theme.
 
-For inline keyboard chips, use [Kbd](kbd.md).
+The `code` chip's tint mixes `currentColor`, so it follows a link, an alert or muted text it sits in. Bare `<code>` in `.prose` gets the same chip. For keyboard keys, use [Kbd](kbd.md).

@@ -4,6 +4,7 @@ import { Code } from "astro:components";
 import type { HTMLAttributes } from "astro/types";
 import { shikiTheme } from "../shiki-theme";
 import CodeBar from "./CodeBar.astro";
+import CodePeek from "./CodePeek.astro";
 
 interface Props extends HTMLAttributes<"div"> {
   code: string;
@@ -13,9 +14,12 @@ interface Props extends HTMLAttributes<"div"> {
 }
 
 const { code, lang, label, class: className, ...rest } = Astro.props;
+const lines = code.trimEnd().split("\n").length;
 ---
 
 <div class:list={["prose-exclude", "code-pane", className]} {...rest}>
   <CodeBar lang={lang} label={label} />
-  <Code code={code} lang={lang} theme={shikiTheme} wrap={null} class="code-block code-block-nowrap" />
+  <CodePeek lines={lines}>
+    <Code code={code} lang={lang} theme={shikiTheme} wrap={null} class="code-block code-block-nowrap" />
+  </CodePeek>
 </div>

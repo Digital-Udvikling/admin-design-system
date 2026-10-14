@@ -1,6 +1,6 @@
 ---
 // The page chrome, built from the design system's own vanilla classes: app shell,
-// navbar, sidebar (copied into a drawer below 48rem), `.prose` article and TOC.
+// navbar, sidebar (copied into a drawer below 48rem), reading-size `.prose` article and TOC.
 import "../styles/global.css";
 // Source, not the package export: the scoped plugin wraps Tailwind's output.
 import "../../../../packages/admin-css/src/admin.css?scoped";
@@ -107,7 +107,7 @@ const isHome = Astro.url.pathname === base;
       </script>
       <main class="docs-main">
         <div class="container docs-page">
-          <article class="prose docs-article">
+          <article class="prose prose-lg docs-article">
             <h1>{title}</h1>
             {!isHome && description && <p class="docs-lede">{description}</p>}
             {

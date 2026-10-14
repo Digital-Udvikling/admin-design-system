@@ -1,10 +1,8 @@
 ---
-// This reuses the design system's `.alert` for the icon/text grid, radius and
-// padding, but swaps the solid status fill for a muted tint — a docs note is not
-// an app alert and shouldn't shout. `prose-exclude` opts the body out of `.prose`,
-// whose chips and block margins would fight the tinted surface.
+// A soft `.alert` at the article's reading size. `prose-exclude` keeps `.prose` element
+// rules off the body, so its markdown links and code get the styles below.
 interface Props {
-  /** Tone. Sets the tint, border and icon. */
+  /** Tone of the tint, border and icon. */
   variant?: "info" | "success" | "warning" | "danger";
 }
 
@@ -18,50 +16,20 @@ const ICONS = {
 };
 ---
 
-<div class="callout alert prose-exclude" data-variant={variant}>
+<div class:list={["alert", `alert-${variant}`, "alert-soft", "prose-exclude", "callout"]}>
   <i class={`ti ${ICONS[variant]}`} aria-hidden="true"></i>
   <div class="callout-body"><slot /></div>
 </div>
 
 <style>
   .callout {
-    /* Align the glyph to the first line rather than centring it against a
-       multi-line body, which `.alert`'s own `align-items: center` would do. */
-    align-items: start;
-    margin-block: 1.25rem;
-    background-color: var(--callout-tint);
-    border-color: color-mix(in oklab, var(--callout-tone) 40%, var(--callout-tint));
-    color: var(--color-text);
-  }
-
-  .callout[data-variant="info"] {
-    --callout-tone: var(--color-info);
-    --callout-tint: var(--color-info-muted);
-    --callout-accent: var(--color-info);
-  }
-  .callout[data-variant="success"] {
-    --callout-tone: var(--color-success);
-    --callout-tint: var(--color-success-muted);
-    --callout-accent: var(--color-success);
-  }
-  /* `--color-warning` is an absolute yellow-400; as a glyph on a yellow tint it
-     fails contrast, so the icon takes the text colour — same rule as badge-soft. */
-  .callout[data-variant="warning"] {
-    --callout-tone: var(--color-warning);
-    --callout-tint: var(--color-warning-muted);
-    --callout-accent: var(--color-text);
-  }
-  .callout[data-variant="danger"] {
-    --callout-tone: var(--color-danger);
-    --callout-tint: var(--color-danger-muted);
-    --callout-accent: var(--color-danger);
-  }
-
-  .callout > i {
-    color: var(--callout-accent);
     font-size: 1rem;
-    /* Match the body's line box so the glyph sits on the first line's baseline. */
-    line-height: 1.25rem;
+    line-height: 1.6;
+  }
+
+  /* `.alert` centres the glyph on a 1.25rem first line; this one is 1.6rem. */
+  .callout > i {
+    margin-block-start: calc((1.6rem - 1lh) / 2);
   }
 
   .callout-body {
@@ -74,16 +42,29 @@ const ICONS = {
     margin: 0;
   }
 
-  .callout-body :global(code) {
-    padding: 0.0625rem 0.25rem;
+  /* The `.code` chip; markdown can't add the class. */
+  .callout-body :global(:not(pre) > code) {
+    padding: 0.125em 0.3em;
+    border: 1px solid transparent;
     border-radius: 0.25rem;
-    background-color: color-mix(in oklab, currentColor 8%, transparent);
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    font-family: var(--font-mono);
     font-size: 0.875em;
+    box-decoration-break: clone;
   }
 
-  .callout-body :global(a) {
-    color: inherit;
+  /* The `.link` look a soft alert keeps; markdown can't add the class. */
+  .callout-body :global(a:not(.btn)) {
+    color: var(--color-link);
     text-decoration: underline;
     text-underline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+  .callout-body :global(a:not(.btn):hover) {
+    color: var(--color-link-hover);
+  }
+  .callout-body :global(a:not(.btn):focus-visible) {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
   }
 </style>

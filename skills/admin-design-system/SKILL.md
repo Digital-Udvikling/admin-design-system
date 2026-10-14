@@ -242,6 +242,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Filter menu](references/patterns/filter-menu.md) — Filter a list by several values of one field.
 - [Flash messages](references/patterns/flash-messages.md) — Report the result of an action after it runs.
 - [Master-detail](references/patterns/master-detail.md) — Pick a row and show its record beside the list.
+- [Page header](references/patterns/page-header.md) — Title a page with its trail, summary and actions.
 - [Section header](references/patterns/section-header.md) — Title a list or table with a count and actions.
 
 ### Modules

@@ -103,7 +103,7 @@
   <header class="navbar">
     <div class="navbar-brand">
       <span class="brand-tile" aria-hidden="true">A</span>
-      Acme
+      <span>Acme</span>
     </div>
   </header>
   <main class="app-shell-main">
@@ -129,7 +129,7 @@
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
-      Acme
+      <span>Acme</span>
     </Navbar.Brand>
   </Navbar>
   <AppShell.Main>

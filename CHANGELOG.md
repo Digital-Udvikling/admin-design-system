@@ -13,16 +13,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `prose-lg` / `<Prose size="lg">` sets long-form text at 16px, with a steeper heading scale and a capped line length. (both)
 - `.code` / `<Code>` sets an identifier in a sentence as an inline chip tinted from the text colour. (both)
 - `alert-soft` / `<Alert soft>` tints the fill for standing notes, with default text, focus rings and links. (both)
+- `Navbar.Brand` takes `render`, so a router link to the home page can be the brand. (react)
 
 ### Changed
 
-- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines; `.prose` `<code>` chips are borderless tints of the text colour. (css)
+- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines; `.prose` `<code>` chips are borderless tints of the text colour; groups in the collapsed sidebar rail are split by a hairline. (css)
 - `.prose` heading sizes and heading, list and quote spacing are in em, so they follow the font size set on or inside `.prose`. (css)
 - `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 
 ### Fixed
 
 - A cached Plex font paints from the first frame instead of flashing the fallback; Linux gets metric-matched Liberation fallbacks. (css)
+- `.navbar` on a narrow screen keeps its actions in view: `navbar-items` scrolls sideways, then the brand name truncates. (css)
+- A `.table-sticky` row reached by a fragment link or `scrollIntoView()` stops below the sticky header. (css)
+- Light-mode `--color-text-muted` is `--color-base-650` (new), so muted text on a hovered row reaches 4.5:1. (css)
 
 ## [0.22.0] - 2026-09-30
 

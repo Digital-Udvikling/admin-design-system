@@ -134,6 +134,18 @@ describe("Navbar", () => {
     });
   });
 
+  it("render: makes a router link the brand", () => {
+    render(
+      <Navbar.Brand render={<RouterLink href="/" />}>
+        <span>Acme</span>
+      </Navbar.Brand>,
+    );
+    const link = screen.getByRole("link", { name: "Acme" });
+    expect(link).toHaveAttribute("data-router");
+    expect(link).toHaveAttribute("href", "/");
+    expect(link).toHaveAdminClass("navbar-brand");
+  });
+
   it("render: puts the item classes and aria-current on a router link", () => {
     render(
       <Navbar.Item

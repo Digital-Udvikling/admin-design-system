@@ -550,6 +550,8 @@ Markup only; wire the filtering logic yourself. The layout is a flex [toolbar](r
 </Table.Scroll>
 ```
 
+A row that a fragment link or `scrollIntoView()` scrolls to stops below the sticky header.
+
 ### Pinned column
 
 **Example**
@@ -1202,7 +1204,7 @@ Plus each element's native attributes. `Table` takes no `classNames` — every p
 | `table-bordered`     | Border around the table and between columns                                                                             |
 | `table-compact`      | `0.5rem`/`0.25rem` padding, `text-xs`                                                                                   |
 | `table-relaxed`      | `1rem`/`0.75rem` padding                                                                                                |
-| `table-sticky`       | Pins `<thead>` cells to the top of the scroll region                                                                    |
+| `table-sticky`       | Pins `<thead>` cells to the top of the scroll region; body and footer rows scroll into view below them                  |
 | `table-pin-col`      | Pins the first cell of every row against horizontal scroll, with a divider on its edge                                  |
 | `table-header-cell`  | Header styling for a cell outside `<thead>`                                                                             |
 | `table-cell`         | Cell styling for markup that isn't a real `<td>`                                                                        |

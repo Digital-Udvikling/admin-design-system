@@ -48,7 +48,7 @@ Form controls take `variant` `bordered` or `ghost` only; invalid is a state. Mar
 
 ### Router links (`render`)
 
-To render a link-like component as your router's link, pass the link element as `render`: `<Sidebar.Item current render={<NextLink href="/orders" />}>Orders</Sidebar.Item>`. The component's classes, `aria-current` and children land on your element. `Navbar.Item`, `Sidebar.Item` / `SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container`, `Item` and `Menu.Item` take it; `Button` also needs `nativeButton={false}`. Never copy `_ao-` classes onto your own link instead.
+To render a link-like component as your router's link, pass the link element as `render`: `<Sidebar.Item current render={<NextLink href="/orders" />}>Orders</Sidebar.Item>`. The component's classes, `aria-current` and children land on your element. `Navbar.Brand` / `Item`, `Sidebar.Item` / `SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container`, `Item` and `Menu.Item` take it; `Button` also needs `nativeButton={false}`. Never copy `_ao-` classes onto your own link instead.
 
 ### Targeting inner elements (`classNames`)
 

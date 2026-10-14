@@ -75,3 +75,25 @@ describe("semantic token contrast", () => {
     });
   }
 });
+
+/** `wash` at `alpha` composited over the opaque `bg`, channel by channel in sRGB. */
+function over(wash, alpha, bg) {
+  const channels = [1, 3, 5].map((i) => {
+    const [w, b] = [wash, bg].map((hex) => Number.parseInt(hex.slice(i, i + 2), 16));
+    return Math.round(alpha * w + (1 - alpha) * b);
+  });
+  return `#${channels.map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+// `--color-surface-hover` is `text` at 6% over the row's container; table rows hover always.
+describe("muted text on a hovered row", () => {
+  for (const mode of ["light", "dark"]) {
+    it.each([...SURFACES, "surface-strong"])(
+      `${mode}: text-muted on hovered %s reaches 4.5:1`,
+      (bg) => {
+        const hovered = over(token("text")[mode], 0.06, token(bg)[mode]);
+        expect(ratio(token("text-muted")[mode], hovered)).toBeGreaterThanOrEqual(4.5);
+      },
+    );
+  }
+});

@@ -23,10 +23,13 @@ function NavbarRoot({ systemAccent, className, style, ...rest }: NavbarProps) {
   return <header className={cn("navbar", className)} style={rootStyle} {...rest} />;
 }
 
-export type NavbarBrandProps = ComponentProps<"div">;
+export interface NavbarBrandProps extends ComponentProps<"div"> {
+  /** Element rendered in place of the `<div>`, such as a router link to the home page. */
+  render?: RenderElement;
+}
 
-function NavbarBrand({ className, ...rest }: NavbarBrandProps) {
-  return <div className={cn("navbar-brand", className)} {...rest} />;
+function NavbarBrand({ render, className, ...rest }: NavbarBrandProps) {
+  return renderAs("div", render, { className: cn("navbar-brand", className), ...rest });
 }
 
 export type NavbarItemsProps = ComponentProps<"nav">;

@@ -32,6 +32,11 @@
     display: none;
   }
 
+  /* Group labels hide in the collapsed rail, so a hairline separates the groups. */
+  .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-group + .sidebar-group {
+    @apply mt-1 pt-1 border-t border-border;
+  }
+
   /* Visually hidden, not display:none: the icon is aria-hidden, so the label is the row's accessible name. */
   .sidebar:is([data-collapsed], :has(.sidebar-toggle:checked)) .sidebar-label {
     position: absolute;

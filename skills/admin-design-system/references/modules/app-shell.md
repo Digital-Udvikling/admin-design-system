@@ -55,7 +55,7 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
   <header class="navbar">
     <div class="navbar-brand">
       <span class="brand-tile" aria-hidden="true">A</span>
-      Acme
+      <span>Acme</span>
     </div>
   </header>
   <main class="app-shell-main" style="padding: 1rem">Page content</main>
@@ -70,7 +70,7 @@ A CSS grid with named areas — `header`, `sidebar`, `main`, `footer` — plus a
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
-      Acme
+      <span>Acme</span>
     </Navbar.Brand>
   </Navbar>
   <AppShell.Main style={{ padding: "1rem" }}>Page content</AppShell.Main>
@@ -89,7 +89,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
-      Acme
+      <span>Acme</span>
     </Navbar.Brand>
   </Navbar>
   <Sidebar>
@@ -111,7 +111,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 
 ## Navbar
 
-48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `current` on an item sets `aria-current="page"`. Items accept a leading `icon` prop.
+48px-tall flex row: `<Navbar.Brand>` and `<Navbar.Items>` on the left, `<Navbar.Actions>` on the right. `current` on an item sets `aria-current="page"`. Items accept a leading `icon` prop. On a narrow row the actions keep their size, the items scroll sideways, and once they have no room left the brand name truncates; wrap the name in a `<span>` for the ellipsis. To link the brand home, make the brand itself the link (`<a class="navbar-brand">`, or `render` on `Navbar.Brand`); a link nested inside it does not truncate.
 
 **Example**
 
@@ -120,10 +120,10 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
   class="navbar"
   style="--color-system-accent: light-dark(var(--color-purple-600), var(--color-purple-400))"
 >
-  <div class="navbar-brand">
+  <a class="navbar-brand" href="#">
     <span class="brand-tile" aria-hidden="true">A</span>
-    Acme
-  </div>
+    <span>Acme</span>
+  </a>
   <nav class="navbar-items">
     <a class="navbar-item" href="#" aria-current="page">
       <i class="ti ti-home" aria-hidden="true"></i>
@@ -143,9 +143,9 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 
 ```tsx
 <Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
-  <Navbar.Brand>
+  <Navbar.Brand render={<a href="#" />}>
     <BrandTile monogram="A" />
-    Acme
+    <span>Acme</span>
   </Navbar.Brand>
   <Navbar.Items>
     <Navbar.Item href="#" current icon={IconHome}>
@@ -177,7 +177,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 >
   <div class="navbar-brand">
     <span class="brand-tile" aria-hidden="true">A</span>
-    Acme
+    <span>Acme</span>
   </div>
   <nav class="navbar-items">
     <a class="navbar-item" href="#">Dashboard</a>
@@ -200,7 +200,7 @@ A `<Sidebar>` placed directly in the shell adds the sidebar column; a `<Footer>`
 <Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   <Navbar.Brand>
     <BrandTile monogram="A" />
-    Acme
+    <span>Acme</span>
   </Navbar.Brand>
   <Navbar.Items>
     <Navbar.Item href="#">Dashboard</Navbar.Item>
@@ -229,7 +229,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 >
   <div class="navbar-brand">
     <span class="brand-tile" aria-hidden="true">AO</span>
-    AO Retail
+    <span>AO Retail</span>
   </div>
   <div class="navbar-actions">
     <select class="select select-sm" style="width: auto" aria-label="Shop">
@@ -255,7 +255,7 @@ The vanilla example uses a native `<select>`; React's `<Select>` is preferable w
 <Navbar systemAccent="light-dark(var(--color-green-600), var(--color-green-400))">
   <Navbar.Brand>
     <BrandTile monogram="AO" />
-    AO Retail
+    <span>AO Retail</span>
   </Navbar.Brand>
   <Navbar.Actions>
     <Select
@@ -419,18 +419,30 @@ React's `<Sidebar>` takes `collapsed` / `defaultCollapsed` / `onCollapsedChange`
     <span class="sidebar-label">AO Retail</span>
   </div>
   <nav class="sidebar-nav">
-    <a class="sidebar-item" href="#" aria-current="page">
-      <span class="sidebar-icon">
-        <i class="ti ti-home" aria-hidden="true"></i>
-      </span>
-      <span class="sidebar-label">Dashboard</span>
-    </a>
-    <a class="sidebar-item" href="#">
-      <span class="sidebar-icon">
-        <i class="ti ti-receipt" aria-hidden="true"></i>
-      </span>
-      <span class="sidebar-label">Orders</span>
-    </a>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Workspace</div>
+      <a class="sidebar-item" href="#" aria-current="page">
+        <span class="sidebar-icon">
+          <i class="ti ti-home" aria-hidden="true"></i>
+        </span>
+        <span class="sidebar-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" href="#">
+        <span class="sidebar-icon">
+          <i class="ti ti-receipt" aria-hidden="true"></i>
+        </span>
+        <span class="sidebar-label">Orders</span>
+      </a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Admin</div>
+      <a class="sidebar-item" href="#">
+        <span class="sidebar-icon">
+          <i class="ti ti-settings" aria-hidden="true"></i>
+        </span>
+        <span class="sidebar-label">Settings</span>
+      </a>
+    </div>
   </nav>
   <div class="sidebar-footer">
     <label class="sidebar-collapse-toggle">
@@ -447,12 +459,21 @@ React's `<Sidebar>` takes `collapsed` / `defaultCollapsed` / `onCollapsedChange`
     <Sidebar.Label>AO Retail</Sidebar.Label>
   </Sidebar.Header>
   <Sidebar.Nav>
-    <Sidebar.Item href="#" current icon={IconHome}>
-      Dashboard
-    </Sidebar.Item>
-    <Sidebar.Item href="#" icon={IconReceipt}>
-      Orders
-    </Sidebar.Item>
+    <Sidebar.Group>
+      <Sidebar.GroupLabel>Workspace</Sidebar.GroupLabel>
+      <Sidebar.Item href="#" current icon={IconHome}>
+        Dashboard
+      </Sidebar.Item>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
+      </Sidebar.Item>
+    </Sidebar.Group>
+    <Sidebar.Group>
+      <Sidebar.GroupLabel>Admin</Sidebar.GroupLabel>
+      <Sidebar.Item href="#" icon={IconSettings}>
+        Settings
+      </Sidebar.Item>
+    </Sidebar.Group>
   </Sidebar.Nav>
   <Sidebar.Footer>
     <Sidebar.CollapseToggle />
@@ -477,7 +498,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
     <Navbar.MobileToggle />
     <Navbar.Brand>
       <BrandTile monogram="A" />
-      Acme
+      <span>Acme</span>
     </Navbar.Brand>
   </Navbar>
   <Sidebar>
@@ -539,7 +560,7 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
     <Navbar.MobileToggle />
     <Navbar.Brand>
       <BrandTile monogram="AO" />
-      AO Retail
+      <span>AO Retail</span>
     </Navbar.Brand>
     <Navbar.Actions>
       <Select
@@ -635,7 +656,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
   <Navbar>
     <Navbar.Brand>
       <BrandTile icon={IconChartBar} />
-      Insights
+      <span>Insights</span>
     </Navbar.Brand>
     <Navbar.Items>
       <Navbar.Item href="#" current>
@@ -688,7 +709,7 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
   <Navbar>
     <Navbar.Brand>
       <BrandTile monogram="A" />
-      Acme Admin
+      <span>Acme Admin</span>
     </Navbar.Brand>
   </Navbar>
   <Sidebar>
@@ -775,7 +796,7 @@ The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the fo
 >
   <div class="navbar-brand">
     <span class="brand-tile" aria-hidden="true">OR</span>
-    Orders
+    <span>Orders</span>
   </div>
 </header>
 ```
@@ -784,7 +805,7 @@ The navbar renders a 2px bottom stripe driven by `--color-system-accent`; the fo
 <Navbar systemAccent="light-dark(var(--color-purple-600), var(--color-purple-400))">
   <Navbar.Brand>
     <BrandTile monogram="OR" />
-    Orders
+    <span>Orders</span>
   </Navbar.Brand>
 </Navbar>
 ```
@@ -834,6 +855,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `AppShell`               | `defaultMobileDrawerOpen`    | `boolean`                      | `false`                  |
 | `AppShell`               | `onMobileDrawerOpenChange`   | `(open: boolean) => void`      | —                        |
 | `Navbar`                 | `systemAccent`               | `string` (CSS color)           | inherited                |
+| `Navbar.Brand`           | `render`                     | `ReactElement`                 | —                        |
 | `Navbar.Item`            | `current`                    | `boolean`                      | `false`                  |
 | `Navbar.Item`            | `icon`                       | component or element           | —                        |
 | `Navbar.Item`            | `render`                     | `ReactElement`                 | —                        |
@@ -859,7 +881,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `Sidebar.SubItem`        | `render`                     | `ReactElement`                 | —                        |
 | `Sidebar.CollapseToggle` | `aria-label`                 | `string`                       | `"Toggle sidebar"`       |
 
-`current` writes `aria-current="page"`. `active` on `Navbar.Dropdown` sets `data-active` on the trigger, for a section that holds the current page. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `current` (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
+`current` writes `aria-current="page"`. `active` on `Navbar.Dropdown` sets `data-active` on the trigger, for a section that holds the current page. `render` on `Navbar.Item`, `Sidebar.Item` and `Sidebar.SubItem` renders the item onto a router link and keeps `current`; on `Navbar.Brand` it makes the brand the link (see [Conventions › `render`](../basics/conventions.md#render)). Each part also takes the native attributes of its element, and `Navbar.Dropdown`, `Sidebar`, `Sidebar.Item`, `Sidebar.SubItem`, `Sidebar.Collapsible` and `Sidebar.CollapseToggle` take [`classNames`](../basics/conventions.md#classnames).
 
 `<Navbar.MobileToggle>` and `<Sidebar>`'s drawer both read `<AppShell>`'s context, so the toggle is inert outside a shell. When the drawer opens, `<Sidebar>` **moves** its children into the drawer rather than duplicating them — state held in a sidebar child does not survive crossing that breakpoint.
 
@@ -871,16 +893,16 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column. A direct-child `sidebar` applies the same layout without the class                                   |
 | `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid                                                                                                   |
 | `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                                                    |
-| `navbar-brand`                | Semibold `text-sm` row that never shrinks                                                                                                                                                            |
-| `navbar-items`                | Flex row, `0.125rem` gap                                                                                                                                                                             |
+| `navbar-brand`                | Semibold `text-sm` row that clips, with `4px` padding inside a `-4px` margin for focus rings; only an unclassed `<span>` child shrinks, with an ellipsis                                             |
+| `navbar-items`                | Flex row that takes the free space, `0.125rem` gap; scrolls sideways, scrollbar hidden, before the brand name truncates                                                                              |
 | `navbar-item`                 | `text-sm` row, `0.375rem` radius, fills on hover; primary-on-muted with `aria-current="page"`, `[data-active]` or a `menu-item[aria-current="page"]` (filled too) in its menu in `navbar-items`      |
-| `navbar-actions`              | Flex row pushed right with `margin-left: auto`; a `menu` inside opens aligned to its trigger's right edge                                                                                            |
+| `navbar-actions`              | Flex row pushed right with `margin-left: auto`, never shrinks; a `menu` inside opens aligned to its trigger's right edge                                                                             |
 | `navbar-mobile-toggle`        | `2.25rem` square hamburger drawn from one `::before` bar plus two box-shadow strokes; hidden at ≥ `48rem`                                                                                            |
 | `sidebar`                     | Column flex rail at `--sidebar-width` (`240px`), muted surface, right border, 150ms width transition; a direct `drawer` child fills it at rail width and hides `sidebar-collapse-toggle`             |
 | `sidebar-toggle`              | 1px visually-hidden checkbox; checked, it collapses the rail like `data-collapsed` on the `sidebar`                                                                                                  |
 | `sidebar-header`              | `3rem` row above the nav, `1rem` side padding, bottom border, for a logo or product switcher; centred in the collapsed rail                                                                          |
 | `sidebar-nav`                 | Scrolling column that fills the remaining height, `0.125rem` gap                                                                                                                                     |
-| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin                                                                                                                                       |
+| `sidebar-group`               | Column of items; a following group gets `0.5rem` of top margin, or a hairline top border in the collapsed rail                                                                                       |
 | `sidebar-group-label`         | `text-xs` uppercase muted heading; hidden when collapsed                                                                                                                                             |
 | `sidebar-item`                | `text-sm` row, `1.75rem` min height, `0.5rem` gap, inset focus ring; active state adds a primary-muted fill and medium weight                                                                        |
 | `sidebar-icon`                | `1rem` muted glyph box — the one part that stays visible in the collapsed rail; turns primary when active                                                                                            |

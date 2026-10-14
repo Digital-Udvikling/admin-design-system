@@ -21,8 +21,14 @@
 **Example**
 
 ```html
-<a class="link" href="#"><i class="ti ti-home" aria-hidden="true"></i>Dashboard</a>
-<a class="link" href="#">Export<i class="ti ti-download" aria-hidden="true"></i></a>
+<a class="link" href="#">
+  <i class="ti ti-home" aria-hidden="true"></i>
+  Dashboard
+</a>
+<a class="link" href="#">
+  Export
+  <i class="ti ti-download" aria-hidden="true"></i>
+</a>
 ```
 
 ```tsx

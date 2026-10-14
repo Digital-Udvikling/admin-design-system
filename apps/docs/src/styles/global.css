@@ -27,10 +27,36 @@
   background: transparent;
   color: inherit;
 }
+/* A lone navbar or footer is a full-width bar; as a content-sized flex item its ml-auto actions, meta and accent stripe collapse. */
+:is(.example-preview, .example-preview > .preview-variant, .example-preview ._ao-admin-root)
+  > :is(.navbar, .footer, ._ao-navbar, ._ao-footer) {
+  flex: 1 1 100%;
+}
+/* Base UI SSRs a portal div beside the specimen; out of flex flow it can't wrap onto a gap-padded second line. */
+.example-preview ._ao-admin-root > [data-base-ui-portal] {
+  display: contents;
+}
+/* navbar.css hides the toggle at >= 48rem (viewport query); show it when it is the lone specimen. */
+:is(.example-preview, .example-preview > .preview-variant) > .navbar-mobile-toggle,
+.example-preview ._ao-admin-root > ._ao-navbar-mobile-toggle {
+  display: inline-flex;
+}
 
 /* ---------------------------------------------------------------- chrome */
 
 /* Docs-local: the pieces the design system has no class for. Semantic tokens only. */
+
+/* Off-screen until focused; z-50 keeps it above the navbar. */
+.docs-skip {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 0.5rem;
+  z-index: 50;
+  translate: 0 -200%;
+}
+.docs-skip:focus {
+  translate: none;
+}
 
 .docs-brand {
   color: inherit;
@@ -48,6 +74,18 @@
     display: none;
   }
   .docs-brand-short {
+    display: inline;
+  }
+}
+/* Below 23rem the full picker label leaves "Admin DS" no room. */
+.docs-flavor-short {
+  display: none;
+}
+@media (width < 23rem) {
+  .docs-flavor-long {
+    display: none;
+  }
+  .docs-flavor-short {
     display: inline;
   }
 }
@@ -87,11 +125,48 @@
   .docs-toc {
     display: block;
     position: sticky;
-    top: 0;
-    max-height: 100dvh;
+    /* Pins level with a jumped-to heading (scroll-margin 1.5rem minus the 0.25rem top padding). */
+    top: 1.25rem;
+    max-height: calc(100dvh - 1.25rem);
     overflow-y: auto;
     padding-block: 0.25rem 1.5rem;
     font-size: 0.8125rem;
+  }
+  /* Scroll-spy: :target-current marks the link whose heading is in view (Chromium 140+); other browsers get the ruled rail with no marker. */
+  .docs-toc > .docs-toc-list {
+    scroll-target-group: auto;
+    border-inline-start: 1px solid var(--color-border);
+  }
+  .docs-toc > .docs-toc-list li[data-depth="3"] {
+    padding-inline-start: 0;
+  }
+  .docs-toc > .docs-toc-list a {
+    margin-inline-start: -1px;
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid transparent;
+  }
+  .docs-toc > .docs-toc-list li[data-depth="3"] a {
+    padding-inline-start: 1.5rem;
+  }
+  .docs-toc > .docs-toc-list a:target-current {
+    color: var(--color-text);
+    border-inline-start-color: var(--color-text);
+  }
+  /* Inset, or the rail's overflow clips the ring of a link that spans its full width. */
+  .docs-toc > .docs-toc-list a:focus-visible {
+    outline-offset: -2px;
+  }
+  @media (forced-colors: active) {
+    /* Opt out so the inactive border stays transparent over the 1px rail. */
+    .docs-toc > .docs-toc-list a {
+      forced-color-adjust: none;
+      color: LinkText;
+      border-inline-start-color: transparent;
+    }
+    .docs-toc > .docs-toc-list a:target-current {
+      color: CanvasText;
+      border-inline-start-color: Highlight;
+    }
   }
   .docs-toc-mobile {
     display: none;
@@ -167,6 +242,9 @@
 .code-pane {
   border-radius: var(--radius-lg);
   background-color: var(--_code-surface, var(--color-code-surface));
+  /* Transparent edge: forced colors drops the fill but draws the outline. */
+  outline: 1px solid transparent;
+  outline-offset: -1px;
 }
 .code-pane-bar {
   display: flex;
@@ -201,6 +279,7 @@
 .code-peek:not(:has(> .code-peek-toggle[open])) > pre {
   max-block-size: 12lh;
   overflow-y: hidden;
+  overflow-anchor: none; /* scroll anchors on the toggle, so "Show less" stays put */
 }
 /* The fade is a sticky overlay, not a mask: content stops at the scrollport, so it ends above a
    classic scrollbar instead of fading it. `max-content` lets it span every scrolled column. */
@@ -218,6 +297,30 @@
   margin-block-start: -4lh;
   margin-inline: -0.75rem; /* over the pre's inline padding */
   background: linear-gradient(transparent, var(--shiki-background));
+  pointer-events: none;
+}
+/* The sticky fade paints over the pre's own focus ring, so an overlay in the pre's grid cell draws it. */
+.code-peek {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* the pre scrolls instead of widening the grid */
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+.code-peek > pre,
+.code-peek::after {
+  grid-area: 1 / 1;
+}
+.code-peek > .code-peek-toggle {
+  grid-row: 2;
+}
+.code-peek:has(> pre:focus-visible) > pre {
+  outline: none;
+}
+.code-peek:has(> pre:focus-visible)::after {
+  content: "";
+  position: relative; /* paints above the sticky fade */
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
   pointer-events: none;
 }
 .code-peek-toggle > summary {
@@ -263,6 +366,23 @@
 .theme-select {
   width: auto;
 }
+/* Brand mark at icon size, in the same box as the select and tabs beside it. */
+.navbar-actions > .btn-square {
+  font-size: 1rem;
+  padding: 0.25rem;
+}
+/* Touch: 26px segments make the picker 32px, the same as the select and GitHub button. */
+@media (pointer: coarse) {
+  .flavor-picker .tab {
+    height: 1.625rem;
+  }
+  .theme-select {
+    min-height: 2rem;
+  }
+  .navbar-actions > .btn-square {
+    padding: 0.4375rem;
+  }
+}
 
 .docs-table-scroll {
   overflow-x: auto;
@@ -279,7 +399,62 @@
 .docs-table-scroll > table {
   margin-block: 0;
 }
+/* Edge fades show which way an overflowing table scrolls (overlay scrollbars show nothing); a table that fits gets none. */
+@property --_fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --_fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes docs-fade-start {
+  from {
+    --_fade-start: 0px;
+  }
+  to {
+    --_fade-start: 2rem;
+  }
+}
+@keyframes docs-fade-end {
+  from {
+    --_fade-end: 2rem;
+  }
+  to {
+    --_fade-end: 0px;
+  }
+}
+/* Without a scroll timeline the animation sticks at `to` and fades every table's first column. */
+@supports (animation-timeline: scroll()) {
+  .docs-table-scroll {
+    /* Longhands: the minifier expands the shorthand to a 0s duration, which pins a scroll-driven animation at its end. */
+    animation-name: docs-fade-start, docs-fade-end;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(self inline);
+    animation-range:
+      0 2rem,
+      calc(100% - 2rem) 100%;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--_fade-start),
+      #000 calc(100% - var(--_fade-end)),
+      transparent
+    );
+  }
+  /* The mask would clip the outset focus ring. */
+  .docs-table-scroll:focus-visible {
+    mask-image: none;
+  }
+}
 /* A Reference name (`prose-exclude`, `aria-invalid`) never breaks at its hyphen. */
 .docs-table-scroll td:first-child code {
+  white-space: nowrap;
+}
+/* A short token (inline-code-nowrap) never breaks at its own hyphen; cells keep wrapping so tables don't widen. */
+.docs-article code.code-nowrap:not(:where(td, th) *) {
   white-space: nowrap;
 }

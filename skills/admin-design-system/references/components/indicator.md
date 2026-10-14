@@ -45,9 +45,9 @@
 
 ```html
 <div class="indicator">
-  <span class="indicator-item badge badge-danger badge-sm" role="status" aria-label="128 unread"
-    >99+</span
-  >
+  <span class="indicator-item badge badge-danger badge-sm" role="status" aria-label="128 unread">
+    99+
+  </span>
   <button class="btn btn-primary">
     <i class="ti ti-inbox" aria-hidden="true"></i>
     Inbox
@@ -151,47 +151,47 @@ Next to its text label, the dot is decorative and takes `aria-hidden`.
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
   <div class="indicator">
     <span class="indicator-item indicator-start badge badge-primary badge-sm">TS</span>
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
     <span class="indicator-item indicator-center badge badge-primary badge-sm">TC</span>
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
     <span class="indicator-item badge badge-primary badge-sm">TE</span>
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-middle indicator-start badge badge-primary badge-sm"
-      >MS</span
-    >
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <span class="indicator-item indicator-middle indicator-start badge badge-primary badge-sm">
+      MS
+    </span>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-middle indicator-center badge badge-primary badge-sm"
-      >MC</span
-    >
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <span class="indicator-item indicator-middle indicator-center badge badge-primary badge-sm">
+      MC
+    </span>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
     <span class="indicator-item indicator-middle badge badge-primary badge-sm">ME</span>
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-bottom indicator-start badge badge-primary badge-sm"
-      >BS</span
-    >
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <span class="indicator-item indicator-bottom indicator-start badge badge-primary badge-sm">
+      BS
+    </span>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
-    <span class="indicator-item indicator-bottom indicator-center badge badge-primary badge-sm"
-      >BC</span
-    >
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <span class="indicator-item indicator-bottom indicator-center badge badge-primary badge-sm">
+      BC
+    </span>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
   <div class="indicator">
     <span class="indicator-item indicator-bottom badge badge-primary badge-sm">BE</span>
-    <div class="card card-bordered" style="width: 6rem; height: 4rem;"></div>
+    <div class="card card-bordered" style="width: 4.5rem; height: 3rem;"></div>
   </div>
 </div>
 ```
@@ -220,7 +220,7 @@ Next to its text label, the dot is decorative and takes `aria-hidden`.
         .map((part) => part[0]!.toUpperCase())
         .join("")}
     >
-      <Card.Container bordered style={{ width: "6rem", height: "4rem" }} />
+      <Card.Container bordered style={{ width: "4.5rem", height: "3rem" }} />
     </Indicator>
   ))}
 </div>

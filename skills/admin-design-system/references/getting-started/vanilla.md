@@ -5,7 +5,10 @@
 ## Install via CDN
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css"
+/>
 ```
 
 ## Or via npm
@@ -35,8 +38,14 @@ Class names are the API — see [Components](../components/buttons.md) for the c
 A second pre-built file ships Tailwind-grammar utilities (`flex`, `grid-cols-3`, `p-4`, `bg-primary`, …) for laying out pages from Jinja, Go templates, or plain HTML without setting up Tailwind. Opt-in — drop a second `<link>` next to `admin.min.css`:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css" />
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.utilities.min.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@aortl/admin-css/dist/admin.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@aortl/admin-css/dist/admin.utilities.min.css"
+/>
 ```
 
 ### What's included

@@ -5,6 +5,7 @@
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, posix, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { CALLOUT_LABELS } from "../src/components/callout-labels.mjs";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = join(SCRIPT_DIR, "..", "src", "content", "docs");
@@ -97,8 +98,6 @@ function transformProseOnly(body, transform) {
   flushProse();
   return out.join("\n");
 }
-
-const CALLOUT_LABELS = { info: "Note", success: "Tip", warning: "Caution", danger: "Danger" };
 
 // Flatten `<Callout variant="…">` blocks into a bolded lead-in. Pages use them for
 // the constraints that survive the zero-prose rule, so the raw JSX must not ship.
@@ -210,6 +209,20 @@ function stripMdxNoiseInProse(prose) {
     if (!pkg) return "";
     const extra = attrs.match(/extra="([^"]+)"/)?.[1];
     return `\`\`\`bash\nnpm install ${pkg}${extra ? ` ${extra}` : ""}\n\`\`\``;
+  });
+
+  // `<CdnLink>` likewise pins the live version; the skill keeps the unversioned URLs.
+  prose = prose.replace(/<CdnLink\b([^>]*?)\/>/g, (_, attrs) => {
+    const files = attrs.match(/files="([^"]+)"/)?.[1];
+    if (!files) return "";
+    const links = files
+      .trim()
+      .split(/\s+/)
+      .map(
+        (file) =>
+          `<link\n  rel="stylesheet"\n  href="https://unpkg.com/@aortl/admin-css/dist/${file}"\n/>`,
+      );
+    return `\`\`\`html\n${links.join("\n")}\n\`\`\``;
   });
 
   prose = prose.replace(/<LinkCard\b([\s\S]*?)\/>/g, (_, attrs) => {

@@ -60,20 +60,18 @@
 ```
 
 ```tsx
-<>
-  <Tooltip content="Top" side="top">
-    <Button>Top (default)</Button>
-  </Tooltip>
-  <Tooltip content="End" side="inline-end">
-    <Button>End</Button>
-  </Tooltip>
-  <Tooltip content="Bottom" side="bottom">
-    <Button>Bottom</Button>
-  </Tooltip>
-  <Tooltip content="Start" side="inline-start">
-    <Button>Start</Button>
-  </Tooltip>
-</>
+<Tooltip content="Top" side="top">
+  <Button>Top (default)</Button>
+</Tooltip>
+<Tooltip content="End" side="inline-end">
+  <Button>End</Button>
+</Tooltip>
+<Tooltip content="Bottom" side="bottom">
+  <Button>Bottom</Button>
+</Tooltip>
+<Tooltip content="Start" side="inline-start">
+  <Button>Start</Button>
+</Tooltip>
 ```
 
 ### Sizes
@@ -92,14 +90,12 @@
 ```
 
 ```tsx
-<>
-  <Tooltip content="Small" size="sm">
-    <Button size="sm">sm</Button>
-  </Tooltip>
-  <Tooltip content="Medium">
-    <Button>md</Button>
-  </Tooltip>
-</>
+<Tooltip content="Small" size="sm">
+  <Button size="sm">sm</Button>
+</Tooltip>
+<Tooltip content="Medium">
+  <Button>md</Button>
+</Tooltip>
 ```
 
 ### Group delay (React only)

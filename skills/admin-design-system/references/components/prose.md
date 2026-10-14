@@ -227,14 +227,18 @@ A component inside rendered HTML goes in `prose-exclude`, so `.prose` doesn't ad
   <div class="prose-exclude">
     <ol class="timeline">
       <li class="timeline-item timeline-item-success">
-        <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+        <span class="timeline-indicator">
+          <span class="timeline-dot"></span>
+        </span>
         <div class="timeline-content">
           <div class="timeline-title">Order shipped</div>
           <div class="timeline-time">14:32 · today</div>
         </div>
       </li>
       <li class="timeline-item">
-        <span class="timeline-indicator"><span class="timeline-dot"></span></span>
+        <span class="timeline-indicator">
+          <span class="timeline-dot"></span>
+        </span>
         <div class="timeline-content">
           <div class="timeline-title">Order placed</div>
           <div class="timeline-time">14:28 · today</div>

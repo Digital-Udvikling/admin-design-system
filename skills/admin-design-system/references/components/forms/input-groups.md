@@ -172,11 +172,15 @@
 
 ```html
 <div class="input-group">
-  <span class="input-group-addon" aria-hidden="true"><i class="ti ti-search"></i></span>
+  <span class="input-group-addon" aria-hidden="true">
+    <i class="ti ti-search"></i>
+  </span>
   <input class="input" type="search" placeholder="Search products…" />
 </div>
 <div class="input-group">
-  <span class="input-group-addon" aria-hidden="true"><i class="ti ti-at"></i></span>
+  <span class="input-group-addon" aria-hidden="true">
+    <i class="ti ti-at"></i>
+  </span>
   <input class="input" type="email" placeholder="you@example.com" />
 </div>
 <div class="input-group">

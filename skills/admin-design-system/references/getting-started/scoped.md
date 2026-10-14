@@ -7,8 +7,13 @@ A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`.
 ## Vanilla CSS
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.scoped.min.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@aortl/admin-css/dist/admin.scoped.min.css"
+/>
+```
 
+```html
 <div class="_ao-admin-root">
   <button class="_ao-btn _ao-btn-primary">Save</button>
 </div>

@@ -80,14 +80,36 @@ IBM Plex Mono — fixed-width, for IDs, hashes, and code.
 
 ## Scale
 
-| Selector                       | Size            | Weight    | Line-height     | Use                            |
-| ------------------------------ | --------------- | --------- | --------------- | ------------------------------ |
-| `<h1>`                         | 1.25rem (20px)  | 600       | `leading-tight` | Page title                     |
-| `<h2>`                         | 1rem (16px)     | 600       | `leading-tight` | Section header                 |
-| `.card-title`, `.dialog-title` | 1rem (16px)     | 600       | `leading-tight` | Card and dialog title          |
-| `<h3>`                         | 0.875rem (14px) | 600       | `leading-snug`  | Subsection / form group header |
-| `<body>`                       | 0.875rem (14px) | 400       | 1.5             | Default text                   |
-| —                              | 0.75rem (12px)  | 400 / 500 | 1rem (16px)     | Captions, hints, table meta    |
+| Selector                       | Size | Weight   | Line-height | Use                           |
+| ------------------------------ | ---- | -------- | ----------- | ----------------------------- |
+| `<h1>`                         | 20px | 600      | 1.25        | Page title                    |
+| `<h2>`                         | 16px | 600      | 1.25        | Section header                |
+| `.card-title`, `.dialog-title` | 16px | 600      | 1.25        | Card and dialog title         |
+| `<h3>`                         | 14px | 600      | 1.375       | Subsection, form group header |
+| `<body>`                       | 14px | 400      | 1.5         | Default text                  |
+| `text-xs`                      | 12px | 400, 500 | 16px        | Captions, hints, table meta   |
+
+**Example**
+
+```html
+<div>
+  <h1>Page title</h1>
+  <h2>Section header</h2>
+  <h3>Subsection header</h3>
+  <p>Default body text.</p>
+  <p class="text-xs text-text-muted">Caption, hint, table meta.</p>
+</div>
+```
+
+```tsx
+<div>
+  <h1>Page title</h1>
+  <h2>Section header</h2>
+  <h3>Subsection header</h3>
+  <p>Default body text.</p>
+  <p className="text-xs text-text-muted">Caption, hint, table meta.</p>
+</div>
+```
 
 This is the dense UI scale, applied at the element level: `h1`–`h3` balance their wrapped lines, `h1` tightens its tracking by `0.01em`, and paragraphs wrap with `text-wrap: pretty`. `h4`–`h6` have no defaults outside [Prose](../components/prose.md).
 

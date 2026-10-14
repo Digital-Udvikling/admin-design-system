@@ -17,7 +17,7 @@ Override either layer to reskin the system — see [Theming](../theming/). Click
 
 ## Semantic tokens
 
-Primary and the state families (danger, success, warning, info) share a four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base). Text, Surface, Border, Link, and Focus use lighter scales.
+Primary, System accent and the state families (danger, success, warning, info) share a four-slot layout: **Base**, **Hover**, **Muted** (low-saturation background for tinted surfaces), and **Content** (text/icons on top of the base). Text, Surface, Border, Link, Focus, and Scrim use lighter scales.
 
 <ColorFamily
   family="Primary"
@@ -27,6 +27,17 @@ Primary and the state families (danger, success, warning, info) share a four-slo
     { label: "Hover", variable: "--color-primary-hover" },
     { label: "Muted", variable: "--color-primary-muted" },
     { label: "Content", variable: "--color-primary-content" },
+  ]}
+/>
+
+<ColorFamily
+  family="System accent"
+  description="Per-app identity: navbar and footer stripes, brand tile. Neutral gray until set; see Theming."
+  variants={[
+    { label: "Base", variable: "--color-system-accent" },
+    { label: "Hover", variable: "--color-system-accent-hover" },
+    { label: "Muted", variable: "--color-system-accent-muted" },
+    { label: "Content", variable: "--color-system-accent-content" },
   ]}
 />
 
@@ -64,6 +75,12 @@ Primary and the state families (danger, success, warning, info) share a four-slo
     { label: "Hover", variable: "--color-surface-hover" },
     { label: "Stripe", variable: "--color-surface-stripe" },
   ]}
+/>
+
+<ColorFamily
+  family="Scrim"
+  description="Translucent backdrop behind modal dialogs and the off-canvas sidebar."
+  variants={[{ label: "Base", variable: "--color-scrim" }]}
 />
 
 <ColorFamily
@@ -166,13 +183,18 @@ For colour-coding categories that aren't states, such as event types or chart se
 
 ```html
 <p class="flex flex-wrap gap-4 text-sm">
-  <span class="text-category-blue"
-    ><i class="ti ti-shopping-cart" aria-hidden="true"></i> Add to cart</span
-  >
-  <span class="text-category-green"
-    ><i class="ti ti-credit-card" aria-hidden="true"></i> Order</span
-  >
-  <span class="text-category-purple"><i class="ti ti-search" aria-hidden="true"></i> Search</span>
+  <span class="text-category-blue">
+    <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+    Add to cart
+  </span>
+  <span class="text-category-green">
+    <i class="ti ti-credit-card" aria-hidden="true"></i>
+    Order
+  </span>
+  <span class="text-category-purple">
+    <i class="ti ti-search" aria-hidden="true"></i>
+    Search
+  </span>
   <span class="rounded-sm bg-category-orange-muted px-1.5 text-category-orange">Campaign</span>
 </p>
 ```

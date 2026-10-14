@@ -258,11 +258,20 @@
   /* The `.code` chip, sized from the prose variable. */
   .prose :where(code) {
     @variant prose-scope {
-      @apply font-mono rounded box-decoration-clone;
+      @apply font-mono rounded;
       font-size: var(--_prose-code);
       padding: 0.125em 0.3em;
       border: 1px solid transparent;
       background-color: color-mix(in srgb, currentColor 10%, transparent);
+    }
+  }
+
+  /* In headings code keeps the mono face but sheds the chip, which outweighs the heading text. */
+  .prose :where(h1, h2, h3, h4, h5, h6) :where(code) {
+    @variant prose-scope {
+      padding: 0;
+      border: 0;
+      background-color: transparent;
     }
   }
 

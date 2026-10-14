@@ -3,7 +3,8 @@
     @apply text-code-text
            font-mono text-sm
            rounded-lg
-           p-3;
+           p-3
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
     /* A surface-muted container sets `--_code-surface`; in dark mode the two tokens match. */
     background-color: var(--_code-surface, var(--color-code-surface));
     line-height: 1.5;
@@ -30,10 +31,10 @@
   }
 
   /* Inline chip for an identifier in a sentence. Tinted from the text colour, so it
-     reads inside alerts and links; the transparent border shows in forced colors. Clone
-     keeps the padding on both fragments of a wrapped chip. */
+     reads inside alerts and links; the transparent border shows in forced colors.
+     No box-decoration-clone: Chromium's text-wrap: pretty skips a paragraph holding one. */
   .code {
-    @apply font-mono rounded box-decoration-clone;
+    @apply font-mono rounded;
     font-size: 0.85em;
     padding: 0.125em 0.3em;
     border: 1px solid transparent;

@@ -18,6 +18,7 @@ export function useAppShell(): AppShellContextValue | null {
 
 export function AppShellRoot({
   hasSidebar = false,
+  stickyHeader = false,
   mobileDrawerOpen,
   defaultMobileDrawerOpen = false,
   onMobileDrawerOpenChange,
@@ -51,7 +52,10 @@ export function AppShellRoot({
   return (
     <AppShellContext.Provider value={value}>
       <div
-        className={cn(["app-shell", hasSidebar && "app-shell-with-sidebar"], className)}
+        className={cn(
+          ["app-shell", hasSidebar && "app-shell-with-sidebar", stickyHeader && "app-shell-sticky"],
+          className,
+        )}
         style={rootStyle}
         {...rest}
       >

@@ -577,6 +577,60 @@ Below `md` the desktop sidebar hides and `<Navbar.MobileToggle>` opens it as a d
 
 :::
 
+## Sticky header
+
+`app-shell-sticky` (`stickyHeader` in React) keeps the navbar at the top of the viewport and sticks a direct-child sidebar below it. The navbar height is in `--app-shell-header-height` (`3rem`); offset your own sticky toolbar by it. For a taller navbar, set it on the shell together with the navbar's height (see [Customization](#customization)). The navbar sits at `z-index: 35`; content in `main` with a higher `z-index` paints over it. Set `scroll-padding-top: 3rem` on `html` so fragment links and keyboard focus land below the navbar. The preview scrolls inside a fixed height in place of the viewport.
+
+:::example
+
+```html
+<div class="app-shell app-shell-sticky" style="min-height: 0; height: 20rem; overflow: auto">
+  <header class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-tile" aria-hidden="true">A</span>
+      <span>Acme</span>
+    </div>
+  </header>
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-item" href="#" aria-current="page">
+        <i class="sidebar-icon ti ti-home" aria-hidden="true"></i>
+        <span class="sidebar-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" href="#">
+        <i class="sidebar-icon ti ti-receipt" aria-hidden="true"></i>
+        <span class="sidebar-label">Orders</span>
+      </a>
+    </nav>
+  </aside>
+  <main class="app-shell-main" style="padding: 1rem; min-height: 200vh">Scroll the page</main>
+</div>
+```
+
+```tsx
+<AppShell stickyHeader style={{ minHeight: 0, height: "20rem", overflow: "auto" }}>
+  <Navbar>
+    <Navbar.Brand>
+      <BrandTile monogram="A" />
+      <span>Acme</span>
+    </Navbar.Brand>
+  </Navbar>
+  <Sidebar>
+    <Sidebar.Nav>
+      <Sidebar.Item href="#" current icon={IconHome}>
+        Dashboard
+      </Sidebar.Item>
+      <Sidebar.Item href="#" icon={IconReceipt}>
+        Orders
+      </Sidebar.Item>
+    </Sidebar.Nav>
+  </Sidebar>
+  <AppShell.Main style={{ padding: "1rem", minHeight: "200vh" }}>Scroll the page</AppShell.Main>
+</AppShell>
+```
+
+:::
+
 ## Examples
 
 ### Classic admin
@@ -808,18 +862,29 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
 
 ## Customization
 
-Two CSS variables set the rail width. Set them on `:root`: a value on `.app-shell` sizes the rail, but the React mobile drawer portals outside the shell and keeps the default.
+Set the rail widths on `:root`: a value on `.app-shell` sizes the rail, but the React mobile drawer portals outside the shell and keeps the default. Set `--app-shell-header-height` on the `app-shell-sticky` element (the `style` prop of `<AppShell stickyHeader>`), since the modifier declares it there; a value on `:root` doesn't reach it.
 
-| Variable                    | Default | What it controls                       |
-| --------------------------- | ------- | -------------------------------------- |
-| `--sidebar-width`           | `240px` | Expanded sidebar / drawer width.       |
-| `--sidebar-width-collapsed` | `56px`  | Width of the icon rail when collapsed. |
+| Variable                    | Default | What it controls                                   |
+| --------------------------- | ------- | -------------------------------------------------- |
+| `--sidebar-width`           | `240px` | Expanded sidebar / drawer width.                   |
+| `--sidebar-width-collapsed` | `56px`  | Width of the icon rail when collapsed.             |
+| `--app-shell-header-height` | `3rem`  | Sticky navbar height; the sidebar sticks below it. |
 
 ```css
 :root {
   --sidebar-width: 280px;
 }
+
+.app-shell-sticky {
+  --app-shell-header-height: 3.5rem;
+}
+
+.app-shell-sticky > .navbar {
+  height: 3.5rem;
+}
 ```
+
+In the scoped bundle the selectors are `._ao-app-shell-sticky` and `._ao-navbar`.
 
 ## Branding multiple systems
 
@@ -890,6 +955,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | Part                     | Prop                         | Type                           | Default                  |
 | ------------------------ | ---------------------------- | ------------------------------ | ------------------------ |
 | `AppShell`               | `hasSidebar`                 | `boolean`                      | `false`                  |
+| `AppShell`               | `stickyHeader`               | `boolean`                      | `false`                  |
 | `AppShell`               | `systemAccent`               | `string` (CSS color)           | inherited                |
 | `AppShell`               | `mobileDrawerOpen`           | `boolean`                      | uncontrolled             |
 | `AppShell`               | `defaultMobileDrawerOpen`    | `boolean`                      | `false`                  |
@@ -931,6 +997,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `app-shell`                   | `min-height: 100vh` grid, one `minmax(0, 1fr)` column, rows `auto 1fr auto` as areas `header` / `main` / `footer`                                                                                               |
 | `app-shell-with-sidebar`      | Adds a leading column sized to the sidebar's own width; below `48rem` drops back to one column. A direct-child `sidebar` applies the same layout without the class                                              |
+| `app-shell-sticky`            | Sticky `z-index: 35` navbar; a direct-child `sidebar` sticks below it at `--app-shell-header-height` (`3rem`)                                                                                                   |
 | `app-shell-main`              | Claims the `main` area with `min-width: 0`, so a wide table scrolls instead of stretching the grid                                                                                                              |
 | `navbar`                      | `3rem` flex row, `1rem` side padding, muted surface, 2px bottom stripe in `--color-system-accent`                                                                                                               |
 | `navbar-brand`                | Semibold `text-sm` row that clips, with `4px` padding inside a `-4px` margin for focus rings; only an unclassed `<span>` child shrinks, with an ellipsis                                                        |
@@ -961,7 +1028,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                                                                                                                          |
 | `footer-meta`                 | Muted text block                                                                                                                                                                                                |
 
-The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. A direct-child `sidebar` is sticky: on a page taller than the viewport it stays in view at `100dvh`, and its `sidebar-nav` scrolls. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
+The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. A direct-child `sidebar` is sticky: on a page taller than the viewport it stays in view at `100dvh`, or below the navbar with `app-shell-sticky`, and its `sidebar-nav` scrolls. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 
 The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest, or render `<aside class="sidebar" data-collapsed>` for a rail that starts collapsed without a toggle. Write `aria-current="page"` and the toggle's `aria-label` yourself.
 

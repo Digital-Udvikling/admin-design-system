@@ -27,6 +27,16 @@ describe("AppShell", () => {
     expect(root).toHaveAdminClass("app-shell-with-sidebar");
   });
 
+  it("applies the sticky header modifier class", () => {
+    const { container } = render(
+      <AppShell stickyHeader>
+        <AppShell.Main>x</AppShell.Main>
+      </AppShell>,
+    );
+    const root = container.querySelector(adminSelector("app-shell"));
+    expect(root).toHaveAdminClass("app-shell-sticky");
+  });
+
   it("sets --color-system-accent from the systemAccent prop", () => {
     const { container } = render(
       <AppShell systemAccent="var(--color-purple-600)">

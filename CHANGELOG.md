@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `app-shell-sticky` / `<AppShell stickyHeader>` keeps the navbar in view; the sidebar sticks below it at `--app-shell-header-height`. (both)
+
+### Changed
+
+- Visual refresh: light-mode sidebar and navbar hover sits halfway between the background and the current item. (css)
+
 ## [0.23.0] - 2026-10-15
 
 ### Added

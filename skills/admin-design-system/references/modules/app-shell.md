@@ -899,7 +899,7 @@ Four independent compounds. `<AppShell>` supplies only the grid and the mobile-d
 | `footer-link`                 | Muted, no underline; brightens and underlines on hover                                                                                                                                               |
 | `footer-meta`                 | Muted text block                                                                                                                                                                                     |
 
-The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
+The grid areas are assigned by child class — `.app-shell > .navbar`, `> .sidebar`, `> main`, `> .footer` — so all four must be **direct** children. Wrapping one in a `<div>` drops it out of its area. A direct-child `sidebar` is sticky: on a page taller than the viewport it stays in view at `100dvh`, and its `sidebar-nav` scrolls. `app-shell-main` exists for markup that can't use a bare `<main>`; `.app-shell > main` already claims the area. Rail widths come from two custom properties, see [Customization](#customization).
 
 The collapsed rail needs no JavaScript: check the hidden `sidebar-toggle` and `:has()` does the rest, or render `<aside class="sidebar" data-collapsed>` for a rail that starts collapsed without a toggle. Write `aria-current="page"` and the toggle's `aria-label` yourself.
 

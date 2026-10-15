@@ -14,7 +14,7 @@ const hasBoth = !!html && hasReact;
 ---
 
 {/* A dual example shows the flavor picked by the page's `#flavor-*` radios (FlavorPicker.astro). */}
-<section class="prose-exclude example-block" data-dual={hasBoth ? "" : undefined}>
+<section class="prose-exclude example-block" data-dual={hasBoth ? "" : undefined} data-pagefind-ignore>
   <div class="example-frame">
     {
       hasBoth ? (

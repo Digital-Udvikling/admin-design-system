@@ -9,7 +9,7 @@ const html = await Astro.slots.render("default");
 const lines = html.match(/<span class="line"/g)?.length ?? 0;
 ---
 
-<div class="prose-exclude code-pane">
+<div class="prose-exclude code-pane" data-pagefind-ignore>
   <CodeBar lang={rest["data-language"]} />
   <CodePeek lines={lines}>
     <pre class={cls ?? className} {...rest} set:html={html} />

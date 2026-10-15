@@ -255,12 +255,14 @@
     }
   }
 
-  /* Clone so a chip that wraps keeps its border and padding on both fragments. */
+  /* The `.code` chip, sized from the prose variable. */
   .prose :where(code) {
     @variant prose-scope {
-      @apply rounded border border-border bg-code-surface px-1 py-0.5
-             font-mono text-code-text box-decoration-clone;
+      @apply font-mono rounded box-decoration-clone;
       font-size: var(--_prose-code);
+      padding: 0.125em 0.3em;
+      border: 1px solid transparent;
+      background-color: color-mix(in srgb, currentColor 10%, transparent);
     }
   }
 

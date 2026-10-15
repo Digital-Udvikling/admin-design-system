@@ -29,6 +29,17 @@
     --shiki-token-changed: var(--color-category-yellow);
   }
 
+  /* Inline chip for an identifier in a sentence. Tinted from the text colour, so it
+     reads inside alerts and links; the transparent border shows in forced colors. Clone
+     keeps the padding on both fragments of a wrapped chip. */
+  .code {
+    @apply font-mono rounded box-decoration-clone;
+    font-size: 0.85em;
+    padding: 0.125em 0.3em;
+    border: 1px solid transparent;
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
   /* Long lines scroll horizontally instead of breaking; pair with an inline
      `max-height` to clamp vertical growth. */
   .code-block-nowrap {

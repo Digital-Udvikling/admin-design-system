@@ -1,0 +1,54 @@
+---
+// The bar of a `.code-pane`: the language on the left, a button that copies the pane's `<pre>` text on the right.
+interface Props {
+  /** Shiki language id; labels the pane unless `label` is set. */
+  lang?: string;
+  /** Label shown instead of the language name. */
+  label?: string;
+}
+
+const LABELS: Record<string, string> = {
+  astro: "Astro",
+  bash: "Shell",
+  css: "CSS",
+  html: "HTML",
+  jinja: "Jinja",
+  markdown: "Markdown",
+  md: "Markdown",
+  mdx: "MDX",
+  plaintext: "",
+  python: "Python",
+  text: "",
+  ts: "TypeScript",
+  tsx: "TSX",
+};
+
+const { lang, label } = Astro.props;
+const text = label ?? (lang ? (LABELS[lang] ?? lang) : "");
+---
+
+<div class="code-pane-bar">
+  <span>{text}</span>
+  <button type="button" class="btn btn-ghost btn-sm btn-square code-pane-copy" aria-label="Copy code">
+    <i class="ti ti-copy" aria-hidden="true"></i>
+    <i class="ti ti-check" aria-hidden="true"></i>
+  </button>
+  <span class="code-pane-status" role="status"></span>
+</div>
+
+<script>
+  // One delegated listener per page: the clipboard has no declarative equivalent.
+  document.addEventListener("click", async (event) => {
+    const button = event.target instanceof Element ? event.target.closest(".code-pane-copy") : null;
+    const pane = button?.closest(".code-pane");
+    if (!button || !pane) return;
+    await navigator.clipboard.writeText(pane.querySelector("pre")?.textContent ?? "");
+    const status = pane.querySelector(".code-pane-status");
+    button.setAttribute("data-copied", "");
+    if (status) status.textContent = "Copied";
+    setTimeout(() => {
+      button.removeAttribute("data-copied");
+      if (status) status.textContent = "";
+    }, 1200);
+  });
+</script>

@@ -49,7 +49,8 @@ export function examplePages(dist) {
       if (statSync(full).isDirectory()) walk(full);
       else if (
         entry === "index.html" &&
-        readFileSync(full, "utf8").includes('class="not-content example-block')
+        // `not-content`: builds from before the Starlight removal, which visual-diff compares against.
+        /class="(?:prose-exclude|not-content) example-block/.test(readFileSync(full, "utf8"))
       ) {
         out.push(relative(dist, dirname(full)).replaceAll("\\", "/").replace(/(.)$/, "$1/"));
       }
@@ -61,7 +62,7 @@ export function examplePages(dist) {
 
 /**
  * One browser context per theme: `colorScheme` set, reduced motion, and
- * Starlight's stored theme preset before any page script runs.
+ * the site's stored theme preset before any page script runs.
  *
  * @param {import("playwright-core").Browser} browser
  * @returns {Promise<Record<string, import("playwright-core").BrowserContext>>}
@@ -78,6 +79,8 @@ export async function themeContexts(browser) {
         await context.addInitScript((t) => {
           // Sandboxed iframes in examples (dialog embeds) deny storage access.
           try {
+            localStorage.setItem("admin-docs-theme", t);
+            // Builds from before the Starlight removal, which visual-diff compares against.
             localStorage.setItem("starlight-theme", t);
           } catch {}
         }, theme);
@@ -98,7 +101,7 @@ export async function openPage(page, url, theme) {
   const res = await page.goto(url, { waitUntil: "networkidle" });
   if (!res?.ok()) throw new Error(`HTTP ${res?.status()}`);
   await page.evaluate((t) => (document.documentElement.dataset.theme = t), theme);
-  // Starlight's fixed header would overlay any example scrolled under it.
+  // Starlight's fixed header (builds from before its removal) would overlay any example scrolled under it.
   await page.addStyleTag({ content: "header.header { position: absolute !important; }" });
   // React previews hydrate (`client:load`); islands drop `ssr` once they have.
   await page
@@ -130,7 +133,7 @@ export function tagExamples() {
   let heading = "top";
   let index = 0;
   for (const el of document.querySelectorAll(
-    ".sl-markdown-content :is(h2, h3, h4)[id], .example-block",
+    ":is(.docs-article, .sl-markdown-content) :is(h2, h3, h4)[id], .example-block",
   )) {
     if (!el.classList.contains("example-block")) {
       heading = el.id;

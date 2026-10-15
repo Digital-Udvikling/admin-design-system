@@ -4,11 +4,11 @@ Guidance for Claude Code working in this repo.
 
 ## Project
 
-`@aortl/admin` — a design system shipped as two npm packages from a single source of truth, plus a Starlight docs site. Under the `Digital-Udvikling` GitHub org.
+`@aortl/admin` — a design system shipped as two npm packages from a single source of truth, plus an Astro docs site whose chrome is built from the system itself. Under the `Digital-Udvikling` GitHub org.
 
 - `packages/admin-css` — pre-built CSS, semantic class names (`.btn`, `.input`, `.card`, `.field`). Built from Tailwind v4 source.
 - `packages/admin-react` — React component library. Wraps Base UI primitives and emits the **same class names** as `admin-css`, so vanilla HTML and React render identically.
-- `apps/docs` — Astro + Starlight site; each example shows its vanilla or React source, picked site-wide in the header.
+- `apps/docs` — Astro site laid out with admin-css's own vanilla classes (`src/layouts/Docs.astro`); each example shows its vanilla or React source, picked site-wide in the header.
 
 ## Design philosophy
 
@@ -109,7 +109,7 @@ Dark mode is driven by CSS `color-scheme` on `:root`: `light dark` (OS-driven) b
 
 Workspace order: `admin-css` (Tailwind CLI → `dist/admin.css` + `.min.css`) → `admin-react` (Vite lib mode, ESM only, one `.js` + `.d.ts` per source module, externals everything; then `cp ../admin-css/dist/admin.scoped.css ./dist/admin.scoped.css` for the `./styles.css` subpath export) → `docs`.
 
-`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order explicitly so Tailwind's `components`/`utilities` layers land AFTER Starlight's — otherwise `@layer starlight.reset` overrides component sizing regardless of specificity. **Don't reorder these imports without understanding why.** The scoped bundle for React previews is also compiled from source: `customCss` imports `@aortl/admin-css/src/admin.css?scoped`, and `apps/docs/plugins/admin-scoped.mjs` runs `wrap()` on Tailwind's output and puts it in `@layer admin`. So `pnpm dev` and the docs build never read `admin-css/dist`.
+`apps/docs/src/styles/global.css` imports `admin-css` **source files**, not the built bundle, so docs share Tailwind's single compilation pass — this is what makes editing component CSS hot-reload in dev. It also pre-declares the `@layer` order so the scoped bundle's `admin` layer sits below `components`/`utilities`. **Don't reorder these imports without understanding why.** The scoped bundle for React previews is also compiled from source: `src/layouts/Docs.astro` imports `packages/admin-css/src/admin.css?scoped` after `global.css`, and `apps/docs/plugins/admin-scoped.mjs` runs `wrap()` on Tailwind's output and puts it in `@layer admin`. So `pnpm dev` and the docs build never read `admin-css/dist`.
 
 ### Tests
 
@@ -166,7 +166,7 @@ URLs in docs MUST go through `import.meta.env.BASE_URL` (e.g. `` `${import.meta.
 
 Examples carry the page; prose should orient and step out of the way.
 
-- **Frontmatter `description`** — one short sentence (≤ ~10 words). Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
+- **Frontmatter `description`** — one short sentence (≤ ~10 words); the layout renders it under the title as the lede. Don't restate it as the body's first paragraph. Sentence case in `title` (`App shell`, `Dark mode`, `File inputs`).
 - **Subsection intros are optional** — `### Variants`, `### Sizes`, `### Disabled` usually need no prose. Add a sentence only when the example would surprise (constraint, gotcha, invariant).
 - **No marketing voice, no rationale for third-party choices** — name the library, link it, move on. Skip "warm humanist sans" / "heart of the design system" framing. Trust the reader knows `<details>`, `:has()`, `color-scheme`.
 - **Voice is flat and factual** — no rhetorical color. Purge antithesis ("X rather than Y", "isn't just X, it's Y"), rule-of-three flavor triads, anthropomorphism ("digits don't shimmy", "segments breathe"), marketing intensifiers ("the fastest way", "the simplest path"), empty reassurance ("text stays readable", "visible at a glance", "which is the right outcome"), and soft hedges ("most likely", "probably"). Keep an em-dash only for a real list or aside that adds information, never to tack on an editorializing clause. Delete `###` intros that only narrate the adjacent example.
@@ -193,7 +193,7 @@ The repo ships an Agent Skill at `skills/admin-design-system/` (see [getting-sta
 
 - **After any change under `apps/docs/src/content/docs/`** (new component page, edited examples, new section): run `pnpm generate-skill` and commit the updated `skills/` alongside your MDX change. Same commit. CI catches it if you forget.
 - **When introducing a new system-wide convention** (a new prop pattern, a new token layer, a new "prefer the platform" rule, a different way to compose primitives): edit `apps/docs/scripts/skill-header.md`. That file is the hand-curated header of `SKILL.md` and holds everything that isn't per-component reference material — frontmatter, "when to use this skill" trigger, conventions, the "When nothing fits" gap procedure. Then run `pnpm generate-skill`.
-- **When the transform logic needs to change** (a new MDX directive to handle, a new piece of Starlight JSX to strip, a different output layout): edit `apps/docs/scripts/generate-skill.mjs`. The script is deterministic — no timestamps, sorted file enumeration — so `git diff --exit-code` is a meaningful staleness check.
+- **When the transform logic needs to change** (a new MDX directive to handle, a new docs component to flatten, a different output layout): edit `apps/docs/scripts/generate-skill.mjs`. The script is deterministic — no timestamps, sorted file enumeration — so `git diff --exit-code` is a meaningful staleness check.
 
 `skills/` is in `.oxfmtrc.json`'s `ignorePatterns` because it's a generated artifact. `apps/docs/scripts/skill-header.md` is NOT ignored — oxfmt formats it as normal markdown.
 
@@ -208,7 +208,7 @@ The reader is a consumer bumping the version. `apps/docs/src/content/docs/contri
 - Visual-only changes (radius, padding, borders, hover fills, contrast) share one "Visual refresh" bullet at the top of Changed.
 - Don't log fixes to features that haven't shipped yet.
 
-The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` via the `@changelog` Vite alias (typed by the ambient `apps/docs/src/changelog.d.ts`) and renders it inside Starlight's `<StarlightPage>`, passing `getHeadings()` so the version TOC populates — no copy step, no generated file. The file has no top-level `# Changelog` heading; the page title supplies it. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
+The docs changelog page (`apps/docs/src/pages/changelog.astro`) imports the root `CHANGELOG.md` via the `@changelog` Vite alias (typed by the ambient `apps/docs/src/changelog.d.ts`) and renders it in the docs layout, passing `getHeadings()` so the version TOC populates — no copy step, no generated file. The file has no top-level `# Changelog` heading; the page title supplies it. Each package also ships a copy in its npm tarball via a `prepack` step (gitignored as `packages/*/CHANGELOG.md`).
 
 `CHANGELOG.md` is in `.oxfmtrc.json`'s `ignorePatterns`: the keep-a-changelog release plugin owns its formatting, and oxfmt (which also formats markdown) disagrees with the plugin's compare-link spacing — so the release plugin is the single formatter.
 

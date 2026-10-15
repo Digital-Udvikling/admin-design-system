@@ -16,7 +16,7 @@
 - [Hotkeys](#hotkeys)
 - [Layout](#layout)
 
-What holds across the whole library. Component pages list their own props and classes in a `Reference` section and don't repeat any of this.
+Component pages list their own props and classes in a `Reference` section and don't repeat any of this.
 
 ## Prop shapes
 

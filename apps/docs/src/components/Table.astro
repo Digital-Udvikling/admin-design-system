@@ -1,0 +1,9 @@
+---
+// MDX renders every markdown table through this: a scroll box keeps a wide
+// Reference table from widening the page on a phone. `.prose` still styles the table.
+// No tabindex or region: browsers make an overflowing scroller keyboard-focusable themselves.
+---
+
+<div class="docs-table-scroll">
+  <table><slot /></table>
+</div>

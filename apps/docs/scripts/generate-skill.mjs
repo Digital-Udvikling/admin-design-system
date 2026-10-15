@@ -234,7 +234,7 @@ function stripMdxNoise(body, info, pageMap) {
   return stripped.replace(/\n{3,}/g, "\n\n");
 }
 
-// Starlight serves docs from directory-style URLs with a trailing slash
+// The site serves docs from directory-style URLs with a trailing slash
 // (`a/index.mdx` → `/a/`); relative prose links resolve against this.
 function pageUrlFor(rel) {
   const slug = rel.replace(/\.mdx$/, "").replace(/\/index$/, "");
@@ -242,7 +242,7 @@ function pageUrlFor(rel) {
 }
 
 // Point intra-docs relative links (`[Kbd](../kbd/)`) at the per-page skill
-// files — Starlight's directory routes don't exist in the skill tree. Unknown
+// files — the site's directory routes don't exist in the skill tree. Unknown
 // targets are left as-is.
 function rewriteRelativeLinksInProse(prose, info, pageMap) {
   const pageUrl = pageUrlFor(info.rel);

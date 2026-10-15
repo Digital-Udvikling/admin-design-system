@@ -2,7 +2,7 @@
 
 > Drop admin styles into a non-admin app without colliding on class names.
 
-A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. Use it when admin markup lives inside a host app that owns its own design system. The default `@aortl/admin-css` bundle stays unprefixed — use that one for full-page admin apps that own the document.
+A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. The default `@aortl/admin-css` bundle stays unprefixed — use that one for full-page admin apps that own the document.
 
 ## Vanilla CSS
 

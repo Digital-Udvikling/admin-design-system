@@ -49,7 +49,7 @@ const strictCoverage = process.argv.includes("--strict-coverage");
 const errors = [];
 const warnings = [];
 
-// Starlight serves directory-style URLs: `a/index.mdx` → `/a/`, `a/b.mdx` → `/a/b/`.
+// The site serves directory-style URLs (src/pages/[...slug].astro): `a/index.mdx` → `/a/`, `a/b.mdx` → `/a/b/`.
 function urlForDocsRel(rel) {
   const slug = rel.replace(/\.mdx$/, "").replace(/\/index$/, "");
   return slug === "index" || slug === "" ? "/" : `/${slug}/`;

@@ -1,14 +1,13 @@
 ---
-import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Content, getHeadings } from "@changelog";
+import Docs from "../layouts/Docs.astro";
 ---
 
-<StarlightPage
-  frontmatter={{
-    title: "Changelog",
-    description: "Release history for @aortl/admin-css and @aortl/admin-react.",
-  }}
+<Docs
+  title="Changelog"
+  description="Release history for @aortl/admin-css and @aortl/admin-react."
   headings={getHeadings()}
+  tocDepth={2}
 >
   <Content />
-</StarlightPage>
+</Docs>

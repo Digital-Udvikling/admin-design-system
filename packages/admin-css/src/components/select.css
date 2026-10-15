@@ -44,12 +44,12 @@
 
   /* A replaced <select> can't host a tinted ::after and data URIs can't read
      CSS variables, so the chevron is a background image whose stroke copies
-     text-muted per mode (base-600 / base-400). Its inset and the reserved
+     text-muted per mode (base-650 / base-400). Its inset and the reserved
      padding (inset + 1em glyph + 0.5rem gap) match the React trigger. */
   select.select {
     appearance: none;
     padding-right: calc(0.75rem + 1em + 0.5rem);
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c6c6c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 1em;

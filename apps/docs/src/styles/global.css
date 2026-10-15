@@ -35,12 +35,6 @@
 .docs-brand {
   color: inherit;
   text-decoration: none;
-  /* The name gives way first on a phone: `navbar-brand` alone never shrinks. */
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .docs-version {
   font-variant-numeric: tabular-nums;

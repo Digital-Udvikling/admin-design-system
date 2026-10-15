@@ -126,7 +126,7 @@ For colour-coding categories that aren't states, such as event types or chart se
 
 ## Palette
 
-Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp adds `paper` at the light end and `black` at the dark end.
+Every Flexoki tone is a utility class and CSS variable. Tones run light→dark from `50` to `950`; the base ramp adds `paper` at the light end, `black` at the dark end, and `650`, the light-mode `--color-text-muted`.
 
 **Base**
 
@@ -139,6 +139,7 @@ Every Flexoki tone is a utility class and CSS variable. Tones run light→dark f
 - 400 — `--color-base-400`
 - 500 — `--color-base-500`
 - 600 — `--color-base-600`
+- 650 — `--color-base-650`
 - 700 — `--color-base-700`
 - 800 — `--color-base-800`
 - 850 — `--color-base-850`

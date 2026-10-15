@@ -2,19 +2,42 @@
   /* The bottom stripe brand-shifts when the consuming app overrides
      `--color-system-accent` at :root (see also `.footer` and `.brand-tile`). */
   .navbar {
-    @apply flex items-center gap-3 px-4 h-12
+    @apply flex items-center gap-3 px-4 h-12 min-w-0
            bg-surface-muted text-text
            border-b-2 border-system-accent;
     --surface-current: var(--color-surface-muted);
     --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
   }
 
+  /* The padding keeps a focus ring inside the clip, on a brand link's children or the brand itself. */
   .navbar-brand {
-    @apply flex items-center gap-2 font-semibold text-sm shrink-0 text-text;
+    @apply flex items-center gap-2 font-semibold text-sm text-text min-w-0 overflow-hidden whitespace-nowrap
+           rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+    padding: 4px;
+    margin: -4px;
   }
 
+  /* Only the name gives way: a bare text node clips, a <span> gets the ellipsis. */
+  .navbar-brand > * {
+    flex-shrink: 0;
+  }
+
+  .navbar-brand > span:not([class]) {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The items take the free space from a zero basis, so on a narrow row they scroll
+     sideways before the brand name gives way. The padding keeps focus rings inside the scroll box. */
   .navbar-items {
-    @apply flex items-center gap-0.5;
+    @apply flex flex-1 items-center gap-0.5 min-w-0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 4px;
+    margin: -4px;
   }
 
   .navbar-item {
@@ -36,13 +59,12 @@
     @apply bg-primary-muted text-primary;
   }
 
-  .navbar-brand > :is(i, svg),
   .navbar-item > :is(i, svg) {
     flex-shrink: 0;
   }
 
   .navbar-actions {
-    @apply flex items-center gap-2 ml-auto;
+    @apply flex items-center gap-2 ml-auto shrink-0;
   }
 
   /* Menus in the actions slot align to the trigger's end edge so the popup stays on screen. */

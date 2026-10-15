@@ -24,6 +24,7 @@
   --color-base-400: #9b9b9b;
   --color-base-500: #848484;
   --color-base-600: #6c6c6c;
+  --color-base-650: #606060;
   --color-base-700: #555555;
   --color-base-800: #3e3e3e;
   --color-base-850: #333333;
@@ -175,7 +176,7 @@
   );
 
   --color-text: light-dark(var(--color-black), var(--color-base-200));
-  --color-text-muted: light-dark(var(--color-base-600), var(--color-base-400));
+  --color-text-muted: light-dark(var(--color-base-650), var(--color-base-400));
 
   --color-border: light-dark(var(--color-base-150), var(--color-base-850));
   --color-border-strong: light-dark(var(--color-base-300), var(--color-base-700));

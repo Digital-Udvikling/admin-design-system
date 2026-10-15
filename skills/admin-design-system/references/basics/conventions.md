@@ -144,7 +144,7 @@ import NextLink from "next/link";
 </Sidebar.Item>;
 ```
 
-`Navbar.Item`, `Sidebar.Item`, `Sidebar.SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container` and `Item` / `Item.Container` take an element, so they work from a Server Component. `Button` and `Menu.Item` get `render` from Base UI, which also accepts a function; a `Button` rendered as an anchor needs `nativeButton={false}` (see [Buttons](../components/buttons.md)).
+`Navbar.Brand`, `Navbar.Item`, `Sidebar.Item`, `Sidebar.SubItem`, `Breadcrumbs.Item`, `Link`, `Badge`, `Card.Container` and `Item` / `Item.Container` take an element, so they work from a Server Component. `Button` and `Menu.Item` get `render` from Base UI, which also accepts a function; a `Button` rendered as an anchor needs `nativeButton={false}` (see [Buttons](../components/buttons.md)).
 
 Put the content in the admin component's children and leave the element empty. Don't hard-code `_ao-` classes on your own link: the prefix belongs to the scoped bundle.
 

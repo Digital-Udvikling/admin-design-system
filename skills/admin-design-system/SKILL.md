@@ -88,6 +88,10 @@ Override semantic tokens to reskin the system; never reference Flexoki tones dir
 
 Hover and zebra fills use the translucent `surface-hover` / `surface-stripe` washes, so they show on any container. A custom filled container sets `--surface-current` to its fill so timeline rings, avatar-group rings and pinned or sticky table cells paint the same surface; see [Theming › Container surface](references/basics/theming.md).
 
+### Type registers
+
+Every screen uses the dense 14px UI scale, `.prose` included. `<Prose size="lg">` / `.prose-lg` is the reading register (16px, capped line length) for long-form text only: help articles, changelogs, policies, LLM answers. Never use it for forms, tables or other UI; tables, code and `Prose.Exclude` content inside it stay at UI size.
+
 ### Dark mode
 
 Driven entirely by CSS `color-scheme` and `[data-theme]`:

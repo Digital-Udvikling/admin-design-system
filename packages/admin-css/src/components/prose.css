@@ -10,20 +10,103 @@
   )
 )));
 
+/* Registered so an em value resolves once, on the `.prose` element, and inherits as a
+   length; unregistered, each heading and the exclude would resolve it at its own size. */
+@property --_prose-measure {
+  syntax: "<length> | none";
+  inherits: true;
+  initial-value: none;
+}
+@property --_prose-block {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 @layer components {
   /* Styles rendered HTML (markdown, CMS bodies) that can't carry the system's
      class names — re-establishes what the global reset strips. Descendant rules
      use `:where()` so a consumer's own `.prose a { … }` wins without `!important`,
-     and `prose-scope` so embedded components keep their own look. */
+     and `prose-scope` so embedded components keep their own look.
+     Every size reads a private variable declared here, in em so it follows the
+     text: `.prose-lg` overrides only these, and a nested `.prose` resets them. */
   .prose {
-    @apply text-sm leading-normal text-text;
+    /* md: 14px body. Heading sizes are in body em, heading margins in the heading's own em. */
+    --_prose-text: var(--text-sm);
+    --_prose-leading: 1.625;
+    --_prose-gap: 1em;
+    --_prose-block: var(--_prose-gap);
+    --_prose-measure: none;
+    --_prose-code: 0.85em;
+    --_prose-h1: calc(24em / 14);
+    --_prose-h1-margin: calc(32em / 24) calc(16em / 24);
+    --_prose-h2: calc(18em / 14);
+    --_prose-h2-margin: calc(32em / 18) calc(12em / 18);
+    --_prose-h3: calc(16em / 14);
+    --_prose-h3-margin: 1.5em 0.5em;
+    --_prose-h4: 1em;
+    --_prose-h4-margin: calc(20em / 14) calc(8em / 14);
+    --_prose-h5: calc(12em / 14);
+    --_prose-h5-margin: calc(20em / 12) calc(8em / 12);
+    @apply text-text;
+    font-size: var(--_prose-text);
+    line-height: var(--_prose-leading);
     /* Break long URLs/tokens; the scrolling `<pre>` keeps its own `white-space: pre`. */
     overflow-wrap: break-word;
   }
 
-  .prose :where(p, ul, ol, blockquote, pre, table, figure) {
+  /* Reading size for long-form text. Same specificity as `.prose` and after it, so it
+     wins on the same element only; tables, code and excluded subtrees keep UI size. */
+  .prose-lg {
+    --_prose-text: var(--text-base);
+    --_prose-leading: 1.7;
+    --_prose-gap: 1.25em;
+    --_prose-measure: 45em;
+    --_prose-code: 0.875em;
+    --_prose-h1: 2em;
+    --_prose-h1-margin: 1.25em 0.5em;
+    --_prose-h2: 1.5em;
+    --_prose-h2-margin: 1.75em 0.5em;
+    --_prose-h3: 1.25em;
+    --_prose-h3-margin: 1.6em 0.6em;
+    --_prose-h4: 1em;
+    --_prose-h4-margin: 1.5em 0.5em;
+  }
+
+  .prose :where(p, ul, ol, blockquote, figure) {
     @variant prose-scope {
-      @apply my-3;
+      margin-block: var(--_prose-gap);
+    }
+  }
+  /* UI-sized blocks: the gap is resolved on `.prose`, so it matches the text's. */
+  .prose :where(pre, table) {
+    @variant prose-scope {
+      margin-block: var(--_prose-block);
+    }
+  }
+
+  .prose :where(p, li, blockquote, figcaption) {
+    @variant prose-scope {
+      text-wrap-style: pretty;
+    }
+  }
+  /* Line length is capped on leaf text only, so code and tables in a list keep full width. */
+  .prose
+    :where(
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      figcaption,
+      dt,
+      dd,
+      :is(li, blockquote):not(:has(pre, table, figure, .prose-exclude))
+    ):not(:where(td, th) *) {
+    @variant prose-scope {
+      max-inline-size: var(--_prose-measure);
     }
   }
   .prose > :first-child {
@@ -39,24 +122,53 @@
     line-height: 1.5;
   }
 
-  /* base.css already sizes h1–h3; add h4–h6 and the sectioning rhythm. */
   .prose :where(h1, h2, h3, h4, h5, h6) {
     @variant prose-scope {
-      @apply mt-6 mb-2 font-semibold leading-tight;
+      @apply font-semibold text-text;
+      text-wrap-style: balance;
+    }
+  }
+  .prose :where(h1) {
+    @variant prose-scope {
+      font-size: var(--_prose-h1);
+      margin-block: var(--_prose-h1-margin);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+  }
+  .prose :where(h2) {
+    @variant prose-scope {
+      font-size: var(--_prose-h2);
+      margin-block: var(--_prose-h2-margin);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+  }
+  .prose :where(h3) {
+    @variant prose-scope {
+      font-size: var(--_prose-h3);
+      margin-block: var(--_prose-h3-margin);
+      line-height: 1.4;
     }
   }
   .prose :where(h4) {
     @variant prose-scope {
-      @apply text-sm;
+      font-size: var(--_prose-h4);
+      margin-block: var(--_prose-h4-margin);
+      line-height: 1.45;
     }
   }
   .prose :where(h5, h6) {
     @variant prose-scope {
-      @apply text-xs uppercase tracking-wide text-text-muted;
+      @apply uppercase tracking-wide text-text-muted;
+      font-size: var(--_prose-h5);
+      margin-block: var(--_prose-h5-margin);
+      line-height: 1.5;
     }
   }
-  /* Lets the heading's mb-2 set the gap instead of collapsing into the next block's my-3. */
-  .prose :where(h1, h2, h3, h4, h5, h6) + :where(*) {
+  /* Lets the heading's bottom margin set the gap to the block it leads. A heading
+     that follows keeps its own top margin, so stacked headings still separate. */
+  .prose :where(h1, h2, h3, h4, h5, h6) + :where(:not(h1, h2, h3, h4, h5, h6)) {
     @variant prose-scope {
       margin-top: 0;
     }
@@ -66,41 +178,49 @@
      exclude takes the block gap and consecutive components don't touch. Relies on
      prose.css importing after component roots that zero their margin (.timeline). */
   .prose > :where(.prose-exclude) {
-    margin-block: 1em;
+    margin-block: var(--_prose-block);
   }
   .prose > :where(h1, h2, h3, h4, h5, h6) + :where(.prose-exclude) {
     margin-top: 0;
   }
 
+  /* Plain em decimals are the 14px px value rounded up, so a minifier's 6-digit
+     rounding can't land them a hair under the pixel. */
   .prose :where(ul) {
     @variant prose-scope {
-      @apply list-disc ps-5;
+      @apply list-disc;
+      padding-inline-start: 1.4286em;
     }
   }
   .prose :where(ol) {
     @variant prose-scope {
-      @apply list-decimal ps-5;
+      @apply list-decimal;
+      padding-inline-start: 1.4286em;
     }
   }
+  /* Muted markers, so bullets and numbers sit behind the text they lead. */
   .prose :where(li) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
+      &::marker {
+        color: var(--color-text-muted);
+      }
     }
   }
   /* Loose lists wrap each item's text in <p> — tighten those back down. */
   .prose :where(li) :where(p) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
     }
   }
   .prose :where(li > ul, li > ol) {
     @variant prose-scope {
-      @apply my-1;
+      margin-block: 0.25em;
     }
   }
-  /* GFM task lists (tight and loose): the checkbox hangs in the bullet's
-     1.25rem gutter (14px box, 2px margin, the space GFM emits), so wrapped lines
-     align with the first. */
+  /* GFM task lists (tight and loose): the checkbox hangs in the list's indent
+     (a 1em box, 2px margin at 14px, the space GFM emits), so wrapped lines align
+     with the first. Sized with the indent so both follow the text. */
   .prose
     :where(
       li:has(
@@ -118,10 +238,11 @@
       li > p:first-child > input[type="checkbox"]:first-child
     ) {
     @variant prose-scope {
-      @apply size-3.5;
+      inline-size: 1em;
+      block-size: 1em;
       margin-block: 0;
-      margin-inline: -1.25rem 0.125rem;
-      vertical-align: -0.1875rem;
+      margin-inline: -1.4286em 0.1429em;
+      vertical-align: -0.2143em;
     }
   }
 
@@ -139,7 +260,7 @@
     @variant prose-scope {
       @apply rounded border border-border bg-code-surface px-1 py-0.5
              font-mono text-code-text box-decoration-clone;
-      font-size: 0.85em;
+      font-size: var(--_prose-code);
     }
   }
 
@@ -163,21 +284,24 @@
 
   .prose :where(blockquote) {
     @variant prose-scope {
-      @apply border-s-2 border-border-strong ps-3 text-text-muted;
+      @apply border-s-2 border-border-strong text-text-muted;
+      padding-inline-start: 0.8572em;
     }
   }
 
   .prose :where(hr) {
     @variant prose-scope {
-      @apply my-6 border-0 border-t border-border;
+      @apply border-0 border-t border-border;
+      margin-block: 2.2858em;
     }
   }
 
   /* Tables — the .table look, top-aligned and wrapping since prose cells run to several
      lines. A .table keeps its own rules. */
+  /* Cells keep the UI's 1.5 line so rows stay table-dense. */
   .prose :where(table:not(.table)) {
     @variant prose-scope {
-      @apply w-full border-collapse text-sm;
+      @apply w-full border-collapse text-sm leading-normal;
     }
   }
   .prose :where(table:not(.table)) :where(th, td) {
@@ -217,7 +341,10 @@
   }
   .prose :where(figcaption) {
     @variant prose-scope {
-      @apply mt-1 text-xs text-text-muted;
+      @apply text-text-muted;
+      margin-top: 0.3334em;
+      font-size: 0.857143em;
+      line-height: 1.3334;
     }
   }
   .prose :where(strong) {

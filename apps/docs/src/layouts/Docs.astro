@@ -1,6 +1,7 @@
 ---
 // The page chrome, built from the design system's own vanilla classes: app shell,
-// navbar, sidebar (copied into a drawer below 48rem), reading-size `.prose` article and TOC.
+// sticky navbar, sidebar (copied into a drawer below 64rem), reading-size `.prose` article, TOC
+// and previous/next links.
 import "../styles/global.css";
 // Source, not the package export: the scoped plugin wraps Tailwind's output.
 import "../../../../packages/admin-css/src/admin.css?scoped";
@@ -17,7 +18,7 @@ import { getCollection } from "astro:content";
 import FlavorPicker from "../components/FlavorPicker.astro";
 import SidebarNav from "../components/SidebarNav.astro";
 import ThemeSelect from "../components/ThemeSelect.astro";
-import { buildNav } from "../nav";
+import { buildNav, flatNav } from "../nav";
 import { version } from "../version";
 
 interface Props {
@@ -39,6 +40,10 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= tocDepth);
 // A one-entry TOC only repeats the page's single section.
 const showToc = toc.length > 1;
 const isHome = Astro.url.pathname === base;
+const sequence = flatNav(nav);
+const at = sequence.findIndex((l) => l.href === Astro.url.pathname);
+const prev = at > 0 ? sequence[at - 1] : undefined;
+const next = at >= 0 ? sequence[at + 1] : undefined;
 ---
 
 <!doctype html>
@@ -73,7 +78,7 @@ const isHome = Astro.url.pathname === base;
   </head>
   <body>
     <a class="btn btn-primary btn-sm docs-skip" href="#content">Skip to content</a>
-    <div class="app-shell">
+    <div class="app-shell app-shell-sticky docs-shell">
       <header class="navbar">
         <button
           class="navbar-mobile-toggle"
@@ -138,6 +143,28 @@ const isHome = Astro.url.pathname === base;
                     Edit page
                   </a>
                 </p>
+              )
+            }
+            {
+              (prev || next) && (
+                <nav class="docs-pager prose-exclude" aria-label="Previous and next page">
+                  {prev && (
+                    <a class="card card-bordered card-compact docs-pager-link" rel="prev" href={prev.href}>
+                      <div class="card-body">
+                        <div class="card-description">Previous</div>
+                        <div class="card-title">{prev.label}</div>
+                      </div>
+                    </a>
+                  )}
+                  {next && (
+                    <a class="card card-bordered card-compact docs-pager-link" rel="next" href={next.href}>
+                      <div class="card-body">
+                        <div class="card-description">Next</div>
+                        <div class="card-title">{next.label}</div>
+                      </div>
+                    </a>
+                  )}
+                </nav>
               )
             }
           </article>

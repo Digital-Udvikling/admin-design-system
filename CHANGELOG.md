@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A `.sidebar` directly in `.app-shell` stays in view on long pages, its nav scrolling inside. (css)
 - `prose-lg` / `<Prose size="lg">` sets long-form text at 16px, with a steeper heading scale and a capped line length. (both)
 - `.code` / `<Code>` sets an identifier in a sentence as an inline chip tinted from the text colour. (both)
+- `alert-soft` / `<Alert soft>` tints the fill for standing notes, with default text, focus rings and links. (both)
 
 ### Changed
 

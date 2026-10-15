@@ -123,22 +123,62 @@
      color: the blue `--color-focus` is invisible on the info fill and under 3:1 on the rest. */
   .alert-info {
     @apply bg-info border-info text-info-content;
+  }
+  .alert-info:not(.alert-soft) {
     --color-focus: var(--color-info-content);
   }
 
   .alert-success {
     @apply bg-success border-success text-success-content;
+  }
+  .alert-success:not(.alert-soft) {
     --color-focus: var(--color-success-content);
   }
 
   .alert-warning {
     @apply bg-warning border-warning text-warning-content;
+  }
+  .alert-warning:not(.alert-soft) {
     --color-focus: var(--color-warning-content);
   }
 
   .alert-danger {
     @apply bg-danger border-danger text-danger-content;
+  }
+  .alert-danger:not(.alert-soft) {
     --color-focus: var(--color-danger-content);
+  }
+
+  /* Soft: the `-muted` tint with body text in the text colour; the tone moves to the border
+     and icon. Pairs with a variant. Focus rings and links keep their defaults on the tint. */
+  .alert.alert-soft {
+    @apply text-text;
+    background-color: var(--_alert-tint);
+    border-color: color-mix(in oklab, var(--_alert-tone) 40%, var(--_alert-tint));
+  }
+  .alert-soft > :is(i, svg):first-child {
+    color: var(--_alert-glyph);
+  }
+  .alert-soft.alert-info {
+    --_alert-tone: var(--color-info);
+    --_alert-tint: var(--color-info-muted);
+    --_alert-glyph: var(--color-info);
+  }
+  .alert-soft.alert-success {
+    --_alert-tone: var(--color-success);
+    --_alert-tint: var(--color-success-muted);
+    --_alert-glyph: var(--color-success);
+  }
+  /* Yellow fails contrast as a glyph on its own tint, as in badge-soft. */
+  .alert-soft.alert-warning {
+    --_alert-tone: var(--color-warning);
+    --_alert-tint: var(--color-warning-muted);
+    --_alert-glyph: var(--color-text);
+  }
+  .alert-soft.alert-danger {
+    --_alert-tone: var(--color-danger);
+    --_alert-tint: var(--color-danger-muted);
+    --_alert-glyph: var(--color-danger);
   }
 
   .alert-title {
@@ -146,7 +186,7 @@
   }
 
   /* Dismiss button — currentColor hover wash works on the solid fills (where
-     text is `-content`) and the bordered neutral alert alike, like badge-remove. */
+     text is `-content`) and the soft tint (body text colour) alike, like badge-remove. */
   .alert-dismiss {
     @apply inline-flex items-center justify-center shrink-0
            size-5 -mr-1 rounded
@@ -162,5 +202,8 @@
      color; the underline carries the affordance. */
   .alert .link {
     @apply text-current hover:text-current hover:decoration-2;
+  }
+  .alert-soft .link {
+    @apply text-link hover:text-link-hover hover:decoration-auto;
   }
 }

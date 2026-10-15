@@ -8,6 +8,7 @@
   - [Variants](#variants)
   - [With title and description](#with-title-and-description)
   - [With a leading icon](#with-a-leading-icon)
+  - [Soft](#soft)
   - [With inline markup](#with-inline-markup)
   - [With a trailing action](#with-a-trailing-action)
   - [Dismissible](#dismissible)
@@ -96,6 +97,56 @@
 />
 ```
 
+### Soft
+
+`alert-soft` tints the fill for standing notes on a form or record; body text, focus rings and links keep their defaults.
+
+**Example**
+
+```html
+<div class="alert alert-info alert-soft" role="status">
+  <i class="ti ti-info-circle" aria-hidden="true"></i>
+  <div>
+    Synced from SAP nightly; edits here are overwritten at 02:00. See
+    <a href="#" class="link">sync settings</a>.
+  </div>
+</div>
+<div class="alert alert-success alert-soft" role="status">
+  <i class="ti ti-circle-check" aria-hidden="true"></i>
+  248 lines imported.
+</div>
+<div class="alert alert-warning alert-soft" role="alert">
+  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  2 price lines were skipped.
+  <button type="button" class="btn btn-sm alert-action">Review</button>
+</div>
+<div class="alert alert-danger alert-soft" role="alert">
+  <i class="ti ti-alert-octagon" aria-hidden="true"></i>
+  <strong class="alert-title">Couldn't load orders</strong>
+  <p class="alert-description">The orders service timed out.</p>
+</div>
+```
+
+```tsx
+<Alert variant="info" soft icon={IconInfoCircle}>
+  Synced from SAP nightly; edits here are overwritten at 02:00. See{" "}
+  <Link href="#">sync settings</Link>.
+</Alert>
+<Alert variant="success" soft icon={IconCircleCheck}>
+  248 lines imported.
+</Alert>
+<Alert variant="warning" soft icon={IconAlertTriangle} action={<Button size="sm">Review</Button>}>
+  2 price lines were skipped.
+</Alert>
+<Alert
+  variant="danger"
+  soft
+  icon={IconAlertOctagon}
+  title="Couldn't load orders"
+  description="The orders service timed out."
+/>
+```
+
 ### With inline markup
 
 **Example**
@@ -173,6 +224,7 @@
 | Prop           | Type                                           | Default      |
 | -------------- | ---------------------------------------------- | ------------ |
 | `variant`      | `"info" \| "success" \| "warning" \| "danger"` | — (required) |
+| `soft`         | `boolean`                                      | `false`      |
 | `icon`         | [`IconProp`](../basics/conventions.md#icons)  | —            |
 | `title`        | `ReactNode`                                    | —            |
 | `description`  | `ReactNode`                                    | —            |
@@ -191,19 +243,20 @@ There is no toast. Show a result inline: an alert next to the action, or a statu
 
 ### Vanilla
 
-| Class                                                       | Effect                                                                              |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `alert`                                                     | Full-width bordered block, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm` |
-| `alert-info` `alert-success` `alert-warning` `alert-danger` | Solid status fill with matching border and `-content` text                          |
-| `alert-title`                                               | Medium weight, own line                                                             |
-| `alert-description`                                         | Body text, `0.25rem` below the title                                                |
-| `alert-action`                                              | Trailing control, pinned to the end column, centred on the text, no wrapping        |
-| `alert-dismiss`                                             | `1.25rem` square × button on the first line, `currentColor` hover wash              |
+| Class                                                       | Effect                                                                                                              |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `alert`                                                     | Full-width bordered block, `0.75rem`/`0.5rem` padding, `0.375rem` radius, `text-sm`                                 |
+| `alert-info` `alert-success` `alert-warning` `alert-danger` | Solid status fill with matching border and `-content` text                                                          |
+| `alert-soft`                                                | With a variant: `-muted` tint, body text colour, tone on the border and icon. `warning`'s icon uses the text colour |
+| `alert-title`                                               | Medium weight, own line                                                                                             |
+| `alert-description`                                         | Body text, `0.25rem` below the title                                                                                |
+| `alert-action`                                              | Trailing control, pinned to the end column, centred on the text, no wrapping                                        |
+| `alert-dismiss`                                             | `1.25rem` square × button on the first line, `currentColor` hover wash                                              |
 
 Write the `role` yourself: `role="alert"` for warning and danger, `role="status"` otherwise.
 
 The layout is `:has()`-driven. A leading `<i>`/`<svg>` as the _first_ child turns the block into an icon + text grid; an `alert-action` or `alert-dismiss` adds a trailing column, and both together add two. In the grid, every other direct child is a cell in the text column, so text that contains `<code>` or a link goes in one element: `alert-description` or a plain `<div>`. Block children stack `0.25rem` apart, but bare text right after an `alert-title` sits flush against it, so body text goes in `alert-description`. The icon and dismiss align to the first line of text and `alert-action` centres on the text block. In an alert without a title, a `btn` action sits on the first line and overhangs the padding instead of making the alert taller; prefer `btn-sm`, since a default `btn` comes within `2px` of the edge. Nothing needs a wrapper class.
 
-`alert-action` can go on the link itself or on a wrapper around it. A `link` inside an alert inherits the variant's content colour, since link blue is illegible on a solid fill; the underline marks the link. Focus rings on the fills take the content colour for the same reason. The dismiss button's `aria-label` is yours to write.
+`alert-action` can go on the link itself or on a wrapper around it. A `link` inside an alert inherits the variant's content colour, since link blue is illegible on a solid fill; the underline marks the link. Focus rings on the fills take the content colour for the same reason. In `alert-soft` both keep their defaults. The dismiss button's `aria-label` is yours to write.
 
-For single-field validation, use [Fields](forms/fields.md). For a docs-style note rather than an app alert, this component is the wrong shape — it's built to be loud.
+For single-field validation, use [Fields](forms/fields.md).

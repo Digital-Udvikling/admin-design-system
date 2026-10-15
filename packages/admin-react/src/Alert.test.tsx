@@ -32,6 +32,15 @@ describe("Alert", () => {
     expect(alert.firstElementChild).toBe(screen.getByTestId("icon"));
   });
 
+  it("adds the soft modifier", () => {
+    render(
+      <Alert variant="warning" soft>
+        Synced nightly
+      </Alert>,
+    );
+    expect(screen.getByRole("alert")).toHaveAdminClass("alert-warning", "alert-soft");
+  });
+
   it("uses status role for non-urgent variants", () => {
     render(<Alert variant="info">Heads up</Alert>);
     expect(screen.getByRole("status")).toBeInTheDocument();

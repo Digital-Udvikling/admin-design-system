@@ -5,7 +5,9 @@ import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import adminScopedPlugin from "./plugins/admin-scoped.mjs";
+import changelogTags from "./plugins/changelog-tags.mjs";
 import remarkExample from "./plugins/example/index.mjs";
+import groupTableRows from "./plugins/group-table-rows.mjs";
 import inlineCodeNowrap from "./plugins/inline-code-nowrap.mjs";
 import trimHeadingText from "./plugins/trim-heading-text.mjs";
 import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
@@ -20,6 +22,7 @@ export default defineConfig({
     processor: satteri({
       features: { directive: true },
       mdastPlugins: [remarkExample, inlineCodeNowrap, trimHeadingText],
+      hastPlugins: [groupTableRows, changelogTags],
     }),
     shikiConfig: {
       theme: shikiTheme,

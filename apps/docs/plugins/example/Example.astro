@@ -43,9 +43,9 @@ const hasBoth = !!html && hasReact;
 
 <style>
   .example-block {
-    margin-block: 1.5rem 2.5rem;
+    margin-block: 1.5rem 2rem;
   }
-  /* After its heading the gap is half the bottom margin; it collapses with the heading's own. */
+  /* Closer to its own heading; collapses with the heading's bottom margin. */
   :global(:is(h1, h2, h3, h4, h5, h6)) + .example-block {
     margin-block-start: 1.25rem;
   }

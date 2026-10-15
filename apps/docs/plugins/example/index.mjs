@@ -290,7 +290,28 @@ async function formatHtml(code, ctx, node) {
     // prettier hugs a text-only child as `\n  >text</tag>` when the open tag fills the line; break it out instead
     .replace(/\n( *) {2}>([^<>\n]+)<\/([\w-]+)>$/gm, ">\n$1  $2\n$1</$3>");
   const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
-  return dedent(inner);
+  return joinCssCalls(dedent(inner));
+}
+
+// oxfmt breaks an overflowing CSS declaration in a style attribute as `prop: fn(` / one arg per line / `);`.
+const SPLIT_CSS_CALL = /^( *)([\w-]+): ([\w-]+)\(\n((?:\1 {2}[^\n]*\n)+)\1\);$/gm;
+
+/**
+ * Rejoins such a call onto one line below its property, as oxfmt lays out a value list, when
+ * that line fits; `--accent: light-dark(…)` then takes 2 lines instead of 4.
+ *
+ * @param {string} code
+ */
+function joinCssCalls(code) {
+  return code.replace(SPLIT_CSS_CALL, (all, indent, prop, fn, args) => {
+    const flat = args
+      .trim()
+      .replace(/\(\n\s*/g, "(")
+      .replace(/\s*\n\s*\)/g, ")");
+    const call = `${fn}(${flat.split(/\s*\n\s*/).join(" ")});`;
+    const line = `${indent}  ${call}`;
+    return line.length <= PRETTIER_OPTS.printWidth ? `${indent}${prop}:\n${line}` : all;
+  });
 }
 
 // oxfmt splits an element with 2+ attributes and a text-only child onto three lines even when it fits; rejoin those.

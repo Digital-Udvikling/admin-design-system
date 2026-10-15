@@ -18,4 +18,8 @@ import Docs from "../layouts/Docs.astro";
   :global(.docs-article > h2 > a:hover) {
     text-decoration-color: currentColor;
   }
+  /* changelog-tags.mjs: the package badge never wraps onto a line of its own. */
+  :global(.changelog-tag) {
+    white-space: nowrap;
+  }
 </style>

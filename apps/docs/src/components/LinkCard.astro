@@ -11,7 +11,10 @@ const { title, href, description } = Astro.props;
 
 <a class="card card-bordered link-card" href={href}>
   <div class="card-body">
-    <div class="card-title">{title}</div>
+    <div class="card-header">
+      <div class="card-title">{title}</div>
+      <span class="card-toolbar"><i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+    </div>
     {description && <div class="card-description">{description}</div>}
   </div>
 </a>
@@ -20,5 +23,13 @@ const { title, href, description } = Astro.props;
   .link-card {
     text-decoration: none;
     color: inherit;
+  }
+
+  .link-card .card-toolbar {
+    color: var(--color-text-muted);
+    transition: color 150ms;
+  }
+  .link-card:is(:hover, :focus-visible) .card-toolbar {
+    color: var(--color-text);
   }
 </style>

@@ -1,4 +1,6 @@
 ---
+import { CALLOUT_LABELS } from "./callout-labels.mjs";
+
 // A soft `.alert` at the article's reading size. `prose-exclude` keeps `.prose` element
 // rules off the body, so its markdown links and code get the styles below.
 interface Props {
@@ -18,7 +20,10 @@ const ICONS = {
 
 <div class:list={["alert", `alert-${variant}`, "alert-soft", "prose-exclude", "callout"]}>
   <i class={`ti ${ICONS[variant]}`} aria-hidden="true"></i>
-  <div class="callout-body"><slot /></div>
+  <div class="callout-body">
+    <span class="sr-only">{CALLOUT_LABELS[variant]}:</span>
+    <slot />
+  </div>
 </div>
 
 <style>
@@ -50,7 +55,6 @@ const ICONS = {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
     font-family: var(--font-mono);
     font-size: 0.875em;
-    box-decoration-break: clone;
   }
 
   /* The `.link` look a soft alert keeps; markdown can't add the class. */

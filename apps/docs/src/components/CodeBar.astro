@@ -29,7 +29,11 @@ const text = label ?? (lang ? (LABELS[lang] ?? lang) : "");
 
 <div class="code-pane-bar">
   <span>{text}</span>
-  <button type="button" class="btn btn-ghost btn-sm btn-square code-pane-copy" aria-label="Copy code">
+  <button
+    type="button"
+    class="btn btn-ghost btn-sm btn-square code-pane-copy"
+    aria-label={text ? `Copy ${text} code` : "Copy code"}
+  >
     <i class="ti ti-copy" aria-hidden="true"></i>
     <i class="ti ti-check" aria-hidden="true"></i>
   </button>
@@ -37,18 +41,33 @@ const text = label ?? (lang ? (LABELS[lang] ?? lang) : "");
 </div>
 
 <script>
+  // Per button, so a second click restarts the "Copied" state instead of being cut short.
+  const timers = new WeakMap<Element, ReturnType<typeof setTimeout>>();
+
   // One delegated listener per page: the clipboard has no declarative equivalent.
   document.addEventListener("click", async (event) => {
     const button = event.target instanceof Element ? event.target.closest(".code-pane-copy") : null;
     const pane = button?.closest(".code-pane");
     if (!button || !pane) return;
-    await navigator.clipboard.writeText(pane.querySelector("pre")?.textContent ?? "");
     const status = pane.querySelector(".code-pane-status");
+    clearTimeout(timers.get(button));
+    button.removeAttribute("data-copied");
+    if (status) status.textContent = "";
+    try {
+      // Throws a TypeError where `navigator.clipboard` is undefined (insecure context).
+      await navigator.clipboard.writeText(pane.querySelector("pre")?.textContent ?? "");
+    } catch {
+      if (status) status.textContent = "Copy failed";
+      return;
+    }
     button.setAttribute("data-copied", "");
     if (status) status.textContent = "Copied";
-    setTimeout(() => {
-      button.removeAttribute("data-copied");
-      if (status) status.textContent = "";
-    }, 1200);
+    timers.set(
+      button,
+      setTimeout(() => {
+        button.removeAttribute("data-copied");
+        if (status) status.textContent = "";
+      }, 1200),
+    );
   });
 </script>

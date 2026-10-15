@@ -66,21 +66,27 @@
 ```html
 <ol class="timeline">
   <li class="timeline-item">
-    <span class="timeline-indicator"><i class="ti ti-user-plus" aria-hidden="true"></i></span>
+    <span class="timeline-indicator">
+      <i class="ti ti-user-plus" aria-hidden="true"></i>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Account created</div>
       <div class="timeline-time">Mon 09:14</div>
     </div>
   </li>
   <li class="timeline-item">
-    <span class="timeline-indicator"><i class="ti ti-upload" aria-hidden="true"></i></span>
+    <span class="timeline-indicator">
+      <i class="ti ti-upload" aria-hidden="true"></i>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Uploaded 12 files</div>
       <div class="timeline-time">Mon 09:20</div>
     </div>
   </li>
   <li class="timeline-item">
-    <span class="timeline-indicator"><i class="ti ti-circle-check" aria-hidden="true"></i></span>
+    <span class="timeline-indicator">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Verified</div>
       <div class="timeline-time">Mon 09:45</div>
@@ -104,21 +110,27 @@
 ```html
 <ol class="timeline timeline-numbered">
   <li class="timeline-item timeline-item-success">
-    <span class="timeline-indicator"><span class="timeline-marker">1</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">1</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Details</div>
       <div class="timeline-description">Name and contact.</div>
     </div>
   </li>
   <li class="timeline-item timeline-item-current" aria-current="step">
-    <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">2</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Payment</div>
       <div class="timeline-description">Card or invoice.</div>
     </div>
   </li>
   <li class="timeline-item">
-    <span class="timeline-indicator"><span class="timeline-marker">3</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">3</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Review</div>
       <div class="timeline-description">Confirm and submit.</div>
@@ -142,25 +154,33 @@
 ```html
 <ol class="timeline timeline-horizontal timeline-numbered">
   <li class="timeline-item timeline-item-success">
-    <span class="timeline-indicator"><span class="timeline-marker">1</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">1</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Cart</div>
     </div>
   </li>
   <li class="timeline-item timeline-item-current" aria-current="step">
-    <span class="timeline-indicator"><span class="timeline-marker">2</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">2</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Shipping</div>
     </div>
   </li>
   <li class="timeline-item">
-    <span class="timeline-indicator"><span class="timeline-marker">3</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">3</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Payment</div>
     </div>
   </li>
   <li class="timeline-item">
-    <span class="timeline-indicator"><span class="timeline-marker">4</span></span>
+    <span class="timeline-indicator">
+      <span class="timeline-marker">4</span>
+    </span>
     <div class="timeline-content">
       <div class="timeline-title">Confirm</div>
     </div>

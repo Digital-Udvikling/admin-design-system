@@ -49,6 +49,12 @@ const hasBoth = !!html && hasReact;
   :global(:is(h1, h2, h3, h4, h5, h6)) + .example-block {
     margin-block-start: 1.25rem;
   }
+  /* A lone note between an example and the next heading belongs to the example. */
+  :global(
+    .example-block:has(+ :not(h1, h2, h3, h4, h5, h6, .example-block) + :is(h1, h2, h3, h4, h5, h6))
+  ) {
+    margin-block-end: 1.25rem;
+  }
   .example-frame {
     border: 1px solid var(--color-border);
     border-radius: 0.5rem;
@@ -68,9 +74,16 @@ const hasBoth = !!html && hasReact;
     font-size: var(--text-sm);
     line-height: 1.5;
     color: var(--color-text);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
   }
-  /* The frame's `overflow: hidden` (needed for rounded corners) clips vanilla
-  `.tooltip-wrap` tooltips — pad enough to contain one on any side. */
+  @container (width < 40rem) {
+    .example-preview {
+      padding: 1rem;
+    }
+  }
+  /* The preview's own scroll box clips vanilla `.tooltip-wrap` tooltips — pad
+  enough to contain one on any side. */
   .example-preview:has(.tooltip-wrap) {
     padding: 3rem;
   }
@@ -85,6 +98,10 @@ const hasBoth = !!html && hasReact;
   .example-source :global(:is(.code-pane, .code-block)) {
     margin: 0;
     border-radius: 0;
+  }
+  /* The frame border is the edge; the pre keeps its focus ring. */
+  .example-source :global(.code-pane) {
+    outline: none;
   }
   /* Global: the flavor radios live in the page chrome, and `data-variant` also
   marks CodePane roots, which this component's scope doesn't reach. */

@@ -6,6 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import adminScopedPlugin from "./plugins/admin-scoped.mjs";
 import remarkExample from "./plugins/example/index.mjs";
+import inlineCodeNowrap from "./plugins/inline-code-nowrap.mjs";
+import trimHeadingText from "./plugins/trim-heading-text.mjs";
 import virtualPreviewsPlugin from "./plugins/example/virtual-previews.mjs";
 import { shikiTheme } from "./src/shiki-theme";
 
@@ -17,7 +19,7 @@ export default defineConfig({
     // the example transform parses fences natively — no remark-directive needed.
     processor: satteri({
       features: { directive: true },
-      mdastPlugins: [remarkExample],
+      mdastPlugins: [remarkExample, inlineCodeNowrap, trimHeadingText],
     }),
     shikiConfig: {
       theme: shikiTheme,

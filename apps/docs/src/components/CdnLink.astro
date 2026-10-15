@@ -1,0 +1,21 @@
+---
+import CodePane from "./CodePane.astro";
+import { version } from "../version";
+
+interface Props {
+  /** Space-separated files under the package's `dist/`, one `<link>` each, pinned to the current release. */
+  files: string;
+}
+
+const { files } = Astro.props;
+const code = files
+  .trim()
+  .split(/\s+/)
+  .map(
+    (file) =>
+      `<link\n  rel="stylesheet"\n  href="https://unpkg.com/@aortl/admin-css@${version}/dist/${file}"\n/>`,
+  )
+  .join("\n");
+---
+
+<CodePane code={code} lang="html" />

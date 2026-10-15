@@ -3,11 +3,19 @@ import { Content, getHeadings } from "@changelog";
 import Docs from "../layouts/Docs.astro";
 ---
 
-<Docs
-  title="Changelog"
-  description="Release history for @aortl/admin-css and @aortl/admin-react."
-  headings={getHeadings()}
-  tocDepth={2}
->
+<Docs title="Changelog" description="Every release, newest first." headings={getHeadings()} tocDepth={2}>
   <Content />
 </Docs>
+
+<style>
+  /* Version headings link to the GitHub compare view; they read as headings and underline on hover. */
+  :global(.docs-article > h2 > a) {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+  }
+  :global(.docs-article > h2 > a:hover) {
+    text-decoration-color: currentColor;
+  }
+</style>

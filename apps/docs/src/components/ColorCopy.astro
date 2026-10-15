@@ -1,79 +1,52 @@
 ---
 /**
  * Singleton: shared "copy color" popover + toast. A click on any
- * [data-color-chip] opens a hex / class / CSS-variable menu.
+ * [data-color-chip] opens a hex / utility / CSS-variable menu.
  */
 ---
 
-<div class="copy-popover" popover id="color-copy-popover">
-  <button class="copy-option" type="button" data-format="hex">
-    <span class="copy-label">Hex</span>
-    <code class="copy-value" data-target="hex"></code>
+<div class="menu-popup color-copy" popover id="color-copy-popover">
+  <button class="menu-item copy-option" type="button" data-format="hex">
+    <span class="color-copy-label">Hex</span>
+    <code class="color-copy-value" data-target="hex"></code>
   </button>
-  <button class="copy-option" type="button" data-format="class">
-    <span class="copy-label">Class</span>
-    <code class="copy-value" data-target="class"></code>
+  <button class="menu-item copy-option" type="button" data-format="class">
+    <span class="color-copy-label">Tailwind</span>
+    <code class="color-copy-value" data-target="class"></code>
   </button>
-  <button class="copy-option" type="button" data-format="var">
-    <span class="copy-label">Variable</span>
-    <code class="copy-value" data-target="var"></code>
+  <button class="menu-item copy-option" type="button" data-format="var">
+    <span class="color-copy-label">Variable</span>
+    <code class="color-copy-value" data-target="var"></code>
   </button>
 </div>
 
 <div class="copy-toast" id="color-copy-toast" role="status" aria-live="polite"></div>
 
 <style>
-  .copy-popover {
-    position: fixed;
-    inset: auto;
-    margin: 0;
-    padding: 0.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.5rem;
-    background: var(--color-surface);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
-    min-width: 15rem;
-    display: none;
-    flex-direction: column;
-    gap: 0.125rem;
-  }
-  .copy-popover:popover-open {
-    display: flex;
+  /* auto: the implicit anchor from showPopover({ source }), not .menu's --menu-trigger. */
+  /* span-all centres on the chip and shifts inside the viewport; margin-inline is the edge gutter. */
+  .color-copy[popover] {
+    position-anchor: auto;
+    position-area: block-end span-all;
+    margin-inline: 0.5rem;
+    max-width: 24rem;
   }
   .copy-option {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.4rem 0.6rem;
-    border: 0;
-    background: transparent;
-    border-radius: 0.35rem;
-    font-size: 0.75rem;
-    line-height: 1;
-    cursor: pointer;
-    text-align: left;
-    color: var(--color-text);
-    font-family: inherit;
   }
-  .copy-option:hover,
-  .copy-option:focus-visible {
-    background: var(--color-surface-muted);
-    outline: none;
-  }
-  .copy-label {
+  .color-copy-label {
+    flex: none;
     color: var(--color-text-muted);
-    font-weight: 500;
   }
-  .copy-value {
-    font-size: 0.7rem;
-    color: var(--color-text);
-    background: transparent;
-    padding: 0;
-    white-space: nowrap;
+  .color-copy-value {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 11rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    background: transparent;
+    padding: 0;
   }
   .copy-toast {
     position: fixed;
@@ -125,79 +98,103 @@
       );
     }
 
-    function rgbToHex(value: string): string {
-      const m = value.match(
-        /rgba?\(\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)/,
-      );
-      if (!m) return value;
-      const hex = (n: string) =>
-        Math.round(parseFloat(n)).toString(16).padStart(2, "0");
-      return `#${hex(m[1])}${hex(m[2])}${hex(m[3])}`;
+    const ctx = document
+      .createElement("canvas")
+      .getContext("2d", { willReadFrequently: true })!;
+    // Paint opaque, then append alpha: getImageData unpremultiplies, so a low-alpha fill loses RGB precision.
+    function toHex(value: string): string {
+      const am = value.match(/(?:\/\s*|rgba\([^)]*,\s*)([\d.]+%?)\s*\)$/);
+      const a = am
+        ? am[1]!.endsWith("%")
+          ? parseFloat(am[1]!) / 100
+          : parseFloat(am[1]!)
+        : 1;
+      const opaque = value
+        .replace(/\s*\/\s*[\d.]+%?\s*\)$/, ")")
+        .replace(/^rgba\((.*),\s*[\d.]+\s*\)$/, "rgb($1)");
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = "#000";
+      ctx.fillStyle = opaque;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      const h = (n: number) => n.toString(16).padStart(2, "0");
+      return `#${h(r!)}${h(g!)}${h(b!)}${a < 1 ? h(Math.round(a * 255)) : ""}`;
     }
 
-    function twNameFromVariable(variable: string): string {
-      return variable.replace(/^--color-/, "");
-    }
-
-    function positionPopover(anchor: HTMLElement) {
-      const rect = anchor.getBoundingClientRect();
-      const margin = 6;
-      // Render off-screen first to measure, then clamp to viewport.
-      popover!.style.top = "0px";
-      popover!.style.left = "0px";
-      const pop = popover!.getBoundingClientRect();
-      let top = rect.bottom + margin;
-      let left = rect.left;
-      if (top + pop.height > window.innerHeight - margin) {
-        top = Math.max(margin, rect.top - pop.height - margin);
-      }
-      if (left + pop.width > window.innerWidth - margin) {
-        left = Math.max(margin, window.innerWidth - pop.width - margin);
-      }
-      popover!.style.top = `${top}px`;
-      popover!.style.left = `${left}px`;
+    // The utility a reader would write: text- for foregrounds, border-/outline- for edges, bg- otherwise.
+    function utility(variable: string): string {
+      const key = variable.replace(/^--color-/, "");
+      if (
+        /^(text|link)\b|-(content|text)$/.test(key) ||
+        /^category-[a-z]+$/.test(key)
+      )
+        return `text-${key}`;
+      if (/^border\b/.test(key)) return `border-${key}`;
+      if (key === "focus") return "outline-focus";
+      return `bg-${key}`;
     }
 
     let activeAnchor: HTMLElement | null = null;
 
+    function setAnchor(next: HTMLElement | null) {
+      activeAnchor?.setAttribute("aria-expanded", "false");
+      next?.setAttribute("aria-expanded", "true");
+      activeAnchor = next;
+    }
+
+    // Light dismiss closes the popover on pointerup, before the click lands, even on its own source.
+    let openOnPointerDown: HTMLElement | null = null;
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        openOnPointerDown = popover.matches(":popover-open")
+          ? activeAnchor
+          : null;
+      },
+      { capture: true },
+    );
+
     document.addEventListener("click", (event) => {
+      const wasOpenFor = openOnPointerDown;
+      openOnPointerDown = null;
       const trigger = (event.target as HTMLElement).closest(
         "[data-color-chip]",
       ) as HTMLElement | null;
       if (!trigger) return;
 
-      event.preventDefault();
-      const variable = trigger.dataset.variable ?? "";
-      const swatch = trigger.querySelector("[data-color-swatch]") as
-        | HTMLElement
-        | null;
-      const computed = swatch
-        ? getComputedStyle(swatch).backgroundColor
-        : getComputedStyle(trigger).backgroundColor;
-      const hex = rgbToHex(computed).toLowerCase();
-      const className = twNameFromVariable(variable);
-      const varExpr = `var(${variable})`;
-
-      slots.hex.textContent = hex;
-      slots.class.textContent = className;
-      slots.var.textContent = varExpr;
-
-      const sameAnchor = activeAnchor === trigger;
       const isOpen = popover.matches(":popover-open");
-      if (isOpen && sameAnchor) {
-        popover.hidePopover();
-        activeAnchor = null;
+      if (
+        (isOpen && activeAnchor === trigger) ||
+        (event.detail > 0 && wasOpenFor === trigger)
+      ) {
+        if (isOpen) popover.hidePopover();
         return;
       }
+
+      const variable = trigger.dataset.variable ?? "";
+      const swatch = trigger.querySelector(
+        "[data-color-swatch]",
+      ) as HTMLElement | null;
+      slots.hex.textContent = toHex(
+        getComputedStyle(swatch ?? trigger).backgroundColor,
+      );
+      slots.class.textContent = utility(variable);
+      slots.var.textContent = `var(${variable})`;
+
+      // A bare popovertarget on a shared popover closes it on a second invoker instead of moving it.
       if (isOpen) popover.hidePopover();
-      activeAnchor = trigger;
-      popover.showPopover();
-      positionPopover(trigger);
+      setAnchor(trigger);
+      // TS's DOM lib predates the source option.
+      (
+        popover as HTMLElement & {
+          showPopover(options: { source: HTMLElement }): void;
+        }
+      ).showPopover({ source: trigger });
     });
 
+    // Toggle events coalesce, so a hide-then-show in one task arrives as open; only a real close clears.
     popover.addEventListener("toggle", (event) => {
-      const e = event as ToggleEvent;
-      if (e.newState === "closed") activeAnchor = null;
+      if ((event as ToggleEvent).newState === "closed") setAnchor(null);
     });
 
     popover.addEventListener("click", async (event) => {
@@ -209,7 +206,7 @@
       const value = slots[format].textContent ?? "";
       const labels: Record<string, string> = {
         hex: "hex",
-        class: "class",
+        class: "utility",
         var: "variable",
       };
       try {
@@ -220,13 +217,5 @@
       }
       popover.hidePopover();
     });
-
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (popover.matches(":popover-open")) popover.hidePopover();
-      },
-      { passive: true },
-    );
   }
 </script>

@@ -24,6 +24,8 @@ const { family, tones } = Astro.props;
             data-color-chip
             data-variable={t.variable}
             aria-label={`Copy ${family} ${t.label} (${t.variable})`}
+            aria-expanded="false"
+            aria-controls="color-copy-popover"
           >
             <span
               class="ramp-chip"
@@ -41,6 +43,7 @@ const { family, tones } = Astro.props;
 
 <style>
   .ramp {
+    container-type: inline-size;
     padding: 0.75rem 0;
     border-top: 1px solid var(--color-border);
   }
@@ -93,14 +96,24 @@ const { family, tones } = Astro.props;
     transform: translateY(-1px);
   }
   .ramp-label {
-    font-size: 0.6rem;
+    font-size: var(--text-xs);
     font-variant-numeric: tabular-nums;
     color: var(--color-text-muted);
     line-height: 1;
+    white-space: nowrap;
   }
-  @media (max-width: 50rem) {
-    .ramp-label {
-      font-size: 0.55rem;
+  /* Below 36rem a 12px "paper" overflows a 16-column cell. */
+  @container (width < 36rem) {
+    .ramp-strip {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      row-gap: 0.5rem;
+    }
+  }
+  @media (forced-colors: active) {
+    /* swatch colour is the content */
+    .ramp-chip {
+      forced-color-adjust: none;
+      border-color: CanvasText;
     }
   }
 </style>

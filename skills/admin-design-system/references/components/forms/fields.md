@@ -53,7 +53,9 @@
   <input id="email-required" type="email" class="input" required />
 </div>
 <div class="field">
-  <label class="field-label" for="email-asterisk">Email <span class="asteriskField">*</span></label>
+  <label class="field-label" for="email-asterisk">
+    Email <span class="asteriskField">*</span>
+  </label>
   <input id="email-asterisk" type="email" class="input" required />
 </div>
 ```
@@ -71,8 +73,14 @@
 ```html
 <div class="field" role="group" aria-labelledby="notify-label">
   <span id="notify-label" class="field-label" data-required>Notify via</span>
-  <label><input type="checkbox" class="checkbox" name="notify" value="email" /> Email</label>
-  <label><input type="checkbox" class="checkbox" name="notify" value="sms" /> SMS</label>
+  <label>
+    <input type="checkbox" class="checkbox" name="notify" value="email" />
+    Email
+  </label>
+  <label>
+    <input type="checkbox" class="checkbox" name="notify" value="sms" />
+    SMS
+  </label>
 </div>
 ```
 

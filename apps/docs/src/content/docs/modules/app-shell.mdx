@@ -370,12 +370,16 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
 <aside class="sidebar" style="height: 22rem">
   <nav class="sidebar-nav">
     <a class="sidebar-item" href="#">
-      <span class="sidebar-icon"><i class="ti ti-receipt" aria-hidden="true"></i></span>
+      <span class="sidebar-icon">
+        <i class="ti ti-receipt" aria-hidden="true"></i>
+      </span>
       <span class="sidebar-label">Ordrer</span>
     </a>
     <details class="sidebar-collapsible" open>
       <summary class="sidebar-collapsible-trigger">
-        <span class="sidebar-icon"><i class="ti ti-shopping-cart" aria-hidden="true"></i></span>
+        <span class="sidebar-icon">
+          <i class="ti ti-shopping-cart" aria-hidden="true"></i>
+        </span>
         <span class="sidebar-label">Webshop</span>
       </summary>
       <div class="sidebar-collapsible-panel">
@@ -394,7 +398,9 @@ Flat items, tree groups, and click-to-collapse, driven by native HTML.
       </div>
     </details>
     <a class="sidebar-item" href="#">
-      <span class="sidebar-icon"><i class="ti ti-package" aria-hidden="true"></i></span>
+      <span class="sidebar-icon">
+        <i class="ti ti-package" aria-hidden="true"></i>
+      </span>
       <span class="sidebar-label">Lager</span>
     </a>
   </nav>
@@ -753,8 +759,8 @@ No sidebar — primary navigation in the navbar via `<Navbar.Dropdown>`. For too
     </Sidebar.Nav>
   </Sidebar>
   <AppShell.Main>
-    <Container>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <Container className="@container">
+      <div className="grid gap-4 @sm:grid-cols-3">
         <StatCard
           icon={IconShoppingCart}
           label="Orders today"

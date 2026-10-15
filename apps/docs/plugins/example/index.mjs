@@ -269,6 +269,9 @@ function dedent(s) {
     .replace(/^\n+|\n+$/g, "");
 }
 
+// A <pre>/<textarea> with a body; an empty one formats like any other element.
+const WHITESPACE_SENSITIVE = /<(pre|textarea)\b[^>]*>(?!<\/\1>)/i;
+
 /**
  * @param {string} code
  * @param {import("@astrojs/markdown-satteri").MdastVisitorContext} ctx
@@ -278,9 +281,27 @@ async function formatHtml(code, ctx, node) {
   const wrapped = `<div>\n${code}\n</div>`;
   const result = await format("snippet.html", wrapped, { ...PRETTIER_OPTS, parser: "html" });
   failOnFormatErrors(result, ctx, node, "html");
-  const out = result.code.trim();
+  // oxfmt can't re-indent a non-empty <pre>/<textarea> body; it indents the open tag and dangles `</pre\n  >`.
+  if (WHITESPACE_SENSITIVE.test(code)) return dedent(code);
+  const out = result.code
+    .trim()
+    // prettier's css-sensitive `</tag\n>` split; whitespace inside a tag is insignificant
+    .replace(/<\/([a-zA-Z][\w-]*)[ \t]*\n[ \t]*>/g, "</$1>")
+    // prettier hugs a text-only child as `\n  >text</tag>` when the open tag fills the line; break it out instead
+    .replace(/\n( *) {2}>([^<>\n]+)<\/([\w-]+)>$/gm, ">\n$1  $2\n$1</$3>");
   const inner = out.replace(/^<div>\n?/, "").replace(/\n?<\/div>\s*$/, "");
   return dedent(inner);
+}
+
+// oxfmt splits an element with 2+ attributes and a text-only child onto three lines even when it fits; rejoin those.
+const SPLIT_TEXT_ELEMENT = /^( *)(<([A-Za-z][\w.]*)\b[^\n]*[^/\n]>)\n *([^<>{}\n]+)\n\1<\/\3>$/gm;
+
+/** @param {string} code */
+function joinTextElements(code) {
+  return code.replace(SPLIT_TEXT_ELEMENT, (all, indent, open, tag, text) => {
+    const line = `${indent}${open}${text.trim()}</${tag}>`;
+    return line.length <= PRETTIER_OPTS.printWidth ? line : all;
+  });
 }
 
 /**
@@ -315,7 +336,7 @@ async function formatReact(code, ctx, node) {
       .slice(at + 1)
       .replace(/^<>\n?/, "")
       .replace(/\n?<\/>;?\s*$/, "");
-    return `${out.slice(0, at).trimEnd()}\n\n${dedent(inner)}`;
+    return `${out.slice(0, at).trimEnd()}\n\n${joinTextElements(dedent(inner))}`;
   }
   const wrapped = `<>\n${code}\n</>;\n`;
   const result = await format("snippet.tsx", wrapped, {
@@ -325,7 +346,7 @@ async function formatReact(code, ctx, node) {
   failOnFormatErrors(result, ctx, node, "tsx");
   const out = result.code.trim();
   const inner = out.replace(/^<>\n?/, "").replace(/\n?<\/>;?\s*$/, "");
-  return dedent(inner);
+  return joinTextElements(dedent(inner));
 }
 
 /**

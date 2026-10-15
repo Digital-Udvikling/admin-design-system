@@ -5,13 +5,15 @@ sidebar:
   order: 4
 ---
 
+import CdnLink from "../../../components/CdnLink.astro";
+
 A parallel CSS bundle prefixed `_ao-` and wrapped in `@scope (._ao-admin-root)`. The default `@aortl/admin-css` bundle stays unprefixed — use that one for full-page admin apps that own the document.
 
 ## Vanilla CSS
 
-```html
-<link rel="stylesheet" href="https://unpkg.com/@aortl/admin-css/dist/admin.scoped.min.css" />
+<CdnLink files="admin.scoped.min.css" />
 
+```html
 <div class="_ao-admin-root">
   <button class="_ao-btn _ao-btn-primary">Save</button>
 </div>

@@ -5,9 +5,11 @@ interface Props {
   groups: NavGroup[];
   /** Pathname of the current page, to mark its link `aria-current="page"`. */
   current: string;
+  /** Autofocus the current page's link, so a modal drawer opens with it focused and scrolled into view. */
+  autofocusCurrent?: boolean;
 }
 
-const { groups, current } = Astro.props;
+const { groups, current, autofocusCurrent = false } = Astro.props;
 const here = (href: string) => (href === current ? "page" : undefined);
 ---
 
@@ -24,14 +26,24 @@ const here = (href: string) => (href === current ? "page" : undefined);
               </summary>
               <div class="sidebar-collapsible-panel">
                 {item.links.map((l) => (
-                  <a class="sidebar-subitem" href={l.href} aria-current={here(l.href)}>
+                  <a
+                    class="sidebar-subitem"
+                    href={l.href}
+                    aria-current={here(l.href)}
+                    autofocus={autofocusCurrent && l.href === current}
+                  >
                     <span class="sidebar-label">{l.label}</span>
                   </a>
                 ))}
               </div>
             </details>
           ) : (
-            <a class="sidebar-item" href={item.href} aria-current={here(item.href)}>
+            <a
+              class="sidebar-item"
+              href={item.href}
+              aria-current={here(item.href)}
+              autofocus={autofocusCurrent && item.href === current}
+            >
               <span class="sidebar-label">{item.label}</span>
             </a>
           ),

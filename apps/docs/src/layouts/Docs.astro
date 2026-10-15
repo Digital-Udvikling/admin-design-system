@@ -36,6 +36,8 @@ const site = "Admin design system";
 const repo = "https://github.com/Digital-Udvikling/admin-design-system";
 const nav = buildNav(await getCollection("docs"), base);
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= tocDepth);
+// A one-entry TOC only repeats the page's single section.
+const showToc = toc.length > 1;
 const isHome = Astro.url.pathname === base;
 ---
 
@@ -70,6 +72,7 @@ const isHome = Astro.url.pathname === base;
     </script>
   </head>
   <body>
+    <a class="btn btn-primary btn-sm docs-skip" href="#content">Skip to content</a>
     <div class="app-shell">
       <header class="navbar">
         <button
@@ -105,13 +108,13 @@ const isHome = Astro.url.pathname === base;
           if (offset > nav.clientHeight - 48) nav.scrollTop = offset - nav.clientHeight / 2;
         })();
       </script>
-      <main class="docs-main">
+      <main class="docs-main" id="content">
         <div class="container docs-page">
           <article class="prose prose-lg docs-article">
             <h1>{title}</h1>
             {!isHome && description && <p class="docs-lede">{description}</p>}
             {
-              toc.length > 0 && (
+              showToc && (
                 <details class="accordion-item prose-exclude docs-toc-mobile">
                   <summary class="accordion-summary">On this page</summary>
                   <nav class="accordion-content" aria-label="On this page">
@@ -139,7 +142,7 @@ const isHome = Astro.url.pathname === base;
             }
           </article>
           {
-            toc.length > 0 && (
+            showToc && (
               <nav class="docs-toc" aria-labelledby="toc-heading">
                 <div class="docs-toc-heading" id="toc-heading">On this page</div>
                 <ul class="docs-toc-list">
@@ -157,7 +160,24 @@ const isHome = Astro.url.pathname === base;
     </div>
     <dialog id="nav-drawer" class="dialog drawer drawer-start" closedby="any" aria-label="Navigation">
       <aside class="sidebar">
-        <SidebarNav groups={nav} current={Astro.url.pathname} />
+        <div class="sidebar-header">
+          {/* The drawer is wide enough for the full name; a bare span gets the system ellipsis. */}
+          <a class="navbar-brand docs-brand" href={base}><span>{site}</span></a>
+          <button
+            type="button"
+            class="dialog-close"
+            commandfor="nav-drawer"
+            command="close"
+            aria-label="Close menu"><i class="ti ti-x" aria-hidden="true"></i></button>
+        </div>
+        <SidebarNav groups={nav} current={Astro.url.pathname} autofocusCurrent />
+        <div class="sidebar-footer">
+          <a class="sidebar-item" href={repo}>
+            <i class="ti ti-brand-github sidebar-icon" aria-hidden="true"></i>
+            <span class="sidebar-label">GitHub</span>
+            <span class="sidebar-badge">v{version}</span>
+          </a>
+        </div>
       </aside>
     </dialog>
   </body>

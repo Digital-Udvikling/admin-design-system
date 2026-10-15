@@ -73,14 +73,13 @@ See [Icons](icons.md) for the library, install, and sizing table.
 
 Every component accepts `className` on its root. It is **appended** to admin's own classes, never replaces them, and passes through verbatim — only admin's classes carry the `_ao-` scope prefix.
 
-**Example**
-
-```html
-<div class="card flex-1"><div class="card-body">…</div></div>
-```
-
 ```tsx
 <Card className="flex-1">…</Card>
+```
+
+```html
+<!-- renders -->
+<div class="_ao-card flex-1"><div class="_ao-card-body">…</div></div>
 ```
 
 ## `classNames`

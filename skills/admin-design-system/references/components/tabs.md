@@ -334,15 +334,20 @@
 <div class="tabs tabs-boxed">
   <div class="tab-list" role="radiogroup" aria-label="Layout">
     <input class="tab-input" type="radio" name="icons" id="icons-1" value="1" checked />
-    <label class="tab" for="icons-1"
-      ><i class="ti ti-layout-grid" aria-hidden="true"></i> Grid</label
-    >
+    <label class="tab" for="icons-1">
+      <i class="ti ti-layout-grid" aria-hidden="true"></i>
+      Grid
+    </label>
     <input class="tab-input" type="radio" name="icons" id="icons-2" value="2" />
-    <label class="tab" for="icons-2"><i class="ti ti-list" aria-hidden="true"></i> List</label>
+    <label class="tab" for="icons-2">
+      <i class="ti ti-list" aria-hidden="true"></i>
+      List
+    </label>
     <input class="tab-input" type="radio" name="icons" id="icons-3" value="3" />
-    <label class="tab" for="icons-3"
-      ><i class="ti ti-chart-bar" aria-hidden="true"></i> Chart</label
-    >
+    <label class="tab" for="icons-3">
+      <i class="ti ti-chart-bar" aria-hidden="true"></i>
+      Chart
+    </label>
   </div>
   <div class="tab-panel" data-value="1">Grid view.</div>
   <div class="tab-panel" data-value="2">List view.</div>

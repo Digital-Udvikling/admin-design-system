@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `.prose` heading sizes and heading, list and quote spacing are in em, so they follow the font size set on or inside `.prose`. (css)
 - `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 
+### Fixed
+
+- A cached Plex font paints from the first frame instead of flashing the fallback; Linux gets metric-matched Liberation fallbacks. (css)
+
 ## [0.22.0] - 2026-09-30
 
 ### Breaking

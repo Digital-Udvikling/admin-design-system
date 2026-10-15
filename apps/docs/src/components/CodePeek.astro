@@ -1,0 +1,27 @@
+---
+// Wraps a pane's `<pre>`: past `MAX_LINES` it starts as a 12-line peek (global.css).
+// The toggle is an empty `<details>` after the code, so tab order follows the visual order.
+interface Props {
+  lines: number;
+}
+
+const MAX_LINES = 20;
+const { lines } = Astro.props;
+---
+
+{
+  lines > MAX_LINES ? (
+    <div class="code-peek">
+      <slot />
+      <details class="code-peek-toggle">
+        <summary>
+          <i class="ti ti-chevron-down" aria-hidden="true" />
+          <span class="code-peek-more">Show all {lines} lines</span>
+          <span class="code-peek-less">Show less</span>
+        </summary>
+      </details>
+    </div>
+  ) : (
+    <slot />
+  )
+}

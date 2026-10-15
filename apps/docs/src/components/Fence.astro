@@ -1,12 +1,17 @@
 ---
 // MDX renders every highlighted markdown fence through this, to add the language and copy bar.
 import CodeBar from "./CodeBar.astro";
+import CodePeek from "./CodePeek.astro";
 
 // Shiki already sets `tabindex="0"`, so an overflowing block scrolls by keyboard.
 const { className, class: cls, ...rest } = Astro.props;
+const html = await Astro.slots.render("default");
+const lines = html.match(/<span class="line"/g)?.length ?? 0;
 ---
 
 <div class="prose-exclude code-pane">
   <CodeBar lang={rest["data-language"]} />
-  <pre class={cls ?? className} {...rest}><slot /></pre>
+  <CodePeek lines={lines}>
+    <pre class={cls ?? className} {...rest} set:html={html} />
+  </CodePeek>
 </div>

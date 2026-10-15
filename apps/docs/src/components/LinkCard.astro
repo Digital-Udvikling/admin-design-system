@@ -1,0 +1,24 @@
+---
+// A whole-card link: `.card` gets a focus ring and hover state when it is the `<a>`.
+interface Props {
+  title: string;
+  href: string;
+  description?: string;
+}
+
+const { title, href, description } = Astro.props;
+---
+
+<a class="card card-bordered link-card" href={href}>
+  <div class="card-body">
+    <div class="card-title">{title}</div>
+    {description && <div class="card-description">{description}</div>}
+  </div>
+</a>
+
+<style>
+  .link-card {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>

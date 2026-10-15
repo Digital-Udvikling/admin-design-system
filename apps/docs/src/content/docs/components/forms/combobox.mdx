@@ -4,13 +4,13 @@ description: Type to filter a list, then pick one or more values.
 ---
 
 import { Combobox, Field } from "@aortl/admin-react";
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../../components/ReactOnly.astro";
 
 `Combobox` wraps Base UI's [Combobox](https://base-ui.com/react/components/combobox). Filtering needs JavaScript, so the examples are React only; the `combobox-*` classes ship in both bundles for a vanilla page that wires its own script (see [Vanilla](#vanilla)). For a multi-choice filter without JavaScript, use the [filter menu](../../../patterns/filter-menu/).
 
 ## Examples
 
-### Default <StarlightBadge text="React only" variant="caution" />
+### Default <ReactOnly />
 
 :::example
 
@@ -39,7 +39,7 @@ import { Badge as StarlightBadge } from "@astrojs/starlight/components";
 
 :::
 
-### Multiple <StarlightBadge text="React only" variant="caution" />
+### Multiple <ReactOnly />
 
 With `multiple`, selected values render as chips in `Combobox.Chips`. `Combobox.Value` passes the array to its render function. Backspace in an empty input removes the last chip, and ← / → move focus between chips.
 
@@ -87,7 +87,7 @@ With `multiple`, selected values render as chips in `Combobox.Chips`. `Combobox.
 
 :::
 
-### Sizes <StarlightBadge text="React only" variant="caution" />
+### Sizes <ReactOnly />
 
 :::example
 

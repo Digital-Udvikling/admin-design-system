@@ -6,7 +6,7 @@ sidebar:
 ---
 
 import { Button, Dialog, useConfirm } from "@aortl/admin-react";
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -178,7 +178,7 @@ Render one dialog per row in its actions cell, with the row key in its `id` and 
 
 A table with hundreds of rows can link each row's action to a confirmation page instead, which renders the same dialog content as the page body.
 
-### Promise-based <StarlightBadge text="React only" variant="caution" />
+### Promise-based <ReactOnly />
 
 In React, `useConfirm()` asks and returns the answer, and the caller runs the action.
 

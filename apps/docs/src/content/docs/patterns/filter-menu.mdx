@@ -6,7 +6,7 @@ sidebar:
 ---
 
 import { Combobox, Menu } from "@aortl/admin-react";
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 
 Use a filter menu for a short, fixed set of values (statuses, types, warehouses). For a long or open-ended list (suppliers, customers), use a [Combobox](../../components/forms/combobox/) with `multiple`.
 
@@ -70,7 +70,7 @@ The menu sits in a GET form, so Apply submits the checked values as query parame
 
 :::
 
-### React menu <StarlightBadge text="React only" variant="caution" />
+### React menu <ReactOnly />
 
 Checkable `Menu.Item`s toggle without closing the menu. Keep the checked set in state and filter as it changes, or apply it from a button.
 
@@ -91,7 +91,7 @@ Checkable `Menu.Item`s toggle without closing the menu. Keep the checked set in 
 
 :::
 
-### Searchable <StarlightBadge text="React only" variant="caution" />
+### Searchable <ReactOnly />
 
 :::example
 

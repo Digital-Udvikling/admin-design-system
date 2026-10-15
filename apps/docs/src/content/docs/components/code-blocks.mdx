@@ -81,7 +81,7 @@ import { CodeBlock } from "@aortl/admin-react";
 
 :::
 
-Highlight with `theme: "css-variables"` and put `code-block` on the `<pre>`, for example with a `pre` transformer. In React, render Shiki's `structure: "inline"` output inside `CodeBlock`:
+Highlight with `theme: "css-variables"` and put `code-block` on the `<pre>`, for example with a `pre` transformer. Astro's built-in `"css-variables"` preset prefixes its variables `--astro-code-`, so pass Shiki's `createCssVariablesTheme()` there instead. In React, render Shiki's `structure: "inline"` output inside `CodeBlock`:
 
 ```tsx
 const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", structure: "inline" });

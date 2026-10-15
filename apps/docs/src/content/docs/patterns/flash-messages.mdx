@@ -6,7 +6,7 @@ sidebar:
 ---
 
 import { Alert, Button } from "@aortl/admin-react";
-import { Badge as StarlightBadge } from "@astrojs/starlight/components";
+import ReactOnly from "../../../components/ReactOnly.astro";
 import { IconAlertTriangle, IconCircleCheck } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -46,7 +46,7 @@ There is no toast. A server-rendered page shows the messages from the last reque
 
 The messages disappear on the next navigation, so the vanilla stack has no dismiss button. React's `Alert` renders one when you pass `onDismiss`.
 
-### Result next to the action <StarlightBadge text="React only" variant="caution" />
+### Result next to the action <ReactOnly />
 
 :::example
 

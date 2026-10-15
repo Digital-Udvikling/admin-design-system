@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines; `.prose` `<code>` chips are borderless tints of the text colour; groups in the collapsed sidebar rail are split by a hairline. (css)
+- Visual refresh: code blocks sit closer to the page surface, so syntax colours reach 4.5:1, at `1.5` line height; `.prose` headings step 24/18/16/14/12px over a `1.625` body line; `h1`–`h3` balance wrapped lines; `.prose` `<code>` chips are borderless tints of the text colour, and code in `.prose` headings drops the chip fill; groups in the collapsed sidebar rail are split by a hairline. (css)
 - `.prose` heading sizes and heading, list and quote spacing are in em, so they follow the font size set on or inside `.prose`. (css)
 - `<Field inline>` puts the label before controls other than a checkbox or switch, and after a checkbox or switch; `reverse` / `field-row-reverse` swaps the order. (both)
 
@@ -27,6 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `.navbar` on a narrow screen keeps its actions in view: `navbar-items` scrolls sideways, then the brand name truncates. (css)
 - A `.table-sticky` row reached by a fragment link or `scrollIntoView()` stops below the sticky header. (css)
 - Light-mode `--color-text-muted` is `--color-base-650` (new), so muted text on a hovered row reaches 4.5:1. (css)
+- A sidebar in a vanilla drawer keeps its header and footer pinned while the nav scrolls. (css)
+- `code-block` with `tabindex` shows the system focus ring instead of the browser default. (both)
 
 ## [0.22.0] - 2026-09-30
 

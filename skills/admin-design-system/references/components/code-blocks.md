@@ -144,11 +144,11 @@ const html = await codeToHtml(source, { lang: "ts", theme: "css-variables", stru
 
 ### Vanilla
 
-| Class               | Effect                                                                                                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono at `1.5` line height, `0.5rem` radius, long lines wrapped |
-| `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                                       |
-| `code`              | Inline chip for an identifier in a sentence: mono at `0.85em`, tinted from the text colour, which it inherits            |
+| Class               | Effect                                                                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `code-block`        | `<pre>` on the code surface: `0.75rem` padding, `text-sm` mono at `1.5` line height, `0.5rem` radius, long lines wrapped, an inset focus ring with `tabindex` |
+| `code-block-nowrap` | Long lines scroll horizontally instead of wrapping                                                                                                            |
+| `code`              | Inline chip for an identifier in a sentence: mono at `0.85em`, tinted from the text colour, which it inherits                                                 |
 
 The block's surface and text come from `--color-code-surface` / `--color-code-text`, so both follow the page's `color-scheme`. In dark mode the code surface matches `--color-surface-muted`, so inside a card, sidebar, navbar, footer, dialog footer or muted item the block takes `--color-surface` instead; on your own surface-muted container, set `background-color: var(--color-surface)` on the `code-block`. The root already has `overflow: auto`, so an inline `max-height` clamps a log viewer's height. Add `tabindex="0"` so a block that overflows scrolls by keyboard.
 

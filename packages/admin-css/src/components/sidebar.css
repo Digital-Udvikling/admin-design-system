@@ -69,8 +69,10 @@
     @apply flex items-center gap-2 px-4 h-12 shrink-0 border-b border-border;
   }
 
+  /* Chromium focuses an overflowing nav first when a drawer opens with no autofocus inside. */
   .sidebar-nav {
-    @apply flex flex-col gap-0.5 px-2 py-2 flex-1 overflow-auto;
+    @apply flex flex-col gap-0.5 px-2 py-2 flex-1 overflow-auto
+           focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
   }
 
   .sidebar-group {
@@ -294,6 +296,8 @@
   }
   .drawer > .sidebar {
     flex: 1;
+    /* Let .sidebar-nav scroll so a header/footer copy stays pinned. */
+    min-height: 0;
     width: auto;
     border-inline-end-width: 0;
   }

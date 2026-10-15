@@ -8,6 +8,7 @@
            shadow-sm
            flex-col;
     --surface-current: var(--color-surface);
+    --_code-surface: initial;
     width: calc(100% - 2rem);
     max-width: 32rem;
     max-height: calc(100dvh - 2rem);
@@ -183,6 +184,7 @@
            border-t border-border
            bg-surface-muted;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
     /* Keep the muted background inside the parent's rounded corners — don't
        use `overflow: hidden` on `.dialog` for this; it clips popups. */
     border-bottom-left-radius: inherit;

@@ -4,6 +4,7 @@
            bg-surface-muted text-text
            border-r border-border;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
     width: var(--sidebar-width, 240px);
     transition: width 150ms ease;
   }
@@ -263,6 +264,7 @@
            bg-surface-muted text-text border-r border-border-strong shadow-sm
            transition-transform duration-150;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
     width: min(var(--sidebar-width, 240px), 80vw);
   }
 

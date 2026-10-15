@@ -6,6 +6,7 @@
            bg-surface-muted text-text
            border-b-2 border-system-accent;
     --surface-current: var(--color-surface-muted);
+    --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
   }
 
   .navbar-brand {

@@ -138,6 +138,7 @@
     ) {
     --_table-row-bg: var(--color-primary-muted);
     --surface-current: var(--color-primary-muted);
+    --_code-surface: initial;
   }
 
   /* A strong divider only between two selected rows: primary-muted equals border in light

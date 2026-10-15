@@ -64,6 +64,7 @@
            border border-border-strong rounded-lg shadow-sm
            transition-[opacity,translate] duration-100;
     --surface-current: var(--color-surface);
+    --_code-surface: initial;
   }
 
   /* Vanilla popup: top layer, so no ancestor's overflow or stacking context clips it. */

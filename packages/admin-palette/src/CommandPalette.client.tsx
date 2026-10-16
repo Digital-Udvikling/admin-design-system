@@ -49,6 +49,7 @@ const NO_SOURCES: readonly Source[] = [];
 const NO_IDS: readonly string[] = [];
 
 const defaultNavigate = (href: string) => window.location.assign(href);
+const getServerPageCommands = () => NO_COMMANDS;
 
 function CommandIconView({ icon }: { icon: CommandIcon | undefined }) {
   if (icon === undefined || icon === null) return null;
@@ -118,7 +119,8 @@ export function CommandPaletteRoot({
   className,
 }: CommandPaletteProps) {
   const { open, options } = useSyncExternalStore(subscribe, getOpenState, getOpenState);
-  const pageCommands = useSyncExternalStore(subscribe, getPageCommands, getPageCommands);
+  // The server never has page commands; hydrating with them would mismatch its markup.
+  const pageCommands = useSyncExternalStore(subscribe, getPageCommands, getServerPageCommands);
 
   const [query, setQuery] = useState("");
   const [stack, setStack] = useState<readonly Located[]>([]);

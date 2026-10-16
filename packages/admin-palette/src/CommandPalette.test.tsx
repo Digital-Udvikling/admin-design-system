@@ -1,5 +1,7 @@
 import { AdminRoot } from "@aortl/admin-react";
 import { act, render, screen, waitFor, within } from "@testing-library/react";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CommandPalette, useCommandPalette, useCommands, type Command, type Source } from ".";
@@ -194,5 +196,26 @@ describe("CommandPalette", () => {
     expect(perform).not.toHaveBeenCalled();
     await user.keyboard("{Control>}k{/Control}{Control>}e{/Control}");
     expect(perform).toHaveBeenCalledOnce();
+  });
+
+  it("hydrates over server markup when page commands registered first", async () => {
+    const tree = (
+      <AdminRoot>
+        <CommandPalette />
+      </AdminRoot>
+    );
+    const container = document.body.appendChild(document.createElement("div"));
+    container.innerHTML = renderToString(tree);
+    function Page() {
+      useCommands([{ id: "refund", title: "Refund this order" }]);
+      return null;
+    }
+    render(<Page />);
+    const errors: unknown[] = [];
+    await act(async () => {
+      hydrateRoot(container, tree, { onRecoverableError: (error) => errors.push(error) });
+    });
+    expect(errors).toEqual([]);
+    container.remove();
   });
 });

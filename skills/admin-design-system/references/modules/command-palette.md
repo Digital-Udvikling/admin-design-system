@@ -1,11 +1,21 @@
----
-title: Command palette
-description: Cmd+K search, navigation and commands.
----
+# Command palette
 
-import ReactOnly from "../../../components/ReactOnly.astro";
-import { CommandPalette, useCommands } from "@aortl/admin-palette";
-import { IconFileExport, IconMoon, IconPackage, IconSun, IconUsers } from "@tabler/icons-react";
+> Cmd+K search, navigation and commands.
+
+## Contents
+
+- [Examples](#examples)
+  - [Palette (React only)](#palette-react-only)
+  - [Trigger](#trigger)
+  - [Page commands (React only)](#page-commands-react-only)
+  - [Async sources](#async-sources)
+  - [Anatomy](#anatomy)
+- [Behavior](#behavior)
+- [Reference](#reference)
+  - [React](#react)
+  - [Command](#command)
+  - [Source](#source)
+  - [Vanilla](#vanilla)
 
 The palette ships in its own package, `@aortl/admin-palette`, built on `@aortl/admin-react`. Its classes are in `@aortl/admin-css`.
 
@@ -17,11 +27,11 @@ Render one `<CommandPalette>` per document inside `<AdminRoot>`, from a client c
 
 ## Examples
 
-### Palette <ReactOnly />
+### Palette (React only)
 
 Open it with the trigger, type `dark`, or type a number for the async Orders source.
 
-:::example
+**Example**
 
 ```tsx
 const setTheme = (theme: "light" | "dark") => {
@@ -70,15 +80,13 @@ const commands = [
 <CommandPalette.Trigger keys={null} />
 ```
 
-:::
-
 This page binds no hotkey to the example, since Ctrl/Cmd+K opens the site search. Leave `hotkey` out to bind `mod+k`.
 
 ### Trigger
 
 Any element with `data-admin-palette` opens the palette; a value opens straight into that command's page. `CommandPalette.Trigger` renders the field-shaped button with no handler, so a Server Component can render it.
 
-:::example
+**Example**
 
 ```html
 <button type="button" class="palette-trigger" data-admin-palette aria-haspopup="dialog">
@@ -92,13 +100,11 @@ Any element with `data-admin-palette` opens the palette; a value opens straight 
 <CommandPalette.Trigger />
 ```
 
-:::
-
-### Page commands <ReactOnly />
+### Page commands (React only)
 
 `useCommands` adds commands while the calling component is mounted. Before anything is typed they list under "This page", after Recent and Suggested.
 
-:::example
+**Example**
 
 ```tsx
 function OrderPage() {
@@ -111,8 +117,6 @@ function OrderPage() {
 
 <OrderPage />;
 ```
-
-:::
 
 ### Async sources
 
@@ -141,7 +145,7 @@ const orders: Source = {
 
 The markup `CommandPalette` renders inside its `<dialog class="dialog palette">`, shown inline.
 
-:::example
+**Example**
 
 ```html
 <div class="palette" style="width: 100%">
@@ -185,8 +189,6 @@ The markup `CommandPalette` renders inside its `<dialog class="dialog palette">`
 </div>
 ```
 
-:::
-
 ## Behavior
 
 | Key                  | Action                                                                  |
@@ -225,7 +227,7 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 | `CommandPalette.Trigger` | `page`        | `string`                               | —                      |
 | `CommandPalette.Trigger` | `keys`        | `string \| null`                       | `"mod+k"`              |
 
-`commands` list under "Commands" unless they name a `group`. `suggested` holds command ids. `hotkey` takes [`useHotkey`](../../basics/conventions/#hotkeys) syntax and toggles the palette. Pass your router's navigate as `onNavigate` so same-app links skip a full load. `CommandPalette.Trigger` takes native `<button>` attributes; `keys` is the hint only and should match `hotkey`.
+`commands` list under "Commands" unless they name a `group`. `suggested` holds command ids. `hotkey` takes [`useHotkey`](../basics/conventions.md#hotkeys) syntax and toggles the palette. Pass your router's navigate as `onNavigate` so same-app links skip a full load. `CommandPalette.Trigger` takes native `<button>` attributes; `keys` is the hint only and should match `hotkey`.
 
 | Hook                  | Returns                       |
 | --------------------- | ----------------------------- |
@@ -282,4 +284,4 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 | `palette-trigger`       | Search-field-shaped button; the `kbd-group` hint hides on touch                                            |
 | `palette-trigger-label` | The trigger's label, truncated first                                                                       |
 
-The rows reuse `item-media`, `item-content`, `item-title`, `item-description` and `item-actions` from [List](../list/).
+The rows reuse `item-media`, `item-content`, `item-title`, `item-description` and `item-actions` from [List](../components/list.md).

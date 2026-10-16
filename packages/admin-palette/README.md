@@ -2,7 +2,7 @@
 
 Cmd+K command palette for the admin design system: search, navigation, nested pages and async sources. Built on [`@aortl/admin-react`](https://www.npmjs.com/package/@aortl/admin-react).
 
-[View on npm](https://www.npmjs.com/package/@aortl/admin-palette) · [Docs](https://digital-udvikling.github.io/admin-design-system/components/command-palette/)
+[View on npm](https://www.npmjs.com/package/@aortl/admin-palette) · [Docs](https://digital-udvikling.github.io/admin-design-system/modules/command-palette/)
 
 ## Install
 

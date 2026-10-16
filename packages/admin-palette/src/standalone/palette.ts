@@ -13,7 +13,15 @@ let options: StandaloneOptions | undefined;
 let mounted: Promise<void> | undefined;
 
 function mount(): Promise<void> {
-  mounted ??= import("./app").then((app) => app.mount(options ?? {}));
+  mounted ??= import("./app").then(
+    (app) => app.mount(options ?? {}),
+    (error: unknown) => {
+      // A failed chunk load (a deploy, a network blip) is retried on the next open.
+      mounted = undefined;
+      closePalette();
+      console.error("AdminPalette: the palette failed to load", error);
+    },
+  );
   return mounted;
 }
 

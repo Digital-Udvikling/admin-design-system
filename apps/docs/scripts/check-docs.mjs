@@ -7,7 +7,7 @@
 //   4. coverage report: component classes no Reference table mentions yet, and
 //      public custom properties (not `--_*`, not tokens) no page mentions
 //   5. every `:::example` tsx fence type-checks, built into the same preview
-//      module the site renders, against packages/admin-react/src
+//      module the site renders, against packages/admin-react/src and admin-palette/src
 //   6. every prop in a `## Reference` → `### React` table exists on the props
 //      type of its part (or, without a Part column, of a component the page imports)
 //   7. every example with both fences uses the same admin classes in each: the
@@ -42,6 +42,8 @@ const DIST_DIR = join(SCRIPT_DIR, "..", "dist");
 const REPO_ROOT = join(SCRIPT_DIR, "..", "..", "..");
 const CSS_DIR = join(REPO_ROOT, "packages", "admin-css", "src", "components");
 const REACT_ENTRY = join(REPO_ROOT, "packages", "admin-react", "src", "index.ts");
+const REACT_INTERNAL = join(REPO_ROOT, "packages", "admin-react", "src", "internal.ts");
+const PALETTE_ENTRY = join(REPO_ROOT, "packages", "admin-palette", "src", "index.ts");
 
 const requireBuild = process.argv.includes("--require-build");
 const strictCoverage = process.argv.includes("--strict-coverage");
@@ -286,7 +288,11 @@ const compilerOptions = {
   // `import.meta.env`, `*.astro` modules.
   types: ["astro/client"],
   // Source, like the docs' Vite alias; dist is often stale.
-  paths: { "@aortl/admin-react": [REACT_ENTRY] },
+  paths: {
+    "@aortl/admin-react": [REACT_ENTRY],
+    "@aortl/admin-react/internal": [REACT_INTERNAL],
+    "@aortl/admin-palette": [PALETTE_ENTRY],
+  },
 };
 
 const host = ts.createCompilerHost(compilerOptions);
@@ -299,7 +305,7 @@ host.fileExists = (file) => previews.has(file) || fileExists.call(host, file);
 host.readFile = (file) => previews.get(file)?.source ?? readFile.call(host, file);
 
 const program = ts.createProgram({
-  rootNames: [...previews.keys(), REACT_ENTRY],
+  rootNames: [...previews.keys(), REACT_ENTRY, PALETTE_ENTRY],
   options: compilerOptions,
   host,
 });
@@ -333,9 +339,11 @@ errors.push(...exampleErrors);
 
 const checker = program.getTypeChecker();
 const reactExports = new Map(
-  checker
-    .getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(REACT_ENTRY)))
-    .map((s) => [s.name, s]),
+  [REACT_ENTRY, PALETTE_ENTRY].flatMap((entry) =>
+    checker
+      .getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(entry)))
+      .map((s) => [s.name, s]),
+  ),
 );
 
 const propsCache = new Map();
@@ -372,7 +380,7 @@ for (const { rel, tree } of pages) {
   for (const node of tree.children) {
     if (node.type === "mdxjsEsm") {
       for (const { code } of forwardedImports(node.value)) {
-        const m = code.match(/^import\s*\{([^}]*)\}\s*from\s*"@aortl\/admin-react"/);
+        const m = code.match(/^import\s*\{([^}]*)\}\s*from\s*"@aortl\/admin-(?:react|palette)"/);
         if (!m) continue;
         for (const spec of m[1].split(",")) {
           const name = spec.trim().split(/\s+as\s+/)[0];

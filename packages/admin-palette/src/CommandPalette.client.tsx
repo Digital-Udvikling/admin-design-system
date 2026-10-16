@@ -1,0 +1,470 @@
+"use client";
+
+import { Dialog, Kbd, Spinner, renderIcon, useHotkey } from "@aortl/admin-react";
+import { cn } from "@aortl/admin-react/internal";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
+import { Layer, isStaticList, walkCommands, type CommandSet, type ResultItem } from "./rank";
+import { readRecents, recordRecent, type Located } from "./recents";
+import { buildResults, locate } from "./results";
+import {
+  closePalette,
+  getOpenState,
+  getPageCommands,
+  openPalette,
+  subscribe,
+  togglePalette,
+} from "./store";
+import type { Command, CommandIcon, Source } from "./types";
+import { useSources } from "./useSources";
+
+export interface CommandPaletteProps {
+  /** System-wide commands, under "Commands" unless they name a `group`. */
+  commands?: readonly Command[];
+  /** Async results searched from the root. */
+  sources?: readonly Source[];
+  /** Command ids listed under Suggested before anything is typed. */
+  suggested?: readonly string[];
+  /** Opens and closes the palette, in `useHotkey` syntax; `false` binds none. Default: `"mod+k"`. */
+  hotkey?: string | readonly string[] | false;
+  /** Follows an `href`; pass your router's navigate. Default: `location.assign`. */
+  onNavigate?: (href: string) => void;
+  /** Default: `"Search or jump to…"`. */
+  placeholder?: string;
+  /** Names the dialog. Default: `"Command palette"`. */
+  "aria-label"?: string;
+  className?: string;
+}
+
+const NO_COMMANDS: readonly Command[] = [];
+const NO_SOURCES: readonly Source[] = [];
+const NO_IDS: readonly string[] = [];
+
+const defaultNavigate = (href: string) => window.location.assign(href);
+
+function CommandIconView({ icon }: { icon: CommandIcon | undefined }) {
+  if (icon === undefined || icon === null) return null;
+  return (
+    <span className={cn("item-media", undefined)}>
+      {typeof icon === "string" ? (
+        <i className={`ti ti-${icon}`} aria-hidden="true" />
+      ) : (
+        renderIcon(icon)
+      )}
+    </span>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="m21 21-6-6" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+/** Binds a command's shortcut while the palette is open. */
+function ShortcutBinding({ shortcut, onRun }: { shortcut: string; onRun: () => void }) {
+  useHotkey(shortcut, onRun);
+  return null;
+}
+
+/** The palette dialog. Render one per document, from a client component when commands carry functions. */
+export function CommandPaletteRoot({
+  commands = NO_COMMANDS,
+  sources = NO_SOURCES,
+  suggested = NO_IDS,
+  hotkey = "mod+k",
+  onNavigate = defaultNavigate,
+  placeholder = "Search or jump to…",
+  "aria-label": ariaLabel = "Command palette",
+  className,
+}: CommandPaletteProps) {
+  const { open, options } = useSyncExternalStore(subscribe, getOpenState, getOpenState);
+  const pageCommands = useSyncExternalStore(subscribe, getPageCommands, getPageCommands);
+
+  const [query, setQuery] = useState("");
+  const [stack, setStack] = useState<readonly Located[]>([]);
+  // Unset, the highlight follows the top result; arrow keys pin it to an item by key.
+  const [pinned, setPinned] = useState<string | null>(null);
+  const [enterQueued, setEnterQueued] = useState<{ newTab: boolean } | null>(null);
+  const [recents, setRecents] = useState<readonly Located[]>([]);
+  const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const id = useId();
+  const listId = `${id}-list`;
+
+  useHotkey(hotkey === false ? null : hotkey, togglePalette);
+
+  // Any `[data-admin-palette]` element opens it, its value naming a page to open into.
+  useEffect(() => {
+    const onClick = (event: globalThis.MouseEvent) => {
+      const trigger = (event.target as Element | null)?.closest?.("[data-admin-palette]");
+      if (!trigger) return;
+      event.preventDefault();
+      const page = trigger.getAttribute("data-admin-palette");
+      openPalette(page ? { page } : {});
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("click", onClick);
+      closePalette();
+    };
+  }, []);
+
+  const sets = useMemo<CommandSet[]>(
+    () => [
+      { layer: Layer.page, commands: pageCommands, defaultGroup: "This page" },
+      { layer: Layer.system, commands, defaultGroup: "Commands" },
+    ],
+    [pageCommands, commands],
+  );
+
+  // Each open starts fresh, at the root or the requested page.
+  useEffect(() => {
+    if (!open) return;
+    const page = options.page ? locate(sets, options.page) : undefined;
+    setQuery(options.query ?? "");
+    setStack(page && page.command.children ? [page] : []);
+    setPinned(null);
+    setEnterQueued(null);
+    setRecents(readRecents((recentId) => locate(sets, recentId)));
+    // Dialog.Container's effect, a child's, already called showModal().
+    inputRef.current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `sets` is read at open only; a later registration doesn't reset the page
+  }, [open, options]);
+
+  const page = stack.at(-1)?.command;
+  const pageSource = page && !isStaticList(page.children) ? page.children : undefined;
+  const activeSources = useMemo(
+    () => (page ? (pageSource ? [pageSource] : NO_SOURCES) : sources),
+    [page, pageSource, sources],
+  );
+  const trimmed = query.trim();
+  const sourceStates = useSources(activeSources, trimmed, {
+    enabled: open,
+    inPage: page !== undefined,
+  });
+  const pending = [...sourceStates.values()].some((s) => s.status === "pending");
+
+  const groups = useMemo(
+    () =>
+      buildResults({
+        sets,
+        sources: activeSources,
+        sourceStates,
+        query: trimmed,
+        page,
+        recents,
+        suggested,
+      }),
+    [sets, activeSources, sourceStates, trimmed, page, recents, suggested],
+  );
+  const items = useMemo(() => groups.flatMap((g) => g.items), [groups]);
+  const highlighted =
+    (pinned !== null && items.find((i) => i.key === pinned)) || items[0] || undefined;
+  const optionId = (index: number) => `${id}-option-${index}`;
+  const highlightedIndex = highlighted ? items.indexOf(highlighted) : -1;
+  const highlightedId = highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined;
+
+  useEffect(() => {
+    if (highlightedId === undefined) return;
+    listRef.current
+      ?.querySelector(`[id="${highlightedId}"]`)
+      ?.scrollIntoView?.({ block: "nearest" });
+  }, [highlightedId]);
+
+  const stackTitles = stack.map((entry) => entry.command.title);
+
+  function run(entry: Located, newTab: boolean) {
+    const { command } = entry;
+    if (command.children) {
+      setStack((s) => [...s, entry]);
+      setQuery("");
+      setPinned(null);
+      return;
+    }
+    if (command.href) {
+      recordRecent(entry);
+      // A new tab keeps the palette open, so an operator can queue several.
+      if (newTab) window.open(command.href, "_blank", "noopener");
+      else {
+        closePalette();
+        onNavigate(command.href);
+      }
+      return;
+    }
+    if (command.perform) {
+      recordRecent(entry);
+      closePalette();
+      command.perform();
+    }
+  }
+
+  const located = (item: ResultItem): Located => ({
+    command: item.command,
+    path: [...stackTitles, ...item.path],
+  });
+
+  // Enter waits for the sources only while the highlight follows the top result.
+  useEffect(() => {
+    if (!enterQueued || pending) return;
+    setEnterQueued(null);
+    if (highlighted) run(located(highlighted), enterQueued.newTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fires when the sources settle, with the results of that render
+  }, [enterQueued, pending]);
+
+  function leavePage(depth: number) {
+    setStack((s) => s.slice(0, depth));
+    setQuery("");
+    setPinned(null);
+    setEnterQueued(null);
+  }
+
+  function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.nativeEvent.isComposing) return;
+    switch (event.key) {
+      case "ArrowDown":
+      case "ArrowUp": {
+        event.preventDefault();
+        if (items.length === 0) return;
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        const next = Math.min(Math.max(highlightedIndex + step, 0), items.length - 1);
+        setPinned(items[next]?.key ?? null);
+        setEnterQueued(null);
+        return;
+      }
+      case "Enter": {
+        event.preventDefault();
+        const newTab = event.metaKey || event.ctrlKey;
+        if (pinned === null && pending) setEnterQueued({ newTab });
+        else if (highlighted) run(located(highlighted), newTab);
+        return;
+      }
+      case "Escape":
+        // Prevented, the keydown never becomes the dialog's close request.
+        if (stack.length > 0) {
+          event.preventDefault();
+          leavePage(stack.length - 1);
+        }
+        return;
+      case "Backspace":
+        if (query === "" && stack.length > 0) {
+          event.preventDefault();
+          leavePage(stack.length - 1);
+        }
+        return;
+    }
+  }
+
+  function onItemClick(event: MouseEvent, item: ResultItem) {
+    // A modified click on a link opens a tab or window natively.
+    if (item.command.href && (event.metaKey || event.ctrlKey || event.shiftKey)) {
+      recordRecent(located(item));
+      return;
+    }
+    event.preventDefault();
+    run(located(item), false);
+  }
+
+  const shortcuts = useMemo(
+    () =>
+      sets.flatMap(({ commands: list }) =>
+        [...walkCommands(list)].flatMap(({ command, path }) =>
+          command.shortcut
+            ? [{ command, path: path.map((c) => c.title), shortcut: command.shortcut }]
+            : [],
+        ),
+      ),
+    [sets],
+  );
+
+  let index = 0;
+  const empty = items.length === 0 && !pending && !groups.some((g) => g.status);
+
+  return (
+    <Dialog.Container
+      open={open}
+      onOpenChange={(next) => (next ? openPalette() : closePalette())}
+      className={cn("palette", className)}
+      aria-label={ariaLabel}
+    >
+      {open
+        ? shortcuts.map(({ command, path, shortcut }) => (
+            <ShortcutBinding
+              key={`${path.join("/")}/${command.id}`}
+              shortcut={shortcut}
+              onRun={() => run({ command, path }, false)}
+            />
+          ))
+        : null}
+      <div className={cn("palette-header", undefined)}>
+        <SearchIcon />
+        {stack.map((entry, depth) => (
+          <button
+            key={`${depth}-${entry.command.id}`}
+            type="button"
+            className={cn("palette-crumb", undefined)}
+            onClick={() => leavePage(depth + 1)}
+          >
+            {entry.command.title}
+          </button>
+        ))}
+        <input
+          ref={inputRef}
+          className={cn("palette-input", undefined)}
+          type="text"
+          // eslint-disable-next-line jsx-a11y/no-redundant-roles -- a text input is a textbox without `list`; the combobox role carries aria-activedescendant
+          role="combobox"
+          aria-expanded="true"
+          aria-controls={listId}
+          aria-autocomplete="list"
+          aria-activedescendant={highlightedId}
+          aria-label={ariaLabel}
+          placeholder={placeholder}
+          autoComplete="off"
+          spellCheck={false}
+          enterKeyHint="go"
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setPinned(null);
+            setEnterQueued(null);
+          }}
+          onKeyDown={onKeyDown}
+        />
+        {pending ? <Spinner size="sm" aria-label="Searching" /> : null}
+      </div>
+      <div
+        ref={listRef}
+        id={listId}
+        // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- an ARIA combobox popup; <select> can't hold groups of rich rows
+        role="listbox"
+        aria-label={ariaLabel}
+        className={cn("palette-list", undefined)}
+      >
+        {groups.map((group, groupIndex) => {
+          const labelId = `${id}-group-${groupIndex}`;
+          return (
+            <div
+              key={group.key}
+              // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- a group inside an ARIA listbox
+              role="group"
+              aria-labelledby={group.label ? labelId : undefined}
+              className={cn("palette-group", undefined)}
+            >
+              {group.label ? (
+                <div id={labelId} className={cn("palette-group-label", undefined)}>
+                  {group.label}
+                </div>
+              ) : null}
+              {group.items.map((item) => {
+                const i = index++;
+                const { command } = item;
+                const Row = command.href ? "a" : "div";
+                return (
+                  // eslint-disable-next-line jsx-a11y/interactive-supports-focus -- the input keeps focus and points here with aria-activedescendant
+                  <Row
+                    key={item.key}
+                    id={optionId(i)}
+                    // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- an option in an ARIA listbox
+                    role="option"
+                    aria-selected={i === highlightedIndex}
+                    data-highlighted={i === highlightedIndex ? "" : undefined}
+                    className={cn("item palette-item", undefined)}
+                    {...(command.href ? { href: command.href, tabIndex: -1 } : {})}
+                    onClick={(event: MouseEvent) => onItemClick(event, item)}
+                  >
+                    <CommandIconView icon={command.icon} />
+                    <span className={cn("item-content", undefined)}>
+                      <span className={cn("item-title", undefined)}>
+                        {item.path.length > 0 ? (
+                          <span className={cn("palette-item-path", undefined)}>
+                            {item.path.join(" › ")} ›{" "}
+                          </span>
+                        ) : null}
+                        {command.title}
+                      </span>
+                      {command.description ? (
+                        <span className={cn("item-description", undefined)}>
+                          {command.description}
+                        </span>
+                      ) : null}
+                    </span>
+                    {command.shortcut || command.children ? (
+                      <span className={cn("item-actions", undefined)}>
+                        {command.shortcut ? <Kbd keys={command.shortcut} /> : null}
+                        {command.children ? <ChevronIcon /> : null}
+                      </span>
+                    ) : null}
+                  </Row>
+                );
+              })}
+              {group.status === "pending" && group.items.length === 0 ? (
+                <div className={cn("palette-status", undefined)}>Searching…</div>
+              ) : null}
+              {group.status === "error" ? (
+                <div className={cn("palette-status", undefined)}>Unavailable</div>
+              ) : null}
+            </div>
+          );
+        })}
+        <output className={cn("palette-status", undefined)}>
+          {empty ? (trimmed ? `No results for “${trimmed}”` : "Type to search") : ""}
+        </output>
+      </div>
+      <div className={cn("palette-footer", undefined)} aria-hidden="true">
+        <span>
+          <Kbd>↑</Kbd>
+          <Kbd>↓</Kbd> Move
+        </span>
+        <span>
+          <Kbd>↵</Kbd> Open
+        </span>
+        <span>
+          <Kbd keys="mod+enter" /> New tab
+        </span>
+        <span>
+          <Kbd>Esc</Kbd> {stack.length > 0 ? "Back" : "Close"}
+        </span>
+      </div>
+    </Dialog.Container>
+  );
+}

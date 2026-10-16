@@ -1,4 +1,4 @@
-All notable changes to `@aortl/admin-css` and `@aortl/admin-react` are documented here. The two packages share a version and release together; each entry is tagged `(css)`, `(react)`, or `(both)` to show which package a consumer needs to bump.
+All notable changes to `@aortl/admin-css`, `@aortl/admin-react` and `@aortl/admin-palette` are documented here. The packages share a version and release together; each entry is tagged `(css)`, `(react)`, `(both)` (css and react), or `(palette)` to show which package a consumer needs to bump.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `@aortl/admin-palette`: a Cmd+K `<CommandPalette>` with nested pages, async sources, recents, and page commands through `useCommands`; classes `.palette*`. (palette)
 - `app-shell-sticky` / `<AppShell stickyHeader>` keeps the navbar in view; the sidebar sticks below it at `--app-shell-header-height`. (both)
 
 ### Changed

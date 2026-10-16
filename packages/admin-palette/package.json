@@ -1,0 +1,68 @@
+{
+  "name": "@aortl/admin-palette",
+  "version": "0.23.0",
+  "description": "Cmd+K command palette for the admin design system, for React apps and plain HTML pages.",
+  "keywords": [
+    "command-palette",
+    "design-system",
+    "react"
+  ],
+  "homepage": "https://digital-udvikling.github.io/admin-design-system/",
+  "bugs": "https://github.com/Digital-Udvikling/admin-design-system/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Digital-Udvikling/admin-design-system.git",
+    "directory": "packages/admin-palette"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm build",
+    "prepack": "cp ../../CHANGELOG.md ./CHANGELOG.md"
+  },
+  "dependencies": {
+    "@aortl/admin-react": "workspace:*",
+    "@tanstack/match-sorter-utils": "8.19.4"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "happy-dom": "20.9.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "typescript": "5.8.3",
+    "vite": "8.3.1",
+    "vite-plugin-dts": "5.0.0",
+    "vitest": "4.1.6"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

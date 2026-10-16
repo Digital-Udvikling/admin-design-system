@@ -4,10 +4,11 @@ Guidance for Claude Code working in this repo.
 
 ## Project
 
-`@aortl/admin` — a design system shipped as two npm packages from a single source of truth, plus an Astro docs site whose chrome is built from the system itself. Under the `Digital-Udvikling` GitHub org.
+`@aortl/admin` — a design system shipped as npm packages from a single source of truth, plus an Astro docs site whose chrome is built from the system itself. Under the `Digital-Udvikling` GitHub org.
 
 - `packages/admin-css` — pre-built CSS, semantic class names (`.btn`, `.input`, `.card`, `.field`). Built from Tailwind v4 source.
 - `packages/admin-react` — React component library. Wraps Base UI primitives and emits the **same class names** as `admin-css`, so vanilla HTML and React render identically.
+- `packages/admin-palette` — the Cmd+K command palette, built on `admin-react` (`Dialog.Container`, `Kbd`, `useHotkey`, and `cn` from the `@aortl/admin-react/internal` subpath, which is outside semver). Its `.palette*` classes live in `admin-css`. One palette per document: `src/store.ts` holds the open state and page commands at module level.
 - `apps/docs` — Astro site laid out with admin-css's own vanilla classes (`src/layouts/Docs.astro`); each example shows its vanilla or React source, picked site-wide in the header.
 
 ## Design philosophy

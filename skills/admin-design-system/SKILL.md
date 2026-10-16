@@ -11,6 +11,7 @@ A small, opinionated design system for internal admin tooling. Ships as two pack
 
 - `@aortl/admin-css` — pre-built CSS. The default bundle uses bare class names (`.btn`, `.input`, `.card`, `.field`) for full-page admin apps that own the document. A parallel scoped bundle (`@aortl/admin-css/admin.scoped.css`) wraps everything in `@scope (._ao-admin-root)` and prefixes every class with `_ao-`, for embedding inside non-admin pages.
 - `@aortl/admin-react` — React components wrapping Base UI primitives. Always emits `_ao-`-prefixed class names and requires `<AdminRoot>` (which renders `class="_ao-admin-root"`) somewhere up the tree. `@aortl/admin-react/styles.css` resolves to the scoped+prefixed bundle.
+- `@aortl/admin-palette` — the Cmd+K command palette, built on `@aortl/admin-react`. See [Command palette](references/components/command-palette.md).
 
 Vanilla HTML and React render at the same DOM positions and behave identically — the only difference is whether the class names carry the `_ao-` prefix.
 
@@ -200,6 +201,7 @@ Read references **on demand** — do not pre-load. The index below lists every a
 - [Cards](references/components/cards.md) — A container with optional title, description, and actions.
 - [Charts](references/components/charts.md) — Pure-CSS bar, proportion, and donut primitives.
 - [Code blocks](references/components/code-blocks.md) — Styled <pre> for logs and JSON, plus inline code chips.
+- [Command palette](references/components/command-palette.md) — Cmd+K search, navigation and commands.
 - [Container](references/components/container.md) — A centered, max-width page region that spaces its sections.
 - [Copy button](references/components/copy-button.md) — Write a value to the clipboard from a button.
 - [Dialogs](references/components/dialog.md) — Modal dialogs built on the native dialog element.

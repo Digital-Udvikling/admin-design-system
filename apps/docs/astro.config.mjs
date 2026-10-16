@@ -59,13 +59,21 @@ export default defineConfig({
         "@base-ui/react/toggle",
         "@base-ui/react/tooltip",
         "@tabler/icons-react",
+        "@tanstack/match-sorter-utils",
         "clsx",
       ],
     },
     resolve: {
+      // Vite matches an alias as a prefix too, so the `/internal` subpath goes first.
       alias: {
+        "@aortl/admin-react/internal": fileURLToPath(
+          new URL("../../packages/admin-react/src/internal.ts", import.meta.url),
+        ),
         "@aortl/admin-react": fileURLToPath(
           new URL("../../packages/admin-react/src/index.ts", import.meta.url),
+        ),
+        "@aortl/admin-palette": fileURLToPath(
+          new URL("../../packages/admin-palette/src/index.ts", import.meta.url),
         ),
         "@docs": fileURLToPath(new URL("./src", import.meta.url)),
         "@example": fileURLToPath(new URL("./plugins/example", import.meta.url)),

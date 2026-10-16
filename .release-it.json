@@ -20,7 +20,11 @@
       "addVersionUrl": true
     },
     "@release-it/bumper": {
-      "out": ["packages/admin-css/package.json", "packages/admin-react/package.json"]
+      "out": [
+        "packages/admin-css/package.json",
+        "packages/admin-react/package.json",
+        "packages/admin-palette/package.json"
+      ]
     }
   },
   "hooks": {

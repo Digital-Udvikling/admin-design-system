@@ -27,9 +27,15 @@
   background: transparent;
   color: inherit;
 }
-/* A lone navbar or footer is a full-width bar; as a content-sized flex item its ml-auto actions, meta and accent stripe collapse. */
+/* A lone navbar, footer or card spans the preview as in block flow; content-sized, its pushed-apart actions and meta collapse. */
 :is(.example-preview, .example-preview > .preview-variant, .example-preview ._ao-admin-root)
-  > :is(.navbar, .footer, ._ao-navbar, ._ao-footer) {
+  > :is(
+    .navbar,
+    .footer,
+    ._ao-navbar,
+    ._ao-footer,
+    :is(.card, ._ao-card):only-child:not(.stat-card, ._ao-stat-card)
+  ) {
   flex: 1 1 100%;
 }
 /* Base UI SSRs a portal div beside the specimen; out of flex flow it can't wrap onto a gap-padded second line. */
@@ -609,6 +615,21 @@ html {
 /* A Reference name (`prose-exclude`, `aria-invalid`) never breaks at its hyphen. */
 .docs-table-scroll td:first-child code {
   white-space: nowrap;
+}
+/* A run of rows for one part shows its name once (group-table-rows.mjs; still read and copied); inner rules start at the second column.
+   Text between names (a ", ") is hidden too, and line-height 0 keeps hidden wrapped names from adding height. */
+.docs-table-scroll tr:has(+ tr[data-repeat]) > td:first-child {
+  border-bottom-color: transparent;
+}
+.docs-table-scroll tr[data-repeat] > td:first-child {
+  color: transparent;
+  line-height: 0;
+}
+.docs-table-scroll tr[data-repeat] > td:first-child > code {
+  opacity: 0;
+}
+.docs-table-scroll + .docs-table-scroll {
+  margin-block-start: 2rem;
 }
 /* A short token (inline-code-nowrap) never breaks at its own hyphen; cells keep wrapping so tables don't widen. */
 .docs-article code.code-nowrap:not(:where(td, th) *) {

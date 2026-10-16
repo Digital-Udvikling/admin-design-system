@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- `@aortl/admin-palette`: a Cmd+K `<CommandPalette>` with nested pages, async sources, recents, and page commands through `useCommands`; classes `.palette*`. (palette)
+- `@aortl/admin-palette`: a Cmd+K `<CommandPalette>` with nested pages, async sources, recents, and page commands through `useCommands`; classes `.palette*`. (css, palette)
 - `app-shell-sticky` / `<AppShell stickyHeader>` keeps the navbar in view; the sidebar sticks below it at `--app-shell-header-height`. (both)
 
 ### Changed

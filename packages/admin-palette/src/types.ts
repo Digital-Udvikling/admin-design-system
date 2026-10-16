@@ -13,7 +13,10 @@ export interface Command {
   /** Extra terms the query matches, ranked below the title. */
   keywords?: readonly string[];
   icon?: CommandIcon;
-  /** Chord in `useHotkey` syntax, shown on the row and bound while the palette is open. Needs a modifier: the input has focus. */
+  /**
+   * Chord in `useHotkey` syntax, shown on the row and bound while the palette is open. Needs a
+   * modifier: the input has focus. Don't also bind it with `useHotkey`, or both handlers run.
+   */
   shortcut?: string;
   /** Navigates; the row is a real link, so middle-click and Cmd/Ctrl+click open a new tab. */
   href?: string;

@@ -8,7 +8,7 @@ Guidance for Claude Code working in this repo.
 
 - `packages/admin-css` — pre-built CSS, semantic class names (`.btn`, `.input`, `.card`, `.field`). Built from Tailwind v4 source.
 - `packages/admin-react` — React component library. Wraps Base UI primitives and emits the **same class names** as `admin-css`, so vanilla HTML and React render identically.
-- `packages/admin-palette` — the Cmd+K command palette, built on `admin-react` (`Dialog.Container`, `Kbd`, `useHotkey`, and `cn` from the `@aortl/admin-react/internal` subpath, which is outside semver). Its `.palette*` classes live in `admin-css`. One palette per document: `src/store.ts` holds the open state and page commands at module level.
+- `packages/admin-palette` — the Cmd+K command palette, built on `admin-react`'s public exports plus the `@aortl/admin-react/internal` subpath, which is outside semver. Its `.palette*` classes live in `admin-css`. One palette per document: `src/store.ts` holds the open state and page commands at module level.
 - `apps/docs` — Astro site laid out with admin-css's own vanilla classes (`src/layouts/Docs.astro`); each example shows its vanilla or React source, picked site-wide in the header.
 
 ## Design philosophy
@@ -222,7 +222,7 @@ Run `pnpm release` (interactive: pick patch/minor/major; `pnpm release minor` sk
 2. bump the root `package.json` (the canonical release pointer, though root is private) and write the same version into both packages' `package.json` (the bumper plugin — JSON mode, which matches oxfmt's `package.json` formatting, so no reformat step is needed);
 3. commit (`chore(release): v${version}`) and push to `main`.
 
-release-it does **not** publish, tag, or create the GitHub release — that stays in CI. On the pushed commit, `.github/workflows/release.yml` triggers on path `packages/*/package.json`, asks npm (`npm view <name>@<version>`) whether each package's version is already published, and for every package that isn't: gates on `grep`-ing the `## [version]` section out of `CHANGELOG.md` (catches a hand-bump that bypassed `pnpm release`, **before** the irreversible publish) alongside lint/format/build/types/test, then builds + `npm publish --provenance`, pushes one shared umbrella `v<version>` tag (the target of the compare links; there are no per-package tags), and cuts a GitHub Release from that version's changelog section. Don't publish manually.
+release-it does **not** publish, tag, or create the GitHub release — that stays in CI. On the pushed commit, `.github/workflows/release.yml` triggers on path `packages/*/package.json`, asks npm (`npm view <name>@<version>`) whether each package's version is already published, and for every package that isn't: gates on `grep`-ing the `## [version]` section out of `CHANGELOG.md` (catches a hand-bump that bypassed `pnpm release`, **before** the irreversible publish) alongside lint/format/build/types/test, then builds + `npm publish --provenance`, pushes one shared umbrella `v<version>` tag (the target of the compare links; there are no per-package tags), and cuts a GitHub Release from that version's changelog section. A package that fails to publish doesn't stop the others; the job fails at the end and a re-run retries only the unpublished ones. Don't publish manually, except a brand-new package's first version: npm offers the trusted-publisher setting only once a package exists.
 
 Docs deploy is a separate workflow (`deploy.yml`) — every push to `main` publishes `apps/docs/dist` (including the changelog page) to GitHub Pages.
 

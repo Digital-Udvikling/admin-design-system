@@ -236,18 +236,18 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 
 ### Command
 
-| Field         | Type                           | Notes                                                     |
-| ------------- | ------------------------------ | --------------------------------------------------------- |
-| `id`          | `string`                       | Unique across the palette; recents and `suggested` use it |
-| `title`       | `string`                       | —                                                         |
-| `description` | `string`                       | One muted line, clamped at two                            |
-| `group`       | `string`                       | Results heading                                           |
-| `keywords`    | `readonly string[]`            | Extra match terms                                         |
-| `icon`        | `IconProp \| string`           | A string is a Tabler name: `"package"` → `ti ti-package`  |
-| `shortcut`    | `string`                       | `useHotkey` chord, bound while the palette is open        |
-| `href`        | `string`                       | Navigates                                                 |
-| `perform`     | `() => void`                   | Runs after the palette closes; ignored with `href`        |
-| `children`    | `readonly Command[] \| Source` | Opens a nested page                                       |
+| Field         | Type                           | Notes                                                                                         |
+| ------------- | ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `id`          | `string`                       | Unique across the palette; recents and `suggested` use it                                     |
+| `title`       | `string`                       | —                                                                                             |
+| `description` | `string`                       | One muted line, clamped at two                                                                |
+| `group`       | `string`                       | Results heading                                                                               |
+| `keywords`    | `readonly string[]`            | Extra match terms                                                                             |
+| `icon`        | `IconProp \| string`           | A string is a Tabler name: `"package"` → `ti ti-package`                                      |
+| `shortcut`    | `string`                       | `useHotkey` chord, bound while the palette is open; not one the app binds itself, or both run |
+| `href`        | `string`                       | Navigates                                                                                     |
+| `perform`     | `() => void`                   | Runs after the palette closes; ignored with `href`                                            |
+| `children`    | `readonly Command[] \| Source` | Opens a nested page                                                                           |
 
 ### Source
 

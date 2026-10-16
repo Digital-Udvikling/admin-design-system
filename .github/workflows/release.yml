@@ -7,6 +7,9 @@ name: Release
 # Auth: OIDC trusted publishing (no NPM_TOKEN). Configure once per package on its
 # npm page: Settings → Trusted Publishers → Add → GitHub Actions, with owner
 # Digital-Udvikling, repo admin-design-system, workflow release.yml, no environment.
+# npm only offers that page once the package exists, so a new package needs one
+# token-authenticated first publish by a maintainer; until then its step fails and the
+# others still ship.
 
 on:
   push:
@@ -95,6 +98,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          # One package failing (a new one without a trusted publisher yet) mustn't stop the rest;
+          # a re-run retries only what npm still lacks.
+          FAILED=""
           for NAME in ${{ steps.plan.outputs.packages }}; do
             DIR=""
             for f in packages/*/package.json; do
@@ -105,13 +111,16 @@ jobs:
             done
             VERSION="$(jq -r .version "$DIR/package.json")"
             echo "::group::Release $NAME@$VERSION"
-            pnpm -r --filter "$NAME..." build
-            (
-              cd "$DIR"
-              pnpm pack
-              npm publish ./*.tgz --access public --provenance
-              rm -f ./*.tgz
-            )
+            # `&&`, not `set -e`: errexit is off inside an `if` condition, subshells included.
+            if ! { pnpm -r --filter "$NAME..." build \
+                   && (cd "$DIR" && pnpm pack \
+                       && npm publish ./*.tgz --access public --provenance \
+                       && rm -f ./*.tgz); }; then
+              echo "::error::Publishing $NAME@$VERSION failed"
+              FAILED="$FAILED $NAME"
+              echo "::endgroup::"
+              continue
+            fi
 
             # Umbrella tag + GitHub Release, keyed off the shared version. The
             # changelog compare links point at v<version>; both packages bump in
@@ -126,3 +135,7 @@ jobs:
             fi
             echo "::endgroup::"
           done
+          if [ -n "$FAILED" ]; then
+            echo "::error::Not published:$FAILED"
+            exit 1
+          fi

@@ -128,6 +128,7 @@ export function CommandPaletteRoot({
   const [pinned, setPinned] = useState<string | null>(null);
   const [enterQueued, setEnterQueued] = useState<{ newTab: boolean } | null>(null);
   const [recents, setRecents] = useState<readonly Located[]>([]);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useId();
@@ -161,7 +162,11 @@ export function CommandPaletteRoot({
 
   // Each open starts fresh, at the root or the requested page.
   useEffect(() => {
-    if (!open) return;
+    // A queued Enter belongs to the open it was pressed in; closing cancels it.
+    if (!open) {
+      setEnterQueued(null);
+      return;
+    }
     const page = options.page ? locate(sets, options.page) : undefined;
     setQuery(options.query ?? "");
     setStack(page && page.command.children ? [page] : []);
@@ -215,6 +220,13 @@ export function CommandPaletteRoot({
 
   const stackTitles = stack.map((entry) => entry.command.title);
 
+  // The dialog closes now, not in Dialog's effect, so `perform` and navigation see the page
+  // behind it no longer inert.
+  function close() {
+    dialogRef.current?.close();
+    closePalette();
+  }
+
   function run(entry: Located, newTab: boolean) {
     const { command } = entry;
     if (command.children) {
@@ -228,14 +240,14 @@ export function CommandPaletteRoot({
       // A new tab keeps the palette open, so an operator can queue several.
       if (newTab) window.open(command.href, "_blank", "noopener");
       else {
-        closePalette();
+        close();
         onNavigate(command.href);
       }
       return;
     }
     if (command.perform) {
       recordRecent(entry);
-      closePalette();
+      close();
       command.perform();
     }
   }
@@ -247,7 +259,7 @@ export function CommandPaletteRoot({
 
   // Enter waits for the sources only while the highlight follows the top result.
   useEffect(() => {
-    if (!enterQueued || pending) return;
+    if (!enterQueued || pending || !open) return;
     setEnterQueued(null);
     if (highlighted) run(located(highlighted), enterQueued.newTab);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- fires when the sources settle, with the results of that render
@@ -323,6 +335,7 @@ export function CommandPaletteRoot({
 
   return (
     <Dialog.Container
+      ref={dialogRef}
       open={open}
       onOpenChange={(next) => (next ? openPalette() : closePalette())}
       className={cn("palette", className)}
@@ -440,10 +453,10 @@ export function CommandPaletteRoot({
                 );
               })}
               {group.status === "pending" && group.items.length === 0 ? (
-                <div className={cn("palette-status", undefined)}>Searching…</div>
+                <output className={cn("palette-status", undefined)}>Searching…</output>
               ) : null}
               {group.status === "error" ? (
-                <div className={cn("palette-status", undefined)}>Unavailable</div>
+                <output className={cn("palette-status", undefined)}>Unavailable</output>
               ) : null}
             </div>
           );

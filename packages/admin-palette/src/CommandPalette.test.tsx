@@ -143,6 +143,27 @@ describe("CommandPalette", () => {
     expect(highlighted()).toBeUndefined();
   });
 
+  it("drops a queued Enter when the palette closes", async () => {
+    const perform = vi.fn();
+    const { source, resolveLatest } = deferredSource();
+    const { user } = setup({
+      commands: [{ id: "s", title: "Order settings", perform }],
+      sources: [source],
+    });
+    await user.keyboard("{Control>}k{/Control}order{Enter}{Control>}k{/Control}");
+    await resolveLatest([]);
+    expect(perform).not.toHaveBeenCalled();
+  });
+
+  it("closes the dialog before perform runs", async () => {
+    let openDuringPerform: boolean | undefined;
+    const { user } = setup({
+      commands: [{ id: "x", title: "Export", perform: () => (openDuringPerform = dialog().open) }],
+    });
+    await user.keyboard("{Control>}k{/Control}export{Enter}");
+    expect(openDuringPerform).toBe(false);
+  });
+
   it("keeps an arrowed-to item highlighted when results arrive above it", async () => {
     const { source, resolveLatest } = deferredSource({ priority: 10 });
     const { user, highlighted } = setup({
@@ -167,7 +188,8 @@ describe("CommandPalette", () => {
     });
     await user.keyboard("{Control>}k{/Control}1");
     const group = await screen.findByRole("group", { name: "Orders" });
-    expect(within(group).getByText("Unavailable")).toBeInTheDocument();
+    await waitFor(() => expect(within(group).getByRole("status")).not.toBeEmptyDOMElement());
+    expect(within(group).queryAllByRole("option")).toEqual([]);
   });
 
   it("lists page commands from useCommands, then recents after a run", async () => {

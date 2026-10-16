@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import { searches, type SourceState } from "./results";
 import type { Source } from "./types";

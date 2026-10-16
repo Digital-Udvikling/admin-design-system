@@ -43,13 +43,18 @@
     border: 0;
   }
 
+  /* No block padding: a sticky group label pins to the padding edge, and rows would show above it. */
   .palette-list {
-    @apply flex-auto min-h-0 py-1 overflow-y-auto;
+    @apply flex-auto min-h-0 overflow-y-auto;
     overscroll-behavior: contain;
   }
 
+  .palette-group {
+    @apply py-1;
+  }
+
   .palette-group + .palette-group {
-    @apply mt-1 pt-1 border-t border-border;
+    @apply border-t border-border;
   }
 
   .palette-group-label {

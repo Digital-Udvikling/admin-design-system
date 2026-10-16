@@ -48,8 +48,9 @@ export function fillPattern(command: Command, query: string): Command | undefine
   if (!query || query.search(command.pattern) < 0) return undefined;
   return {
     ...command,
-    title: command.title.replaceAll("{q}", query),
-    href: command.href?.replaceAll("{q}", encodeURIComponent(query)),
+    // A function replacement, so `$&` in the query stays literal.
+    title: command.title.replaceAll("{q}", () => query),
+    href: command.href?.replaceAll("{q}", () => encodeURIComponent(query)),
   };
 }
 

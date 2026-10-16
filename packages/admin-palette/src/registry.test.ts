@@ -153,4 +153,80 @@ describe("registryCommands", () => {
       sources[0]!.search("1", { signal: new AbortController().signal }),
     ).rejects.toThrow();
   });
+
+  it("keeps only http(s) links, skipping a system whose url isn't absolute", () => {
+    const { commands } = registryCommands(
+      registry([
+        {
+          id: "bad",
+          name: "Bad",
+          url: "oms.example.com",
+          commands: [{ id: "a", title: "A", href: "/" }],
+        },
+        {
+          id: "oms",
+          name: "OMS",
+          url: "https://oms.example.com",
+          commands: [
+            { id: "script", title: "Script", href: "javascript:alert(1)" },
+            { id: "data", title: "Data", href: "data:text/html,hi" },
+            { id: "ok", title: "OK", href: "/ok" },
+          ],
+        },
+      ]),
+      noToken,
+    );
+    expect(commands.map((c) => c.id)).toEqual(["oms.ok"]);
+  });
+
+  it("drops wrongly typed optional fields instead of the command", () => {
+    const { commands } = registryCommands(
+      registry([
+        {
+          id: "oms",
+          name: "OMS",
+          url: "https://oms.example.com",
+          commands: [
+            { id: "a", title: "A", href: "/", ...({ keywords: 5, icon: { name: "x" } } as object) },
+          ],
+        },
+      ]),
+      noToken,
+    );
+    expect(commands).toEqual([
+      expect.objectContaining({ id: "oms.a", keywords: undefined, icon: undefined }),
+    ]);
+  });
+
+  it("filters sources as well as commands", () => {
+    const { commands, sources } = registryCommands(
+      registry([
+        {
+          id: "oms",
+          name: "OMS",
+          url: "https://oms.example.com",
+          commands: [{ id: "a", title: "A", href: "/" }],
+          sources: [{ id: "lookup", search: "/s" }],
+        },
+      ]),
+      noToken,
+      (_entry, system) => system !== "oms",
+    );
+    expect([...commands, ...sources]).toEqual([]);
+  });
+
+  it("fills a pattern literally, `$&` included", () => {
+    const [order] = registryCommands(
+      registry([
+        {
+          id: "oms",
+          name: "OMS",
+          url: "https://oms.example.com",
+          commands: [{ id: "order", title: "Order {q}", href: "/o/{q}", pattern: "." }],
+        },
+      ]),
+      noToken,
+    ).commands;
+    expect(fillPattern(order!, "a$&b")?.title).toBe("Order a$&b");
+  });
 });

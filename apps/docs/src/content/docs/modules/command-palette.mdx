@@ -265,7 +265,7 @@ A registry lists other systems' commands and search endpoints, so each system's 
 }
 ```
 
-Each system's commands list under its name, their ids prefixed with the system id (`oms.orders`); a local command with the same id replaces one. `href` and `search` resolve against the system's `url`. A link to another origin is a full navigation and carries an arrow; a same-origin one goes through `onNavigate`. A `pattern` command lists only when the query matches, with `{q}` filled in. `filter` drops commands, for example those of systems the user can't open.
+Each system's commands list under its name, their ids prefixed with the system id (`oms.orders`); a local command with the same id replaces one. `href` and `search` resolve against the system's `url`. A link to another origin is a full navigation and carries an arrow; a same-origin one goes through `onNavigate`. A `pattern` command lists only when the query matches, with `{q}` filled in. Only http(s) links are kept. `filter` drops commands and sources, for example those of systems the user can't open; pass a stable function.
 
 A URL is fetched on first open, or earlier when the pointer or focus reaches a trigger or Ctrl/Cmd goes down, and kept in `sessionStorage`: later pages in the tab render from the copy and refresh it after five minutes. When the fetch fails the palette lists its local commands and notes that other systems are unavailable.
 
@@ -306,7 +306,7 @@ Within `protocol` 1 changes are additive: the palette ignores fields it doesn't 
 | `CommandPalette`         | `hotkey`      | `string \| readonly string[] \| false`                  | `"mod+k"`              |
 | `CommandPalette`         | `onNavigate`  | `(href: string) => void`                                | `location.assign`      |
 | `CommandPalette`         | `registry`    | `PaletteRegistry \| { url: string; resource?: string }` | —                      |
-| `CommandPalette`         | `filter`      | `(command: Command, system: string) => boolean`         | —                      |
+| `CommandPalette`         | `filter`      | `(entry: Command \| Source, system: string) => boolean` | —                      |
 | `CommandPalette`         | `token`       | `(resource: string) => Promise<string>`                 | —                      |
 | `CommandPalette`         | `placeholder` | `string`                                                | `"Search or jump to…"` |
 | `CommandPalette`         | `aria-label`  | `string`                                                | `"Command palette"`    |

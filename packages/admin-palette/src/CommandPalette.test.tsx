@@ -313,8 +313,68 @@ describe("CommandPalette registry", () => {
       commands: [{ id: "help", title: "Help" }],
     });
     await user.keyboard("{Control>}k{/Control}");
-    await screen.findByText("Other systems unavailable");
+    await waitFor(() =>
+      expect(screen.getAllByRole("status").some((el) => el.textContent !== "")).toBe(true),
+    );
     await user.keyboard("help");
     expect(options()).toEqual(["Help"]);
+  });
+
+  it("waits before refetching a registry that failed", async () => {
+    const urls = stubFetch(() => new Response("", { status: 503 }));
+    const { user } = setup({ registry: { url: "https://registry.example.com/palette.json" } });
+    await user.keyboard("{Control>}k{/Control}");
+    await waitFor(() => expect(urls).toHaveLength(1));
+    await user.keyboard("{Escape}{Control}{Meta}");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+    expect(urls).toHaveLength(1);
+  });
+
+  it("opens into a registry command's page once the registry arrives", async () => {
+    let answer: (response: Response) => void = () => {};
+    vi.stubGlobal("fetch", () => new Promise<Response>((resolve) => (answer = resolve)));
+    const pageDoc = {
+      protocol: 1,
+      systems: [
+        {
+          id: "oms",
+          name: "OMS",
+          url: "https://oms.example.com",
+          commands: [
+            {
+              id: "status",
+              title: "Status",
+              children: [{ id: "shipped", title: "Shipped", href: "/s" }],
+            },
+          ],
+        },
+      ],
+    };
+    function OpenStatus() {
+      const palette = useCommandPalette();
+      return <button onClick={() => palette.open({ page: "oms.status" })}>Status</button>;
+    }
+    const { user, options } = setup(
+      { registry: { url: "https://registry.example.com/palette.json" } },
+      <OpenStatus />,
+    );
+    await user.click(screen.getByRole("button", { name: "Status" }));
+    await act(async () => answer(new Response(JSON.stringify(pageDoc))));
+    await waitFor(() => expect(options()).toEqual(["Shipped"]));
+  });
+
+  it("lists a run pattern command under Recent, filled in", async () => {
+    stubFetch(ok);
+    const onNavigate = vi.fn();
+    const { user } = setup({
+      registry: { url: "https://registry.example.com/palette.json" },
+      onNavigate,
+    });
+    await user.keyboard("{Control>}k{/Control}");
+    await user.keyboard("123456");
+    await waitFor(() => expect(screen.getAllByRole("option").length).toBeGreaterThan(0));
+    vi.spyOn(window.location, "assign").mockImplementation(() => {});
+    await user.keyboard("{Enter}{Control>}k{/Control}");
+    expect(screen.getByRole("group", { name: "Recent" })).toHaveTextContent("Order 123456");
   });
 });

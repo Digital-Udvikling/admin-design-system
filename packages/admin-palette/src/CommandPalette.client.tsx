@@ -14,7 +14,7 @@ import {
 } from "react";
 import { Layer, isStaticList, walkCommands, type CommandSet, type ResultItem } from "./rank";
 import { readRecents, recordRecent, type Located } from "./recents";
-import { registryCommands } from "./registry";
+import { registryCommands, type RegistryFilter } from "./registry";
 import { buildResults, locate } from "./results";
 import {
   closePalette,
@@ -41,11 +41,15 @@ export interface CommandPaletteProps {
   onNavigate?: (href: string) => void;
   /**
    * Other systems' commands and searches: a registry document, or `{ url, resource? }` to fetch
-   * one on first open. A local command with the same id replaces a registry one.
+   * one on first open. A local command with the same id replaces a registry one. A document is
+   * read again whenever its identity changes, so keep it stable.
    */
   registry?: RegistryOption;
-  /** Drops registry commands, e.g. those of systems the user can't open. */
-  filter?: (command: Command, system: string) => boolean;
+  /**
+   * Keeps a registry command or source, e.g. only those of systems the user can open. Pass a
+   * stable function: a new one re-reads the registry.
+   */
+  filter?: RegistryFilter;
   /** Bearer token for a remote endpoint's `resource`; cached until a request answers 401. */
   token?: (resource: string) => Promise<string>;
   /** Default: `"Search or jump to…"`. */
@@ -180,6 +184,7 @@ export function CommandPaletteRoot({
   const hydrated = useSyncExternalStore(subscribeNever, getHydrated, getServerHydrated);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const awaitedPage = useRef<string | undefined>(undefined);
   const id = useId();
   const listId = `${id}-list`;
 
@@ -202,16 +207,12 @@ export function CommandPaletteRoot({
   }, []);
 
   const remote = useRegistry(registry, token);
-  const filterRef = useRef(filter);
-  filterRef.current = filter;
   const fromRegistry = useMemo(
     () =>
       remote.doc
-        ? registryCommands(remote.doc, remote.token, (command, system) =>
-            filterRef.current ? filterRef.current(command, system) : true,
-          )
+        ? registryCommands(remote.doc, remote.token, filter)
         : { commands: [], sources: [] },
-    [remote.doc, remote.token],
+    [remote.doc, remote.token, filter],
   );
 
   const sets = useMemo<CommandSet[]>(() => {
@@ -233,14 +234,15 @@ export function CommandPaletteRoot({
   );
 
   // Fetch the registry on open, or earlier on a sign the user is about to open the palette.
-  const { load } = remote;
+  const { load, fetches } = remote;
   useEffect(() => {
     if (open) load();
   }, [open, load]);
   useEffect(() => {
+    if (!fetches) return;
     const onIntent = (event: Event) => {
       if (event instanceof globalThis.KeyboardEvent) {
-        if (event.key === "Control" || event.key === "Meta") load();
+        if ((event.key === "Control" || event.key === "Meta") && !event.repeat) load();
       } else if ((event.target as Element | null)?.closest?.("[data-admin-palette]")) load();
     };
     const events = ["keydown", "pointerover", "focusin"] as const;
@@ -248,16 +250,19 @@ export function CommandPaletteRoot({
     return () => {
       for (const type of events) document.removeEventListener(type, onIntent);
     };
-  }, [load]);
+  }, [load, fetches]);
 
   // Each open starts fresh, at the root or the requested page.
   useEffect(() => {
     // A queued Enter belongs to the open it was pressed in; closing cancels it.
     if (!open) {
       setEnterQueued(null);
+      awaitedPage.current = undefined;
       return;
     }
     const page = options.page ? locate(sets, options.page) : undefined;
+    // A registry command's page may not have loaded yet; it opens when the registry arrives.
+    awaitedPage.current = options.page && !page ? options.page : undefined;
     setQuery(options.query ?? "");
     setStack(page && page.command.children ? [page] : []);
     setPinned(null);
@@ -267,6 +272,14 @@ export function CommandPaletteRoot({
     inputRef.current?.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `sets` is read at open only; a later registration doesn't reset the page
   }, [open, options]);
+
+  useEffect(() => {
+    if (!awaitedPage.current) return;
+    const page = locate(sets, awaitedPage.current);
+    if (!page?.command.children) return;
+    awaitedPage.current = undefined;
+    setStack([page]);
+  }, [sets]);
 
   const page = stack.at(-1)?.command;
   const pageSource = page && !isStaticList(page.children) ? page.children : undefined;
@@ -319,6 +332,7 @@ export function CommandPaletteRoot({
 
   function run(entry: Located, newTab: boolean) {
     const { command } = entry;
+    awaitedPage.current = undefined;
     if (command.children) {
       setStack((s) => [...s, entry]);
       setQuery("");
@@ -357,6 +371,7 @@ export function CommandPaletteRoot({
   }, [enterQueued, pending]);
 
   function leavePage(depth: number) {
+    awaitedPage.current = undefined;
     setStack((s) => s.slice(0, depth));
     setQuery("");
     setPinned(null);
@@ -470,6 +485,7 @@ export function CommandPaletteRoot({
           enterKeyHint="go"
           value={query}
           onChange={(event) => {
+            awaitedPage.current = undefined;
             setQuery(event.target.value);
             setPinned(null);
             setEnterQueued(null);

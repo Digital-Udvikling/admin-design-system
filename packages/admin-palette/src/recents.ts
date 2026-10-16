@@ -58,7 +58,8 @@ export function readRecents(find: (id: string) => Located | undefined): Located[
   const out: Located[] = [];
   for (const entry of read()) {
     const live = find(entry.id);
-    if (live) out.push(live);
+    // A pattern command ("Order {q}") is stored filled in; the live one is the bare template.
+    if (live && !live.command.pattern) out.push(live);
     else if (entry.href && entry.title) {
       const { path = [], ...command } = entry;
       out.push({ command: { ...command, title: entry.title }, path });

@@ -20,10 +20,14 @@ describe("standalone", () => {
     });
     const unregister = register([{ id: "refund", title: "Refund this order" }]);
     expect(document.querySelector("admin-palette")).toBeNull();
+    document.documentElement.style.setProperty("--color-primary", "rgb(36, 131, 123)");
 
     await user.keyboard("{Control>}k{/Control}");
     await waitFor(() => expect(dialog()?.open).toBe(true));
     expect(options()).toEqual(["Orders", "Refund this order"]);
+    // The page's token override reaches past the shadow root's own declarations.
+    const root = dialog()!.parentElement!;
+    expect(root.style.getPropertyValue("--color-primary")).toBe("rgb(36, 131, 123)");
 
     await user.keyboard("{Control>}k{/Control}");
     expect(dialog()?.open).toBe(false);

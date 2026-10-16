@@ -1,6 +1,6 @@
 import { cn } from "@aortl/admin-react/internal";
 import scopedCss from "@aortl/admin-css/admin.scoped.min.css?raw";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { createRoot } from "react-dom/client";
 import { CommandPalette, type CommandPaletteProps } from "../CommandPalette";
 
@@ -34,32 +34,57 @@ function splitCss(): { documentCss: string; shadowCss: string } {
   return { documentCss: documentCss.join("\n"), shadowCss };
 }
 
-/** `"dark"`/`"light"` when the page forces one through `color-scheme`, else undefined. */
-function pageTheme(): "light" | "dark" | undefined {
-  const scheme = getComputedStyle(document.documentElement).colorScheme;
-  return scheme === "dark" || scheme === "light" ? scheme : undefined;
+// Palette tones stay the system's own: a Tailwind page declares its own under the same names
+// (`--color-blue-600`). The page's semantic roles already carry any tone it overrode.
+const PALETTE_TONE = /^--color-(?:[a-z]+-\d+|paper|black|white)$/;
+
+/** The semantic color tokens `css` declares, which a page may override on `<html>`. */
+function semanticTokens(css: string): string[] {
+  const names = new Set([...css.matchAll(/(--color-[a-z0-9-]+)\s*:/g)].map((m) => m[1] ?? ""));
+  return [...names].filter((name) => name && !PALETTE_TONE.test(name));
 }
 
-/** Follows the page's forced color scheme, which can't cross into the shadow root. */
-function usePageTheme() {
-  const [theme, setTheme] = useState(pageTheme);
+interface PageStyle {
+  /** `"dark"`/`"light"` when the page forces one through `color-scheme`. */
+  theme: "light" | "dark" | undefined;
+  /** The page's values for the semantic tokens, set on `<html>` by admin.css or its own overrides. */
+  tokens: Record<string, string>;
+}
+
+function readPage(names: readonly string[]): PageStyle {
+  const style = getComputedStyle(document.documentElement);
+  const scheme = style.colorScheme;
+  const tokens: Record<string, string> = {};
+  for (const name of names) {
+    const value = style.getPropertyValue(name).trim();
+    if (value) tokens[name] = value;
+  }
+  return { theme: scheme === "dark" || scheme === "light" ? scheme : undefined, tokens };
+}
+
+/**
+ * Follows the page's forced color scheme and color tokens, which the shadow root's own token
+ * declarations would otherwise replace.
+ */
+function usePageStyle(names: readonly string[]): PageStyle {
+  const [style, setStyle] = useState(() => readPage(names));
   useEffect(() => {
-    const observer = new MutationObserver(() => setTheme(pageTheme()));
+    const observer = new MutationObserver(() => setStyle(readPage(names)));
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["data-theme", "class", "style"],
     });
     return () => observer.disconnect();
-  }, []);
-  return theme;
+  }, [names]);
+  return style;
 }
 
-function App({ options }: { options: StandaloneOptions }) {
-  const theme = usePageTheme();
+function App({ options, tokens }: { options: StandaloneOptions; tokens: readonly string[] }) {
+  const { theme, tokens: values } = usePageStyle(tokens);
   const { stylesheets: _stylesheets, ...props } = options;
   // AdminRoot's markup without its confirm host, which would bundle Field and Input.
   return (
-    <div className={cn("admin-root", undefined)} data-theme={theme}>
+    <div className={cn("admin-root", undefined)} data-theme={theme} style={values as CSSProperties}>
       {/* The loader binds the hotkey, so it works before this chunk has loaded. */}
       <CommandPalette {...props} hotkey={false} />
     </div>
@@ -89,5 +114,5 @@ export function mount(options: StandaloneOptions): void {
   }
   const container = document.createElement("div");
   shadow.append(container);
-  createRoot(container).render(<App options={options} />);
+  createRoot(container).render(<App options={options} tokens={semanticTokens(shadowCss)} />);
 }

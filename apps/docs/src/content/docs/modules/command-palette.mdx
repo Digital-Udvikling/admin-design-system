@@ -46,7 +46,7 @@ The standalone build takes the same options as `<CommandPalette>`. Its entry is 
 </script>
 ```
 
-The palette renders in a shadow root with its own copy of the scoped CSS, so the page's CSS doesn't reach it. `stylesheets` load into that root; the Tabler webfont CSS is needed there for string icons. Dark mode follows a `color-scheme` the page forces on `<html>`, as `data-theme` does. Pin a version in production; see [Stability](../../getting-started/stability/).
+The palette renders in a shadow root with its own copy of the scoped CSS, so the page's CSS doesn't reach it. `stylesheets` load into that root; the Tabler webfont CSS is needed there for string icons. Semantic color tokens the page sets on `<html>`, such as `--color-primary` and `--color-system-accent`, carry into it; palette tones such as `--color-blue-600` don't, so a Tailwind page's own palette stays out. Dark mode follows a `color-scheme` the page forces on `<html>`, as `data-theme` does. Pin a version in production; see [Stability](../../getting-started/stability/).
 
 `window.AdminPalette` holds the same functions for templates that can't import a module: `AdminPalette.open({ page: "theme" })`.
 

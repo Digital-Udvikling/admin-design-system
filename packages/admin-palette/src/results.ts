@@ -87,6 +87,7 @@ function sourceGroups(input: ResultsInput, inPage: boolean): ScoredGroup[] {
 function inOrder(commands: readonly Command[]): ResultGroup[] {
   const groups = new Map<string, ResultGroup>();
   for (const command of commands) {
+    if (command.pattern) continue;
     const key = command.group ?? "";
     let group = groups.get(key);
     if (!group) {
@@ -106,6 +107,8 @@ function emptyRoot(input: ResultsInput): ResultGroup[] {
     label,
     items: entries
       .filter(({ command }) => {
+        // A pattern command needs a query to fill in.
+        if (command.pattern) return false;
         if (seen.has(command.id)) return false;
         seen.add(command.id);
         return true;

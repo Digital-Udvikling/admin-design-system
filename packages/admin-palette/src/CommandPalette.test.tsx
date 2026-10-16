@@ -3,7 +3,7 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { CommandPalette, useCommandPalette, useCommands, type Command, type Source } from ".";
 
 function setup(props: Parameters<typeof CommandPalette>[0] = {}, extra?: React.ReactNode) {
@@ -234,10 +234,87 @@ describe("CommandPalette", () => {
     }
     render(<Page />);
     const errors: unknown[] = [];
-    await act(async () => {
-      hydrateRoot(container, tree, { onRecoverableError: (error) => errors.push(error) });
-    });
+    const root = await act(async () =>
+      hydrateRoot(container, tree, { onRecoverableError: (error) => errors.push(error) }),
+    );
     expect(errors).toEqual([]);
+    act(() => root.unmount());
     container.remove();
+  });
+});
+
+describe("CommandPalette registry", () => {
+  const doc = {
+    protocol: 1,
+    systems: [
+      {
+        id: "oms",
+        name: "OMS",
+        url: "https://oms.example.com",
+        commands: [
+          { id: "orders", title: "Orders", href: "/orders/" },
+          { id: "returns", title: "Returns", href: "/returns/" },
+          { id: "order", title: "Order {q}", href: "/orders/{q}", pattern: "^\\d{6,}$" },
+        ],
+      },
+    ],
+  };
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    sessionStorage.clear();
+  });
+
+  function stubFetch(answer: () => Response) {
+    const urls: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      urls.push(String(url));
+      return answer();
+    });
+    return urls;
+  }
+  const ok = () =>
+    new Response(JSON.stringify(doc), { headers: { "Content-Type": "application/json" } });
+
+  it("fetches on first open, lists other systems, and lets a local command replace one", async () => {
+    const urls = stubFetch(ok);
+    const { user, options } = setup({
+      registry: { url: "https://registry.example.com/palette.json" },
+      commands: [{ id: "oms.returns", title: "Returns here", href: "/returns" }],
+    });
+    expect(urls).toEqual([]);
+    await user.keyboard("{Control>}k{/Control}");
+    expect(urls).toEqual(["https://registry.example.com/palette.json"]);
+    await user.keyboard("ret");
+    await waitFor(() => expect(options()).toEqual(["Returns here"]));
+    await user.clear(screen.getByRole("combobox"));
+    await user.keyboard("123456");
+    await waitFor(() => expect(options()).toEqual(["Order 123456"]));
+  });
+
+  it("renders a later page from the cached copy without fetching again", async () => {
+    const urls = stubFetch(ok);
+    const registry = { url: "https://registry.example.com/palette.json" };
+    const first = setup({ registry });
+    await first.user.keyboard("{Control>}k{/Control}");
+    await waitFor(() => expect(urls).toHaveLength(1));
+    first.unmount();
+
+    const { user, options } = setup({ registry });
+    await user.keyboard("{Control>}k{/Control}orders");
+    expect(options()).toEqual(["Orders"]);
+    expect(urls).toHaveLength(1);
+  });
+
+  it("shows local commands and a note when the registry is unavailable", async () => {
+    stubFetch(() => new Response("", { status: 503 }));
+    const { user, options } = setup({
+      registry: { url: "https://registry.example.com/palette.json" },
+      commands: [{ id: "help", title: "Help" }],
+    });
+    await user.keyboard("{Control>}k{/Control}");
+    await screen.findByText("Other systems unavailable");
+    await user.keyboard("help");
+    expect(options()).toEqual(["Help"]);
   });
 });

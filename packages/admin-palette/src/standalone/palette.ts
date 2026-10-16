@@ -8,6 +8,7 @@ import type { StandaloneOptions } from "./app";
 
 export type { StandaloneOptions } from "./app";
 export type { Command, CommandIcon, OpenOptions, Source, SourceContext } from "../types";
+export type { PaletteRegistry, RemoteCommand, SearchResponse } from "../protocol";
 
 let options: StandaloneOptions | undefined;
 let mounted: Promise<void> | undefined;
@@ -51,6 +52,12 @@ export function init(standalone: StandaloneOptions = {}): void {
     if (getOpenState().open) closePalette();
     else open();
   });
+  // Pointing at or tabbing to a trigger loads the palette ahead of the click.
+  const prefetch = (event: Event) => {
+    if ((event.target as Element | null)?.closest?.("[data-admin-palette]")) void mount();
+  };
+  document.addEventListener("pointerover", prefetch);
+  document.addEventListener("focusin", prefetch);
   document.addEventListener("click", (event) => {
     const trigger = (event.target as Element | null)?.closest?.("[data-admin-palette]");
     if (!trigger) return;

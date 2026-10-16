@@ -234,6 +234,61 @@ A query matches titles first, then `keywords`, then descriptions, in match-sorte
 
 Before anything is typed the palette lists Recent (the last five commands run, in `localStorage` per origin), then `suggested`, then "This page". A recent link is stored whole; a recent action only shows while a command with its id is registered.
 
+## Registry
+
+A registry lists other systems' commands and search endpoints, so each system's palette reaches the others without the list living in its code. Pass the document, or where to fetch it:
+
+```tsx
+<CommandPalette registry={{ url: "https://admin.example.com/palette/registry.json" }} />
+```
+
+```json
+{
+  "$schema": "https://unpkg.com/@aortl/admin-palette/dist/registry.schema.json",
+  "protocol": 1,
+  "systems": [
+    {
+      "id": "oms",
+      "name": "OMS",
+      "url": "https://oms.example.com",
+      "icon": "package",
+      "commands": [
+        { "id": "orders", "title": "Orders", "href": "/orders/" },
+        { "id": "order", "title": "Order {q}", "href": "/orders/{q}", "pattern": "^\\d{6,}$" },
+        { "id": "customers", "title": "Customers", "children": { "search": "/palette/customers/" } }
+      ],
+      "sources": [
+        { "id": "lookup", "search": "/palette/lookup/", "pattern": "^[#\\d]", "priority": 10 }
+      ]
+    }
+  ]
+}
+```
+
+Each system's commands list under its name, their ids prefixed with the system id (`oms.orders`); a local command with the same id replaces one. `href` and `search` resolve against the system's `url`. A link to another origin is a full navigation and carries an arrow; a same-origin one goes through `onNavigate`. A `pattern` command lists only when the query matches, with `{q}` filled in. `filter` drops commands, for example those of systems the user can't open.
+
+A URL is fetched on first open, or earlier when the pointer or focus reaches a trigger or Ctrl/Cmd goes down, and kept in `sessionStorage`: later pages in the tab render from the copy and refresh it after five minutes. When the fetch fails the palette lists its local commands and notes that other systems are unavailable.
+
+A search endpoint answers `GET <search>?q=<query>` with items in the same shape, their `href` relative to the endpoint. It needs CORS for every admin origin, without credentials.
+
+```json
+{
+  "protocol": 1,
+  "items": [
+    {
+      "id": "123456",
+      "title": "Order 123456",
+      "description": "Jane Doe · Shipped",
+      "href": "/orders/123456/"
+    }
+  ]
+}
+```
+
+An endpoint or the registry that names a `resource` is requested with `Authorization: Bearer <token>`, the token from the palette's `token(resource)`, cached per resource until a request answers 401.
+
+Within `protocol` 1 changes are additive: the palette ignores fields it doesn't know and skips commands it can't run. A document in another version is treated as unavailable. `registry.schema.json` and `search.schema.json` in the package validate a server's output.
+
 ## Reference
 
 ### React
@@ -243,17 +298,20 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 | `CommandPalette`         | `<dialog>` | `dialog palette`  |
 | `CommandPalette.Trigger` | `<button>` | `palette-trigger` |
 
-| Part                     | Prop          | Type                                   | Default                |
-| ------------------------ | ------------- | -------------------------------------- | ---------------------- |
-| `CommandPalette`         | `commands`    | `readonly Command[]`                   | —                      |
-| `CommandPalette`         | `sources`     | `readonly Source[]`                    | —                      |
-| `CommandPalette`         | `suggested`   | `readonly string[]`                    | —                      |
-| `CommandPalette`         | `hotkey`      | `string \| readonly string[] \| false` | `"mod+k"`              |
-| `CommandPalette`         | `onNavigate`  | `(href: string) => void`               | `location.assign`      |
-| `CommandPalette`         | `placeholder` | `string`                               | `"Search or jump to…"` |
-| `CommandPalette`         | `aria-label`  | `string`                               | `"Command palette"`    |
-| `CommandPalette.Trigger` | `page`        | `string`                               | —                      |
-| `CommandPalette.Trigger` | `keys`        | `string \| null`                       | `"mod+k"`              |
+| Part                     | Prop          | Type                                                    | Default                |
+| ------------------------ | ------------- | ------------------------------------------------------- | ---------------------- |
+| `CommandPalette`         | `commands`    | `readonly Command[]`                                    | —                      |
+| `CommandPalette`         | `sources`     | `readonly Source[]`                                     | —                      |
+| `CommandPalette`         | `suggested`   | `readonly string[]`                                     | —                      |
+| `CommandPalette`         | `hotkey`      | `string \| readonly string[] \| false`                  | `"mod+k"`              |
+| `CommandPalette`         | `onNavigate`  | `(href: string) => void`                                | `location.assign`      |
+| `CommandPalette`         | `registry`    | `PaletteRegistry \| { url: string; resource?: string }` | —                      |
+| `CommandPalette`         | `filter`      | `(command: Command, system: string) => boolean`         | —                      |
+| `CommandPalette`         | `token`       | `(resource: string) => Promise<string>`                 | —                      |
+| `CommandPalette`         | `placeholder` | `string`                                                | `"Search or jump to…"` |
+| `CommandPalette`         | `aria-label`  | `string`                                                | `"Command palette"`    |
+| `CommandPalette.Trigger` | `page`        | `string`                                                | —                      |
+| `CommandPalette.Trigger` | `keys`        | `string \| null`                                        | `"mod+k"`              |
 
 `commands` list under "Commands" unless they name a `group`. `suggested` holds command ids. `hotkey` takes [`useHotkey`](../../basics/conventions/#hotkeys) syntax and toggles the palette. Pass your router's navigate as `onNavigate` so same-app links skip a full load. `CommandPalette.Trigger` takes native `<button>` attributes; `keys` is the hint only and should match `hotkey`.
 
@@ -285,6 +343,7 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 | `icon`        | `IconProp \| string`           | A string is a Tabler name: `"package"` → `ti ti-package`                                      |
 | `shortcut`    | `string`                       | `useHotkey` chord, bound while the palette is open; not one the app binds itself, or both run |
 | `href`        | `string`                       | Navigates                                                                                     |
+| `pattern`     | `RegExp`                       | Lists the command only when the query matches; `{q}` in `title` and `href` becomes the query  |
 | `perform`     | `() => void`                   | Runs after the palette closes; ignored with `href`                                            |
 | `children`    | `readonly Command[] \| Source` | Opens a nested page                                                                           |
 

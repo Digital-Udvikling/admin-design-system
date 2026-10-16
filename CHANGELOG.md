@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - `@aortl/admin-palette`: a Cmd+K `<CommandPalette>` with nested pages, async sources, recents, and page commands through `useCommands`; classes `.palette*`. (css, palette)
+- `<CommandPalette registry>` adds other systems' commands and search endpoints from a registry document or URL, against a published JSON Schema (protocol 1). (palette)
 - `@aortl/admin-palette/standalone` runs the palette on pages without React from one module script, loading React on first open. (palette)
 - `app-shell-sticky` / `<AppShell stickyHeader>` keeps the navbar in view; the sidebar sticks below it at `--app-shell-header-height`. (both)
 

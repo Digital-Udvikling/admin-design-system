@@ -22,6 +22,11 @@ export interface Command {
   href?: string;
   /** Runs after the palette closes. Ignored when `href` is set. */
   perform?: () => void;
+  /**
+   * Lists the command only when the query matches, ranked as an exact match; `{q}` in `title` and
+   * `href` becomes the query. For a lookup such as "Order {q}" on `/^\d{6,}$/`.
+   */
+  pattern?: RegExp;
   /** Makes the row open a nested page: a static list, or a `Source` searched while the page is open. */
   children?: readonly Command[] | Source;
 }

@@ -39,6 +39,20 @@ const KEYWORD_PENALTY = 0.25;
 const DESCRIPTION_PENALTY = 0.5;
 const DEEP_PENALTY = 0.5;
 const DEEP_PER_PARENT = 3;
+const PATTERN_SCORE = rankings.EQUAL;
+
+/** `command` with `{q}` filled in, or undefined when its pattern doesn't match `query`. */
+export function fillPattern(command: Command, query: string): Command | undefined {
+  if (!command.pattern) return command;
+  // `search`, unlike `test`, ignores a global pattern's `lastIndex`.
+  if (!query || query.search(command.pattern) < 0) return undefined;
+  return {
+    ...command,
+    // A function replacement, so `$&` in the query stays literal.
+    title: command.title.replaceAll("{q}", () => query),
+    href: command.href?.replaceAll("{q}", () => encodeURIComponent(query)),
+  };
+}
 
 /** match-sorter tier of the best field (title, keywords, description), 0 when none match. */
 export function scoreCommand(command: Command, query: string): number {
@@ -82,8 +96,11 @@ export function matchCommands(sets: readonly CommandSet[], query: string): Score
       const label = top.group ?? defaultGroup;
       const direct: { item: ResultItem; score: number }[] = [];
       const deep: { item: ResultItem; score: number }[] = [];
-      for (const { command, path } of walkCommands([top])) {
-        const raw = scoreCommand(command, query);
+      for (const walked of walkCommands([top])) {
+        const { path } = walked;
+        const command = fillPattern(walked.command, query);
+        if (!command) continue;
+        const raw = command.pattern ? PATTERN_SCORE : scoreCommand(command, query);
         if (raw === 0) continue;
         const key = `${label ?? ""}\0${[...path, command].map((c) => c.id).join("/")}`;
         const item = { key, command, path: path.map((c) => c.title) };

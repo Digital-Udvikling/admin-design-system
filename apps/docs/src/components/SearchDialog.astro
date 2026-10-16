@@ -61,6 +61,8 @@
   }
 
   const MAX_PAGES = 8;
+  // Pages loaded before reranking, so a page named by the query surfaces from further down.
+  const CANDIDATES = 16;
   const MAX_ROWS_PER_PAGE = 3;
   const base = import.meta.env.BASE_URL;
 
@@ -103,6 +105,15 @@
       ...rest.filter((sub) => hasFragment(sub, fragment)),
       ...rest.filter((sub) => !hasFragment(sub, fragment)),
     ].slice(0, MAX_ROWS_PER_PAGE);
+  }
+
+  // Pagefind favours short pages and prefix matches, so `button` ranks Copy button over Buttons and
+  // `tab` ranks Tables over Tabs. A page whose title is the query, singular or plural, goes first.
+  const words = (text: string) => text.toLowerCase().split(/\s+/).filter(Boolean).join(" ");
+  function namesQuery(page: ResultData, query: string) {
+    const title = words(page.meta.title ?? "");
+    const q = words(query);
+    return [q, `${q}s`, `${q}es`].includes(title) || [title, `${title}s`, `${title}es`].includes(q);
   }
 
   const level = (anchor: Anchor) => Number(anchor.element.slice(1)) || 0;
@@ -160,8 +171,12 @@
     const terms = query.includes("-") ? `${query} ${query.replaceAll("-", " ")}` : query;
     const found = await pf.debouncedSearch(terms, {}, 150);
     if (!found) return; // a newer query superseded this one
-    const pages = await Promise.all(found.results.slice(0, MAX_PAGES).map((r) => r.data()));
+    const candidates = await Promise.all(found.results.slice(0, CANDIDATES).map((r) => r.data()));
     if (query !== input.value.trim()) return;
+    const pages = [
+      ...candidates.filter((p) => namesQuery(p, query)),
+      ...candidates.filter((p) => !namesQuery(p, query)),
+    ].slice(0, MAX_PAGES);
     list.replaceChildren(
       ...pages.flatMap((p) => topSections(p.sub_results, query).map((s) => row(p, s))),
     );
@@ -188,7 +203,8 @@
     input.focus();
   }
 
-  dialog.addEventListener("toggle", (event) => {
+  // beforetoggle fires inside showModal(), so a key typed right after Ctrl+K isn't selected away.
+  dialog.addEventListener("beforetoggle", (event) => {
     if ((event as ToggleEvent).newState !== "open") return;
     input.select();
     void run();
@@ -206,11 +222,13 @@
       event.preventDefault();
       if (event.isComposing) return;
       const query = input.value.trim();
-      void pending.then(() => {
+      void (async () => {
+        // A later run of the same query supersedes the awaited one, so wait for the last.
+        for (let last; last !== pending; ) await (last = pending);
         if (dialog.open && shown === query && input.value.trim() === query) {
           list.querySelector("a")?.click();
         }
-      });
+      })();
       return;
     }
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;

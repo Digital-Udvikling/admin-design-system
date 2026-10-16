@@ -320,83 +320,19 @@ html {
 /* Header controls: drop the least-needed ones before the navbar overflows. */
 @media (width < 40rem) {
   .docs-version,
-  .navbar-actions > .btn:not(.docs-search) {
+  .navbar-actions > .btn {
     display: none;
   }
 }
-/* Search is icon-only in the GitHub button's box until the full brand, version and label fit. */
+/* Search is an icon in a 32px square until the full brand, version and label fit. */
 @media (width < 48rem) {
   .docs-search > :not(.ti) {
     display: none;
   }
   .navbar-actions > .docs-search {
     font-size: 1rem;
-    padding: 0.25rem;
+    padding-inline: 0.4375rem;
   }
-}
-@media (width < 48rem) and (pointer: coarse) {
-  .navbar-actions > .docs-search {
-    padding: 0.4375rem;
-  }
-}
-/* Touch: the same 32px box as the picker and select, and no key hint. */
-@media (pointer: coarse) {
-  .docs-search {
-    min-height: 2rem;
-  }
-  .docs-search > .kbd-group {
-    display: none;
-  }
-}
-
-/* Search (SearchDialog.astro): pinned near the top so the input stays put as results come and go. */
-.docs-search-dialog {
-  max-width: 40rem;
-  margin-block: min(10dvh, 5rem) auto;
-  max-height: calc(100dvh - min(10dvh, 5rem) - 1rem);
-}
-.docs-search-dialog > .dialog-header {
-  align-items: center;
-  padding-block-end: 1rem;
-}
-.docs-search-body {
-  padding: 0 0 0.5rem;
-  border-block-start: 1px solid var(--color-border);
-}
-.docs-search-body[hidden] {
-  display: none;
-}
-.docs-search-status {
-  margin: 0;
-  padding: 0.5rem 1rem 0.25rem;
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-}
-.docs-search-status:empty {
-  display: none;
-}
-.docs-search-results {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.docs-search-results > .item {
-  padding-inline: 1rem;
-}
-.docs-search-page {
-  font-weight: 400;
-  color: var(--color-text-muted);
-}
-.docs-search-results .item-description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-.docs-search-results mark {
-  background: none;
-  color: var(--color-text);
-  font-weight: 600;
 }
 
 /* A code block under a bar with its language and a copy button (CodePane, Fence). The bar

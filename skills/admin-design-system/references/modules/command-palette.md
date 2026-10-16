@@ -6,9 +6,8 @@
 
 - [Without React](#without-react)
 - [Examples](#examples)
-  - [Palette (React only)](#palette-react-only)
-  - [Trigger](#trigger)
   - [Page commands (React only)](#page-commands-react-only)
+  - [Trigger](#trigger)
   - [Async sources](#async-sources)
   - [Anatomy](#anatomy)
 - [Behavior](#behavior)
@@ -62,60 +61,75 @@ The palette renders in a shadow root with its own copy of the scoped CSS, so the
 
 ## Examples
 
-### Palette (React only)
+### Page commands (React only)
 
-Open it with the trigger, type `dark`, or type a number for the async Orders source.
+This site's search is a `CommandPalette`. The example adds commands to it while this page is open: open it, then type `status`, or `find` and a number. Before anything is typed they list under "This page", after Recent and Suggested.
 
 **Example**
 
 ```tsx
-const setTheme = (theme: "light" | "dark") => {
-  document.documentElement.dataset.theme = theme;
-};
-
-const orders = {
-  id: "orders",
-  group: "Orders",
-  pattern: /^\d+$/,
-  priority: 10,
-  search: async (query: string) => [
+function OrderCommands() {
+  useCommands([
+    { id: "demo-refund", title: "Refund order 1042", icon: IconReceiptRefund, perform: () => {} },
     {
-      id: `order-${query}`,
-      title: `Order ${query}`,
-      description: "Placed 14 Oct · 3 items · Shipped",
-      icon: IconPackage,
-      href: `#order-${query}`,
+      id: "demo-export",
+      title: "Export orders",
+      description: "CSV of the current filter",
+      icon: IconFileExport,
+      shortcut: "mod+shift+e",
+      perform: () => {},
     },
-  ],
-};
+    {
+      id: "demo-status",
+      title: "Set order status",
+      icon: IconTruck,
+      children: [
+        { id: "demo-status-packed", title: "Packed", perform: () => {} },
+        { id: "demo-status-shipped", title: "Shipped", perform: () => {} },
+        { id: "demo-status-delivered", title: "Delivered", perform: () => {} },
+      ],
+    },
+    {
+      id: "demo-find",
+      title: "Find order",
+      icon: IconPackage,
+      children: {
+        id: "demo-orders",
+        search: async (query: string) =>
+          /^\d+$/.test(query)
+            ? [
+                {
+                  id: `demo-order-${query}`,
+                  title: `Order ${query}`,
+                  description: "Placed 14 Oct · 3 items · Shipped",
+                  href: `#order-${query}`,
+                },
+              ]
+            : [],
+      },
+    },
+  ]);
+  return <CommandPalette.Trigger />;
+}
 
-const commands = [
-  { id: "orders", title: "Orders", group: "Navigate", icon: IconPackage, href: "#orders" },
-  { id: "customers", title: "Customers", group: "Navigate", icon: IconUsers, href: "#customers" },
-  {
-    id: "export",
-    title: "Export orders",
-    description: "CSV of the current filter",
-    icon: IconFileExport,
-    shortcut: "mod+shift+e",
-    perform: () => {},
-  },
-  {
-    id: "theme",
-    title: "Change theme",
-    icon: IconSun,
-    children: [
-      { id: "theme-light", title: "Light", icon: IconSun, perform: () => setTheme("light") },
-      { id: "theme-dark", title: "Dark", icon: IconMoon, perform: () => setTheme("dark") },
-    ],
-  },
-];
-
-<CommandPalette commands={commands} sources={[orders]} suggested={["orders"]} hotkey={false} />
-<CommandPalette.Trigger keys={null} />
+<OrderCommands />;
 ```
 
-This page binds no hotkey to the example, since Ctrl/Cmd+K opens the site search. Leave `hotkey` out to bind `mod+k`.
+The palette itself goes once in the app shell:
+
+```tsx
+<AdminRoot>
+  <CommandPalette
+    commands={[
+      { id: "orders", title: "Orders", group: "Navigate", icon: IconPackage, href: "/orders" },
+    ]}
+    sources={[orders]}
+    suggested={["orders"]}
+    onNavigate={(href) => router.push(href)}
+  />
+  {children}
+</AdminRoot>
+```
 
 ### Trigger
 
@@ -133,24 +147,6 @@ Any element with `data-admin-palette` opens the palette; a value opens straight 
 
 ```tsx
 <CommandPalette.Trigger />
-```
-
-### Page commands (React only)
-
-`useCommands` adds commands while the calling component is mounted. Before anything is typed they list under "This page", after Recent and Suggested.
-
-**Example**
-
-```tsx
-function OrderPage() {
-  useCommands([
-    { id: "order-refund", title: "Refund this order", perform: () => {} },
-    { id: "order-resend", title: "Resend confirmation", perform: () => {} },
-  ]);
-  return <CommandPalette.Trigger keys={null}>Search with page commands</CommandPalette.Trigger>;
-}
-
-<OrderPage />;
 ```
 
 ### Async sources

@@ -15,11 +15,11 @@ import plexMono from "../../../../packages/admin-css/src/fonts/plex-mono-400-lat
 import plexSans from "../../../../packages/admin-css/src/fonts/plex-sans-latin.woff2?url";
 import type { MarkdownHeading } from "astro";
 import { getCollection } from "astro:content";
+import DocsPalette, { type PageLink } from "../components/DocsPalette";
 import FlavorPicker from "../components/FlavorPicker.astro";
-import SearchDialog from "../components/SearchDialog.astro";
 import SidebarNav from "../components/SidebarNav.astro";
 import ThemeSelect from "../components/ThemeSelect.astro";
-import { buildNav, flatNav } from "../nav";
+import { buildNav, entryPath, flatNav } from "../nav";
 import { version } from "../version";
 
 interface Props {
@@ -45,7 +45,8 @@ const {
 const base = import.meta.env.BASE_URL;
 const site = "Admin design system";
 const repo = "https://github.com/Digital-Udvikling/admin-design-system";
-const nav = buildNav(await getCollection("docs"), base);
+const entries = await getCollection("docs");
+const nav = buildNav(entries, base);
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= tocDepth);
 // A one-entry TOC only repeats the page's single section.
 const showToc = toc.length > 1;
@@ -54,6 +55,17 @@ const sequence = flatNav(nav);
 const at = sequence.findIndex((l) => l.href === Astro.url.pathname);
 const prev = at > 0 ? sequence[at - 1] : undefined;
 const next = at >= 0 ? sequence[at + 1] : undefined;
+const descriptions = new Map(entries.map((e) => [`${base}${entryPath(e)}`, e.data.description]));
+const pages: PageLink[] = nav.flatMap((group) =>
+  group.items
+    .flatMap((item) => ("links" in item ? item.links : [item]))
+    .map((l) => ({
+      title: l.title ?? l.label,
+      href: l.href,
+      description: descriptions.get(l.href),
+      section: group.label,
+    })),
+);
 ---
 
 <!doctype html>
@@ -104,17 +116,25 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
         <div class="navbar-actions">
           <button
             type="button"
-            class="btn btn-ghost btn-sm docs-search"
-            commandfor="docs-search"
-            command="show-modal"
+            class="palette-trigger docs-search"
+            data-admin-palette
+            aria-haspopup="dialog"
             aria-label="Search"
             aria-keyshortcuts="Control+K Meta+K /">
             <i class="ti ti-search" aria-hidden="true"></i>
-            <span class="docs-search-label">Search</span>
+            <span class="palette-trigger-label">Search</span>
             <span class="kbd-group" aria-hidden="true">
               <kbd class="kbd docs-search-mod">Ctrl</kbd><kbd class="kbd">K</kbd>
             </span>
           </button>
+          <script is:inline>
+            // The hint shows ⌘ where that is the modifier.
+            (() => {
+              const platform = navigator.userAgentData?.platform || navigator.platform;
+              if (!/mac|iphone|ipad/i.test(platform)) return;
+              for (const key of document.querySelectorAll(".docs-search-mod")) key.textContent = "⌘";
+            })();
+          </script>
           <FlavorPicker />
           <ThemeSelect />
           <a class="btn btn-ghost btn-sm btn-square" href={repo} aria-label="GitHub">
@@ -236,6 +256,6 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
         </div>
       </aside>
     </dialog>
-    <SearchDialog />
+    <DocsPalette client:idle pages={pages} base={base} />
   </body>
 </html>

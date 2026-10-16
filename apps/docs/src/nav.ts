@@ -5,6 +5,8 @@ type Entry = CollectionEntry<"docs">;
 export interface NavLink {
   label: string;
   href: string;
+  /** The page's own title, where `label` is a generic "Overview". */
+  title?: string;
 }
 
 /** A sub-directory group: its `index.mdx` page first, then the rest. */
@@ -19,12 +21,13 @@ export interface NavGroup {
   items: (NavLink | NavTree)[];
 }
 
-/** Sidebar sections in display order; `dir` pages are listed from the collection. */
-const SECTIONS: ({ label: string; dir: string } | NavLink)[] = [
+/** Sidebar sections in display order; `dir` pages are listed from the collection, after an
+ * optional `overview` route outside it. */
+const SECTIONS: ({ label: string; dir: string; overview?: string } | NavLink)[] = [
   { label: "Getting started", dir: "getting-started" },
   { label: "Basics", dir: "basics" },
   { label: "Changelog", href: "changelog/" },
-  { label: "Components", dir: "components" },
+  { label: "Components", dir: "components", overview: "components/" },
   { label: "Patterns", dir: "patterns" },
   { label: "Modules", dir: "modules" },
   { label: "Contributing", dir: "contributing" },
@@ -74,7 +77,7 @@ export function buildNav(entries: Entry[], base: string): NavGroup[] {
         item: {
           label,
           links: [
-            ...(index ? [{ ...link(index, base), label: "Overview" }] : []),
+            ...(index ? [{ ...link(index, base), label: "Overview", title: label }] : []),
             ...rest.map((e) => link(e, base)),
           ],
         },
@@ -84,6 +87,23 @@ export function buildNav(entries: Entry[], base: string): NavGroup[] {
     const ordered = direct.some((e) => e.data.sidebar)
       ? items
       : items.sort((a, b) => a.title.localeCompare(b.title));
-    return { label: section.label, items: ordered.map(({ item }) => item) };
+    const overview = section.overview && {
+      label: "Overview",
+      href: `${base}${section.overview}`,
+      title: section.label,
+    };
+    return {
+      label: section.label,
+      items: [...(overview ? [overview] : []), ...ordered.map(({ item }) => item)],
+    };
   });
+}
+
+/** Every page in sidebar order, labelled by page title, for previous/next links. A label-less
+ * group is a standalone page (the changelog) and stays out of the sequence. */
+export function flatNav(groups: NavGroup[]): NavLink[] {
+  return groups
+    .filter((g) => g.label)
+    .flatMap((g) => g.items.flatMap((i) => ("links" in i ? i.links : [i])))
+    .map((l) => ({ label: l.title ?? l.label, href: l.href }));
 }

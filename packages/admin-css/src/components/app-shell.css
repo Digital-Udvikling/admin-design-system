@@ -49,6 +49,23 @@
     max-height: 100dvh;
   }
 
+  .app-shell-sticky {
+    --app-shell-header-height: 3rem;
+  }
+
+  /* z-35 clears in-content lifts (input-group's z-30) and stays below the sidebar drawer (z-40/50)
+     and popups; main stays unisolated so vanilla tooltips and sidebar tooltips paint over it. */
+  .app-shell-sticky > .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 35;
+  }
+
+  .app-shell-sticky > .sidebar {
+    top: var(--app-shell-header-height);
+    max-height: calc(100dvh - var(--app-shell-header-height));
+  }
+
   /* Mobile: the sidebar lives in a Dialog drawer, so reclaim the column. */
   @media (width < 48rem) {
     .app-shell-with-sidebar,

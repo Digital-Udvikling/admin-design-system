@@ -9,6 +9,16 @@
     transition: width 150ms ease;
   }
 
+  /* Row hover. Light: a wash halfway between the muted surface and the current item's fill;
+     a part outside a sidebar falls back to surface-strong. */
+  .sidebar,
+  .sidebar-drawer {
+    --_nav-hover: light-dark(
+      color-mix(in oklab, var(--color-text) 4%, transparent),
+      var(--color-surface-strong)
+    );
+  }
+
   /* Hidden checkbox; :has() reads the collapsed state from anywhere in .sidebar. */
   .sidebar-toggle {
     position: absolute;
@@ -92,7 +102,7 @@
   .sidebar-item {
     @apply flex items-center gap-2 px-2 py-1 min-h-7
            rounded-md text-sm leading-none text-text
-           bg-transparent hover:bg-surface-strong
+           bg-transparent hover:bg-(--_nav-hover,var(--color-surface-strong))
            cursor-pointer select-none no-underline
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
@@ -136,7 +146,7 @@
   .sidebar-collapsible-trigger {
     @apply flex items-center gap-2 w-full px-2 py-1 min-h-7
            rounded-md text-sm leading-none text-text text-left
-           bg-transparent hover:bg-surface-strong
+           bg-transparent hover:bg-(--_nav-hover,var(--color-surface-strong))
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
@@ -210,7 +220,7 @@
   .sidebar-subitem {
     @apply flex items-center gap-2 px-2 py-0.5 min-h-6
            rounded-md text-sm leading-none text-text
-           bg-transparent hover:bg-surface-strong
+           bg-transparent hover:bg-(--_nav-hover,var(--color-surface-strong))
            cursor-pointer select-none no-underline
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus;
@@ -229,7 +239,7 @@
   .sidebar-collapse-toggle {
     @apply relative inline-flex items-center justify-center size-7
            rounded-md text-text-muted bg-transparent
-           hover:bg-surface-strong hover:text-text
+           hover:bg-(--_nav-hover,var(--color-surface-strong)) hover:text-text
            cursor-pointer select-none
            transition-colors duration-150;
   }

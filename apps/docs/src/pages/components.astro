@@ -1,0 +1,70 @@
+---
+// Built from the sidebar's Components group, so a new component page lists itself.
+import { getCollection } from "astro:content";
+import H2 from "../components/H2.astro";
+import Table from "../components/Table.astro";
+import Docs from "../layouts/Docs.astro";
+import { buildNav, entryPath, type NavLink, type NavTree } from "../nav";
+
+const base = import.meta.env.BASE_URL;
+const entries = await getCollection("docs");
+const byHref = new Map(entries.map((e) => [`${base}${entryPath(e)}`, e]));
+const items = buildNav(entries, base).find((g) => g.label === "Components")?.items ?? [];
+const trees = items.filter((i): i is NavTree => "links" in i);
+const slug = (label: string) => label.toLowerCase().replaceAll(/\W+/g, "-");
+
+// The section's own Overview link is this page, which has no collection entry.
+function rows(links: NavLink[]) {
+  return links.flatMap((l) => {
+    const entry = byHref.get(l.href);
+    return entry ? [{ href: l.href, ...entry.data }] : [];
+  });
+}
+
+const groups: { label?: string; rows: ReturnType<typeof rows> }[] = [
+  { rows: rows(items.filter((i): i is NavLink => !("links" in i))) },
+  ...trees.map((t) => ({ label: t.label, rows: rows(t.links) })),
+];
+const headings = trees.map((t) => ({ depth: 2, slug: slug(t.label), text: t.label }));
+---
+
+<Docs title="Components" description="Every component, with a one-line summary." {headings}>
+  {
+    groups.map((group) => (
+      <>
+        {group.label && <H2 id={slug(group.label)}>{group.label}</H2>}
+        <Table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {group.rows.map((r) => (
+              <tr>
+                <td>
+                  <a href={r.href}>{r.title}</a>
+                </td>
+                <td>{r.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </>
+    ))
+  }
+</Docs>
+
+<style>
+  /* One name column for both tables, so the descriptions line up; narrow until the column has room. */
+  th:first-child {
+    inline-size: 7.5rem;
+  }
+
+  @container (width >= 40rem) {
+    th:first-child {
+      inline-size: 11rem;
+    }
+  }
+</style>

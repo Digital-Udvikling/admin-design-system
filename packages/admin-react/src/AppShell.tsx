@@ -7,6 +7,8 @@ export { useAppShell, type AppShellContextValue } from "./AppShell.client";
 export interface AppShellProps extends ComponentProps<"div"> {
   /** Adds `app-shell-with-sidebar`; a direct-child `<Sidebar>` switches the grid without it. */
   hasSidebar?: boolean;
+  /** Adds `app-shell-sticky`: the navbar sticks to the top and the sidebar sticks below it. */
+  stickyHeader?: boolean;
   mobileDrawerOpen?: boolean;
   defaultMobileDrawerOpen?: boolean;
   onMobileDrawerOpenChange?: (open: boolean) => void;

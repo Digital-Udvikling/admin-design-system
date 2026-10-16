@@ -7,6 +7,11 @@
            border-b-2 border-system-accent;
     --surface-current: var(--color-surface-muted);
     --_code-surface: light-dark(var(--color-code-surface), var(--color-surface));
+    /* Same row hover as .sidebar's. */
+    --_nav-hover: light-dark(
+      color-mix(in oklab, var(--color-text) 4%, transparent),
+      var(--color-surface-strong)
+    );
   }
 
   /* The padding keeps a focus ring inside the clip, on a brand link's children or the brand itself. */
@@ -44,7 +49,7 @@
     @apply inline-flex items-center gap-1.5 px-2.5 py-1.5
            rounded-md text-sm leading-none
            text-text bg-transparent
-           hover:bg-surface-strong
+           hover:bg-(--_nav-hover,var(--color-surface-strong))
            cursor-pointer select-none
            transition-colors duration-150
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
@@ -76,7 +81,7 @@
   .navbar-mobile-toggle {
     @apply inline-flex items-center justify-center size-9 -ml-2 shrink-0
            rounded-md text-text bg-transparent
-           hover:bg-surface-strong
+           hover:bg-(--_nav-hover,var(--color-surface-strong))
            cursor-pointer
            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
   }

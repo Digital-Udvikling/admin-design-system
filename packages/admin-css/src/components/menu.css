@@ -20,7 +20,7 @@
   .menu-trigger:not(.btn) {
     @apply gap-1.5 px-2.5 py-1.5 rounded-md text-sm leading-none
            text-text bg-transparent border-0
-           hover:bg-surface-strong;
+           hover:bg-(--_nav-hover,var(--color-surface-strong));
   }
 
   /* em-sized so the chevron scales with btn-sm / btn-lg; the 1em box also

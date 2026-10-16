@@ -116,7 +116,7 @@ function OrderPage() {
 
 ### Async sources
 
-A `Source` searches as the user types. Its group is placed by `priority` against the matched commands' tiers. A source at the root needs a query of `minQuery` characters (default 1) that matches `pattern`, so a lookup only runs on input that could be an id. A source as a command's `children` searches inside that page, on entry too.
+A `Source` searches as the user types. Its group is placed by `priority` against the matched commands' tiers; a result's own `group` splits the results into groups, such as one per page. A source at the root needs a query of `minQuery` characters (default 1) that matches `pattern`, so a lookup only runs on input that could be an id. A source as a command's `children` searches inside that page, on entry too.
 
 ```tsx
 const orders: Source = {

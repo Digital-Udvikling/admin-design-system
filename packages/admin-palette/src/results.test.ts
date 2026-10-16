@@ -87,6 +87,29 @@ describe("buildResults", () => {
     ]);
   });
 
+  it("splits a source's results by their own group", () => {
+    const docs: Source = { id: "docs", group: "Docs", search: async () => [] };
+    const sourceStates = new Map([
+      [
+        "docs",
+        {
+          status: "done" as const,
+          items: [
+            { id: "a", title: "Sizes", group: "Buttons" },
+            { id: "b", title: "Variants", group: "Badges" },
+            { id: "c", title: "Disabled", group: "Buttons" },
+            { id: "d", title: "Changelog" },
+          ],
+        },
+      ],
+    ]);
+    expect(titles(buildResults(input({ sources: [docs], sourceStates, query: "s" })))).toEqual([
+      ["Buttons", ["Sizes", "Disabled"]],
+      ["Badges", ["Variants"]],
+      ["Docs", ["Changelog"]],
+    ]);
+  });
+
   it("lists Recent, Suggested, then This page before anything is typed, each command once", () => {
     const save: Command = { id: "save", title: "Save" };
     const help: Command = { id: "help", title: "Help" };

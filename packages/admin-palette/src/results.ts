@@ -47,22 +47,38 @@ const item = (groupKey: string, { command, path }: Located): ResultItem => ({
   path,
 });
 
+/** A source's results under its group, or split by each result's own `group`, in order. */
 function sourceGroups(input: ResultsInput, inPage: boolean): ScoredGroup[] {
   const out: ScoredGroup[] = [];
   for (const source of input.sources) {
     const state = input.sourceStates.get(source.id);
     if (!state) continue;
-    const key = `source\0${source.id}`;
-    const items = state.items.map((command) => item(key, { command, path: [] }));
-    if (state.status === "done" && items.length === 0) continue;
-    out.push({
-      key,
-      label: source.group ?? (inPage ? undefined : "Results"),
-      items,
-      status: state.status === "done" ? undefined : state.status,
-      score: source.priority ?? 0,
-      layer: Layer.source,
-    });
+    if (state.status === "done" && state.items.length === 0) continue;
+    const label = source.group ?? (inPage ? undefined : "Results");
+    const groups = new Map<string, ScoredGroup>();
+    const groupFor = (groupLabel: string | undefined) => {
+      const key = `source\0${source.id}\0${groupLabel ?? ""}`;
+      let group = groups.get(key);
+      if (!group) {
+        group = {
+          key,
+          label: groupLabel,
+          items: [],
+          score: source.priority ?? 0,
+          layer: Layer.source,
+        };
+        groups.set(key, group);
+      }
+      return group;
+    };
+    for (const command of state.items) {
+      const group = groupFor(command.group ?? label);
+      group.items.push(item(group.key, { command, path: [] }));
+    }
+    // The status shows once, on the source's first group.
+    const first = groups.values().next().value ?? groupFor(label);
+    if (state.status !== "done") first.status = state.status;
+    out.push(...groups.values());
   }
   return out;
 }

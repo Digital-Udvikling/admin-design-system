@@ -28,7 +28,10 @@ export interface SourceContext {
   signal: AbortSignal;
 }
 
-/** Async results, searched as the user types. Its results keep the order `search` returns. */
+/**
+ * Async results, searched as the user types. Its results keep the order `search` returns; a
+ * result's own `group` splits them into groups, in order of first appearance.
+ */
 export interface Source {
   id: string;
   /** Results heading. Default: none inside a nested page, "Results" at the root. */

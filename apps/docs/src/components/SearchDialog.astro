@@ -1,0 +1,271 @@
+---
+// Site search over the Pagefind index that the docs `build` script writes to dist/pagefind.
+// The navbar trigger opens it, as do Ctrl/Cmd+K and `/`. Pagefind loads on first open.
+---
+
+<dialog id="docs-search" class="dialog docs-search-dialog" closedby="any" aria-label="Search docs">
+  <div class="dialog-header">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="ti ti-search" aria-hidden="true"></i></span>
+      <input
+        class="input"
+        type="text"
+        enterkeyhint="search"
+        placeholder="Search docs"
+        aria-label="Search docs"
+        aria-controls="docs-search-results"
+        autocomplete="off"
+        spellcheck="false"
+        autofocus
+      />
+    </div>
+    <button
+      type="button"
+      class="dialog-close"
+      commandfor="docs-search"
+      command="close"
+      aria-label="Close search"><i class="ti ti-x" aria-hidden="true"></i></button>
+  </div>
+  <div class="dialog-body docs-search-body" hidden>
+    <p class="docs-search-status" role="status"></p>
+    <ul class="item-group docs-search-results" id="docs-search-results" aria-label="Results"></ul>
+  </div>
+</dialog>
+
+<script>
+  interface Anchor {
+    element: string;
+    text: string;
+    location: number;
+  }
+  interface SubResult {
+    title: string;
+    url: string;
+    excerpt: string;
+    anchor?: Anchor;
+    weighted_locations: { balanced_score: number }[];
+  }
+  interface ResultData {
+    url: string;
+    meta: { title?: string };
+    anchors: Anchor[];
+    sub_results: SubResult[];
+  }
+  interface Pagefind {
+    options(options: { baseUrl?: string; excerptLength?: number }): Promise<void>;
+    debouncedSearch(
+      query: string,
+      options?: object,
+      ms?: number,
+    ): Promise<{ results: { data(): Promise<ResultData> }[] } | null>;
+  }
+
+  const MAX_PAGES = 8;
+  // Pages loaded before reranking, so a page named by the query surfaces from further down.
+  const CANDIDATES = 16;
+  const MAX_ROWS_PER_PAGE = 3;
+  const base = import.meta.env.BASE_URL;
+
+  const dialog = document.getElementById("docs-search") as HTMLDialogElement;
+  const input = dialog.querySelector("input")!;
+  const body = dialog.querySelector<HTMLElement>(".docs-search-body")!;
+  const status = dialog.querySelector(".docs-search-status")!;
+  const list = dialog.querySelector(".docs-search-results")!;
+
+  let pagefind: Promise<Pagefind | null> | undefined;
+  function load() {
+    pagefind ??= import(/* @vite-ignore */ `${base}pagefind/pagefind.js`).then(
+      async (pf: Pagefind) => {
+        await pf.options({ baseUrl: base, excerptLength: 18 });
+        return pf;
+      },
+      // `astro dev` serves no index.
+      () => null,
+    );
+    return pagefind;
+  }
+
+  // Pagefind weights a hit in a heading above one in body text, so a matching section title ranks first.
+  const score = (sub: SubResult) => sub.weighted_locations.reduce((sum, l) => sum + l.balanced_score, 0);
+  const plain = (text: string) => text.toLowerCase().replaceAll("-", "");
+  const hasFragment = (sub: SubResult, fragment: string) =>
+    plain(sub.excerpt.replace(/<[^>]+>/g, "")).includes(fragment);
+  function topSections(subs: SubResult[], query: string) {
+    const ranked = subs
+      .map((sub) => ({ sub, score: score(sub) }))
+      .sort((a, b) => b.score - a.score)
+      .map(({ sub }) => sub);
+    if (!query.includes("-")) return ranked.slice(0, MAX_ROWS_PER_PAGE);
+    // Keep the best row (often a heading hit), then rows holding the fragment ahead of rows that
+    // match only a split part (`col` in "columns").
+    const fragment = plain(query);
+    const [best, ...rest] = ranked;
+    return [
+      ...(best ? [best] : []),
+      ...rest.filter((sub) => hasFragment(sub, fragment)),
+      ...rest.filter((sub) => !hasFragment(sub, fragment)),
+    ].slice(0, MAX_ROWS_PER_PAGE);
+  }
+
+  // Pagefind favours short pages and prefix matches, so `button` ranks Copy button over Buttons and
+  // `tab` ranks Tables over Tabs. A page whose title is the query, singular or plural, goes first.
+  const words = (text: string) => text.toLowerCase().split(/\s+/).filter(Boolean).join(" ");
+  function namesQuery(page: ResultData, query: string) {
+    const title = words(page.meta.title ?? "");
+    const q = words(query);
+    return [q, `${q}s`, `${q}es`].includes(title) || [title, `${title}s`, `${title}es`].includes(q);
+  }
+
+  const level = (anchor: Anchor) => Number(anchor.element.slice(1)) || 0;
+  // A repeated heading (the changelog's Added/Fixed under each version) needs its parent heading.
+  function parentHeading(page: ResultData, sub: SubResult) {
+    const anchor = sub.anchor;
+    if (!anchor || page.anchors.filter((a) => a.text === anchor.text).length < 2) return undefined;
+    return page.anchors.findLast(
+      (a) => a.location < anchor.location && level(a) > 0 && level(a) < level(anchor),
+    )?.text;
+  }
+
+  function row(page: ResultData, sub: SubResult) {
+    const pageTitle = page.meta.title ?? "";
+    const li = document.createElement("li");
+    li.className = "item item-link";
+    const content = li.appendChild(document.createElement("div"));
+    content.className = "item-content";
+    const title = content.appendChild(document.createElement("span"));
+    title.className = "item-title";
+    const link = title.appendChild(document.createElement("a"));
+    link.href = sub.url;
+    if (sub.url === page.url || sub.title === pageTitle) link.textContent = pageTitle;
+    else {
+      const context = link.appendChild(document.createElement("span"));
+      context.className = "docs-search-page";
+      const parent = parentHeading(page, sub);
+      context.textContent = parent ? `${pageTitle} › ${parent} › ` : `${pageTitle} › `;
+      link.append(sub.title);
+    }
+    const excerpt = content.appendChild(document.createElement("span"));
+    excerpt.className = "item-description";
+    // Pagefind escapes the indexed text and wraps the matches in <mark>.
+    excerpt.innerHTML = sub.excerpt;
+    return li;
+  }
+
+  let shown = ""; // the query whose hits the list holds
+  async function search() {
+    const query = input.value.trim();
+    const pf = await load();
+    body.hidden = false;
+    if (!pf) {
+      status.textContent = "Search needs the built site: pnpm build, then pnpm preview.";
+      return;
+    }
+    if (!query) {
+      body.hidden = true;
+      list.replaceChildren();
+      shown = "";
+      return;
+    }
+    // Pagefind indexes `table-pin-col` as `tablepincol` plus its parts, so the parts let `pin-col`
+    // match it, and the joined term narrows the pages; topSections picks the rows.
+    const terms = query.includes("-") ? `${query} ${query.replaceAll("-", " ")}` : query;
+    const found = await pf.debouncedSearch(terms, {}, 150);
+    if (!found) return; // a newer query superseded this one
+    const candidates = await Promise.all(found.results.slice(0, CANDIDATES).map((r) => r.data()));
+    if (query !== input.value.trim()) return;
+    const pages = [
+      ...candidates.filter((p) => namesQuery(p, query)),
+      ...candidates.filter((p) => !namesQuery(p, query)),
+    ].slice(0, MAX_PAGES);
+    list.replaceChildren(
+      ...pages.flatMap((p) => topSections(p.sub_results, query).map((s) => row(p, s))),
+    );
+    shown = query;
+    const total = found.results.length;
+    status.textContent =
+      total === 0
+        ? `No results for “${query}”.`
+        : total > MAX_PAGES
+          ? `Top ${MAX_PAGES} of ${total} pages`
+          : `${total} ${total === 1 ? "page" : "pages"}`;
+  }
+
+  // The latest search, so Enter can wait for the hits of what was typed.
+  let pending: Promise<void> = Promise.resolve();
+  const run = () => (pending = search());
+
+  function open() {
+    // The nav drawer is modal too; a result link must land on the page, not behind it.
+    for (const other of document.querySelectorAll<HTMLDialogElement>("dialog:modal")) {
+      if (other !== dialog) other.close();
+    }
+    if (!dialog.open) dialog.showModal();
+    input.focus();
+  }
+
+  // beforetoggle fires inside showModal(), so a key typed right after Ctrl+K isn't selected away.
+  dialog.addEventListener("beforetoggle", (event) => {
+    if ((event as ToggleEvent).newState !== "open") return;
+    input.select();
+    void run();
+  });
+  input.addEventListener("input", () => void run());
+
+  // A hit on the current page only scrolls, so the dialog has to close itself.
+  list.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) dialog.close();
+  });
+
+  // Enter follows the first hit; the arrows move between the input and the hits.
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && event.target === input) {
+      event.preventDefault();
+      if (event.isComposing) return;
+      const query = input.value.trim();
+      void (async () => {
+        // A later run of the same query supersedes the awaited one, so wait for the last.
+        for (let last; last !== pending; ) await (last = pending);
+        if (dialog.open && shown === query && input.value.trim() === query) {
+          list.querySelector("a")?.click();
+        }
+      })();
+      return;
+    }
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    const links = [...list.querySelectorAll("a")];
+    const stops = [input, ...links];
+    const at = stops.indexOf(document.activeElement as HTMLInputElement | HTMLAnchorElement);
+    if (at < 0) return;
+    event.preventDefault();
+    const next = event.key === "ArrowDown" ? Math.min(at + 1, stops.length - 1) : Math.max(at - 1, 0);
+    stops[next]?.focus();
+  });
+
+  const TEXT_INPUT =
+    "input:not([type=checkbox], [type=radio], [type=button], [type=submit], [type=reset], [type=range], [type=color], [type=file])";
+  document.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented || event.isComposing) return;
+    const target = event.target;
+    if (
+      target instanceof HTMLElement &&
+      (target.isContentEditable || target.matches(`${TEXT_INPUT}, textarea, select`))
+    ) {
+      return;
+    }
+    const modK =
+      (event.ctrlKey || event.metaKey) &&
+      !event.altKey &&
+      !event.shiftKey &&
+      event.key.toLowerCase() === "k";
+    const slash = event.key === "/" && !event.ctrlKey && !event.metaKey && !event.altKey;
+    if (!modK && !slash) return;
+    event.preventDefault();
+    open();
+  });
+
+  // The trigger's hint shows ⌘ where that is the modifier.
+  const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData;
+  if (/mac|iphone|ipad/i.test(uaData?.platform || navigator.platform)) {
+    for (const key of document.querySelectorAll(".docs-search-mod")) key.textContent = "⌘";
+  }
+</script>

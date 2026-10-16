@@ -37,6 +37,7 @@ pnpm build           # admin-css → admin-react → docs (order matters)
 pnpm build:css
 pnpm build:react     # depends on admin-css dist
 pnpm dev             # docs at http://localhost:4321, HMR into source CSS
+pnpm preview         # serve the built docs; search needs the Pagefind index from pnpm build
 pnpm check-types     # tsc on admin-react + astro check on docs
 pnpm test            # vitest: admin-react (happy-dom + RTL) + admin-css build scripts
 pnpm lint            # oxlint (NOT eslint)

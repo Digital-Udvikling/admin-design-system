@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check-types": "astro check",
     "check-docs": "node scripts/check-docs.mjs",
@@ -43,6 +43,7 @@
     "acorn-jsx": "5.3.2",
     "clsx": "2.1.1",
     "happy-dom": "20.9.0",
+    "pagefind": "1.5.2",
     "pixelmatch": "7.2.0",
     "playwright-core": "1.63.0",
     "pngjs": "7.0.0",

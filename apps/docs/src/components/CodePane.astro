@@ -17,7 +17,7 @@ const { code, lang, label, class: className, ...rest } = Astro.props;
 const lines = code.trimEnd().split("\n").length;
 ---
 
-<div class:list={["prose-exclude", "code-pane", className]} {...rest}>
+<div class:list={["prose-exclude", "code-pane", className]} data-pagefind-ignore {...rest}>
   <CodeBar lang={lang} label={label} />
   <CodePeek lines={lines}>
     <Code code={code} lang={lang} theme={shikiTheme} wrap={null} class="code-block code-block-nowrap" />

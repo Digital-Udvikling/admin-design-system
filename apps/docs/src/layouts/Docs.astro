@@ -16,6 +16,7 @@ import plexSans from "../../../../packages/admin-css/src/fonts/plex-sans-latin.w
 import type { MarkdownHeading } from "astro";
 import { getCollection } from "astro:content";
 import FlavorPicker from "../components/FlavorPicker.astro";
+import SearchDialog from "../components/SearchDialog.astro";
 import SidebarNav from "../components/SidebarNav.astro";
 import ThemeSelect from "../components/ThemeSelect.astro";
 import { buildNav, flatNav } from "../nav";
@@ -29,9 +30,18 @@ interface Props {
   tocDepth?: number;
   /** Source path under apps/docs, for the "Edit page" link. */
   editPath?: string;
+  /** Whether site search indexes the page. */
+  searchable?: boolean;
 }
 
-const { title, description, headings = [], tocDepth = 3, editPath } = Astro.props;
+const {
+  title,
+  description,
+  headings = [],
+  tocDepth = 3,
+  editPath,
+  searchable = true,
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const site = "Admin design system";
 const repo = "https://github.com/Digital-Udvikling/admin-design-system";
@@ -92,6 +102,19 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
         </a>
         <a class="badge docs-version" href={`${base}changelog/`}>v{version}</a>
         <div class="navbar-actions">
+          <button
+            type="button"
+            class="btn btn-ghost btn-sm docs-search"
+            commandfor="docs-search"
+            command="show-modal"
+            aria-label="Search"
+            aria-keyshortcuts="Control+K Meta+K /">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <span class="docs-search-label">Search</span>
+            <span class="kbd-group" aria-hidden="true">
+              <kbd class="kbd docs-search-mod">Ctrl</kbd><kbd class="kbd">K</kbd>
+            </span>
+          </button>
           <FlavorPicker />
           <ThemeSelect />
           <a class="btn btn-ghost btn-sm btn-square" href={repo} aria-label="GitHub">
@@ -115,12 +138,13 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
       </script>
       <main class="docs-main" id="content">
         <div class="container docs-page">
-          <article class="prose prose-lg docs-article">
+          {/* Pagefind indexes only the article; data-pagefind-ignore drops the parts that repeat it. */}
+          <article class="prose prose-lg docs-article" data-pagefind-body={searchable ? "" : undefined}>
             <h1>{title}</h1>
             {!isHome && description && <p class="docs-lede">{description}</p>}
             {
               showToc && (
-                <details class="accordion-item prose-exclude docs-toc-mobile">
+                <details class="accordion-item prose-exclude docs-toc-mobile" data-pagefind-ignore>
                   <summary class="accordion-summary">On this page</summary>
                   <nav class="accordion-content" aria-label="On this page">
                     <ul class="docs-toc-list">
@@ -137,7 +161,7 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
             <slot />
             {
               editPath && (
-                <p class="docs-edit">
+                <p class="docs-edit" data-pagefind-ignore>
                   <a class="link" href={`${repo}/edit/main/apps/docs/${editPath}`}>
                     <i class="ti ti-pencil" aria-hidden="true" />
                     Edit page
@@ -147,7 +171,7 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
             }
             {
               (prev || next) && (
-                <nav class="docs-pager prose-exclude" aria-label="Previous and next page">
+                <nav class="docs-pager prose-exclude" aria-label="Previous and next page" data-pagefind-ignore>
                   {prev && (
                     <a class="card card-bordered card-compact docs-pager-link" rel="prev" href={prev.href}>
                       <div class="card-body">
@@ -204,8 +228,14 @@ const next = at >= 0 ? sequence[at + 1] : undefined;
             <span class="sidebar-label">GitHub</span>
             <span class="sidebar-badge">v{version}</span>
           </a>
+          <label class="sidebar-item docs-drawer-theme">
+            <i class="ti ti-sun-moon sidebar-icon" aria-hidden="true"></i>
+            <span class="sidebar-label">Theme</span>
+            <ThemeSelect />
+          </label>
         </div>
       </aside>
     </dialog>
+    <SearchDialog />
   </body>
 </html>

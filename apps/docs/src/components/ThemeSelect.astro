@@ -16,6 +16,8 @@
     select.value = document.documentElement.dataset.theme ?? "auto";
     select.addEventListener("change", () => {
       const theme = select.value;
+      // The drawer has a second copy for narrow screens.
+      for (const other of document.querySelectorAll(".theme-select")) other.value = theme;
       if (theme === "auto") delete document.documentElement.dataset.theme;
       else document.documentElement.dataset.theme = theme;
       try {

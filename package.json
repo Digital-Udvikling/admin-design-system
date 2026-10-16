@@ -9,7 +9,7 @@
     "build:react": "pnpm --filter @aortl/admin-react build",
     "dev": "pnpm --filter docs dev",
     "preview": "pnpm --filter docs preview",
-    "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter docs check-types",
+    "check-types": "pnpm --filter @aortl/admin-react check-types && pnpm --filter @aortl/admin-palette check-types && pnpm --filter docs check-types",
     "check-docs": "pnpm --filter docs check-docs",
     "test": "pnpm -r --filter='@aortl/*' run test",
     "generate-skill": "pnpm --filter docs generate-skill",

@@ -44,7 +44,10 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(import.meta.dirname, "src/index.ts"),
+      entry: {
+        index: resolve(import.meta.dirname, "src/index.ts"),
+        internal: resolve(import.meta.dirname, "src/internal.ts"),
+      },
       formats: ["es"],
       // One file per source module, so each keeps its own "use client" boundary.
       fileName: (_format, name) => `${name}.js`,

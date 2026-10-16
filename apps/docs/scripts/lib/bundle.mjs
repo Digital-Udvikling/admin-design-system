@@ -18,7 +18,7 @@ const NODE_REQUIRE = `import { createRequire as __createRequire } from "node:mod
 
 /**
  * @typedef {object} PreviewModule
- * @property {string} source      TSX source; may import `@aortl/admin-react` (source, not dist) and the docs' deps.
+ * @property {string} source      TSX source; may import `@aortl/admin-react` and `@aortl/admin-palette` (source, not dist) and the docs' deps.
  * @property {string} resolveDir  Directory relative imports in `source` resolve from.
  */
 
@@ -45,8 +45,17 @@ export async function bundle({ modules, glue, platform }) {
     logLevel: "silent",
     tsconfig: false,
     resolve: {
+      // Matched as prefixes too, so the `/internal` subpath goes first.
       alias: {
+        "@aortl/admin-react/internal": join(
+          REPO_ROOT,
+          "packages",
+          "admin-react",
+          "src",
+          "internal.ts",
+        ),
         "@aortl/admin-react": join(REPO_ROOT, "packages", "admin-react", "src", "index.ts"),
+        "@aortl/admin-palette": join(REPO_ROOT, "packages", "admin-palette", "src", "index.ts"),
         "@docs": join(DOCS_ROOT, "src"),
       },
     },

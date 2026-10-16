@@ -3,16 +3,18 @@
 [![CI](https://github.com/Digital-Udvikling/admin-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Digital-Udvikling/admin-design-system/actions/workflows/ci.yml)
 [![npm @aortl/admin-css](https://img.shields.io/npm/v/@aortl/admin-css?label=%40aortl%2Fadmin-css)](https://www.npmjs.com/package/@aortl/admin-css)
 [![npm @aortl/admin-react](https://img.shields.io/npm/v/@aortl/admin-react?label=%40aortl%2Fadmin-react)](https://www.npmjs.com/package/@aortl/admin-react)
+[![npm @aortl/admin-palette](https://img.shields.io/npm/v/@aortl/admin-palette?label=%40aortl%2Fadmin-palette)](https://www.npmjs.com/package/@aortl/admin-palette)
 
 ### 📖 **[View the live docs →](https://digital-udvikling.github.io/admin-design-system/)**
 
 A small, opinionated design system shipped in two flavors from a single source of truth. Built for internal admin tooling — dashboards, CRMs, ops consoles — where information density and operator UX matter more than marketing polish.
 
-| Package                                                                  | What it is                                                                                                                                                |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css)     | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...).                                                       |
-| [`@aortl/admin-react`](https://www.npmjs.com/package/@aortl/admin-react) | A React component library that renders the same class names as the CSS package.                                                                           |
-| `apps/docs`                                                              | An [Astro](https://astro.build) docs site, laid out with the design system itself, that shows each component's vanilla or React source, picked site-wide. |
+| Package                                                                      | What it is                                                                                                                                                |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@aortl/admin-css`](https://www.npmjs.com/package/@aortl/admin-css)         | A pre-built CSS file. Drop it in via `<link>` and use semantic class names (`.btn`, `.input`, ...).                                                       |
+| [`@aortl/admin-react`](https://www.npmjs.com/package/@aortl/admin-react)     | A React component library that renders the same class names as the CSS package.                                                                           |
+| [`@aortl/admin-palette`](https://www.npmjs.com/package/@aortl/admin-palette) | A Cmd+K command palette built on the React package.                                                                                                       |
+| `apps/docs`                                                                  | An [Astro](https://astro.build) docs site, laid out with the design system itself, that shows each component's vanilla or React source, picked site-wide. |
 
 ## Quick start
 

@@ -1,0 +1,166 @@
+@layer components {
+  /* The command panel: a `.dialog` modifier for the modal, or a bare element for an inline preview. */
+  .palette {
+    @apply flex-col bg-surface text-text border border-border-strong rounded-lg shadow-sm;
+    --surface-current: var(--color-surface);
+    width: calc(100% - 2rem);
+    max-width: 40rem;
+    max-height: min(32rem, calc(100dvh - 2rem));
+    /* The list scrolls inside; the panel holds no popups to clip. */
+    overflow: hidden;
+  }
+
+  /* The dialog shows itself through `.dialog[open]`. */
+  .palette:not(dialog) {
+    display: flex;
+  }
+
+  /* Pinned near the top, so the input stays put as the results change height. */
+  .dialog.palette {
+    max-width: 40rem;
+    margin-block: min(12dvh, 6rem) auto;
+    max-height: min(32rem, calc(100dvh - min(12dvh, 6rem) - 1rem));
+  }
+
+  .palette-header {
+    @apply flex items-center gap-2 px-4 h-12 shrink-0 text-base text-text-muted
+           border-b border-border;
+  }
+
+  .palette-input {
+    @apply flex-1 min-w-0 h-full p-0
+           bg-transparent border-0 outline-none
+           text-text placeholder:text-text-muted;
+    font: inherit;
+  }
+
+  /* One per nested page; a click returns to that page. */
+  .palette-crumb {
+    @apply inline-flex items-center shrink-0 h-6 px-2 max-w-48
+           rounded-md text-xs font-medium text-text bg-surface-strong
+           cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+    border: 0;
+  }
+
+  /* No block padding: a sticky group label pins to the padding edge, and rows would show above it. */
+  .palette-list {
+    @apply flex-auto min-h-0 overflow-y-auto;
+    overscroll-behavior: contain;
+  }
+
+  .palette-group {
+    @apply py-1;
+  }
+
+  .palette-group + .palette-group {
+    @apply border-t border-border;
+  }
+
+  .palette-group-label {
+    @apply sticky top-0 z-[1] px-4 pt-1.5 pb-1 bg-surface
+           text-xs font-medium text-text-muted;
+  }
+
+  /* An `.item` row; the input keeps focus, so the highlight is `[data-highlighted]`. */
+  .palette-item {
+    @apply px-4 py-1.5 gap-2.5 cursor-pointer no-underline;
+    color: inherit;
+  }
+
+  .palette-item:hover {
+    background-image: linear-gradient(var(--color-surface-hover), var(--color-surface-hover));
+  }
+
+  .palette-item[data-highlighted] {
+    @apply bg-primary-muted;
+    --surface-current: var(--color-primary-muted);
+    background-image: none;
+  }
+
+  /* text-muted on the tint is under 4.5:1 in both themes. */
+  .palette-item[data-highlighted] .item-description {
+    @apply text-text;
+  }
+
+  .palette-item .item-media > :is(i, svg) {
+    font-size: 1rem;
+  }
+
+  .palette-item .item-description {
+    @apply text-xs;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .palette-item .item-actions {
+    @apply text-xs text-text-muted;
+  }
+
+  /* The ancestors of a match from inside a nested page. */
+  .palette-item-path {
+    @apply font-normal text-text-muted;
+  }
+
+  .palette-status {
+    @apply block px-4 py-1.5 text-sm text-text-muted;
+  }
+
+  .palette-status:empty {
+    display: none;
+  }
+
+  .palette-footer {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2 shrink-0
+           text-xs text-text-muted
+           border-t border-border bg-surface-muted;
+    --surface-current: var(--color-surface-muted);
+  }
+
+  .palette-footer > * {
+    @apply inline-flex items-center gap-1;
+  }
+
+  /* A search-field-shaped button; the label collapses before the icon does. */
+  .palette-trigger {
+    @apply inline-flex items-center gap-2 h-8 px-2.5 min-w-0
+           rounded-md text-sm text-text-muted
+           bg-surface border border-border hover:border-border-strong
+           cursor-pointer transition-colors duration-150
+           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus;
+  }
+
+  .palette-trigger-label {
+    @apply flex-1 min-w-0 text-start whitespace-nowrap overflow-hidden text-ellipsis;
+  }
+
+  .palette-trigger > .kbd-group {
+    margin-inline-start: auto;
+  }
+
+  /* Touch: no keyboard to hint at. */
+  @media (pointer: coarse) {
+    .palette-trigger > .kbd-group {
+      display: none;
+    }
+  }
+
+  /* Phones: a full-screen sheet, without key hints. */
+  @media (width < 40rem) {
+    .dialog.palette {
+      width: 100%;
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .palette-footer {
+      display: none;
+    }
+  }
+}

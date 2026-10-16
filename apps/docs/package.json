@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@aortl/admin-css": "workspace:*",
+    "@aortl/admin-palette": "workspace:*",
     "@aortl/admin-react": "workspace:*",
     "@astrojs/check": "0.9.10",
     "@astrojs/markdown-satteri": "0.4.2",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@base-ui/react": "1.4.1",
+    "@tanstack/match-sorter-utils": "8.19.4",
     "acorn": "8.16.0",
     "acorn-jsx": "5.3.2",
     "clsx": "2.1.1",

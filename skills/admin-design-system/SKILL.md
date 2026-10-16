@@ -11,6 +11,7 @@ A small, opinionated design system for internal admin tooling. Ships as two pack
 
 - `@aortl/admin-css` — pre-built CSS. The default bundle uses bare class names (`.btn`, `.input`, `.card`, `.field`) for full-page admin apps that own the document. A parallel scoped bundle (`@aortl/admin-css/admin.scoped.css`) wraps everything in `@scope (._ao-admin-root)` and prefixes every class with `_ao-`, for embedding inside non-admin pages.
 - `@aortl/admin-react` — React components wrapping Base UI primitives. Always emits `_ao-`-prefixed class names and requires `<AdminRoot>` (which renders `class="_ao-admin-root"`) somewhere up the tree. `@aortl/admin-react/styles.css` resolves to the scoped+prefixed bundle.
+- `@aortl/admin-palette` — the Cmd+K command palette, built on `@aortl/admin-react`. See [Command palette](references/modules/command-palette.md).
 
 Vanilla HTML and React render at the same DOM positions and behave identically — the only difference is whether the class names carry the `_ao-` prefix.
 
@@ -248,4 +249,5 @@ Read references **on demand** — do not pre-load. The index below lists every a
 ### Modules
 
 - [App shell](references/modules/app-shell.md) — Page chrome — navbar, optional sidebar, optional footer — around a main content area.
+- [Command palette](references/modules/command-palette.md) — Cmd+K search, navigation and commands.
 - [Standalone page](references/modules/standalone-page.md) — Centre a sign-in or error page outside the app shell.

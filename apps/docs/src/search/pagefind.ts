@@ -106,6 +106,8 @@ export function pagefindSource(base: string): Source {
     group: "Docs",
     // Below an exact or prefix page-title match, above weaker ones.
     priority: 4,
+    // The first search also downloads pagefind.js, its WASM and index chunks.
+    timeout: 15_000,
     async search(query) {
       const pf = await load();
       // Pagefind indexes `table-pin-col` as `tablepincol` plus its parts, so the parts let

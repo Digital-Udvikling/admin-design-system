@@ -31,3 +31,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
 ```
 
 Render one `<CommandPalette>` per document. Ctrl/Cmd+K opens it.
+
+## Without React
+
+```html
+<script type="module">
+  import { init } from "https://unpkg.com/@aortl/admin-palette/dist/standalone/palette.js";
+
+  init({ commands: [{ id: "orders", title: "Orders", href: "/orders/" }] });
+</script>
+```
+
+The entry binds the hotkey and `[data-admin-palette]` triggers; the palette, React included, loads on first open into a shadow root.

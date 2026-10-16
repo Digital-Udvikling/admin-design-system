@@ -163,6 +163,9 @@ importers:
         specifier: 8.19.4
         version: 8.19.4
     devDependencies:
+      '@aortl/admin-css':
+        specifier: workspace:*
+        version: link:../admin-css
       '@testing-library/dom':
         specifier: 10.4.1
         version: 10.4.1

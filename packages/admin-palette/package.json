@@ -20,12 +20,18 @@
     "CHANGELOG.md"
   ],
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/standalone/*.js"
+  ],
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./standalone": {
+      "types": "./dist/standalone/palette.d.ts",
+      "default": "./dist/standalone/palette.js"
     }
   },
   "publishConfig": {
@@ -33,7 +39,8 @@
     "provenance": true
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && vite build -c vite.standalone.config.ts && pnpm copy:fonts",
+    "copy:fonts": "cp -r ../admin-css/dist/fonts ./dist/standalone/",
     "dev": "vite build --watch",
     "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
@@ -46,6 +53,7 @@
     "@tanstack/match-sorter-utils": "8.19.4"
   },
   "devDependencies": {
+    "@aortl/admin-css": "workspace:*",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",

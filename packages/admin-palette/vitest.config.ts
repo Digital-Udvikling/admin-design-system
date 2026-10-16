@@ -19,6 +19,7 @@ export default defineConfig({
     globals: false,
     setupFiles: ["./src/test-setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
-    css: false,
+    // The standalone app reads its token names from the scoped bundle, imported `?raw`.
+    css: { include: [/admin\.scoped\.min\.css/] },
   },
 });

@@ -4,6 +4,7 @@
 
 ## Contents
 
+- [Without React](#without-react)
 - [Examples](#examples)
   - [Palette (React only)](#palette-react-only)
   - [Trigger](#trigger)
@@ -13,17 +14,51 @@
 - [Behavior](#behavior)
 - [Reference](#reference)
   - [React](#react)
+  - [Standalone](#standalone)
   - [Command](#command)
   - [Source](#source)
   - [Vanilla](#vanilla)
 
-The palette ships in its own package, `@aortl/admin-palette`, built on `@aortl/admin-react`. Its classes are in `@aortl/admin-css`.
+The palette ships in its own package, `@aortl/admin-palette`, built on `@aortl/admin-react`, with a standalone build for pages without React. Its classes are in `@aortl/admin-css`.
 
 ```fish
 npm install @aortl/admin-palette @aortl/admin-react react react-dom
 ```
 
 Render one `<CommandPalette>` per document inside `<AdminRoot>`, from a client component: commands carry functions. Triggers, `useCommands` and `useCommandPalette` reach it from anywhere in the page.
+
+## Without React
+
+The standalone build takes the same options as `<CommandPalette>`. Its entry is about 1 kB: it binds the hotkey and `data-admin-palette` triggers, and loads the palette, React included (about 120 kB gzipped), on first open.
+
+```html
+<button type="button" class="palette-trigger" data-admin-palette aria-haspopup="dialog">
+  <i class="ti ti-search" aria-hidden="true"></i>
+  <span class="palette-trigger-label">Search</span>
+  <span class="kbd-group"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">K</kbd></span>
+</button>
+
+<script type="module">
+  import { init } from "https://unpkg.com/@aortl/admin-palette/dist/standalone/palette.js";
+
+  init({
+    stylesheets: ["https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css"],
+    commands: [
+      { id: "orders", title: "Orders", icon: "package", href: "/orders/" },
+      {
+        id: "logout",
+        title: "Sign out",
+        icon: "logout",
+        perform: () => document.forms.logout.submit(),
+      },
+    ],
+  });
+</script>
+```
+
+The palette renders in a shadow root with its own copy of the scoped CSS, so the page's CSS doesn't reach it. `stylesheets` load into that root; the Tabler webfont CSS is needed there for string icons. Semantic color tokens the page sets on `<html>`, such as `--color-primary` and `--color-system-accent`, carry into it; palette tones such as `--color-blue-600` don't, so a Tailwind page's own palette stays out. Dark mode follows a `color-scheme` the page forces on `<html>`, as `data-theme` does. Pin a version in production; see [Stability](../getting-started/stability.md).
+
+`window.AdminPalette` holds the same functions for templates that can't import a module: `AdminPalette.open({ page: "theme" })`.
 
 ## Examples
 
@@ -235,6 +270,15 @@ Before anything is typed the palette lists Recent (the last five commands run, i
 | `useCommandPalette()` | `{ open(options?), close() }` |
 
 `open` takes `{ page, query }`: `page` is the id of a command with `children`.
+
+### Standalone
+
+| Function             | Effect                                                                            |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `init(options)`      | Binds `hotkey` and triggers; once. Options: `CommandPalette` props, `stylesheets` |
+| `open(options?)`     | Opens, loading the palette first; `{ page, query }` as `useCommandPalette`        |
+| `close()`            | Closes                                                                            |
+| `register(commands)` | Adds page commands; returns a function that removes them                          |
 
 ### Command
 
